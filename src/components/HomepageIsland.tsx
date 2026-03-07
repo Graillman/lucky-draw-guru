@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useSpinCounter } from "@/hooks/useSpinCounter";
+import { useWheelSound } from "@/hooks/useWheelSound";
 import NextToolSuggestion from "@/components/NextToolSuggestion";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -17,8 +18,10 @@ import AdPlaceholder from "@/components/AdPlaceholder";
 import LocalStorageNotice from "@/components/LocalStorageNotice";
 import { useLocalStorageParticipants } from "@/hooks/useLocalStorageParticipants";
 import PopularTemplates from "@/components/PopularTemplates";
+import { ConfettiEffect } from "@/components/ConfettiEffect";
+import { WheelThemePicker, WHEEL_THEMES } from "@/components/WheelThemePicker";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Gift, Hash, Users, PartyPopper, GraduationCap, Scale, Instagram, Dices, Edit3, Share2 } from "lucide-react";
+import { Gift, Hash, Users, PartyPopper, GraduationCap, Scale, Instagram, Dices, Edit3, Share2, Volume2, VolumeX } from "lucide-react";
 import { buildShareURL, readShareURLConfig } from "@/hooks/useShareableURL";
 import { toast } from "sonner";
 
@@ -85,6 +88,11 @@ const HomepageIslandInner = () => {
     { emoji: "🎮", text: t.indexUseCasePresentation },
   ];
 
+  const { enabled: soundEnabled, toggle: toggleSound, playTick, playFanfare } = useWheelSound();
+  const [wheelTheme, setWheelTheme] = useState(() => {
+    try { return localStorage.getItem("wheelTheme") || "classic"; } catch { return "classic"; }
+  });
+  const [showConfetti, setShowConfetti] = useState(false);
   const [mode, setMode] = useState<"simple" | "advanced">("simple");
   const [winners, setWinners] = useState<string[]>([]);
   const [isSpinning, setIsSpinning] = useState(false);
@@ -96,9 +104,14 @@ const HomepageIslandInner = () => {
   const [hasInitialized, setHasInitialized] = useState(false);
   const [spinCount, setSpinCount] = useState(() => getCount());
 
+  const handleThemeChange = (theme: string) => {
+    setWheelTheme(theme);
+    try { localStorage.setItem("wheelTheme", theme); } catch {}
+  };
+
   if (isLoaded && !hasInitialized) {
     const shared = readShareURLConfig();
-    if (shared && shared.items.length > 0) {
+    if (shared && shared.items && shared.items.length > 0) {
       setParticipants(shared.items);
       if (shared.title) setDrawTitle(shared.title);
     } else if (participants.length === 0) {
@@ -129,7 +142,9 @@ const HomepageIslandInner = () => {
     setIsSpinning(false);
     setSpinCount(increment());
     setWinnerHistory(prev => [selectedWinners, ...prev].slice(0, 5));
-  }, [increment]);
+    setShowConfetti(true);
+    playFanfare();
+  }, [increment, playFanfare]);
 
   const handleRelaunch = useCallback(() => {
     setWinners([]);
@@ -157,6 +172,7 @@ const HomepageIslandInner = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden" style={{ background: isAdvanced ? "var(--gradient-bg-purple)" : "var(--gradient-bg)" }}>
+      <ConfettiEffect active={showConfetti} onComplete={() => setShowConfetti(false)} />
       {/* Aurora background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <div className={`aurora-orb ${isAdvanced ? "aurora-orb-purple" : "aurora-orb-gold"}`} />
@@ -224,10 +240,31 @@ const HomepageIslandInner = () => {
                 )}
               </div>
 
+              {/* Wheel theme + sound controls */}
+              <div className="flex items-center justify-between gap-2 px-1">
+                <WheelThemePicker selected={wheelTheme} onChange={handleThemeChange} />
+                <button
+                  onClick={toggleSound}
+                  title={soundEnabled ? "Mute sounds" : "Enable sounds"}
+                  className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                >
+                  {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+                </button>
+              </div>
+
               {/* Wheel */}
               <div className="relative">
                 {winnersCount === 1 ? (
-                  <SpinningWheel participants={displayParticipants} isSpinning={isSpinning} onComplete={handleWheelComplete} mode={mode} winnersCount={winnersCount} onSpin={handleDraw} />
+                  <SpinningWheel
+                    participants={displayParticipants}
+                    isSpinning={isSpinning}
+                    onComplete={handleWheelComplete}
+                    mode={mode}
+                    winnersCount={winnersCount}
+                    onSpin={handleDraw}
+                    onTick={playTick}
+                    colors={WHEEL_THEMES[wheelTheme]?.colors}
+                  />
                 ) : (
                   <CasinoRoulette participants={displayParticipants} isSpinning={isSpinning} onComplete={handleWheelComplete} mode={mode} winnersCount={winnersCount} />
                 )}

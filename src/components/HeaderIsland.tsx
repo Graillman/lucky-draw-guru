@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { ChevronDown, Share2 } from "lucide-react";
+import { ChevronDown, Share2, Sun, Moon } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
@@ -35,10 +35,19 @@ const toolLinks = [
 const HeaderIsland = () => {
   const [toolsOpen, setToolsOpen] = useState(false);
   const [pathname, setPathname] = useState("");
+  const [isDark, setIsDark] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setPathname(window.location.pathname);
+    // Init theme from localStorage or system preference
+    const saved = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const dark = saved ? saved === "dark" : prefersDark;
+    setIsDark(dark);
+    document.documentElement.classList.toggle("dark", dark);
+    document.documentElement.classList.toggle("light", !dark);
+
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setToolsOpen(false);
@@ -47,6 +56,14 @@ const HeaderIsland = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const toggleTheme = () => {
+    const next = !isDark;
+    setIsDark(next);
+    localStorage.setItem("theme", next ? "dark" : "light");
+    document.documentElement.classList.toggle("dark", next);
+    document.documentElement.classList.toggle("light", !next);
+  };
 
   const isActive = (path: string) => pathname === path;
 
@@ -140,6 +157,13 @@ const HeaderIsland = () => {
 
         <div className="flex items-center gap-2 shrink-0">
           <LanguageSelector mode="simple" />
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+            title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
           <button
             onClick={handleShare}
             className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"

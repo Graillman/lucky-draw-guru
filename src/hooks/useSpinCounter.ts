@@ -7,11 +7,13 @@ export const useSpinCounter = () => {
     }
   };
 
-  const increment = () => {
+  const increment = (): number => {
     try {
-      localStorage.setItem("spinCount", String(getCount() + 1));
+      const next = getCount() + 1;
+      localStorage.setItem("spinCount", String(next));
+      return next;
     } catch {
-      // ignore
+      return 0;
     }
   };
 

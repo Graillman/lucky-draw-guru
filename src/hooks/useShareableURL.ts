@@ -14,18 +14,18 @@ export const buildShareURL = (participants: Participant[], drawTitle?: string): 
   }
 };
 
-export const readShareURLConfig = (): { participants: Participant[]; drawTitle?: string } | null => {
+export const readShareURLConfig = (): { items: Participant[]; title?: string } | null => {
   try {
     const params = new URLSearchParams(window.location.search);
     const entries = params.get("entries");
     if (!entries) return null;
-    const participants = entries
+    const items = entries
       .split(",")
       .map((s) => s.trim())
       .filter(Boolean)
       .map((pseudo) => ({ pseudo, weight: 1 }));
-    const drawTitle = params.get("title") || undefined;
-    return { participants, drawTitle };
+    const title = params.get("title") || undefined;
+    return { items, title };
   } catch {
     return null;
   }

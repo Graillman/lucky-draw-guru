@@ -13,24 +13,28 @@ interface SpinningWheelProps {
   onComplete: (winners: string[]) => void;
   mode: "simple" | "advanced";
   winnersCount: number;
+  onSpin?: () => void;
+  onTick?: () => void;
+  colors?: string[];
 }
 
-const COLORS = [
-  'hsl(348, 83%, 47%)',  // Red (Wheel of Fortune)
-  'hsl(45, 100%, 51%)',  // Gold/Yellow
-  'hsl(210, 80%, 45%)',  // Royal Blue
-  'hsl(145, 63%, 42%)',  // Emerald Green
-  'hsl(25, 95%, 53%)',   // Vibrant Orange
+const DEFAULT_COLORS = [
+  'hsl(348, 83%, 47%)',  // Red
+  'hsl(45, 100%, 51%)',  // Gold
+  'hsl(210, 80%, 45%)',  // Blue
+  'hsl(145, 63%, 42%)',  // Green
+  'hsl(25, 95%, 53%)',   // Orange
   'hsl(280, 68%, 50%)',  // Purple
   'hsl(190, 90%, 45%)',  // Teal
-  'hsl(340, 75%, 55%)',  // Hot Pink
-  'hsl(160, 60%, 40%)',  // Forest Green
+  'hsl(340, 75%, 55%)',  // Pink
+  'hsl(160, 60%, 40%)',  // Forest
   'hsl(35, 100%, 50%)',  // Amber
   'hsl(220, 70%, 55%)',  // Steel Blue
   'hsl(0, 75%, 55%)',    // Crimson
 ];
 
-export function SpinningWheel({ participants, isSpinning, onComplete, mode, winnersCount }: SpinningWheelProps) {
+export function SpinningWheel({ participants, isSpinning, onComplete, mode, winnersCount, onSpin, onTick, colors }: SpinningWheelProps) {
+  const COLORS = colors && colors.length > 0 ? colors : DEFAULT_COLORS;
   const { t } = useLanguage();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [rotation, setRotation] = useState(0);
@@ -38,6 +42,7 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
   const animationRef = useRef<number>();
   const startTimeRef = useRef<number>(0);
   const selectedWinnersRef = useRef<string[]>([]);
+  const lastTickSegmentRef = useRef(-1);
 
   const isAdvanced = mode === "advanced";
   
@@ -340,6 +345,22 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
       const newRotation = startRotation + totalRotation * easeOut;
       setRotation(newRotation);
 
+      // Tick sound: detect segment crossing at the pointer (top)
+      if (onTick) {
+        const pointerAngle = ((Math.PI / 2 - newRotation) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+        let currentSeg = segments.length - 1;
+        for (let i = 0; i < segments.length; i++) {
+          if (pointerAngle >= segments[i].startAngle && pointerAngle < segments[i].endAngle) {
+            currentSeg = i;
+            break;
+          }
+        }
+        if (currentSeg !== lastTickSegmentRef.current) {
+          lastTickSegmentRef.current = currentSeg;
+          onTick();
+        }
+      }
+
       if (progress < 1) {
         animationRef.current = requestAnimationFrame(animate);
       } else {
@@ -392,7 +413,13 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
           width={canvasPixelSize}
           height={canvasPixelSize}
           className="relative z-10 drop-shadow-2xl max-w-full"
-          style={{ width: 'min(480px, 90vw)', height: 'min(480px, 90vw)' }}
+          style={{
+            width: 'min(480px, 90vw)',
+            height: 'min(480px, 90vw)',
+            cursor: onSpin && !isSpinning && !isAnimating ? 'pointer' : 'default',
+          }}
+          onClick={() => { if (onSpin && !isSpinning && !isAnimating) onSpin(); }}
+          title={onSpin && !isSpinning ? "Click to spin!" : undefined}
         />
         
         {/* Sparkle effects when spinning */}
