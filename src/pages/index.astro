@@ -1,0 +1,65 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import HomepageIsland from '@/components/HomepageIsland';
+
+const title = "Spin the Wheel — Free Online Random Picker";
+const description = "Spin the wheel & pick a random winner in seconds. 8 free tools: giveaways, classrooms, teams & more. Cryptographically fair, no signup required.";
+const canonical = "/";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://realwheelpicker.com/#app",
+      "name": "Real Wheel Picker",
+      "url": "https://realwheelpicker.com",
+      "description": "Free online spin the wheel and random picker. Cryptographically secure randomness for giveaways, classrooms, teams and more.",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "featureList": [
+        "Cryptographically secure random selection",
+        "Weighted draws — custom probabilities per entry",
+        "Multi-winner draws without replacement",
+        "Giveaway mode for Instagram, TikTok, Discord",
+        "Embed widget for any website",
+        "50+ pre-built wheel presets",
+        "No signup required",
+        "Mobile and desktop"
+      ],
+    },
+    {
+      "@type": "HowTo",
+      "name": "How to spin the wheel and pick a random winner",
+      "description": "Use Real Wheel Picker to randomly select a winner or make a fair random decision in seconds.",
+      "totalTime": "PT1M",
+      "step": [
+        { "@type": "HowToStep", "position": 1, "name": "Add your entries", "text": "Type names or options one by one, paste a comma-separated list, or choose a pre-built template." },
+        { "@type": "HowToStep", "position": 2, "name": "Click Spin the Wheel", "text": "Press the Spin button. The wheel rotates with a realistic animation and click sound powered by the Web Audio API." },
+        { "@type": "HowToStep", "position": 3, "name": "Get your winner", "text": "The wheel stops on a cryptographically random winner. Copy the result, share it on social media, or spin again instantly." }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "Is the random picker truly fair?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Real Wheel Picker uses the Web Crypto API (window.crypto.getRandomValues) for cryptographically secure randomness — the same standard used in online banking and encryption." } },
+        { "@type": "Question", "name": "Do you store my data?", "acceptedAnswer": { "@type": "Answer", "text": "No data is sent to any server. Everything runs entirely in your browser." } },
+        { "@type": "Question", "name": "Can I pick multiple winners?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Set the number of winners before spinning. Each winner is selected without replacement." } },
+        { "@type": "Question", "name": "Is it free to use?", "acceptedAnswer": { "@type": "Answer", "text": "100% free with no limits on spins, entries, or winners. No account required." } }
+      ]
+    }
+  ]
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <!-- Static h1 for SEO crawlers -->
+  <h1 class="sr-only">Spin the Wheel — Free Online Random Picker</h1>
+  <HeaderIsland client:load />
+  <HomepageIsland client:load />
+  <GlobalFooterIsland client:idle />
+</Layout>

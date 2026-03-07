@@ -1,0 +1,126 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import { seoPages, type SEOPageConfig } from '@/data/seoPageConfig';
+
+export function getStaticPaths() {
+  return Object.values(seoPages).map((config: SEOPageConfig) => ({
+    params: { slug: config.slug },
+    props: { config },
+  }));
+}
+
+interface Props {
+  config: SEOPageConfig;
+}
+
+const { config } = Astro.props;
+
+const iconEmoji: Record<string, string> = {
+  gift: '🎁',
+  video: '🎥',
+  graduation: '🎓',
+  users: '👥',
+  chart: '📊',
+  trophy: '🏆',
+  sparkles: '✨',
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: config.h1,
+  url: `https://realwheelpicker.com/${config.slug}`,
+  description: config.metaDescription,
+  applicationCategory: "UtilitiesApplication",
+  operatingSystem: "All",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+};
+---
+
+<Layout
+  title={config.metaTitle}
+  description={config.metaDescription}
+  canonical={`/${config.slug}`}
+  jsonLd={jsonLd}
+>
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-8 md:space-y-12">
+
+      <!-- Hero -->
+      <section class="text-center space-y-6 py-4 md:py-8">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          {config.h1}
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          {config.subtitle}
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No signup • Instant result</p>
+      </section>
+
+      <!-- How it works -->
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30">
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-lg">
+            ❓
+          </div>
+          <div class="space-y-2">
+            <h2 class="text-lg md:text-xl font-bold text-foreground">{config.howItWorksTitle}</h2>
+            <p class="text-sm md:text-base text-muted-foreground leading-relaxed">{config.howItWorksText}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive tool (React island) -->
+      <SEOPageIsland slug={config.slug} client:load />
+
+      <!-- Use Cases -->
+      <section class="py-8 space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground text-center">
+          {config.whenToUseTitle}
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          {config.useCases.map((useCase) => (
+            <div class="p-4 rounded-xl bg-card border border-border text-center hover:scale-105 transition-all hover:border-primary/50">
+              <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 bg-primary/10 text-2xl">
+                {iconEmoji[useCase.icon] ?? '⭐'}
+              </div>
+              <h3 class="font-semibold text-foreground text-sm mb-1">{useCase.title}</h3>
+              <p class="text-xs text-muted-foreground">{useCase.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      <!-- SEO bottom section -->
+      <section class="py-8 px-6 rounded-xl border bg-primary/5 border-primary/20">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground mb-4">{config.seoTitle}</h2>
+        <p class="text-sm md:text-base text-muted-foreground leading-relaxed">{config.seoText}</p>
+      </section>
+
+      {config.relatedBlogPost && (
+        <section class="p-6 rounded-xl border bg-primary/5 border-primary/20">
+          <p class="text-sm text-muted-foreground mb-2">Want a step-by-step guide?</p>
+          <a
+            href={config.relatedBlogPost.slug}
+            class="font-semibold text-primary hover:underline"
+          >
+            {config.relatedBlogPost.title} →
+          </a>
+        </section>
+      )}
+
+      <AdPlaceholder position="bottom" client:visible />
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

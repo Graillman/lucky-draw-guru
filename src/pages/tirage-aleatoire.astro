@@ -1,0 +1,185 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import { ArrowRight, Check } from 'lucide-react';
+
+const title = "Tirage aléatoire en ligne gratuit — Sélection au hasard | Real Wheel Picker";
+const description = "Faites un tirage aléatoire en ligne parmi vos options. Roue de sélection aléatoire cryptographiquement sécurisée, gratuite, sans inscription. Résultat instantané.";
+const canonical = "/tirage-aleatoire";
+const locale = "fr_FR";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Tirage aléatoire — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/tirage-aleatoire",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "inLanguage": "fr",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Comment faire une sélection aléatoire en ligne ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Entrez vos options dans la liste (noms, textes, chiffres), cliquez sur le bouton et la roue effectue une sélection aléatoire. Le résultat s'affiche instantanément.",
+          },
+        },
+        {
+          "@type": "Question",
+          "name": "Puis-je assigner des probabilités différentes à chaque option ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui. En mode avancé, vous pouvez attribuer un poids à chaque entrée. Une option avec un poids de 3 a trois fois plus de chances d'être sélectionnée qu'une option avec un poids de 1.",
+          },
+        },
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Tirage aléatoire" },
+      ],
+    },
+  ],
+};
+
+const defaultParticipants = [
+  { pseudo: "Option A", weight: 1 },
+  { pseudo: "Option B", weight: 1 },
+  { pseudo: "Option C", weight: 1 },
+  { pseudo: "Option D", weight: 1 },
+  { pseudo: "Option E", weight: 1 },
+  { pseudo: "Option F", weight: 1 },
+];
+
+const USES = [
+  "Choisir aléatoirement parmi plusieurs options",
+  "Décider d'un menu, d'un film ou d'une activité",
+  "Sélectionner un participant pour une tâche",
+  "Organiser un jeu équitable entre amis",
+  "Générer un résultat aléatoire pour un quiz ou un défi",
+  "Faire un choix impartial dans un groupe",
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} locale={locale} jsonLd={jsonLd}>
+  <div class="relative min-h-screen overflow-hidden" style="background: var(--gradient-bg)">
+    <div aria-hidden class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div class="aurora-orb aurora-orb-gold"></div>
+      <div class="aurora-orb aurora-orb-purple"></div>
+      <div class="aurora-orb aurora-orb-blue"></div>
+    </div>
+    <div class="relative z-10">
+      <HeaderIsland client:load />
+      <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+
+        {/* Breadcrumb */}
+        <nav aria-label="fil d'Ariane" class="text-xs text-muted-foreground flex gap-1">
+          <a href="/" class="hover:text-primary transition-colors">Accueil</a>
+          <span>/</span>
+          <span class="text-foreground">Tirage aléatoire</span>
+        </nav>
+
+        {/* Hero */}
+        <section class="text-center space-y-4 py-2">
+          <h1 class="text-2xl md:text-4xl font-bold text-foreground leading-tight">
+            Tirage aléatoire en ligne — Rapide, gratuit, impartial
+          </h1>
+          <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            Effectuez une sélection aléatoire parmi n'importe quelle liste d'options. Roue visuelle, résultat cryptographiquement sécurisé. Zéro inscription.
+          </p>
+        </section>
+
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+
+        {/* Cas d'usage */}
+        <section class="space-y-4">
+          <h2 class="text-xl font-bold text-foreground">Utilisations du tirage aléatoire</h2>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {USES.map((use, i) => (
+              <li class="flex items-start gap-3 bg-card border border-border rounded-xl p-4">
+                <Check className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                <span class="text-sm text-muted-foreground">{use}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <AdPlaceholder position="after-use-cases" client:visible />
+
+        {/* SEO text */}
+        <section class="bg-card border border-border rounded-xl p-6 space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Pourquoi utiliser un générateur de tirage aléatoire ?</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Un tirage aléatoire en ligne remplace efficacement le tirage au sort traditionnel (papiers dans un chapeau, dé à lancer, etc.) avec un avantage majeur : la <strong>transparence</strong>. L'animation de la roue permet à tous les participants de voir la sélection se dérouler en direct, ce qui élimine tout soupçon de favoritisme.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            Notre générateur utilise l'API cryptographique <code>window.crypto.getRandomValues()</code>, qui produit une aléatoire de haute qualité non prévisible. Contrairement à <code>Math.random()</code> utilisé par la plupart des outils en ligne, notre implémentation est certifiée imprévisible même pour des adversaires connaissant l'état interne du système.
+          </p>
+        </section>
+
+        {/* Liens internes */}
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Autres outils de tirage en français</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              { label: "Tirage au sort", href: "/tirage-au-sort" },
+              { label: "Roue des noms", href: "/roue-des-noms" },
+              { label: "Oui ou Non", href: "/yes-or-no-wheel" },
+            ].map((link) => (
+              <a
+                href={link.href}
+                class="p-4 bg-card border border-border rounded-xl text-center hover:border-primary/50 hover:shadow-md transition-all text-sm font-semibold text-foreground"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Questions fréquentes</h2>
+          <div class="space-y-3">
+            {[
+              ["Comment faire une sélection aléatoire en ligne ?",
+               "Entrez vos options, cliquez sur 'Lancer la Roue' et obtenez votre résultat. Vous pouvez personnaliser les entrées à tout moment."],
+              ["Puis-je assigner des probabilités différentes ?",
+               "En mode avancé, vous attribuez un poids à chaque option. Un poids de 3 donne trois fois plus de chances qu'un poids de 1."],
+              ["Le tirage aléatoire fonctionne-t-il sur téléphone ?",
+               "Oui, l'outil est entièrement responsive et optimisé mobile. Aucune installation requise."],
+            ].map(([q, a], i) => (
+              <div class="bg-card border border-border rounded-xl p-5">
+                <p class="font-semibold text-foreground mb-2">{q}</p>
+                <p class="text-muted-foreground">{a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="text-center py-6 space-y-4">
+          <a
+            href="/"
+            class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity"
+          >
+            Accéder à l'outil complet <ArrowRight className="w-4 h-4" />
+          </a>
+        </section>
+
+        <AdPlaceholder position="bottom" client:visible />
+      </main>
+      <GlobalFooterIsland client:idle />
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,178 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import { ArrowRight, Check } from 'lucide-react';
+
+const title = "Zufallsgenerator Online — Zufällig auswählen mit dem Rad | Real Wheel Picker";
+const description = "Zufällig auswählen mit dem digitalen Glücksrad. Namen eingeben, drehen und sofort ein zufälliges Ergebnis erhalten. Kostenlos, ohne Anmeldung, kryptographisch fair.";
+const canonical = "/zufallsgenerator";
+const locale = "de_DE";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Zufallsgenerator — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/zufallsgenerator",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Online Zufallsgenerator mit Glücksrad. Einträge hinzufügen, drehen und ein zufälliges Ergebnis erhalten.",
+      "inLanguage": "de",
+    },
+    {
+      "@type": "HowTo",
+      "name": "Wie benutzt man den Zufallsgenerator",
+      "inLanguage": "de",
+      "totalTime": "PT30S",
+      "step": [
+        { "@type": "HowToStep", "position": 1, "name": "Einträge hinzufügen", "text": "Tippe deine Optionen oder Namen in das Rad. Bearbeite die vorhandenen Felder mit deinen eigenen Einträgen." },
+        { "@type": "HowToStep", "position": 2, "name": "Drehen", "text": "Klicke auf Drehen. Das Rad wählt einen Eintrag zufällig mit window.crypto.getRandomValues() aus." },
+        { "@type": "HowToStep", "position": 3, "name": "Ergebnis", "text": "Der ausgewählte Eintrag wird angezeigt. Jeder Eintrag hat exakt die gleiche Wahrscheinlichkeit." },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Ist der Zufallsgenerator wirklich zufällig?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Ja. Real Wheel Picker verwendet window.crypto.getRandomValues(), den kryptografischen Standard moderner Browser. Das ist dasselbe Zufallsprinzip wie beim Online-Banking. Kein Eintrag hat eine höhere Wahrscheinlichkeit als ein anderer." },
+        },
+        {
+          "@type": "Question",
+          "name": "Wie viele Einträge kann ich hinzufügen?",
+          "acceptedAnswer": { "@type": "Answer", "text": "So viele wie nötig. Klicke auf einen Namen zum Bearbeiten und füge beliebig viele Einträge hinzu. Das Rad passt sich automatisch an." },
+        },
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Zufallsgenerator" },
+      ],
+    },
+  ],
+};
+
+const defaultParticipants = [
+  { pseudo: "Auswahl 1", weight: 1 },
+  { pseudo: "Auswahl 2", weight: 1 },
+  { pseudo: "Auswahl 3", weight: 1 },
+  { pseudo: "Auswahl 4", weight: 1 },
+];
+
+const ANWENDUNGEN = [
+  "Zufällige Entscheidungen — was essen, wohin fahren",
+  "Verlosungen und Gewinnspiele",
+  "Klassenzimmer — Schüler zufällig auswählen",
+  "Teamzusammenstellung bei Spielen",
+  "Arbeitsteilung im Team",
+  "Wer fängt an beim Spiel?",
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} locale={locale} jsonLd={jsonLd}>
+  <div class="relative min-h-screen overflow-hidden" style="background: var(--gradient-bg)">
+    <div aria-hidden class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div class="aurora-orb aurora-orb-gold"></div>
+      <div class="aurora-orb aurora-orb-purple"></div>
+      <div class="aurora-orb aurora-orb-blue"></div>
+    </div>
+    <div class="relative z-10">
+      <HeaderIsland client:load />
+      <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+
+        <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+          <a href="/" class="hover:text-primary transition-colors">Home</a>
+          <span>/</span>
+          <span class="text-foreground">Zufallsgenerator</span>
+        </nav>
+
+        <section class="text-center space-y-4 py-2">
+          <h1 class="text-2xl md:text-4xl font-bold text-foreground leading-tight">
+            Zufallsgenerator Online — Zufällig auswählen mit dem Glücksrad
+          </h1>
+          <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            Entscheidungen per Zufall treffen. Einträge eingeben, Rad drehen, sofortiges Ergebnis. Kryptographisch fair, kostenlos, ohne Anmeldung.
+          </p>
+        </section>
+
+        <section class="bg-card border border-border rounded-xl p-5 text-sm text-muted-foreground leading-relaxed">
+          <p>
+            <strong class="text-foreground">Zufallsgenerator:</strong> Trage deine Optionen ein, drehe das Rad und erhalte sofort ein zufälliges Ergebnis — mit <code>window.crypto.getRandomValues()</code>, dem kryptografischen Standard für echte Zufälligkeit. Jeder Eintrag hat exakt die gleiche Wahrscheinlichkeit.
+          </p>
+        </section>
+
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+
+        <section class="space-y-4">
+          <h2 class="text-xl font-bold text-foreground">Anwendungsmöglichkeiten</h2>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {ANWENDUNGEN.map((uso, i) => (
+              <li class="flex items-start gap-3 bg-card border border-border rounded-xl p-4">
+                <Check className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                <span class="text-sm text-muted-foreground">{uso}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <AdPlaceholder position="after-use-cases" client:visible />
+
+        <section class="bg-card border border-border rounded-xl p-6 space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Warum ein digitales Glücksrad statt Würfeln?</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Ein physischer Würfel hat mechanische Unvollkommenheiten — das Gewichtszentrum ist nicht perfekt zentriert, und bestimmte Zahlen werden leicht häufiger gewürfelt. Ein digitaler Zufallsgenerator mit <code>window.crypto.getRandomValues()</code> hat keinen physischen Bias. Jeder Eintrag hat exakt die gleiche Wahrscheinlichkeit.
+          </p>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Weitere Tools</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              { label: "Namenrad", href: "/namenrad" },
+              { label: "Yes or No Wheel", href: "/yes-or-no-wheel" },
+              { label: "Random Decision Maker", href: "/random-decision-maker" },
+            ].map((link) => (
+              <a href={link.href}
+                class="p-4 bg-card border border-border rounded-xl text-center hover:border-primary/50 hover:shadow-md transition-all text-sm font-semibold text-foreground">
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Häufig gestellte Fragen</h2>
+          <div class="space-y-3">
+            {[
+              ["Ist der Zufallsgenerator wirklich zufällig?", "Ja. Wir verwenden window.crypto.getRandomValues(), den kryptografischen Standard moderner Browser. Kein Eintrag hat eine höhere Wahrscheinlichkeit als ein anderer."],
+              ["Wie viele Einträge kann ich hinzufügen?", "So viele wie nötig. Das Rad passt sich automatisch an beliebig viele Einträge an."],
+              ["Ist es kostenlos?", "Vollständig kostenlos. Keine Anmeldung, kein Download, keine Zahlung erforderlich."],
+            ].map(([q, a], i) => (
+              <div class="bg-card border border-border rounded-xl p-5">
+                <p class="font-semibold text-foreground mb-2">{q}</p>
+                <p class="text-muted-foreground">{a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="text-center py-6">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Vollständiges Tool <ArrowRight className="w-4 h-4" />
+          </a>
+        </section>
+
+        <AdPlaceholder position="bottom" client:visible />
+      </main>
+      <GlobalFooterIsland client:idle />
+    </div>
+  </div>
+</Layout>

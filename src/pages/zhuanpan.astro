@@ -1,0 +1,156 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import { ArrowRight } from 'lucide-react';
+
+const title = "在线转盘 — 随机抽签工具 | Real Wheel Picker";
+const description = "免费在线转盘，随机抽签，公平公正。添加参与者，转动转盘，立即获得结果。无需注册，完全免费，使用密码学随机算法。";
+const canonical = "/zhuanpan";
+const locale = "zh_CN";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "在线转盘 — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/zhuanpan",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "免费在线转盘，随机抽签工具。添加选项，转动转盘，获得随机结果。",
+      "inLanguage": "zh",
+    },
+    {
+      "@type": "HowTo",
+      "name": "如何使用在线转盘",
+      "inLanguage": "zh",
+      "totalTime": "PT30S",
+      "step": [
+        { "@type": "HowToStep", "position": 1, "name": "添加参与者", "text": "在转盘中输入每个参与者的名字或选项。" },
+        { "@type": "HowToStep", "position": 2, "name": "转动转盘", "text": "点击转动按钮。系统使用 window.crypto.getRandomValues() 进行完全公平的随机选择。" },
+        { "@type": "HowToStep", "position": 3, "name": "查看结果", "text": "转盘随机选出的参与者就是获奖者。每个人获奖的概率完全相同。" },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "这个在线转盘真的是随机的吗？",
+          "acceptedAnswer": { "@type": "Answer", "text": "是的。Real Wheel Picker 使用 window.crypto.getRandomValues()，这是现代浏览器的密码学标准，与网上银行使用的随机性级别相同。每个参与者获选的概率完全相等，结果无法预测或操纵。" },
+        },
+        {
+          "@type": "Question",
+          "name": "可以添加多少个参与者？",
+          "acceptedAnswer": { "@type": "Answer", "text": "可以添加任意数量的参与者。点击任何名字即可编辑，并可继续添加更多。转盘会自动适应。" },
+        },
+        {
+          "@type": "Question",
+          "name": "免费使用吗？",
+          "acceptedAnswer": { "@type": "Answer", "text": "完全免费。无需注册，无需下载，无需付费。直接在浏览器中使用。" },
+        },
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "在线转盘" },
+      ],
+    },
+  ],
+};
+
+const defaultParticipants = [
+  { pseudo: "选项 1", weight: 1 },
+  { pseudo: "选项 2", weight: 1 },
+  { pseudo: "选项 3", weight: 1 },
+  { pseudo: "选项 4", weight: 1 },
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} locale={locale} jsonLd={jsonLd}>
+  <div class="relative min-h-screen overflow-hidden" style="background: var(--gradient-bg)">
+    <div aria-hidden class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div class="aurora-orb aurora-orb-gold"></div>
+      <div class="aurora-orb aurora-orb-purple"></div>
+      <div class="aurora-orb aurora-orb-blue"></div>
+    </div>
+    <div class="relative z-10">
+      <HeaderIsland client:load />
+      <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+
+        <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+          <a href="/" class="hover:text-primary transition-colors">Home</a>
+          <span>/</span>
+          <span class="text-foreground">在线转盘</span>
+        </nav>
+
+        <section class="text-center space-y-4 py-2">
+          <h1 class="text-2xl md:text-4xl font-bold text-foreground leading-tight">
+            在线转盘 — 随机抽签，公平公正
+          </h1>
+          <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            添加参与者或选项，转动转盘，立即获得随机结果。使用密码学算法确保绝对公平。免费，无需注册。
+          </p>
+        </section>
+
+        <section class="bg-card border border-border rounded-xl p-5 text-sm text-muted-foreground leading-relaxed">
+          <p>
+            <strong class="text-foreground">在线转盘：</strong>输入参与者姓名，点击转动，系统使用 <code>window.crypto.getRandomValues()</code> 随机选出获奖者。每位参与者获选概率完全相同，结果透明可验证，完全免费。
+          </p>
+        </section>
+
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">使用场景</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[
+              ["抽奖活动", "微信、微博、抖音等平台的抽奖，公平透明。"],
+              ["课堂点名", "随机选择学生回答问题或完成任务。"],
+              ["团队决策", "随机分配任务、选择发言人或决定顺序。"],
+              ["游戏娱乐", "决定谁先开始，随机选择游戏规则。"],
+            ].map(([title, desc], i) => (
+              <div class="bg-card border border-border rounded-xl p-4">
+                <p class="font-semibold text-foreground mb-1">{title}</p>
+                <p class="text-sm text-muted-foreground">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <AdPlaceholder position="after-use-cases" client:visible />
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">常见问题</h2>
+          <div class="space-y-3">
+            {[
+              ["这个在线转盘真的是随机的吗？", "是的。我们使用 window.crypto.getRandomValues()，这是现代浏览器的密码学标准。每个参与者获选的概率完全相等。"],
+              ["可以添加多少个参与者？", "可以添加任意数量的参与者。转盘会自动适应。"],
+              ["免费使用吗？", "完全免费，无需注册，无需下载，直接在浏览器中使用。"],
+            ].map(([q, a], i) => (
+              <div class="bg-card border border-border rounded-xl p-5">
+                <p class="font-semibold text-foreground mb-2">{q}</p>
+                <p class="text-muted-foreground">{a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="text-center py-6">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            完整工具 <ArrowRight className="w-4 h-4" />
+          </a>
+        </section>
+
+        <AdPlaceholder position="bottom" client:visible />
+      </main>
+      <GlobalFooterIsland client:idle />
+    </div>
+  </div>
+</Layout>

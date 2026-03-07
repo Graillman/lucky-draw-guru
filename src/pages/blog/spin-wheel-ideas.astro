@@ -1,0 +1,201 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, Sparkles, PartyPopper, Users, BookOpen, Briefcase } from 'lucide-react';
+
+const title = "50 Creative Spin the Wheel Ideas for Parties, Classes & Events";
+const description = "Discover 50 creative spin the wheel ideas for parties, games, classrooms, work events, and social media. Copy-paste ready wheel templates included.";
+const canonical = "/blog/spin-wheel-ideas";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "50 Creative Spin the Wheel Ideas for Parties, Classes & Events",
+  "description": "50 creative spin the wheel ideas for parties, games, classrooms, work events, and social media.",
+  "author": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2025-02-15",
+  "dateModified": "2026-03-01",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/spin-wheel-ideas" },
+};
+
+const categories = [
+  {
+    icon: PartyPopper,
+    title: "Party & Social Games (10 ideas)",
+    ideas: [
+      { name: "Truth or Dare", desc: "Classic party game. Add custom truths and dares to each slot for your group." },
+      { name: "Drink or Dare", desc: "Adult parties: spin to decide between taking a sip or completing a dare." },
+      { name: "Random Dance Move", desc: "Each slot = a different dance move. Spin and everyone does it for 30 seconds." },
+      { name: "Would You Rather", desc: "Fill slots with 'Would you rather' scenarios. The wheel picks which one you must answer." },
+      { name: "Karaoke Song Roulette", desc: "Put song titles in each slot. Whoever it lands on has to perform that song." },
+      { name: "Compliment Wheel", desc: "Fill slots with compliment topics ('your funniest moment', 'best quality', etc.). Spin to share compliments." },
+      { name: "Party Game Selector", desc: "Can't decide what to play? Put all your game options on the wheel and let fate decide." },
+      { name: "Movie Night Picker", desc: "Everyone submits a movie, put them all on the wheel, spin to pick tonight's film. No more 30-minute debates." },
+      { name: "Restaurant Roulette", desc: "Can't agree where to eat? Each person picks a restaurant, spin to decide." },
+      { name: "Chore Wheel", desc: "Assign household tasks randomly so no one gets stuck with the worst jobs every time." },
+    ],
+  },
+  {
+    icon: BookOpen,
+    title: "Classroom & Education (10 ideas)",
+    ideas: [
+      { name: "Random Question Picker", desc: "Put different question types or subjects on the wheel for review games." },
+      { name: "Student Name Picker", desc: "The most common classroom use. Equitable participation for all students." },
+      { name: "Reading Group Assignments", desc: "Assign students to reading groups randomly at the start of each unit." },
+      { name: "Essay Topic Wheel", desc: "List essay topic options — spin to assign topics so everyone gets something different." },
+      { name: "Vocabulary Challenge", desc: "Put vocabulary words on the wheel. Spin to pick the word a student must define or use in a sentence." },
+      { name: "Classroom Jobs", desc: "Weekly classroom roles (line leader, door holder, attendance taker) assigned randomly." },
+      { name: "Brain Break Activities", desc: "Spinning exercises, stretches, mindfulness moments — spin to pick the break activity." },
+      { name: "Debate Side Assigner", desc: "In debate class, spin to assign which side of the argument each team must argue." },
+      { name: "Homework Check", desc: "Spin to pick which student's homework gets reviewed on the projector that day." },
+      { name: "Science Experiment Groups", desc: "Form lab groups randomly at the start of each experiment." },
+    ],
+  },
+  {
+    icon: Users,
+    title: "Content Creators & Social Media (10 ideas)",
+    ideas: [
+      { name: "Subscriber Giveaway Winner", desc: "Paste subscriber usernames and spin for a transparent winner selection." },
+      { name: "Content Idea Wheel", desc: "Stuck on what to create? Put content ideas on the wheel and let randomness guide you." },
+      { name: "Niche Topic Picker", desc: "For blogs or channels that cover multiple topics — spin to pick this week's topic." },
+      { name: "Collaboration Partner", desc: "If you have multiple collab opportunities, spin to decide who to reach out to first." },
+      { name: "Comment Highlight", desc: "Too many comments to read? Spin to pick one lucky commenter whose comment you feature." },
+      { name: "Posting Time Experiment", desc: "Put different posting times on the wheel. Spin to pick your post time this week and track results." },
+      { name: "Hashtag Strategy Wheel", desc: "Rotate between hashtag sets to test which performs best, assigned by the wheel." },
+      { name: "Thumbnail Style Picker", desc: "Have multiple thumbnail concepts? Spin to pick which one goes live." },
+      { name: "Fan Q&A Picker", desc: "Collect questions from fans, put them all on the wheel, spin to pick which you answer in your next video." },
+      { name: "Merch Design Vote", desc: "Finalists in a design vote — spin to break a tie between two top contenders." },
+    ],
+  },
+  {
+    icon: Briefcase,
+    title: "Work & Team Building (10 ideas)",
+    ideas: [
+      { name: "Meeting Icebreaker Wheel", desc: "Start every meeting with a random icebreaker question. Keeps remote teams engaged." },
+      { name: "Stand-Up Order", desc: "Spin to determine who speaks first in your daily stand-up — no one waits until last." },
+      { name: "Lunch Roulette", desc: "Put nearby restaurants or delivery options on the wheel for the team lunch decision." },
+      { name: "Peer Recognition Pick", desc: "Who gets to give out the team recognition award this week? Spin to choose the nominator." },
+      { name: "Task Assignment", desc: "For equivalent tasks where it doesn't matter who does what — spin to assign fairly." },
+      { name: "Presentation Order", desc: "Quarterly reviews, project demos — spin to set the order so no one gets the coveted first/last slot." },
+      { name: "Hackathon Team Formation", desc: "Mix team members across departments for maximum diversity." },
+      { name: "Decision Tiebreaker", desc: "Stakeholders are split on two equal options — spin to break the impasse and move forward." },
+      { name: "Training Topic Wheel", desc: "Determine the next lunch-and-learn topic by spinning from a list of proposed subjects." },
+      { name: "Feedback Focus", desc: "In retro sessions, spin to pick which topic gets the most discussion time." },
+    ],
+  },
+  {
+    icon: Sparkles,
+    title: "Personal Life & Fun (10 ideas)",
+    ideas: [
+      { name: "Workout Routine Wheel", desc: "Put exercises on the wheel — spin to build a random workout that keeps things fresh." },
+      { name: "Meal Prep Picker", desc: "Can't decide what to cook? List your go-to recipes and spin for dinner inspiration." },
+      { name: "Weekend Activity", desc: "Put all the things you've been wanting to do on the wheel — spin to commit to one." },
+      { name: "Book to Read Next", desc: "Your reading list is too long. Spin to pick what gets read next." },
+      { name: "Savings Challenge", desc: "Different amounts on the wheel ($5, $10, $20, $50) — spin every week to set your savings target." },
+      { name: "Random Act of Kindness", desc: "Fill slots with small acts of kindness. Spin daily and complete the action." },
+      { name: "Language Practice Topic", desc: "If you're learning a language — spin to pick today's vocabulary topic." },
+      { name: "Journaling Prompt", desc: "Load journaling prompts onto the wheel. Spin each morning to start your entry." },
+      { name: "Meditation Type", desc: "Guided, breathing, body scan, silent — spin to vary your daily practice." },
+      { name: "Yes or No Life Decisions", desc: "For small, roughly equal decisions — just spin the yes/no wheel and commit to the outcome." },
+    ],
+  },
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <section class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary transition-colors">Blog</a>
+          <span>/</span>
+          <span>Spin Wheel Ideas</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          50 Creative Spin the Wheel Ideas for Parties, Classes & Events
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          A spinning wheel isn't just for giveaways. Once you have a random wheel tool, the applications are everywhere — from running a fairer classroom to making team decisions without endless debate. Here are 50 proven ideas organized by category.
+        </p>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>10 min read</span>
+          <span>·</span>
+          <span>Updated March 2026</span>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      {categories.map((cat, ci) => (
+        <section key={ci} class="space-y-5">
+          <h2 class="text-2xl font-bold text-foreground flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <cat.icon className="w-5 h-5 text-primary" />
+            </div>
+            {cat.title}
+          </h2>
+          <div class="space-y-3">
+            {cat.ideas.map((idea, ii) => (
+              <div key={ii} class="bg-card border border-border rounded-xl p-4 flex gap-4">
+                <span class="w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center flex-shrink-0">
+                  {ci * 10 + ii + 1}
+                </span>
+                <div class="space-y-0.5">
+                  <p class="font-semibold text-foreground text-sm">{idea.name}</p>
+                  <p class="text-xs text-muted-foreground">{idea.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          {ci === 1 && <AdPlaceholder position="after-winners" client:visible />}
+        </section>
+      ))}
+
+      {/* How to get started */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">How to Get Started with Any of These Ideas</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Every idea on this list works with Real Wheel Picker's free tools. Here's the general setup:
+        </p>
+        <div class="space-y-3">
+          {[
+            "Go to the main Spin the Wheel tool",
+            "Clear the default participant list",
+            "Type or paste your custom options (one per line)",
+            "Click Spin — the wheel selects a random entry",
+            "Use the 'Remove winner' option if you want to avoid repeat picks",
+          ].map((step, i) => (
+            <div key={i} class="flex items-center gap-3 bg-card border border-border rounded-xl p-4">
+              <span class="w-7 h-7 rounded-full bg-primary/10 text-primary text-sm font-bold flex items-center justify-center flex-shrink-0">{i + 1}</span>
+              <p class="text-sm text-muted-foreground">{step}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section class="bg-primary/5 border border-primary/20 rounded-xl p-8 text-center space-y-4">
+        <Sparkles className="w-10 h-10 text-primary mx-auto" />
+        <h2 class="text-2xl font-bold text-foreground">Start spinning</h2>
+        <p class="text-muted-foreground">Free, instant, works on every device. Pick an idea above and try it now.</p>
+        <div class="flex flex-wrap gap-3 justify-center">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Spin the Wheel <ArrowRight className="w-4 h-4" />
+          </a>
+          <a href="/party-wheel" class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-6 py-3 rounded-xl font-semibold hover:border-primary transition-colors">
+            Party Wheel (Truth or Dare)
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug="/blog/spin-wheel-ideas" client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

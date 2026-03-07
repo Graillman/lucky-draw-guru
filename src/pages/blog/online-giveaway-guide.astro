@@ -1,0 +1,256 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertCircle, Trophy, Shield, Globe } from 'lucide-react';
+
+const title = "How to Run a Fair Online Giveaway: Complete Guide for 2026";
+const description = "Everything you need to know to run a legitimate, transparent online giveaway. Rules, platforms, winner selection, legal requirements, and proven engagement strategies.";
+const canonical = "/blog/online-giveaway-guide";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Run a Fair Online Giveaway: Complete Guide for 2026",
+  "description": "Everything you need to run a legitimate, transparent online giveaway including rules, platforms, and winner selection.",
+  "author": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2025-03-01",
+  "dateModified": "2026-03-01",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/online-giveaway-guide" },
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <section class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary transition-colors">Blog</a>
+          <span>/</span>
+          <span>Online Giveaway Guide</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          How to Run a Fair Online Giveaway: Complete Guide for 2026
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          Online giveaways are one of the highest-ROI marketing tactics available to creators and businesses. Done right, they build trust, grow audiences, and generate genuine excitement. Done wrong, they destroy credibility. This guide covers every step — from planning to winner selection to legal compliance.
+        </p>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>12 min read</span>
+          <span>·</span>
+          <span>Updated March 2026</span>
+        </div>
+      </section>
+
+      {/* Part 1: Planning */}
+      <section class="space-y-5">
+        <h2 class="text-2xl font-bold text-foreground">Part 1: Planning Your Giveaway</h2>
+
+        <div class="bg-card border border-border rounded-xl p-6 space-y-4">
+          <h3 class="text-lg font-semibold text-foreground">Define Your Goal First</h3>
+          <p class="text-muted-foreground text-sm leading-relaxed">
+            Before choosing a prize, define what success looks like. Are you trying to grow followers? Generate email leads? Increase post engagement? Drive traffic to a new product? Your goal determines everything else.
+          </p>
+          <div class="grid sm:grid-cols-2 gap-3">
+            {[
+              { goal: "Grow followers", tactic: "Require following + tagging friends" },
+              { goal: "Email list growth", tactic: "Entry via email signup form" },
+              { goal: "Product launch buzz", tactic: "Prize = your new product" },
+              { goal: "Engagement", tactic: "Comment-to-enter on a specific post" },
+            ].map((item, i) => (
+              <div key={i} class="bg-muted/30 rounded-lg p-3 space-y-1">
+                <p class="text-xs font-semibold text-foreground">Goal: {item.goal}</p>
+                <p class="text-xs text-muted-foreground">{item.tactic}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="bg-card border border-border rounded-xl p-6 space-y-4">
+          <h3 class="text-lg font-semibold text-foreground">Choosing the Right Prize</h3>
+          <p class="text-muted-foreground text-sm leading-relaxed">
+            The prize is the most important decision. A generic prize (iPhone, gift card) attracts everyone and converts no one — you'll gain followers who unfollow immediately after. A niche-specific prize attracts your exact target audience and builds lasting engagement.
+          </p>
+          <div class="space-y-2">
+            {[
+              { type: "Best prizes", examples: "Your own product, niche gear, experience relevant to your audience", color: "text-green-400" },
+              { type: "Good prizes", examples: "Product bundle from a brand partner, exclusive access, digital products", color: "text-primary" },
+              { type: "Avoid", examples: "Generic gift cards, iPhones, cash (unless you're a finance creator)", color: "text-destructive" },
+            ].map((item, i) => (
+              <div key={i} class="flex gap-3 items-start">
+                <span class={`text-xs font-bold ${item.color} w-20 flex-shrink-0 mt-0.5`}>{item.type}</span>
+                <p class="text-xs text-muted-foreground">{item.examples}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      {/* Part 2: Platform Rules */}
+      <section class="space-y-5">
+        <h2 class="text-2xl font-bold text-foreground">Part 2: Platform-Specific Rules</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Every major platform has specific rules for giveaways. Violating them can result in post removal or account suspension.
+        </p>
+
+        {[
+          {
+            platform: "Instagram",
+            icon: "📸",
+            required: ["Must state the promotion is not affiliated with Instagram", "Must include eligibility requirements", "Must clearly state entry method and end date"],
+            forbidden: ["Asking users to tag themselves in photos they're not in", "Inaccurate tagging"],
+          },
+          {
+            platform: "TikTok",
+            icon: "🎵",
+            required: ["Clear rules in video or caption", "Age restriction compliance", "Must not promise guaranteed earnings or prizes based on engagement metrics"],
+            forbidden: ["Misleading claims about the prize value", "Requiring users to create TikTok accounts to enter if they already have one"],
+          },
+          {
+            platform: "YouTube",
+            icon: "▶️",
+            required: ["Disclose if the giveaway is sponsored", "Follow Google's contest policies", "Clear rules in the video description"],
+            forbidden: ["Using subscriber counts as entry requirements", "Sub4Sub arrangements"],
+          },
+          {
+            platform: "Twitter / X",
+            icon: "𝕏",
+            required: ["Link to full official rules", "Disclose affiliation if sponsored"],
+            forbidden: ["Asking users to create multiple accounts to enter", "Mass duplicate content"],
+          },
+        ].map((item, i) => (
+          <div key={i} class="bg-card border border-border rounded-xl p-5 space-y-3">
+            <h3 class="font-bold text-foreground flex items-center gap-2">
+              <span>{item.icon}</span> {item.platform}
+            </h3>
+            <div class="space-y-2">
+              <p class="text-xs font-semibold text-green-400 uppercase tracking-wide">Required</p>
+              <ul class="space-y-1">
+                {item.required.map((r, ri) => (
+                  <li key={ri} class="flex items-start gap-2 text-xs text-muted-foreground">
+                    <CheckCircle className="w-3 h-3 text-green-400 mt-0.5 flex-shrink-0" /> {r}
+                  </li>
+                ))}
+              </ul>
+              <p class="text-xs font-semibold text-destructive uppercase tracking-wide">Forbidden</p>
+              <ul class="space-y-1">
+                {item.forbidden.map((f, fi) => (
+                  <li key={fi} class="flex items-start gap-2 text-xs text-muted-foreground">
+                    <AlertCircle className="w-3 h-3 text-destructive mt-0.5 flex-shrink-0" /> {f}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      {/* Part 3: Picking a Winner */}
+      <section class="space-y-5">
+        <h2 class="text-2xl font-bold text-foreground">Part 3: Picking a Winner Transparently</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Transparency in winner selection is the single most important factor in building long-term trust with your audience. People are increasingly skeptical of online giveaways — they assume the winner is a friend, a paid actor, or simply made up.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The solution: use a verifiable random picker, record the selection on screen, and post the recording publicly when you announce the winner.
+        </p>
+        <div class="bg-card border border-border rounded-xl p-6 space-y-4">
+          <h3 class="font-semibold text-foreground flex items-center gap-2">
+            <Trophy className="w-5 h-5 text-primary" /> The transparent selection process
+          </h3>
+          <ol class="space-y-3 text-sm text-muted-foreground">
+            {[
+              "Collect all eligible entries and verify each one meets the requirements",
+              "Open a screen recording tool (Loom, OBS, QuickTime, or your phone screen recorder)",
+              "Paste all eligible usernames into Real Wheel Picker",
+              "Show the full list on screen before spinning",
+              "Spin the wheel on camera",
+              "Post the recording with your winner announcement",
+            ].map((step, i) => (
+              <li key={i} class="flex gap-3">
+                <span class="w-5 h-5 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center flex-shrink-0">{i + 1}</span>
+                {step}
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <div class="text-center">
+          <a href="/giveaway-picker" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Try the Giveaway Picker <ArrowRight className="w-4 h-4" />
+          </a>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      {/* Part 4: Legal */}
+      <section class="space-y-5">
+        <h2 class="text-2xl font-bold text-foreground">Part 4: Legal Requirements</h2>
+        <div class="bg-card border border-border rounded-xl p-5 space-y-3">
+          <div class="flex items-start gap-3">
+            <Shield className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+            <div class="space-y-2">
+              <p class="font-semibold text-foreground">Key legal requirements (varies by country)</p>
+              <ul class="space-y-2 text-sm text-muted-foreground">
+                <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /> <strong class="text-foreground">No purchase necessary</strong> — in many countries, requiring a purchase to enter makes it an illegal lottery. Offer a free alternative entry method.</li>
+                <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /> <strong class="text-foreground">Age restrictions</strong> — clearly state minimum age. Many jurisdictions require 18+ for sweepstakes.</li>
+                <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /> <strong class="text-foreground">Geographic restrictions</strong> — some prizes can't be shipped internationally. State clearly which countries are eligible.</li>
+                <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /> <strong class="text-foreground">Prize value disclosure</strong> — in the US and EU, prizes above a certain value (varies by state/country) may require tax reporting.</li>
+                <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /> <strong class="text-foreground">Odds of winning</strong> — some jurisdictions require disclosing approximate odds.</li>
+              </ul>
+              <p class="text-xs text-muted-foreground italic">Disclaimer: This is general information, not legal advice. Consult a local legal professional for giveaways with significant prize values or international reach.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Part 5: Post-giveaway */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Part 5: What to Do After the Giveaway</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The giveaway isn't over when you pick a winner. The post-giveaway period is critical for retaining the followers you gained.
+        </p>
+        <div class="space-y-3">
+          {[
+            { action: "Post the winner announcement within 24 hours", why: "Followers who entered are waiting. Late announcements suggest disorganization or fraud." },
+            { action: "Share the screen recording proof", why: "Silences any accusations of favoritism. Shows you run a professional operation." },
+            { action: "Follow up when the winner receives their prize", why: "Post a photo or message from the winner. Confirms the giveaway was real and creates content for future promotions." },
+            { action: "Engage with the spike in followers immediately", why: "New followers are most engaged in the first 48 hours. Post valuable content immediately to convert them into long-term fans." },
+            { action: "Track your metrics before and after", why: "Follower count, engagement rate, website traffic. Quantify the ROI so you can scale what works." },
+          ].map((item, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-4 space-y-1">
+              <p class="font-semibold text-foreground text-sm">{item.action}</p>
+              <p class="text-xs text-muted-foreground"><strong class="text-foreground">Why:</strong> {item.why}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section class="bg-primary/5 border border-primary/20 rounded-xl p-8 text-center space-y-4">
+        <Globe className="w-10 h-10 text-primary mx-auto" />
+        <h2 class="text-2xl font-bold text-foreground">Run your giveaway the right way</h2>
+        <p class="text-muted-foreground">Use our free giveaway picker to select a winner transparently. Works for Instagram, TikTok, YouTube, and any platform.</p>
+        <div class="flex flex-wrap gap-3 justify-center">
+          <a href="/giveaway-picker" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Giveaway Picker <ArrowRight className="w-4 h-4" />
+          </a>
+          <a href="/instagram-giveaway-picker" class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-6 py-3 rounded-xl font-semibold hover:border-primary transition-colors">
+            Instagram Giveaway Picker
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug="/blog/online-giveaway-guide" client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

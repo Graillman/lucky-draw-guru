@@ -1,0 +1,98 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import FaqAccordionIsland from '@/components/FaqAccordionIsland';
+
+const title = "Frequently Asked Questions";
+const description = "Everything you need to know about our random picker tool";
+const canonical = "/faq";
+
+const faqItems = [
+  {
+    question: "Is this random picker truly fair and unbiased?",
+    answer: "Yes, absolutely. Our random picker uses the Web Crypto API (crypto.getRandomValues), which provides cryptographically secure random numbers. This is the same technology used by banks and security applications. Every participant has exactly equal chances in fair mode - no manipulation is possible.",
+  },
+  {
+    question: "How does the randomness algorithm work?",
+    answer: "We use your browser's built-in cryptographic random number generator (CSPRNG). Unlike simple Math.random(), this provides true randomness based on hardware entropy sources. The algorithm is deterministic once seeded, ensuring consistent and verifiable results. All calculations happen locally - nothing is sent to servers.",
+  },
+  {
+    question: "Is my data safe? What do you store?",
+    answer: "We store absolutely nothing on our servers. Your participant list is saved only in your browser's local storage for convenience - you can clear it anytime. No cookies track you, no analytics collect personal data, and no information leaves your device. The draw runs 100% client-side.",
+  },
+  {
+    question: "Can I use this for Instagram or YouTube giveaways?",
+    answer: "Yes! Our giveaway picker is perfect for social media contests. You can paste comments, usernames, or any list of participants. The visual wheel spin adds transparency - show your audience the live draw. Many influencers and streamers use our tool for fair, public winner selection.",
+  },
+  {
+    question: "What's the difference between Fair and Custom draw modes?",
+    answer: "Fair mode gives everyone equal chances - perfect for giveaways where fairness is essential. Custom mode lets you assign different weights/probabilities to participants - useful for loyalty programs, engagement rewards, or scenarios where some entries should have better odds. Both modes show transparent probability calculations.",
+  },
+  {
+    question: "Can I pick multiple winners at once?",
+    answer: "Yes! Set the number of winners before spinning. For multiple winners, we use our casino roulette visualization with numbered balls - each landing in a unique slot. Winners are selected without replacement, ensuring the same person can't win twice in a single draw.",
+  },
+  {
+    question: "Does it work on mobile devices?",
+    answer: "Absolutely. Our tool is fully responsive and optimized for all devices - phones, tablets, and desktops. The wheel animations are smooth, touch-friendly, and work identically across all platforms. No app download required - just open the website.",
+  },
+  {
+    question: "Is this free? Are there hidden costs?",
+    answer: "100% free with no hidden costs, no premium tiers, no signup required. We're supported by non-intrusive ads that never interrupt your draws. Use it unlimited times with unlimited participants.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItems.map((item) => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": { "@type": "Answer", "text": item.answer },
+  })),
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-4xl mx-auto px-4 py-8 space-y-8">
+
+      <section class="text-center space-y-4 py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground">Frequently Asked Questions</h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">Everything you need to know about our random picker tool</p>
+        <p class="text-sm text-muted-foreground">Fairness &bull; Privacy &bull; Transparency</p>
+      </section>
+
+      <FaqAccordionIsland client:load />
+
+      <section class="bg-card border border-border rounded-xl p-6 md:p-8 space-y-4">
+        <h2 class="text-xl font-bold text-foreground">Still have questions?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Real Wheel Picker is a free online random selection tool built for streamers, teachers, event organizers, and anyone who needs a fair, transparent way to pick winners. It runs entirely in your browser — no data ever leaves your device, no account is needed, and every draw is powered by cryptographically secure randomness.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Whether you're running a giveaway for 10 followers or selecting teams for 200 employees, the tool handles it instantly. Use it for Instagram giveaways, TikTok live draws, Discord raffles, classroom activities, Secret Santa assignments, or any situation that calls for a random, unbiased choice.
+        </p>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      <section class="text-center py-8 space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">Ready to pick a winner?</h2>
+        <a
+          href="/"
+          class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity"
+        >
+          Start Your Free Draw
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </section>
+
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

@@ -1,0 +1,175 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+
+const title = "How to Pick a Winner on Reddit: Complete Giveaway Guide 2026";
+const description = "Step-by-step guide to running a fair Reddit giveaway and picking a random winner from comments. Includes Reddit rules, best practices, and free tools.";
+const canonical = "/blog/reddit-giveaway-guide";
+
+const steps = [
+  {
+    step: "Step 1",
+    title: "Choose the Right Subreddit",
+    content: "Don't just post in your own community. Find relevant subreddits where your target audience hangs out. Use r/giveaways as a starting point, but also look for niche subreddits related to your product or service. Check subreddit rules before posting.",
+  },
+  {
+    step: "Step 2",
+    title: "Write a Clear, Honest Post",
+    content: "State exactly what you're giving away, who is eligible (country restrictions, account age), how to enter (comment below, answer a question), and when you'll pick the winner. Vague posts get downvoted. Specific, honest posts get upvoted.",
+  },
+  {
+    step: "Step 3",
+    title: "Set a Clear Entry Method",
+    content: "The simplest: \"Comment below to enter.\" For more engagement: ask a question like \"What would you do with [prize]?\" Avoid requiring upvotes — this violates Reddit's rules and will get your post removed.",
+  },
+  {
+    step: "Step 4",
+    title: "Collect All Entries",
+    content: "When the giveaway closes, copy all commenter usernames. Remove duplicates if someone commented multiple times (unless multiple entries are allowed). Paste the list into RealWheelPicker.",
+  },
+  {
+    step: "Step 5",
+    title: "Pick a Winner Transparently",
+    content: "Use a random picker and screen-record the entire process. Post the video or screenshot as a comment on your original thread. Reddit users will appreciate the transparency — and it protects you from accusations of rigging.",
+  },
+  {
+    step: "Step 6",
+    title: "Announce and Deliver",
+    content: "Tag the winner in a comment on your original post. Send them a DM with prize delivery details. Update the post title with [CLOSED] and a note about the winner. Follow up with proof of delivery if possible.",
+  },
+];
+
+const mistakes = [
+  { title: "Requiring upvotes as entry", desc: "This violates Reddit's site-wide rules and will get your post removed or your account banned." },
+  { title: "Not checking subreddit rules first", desc: "Every subreddit has different rules about giveaways. Some require mod approval, others ban them entirely." },
+  { title: "Posting from a new account", desc: "Low-karma accounts get filtered as spam. Build your account before hosting a giveaway or have an established community member post it." },
+  { title: "Picking a winner without proof", desc: "Reddit's users are skeptical. Always screen-record your winner selection and post the video as proof." },
+  { title: "Ignoring country eligibility", desc: "Digital prizes can be global, but physical prizes have shipping costs and legal restrictions. State eligibility clearly in your post." },
+];
+
+const subreddits = [
+  { name: "r/giveaways", desc: "The main giveaway subreddit. Large audience, active community." },
+  { name: "r/GameDeals", desc: "Great for gaming-related giveaways. High engagement." },
+  { name: "r/SteamDeals", desc: "Steam game keys and giveaways. Very active community." },
+  { name: "r/RandomActsOfGaming", desc: "Gift games to random strangers. Karma-building." },
+  { name: "r/RandomActsOfAmazon", desc: "Wishlist-based gifting community." },
+  { name: "Your niche subreddit", desc: "Always check your industry subreddit for giveaway rules." },
+];
+---
+
+<Layout title={title} description={description} canonical={canonical}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <header class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary">Blog</a>
+          <span>/</span>
+          <span>Reddit Giveaways</span>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold text-foreground leading-tight">
+          How to Pick a Winner on Reddit: Complete Giveaway Guide 2026
+        </h1>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span class="bg-purple-500/10 text-purple-400 px-2 py-1 rounded text-xs font-medium">Giveaways</span>
+          <span>9 min read</span>
+          <span>Jan 1, 2026</span>
+        </div>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          Reddit giveaways can go viral fast&mdash;but picking a fair winner is trickier than it sounds. Here&apos;s everything you need to know to run a legitimate Reddit contest and select a winner your community trusts.
+        </p>
+      </header>
+
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Why Reddit Giveaways Work</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Reddit has over 1.5 billion monthly active users across tens of thousands of communities. A well-executed giveaway in the right subreddit can generate thousands of upvotes, massive comment engagement, and serious brand visibility&mdash;all organically.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Unlike Instagram or TikTok, Reddit users tend to be skeptical and vocal. If your giveaway looks shady, you&apos;ll get called out immediately. That&apos;s why transparency matters even more on Reddit than on other platforms.
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Reddit Giveaway Rules You Must Know</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Before running a giveaway, understand Reddit&apos;s policies:
+        </p>
+        <ul class="space-y-2 text-muted-foreground">
+          <li class="flex gap-2"><span class="text-primary font-bold">&bull;</span><span><strong>No vote manipulation</strong> &mdash; you cannot require upvotes as entry conditions. Reddit will ban accounts that do this.</span></li>
+          <li class="flex gap-2"><span class="text-primary font-bold">&bull;</span><span><strong>Follow subreddit rules</strong> &mdash; each subreddit has its own rules. Many require mod approval for giveaways.</span></li>
+          <li class="flex gap-2"><span class="text-primary font-bold">&bull;</span><span><strong>No self-promotion spam</strong> &mdash; your account must be established (karma, post history) or mods will remove your post.</span></li>
+          <li class="flex gap-2"><span class="text-primary font-bold">&bull;</span><span><strong>Disclose if it&apos;s a promotion</strong> &mdash; FTC guidelines require disclosure if you have a commercial interest.</span></li>
+          <li class="flex gap-2"><span class="text-primary font-bold">&bull;</span><span><strong>No prize for follows/subscribes</strong> &mdash; awarding Reddit Platinum/Awards as prizes is allowed, but requiring follows is not.</span></li>
+        </ul>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      <section class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">How to Run a Reddit Giveaway: Step by Step</h2>
+
+        {steps.map(({ step, title, content }) => (
+          <div key={step} class="p-5 rounded-xl bg-card border border-border space-y-2">
+            <div class="flex items-center gap-3">
+              <span class="bg-primary/20 text-primary text-xs font-bold px-2 py-1 rounded">{step}</span>
+              <h3 class="font-bold text-foreground">{title}</h3>
+            </div>
+            <p class="text-muted-foreground text-sm leading-relaxed">{content}</p>
+          </div>
+        ))}
+      </section>
+
+      <section class="p-6 rounded-xl bg-primary/5 border border-primary/20 space-y-3">
+        <h2 class="text-xl font-bold text-foreground">Pick Your Reddit Winner Now</h2>
+        <p class="text-muted-foreground text-sm">
+          Paste your list of Reddit commenters, spin the wheel, screen-record the result, and post it as proof. Free, instant, no signup required.
+        </p>
+        <a
+          href="/reddit-giveaway-picker"
+          class="inline-block bg-primary text-primary-foreground font-semibold px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
+        >
+          Use the Reddit Giveaway Picker &rarr;
+        </a>
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">5 Mistakes to Avoid</h2>
+        <div class="space-y-3">
+          {mistakes.map(({ title, desc }) => (
+            <div key={title} class="flex gap-3 p-4 rounded-lg bg-card border border-border">
+              <span class="text-red-400 font-bold text-lg leading-none mt-0.5">&#x2715;</span>
+              <div>
+                <p class="font-semibold text-foreground text-sm">{title}</p>
+                <p class="text-muted-foreground text-sm">{desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Best Subreddits for Giveaways</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {subreddits.map(({ name, desc }) => (
+            <div key={name} class="p-4 rounded-lg bg-card border border-border">
+              <p class="font-semibold text-foreground text-sm">{name}</p>
+              <p class="text-muted-foreground text-xs mt-1">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <AdPlaceholder position="bottom" client:visible />
+
+      <RelatedPosts currentSlug="/blog/reddit-giveaway-guide" client:idle />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

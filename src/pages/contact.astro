@@ -1,0 +1,29 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import ContactFormIsland from '@/components/ContactFormIsland';
+
+const title = "Contact Us — Random Picker";
+const description = "Have feedback, a bug report, or a feature request? Get in touch with the Random Picker team.";
+const canonical = "/contact";
+---
+
+<Layout title={title} description={description} canonical={canonical}>
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-2xl mx-auto px-4 py-12 space-y-8">
+
+      <section class="text-center space-y-4">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground">Contact Us</h1>
+        <p class="text-lg text-muted-foreground">
+          Have feedback, a bug report, or a feature request? We'd love to hear from you.
+        </p>
+      </section>
+
+      <ContactFormIsland client:load />
+
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

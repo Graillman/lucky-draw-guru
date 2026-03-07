@@ -1,0 +1,265 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, Lightbulb, Trophy, Users, Shield } from 'lucide-react';
+
+const title = "How to Pick a Winner on Discord: Free Giveaway Guide 2026";
+const description = "Learn how to run a fair Discord giveaway without a bot. Step-by-step guide to collecting entries and picking a random winner your community trusts.";
+const canonical = "/blog/discord-giveaway-guide";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Pick a Winner on Discord: Free Giveaway Guide 2026",
+  "description": "How to run a fair Discord giveaway without a bot and pick a random winner your community trusts.",
+  "author": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2025-08-01",
+  "dateModified": "2026-03-01",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/discord-giveaway-guide" },
+};
+
+const steps = [
+  {
+    title: "Create a #giveaway channel",
+    content: "Create a dedicated channel for giveaways and pin the giveaway announcement there. Use Discord's channel description to include the prize, entry requirements, and end date. This keeps the giveaway visible even as regular messages push it down.",
+    tip: "Lock the channel so only admins can post. This prevents people from trying to comment in ways that wouldn't count as entries and keeps the channel clean.",
+  },
+  {
+    title: "Write a clear giveaway announcement",
+    content: "Your announcement should include: the prize (with a photo if possible), exactly how to enter, eligible countries or restrictions, the end date and time with timezone, and how the winner will be picked and contacted. Example: \"React with 🎉 to enter. Winner picked randomly on Friday Feb 14 at 8pm EST using realwheelpicker.com. Open worldwide. Must be a member for 7+ days.\"",
+    tip: "Use Discord formatting: **bold** for key info, > blockquotes for terms, and a countdown bot like Sesh to add a countdown timer to your announcement.",
+  },
+  {
+    title: "Choose your entry method",
+    content: "The most common Discord entry methods are: (1) React to the giveaway message with an emoji — easy to participate, easy to see who entered. (2) Reply in a specific channel with a keyword or phrase — gives you text entries to paste into a picker. (3) Complete a form via Google Forms link — best for complex qualification requirements.",
+    tip: "Reaction-based entries are the most frictionless and will get the highest participation rate. If you need more verification (e.g., must have a certain role), combine reactions with role checks using Carl-bot's reaction roles.",
+  },
+  {
+    title: "Collect entries at the close date",
+    content: "When the giveaway closes: for reaction entries, click the emoji reaction and scroll through the user list — Discord shows everyone who reacted. Screenshot it for records, then copy all usernames. For text entries, copy all replies from the entry channel. Paste usernames one per line into realwheelpicker.com. Remove duplicate entries if your rules say one entry per person.",
+  },
+  {
+    title: "Pick the winner publicly",
+    content: "Share your screen in a voice channel, or record a short video of the spin. Paste all entries into the random wheel at realwheelpicker.com and spin it. Post the recording or screenshot of the result in your #giveaway channel. This gives your community proof the draw was fair and not predetermined.",
+    tip: "Use Discord's Go Live feature to stream the pick in a voice channel. This creates a shared, live moment where your community watches the draw happen in real time.",
+  },
+  {
+    title: "Announce the winner and follow up",
+    content: "Ping the winner in the announcement channel: \"@username — you won! DM an admin within 48 hours to claim your prize.\" If they don't respond in 48 hours, reroll using the same list (minus the non-responder). Always post a follow-up photo or confirmation when the prize is delivered — this builds trust for your next giveaway.",
+  },
+];
+
+const entryRows = [
+  { method: "Emoji reaction", user: "Very easy", collect: "Easy", best: "Most giveaways" },
+  { method: "Text reply", user: "Easy", collect: "Medium", best: "Word/phrase entries" },
+  { method: "Google Form", user: "Medium", collect: "Easy (spreadsheet)", best: "Qualification checks" },
+  { method: "Bot command", user: "Easy", collect: "Automatic", best: "Large servers" },
+];
+
+const trustPoints = [
+  { title: "Use a visible, open-source random tool", desc: "Tools like realwheelpicker.com run entirely in the browser with no server involvement. Community members can independently verify what the tool does." },
+  { title: "Post a screen recording of the draw", desc: "Even better than going live — a recording can be replayed and scrutinized. It shows the complete entry list and the spin in one clip." },
+  { title: "Keep a log of past giveaways", desc: "A pinned post listing past winners builds a track record. When members can see that previous winners were real, they trust future giveaways more." },
+  { title: "Let a community mod verify the entry list", desc: "Having a moderator (not you) confirm that all entries are legitimate removes any conflict of interest concerns." },
+];
+
+const prizes = [
+  { category: "Gaming servers", prizes: "Steam games, Discord Nitro, in-game currency, custom role with perks" },
+  { category: "NFT / Crypto communities", prizes: "Whitelist spots, rare NFTs, hardware wallets — (check local regulations)" },
+  { category: "Art & creative servers", prizes: "Custom commissions, art software licenses, printing credits" },
+  { category: "Streamer communities", prizes: "Subscriptions to the streamer's channel, merch, co-stream invitations" },
+  { category: "Study / education servers", prizes: "Online course access, book vouchers, software subscriptions" },
+  { category: "Any server", prizes: "Discord Nitro is universally valued and easy to distribute digitally" },
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      {/* Header */}
+      <section class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary transition-colors">Blog</a>
+          <span>/</span>
+          <span>Discord Giveaway Guide</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          How to Pick a Winner on Discord: Complete Giveaway Guide
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          Discord giveaways are one of the best ways to reward your community members and attract new ones — but they only work if your audience trusts the process. This guide covers how to run a fair, transparent Discord giveaway with or without a bot.
+        </p>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>7 min read</span>
+          <span>·</span>
+          <span>Updated February 2026</span>
+        </div>
+      </section>
+
+      {/* With vs Without Bot */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Users className="w-5 h-5 text-primary" /> Bot vs. Manual: Which Should You Use?
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The two main approaches to Discord giveaways are using a dedicated bot (like GiveawayBot or Carl-bot) or running it manually. Both have tradeoffs.
+        </p>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-muted/30 rounded-xl p-4 space-y-2">
+            <p class="font-semibold text-foreground text-sm">Giveaway Bot</p>
+            <ul class="space-y-1 text-sm text-muted-foreground">
+              <li class="flex items-start gap-1"><CheckCircle className="w-3 h-3 text-primary flex-shrink-0 mt-1" /> Automated — picks winner automatically</li>
+              <li class="flex items-start gap-1"><CheckCircle className="w-3 h-3 text-primary flex-shrink-0 mt-1" /> Handles reaction-based entries</li>
+              <li class="flex items-start gap-1"><CheckCircle className="w-3 h-3 text-primary flex-shrink-0 mt-1" /> Role-based entry restrictions</li>
+              <li class="flex items-start gap-1 text-yellow-400"><span class="flex-shrink-0 mt-1">⚠</span> Requires server permissions</li>
+              <li class="flex items-start gap-1 text-yellow-400"><span class="flex-shrink-0 mt-1">⚠</span> Not always transparent to users</li>
+            </ul>
+          </div>
+          <div class="bg-muted/30 rounded-xl p-4 space-y-2">
+            <p class="font-semibold text-foreground text-sm">Manual (with Random Picker)</p>
+            <ul class="space-y-1 text-sm text-muted-foreground">
+              <li class="flex items-start gap-1"><CheckCircle className="w-3 h-3 text-primary flex-shrink-0 mt-1" /> No permissions or bot needed</li>
+              <li class="flex items-start gap-1"><CheckCircle className="w-3 h-3 text-primary flex-shrink-0 mt-1" /> Fully visible and auditable</li>
+              <li class="flex items-start gap-1"><CheckCircle className="w-3 h-3 text-primary flex-shrink-0 mt-1" /> Works with any entry type</li>
+              <li class="flex items-start gap-1 text-yellow-400"><span class="flex-shrink-0 mt-1">⚠</span> Requires manual entry collection</li>
+              <li class="flex items-start gap-1 text-yellow-400"><span class="flex-shrink-0 mt-1">⚠</span> More work for large giveaways</li>
+            </ul>
+          </div>
+        </div>
+        <p class="text-muted-foreground leading-relaxed text-sm">
+          For smaller servers (under 500 members) or high-value prizes where trust is paramount, the manual approach is often better. This guide covers both, but focuses on the manual method since it's universally available.
+        </p>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      {/* Step by Step */}
+      <section class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">How to Run a Discord Giveaway (Step by Step)</h2>
+        <div class="space-y-4">
+          {steps.map((s, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-6 space-y-3">
+              <div class="flex items-center gap-3">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex-shrink-0">{i + 1}</span>
+                <h3 class="text-lg font-semibold text-foreground">{s.title}</h3>
+              </div>
+              <p class="text-muted-foreground leading-relaxed pl-11">{s.content}</p>
+              {s.tip && (
+                <div class="bg-muted/40 rounded-lg p-3 ml-11 flex items-start gap-2">
+                  <Lightbulb className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                  <p class="text-sm text-muted-foreground"><strong class="text-foreground">Pro tip:</strong> {s.tip}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Entry Types Comparison */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground">Discord Entry Types Compared</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-2 pr-4 font-semibold text-foreground">Method</th>
+                <th class="text-left py-2 pr-4 font-semibold text-foreground">Ease for users</th>
+                <th class="text-left py-2 pr-4 font-semibold text-foreground">Ease of collection</th>
+                <th class="text-left py-2 font-semibold text-foreground">Best for</th>
+              </tr>
+            </thead>
+            <tbody class="space-y-2">
+              {entryRows.map((row, i) => (
+                <tr key={i} class="border-b border-border/50">
+                  <td class="py-2 pr-4 text-foreground font-medium">{row.method}</td>
+                  <td class="py-2 pr-4 text-muted-foreground">{row.user}</td>
+                  <td class="py-2 pr-4 text-muted-foreground">{row.collect}</td>
+                  <td class="py-2 text-muted-foreground">{row.best}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      {/* Trust Section */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Building Trust with Your Discord Community</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Discord communities are tight-knit and skeptical. Unlike social media followers who come and go, server members are invested — they've chosen to be in your community long-term. This means accusations of unfair giveaways spread quickly and can cause lasting damage.
+        </p>
+        <div class="space-y-3">
+          {trustPoints.map((point, i) => (
+            <div key={i} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl">
+              <Shield className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+              <div>
+                <p class="font-semibold text-foreground text-sm">{point.title}</p>
+                <p class="text-xs text-muted-foreground mt-1">{point.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Prize Ideas */}
+      <section class="bg-primary/5 border border-primary/20 rounded-xl p-6 md:p-8 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Trophy className="w-5 h-5 text-primary" /> Discord Giveaway Prize Ideas That Work
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The best prizes are relevant to your specific community. Generic prizes (Amazon gift cards) generate entry spam from people who don't care about your server. Niche-specific prizes attract real community members.
+        </p>
+        <div class="grid md:grid-cols-2 gap-4">
+          {prizes.map((p, i) => (
+            <div key={i} class="bg-card border border-border rounded-lg p-4 space-y-1">
+              <p class="font-semibold text-foreground text-sm">{p.category}</p>
+              <p class="text-xs text-muted-foreground">{p.prizes}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Conclusion */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Summary</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Running a Discord giveaway doesn't require a bot or special permissions. The core is simple: announce clearly, collect entries systematically, pick publicly with a verifiable random tool, and follow through quickly. Do that consistently and your community will trust — and look forward to — every giveaway you run.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The random picker tool is the linchpin of the whole process. A spinning wheel your community can watch is worth a hundred text messages saying "trust me, it was random."
+        </p>
+      </section>
+
+      {/* CTA */}
+      <section class="text-center py-8 space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Pick Your Discord Winner Now</h2>
+        <p class="text-muted-foreground">Free, no signup, works on any device.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a
+            href="/discord-giveaway-picker"
+            class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity"
+          >
+            Discord Giveaway Picker <ArrowRight className="w-5 h-5" />
+          </a>
+          <a
+            href="/blog"
+            class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:border-primary/50 transition-colors"
+          >
+            More Guides <ArrowRight className="w-5 h-5" />
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug="/blog/discord-giveaway-guide" client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

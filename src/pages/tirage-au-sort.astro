@@ -1,0 +1,202 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import { ArrowRight, Check } from 'lucide-react';
+
+const title = "Tirage au sort en ligne gratuit — Roue aléatoire | Real Wheel Picker";
+const description = "Effectuez un tirage au sort en ligne gratuit et instantané. Roue aléatoire cryptographiquement équitable. Idéal pour concours, classrooms et giveaways. Sans inscription.";
+const canonical = "/tirage-au-sort";
+const locale = "fr_FR";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Tirage au sort en ligne — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/tirage-au-sort",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "inLanguage": "fr",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Comment faire un tirage au sort en ligne gratuit ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Entrez les noms des participants dans la liste, puis cliquez sur 'Lancer la Roue'. La roue tourne et s'arrête aléatoirement sur un gagnant. Le tirage est cryptographiquement sécurisé — aucune triche possible.",
+          },
+        },
+        {
+          "@type": "Question",
+          "name": "Ce tirage au sort est-il vraiment équitable ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui. Nous utilisons window.crypto.getRandomValues(), l'API cryptographique du navigateur, qui génère une vraie aléatoire impossible à prédire ou manipuler. C'est le même niveau de sécurité que les transactions bancaires en ligne.",
+          },
+        },
+        {
+          "@type": "Question",
+          "name": "Puis-je faire un tirage au sort avec plusieurs gagnants ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui, depuis la page principale vous pouvez choisir le nombre de gagnants (2, 3, 5...). Les gagnants sont tirés sans remise — chaque participant ne peut gagner qu'une seule fois.",
+          },
+        },
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Tirage au sort en ligne" },
+      ],
+    },
+  ],
+};
+
+const defaultParticipants = [
+  { pseudo: "Alice", weight: 1 },
+  { pseudo: "Bob", weight: 1 },
+  { pseudo: "Camille", weight: 1 },
+  { pseudo: "David", weight: 1 },
+  { pseudo: "Emma", weight: 1 },
+  { pseudo: "Florian", weight: 1 },
+  { pseudo: "Gaëlle", weight: 1 },
+  { pseudo: "Hugo", weight: 1 },
+];
+
+const USES = [
+  "Désigner un gagnant pour un concours ou un jeu",
+  "Choisir l'ordre de passage dans un exposé",
+  "Organiser un tirage au sort sur Instagram ou TikTok",
+  "Sélectionner un volontaire dans un groupe",
+  "Décider équitablement entre plusieurs options",
+  "Animer une soirée ou un jeu en famille",
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} locale={locale} jsonLd={jsonLd}>
+  <div class="relative min-h-screen overflow-hidden" style="background: var(--gradient-bg)">
+    <div aria-hidden class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div class="aurora-orb aurora-orb-gold"></div>
+      <div class="aurora-orb aurora-orb-purple"></div>
+      <div class="aurora-orb aurora-orb-blue"></div>
+    </div>
+    <div class="relative z-10">
+      <HeaderIsland client:load />
+      <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+
+        {/* Breadcrumb */}
+        <nav aria-label="fil d'Ariane" class="text-xs text-muted-foreground flex gap-1">
+          <a href="/" class="hover:text-primary transition-colors">Accueil</a>
+          <span>/</span>
+          <span class="text-foreground">Tirage au sort</span>
+        </nav>
+
+        {/* Hero */}
+        <section class="text-center space-y-4 py-2">
+          <h1 class="text-2xl md:text-4xl font-bold text-foreground leading-tight">
+            Tirage au sort en ligne — Gratuit et équitable
+          </h1>
+          <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            Entrez vos participants, faites tourner la roue et obtenez un gagnant en un instant.
+            Aléatoire cryptographiquement sécurisé. Aucune inscription requise.
+          </p>
+        </section>
+
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+
+        {/* Comment ça marche */}
+        <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+          <h2 class="text-xl font-bold text-foreground">Comment faire un tirage au sort en ligne ?</h2>
+          <ol class="space-y-3">
+            {[
+              ["Entrez vos participants", "Ajoutez les noms ou options dans la liste (jusqu'à plusieurs centaines)."],
+              ["Lancez la roue", "Cliquez sur le bouton et regardez la roue tourner avec une animation fluide."],
+              ["Le gagnant est désigné", "La roue s'arrête aléatoirement sur un participant. Résultat immédiat."],
+              ["Recommencez si besoin", "Relancez pour un nouveau tirage ou retirez le gagnant pour un tirage en cascade."],
+            ].map(([titre, desc], i) => (
+              <li class="flex gap-4">
+                <span class="flex-shrink-0 w-7 h-7 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center">
+                  {i + 1}
+                </span>
+                <div>
+                  <p class="font-semibold text-foreground text-sm">{titre}</p>
+                  <p class="text-muted-foreground text-sm">{desc}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        {/* Cas d'usage */}
+        <section class="space-y-4">
+          <h2 class="text-xl font-bold text-foreground">À quoi sert un tirage au sort en ligne ?</h2>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {USES.map((use, i) => (
+              <li class="flex items-start gap-3 bg-card border border-border rounded-xl p-4">
+                <Check className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                <span class="text-sm text-muted-foreground">{use}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <AdPlaceholder position="after-use-cases" client:visible />
+
+        {/* SEO text */}
+        <section class="bg-card border border-border rounded-xl p-6 space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Tirage au sort en ligne — tout ce que vous devez savoir</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Un tirage au sort en ligne doit être à la fois rapide, gratuit et véritablement aléatoire. Real Wheel Picker utilise <strong>window.crypto.getRandomValues()</strong> — l'API cryptographique native des navigateurs modernes — pour garantir que chaque tirage est totalement imprévisible. Contrairement aux solutions basées sur Math.random() qui peuvent être biaisées, notre générateur est utilisé dans les applications de sécurité et de cryptographie.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            La roue de tirage au sort est particulièrement appréciée pour sa <strong>transparence visuelle</strong> : l'audience voit la roue tourner et ralentir en temps réel, ce qui renforce la confiance dans le résultat. Idéal pour les concours Instagram et TikTok, les activités en classe, ou les décisions de groupe.
+          </p>
+        </section>
+
+        {/* FAQ */}
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Questions fréquentes sur le tirage au sort</h2>
+          <div class="space-y-3">
+            {[
+              ["Comment faire un tirage au sort en ligne gratuit ?",
+               "Entrez les noms des participants, cliquez sur « Lancer la Roue » et le résultat s'affiche immédiatement. Aucun compte, aucun téléchargement."],
+              ["Ce tirage au sort est-il vraiment équitable ?",
+               "Oui. Nous utilisons window.crypto.getRandomValues(), l'API cryptographique du navigateur — le même niveau de sécurité que les opérations bancaires."],
+              ["Puis-je faire un tirage au sort avec plusieurs gagnants ?",
+               "Depuis la page principale, vous pouvez sélectionner le nombre de gagnants souhaité. Chaque gagnant est tiré sans remise."],
+            ].map(([q, a], i) => (
+              <div class="bg-card border border-border rounded-xl p-5">
+                <p class="font-semibold text-foreground mb-2">{q}</p>
+                <p class="text-muted-foreground">{a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section class="text-center py-6 space-y-4">
+          <p class="text-muted-foreground">Besoin de fonctionnalités avancées ? Mode concours, tirages pondérés, multi-gagnants…</p>
+          <a
+            href="/"
+            class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity"
+          >
+            Accéder à toutes les fonctionnalités <ArrowRight className="w-4 h-4" />
+          </a>
+        </section>
+
+        <AdPlaceholder position="bottom" client:visible />
+      </main>
+      <GlobalFooterIsland client:idle />
+    </div>
+  </div>
+</Layout>

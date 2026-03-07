@@ -1,0 +1,107 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import { ArrowRight } from 'lucide-react';
+
+const title = "Ruota dei Nomi Online Gratis — Scegli un Nome a Caso | Real Wheel Picker";
+const description = "Gira la ruota dei nomi e scegli un nome a caso in modo giusto e immediato. Aggiungi quanti nomi vuoi. Gratis, senza registrazione.";
+const canonical = "/ruota-dei-nomi";
+const locale = "it_IT";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Ruota dei Nomi — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/ruota-dei-nomi",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "inLanguage": "it",
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Ruota dei Nomi" },
+      ],
+    },
+  ],
+};
+
+const defaultParticipants = [
+  { pseudo: "Marco", weight: 1 },
+  { pseudo: "Giulia", weight: 1 },
+  { pseudo: "Luca", weight: 1 },
+  { pseudo: "Sofia", weight: 1 },
+  { pseudo: "Matteo", weight: 1 },
+  { pseudo: "Chiara", weight: 1 },
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} locale={locale} jsonLd={jsonLd}>
+  <div class="relative min-h-screen overflow-hidden" style="background: var(--gradient-bg)">
+    <div aria-hidden class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div class="aurora-orb aurora-orb-gold"></div>
+      <div class="aurora-orb aurora-orb-purple"></div>
+      <div class="aurora-orb aurora-orb-blue"></div>
+    </div>
+    <div class="relative z-10">
+      <HeaderIsland client:load />
+      <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+
+        <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+          <a href="/" class="hover:text-primary transition-colors">Home</a>
+          <span>/</span>
+          <span class="text-foreground">Ruota dei Nomi</span>
+        </nav>
+
+        <section class="text-center space-y-4 py-2">
+          <h1 class="text-2xl md:text-4xl font-bold text-foreground leading-tight">
+            Ruota dei Nomi Online — Scegli un Nome Casuale
+          </h1>
+          <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            Aggiungi nomi, gira la ruota e scegli uno in modo completamente casuale e giusto. Ideale per insegnanti, sorteggi e dinamiche di gruppo.
+          </p>
+        </section>
+
+        <section class="bg-card border border-border rounded-xl p-5 text-sm text-muted-foreground leading-relaxed">
+          <p>
+            <strong class="text-foreground">Ruota dei nomi:</strong> Inserisci i nomi dei partecipanti, clicca su Gira e il sistema estrae un nome a caso con <code>window.crypto.getRandomValues()</code>. Imparziale, istantaneo, gratuito.
+          </p>
+        </section>
+
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Altri strumenti</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              { label: "Sorteggio Online", href: "/sorteggio-online" },
+              { label: "Giveaway Picker", href: "/giveaway-picker" },
+              { label: "Classroom Picker", href: "/classroom-picker" },
+            ].map((link) => (
+              <a href={link.href}
+                class="p-4 bg-card border border-border rounded-xl text-center hover:border-primary/50 hover:shadow-md transition-all text-sm font-semibold text-foreground">
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section class="text-center py-6">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Strumento completo <ArrowRight className="w-4 h-4" />
+          </a>
+        </section>
+
+        <AdPlaceholder position="bottom" client:visible />
+      </main>
+      <GlobalFooterIsland client:idle />
+    </div>
+  </div>
+</Layout>

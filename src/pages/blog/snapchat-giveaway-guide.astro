@@ -1,0 +1,212 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertTriangle, Lightbulb, Trophy, Camera } from 'lucide-react';
+
+const title = "How to Pick a Winner on Snapchat: Giveaway Guide 2026";
+const description = "Step-by-step guide to running a fair Snapchat giveaway. Learn how to collect entries from Snapchat stories and DMs, pick a random winner, and stay compliant.";
+const canonical = "/blog/snapchat-giveaway-guide";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Pick a Winner on Snapchat: Giveaway Guide 2026",
+  "description": "Complete guide to running a Snapchat giveaway and picking a random winner transparently.",
+  "author": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2026-03-02",
+  "dateModified": "2026-03-02",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/snapchat-giveaway-guide" },
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <section class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary transition-colors">Blog</a>
+          <span>/</span>
+          <span>Snapchat Giveaway Guide</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          How to Pick a Winner on Snapchat: Giveaway Guide
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          Snapchat giveaways work differently from Instagram or TikTok — entries come through DMs or story replies instead of public comments. Here's how to run one fairly and pick a winner your audience will trust.
+        </p>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>7 min read</span>
+          <span>·</span>
+          <span>Updated March 2026</span>
+        </div>
+      </section>
+
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Camera className="w-5 h-5 text-primary" /> How Snapchat Giveaways Work
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Because Snapchat is ephemeral by design (posts disappear after 24 hours), giveaways there follow a different pattern than on other platforms. The main entry methods are:
+        </p>
+        <ul class="space-y-3">
+          {[
+            { method: "Story reply", detail: "Followers reply to your Story snap with a specific keyword or answer. You collect usernames from your reply tray." },
+            { method: "DM entry", detail: "Followers send you a DM with a keyword or answer to enter. You build the participant list manually from your inbox." },
+            { method: "Screenshot proof", detail: "Followers screenshot your story and send you proof as a DM entry." },
+            { method: "Snap send", detail: "Followers send you a specific snap (a photo with a filter, a selfie, etc.) as an entry requirement." },
+          ].map((item, i) => (
+            <div key={i} class="border border-border rounded-lg p-4 space-y-1">
+              <p class="font-semibold text-foreground text-sm">{item.method}</p>
+              <p class="text-xs text-muted-foreground">{item.detail}</p>
+            </div>
+          ))}
+        </ul>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-4">
+          <p class="text-sm text-muted-foreground"><strong class="text-foreground">Key difference from Instagram/TikTok:</strong> Entries are not public, so you're the only one who can verify them. This makes transparency even more important when announcing the winner.</p>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      <section class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">Step-by-Step: Running a Snapchat Giveaway</h2>
+
+        <div class="space-y-4">
+          {[
+            {
+              title: "Post Your Giveaway Story",
+              content: "Create a Story snap announcing the giveaway. Include: what the prize is, how to enter (reply to this story / DM me with keyword), deadline (when the giveaway closes), and any restrictions (age, region). Make it visual — use Snapchat's text overlay and stickers to make it eye-catching.",
+              tip: "Post multiple snaps in your Story: one announcing the giveaway, one showing the prize, and one countdown before the close. This keeps it visible for the full 24-hour window.",
+            },
+            {
+              title: "Collect Entries",
+              content: "Go to your Story, swipe up (or tap the eye icon) to see who viewed it, then check the Reply tray for entries. Collect usernames from everyone who replied with the correct keyword. If using DMs, check your inbox. Copy usernames into a text document as they come in. Once the 24-hour window closes (or your set deadline passes), stop collecting.",
+              tip: "Snapchat doesn't have an export feature, so you'll need to collect entries manually. For large giveaways, keep a running Google Doc open and paste usernames as replies come in.",
+            },
+            {
+              title: "Verify Entries",
+              content: "Check that each entrant: followed the entry instructions correctly (right keyword, correct action), follows your account (if that's a requirement), and hasn't entered multiple times using different accounts. Snapchat accounts can be anonymous, so verifying identity is harder than on Instagram or TikTok — keep this in mind when setting entry rules.",
+            },
+            {
+              title: "Pick the Winner Randomly",
+              content: "Once entries are closed and verified, paste all valid usernames into a random wheel picker. Spin the wheel and record yourself doing it. Even though entries were private, the winner announcement should be public and verifiable. Post the recording to your Story so all entrants can see the draw was real.",
+              tip: "Go to realwheelpicker.com, paste your list, and record your screen while spinning. Post this as a Snapchat Story snap — your audience trusts visible randomness far more than just 'I picked randomly.'",
+            },
+            {
+              title: "Announce the Winner",
+              content: "Post the winner's username in a Story snap and send them a direct DM. Give them 48 hours to respond before picking an alternate. In your DM to the winner, ask for their delivery address if shipping a physical prize, or send a digital gift code directly.",
+            },
+          ].map((s, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-6 space-y-3">
+              <div class="flex items-center gap-3">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex-shrink-0">{i + 1}</span>
+                <h3 class="text-lg font-semibold text-foreground">{s.title}</h3>
+              </div>
+              <p class="text-muted-foreground leading-relaxed pl-11">{s.content}</p>
+              {s.tip && (
+                <div class="bg-muted/40 rounded-lg p-3 ml-11 flex items-start gap-2">
+                  <Lightbulb className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                  <p class="text-sm text-muted-foreground"><strong class="text-foreground">Pro tip:</strong> {s.tip}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <AlertTriangle className="w-5 h-5 text-yellow-500" /> Snapchat Giveaway Rules You Must Follow
+        </h2>
+        <ul class="space-y-3">
+          {[
+            { rule: "Comply with Snapchat's Community Guidelines", detail: "Giveaways are allowed but cannot involve adult content, gambling, weapons, or regulated substances. Review Snap Inc.'s guidelines before posting." },
+            { rule: "No guaranteed wins for money paid", detail: "Free-entry giveaways are generally legal. If entrants pay to enter, you're running a lottery — which requires licensing in most countries." },
+            { rule: "Paid promotions must be disclosed", detail: "If a brand is sponsoring your giveaway, add a #ad or #sponsored label per FTC guidelines (US) and local equivalents." },
+            { rule: "No misleading claims about prizes", detail: "State exactly what the prize is, its approximate value, and any conditions (e.g., shipping to certain countries only)." },
+            { rule: "Age restrictions for Snapchat itself", detail: "Snapchat requires users to be 13+. If your prize is age-restricted (alcohol, certain games), add an age requirement to the entry rules." },
+          ].map((r, i) => (
+            <li key={i} class="border border-border rounded-lg p-4 space-y-1">
+              <p class="font-semibold text-foreground text-sm">{r.rule}</p>
+              <p class="text-xs text-muted-foreground">{r.detail}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Snapchat Giveaway Mistakes to Avoid</h2>
+        <div class="grid gap-4">
+          {[
+            { mistake: "Picking the winner without recording the process", fix: "Always record or screenshot your random picker. Snapchat audiences are skeptical of private draws." },
+            { mistake: "Not setting a clear deadline", fix: "Always announce a specific end time. '24 hours' or 'Friday at midnight EST' — never 'soon.'" },
+            { mistake: "Ignoring duplicate accounts", fix: "Snapchat makes it easy to create burner accounts. Spot-check suspicious usernames before adding them to the draw." },
+            { mistake: "Missing the 24-hour window", fix: "Snapchat Stories expire — if you want to collect entries over multiple days, post a new Story each day or use Spotlight." },
+            { mistake: "Not following up publicly", fix: "Always post a winner announcement Story. If followers never see the result, they'll assume the giveaway wasn't real." },
+          ].map((m, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-5 space-y-2">
+              <div class="flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 text-yellow-500 flex-shrink-0 mt-0.5" />
+                <p class="font-semibold text-foreground text-sm">{m.mistake}</p>
+              </div>
+              <p class="text-sm text-muted-foreground pl-6"><strong class="text-foreground">Fix:</strong> {m.fix}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      <section class="bg-primary/5 border border-primary/20 rounded-xl p-6 md:p-8 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Trophy className="w-5 h-5 text-primary" /> Best Tool for Snapchat Giveaway Winner Picks
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Real Wheel Picker is ideal for Snapchat giveaways because:
+        </p>
+        <ul class="space-y-2">
+          {[
+            "Works in any browser on any device — including mid-recording on your phone",
+            "Paste your list from notes and spin in seconds",
+            "The visual wheel spin is more credible on video than a text-based tool",
+            "No watermark, no logo, no delay — just the wheel",
+            "Cryptographically random — results can't be manipulated",
+          ].map((point, i) => (
+            <li key={i} class="flex items-start gap-2">
+              <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+              <span class="text-sm text-muted-foreground">{point}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="text-center py-8 space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Pick Your Snapchat Giveaway Winner</h2>
+        <p class="text-muted-foreground">Free random picker — paste names, spin, done.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a
+            href="/snapchat-giveaway-picker"
+            class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity"
+          >
+            Free Snapchat Picker <ArrowRight className="w-5 h-5" />
+          </a>
+          <a
+            href="/blog"
+            class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:border-primary/50 transition-colors"
+          >
+            More Guides <ArrowRight className="w-5 h-5" />
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug="/blog/snapchat-giveaway-guide" client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

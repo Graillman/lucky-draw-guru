@@ -1,0 +1,195 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, Users, Shuffle, Trophy, Scale } from 'lucide-react';
+
+const title = "How to Split Teams Randomly: Fair Group Generator Guide";
+const description = "Learn how to split groups randomly and fairly for sports, classrooms, work events, and games. Free random team generator tool included.";
+const canonical = "/blog/spin-wheel-team-generator";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Split Teams Randomly: Fair Group Generator Guide",
+  "description": "How to split groups randomly and fairly for sports, classrooms, work events, and games.",
+  "author": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2025-02-01",
+  "dateModified": "2026-03-01",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/spin-wheel-team-generator" },
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <section class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary transition-colors">Blog</a>
+          <span>/</span>
+          <span>Team Generator Guide</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          How to Split Teams Randomly: The Fair Group Generator Guide
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          Whether you're organizing a company offsite, gym class, a hackathon, or a sports tournament — splitting people into teams is one of those simple tasks that can go very wrong. People pick friends, perceived skill levels affect dynamics, and the whole thing becomes political. Here's how to do it right.
+        </p>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>6 min read</span>
+          <span>·</span>
+          <span>Updated March 2026</span>
+        </div>
+      </section>
+
+      {/* Why Random */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Scale className="w-5 h-5 text-primary" /> Why Random Team Selection is the Fairest Method
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The two common alternatives — letting people self-select or having a leader "draft" teams — both produce biased results. Self-selection creates cliques. Drafting creates hierarchies where being picked early or late sends a social signal. Random assignment eliminates both problems.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          In organizational psychology research, randomly assigned teams consistently report <strong class="text-foreground">higher psychological safety</strong> than self-selected teams, because no one had to "get picked" and no one was left last.
+        </p>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      {/* 5 Scenarios */}
+      <section class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">5 Common Scenarios and How to Handle Each</h2>
+
+        {[
+          {
+            title: "Sports / Gym Class",
+            scenario: "You have 20 people and need 4 equal teams of 5 for a tournament.",
+            howTo: "Enter all 20 names into the Random Team Generator, set 4 teams, and let it assign players. The tool shuffles the list and distributes evenly.",
+            tip: "If you want mixed skill levels, use the Weighted Picker to manually assign skill groups first, then distribute proportionally across teams.",
+            icon: Trophy,
+          },
+          {
+            title: "School Projects",
+            scenario: "Class of 30 students, groups of 3 for a science project.",
+            howTo: "Paste the full class roster into the team generator. Set group size to 3 (or number of teams to 10). Hit generate — done in seconds.",
+            tip: "Teachers: screenshot the result and post it on your class page so there's no dispute about assignments later.",
+            icon: Users,
+          },
+          {
+            title: "Corporate Team Building",
+            scenario: "Company offsite with 60 employees from different departments.",
+            howTo: "The goal is mixing departments. Enter names, generate random teams of 6–8. Random mixing across departments is exactly what the tool produces by default.",
+            tip: "Run the generator in front of everyone on a projector — it signals organizational fairness and removes any 'the management rigged it' suspicion.",
+            icon: Shuffle,
+          },
+          {
+            title: "Hackathon / Workshop",
+            scenario: "50 participants, teams of 4-5, skill levels vary widely.",
+            howTo: "For hackathons where skills matter, a purely random split may create imbalanced teams. Consider a modified approach: identify one 'anchor' per team manually, then fill remaining spots randomly.",
+            tip: "This hybrid approach (manual anchors + random fill) is used by professional hackathon organizers to ensure each team has at least one person with core technical skills.",
+            icon: Scale,
+          },
+          {
+            title: "Board Games / Party Games",
+            scenario: "8 friends, need 2 teams of 4 for a trivia night.",
+            howTo: "Quickest use case: type all names, set to 2 teams, spin. Takes 10 seconds and removes the 'I always get stuck with the same people' complaint.",
+            tip: "For recurring game nights, keep the same group list saved in your browser and re-spin each time for fresh matchups.",
+            icon: Trophy,
+          },
+        ].map((item, i) => (
+          <div key={i} class="bg-card border border-border rounded-xl p-6 space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <item.icon className="w-5 h-5 text-primary" />
+              </div>
+              <h3 class="text-lg font-bold text-foreground">{item.title}</h3>
+            </div>
+            <div class="space-y-2 pl-13">
+              <p class="text-sm text-muted-foreground"><strong class="text-foreground">Scenario:</strong> {item.scenario}</p>
+              <p class="text-sm text-muted-foreground"><strong class="text-foreground">How to use the tool:</strong> {item.howTo}</p>
+              <div class="bg-muted/30 rounded-lg p-3 text-sm">
+                <strong class="text-foreground">Pro tip:</strong> <span class="text-muted-foreground">{item.tip}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      {/* How it works */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">How the Random Team Generator Works</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Our team generator uses a cryptographically secure shuffle algorithm (Fisher-Yates shuffle powered by <code class="text-primary bg-muted/50 px-1 rounded">crypto.getRandomValues()</code>). This guarantees that every permutation of your participant list is equally likely — not pseudo-random like <code class="text-primary bg-muted/50 px-1 rounded">Math.random()</code>.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Once shuffled, participants are distributed sequentially into teams. If your group doesn't divide evenly, the tool automatically handles remainder members by distributing them to the first teams.
+        </p>
+        <div class="space-y-3">
+          {[
+            "Enter all participant names (paste a list or type one by one)",
+            "Choose: number of teams OR team size",
+            "Click Generate — teams appear instantly",
+            "Re-generate if you want a different distribution",
+            "Copy or share the result",
+          ].map((step, i) => (
+            <div key={i} class="flex items-center gap-3 bg-card border border-border rounded-xl p-4">
+              <span class="w-7 h-7 rounded-full bg-primary/10 text-primary text-sm font-bold flex items-center justify-center flex-shrink-0">{i + 1}</span>
+              <p class="text-sm text-muted-foreground">{step}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {[
+            {
+              q: "Can I generate teams of unequal sizes?",
+              a: "Yes. If your group doesn't divide evenly, the generator automatically puts extra people into the first few teams. For example, 10 people in 3 teams gives you two teams of 3 and one team of 4.",
+            },
+            {
+              q: "Is there a limit to how many participants I can add?",
+              a: "There's no hard limit. The tool handles lists of 100+ participants comfortably. For very large groups (200+), performance is still smooth since all computation is done locally in your browser.",
+            },
+            {
+              q: "Can I prevent specific people from being on the same team?",
+              a: "Not automatically. For use cases where certain people must be separated (e.g. avoiding two managers on the same team), the easiest solution is to regenerate until satisfied, or use the weighted approach to manually distribute anchors.",
+            },
+            {
+              q: "Does the tool save my team results?",
+              a: "The participant list is saved in your browser's local storage, but generated team results are not automatically saved. We recommend screenshotting or copying the result before closing.",
+            },
+          ].map((item, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-5 space-y-2">
+              <p class="font-semibold text-foreground">{item.q}</p>
+              <p class="text-sm text-muted-foreground">{item.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section class="bg-primary/5 border border-primary/20 rounded-xl p-8 text-center space-y-4">
+        <Shuffle className="w-10 h-10 text-primary mx-auto" />
+        <h2 class="text-2xl font-bold text-foreground">Split your teams in seconds</h2>
+        <p class="text-muted-foreground">Free, no signup, works on any device. Fair teams generated instantly.</p>
+        <a href="/team-generator" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+          Open Team Generator <ArrowRight className="w-4 h-4" />
+        </a>
+      </section>
+
+      <RelatedPosts currentSlug="/blog/spin-wheel-team-generator" client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

@@ -1,0 +1,256 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, Users, BookOpen, Lightbulb, Star } from 'lucide-react';
+
+const title = "10 Ways to Use a Random Name Picker in the Classroom";
+const description = "Discover how teachers use random name pickers to improve student participation, reduce anxiety, and make learning fair and fun. Free classroom tools included.";
+const canonical = "/blog/classroom-random-picker";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "10 Ways to Use a Random Name Picker in the Classroom",
+  "description": "How teachers use random name pickers to improve student participation and make learning fair and fun.",
+  "author": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2025-01-20",
+  "dateModified": "2026-03-01",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/classroom-random-picker" },
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      {/* Hero */}
+      <section class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary transition-colors">Blog</a>
+          <span>/</span>
+          <span>Classroom Guide</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          10 Ways to Use a Random Name Picker in the Classroom
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          Calling on the same students repeatedly creates unfair dynamics in class. A random name picker eliminates bias, reduces anxiety for shy students, and creates a genuinely equitable participation environment. Here's how teachers are using it — and why it works.
+        </p>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>7 min read</span>
+          <span>·</span>
+          <span>Updated March 2026</span>
+        </div>
+      </section>
+
+      {/* Why Random is Better */}
+      <section class="bg-card border border-border rounded-xl p-6 md:p-8 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground flex items-center gap-2">
+          <BookOpen className="w-6 h-6 text-primary" /> Why Random Selection Beats "Cold Calling"
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Research in educational psychology consistently shows that the practice of teachers picking students manually leads to <strong class="text-foreground">unconscious bias</strong> — favoring students who are more engaged, sit in the front row, or are from majority groups. Over time, this creates a two-tier classroom where some students feel invisible.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Random selection removes this entirely. When students know the wheel is truly random, it changes the dynamic: everyone prepares, everyone pays attention, and participation becomes the norm rather than the exception.
+        </p>
+        <div class="grid sm:grid-cols-3 gap-4 pt-2">
+          {[
+            { stat: "40%", label: "increase in preparation when students know they can be called at random" },
+            { stat: "3x", label: "more equitable participation across genders and backgrounds" },
+            { stat: "60%", label: "of students report lower anxiety when selection is visibly random" },
+          ].map((item, i) => (
+            <div key={i} class="bg-primary/5 border border-primary/20 rounded-xl p-4 text-center space-y-1">
+              <div class="text-2xl font-bold text-primary">{item.stat}</div>
+              <p class="text-xs text-muted-foreground">{item.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      {/* 10 Ways */}
+      <section class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">10 Ways Teachers Use Random Name Pickers</h2>
+
+        {[
+          {
+            num: "01",
+            title: "Answering Questions Fairly",
+            desc: "Instead of calling on raised hands (which always selects the same motivated students), spin the wheel for every question. Students who thought they could avoid participation quickly change their preparation habits.",
+            tip: "Keep the same list all week so every student gets called roughly the same number of times.",
+          },
+          {
+            num: "02",
+            title: "Random Team Formation",
+            desc: "Stop letting students self-select into friend groups. Use the random team generator to split students into balanced groups for projects. It also forces students to work with people they wouldn't normally choose — a critical life skill.",
+            tip: "Use the Weighted Picker to ensure mixed ability levels — put stronger and weaker students in each group intentionally.",
+            link: { to: "/team-generator", label: "Try the Team Generator" },
+          },
+          {
+            num: "03",
+            title: "Assigning Classroom Jobs",
+            desc: "Who cleans the board? Who hands out papers? Who leads today's warmup? Let the wheel decide. Students perceive this as far more fair than teacher assignment, and it avoids the drama of favorites.",
+            tip: "Remove students from the list once selected so everyone gets a turn before anyone repeats.",
+          },
+          {
+            num: "04",
+            title: "Presentation Order",
+            desc: "Spinning the wheel to determine who presents first removes the anxiety of waiting and the unfair advantage of presenting last (when the audience is fatigued or standards have drifted). Every presentation order is equally random.",
+            tip: "Spin live in front of the class so there's no suspicion the order was pre-arranged.",
+          },
+          {
+            num: "05",
+            title: "Quiz Review Games",
+            desc: "Turn review sessions into games. Write review questions on the wheel instead of student names — spin to pick the question, then call on a student to answer. Double randomness keeps everyone alert.",
+            tip: "Add point values to the wheel for a weighted review where harder questions are worth more.",
+            link: { to: "/weighted-random-picker", label: "Try Weighted Picker" },
+          },
+          {
+            num: "06",
+            title: "Exit Ticket Questions",
+            desc: "At the end of class, spin the wheel to pick which student has to explain the key concept of the day to the rest of the class before everyone leaves. This is an extremely effective comprehension check.",
+            tip: "Phrase it positively: 'You've been chosen to be today's expert!'",
+          },
+          {
+            num: "07",
+            title: "Random Read-Aloud",
+            desc: "For classes that involve reading text aloud — language classes, literature — spinning the wheel for reader selection keeps everyone following the text instead of zoning out until it's their turn.",
+            tip: "Keep a second list of students who've already read to avoid double picks in the same session.",
+          },
+          {
+            num: "08",
+            title: "Picking Essay Topics or Debate Sides",
+            desc: "When students get to choose their topics, some topics always get overselected. Use the wheel to assign topics randomly — this also makes the work more original and prevents copying.",
+            tip: "For debates, spin once for topic assignment and once for which side (for/against) each team argues.",
+          },
+          {
+            num: "09",
+            title: "Break Activities and Brain Breaks",
+            desc: "Put 5-minute break activities on the wheel: stretching, breathing exercise, quick trivia, 2-minute free draw. Spin it at break time. Students love the randomness and it energizes the room.",
+            tip: "Let students suggest activities to add to the wheel — builds buy-in and creativity.",
+          },
+          {
+            num: "10",
+            title: "Prize Raffles and Reward Systems",
+            desc: "Run classroom reward raffles: students earn raffle tickets for good behavior or achievement. At the end of the week, all ticket holders go on the wheel and one winner gets a reward. Motivating without creating a fixed point-based leaderboard.",
+            tip: "Use the Weighted Picker to give students with more tickets a higher chance of winning — this preserves the reward for effort.",
+            link: { to: "/classroom-picker", label: "Try Classroom Picker" },
+          },
+        ].map((item) => (
+          <div key={item.num} class="bg-card border border-border rounded-xl p-6 space-y-3">
+            <div class="flex items-start gap-4">
+              <span class="text-3xl font-black text-primary/30 leading-none">{item.num}</span>
+              <div class="space-y-2 flex-1">
+                <h3 class="text-lg font-bold text-foreground">{item.title}</h3>
+                <p class="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
+                <div class="bg-muted/30 rounded-lg p-3 text-sm">
+                  <strong class="text-foreground">Pro tip:</strong>{" "}
+                  <span class="text-muted-foreground">{item.tip}</span>
+                </div>
+                {item.link && (
+                  <a href={item.link.to} class="inline-flex items-center gap-1 text-sm text-primary hover:underline">
+                    {item.link.label} <ArrowRight className="w-3 h-3" />
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      {/* Setup Guide */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">How to Set Up Your Classroom Picker in 2 Minutes</h2>
+        <div class="space-y-3">
+          {[
+            { step: "1", text: "Go to the Classroom Picker on Real Wheel Picker" },
+            { step: "2", text: "Enter your students' names (one per line, or paste a comma-separated list)" },
+            { step: "3", text: "Optionally give the draw a title (e.g. 'Question 3 — who answers?')" },
+            { step: "4", text: "Click 'Spin' — the wheel spins and lands on a random student" },
+            { step: "5", text: "Remove the student if you want to avoid repeats, or keep them in for all-equal probability" },
+            { step: "6", text: "Your list is automatically saved in the browser — no account needed" },
+          ].map((item) => (
+            <div key={item.step} class="flex items-start gap-4 bg-card border border-border rounded-xl p-4">
+              <span class="w-7 h-7 rounded-full bg-primary/10 text-primary text-sm font-bold flex items-center justify-center flex-shrink-0">{item.step}</span>
+              <p class="text-muted-foreground text-sm mt-0.5">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Teacher FAQ</h2>
+        <div class="space-y-3">
+          {[
+            {
+              q: "Is it really random, or does it favor certain names?",
+              a: "Real Wheel Picker uses the Web Crypto API (cryptographic randomness), the same technology used in secure applications. Every entry has an exactly equal probability of being selected. There is no pattern or bias.",
+            },
+            {
+              q: "Can I use it on a projector or smartboard?",
+              a: "Yes. The tool works in any browser, on any device. Simply open it on your classroom computer and project it. The spinning animation works well on large screens.",
+            },
+            {
+              q: "Does it store my students' names anywhere?",
+              a: "No. Names are stored only in your browser's local storage. They never leave your device and are never sent to any server. This makes it fully GDPR and FERPA compliant for educational use.",
+            },
+            {
+              q: "Can I have different lists for different classes?",
+              a: "Currently the tool saves one list per browser session. For multiple classes, you can bookmark a pre-filled URL or simply replace the list at the start of each class period.",
+            },
+          ].map((item, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-5 space-y-2">
+              <p class="font-semibold text-foreground">{item.q}</p>
+              <p class="text-sm text-muted-foreground">{item.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section class="bg-primary/5 border border-primary/20 rounded-xl p-8 text-center space-y-4">
+        <Users className="w-10 h-10 text-primary mx-auto" />
+        <h2 class="text-2xl font-bold text-foreground">Try the Classroom Picker</h2>
+        <p class="text-muted-foreground">Free, no signup, works on any device. Designed for teachers who want fair, engaging classrooms.</p>
+        <div class="flex flex-wrap gap-3 justify-center">
+          <a href="/classroom-picker" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Open Classroom Picker <ArrowRight className="w-4 h-4" />
+          </a>
+          <a href="/team-generator" class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-6 py-3 rounded-xl font-semibold hover:border-primary transition-colors">
+            Random Team Generator
+          </a>
+        </div>
+      </section>
+
+      {/* Related */}
+      <section class="space-y-4">
+        <h2 class="text-xl font-bold text-foreground">Related guides</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <a href="/blog/spin-wheel-team-generator" class="bg-card border border-border rounded-xl p-5 hover:border-primary transition-colors space-y-2">
+            <p class="font-semibold text-foreground text-sm">How to Split Teams Randomly</p>
+            <p class="text-xs text-muted-foreground">Fair group formation for classrooms and events</p>
+            <span class="text-xs text-primary flex items-center gap-1">Read guide <ArrowRight className="w-3 h-3" /></span>
+          </a>
+          <a href="/blog/weighted-random-picker" class="bg-card border border-border rounded-xl p-5 hover:border-primary transition-colors space-y-2">
+            <p class="font-semibold text-foreground text-sm">Weighted Random Picker Explained</p>
+            <p class="text-xs text-muted-foreground">Give some participants a higher chance of winning</p>
+            <span class="text-xs text-primary flex items-center gap-1">Read guide <ArrowRight className="w-3 h-3" /></span>
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug="/blog/classroom-random-picker" client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

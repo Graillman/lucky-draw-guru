@@ -1,0 +1,95 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import EmbedBuilderIsland from '@/components/EmbedBuilderIsland';
+
+const title = "Embed Real Wheel Picker on Your Website — Free Widget";
+const description = "Add a free spin-the-wheel widget to your website or blog. One line of code. Works on any site — WordPress, Squarespace, Notion, and more.";
+const canonical = "/embed";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Embed Real Wheel Picker Widget",
+  "url": "https://realwheelpicker.com/embed",
+  "description": "Embed a free spin-the-wheel widget on your website with one line of code.",
+};
+
+const steps = [
+  { step: "1", title: "Copy the code", desc: "Click Copy Code above to copy your customized embed snippet." },
+  { step: "2", title: "Paste into your site", desc: "Open your website editor, switch to HTML mode, and paste the code where you want the wheel to appear." },
+  { step: "3", title: "Done!", desc: "The wheel loads instantly for your visitors — no account needed on their end." },
+];
+
+const platforms = [
+  { platform: "WordPress", instruction: "Add a Custom HTML block, paste the code inside." },
+  { platform: "Squarespace", instruction: "Add a Code Block, paste the HTML embed code." },
+  { platform: "Wix", instruction: "Add an HTML iFrame element from the Add menu." },
+  { platform: "Notion", instruction: "Type /embed, paste the URL, press Enter." },
+  { platform: "Google Sites", instruction: "Insert → Embed → paste the full iframe code." },
+  { platform: "Webflow", instruction: "Add an Embed element, paste the iframe code." },
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-4xl mx-auto px-4 py-8 space-y-10">
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-6">
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold text-foreground">
+          Embed the Wheel on Your Website
+        </h1>
+        <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+          Add a free spin-the-wheel widget to any website, blog, or LMS in under a minute.
+          Works on WordPress, Squarespace, Notion, Google Sites, and more.
+        </p>
+        <div class="flex flex-wrap justify-center gap-3 pt-2 text-sm text-muted-foreground">
+          <span class="px-3 py-1 bg-primary/10 text-primary rounded-full font-medium">100% Free</span>
+          <span class="px-3 py-1 bg-primary/10 text-primary rounded-full font-medium">No account needed</span>
+          <span class="px-3 py-1 bg-primary/10 text-primary rounded-full font-medium">1 line of code</span>
+          <span class="px-3 py-1 bg-primary/10 text-primary rounded-full font-medium">Mobile responsive</span>
+        </div>
+      </section>
+
+      <!-- Interactive embed builder (React island) -->
+      <EmbedBuilderIsland client:load />
+
+      <!-- Instructions -->
+      <section class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">How to Embed</h2>
+        <div class="grid md:grid-cols-3 gap-4">
+          {steps.map((item) => (
+            <div class="bg-card border border-border rounded-xl p-5 space-y-2">
+              <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                <span class="text-primary font-bold text-sm">{item.step}</span>
+              </div>
+              <h3 class="font-semibold text-foreground">{item.title}</h3>
+              <p class="text-sm text-muted-foreground">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Platform guides -->
+      <section class="bg-card border border-border rounded-2xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground">Platform-Specific Instructions</h2>
+        <div class="grid md:grid-cols-2 gap-4 text-sm">
+          {platforms.map((item) => (
+            <div class="flex gap-3 p-3 rounded-lg bg-secondary/50">
+              <span class="font-semibold text-primary shrink-0 w-24">{item.platform}</span>
+              <span class="text-muted-foreground">{item.instruction}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

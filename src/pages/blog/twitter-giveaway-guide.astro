@@ -1,0 +1,226 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertTriangle, Lightbulb, Trophy, Users } from 'lucide-react';
+
+const title = "How to Pick a Winner on Twitter / X: Complete Giveaway Guide 2026";
+const description = "Step-by-step guide to running a fair Twitter or X giveaway. Learn how to collect entries, pick a random winner, and comply with X's rules.";
+const canonical = "/blog/twitter-giveaway-guide";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Pick a Winner on Twitter / X: Complete Giveaway Guide 2026",
+  "description": "Step-by-step guide to running a fair Twitter or X giveaway.",
+  "author": { "@type": "Organization", "name": "RealWheelPicker" },
+  "publisher": { "@type": "Organization", "name": "RealWheelPicker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2025-10-01",
+};
+
+const steps = [
+  {
+    n: 1,
+    title: "Choose Your Entry Format",
+    body: "The most common formats are: (1) Follow + Like + Retweet, (2) Follow + Reply with a specific hashtag, or (3) Quote-tweet with a comment. Replies and quote-tweets are easiest to collect manually — avoid formats that require you to scrape likes.",
+    tip: "Reply-based entries give you a ready-made list of usernames. Just open the tweet, copy all reply usernames into a text file, and paste into the picker.",
+  },
+  {
+    n: 2,
+    title: "Write Your Giveaway Tweet",
+    body: "Post a clear tweet describing: what you're giving away, how to enter, how many winners, and the deadline. Pin it to your profile for visibility. Example: \"GIVEAWAY 🎁 Giving away [prize]! To enter: 1. Follow @you 2. Like this tweet 3. Reply 'done' below. Winner picked [date] with @realwheelpicker for full transparency.\"",
+    tip: "Mentioning the tool you'll use to pick the winner adds credibility and reduces \"rigged\" accusations.",
+  },
+  {
+    n: 3,
+    title: "Collect Your Entries",
+    body: "For reply-based giveaways: open the tweet, scroll through all replies, and copy each eligible username into a list. Remove duplicates (one person, one entry). For retweet-based: use Twitter's analytics or manually check — retweet lists aren't easily accessible without the API.",
+    tip: "Paste names one per line into a text file as you scroll. Set a clear cut-off time and stop collecting at exactly that time.",
+  },
+  {
+    n: 4,
+    title: "Verify Eligibility",
+    body: "Before spinning, quickly scan the list: confirm entrants actually followed your account, check for obvious bot accounts (0 tweets, no profile picture, created recently), and remove any entries that don't meet your stated requirements.",
+    tip: "5 minutes of verification prevents 100% of \"the winner didn't even follow you\" complaints.",
+  },
+  {
+    n: 5,
+    title: "Pick the Winner Live",
+    body: "Paste your verified list into realwheelpicker.com. Screen-record the spin (or go live on Twitter/X to spin in real time). The animated wheel makes the draw visual and exciting. Hit spin — the winner is selected by cryptographically secure randomness.",
+    tip: "If you go live, let your audience watch the spin happen in real time. It's the gold standard for transparency.",
+  },
+  {
+    n: 6,
+    title: "Announce and Deliver",
+    body: "Reply to your original giveaway tweet with the winner announcement. Tag the winner directly, ask them to DM you within 48 hours to claim their prize. Have a backup winner ready if the original doesn't respond in time.",
+    tip: "Screenshot the wheel result and include it in your announcement tweet as proof.",
+  },
+];
+
+const rules = [
+  { ok: true, text: "Asking users to \"Like + Retweet + Follow\" is allowed" },
+  { ok: true, text: "Requiring a reply with a specific word or hashtag is allowed" },
+  { ok: true, text: "Running multiple giveaways is allowed" },
+  { ok: false, text: "Creating duplicate accounts to enter your own giveaway is prohibited" },
+  { ok: false, text: "Coordinated inauthentic behavior (fake engagement networks) is banned" },
+  { ok: false, text: "Promising to follow everyone back in exchange for entries is against TOS" },
+];
+
+const prizeCategories = [
+  { cat: "Digital Products", items: ["Amazon gift cards", "Software subscriptions (Adobe, Notion, Figma)", "Premium courses or ebooks"] },
+  { cat: "Tech Gadgets", items: ["Wireless earbuds", "Mechanical keyboards", "Webcams or ring lights"] },
+  { cat: "Creator Tools", items: ["Twitter Blue / X Premium subscription", "Scheduling tools (Buffer, Hootsuite)", "Canva Pro subscription"] },
+  { cat: "Cash Prizes", items: ["PayPal / Venmo transfers", "Crypto (if your audience is tech-savvy)", "Store credit at your own shop"] },
+];
+
+const mistakes = [
+  { mistake: "No proof of the draw", fix: "Always screen-record or go live during the spin. A simple screenshot of the winner name is not enough." },
+  { mistake: "Not verifying followers before the draw", fix: "Check that entrants actually followed you. Picking a winner who didn't follow makes you look incompetent or unfair." },
+  { mistake: "Too many entry requirements", fix: "The more steps required to enter, the fewer entries you'll get. Keep it to 2-3 actions max." },
+  { mistake: "No backup winner plan", fix: "Winners sometimes ghost. Have a clear policy: \"Winner has 48 hours to reply or a new winner is drawn.\"" },
+  { mistake: "Vague prize description", fix: "Always specify shipping restrictions, prize value, and any limitations. Ambiguity leads to disappointed winners." },
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-4xl mx-auto px-4 py-8 space-y-10">
+
+      {/* Hero */}
+      <section class="space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xs px-2 py-0.5 rounded-full font-medium bg-purple-500/10 text-purple-400">Giveaways</span>
+          <span class="text-xs text-muted-foreground">Oct 1, 2025 • 8 min read</span>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold text-foreground leading-tight">
+          How to Pick a Winner on Twitter / X: Complete Giveaway Guide 2026
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          Twitter (now X) giveaways can explode your reach overnight — one well-structured contest can generate thousands of impressions and hundreds of new followers. But picking a winner transparently on a public platform is critical. Here's exactly how to do it.
+        </p>
+      </section>
+
+      {/* Why Twitter giveaways work */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Why Twitter / X Giveaways Still Work in 2026</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Despite algorithm changes and the rebrand to X, giveaways remain one of the highest-ROI activities on the platform. A single viral giveaway tweet can generate 10-50× the impressions of a normal post.
+        </p>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="text-sm font-semibold text-foreground flex items-center gap-2"><Trophy className="w-4 h-4 text-primary" /> What a typical Twitter giveaway delivers:</p>
+          <ul class="space-y-1 text-sm text-muted-foreground">
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> 5–20× retweet rate vs. standard posts</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> 200–2,000 new followers per giveaway depending on prize value</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> Algorithm boost that surfaces the tweet in non-followers' feeds</li>
+          </ul>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      {/* Step by Step */}
+      <section class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">How to Run a Twitter / X Giveaway (Step by Step)</h2>
+        <div class="space-y-4">
+          {steps.map((step) => (
+            <div key={step.n} class="bg-card border border-border rounded-xl p-5 space-y-3">
+              <div class="flex items-start gap-3">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex-shrink-0">{step.n}</span>
+                <h3 class="font-semibold text-foreground text-lg leading-tight">{step.title}</h3>
+              </div>
+              <p class="text-muted-foreground text-sm leading-relaxed pl-11">{step.body}</p>
+              {step.tip && (
+                <div class="ml-11 bg-muted/50 rounded-lg p-3 text-sm flex items-start gap-2">
+                  <Lightbulb className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                  <span class="text-muted-foreground">{step.tip}</span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      {/* X Rules */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">X / Twitter Giveaway Rules to Know</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          X's policies prohibit certain types of engagement manipulation. To stay compliant:
+        </p>
+        <div class="space-y-3">
+          {rules.map((item, i) => (
+            <div key={i} class={`flex items-start gap-3 p-3 rounded-lg ${item.ok ? "bg-green-500/5 border border-green-500/20" : "bg-red-500/5 border border-red-500/20"}`}>
+              {item.ok
+                ? <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                : <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />}
+              <span class="text-sm text-muted-foreground">{item.text}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Prize ideas */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Prize Ideas for Twitter Giveaways</h2>
+        <div class="grid sm:grid-cols-2 gap-3">
+          {prizeCategories.map((cat, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-4 space-y-2">
+              <h3 class="font-semibold text-foreground text-sm">{cat.cat}</h3>
+              <ul class="space-y-1">
+                {cat.items.map((item, j) => (
+                  <li key={j} class="text-xs text-muted-foreground flex items-center gap-1.5">
+                    <span class="w-1 h-1 rounded-full bg-primary flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Mistakes */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">5 Twitter Giveaway Mistakes to Avoid</h2>
+        <div class="grid gap-4">
+          {mistakes.map((item, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-4 space-y-2">
+              <div class="flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 text-yellow-400 flex-shrink-0 mt-0.5" />
+                <p class="text-sm font-semibold text-foreground">{item.mistake}</p>
+              </div>
+              <p class="text-xs text-muted-foreground pl-6">{item.fix}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section class="bg-primary/5 border border-primary/20 rounded-2xl p-6 md:p-8 space-y-4 text-center">
+        <h2 class="text-xl font-bold text-foreground">Ready to pick your Twitter winner?</h2>
+        <p class="text-muted-foreground">Use the free tool trusted by thousands of creators for transparent giveaways.</p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <a
+            href="/twitter-giveaway-picker"
+            class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity"
+          >
+            Twitter / X Giveaway Picker <ArrowRight className="w-5 h-5" />
+          </a>
+          <a
+            href="/blog"
+            class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:border-primary/50 transition-colors"
+          >
+            More Guides <ArrowRight className="w-5 h-5" />
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug="/blog/twitter-giveaway-guide" client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

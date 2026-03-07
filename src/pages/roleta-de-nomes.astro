@@ -1,0 +1,157 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import { ArrowRight } from 'lucide-react';
+
+const title = "Roleta de Nomes Online Grátis — Escolha um Nome Aleatório | Real Wheel Picker";
+const description = "Gire a roleta de nomes e escolha um nome aleatório de forma justa e instantânea. Adicione quantos nomes quiser. Grátis, sem cadastro.";
+const canonical = "/roleta-de-nomes";
+const locale = "pt_BR";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Roleta de Nomes — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/roleta-de-nomes",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "inLanguage": "pt",
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Como funciona a roleta de nomes?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Adicione os nomes na roleta, clique em Girar e o sistema seleciona um nome aleatoriamente usando criptografia. Cada nome tem exatamente a mesma chance de ser escolhido." },
+        },
+        {
+          "@type": "Question",
+          "name": "Posso usar em sala de aula?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Sim. A roleta de nomes é ideal para professores sortearem alunos para responder perguntas, apresentações ou tarefas. Adicione os nomes da turma e gire." },
+        },
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Roleta de Nomes" },
+      ],
+    },
+  ],
+};
+
+const defaultParticipants = [
+  { pseudo: "Ana", weight: 1 },
+  { pseudo: "Bruno", weight: 1 },
+  { pseudo: "Carla", weight: 1 },
+  { pseudo: "Diego", weight: 1 },
+  { pseudo: "Elena", weight: 1 },
+  { pseudo: "Fernanda", weight: 1 },
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} locale={locale} jsonLd={jsonLd}>
+  <div class="relative min-h-screen overflow-hidden" style="background: var(--gradient-bg)">
+    <div aria-hidden class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div class="aurora-orb aurora-orb-gold"></div>
+      <div class="aurora-orb aurora-orb-purple"></div>
+      <div class="aurora-orb aurora-orb-blue"></div>
+    </div>
+    <div class="relative z-10">
+      <HeaderIsland client:load />
+      <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+
+        <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+          <a href="/" class="hover:text-primary transition-colors">Home</a>
+          <span>/</span>
+          <span class="text-foreground">Roleta de Nomes</span>
+        </nav>
+
+        <section class="text-center space-y-4 py-2">
+          <h1 class="text-2xl md:text-4xl font-bold text-foreground leading-tight">
+            Roleta de Nomes Online — Escolha um Nome Aleatório
+          </h1>
+          <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            Adicione nomes, gire a roleta e escolha um de forma completamente aleatória e justa. Ideal para professores, sorteios e dinâmicas de grupo.
+          </p>
+        </section>
+
+        <section class="bg-card border border-border rounded-xl p-5 text-sm text-muted-foreground leading-relaxed">
+          <p>
+            <strong class="text-foreground">Roleta de nomes:</strong> Insira os nomes dos participantes, clique em Girar e o sistema sorteia um nome ao acaso usando <code>window.crypto.getRandomValues()</code>. Imparcial, instantâneo, gratuito.
+          </p>
+        </section>
+
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Para que usar a roleta de nomes</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[
+              ["Sala de aula", "Sortear alunos para responder, apresentar ou liderar atividades."],
+              ["Sorteios e rifas", "Escolher ganhadores de forma transparente em sorteios online."],
+              ["Jogos em grupo", "Decidir quem começa, quem faz a tarefa ou quem escolhe a atividade."],
+              ["Equipes de trabalho", "Sortear responsáveis para reuniões, tarefas ou apresentações."],
+            ].map(([title, desc], i) => (
+              <div class="bg-card border border-border rounded-xl p-4">
+                <p class="font-semibold text-foreground mb-1">{title}</p>
+                <p class="text-sm text-muted-foreground">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <AdPlaceholder position="after-use-cases" client:visible />
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Perguntas frequentes</h2>
+          <div class="space-y-3">
+            {[
+              ["Como funciona a roleta de nomes?", "Adicione os nomes, clique em Girar e o sistema seleciona um aleatoriamente usando criptografia. Cada nome tem exatamente a mesma chance."],
+              ["Posso adicionar muitos nomes?", "Sim, adicione quantos nomes precisar. A roleta se adapta automaticamente."],
+              ["É realmente aleatório?", "Sim. Usamos window.crypto.getRandomValues(), o mesmo padrão criptográfico de bancos online."],
+            ].map(([q, a], i) => (
+              <div class="bg-card border border-border rounded-xl p-5">
+                <p class="font-semibold text-foreground mb-2">{q}</p>
+                <p class="text-muted-foreground">{a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Mais ferramentas</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              { label: "Sorteio Online", href: "/sorteio-online" },
+              { label: "Giveaway Picker", href: "/giveaway-picker" },
+              { label: "Classroom Picker", href: "/classroom-picker" },
+            ].map((link) => (
+              <a href={link.href}
+                class="p-4 bg-card border border-border rounded-xl text-center hover:border-primary/50 hover:shadow-md transition-all text-sm font-semibold text-foreground">
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section class="text-center py-6">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Ferramenta completa <ArrowRight className="w-4 h-4" />
+          </a>
+        </section>
+
+        <AdPlaceholder position="bottom" client:visible />
+      </main>
+      <GlobalFooterIsland client:idle />
+    </div>
+  </div>
+</Layout>

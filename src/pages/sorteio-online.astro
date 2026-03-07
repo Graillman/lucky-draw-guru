@@ -1,0 +1,196 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import { ArrowRight, Check } from 'lucide-react';
+
+const title = "Sorteio Online Grátis — Roleta para Sortear | Real Wheel Picker";
+const description = "Faça sorteios online justos e transparentes. Adicione os participantes, gire a roleta e escolha o ganhador aleatoriamente. Grátis, sem cadastro, aleatório criptográfico.";
+const canonical = "/sorteio-online";
+const locale = "pt_BR";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Sorteio Online — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/sorteio-online",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Realize sorteios online grátis com aleatoriedade criptográfica. Adicione participantes, gire a roleta e escolha o ganhador.",
+      "inLanguage": "pt",
+    },
+    {
+      "@type": "HowTo",
+      "name": "Como fazer um sorteio online",
+      "inLanguage": "pt",
+      "totalTime": "PT30S",
+      "step": [
+        { "@type": "HowToStep", "position": 1, "name": "Adicione os participantes", "text": "Digite o nome de cada participante na roleta. Edite os nomes padrão com os nomes reais dos participantes." },
+        { "@type": "HowToStep", "position": 2, "name": "Gire a roleta", "text": "Clique em Girar a Roleta. O sistema usa window.crypto.getRandomValues() para garantir uma escolha completamente imparcial." },
+        { "@type": "HowToStep", "position": 3, "name": "Anuncie o ganhador", "text": "O participante selecionado é o ganhador do sorteio. Você pode compartilhar o resultado diretamente da tela." },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Este sorteio online é realmente aleatório e justo?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Sim. Real Wheel Picker usa window.crypto.getRandomValues(), o padrão criptográfico dos navegadores modernos. É o mesmo nível de aleatoriedade usado em bancos online. Nenhum participante tem mais probabilidade que outro, e o resultado é impossível de prever ou manipular." },
+        },
+        {
+          "@type": "Question",
+          "name": "Quantos participantes posso adicionar?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Você pode adicionar quantos participantes precisar. Clique em qualquer nome para editá-lo e adicione mais entradas. A roleta se adapta automaticamente." },
+        },
+        {
+          "@type": "Question",
+          "name": "Posso usar para sorteios no Instagram ou TikTok?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Sim. Copie os nomes dos comentários, adicione-os à roleta e grave a tela enquanto gira. É transparente e verificável para o seu público." },
+        },
+        {
+          "@type": "Question",
+          "name": "É gratuito?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Completamente gratuito. Sem cadastro, sem downloads, sem pagamentos. Funciona diretamente no seu navegador." },
+        },
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Sorteio Online" },
+      ],
+    },
+  ],
+};
+
+const defaultParticipants = [
+  { pseudo: "Participante 1", weight: 1 },
+  { pseudo: "Participante 2", weight: 1 },
+  { pseudo: "Participante 3", weight: 1 },
+  { pseudo: "Participante 4", weight: 1 },
+];
+
+const USOS = [
+  "Sorteios no Instagram — comentários e curtidas",
+  "Rifas para arrecadação de fundos",
+  "Sorteios ao vivo no YouTube ou TikTok",
+  "Seleção de ganhadores em concursos",
+  "Escolher tarefas ou turnos na sala de aula",
+  "Qualquer concurso online ou presencial",
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} locale={locale} jsonLd={jsonLd}>
+  <div class="relative min-h-screen overflow-hidden" style="background: var(--gradient-bg)">
+    <div aria-hidden class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div class="aurora-orb aurora-orb-gold"></div>
+      <div class="aurora-orb aurora-orb-purple"></div>
+      <div class="aurora-orb aurora-orb-blue"></div>
+    </div>
+    <div class="relative z-10">
+      <HeaderIsland client:load />
+      <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+
+        <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+          <a href="/" class="hover:text-primary transition-colors">Home</a>
+          <span>/</span>
+          <span class="text-foreground">Sorteio Online</span>
+        </nav>
+
+        <section class="text-center space-y-4 py-2">
+          <h1 class="text-2xl md:text-4xl font-bold text-foreground leading-tight">
+            Sorteio Online Grátis — Roleta para Escolher o Ganhador
+          </h1>
+          <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            Faça sorteios justos e transparentes em segundos. Adicione os participantes, gire a roleta e escolha o ganhador com aleatoriedade criptográfica. Sem cadastro, completamente grátis.
+          </p>
+        </section>
+
+        <section class="bg-card border border-border rounded-xl p-5 text-sm text-muted-foreground leading-relaxed">
+          <p>
+            <strong class="text-foreground">Sorteio online:</strong> Adicione os nomes dos participantes, clique em Girar a Roleta e o sistema escolhe um ganhador aleatoriamente usando <code>window.crypto.getRandomValues()</code> — o padrão criptográfico dos navegadores modernos. Cada participante tem exatamente a mesma probabilidade de ganhar. Transparente, verificável, gratuito.
+          </p>
+        </section>
+
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+
+        <section class="space-y-4">
+          <h2 class="text-xl font-bold text-foreground">Para que serve esta ferramenta</h2>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {USOS.map((uso, i) => (
+              <li class="flex items-start gap-3 bg-card border border-border rounded-xl p-4">
+                <Check className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                <span class="text-sm text-muted-foreground">{uso}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <AdPlaceholder position="after-use-cases" client:visible />
+
+        <section class="bg-card border border-border rounded-xl p-6 space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Por que usar uma roleta para sorteios?</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Uma roleta digital com aleatoriedade criptográfica é o método mais justo e transparente para fazer sorteios online. Ao contrário de escolher "aleatoriamente" de forma manual (onde o viés humano é inevitável), <code>window.crypto.getRandomValues()</code> garante que cada participante tem exatamente a mesma probabilidade de ser escolhido.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            Para sorteios nas redes sociais, a transparência é fundamental: grave a tela enquanto gira a roleta e mostre ao seu público. O processo é verificável e difícil de questionar.
+          </p>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Mais ferramentas</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              { label: "Roleta de Nomes", href: "/roleta-de-nomes" },
+              { label: "Giveaway Picker", href: "/giveaway-picker" },
+              { label: "Raffle Picker", href: "/raffle-picker" },
+            ].map((link) => (
+              <a href={link.href}
+                class="p-4 bg-card border border-border rounded-xl text-center hover:border-primary/50 hover:shadow-md transition-all text-sm font-semibold text-foreground">
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Perguntas frequentes</h2>
+          <div class="space-y-3">
+            {[
+              ["Este sorteio online é realmente aleatório e justo?",
+               "Sim. Usamos window.crypto.getRandomValues(), o padrão criptográfico dos navegadores modernos. Nenhum participante tem mais probabilidade que outro."],
+              ["Quantos participantes posso adicionar?",
+               "Quantos precisar. Clique em qualquer nome para editá-lo e adicione mais. A roleta se adapta automaticamente."],
+              ["Posso usar para sorteios no Instagram ou TikTok?",
+               "Sim. Copie os nomes dos comentários, adicione-os à roleta e grave a tela enquanto gira. É transparente e verificável para o seu público."],
+              ["É gratuito?",
+               "Completamente gratuito. Sem cadastro, sem downloads, sem pagamentos."],
+            ].map(([q, a], i) => (
+              <div class="bg-card border border-border rounded-xl p-5">
+                <p class="font-semibold text-foreground mb-2">{q}</p>
+                <p class="text-muted-foreground">{a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="text-center py-6">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Ferramenta completa <ArrowRight className="w-4 h-4" />
+          </a>
+        </section>
+
+        <AdPlaceholder position="bottom" client:visible />
+      </main>
+      <GlobalFooterIsland client:idle />
+    </div>
+  </div>
+</Layout>

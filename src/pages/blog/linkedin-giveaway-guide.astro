@@ -1,0 +1,182 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+
+const title = "How to Pick a Winner on LinkedIn: Complete Giveaway Guide 2026";
+const description = "Step-by-step guide to running a professional LinkedIn giveaway and picking a random winner from post comments. Includes LinkedIn rules, B2B strategies, and free tools.";
+const canonical = "/blog/linkedin-giveaway-guide";
+
+const steps = [
+  {
+    step: "Step 1",
+    title: "Choose a Relevant Prize",
+    content: "Professional prizes outperform generic prizes on LinkedIn. Think: industry books, online courses, software subscriptions (SaaS), conference tickets, or a free consulting session. Make sure the prize is relevant to your target audience's role or industry.",
+  },
+  {
+    step: "Step 2",
+    title: "Write a High-Performing Post",
+    content: "Start with a strong hook (first 2 lines visible before \"see more\"). Clearly state the prize, eligibility, how to enter, and deadline. Add a personal angle — why are you running this? Authenticity performs well on LinkedIn. Use a clear image of the prize.",
+  },
+  {
+    step: "Step 3",
+    title: "Set Simple Entry Rules",
+    content: "Best performing: \"Comment below with [your answer/why you want to win/your role].\" Optional bonus: \"Follow my profile for a bonus entry.\" Keep it simple — complex entry steps reduce participation dramatically.",
+  },
+  {
+    step: "Step 4",
+    title: "Collect All Entries",
+    content: "When the giveaway closes, copy all commenter names from your LinkedIn post. If you allowed multiple entries (e.g., comment + tag), decide in advance how to count them. Paste your final list into RealWheelPicker.",
+  },
+  {
+    step: "Step 5",
+    title: "Pick a Winner Transparently",
+    content: "Use a random picker tool and record your screen. Post the video in the comments of your original post. This builds trust with your audience and shows you conducted the draw fairly. Tag the winner and send them a direct message.",
+  },
+  {
+    step: "Step 6",
+    title: "Follow Up for Maximum Impact",
+    content: "Post a follow-up update announcing the winner and thanking all participants. This second post often gets strong engagement too. If your prize was a product, ask the winner to post about it — that's additional organic reach.",
+  },
+];
+
+const mistakes = [
+  { title: "Making the prize irrelevant to your audience", desc: "A generic iPad giveaway attracts random accounts. A prize relevant to your niche attracts your ideal followers and customers." },
+  { title: "Requiring likes as the entry method", desc: "LinkedIn's algorithm deprioritizes posts that explicitly ask for likes. Ask for comments instead — they have far more algorithmic weight." },
+  { title: "Closing the giveaway too soon", desc: "LinkedIn posts take 24–72 hours to fully distribute. Run your giveaway for at least 3–5 days for maximum reach." },
+  { title: "No follow-up post announcing the winner", desc: "The follow-up announcement post is free content that gets strong engagement and closes the loop professionally." },
+  { title: "Picking a winner without transparency", desc: "Professional audiences expect transparency. Always show your winner selection process — a screen recording is perfect." },
+];
+
+const prizes = [
+  { category: "Knowledge", ideas: "Industry books, online courses, Masterclass subscriptions, LinkedIn Learning credits" },
+  { category: "Software", ideas: "SaaS tool subscriptions, design tools, productivity apps, project management licenses" },
+  { category: "Experiences", ideas: "Conference tickets, webinar access, 1-on-1 coaching session, mastermind group access" },
+];
+---
+
+<Layout title={title} description={description} canonical={canonical}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <header class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary">Blog</a>
+          <span>/</span>
+          <span>LinkedIn Giveaways</span>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold text-foreground leading-tight">
+          How to Pick a Winner on LinkedIn: Complete Giveaway Guide 2026
+        </h1>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span class="bg-purple-500/10 text-purple-400 px-2 py-1 rounded text-xs font-medium">Giveaways</span>
+          <span>8 min read</span>
+          <span>Feb 1, 2026</span>
+        </div>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          LinkedIn giveaways are an underrated growth lever for B2B brands and personal brands. Done right, they can multiply your post reach 10x&mdash;here&apos;s how to run one professionally and pick a fair winner.
+        </p>
+      </header>
+
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Why LinkedIn Giveaways Are Different</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          LinkedIn&apos;s algorithm heavily favors posts that generate comments. A giveaway requiring a comment to enter can easily reach 50,000&ndash;200,000 people organically&mdash;for free. LinkedIn&apos;s professional audience also means higher purchasing power than most other platforms.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Unlike Instagram or TikTok, LinkedIn users respond well to educational or professional prizes: books, courses, software licenses, consulting sessions, or industry event tickets. Consumer goods can also work if targeted correctly.
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">LinkedIn Promotion Policies</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl bg-red-500/5 border border-red-500/20 space-y-2">
+            <h3 class="font-bold text-red-400 text-sm">Not Recommended</h3>
+            <ul class="space-y-1 text-muted-foreground text-sm">
+              <li>&#x2715; Requiring likes as entry condition (harms post distribution)</li>
+              <li>&#x2715; Fake engagement pods or buying entries</li>
+              <li>&#x2715; Misleading prize claims</li>
+              <li>&#x2715; Running illegal lotteries (requiring purchase to enter)</li>
+            </ul>
+          </div>
+          <div class="p-4 rounded-xl bg-green-500/5 border border-green-500/20 space-y-2">
+            <h3 class="font-bold text-green-400 text-sm">Fully Allowed</h3>
+            <ul class="space-y-1 text-muted-foreground text-sm">
+              <li>&#x2713; Comment to enter (free sweepstakes)</li>
+              <li>&#x2713; Tag a colleague in comments</li>
+              <li>&#x2713; Answer a question in comments</li>
+              <li>&#x2713; Repost to spread awareness (optional entry)</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      <section class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">How to Run a LinkedIn Giveaway: Step by Step</h2>
+
+        {steps.map(({ step, title, content }) => (
+          <div key={step} class="p-5 rounded-xl bg-card border border-border space-y-2">
+            <div class="flex items-center gap-3">
+              <span class="bg-primary/20 text-primary text-xs font-bold px-2 py-1 rounded">{step}</span>
+              <h3 class="font-bold text-foreground">{title}</h3>
+            </div>
+            <p class="text-muted-foreground text-sm leading-relaxed">{content}</p>
+          </div>
+        ))}
+      </section>
+
+      <section class="p-6 rounded-xl bg-primary/5 border border-primary/20 space-y-3">
+        <h2 class="text-xl font-bold text-foreground">Pick Your LinkedIn Winner Now</h2>
+        <p class="text-muted-foreground text-sm">
+          Paste your list of LinkedIn commenters, spin the wheel, record the result, and post it as proof to your network. Free, instant, no signup required.
+        </p>
+        <a
+          href="/linkedin-giveaway-picker"
+          class="inline-block bg-primary text-primary-foreground font-semibold px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
+        >
+          Use the LinkedIn Giveaway Picker &rarr;
+        </a>
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">5 LinkedIn Giveaway Mistakes to Avoid</h2>
+        <div class="space-y-3">
+          {mistakes.map(({ title, desc }) => (
+            <div key={title} class="flex gap-3 p-4 rounded-lg bg-card border border-border">
+              <span class="text-red-400 font-bold text-lg leading-none mt-0.5">&#x2715;</span>
+              <div>
+                <p class="font-semibold text-foreground text-sm">{title}</p>
+                <p class="text-muted-foreground text-sm">{desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Best Prize Ideas for LinkedIn</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {prizes.map(({ category, ideas }) => (
+            <div key={category} class="p-4 rounded-lg bg-card border border-border">
+              <p class="font-bold text-foreground text-sm mb-1">{category}</p>
+              <p class="text-muted-foreground text-xs">{ideas}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <AdPlaceholder position="bottom" client:visible />
+
+      <RelatedPosts currentSlug="/blog/linkedin-giveaway-guide" client:idle />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

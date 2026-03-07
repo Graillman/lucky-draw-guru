@@ -1,0 +1,162 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import { ArrowRight, Check } from 'lucide-react';
+
+const title = "Rad van Fortuin Online — Gratis Draaiend Wiel | Real Wheel Picker";
+const description = "Draai het rad van fortuin online en krijg direct een willekeurig resultaat. Voeg opties toe, draai en laat het toeval beslissen. Gratis, geen aanmelding vereist.";
+const canonical = "/rad-van-fortuin";
+const locale = "nl_NL";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Rad van Fortuin Online — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/rad-van-fortuin",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Gratis online rad van fortuin. Direct willekeurig resultaat met window.crypto.getRandomValues().",
+      "inLanguage": "nl",
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is het rad van fortuin echt willekeurig?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Ja. Real Wheel Picker gebruikt window.crypto.getRandomValues(), de cryptografische standaard van moderne browsers. Elke optie heeft exact gelijke kans om gekozen te worden." },
+        },
+        {
+          "@type": "Question",
+          "name": "Kan ik mijn eigen opties toevoegen?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Ja. Klik op een label om het te bewerken. Voeg zoveel opties toe als je wilt — het wiel past zich automatisch aan." },
+        },
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Rad van Fortuin" },
+      ],
+    },
+  ],
+};
+
+const defaultParticipants = [
+  { pseudo: "Optie 1", weight: 1 },
+  { pseudo: "Optie 2", weight: 1 },
+  { pseudo: "Optie 3", weight: 1 },
+  { pseudo: "Optie 4", weight: 1 },
+  { pseudo: "Optie 5", weight: 1 },
+  { pseudo: "Optie 6", weight: 1 },
+];
+
+const USOS = [
+  "Beslissingen — wat eten, waar naartoe gaan",
+  "Wedstrijden en winnaars kiezen op sociale media",
+  "Klas activiteiten — willekeurig een leerling kiezen",
+  "Gezelschapsspellen — wie begint?",
+  "Teamverdeling — eerlijk en willekeurig",
+  "Elke willekeurige keuze",
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} locale={locale} jsonLd={jsonLd}>
+  <div class="relative min-h-screen overflow-hidden" style="background: var(--gradient-bg)">
+    <div aria-hidden class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div class="aurora-orb aurora-orb-gold"></div>
+      <div class="aurora-orb aurora-orb-purple"></div>
+      <div class="aurora-orb aurora-orb-blue"></div>
+    </div>
+    <div class="relative z-10">
+      <HeaderIsland client:load />
+      <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+
+        <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+          <a href="/" class="hover:text-primary transition-colors">Home</a>
+          <span>/</span>
+          <span class="text-foreground">Rad van Fortuin</span>
+        </nav>
+
+        <section class="text-center space-y-4 py-2">
+          <h1 class="text-2xl md:text-4xl font-bold text-foreground leading-tight">
+            Rad van Fortuin Online — Draai voor een Willekeurig Resultaat
+          </h1>
+          <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            Kun je geen beslissing nemen? Voeg je opties toe, draai het wiel en laat het toeval beslissen. Gratis, geen aanmelding, cryptografisch eerlijk.
+          </p>
+        </section>
+
+        <section class="bg-card border border-border rounded-xl p-5 text-sm text-muted-foreground leading-relaxed">
+          <p>
+            <strong class="text-foreground">Rad van fortuin online:</strong> Typ je opties, klik op Draaien en het resultaat wordt bepaald met <code>window.crypto.getRandomValues()</code> — elke optie heeft precies gelijke kans. Nul bias, nul manipulatie.
+          </p>
+        </section>
+
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+
+        <section class="space-y-4">
+          <h2 class="text-xl font-bold text-foreground">Wanneer gebruik je het rad van fortuin?</h2>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {USOS.map((uso, i) => (
+              <li class="flex items-start gap-3 bg-card border border-border rounded-xl p-4">
+                <Check className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                <span class="text-sm text-muted-foreground">{uso}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <AdPlaceholder position="after-use-cases" client:visible />
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Meer tools</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              { label: "Ja of Nee Wiel", href: "/yes-or-no-wheel" },
+              { label: "Coin Flip", href: "/coin-flip" },
+              { label: "Random Decision Maker", href: "/random-decision-maker" },
+            ].map((link) => (
+              <a href={link.href}
+                class="p-4 bg-card border border-border rounded-xl text-center hover:border-primary/50 hover:shadow-md transition-all text-sm font-semibold text-foreground">
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Veelgestelde vragen</h2>
+          <div class="space-y-3">
+            {[
+              ["Is het rad van fortuin echt willekeurig?", "Ja. We gebruiken window.crypto.getRandomValues(), de cryptografische standaard in browsers. Elke optie heeft exact gelijke kans."],
+              ["Kan ik mijn eigen opties toevoegen?", "Ja. Klik op een label om het te bewerken. Voeg zoveel opties toe als je wilt."],
+              ["Is het gratis?", "Volledig gratis. Geen aanmelding, geen download, geen betaling."],
+            ].map(([q, a], i) => (
+              <div class="bg-card border border-border rounded-xl p-5">
+                <p class="font-semibold text-foreground mb-2">{q}</p>
+                <p class="text-muted-foreground">{a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="text-center py-6">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Volledige tool <ArrowRight className="w-4 h-4" />
+          </a>
+        </section>
+
+        <AdPlaceholder position="bottom" client:visible />
+      </main>
+      <GlobalFooterIsland client:idle />
+    </div>
+  </div>
+</Layout>

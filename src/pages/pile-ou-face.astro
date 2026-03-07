@@ -1,0 +1,142 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import { ArrowRight } from 'lucide-react';
+
+const title = "Pile ou Face en Ligne — Tirage au Sort Virtuel | Real Wheel Picker";
+const description = "Pile ou face virtuel en ligne. Tirage au sort instantané et cryptographiquement aléatoire. Gratuit, sans inscription. Parfait pour toutes les décisions rapides.";
+const canonical = "/pile-ou-face";
+const locale = "fr_FR";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Pile ou Face en Ligne — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/pile-ou-face",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Pile ou face virtuel en ligne. Résultat aléatoire instantané avec window.crypto.getRandomValues().",
+      "inLanguage": "fr",
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Pile ou face en ligne est-il vraiment aléatoire ?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Oui. Real Wheel Picker utilise window.crypto.getRandomValues(), le standard cryptographique des navigateurs modernes. La probabilité est exactement 50/50 à chaque tirage, sans biais possible." },
+        },
+        {
+          "@type": "Question",
+          "name": "Puis-je remplacer Pile et Face par autre chose ?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Oui. Cliquez sur les étiquettes pour les modifier. Vous pouvez mettre n'importe quelles deux options et la roue choisira l'une d'elles avec 50% de probabilité chacune." },
+        },
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Pile ou Face" },
+      ],
+    },
+  ],
+};
+
+const defaultParticipants = [
+  { pseudo: "Pile", weight: 1 },
+  { pseudo: "Face", weight: 1 },
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} locale={locale} jsonLd={jsonLd}>
+  <div class="relative min-h-screen overflow-hidden" style="background: var(--gradient-bg)">
+    <div aria-hidden class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div class="aurora-orb aurora-orb-gold"></div>
+      <div class="aurora-orb aurora-orb-purple"></div>
+      <div class="aurora-orb aurora-orb-blue"></div>
+    </div>
+    <div class="relative z-10">
+      <HeaderIsland client:load />
+      <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+
+        <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+          <a href="/" class="hover:text-primary transition-colors">Accueil</a>
+          <span>/</span>
+          <span class="text-foreground">Pile ou Face</span>
+        </nav>
+
+        <section class="text-center space-y-4 py-2">
+          <h1 class="text-2xl md:text-4xl font-bold text-foreground leading-tight">
+            Pile ou Face en Ligne — Tirage au Sort Virtuel
+          </h1>
+          <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            Pas de pièce sous la main ? Tourne la roue virtuelle pour un pile ou face instantané, cryptographiquement aléatoire. Exactement 50/50 à chaque fois.
+          </p>
+        </section>
+
+        <section class="bg-card border border-border rounded-xl p-5 text-sm text-muted-foreground leading-relaxed">
+          <p>
+            <strong class="text-foreground">Pile ou face en ligne :</strong> Cliquez sur Tourner la roue et le résultat est déterminé avec <code>window.crypto.getRandomValues()</code> — exactement 50% de probabilité pour Pile, 50% pour Face. Zéro biais, zéro manipulation possible.
+          </p>
+        </section>
+
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+
+        <section class="bg-card border border-border rounded-xl p-6 space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Pourquoi une roue virtuelle plutôt qu'une vraie pièce ?</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Une pièce physique n'est pas parfaitement équilibrée — le côté pile et le côté face ont des masses légèrement différentes, ce qui crée un biais infime mais mesurable. De plus, la technique de lancer influence le résultat. Une roue numérique avec <code>window.crypto.getRandomValues()</code> garantit exactement 50/50 à chaque tirage, sans exception.
+          </p>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Autres outils</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              { label: "Oui ou Non", href: "/yes-or-no-wheel" },
+              { label: "Tirage au Sort", href: "/tirage-au-sort" },
+              { label: "Décision aléatoire", href: "/random-decision-maker" },
+            ].map((link) => (
+              <a href={link.href}
+                class="p-4 bg-card border border-border rounded-xl text-center hover:border-primary/50 hover:shadow-md transition-all text-sm font-semibold text-foreground">
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Questions fréquentes</h2>
+          <div class="space-y-3">
+            {[
+              ["Pile ou face en ligne est-il vraiment aléatoire ?", "Oui. Nous utilisons window.crypto.getRandomValues(), le standard cryptographique des navigateurs. La probabilité est exactement 50/50 à chaque tirage."],
+              ["Puis-je remplacer Pile et Face par autre chose ?", "Oui. Cliquez sur les étiquettes pour modifier. Vous pouvez mettre n'importe quelles deux options."],
+              ["C'est gratuit ?", "Complètement gratuit. Sans inscription, sans téléchargement, directement dans le navigateur."],
+            ].map(([q, a], i) => (
+              <div class="bg-card border border-border rounded-xl p-5">
+                <p class="font-semibold text-foreground mb-2">{q}</p>
+                <p class="text-muted-foreground">{a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="text-center py-6">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Outil complet <ArrowRight className="w-4 h-4" />
+          </a>
+        </section>
+
+        <AdPlaceholder position="bottom" client:visible />
+      </main>
+      <GlobalFooterIsland client:idle />
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,312 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, BarChart2, CheckCircle, HelpCircle } from 'lucide-react';
+
+const title = "Weighted Random Picker: What It Is and When to Use It";
+const description = "Learn what a weighted random picker is, how probability weights work, and real-world use cases for giveaways, raffles, games, and business decisions.";
+const canonical = "/blog/weighted-random-picker";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Weighted Random Picker: What It Is and When to Use It",
+  "description": "What a weighted random picker is, how probability weights work, and real-world use cases.",
+  "author": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2025-02-10",
+  "dateModified": "2026-03-01",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/weighted-random-picker" },
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <section class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary transition-colors">Blog</a>
+          <span>/</span>
+          <span>Weighted Random Picker</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Weighted Random Picker: What It Is and When to Use It
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          A standard random picker gives every entry an equal chance. A weighted random picker lets you assign different probabilities to different entries — so some outcomes are more likely than others while still being random. Here's everything you need to know.
+        </p>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>6 min read</span>
+          <span>·</span>
+          <span>Updated March 2026</span>
+        </div>
+      </section>
+
+      {/* What is it */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <HelpCircle className="w-5 h-5 text-primary" /> What is a Weighted Random Picker?
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          In a standard (uniform) random draw, if you have 5 entries, each has a 20% chance of winning. In a weighted draw, you can assign each entry a different weight — say Entry A has weight 3, Entry B has weight 1, and Entry C has weight 1. The total weight is 5, so Entry A now has a 60% chance (3/5), and B and C each have 20%.
+        </p>
+        <div class="bg-muted/30 rounded-xl p-5 space-y-3">
+          <p class="font-semibold text-foreground text-sm">Example: Raffle with tiered entries</p>
+          <div class="space-y-2">
+            {[
+              { name: "Alice (bought 3 tickets)", weight: 3, prob: "50%" },
+              { name: "Bob (bought 2 tickets)", weight: 2, prob: "33%" },
+              { name: "Charlie (bought 1 ticket)", weight: 1, prob: "17%" },
+            ].map((row) => (
+              <div key={row.name} class="flex items-center gap-3">
+                <span class="text-xs text-muted-foreground w-40 flex-shrink-0">{row.name}</span>
+                <div class="flex-1 bg-muted/50 rounded-full h-2">
+                  <div
+                    class="bg-primary rounded-full h-2 transition-all"
+                    style={`width: ${row.prob}`}
+                  />
+                </div>
+                <span class="text-xs font-medium text-primary w-10 text-right">{row.prob}</span>
+              </div>
+            ))}
+          </div>
+          <p class="text-xs text-muted-foreground">The more tickets bought, the higher the probability — but it's still random. Charlie can still win.</p>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      {/* Use Cases */}
+      <section class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">8 Real Use Cases for Weighted Random Selection</h2>
+
+        {[
+          {
+            title: "Tiered Raffle Tickets",
+            desc: "Sell raffle entries where buying more tickets increases your odds proportionally. This is the most natural use case. Assign each participant a weight equal to the number of tickets purchased.",
+            example: "Charity raffle: Gold ticket (weight 5) = 5x the chance of Bronze ticket (weight 1).",
+          },
+          {
+            title: "Loyalty Reward Programs",
+            desc: "Reward your most loyal customers with a better chance at a monthly prize draw. Assign weights based on purchase history, review count, or subscription tier.",
+            example: "Premium subscribers (weight 3) vs. free users (weight 1) in a monthly winner draw.",
+          },
+          {
+            title: "Employee Recognition Raffles",
+            desc: "Run a monthly employee appreciation draw where employees who went above and beyond get extra weight. More equitable than pure merit, more motivating than pure randomness.",
+            example: "Employees nominated by peers (weight 2) vs. standard entries (weight 1).",
+          },
+          {
+            title: "Classroom Differentiation",
+            desc: "For teachers who want to call on students proportionally — for example, students who haven't been called recently get higher weight — a weighted picker allows this nuanced selection.",
+            example: "Students not called this week (weight 3) vs. students called recently (weight 1).",
+          },
+          {
+            title: "Game Prize Wheels",
+            desc: "Design prize tiers on a wheel where smaller prizes appear more frequently and jackpot prizes appear rarely. Classic casino/game show logic, applied to your own contest.",
+            example: "Weight 10: '10% off coupon' | Weight 3: 'Free product' | Weight 1: 'Grand Prize'",
+          },
+          {
+            title: "Content Creator Giveaways",
+            desc: "Reward super fans who engaged more (shared your post, tagged friends, left a comment AND followed) with a higher chance than those who only liked.",
+            example: "Liked + Shared + Tagged (weight 3) vs. Liked only (weight 1).",
+          },
+          {
+            title: "A/B Testing Rollouts",
+            desc: "When rolling out a new feature, you might want 80% of users to see Version A and 20% to see Version B. A weighted random picker can model this distribution.",
+            example: "Version A (weight 80) vs. Version B (weight 20) = 80/20 split.",
+          },
+          {
+            title: "Sports Drafts",
+            desc: "In fantasy sports or youth league drafts, teams with worse records typically get higher draft pick probability. Replicate this with weights that scale inversely with standing.",
+            example: "Last place team (weight 5), Second to last (weight 4)... First place (weight 1).",
+          },
+        ].map((item, i) => (
+          <div key={i} class="bg-card border border-border rounded-xl p-5 space-y-3">
+            <h3 class="font-bold text-foreground">{item.title}</h3>
+            <p class="text-sm text-muted-foreground">{item.desc}</p>
+            <div class="bg-primary/5 border border-primary/20 rounded-lg p-3 text-xs text-muted-foreground">
+              <strong class="text-primary">Example:</strong> {item.example}
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      {/* How to use */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">How to Use the Weighted Random Picker</h2>
+        <div class="space-y-3">
+          {[
+            "Switch to 'Advanced Mode' on the main picker page",
+            "Enter each participant's name",
+            "Set their weight (whole numbers — higher = more likely to win)",
+            "The tool shows the exact probability percentage for each entry",
+            "Click Spin — the wheel selects proportionally to the weights",
+            "The result is cryptographically random but respects the probabilities",
+          ].map((step, i) => (
+            <div key={i} class="flex items-center gap-3 bg-card border border-border rounded-xl p-4">
+              <span class="w-7 h-7 rounded-full bg-primary/10 text-primary text-sm font-bold flex items-center justify-center flex-shrink-0">{i + 1}</span>
+              <p class="text-sm text-muted-foreground">{step}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">FAQ</h2>
+        <div class="space-y-3">
+          {[
+            {
+              q: "Is a weighted draw still 'random'?",
+              a: "Yes. The outcome is still determined by a cryptographically secure random process. Weights influence the probability of each outcome, but don't predetermine the result. A weight-1 entry can always beat a weight-100 entry — it's just unlikely.",
+            },
+            {
+              q: "Can I use percentages instead of weights?",
+              a: "The tool uses weights, which are automatically converted to percentages. If you want a 30/70 split, use weights 30 and 70, or equivalently 3 and 7. The proportions are what matter.",
+            },
+            {
+              q: "What's the maximum weight I can assign?",
+              a: "There is no hard maximum. However, extremely large weights (e.g. weight 10,000 vs weight 1) may make the outcome essentially predetermined. For transparent giveaways, we recommend weights no larger than 10–20 per entry.",
+            },
+            {
+              q: "Is weighted selection legal for giveaways and raffles?",
+              a: "It depends on your jurisdiction and how you disclose the weights. Many countries require that raffle odds be clearly disclosed. Always state your weight criteria in your giveaway rules if using weighted selection.",
+            },
+          ].map((item, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-5 space-y-2">
+              <p class="font-semibold text-foreground">{item.q}</p>
+              <p class="text-sm text-muted-foreground">{item.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Weighted vs Fair comparison */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Weighted vs. Fair: Which Should You Use?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The choice between a weighted and a fair (uniform) random picker comes down to your goal. Here's a simple decision framework:
+        </p>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-card border border-border rounded-xl p-5 space-y-3">
+            <h3 class="font-bold text-foreground text-lg">Use Fair (equal odds) when:</h3>
+            <ul class="space-y-2">
+              {[
+                "Everyone entered under the same conditions",
+                "You promised 'one entry per person' publicly",
+                "Running a school raffle or class draw",
+                "Transparency and trust are the primary goal",
+                "You want to keep rules simple",
+              ].map((point, i) => (
+                <li key={i} class="flex items-start gap-2 text-sm text-muted-foreground">
+                  <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="bg-card border border-border rounded-xl p-5 space-y-3">
+            <h3 class="font-bold text-foreground text-lg">Use Weighted when:</h3>
+            <ul class="space-y-2">
+              {[
+                "Entries have different levels of effort (e.g. 1 ticket vs. 5 tickets)",
+                "You want to reward loyal or high-value participants",
+                "Running a loyalty program or tiered contest",
+                "Simulating real-world probability scenarios",
+                "Creating a game or prize wheel with varying prize rarity",
+              ].map((point, i) => (
+                <li key={i} class="flex items-start gap-2 text-sm text-muted-foreground">
+                  <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <p class="text-muted-foreground leading-relaxed">
+          A common mistake is using weighted selection when the audience expects fair selection. If you've advertised a giveaway as "everyone has an equal chance" and then apply weights, you're breaking trust — even if the weights are reasonable. Always disclose your weighting criteria in advance.
+        </p>
+      </section>
+
+      {/* How the math works */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <BarChart2 className="w-5 h-5 text-primary" /> How Weighted Random Selection Works Mathematically
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The algorithm behind a weighted random picker is simpler than it sounds. Here's the core logic step by step:
+        </p>
+        <ol class="space-y-3">
+          {[
+            "Add up all the weights to get the total weight. (e.g. 3 + 2 + 1 = 6)",
+            "Generate a cryptographically secure random number between 0 and the total weight. (e.g. a number between 0 and 6)",
+            "Walk through the entries in order, subtracting each weight from the random number. The first entry where the number drops to 0 or below is the winner.",
+            "This means each entry's probability = its weight ÷ total weight. Entry with weight 3 out of total 6 = 50% chance.",
+          ].map((step, i) => (
+            <li key={i} class="flex items-start gap-3">
+              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary font-bold text-xs flex-shrink-0 mt-0.5">{i + 1}</span>
+              <span class="text-muted-foreground text-sm">{step}</span>
+            </li>
+          ))}
+        </ol>
+        <div class="bg-muted/30 rounded-xl p-4 text-sm text-muted-foreground">
+          <strong class="text-foreground">Important:</strong> The random number is generated using the browser's Web Crypto API (<code class="text-primary">crypto.getRandomValues</code>), which provides cryptographically secure randomness. This is the same standard used by banking and security applications — not the weaker <code class="text-primary">Math.random()</code> used by most random tools.
+        </div>
+      </section>
+
+      {/* Transparency tips */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Running a Transparent Weighted Giveaway</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Weighted giveaways are legal and common, but they require clear communication to maintain trust. Here's how to run one properly:
+        </p>
+        <div class="space-y-3">
+          {[
+            {
+              title: "Publish the weight criteria before the draw closes",
+              desc: "Example: 'Comments = 1 entry, shares = 2 extra entries, referrals = 3 extra entries.' Never apply weights that participants couldn't have known about in advance.",
+            },
+            {
+              title: "Show the probability percentages",
+              desc: "Real Wheel Picker shows each participant's exact probability next to their name in Advanced Mode. Screenshot this and share it with your audience before spinning.",
+            },
+            {
+              title: "Record the spin",
+              desc: "Screen-record the draw and post it. In the recording, the full list of participants and their weights should be visible. This is your proof that the draw was conducted as stated.",
+            },
+            {
+              title: "Check local laws for cash-equivalent prizes",
+              desc: "In some jurisdictions, weighted draws for prizes valued above certain thresholds require legal notices or official registration. Gift cards over $600 (US) have tax implications. When in doubt, consult a lawyer.",
+            },
+          ].map((tip, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-5 space-y-2">
+              <p class="font-semibold text-foreground">{i + 1}. {tip.title}</p>
+              <p class="text-sm text-muted-foreground">{tip.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section class="bg-primary/5 border border-primary/20 rounded-xl p-8 text-center space-y-4">
+        <BarChart2 className="w-10 h-10 text-primary mx-auto" />
+        <h2 class="text-2xl font-bold text-foreground">Try the Weighted Random Picker</h2>
+        <p class="text-muted-foreground">Set custom probabilities for each entry. Free, instant, no signup.</p>
+        <a href="/weighted-random-picker" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+          Open Weighted Picker <ArrowRight className="w-4 h-4" />
+        </a>
+      </section>
+
+      <RelatedPosts currentSlug="/blog/weighted-random-picker" client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

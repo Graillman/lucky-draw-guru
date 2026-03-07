@@ -1,0 +1,258 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Light mode (default for users with light system preference) */
+  :root {
+    --background: 40 30% 96%;
+    --foreground: 222 47% 11%;
+
+    --card: 40 25% 98%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 40 25% 98%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 45 93% 47%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 40 20% 92%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 40 15% 90%;
+    --muted-foreground: 222 20% 40%;
+
+    --accent: 262 83% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 40 15% 85%;
+    --input: 40 15% 85%;
+    --ring: 45 93% 47%;
+
+    --radius: 0.75rem;
+
+    --gold: 45 93% 47%;
+    --gold-glow: 45 100% 60%;
+    --navy-deep: 40 30% 96%;
+    --navy-light: 40 20% 88%;
+    
+    --purple: 262 83% 55%;
+    --purple-glow: 262 90% 65%;
+    
+    --gradient-gold: linear-gradient(135deg, hsl(45, 93%, 47%), hsl(35, 100%, 45%));
+    --gradient-purple: linear-gradient(135deg, hsl(262, 83%, 55%), hsl(280, 90%, 50%));
+    --gradient-card: linear-gradient(180deg, hsl(40, 25%, 98%), hsl(40, 30%, 96%));
+    --gradient-bg: radial-gradient(ellipse at top, hsl(40, 30%, 98%), hsl(40, 25%, 94%));
+    --gradient-bg-purple: radial-gradient(ellipse at top, hsl(280, 40%, 96%), hsl(262, 30%, 92%));
+    
+    --shadow-gold: 0 0 40px -10px hsl(45, 93%, 47% / 0.4);
+    --shadow-purple: 0 0 40px -10px hsl(262, 83%, 55% / 0.4);
+    --shadow-card: 0 4px 30px -5px hsl(0, 0%, 0% / 0.1);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  /* Dark mode (for users with dark system preference or explicit .dark class) */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light) {
+      --background: 222 47% 6%;
+      --foreground: 210 40% 98%;
+      --card: 222 47% 8%;
+      --card-foreground: 210 40% 98%;
+      --popover: 222 47% 8%;
+      --popover-foreground: 210 40% 98%;
+      --primary: 45 93% 58%;
+      --primary-foreground: 222 47% 6%;
+      --secondary: 222 30% 14%;
+      --secondary-foreground: 210 40% 98%;
+      --muted: 222 30% 18%;
+      --muted-foreground: 215 20% 55%;
+      --accent: 262 83% 58%;
+      --accent-foreground: 210 40% 98%;
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 210 40% 98%;
+      --border: 222 30% 18%;
+      --input: 222 30% 18%;
+      --ring: 45 93% 58%;
+      
+      --gold: 45 93% 58%;
+      --gold-glow: 45 100% 70%;
+      --navy-deep: 222 47% 4%;
+      --navy-light: 222 30% 20%;
+      
+      --purple: 262 83% 58%;
+      --purple-glow: 262 90% 70%;
+      
+      --gradient-gold: linear-gradient(135deg, hsl(45, 93%, 58%), hsl(35, 100%, 50%));
+      --gradient-purple: linear-gradient(135deg, hsl(262, 83%, 58%), hsl(280, 90%, 50%));
+      --gradient-card: linear-gradient(180deg, hsl(222, 47%, 10%), hsl(222, 47%, 6%));
+      --gradient-bg: radial-gradient(ellipse at top, hsl(222, 47%, 12%), hsl(222, 47%, 4%));
+      --gradient-bg-purple: radial-gradient(ellipse at top, hsl(262, 47%, 12%), hsl(262, 47%, 4%));
+      
+      --shadow-gold: 0 0 40px -10px hsl(45, 93%, 58% / 0.5);
+      --shadow-purple: 0 0 40px -10px hsl(262, 83%, 58% / 0.5);
+      --shadow-card: 0 4px 30px -5px hsl(0, 0%, 0% / 0.3);
+
+      --sidebar-background: 240 5.9% 10%;
+      --sidebar-foreground: 240 4.8% 95.9%;
+      --sidebar-primary: 224.3 76.3% 48%;
+      --sidebar-primary-foreground: 0 0% 100%;
+      --sidebar-accent: 240 3.7% 15.9%;
+      --sidebar-accent-foreground: 240 4.8% 95.9%;
+      --sidebar-border: 240 3.7% 15.9%;
+      --sidebar-ring: 217.2 91.2% 59.8%;
+    }
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 45 93% 58%;
+    --primary-foreground: 222 47% 6%;
+    --secondary: 222 30% 14%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 222 30% 18%;
+    --muted-foreground: 215 20% 55%;
+    --accent: 262 83% 58%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 222 30% 18%;
+    --input: 222 30% 18%;
+    --ring: 45 93% 58%;
+    
+    --gold: 45 93% 58%;
+    --gold-glow: 45 100% 70%;
+    --navy-deep: 222 47% 4%;
+    --navy-light: 222 30% 20%;
+    
+    --purple: 262 83% 58%;
+    --purple-glow: 262 90% 70%;
+    
+    --gradient-gold: linear-gradient(135deg, hsl(45, 93%, 58%), hsl(35, 100%, 50%));
+    --gradient-purple: linear-gradient(135deg, hsl(262, 83%, 58%), hsl(280, 90%, 50%));
+    --gradient-card: linear-gradient(180deg, hsl(222, 47%, 10%), hsl(222, 47%, 6%));
+    --gradient-bg: radial-gradient(ellipse at top, hsl(222, 47%, 12%), hsl(222, 47%, 4%));
+    --gradient-bg-purple: radial-gradient(ellipse at top, hsl(262, 47%, 12%), hsl(262, 47%, 4%));
+    
+    --shadow-gold: 0 0 40px -10px hsl(45, 93%, 58% / 0.5);
+    --shadow-purple: 0 0 40px -10px hsl(262, 83%, 58% / 0.5);
+    --shadow-card: 0 4px 30px -5px hsl(0, 0%, 0% / 0.3);
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--gradient-bg);
+    min-height: 100vh;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer utilities {
+  .text-gradient-gold {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-gradient-gold {
+    background: var(--gradient-gold);
+  }
+
+  .shadow-gold {
+    box-shadow: var(--shadow-gold);
+  }
+
+  .glow-gold {
+    filter: drop-shadow(0 0 20px hsl(45, 93%, 58% / 0.4));
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(222, 30%, 18%) 0%,
+      hsl(222, 30%, 25%) 50%,
+      hsl(222, 30%, 18%) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  @keyframes pulse-gold {
+    0%, 100% { box-shadow: 0 0 20px hsl(45, 93%, 58% / 0.3); }
+    50% { box-shadow: 0 0 40px hsl(45, 93%, 58% / 0.6); }
+  }
+
+  .animate-pulse-gold {
+    animation: pulse-gold 2s ease-in-out infinite;
+  }
+
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 3s linear infinite;
+  }
+
+  @keyframes bounce-subtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  .animate-bounce-subtle {
+    animation: bounce-subtle 2s ease-in-out infinite;
+  }
+
+  @keyframes confetti-fall {
+    0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  .animate-confetti {
+    animation: confetti-fall 3s ease-out forwards;
+  }
+}

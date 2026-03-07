@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Main Tools -->
+  <url><loc>https://realwheelpicker.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://realwheelpicker.com/giveaway-picker</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://realwheelpicker.com/instagram-giveaway-picker</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://realwheelpicker.com/random-name-picker</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://realwheelpicker.com/classroom-picker</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://realwheelpicker.com/team-generator</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://realwheelpicker.com/yes-or-no-wheel</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://realwheelpicker.com/random-number-generator</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://realwheelpicker.com/weighted-random-picker</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/random-wheel</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/wheel-of-names</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/party-wheel</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/random-team-selector</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+  <!-- Content Pages -->
+  <url><loc>https://realwheelpicker.com/how-to-pick-a-random-winner</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/faq</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://realwheelpicker.com/about</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://realwheelpicker.com/contact</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
+
+  <!-- Blog -->
+  <url><loc>https://realwheelpicker.com/blog</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/how-to-run-instagram-giveaway</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/online-giveaway-guide</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/classroom-random-picker</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/spin-wheel-team-generator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/weighted-random-picker</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/spin-wheel-ideas</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Legal -->
+  <url><loc>https://realwheelpicker.com/privacy-policy</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
+  <url><loc>https://realwheelpicker.com/terms-of-service</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
+</urlset>

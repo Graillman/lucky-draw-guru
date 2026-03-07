@@ -1,0 +1,208 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertTriangle, Lightbulb, Trophy, Users } from 'lucide-react';
+
+const title = "How to Pick a Winner on Facebook: Complete Giveaway Guide 2026";
+const description = "Run a fair Facebook giveaway from start to finish. Collect entries from comments, pick a random winner on video, and comply with Facebook's promotion policies.";
+const canonical = "/blog/facebook-giveaway-guide";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Pick a Winner on Facebook: Complete Giveaway Guide 2026",
+  "description": "Run a fair Facebook giveaway from start to finish.",
+  "author": { "@type": "Organization", "name": "RealWheelPicker" },
+  "publisher": { "@type": "Organization", "name": "RealWheelPicker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2025-11-01",
+};
+
+const prohibitedRules = [
+  'Requiring users to "share on their personal Timeline" as a condition of entry',
+  'Requiring users to "tag a friend in the comments" as the sole entry method',
+  "Asking users to share a post on a friend's Timeline",
+  "Running a giveaway through a personal Profile (must use a Page or Group)",
+];
+
+const allowedRules = [
+  "Like the post",
+  "Comment on the post (with a word, emoji, or answer to a question)",
+  "Like the Page",
+  "Submit an email via a linked form",
+  "Tag a friend (as an optional bonus entry, not mandatory)",
+];
+
+const steps = [
+  {
+    n: 1,
+    title: "Set Up Your Giveaway Post",
+    body: 'Create a Facebook post (on your Page or Group) describing the prize, entry requirements, deadline, and how you\'ll pick the winner. Include the required legal disclaimer: "This promotion is in no way sponsored, endorsed or administered by, or associated with Facebook."',
+    tip: "Use an eye-catching image of the prize as the post thumbnail to increase click-through rate.",
+  },
+  {
+    n: 2,
+    title: "Choose Your Entry Method",
+    body: "The easiest and most compliant method: ask people to comment with a specific word or emoji. This gives you a clean list of entrants to copy. Optionally, require them to like the Page first. Avoid requiring shares to personal timelines.",
+    tip: "Add a question-based entry (\"Comment your favorite [topic] below\") to generate extra content and engagement.",
+  },
+  {
+    n: 3,
+    title: "Collect & Clean Your Entry List",
+    body: "Once the giveaway closes, scroll through all comments and copy usernames into a list. Remove duplicates if someone commented multiple times (unless you allow multiple entries). Verify that commenters also liked your Page if that was a requirement.",
+    tip: "For large giveaways (500+ entries), paste into a spreadsheet first to manage duplicates more easily.",
+  },
+  {
+    n: 4,
+    title: "Pick the Winner with RealWheelPicker",
+    body: "Paste your verified list into realwheelpicker.com. Screen-record the spin — or better, go live on Facebook and run the wheel in real time so your audience watches it happen. This is the most trusted method for Facebook giveaways.",
+    tip: "Going Facebook Live for the draw significantly increases transparency and can generate additional engagement.",
+  },
+  {
+    n: 5,
+    title: "Announce and Deliver",
+    body: "Post the winner announcement in a comment on the original post AND as a new post tagging the winner. Message the winner directly to collect their shipping details. Set a 48-72 hour window to respond before redrawing.",
+    tip: "Share the screen-recorded video of the draw as a story or post for maximum credibility.",
+  },
+];
+
+const mistakes = [
+  { mistake: "Running the giveaway on a personal Profile", fix: "Facebook's terms require promotions to be run on Pages or Groups, not personal accounts." },
+  { mistake: "Asking people to share to their Timeline as entry", fix: "This violates Facebook's promotion policies and the post can be taken down." },
+  { mistake: "No legal disclaimer", fix: "Always include \"not sponsored by Facebook\" in your post. It's required by their policies." },
+  { mistake: "Not verifying Page Likes before the draw", fix: "If you required a Page Like to enter, quickly spot-check that your winner actually liked the Page before announcing." },
+  { mistake: "Ignoring international entrants", fix: "If you can only ship to certain countries, clearly state that in the post. Picking an ineligible winner wastes everyone's time." },
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-4xl mx-auto px-4 py-8 space-y-10">
+
+      {/* Hero */}
+      <section class="space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xs px-2 py-0.5 rounded-full font-medium bg-purple-500/10 text-purple-400">Giveaways</span>
+          <span class="text-xs text-muted-foreground">Nov 1, 2025 • 8 min read</span>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold text-foreground leading-tight">
+          How to Pick a Winner on Facebook: Complete Giveaway Guide 2026
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          Facebook giveaways remain one of the most effective ways to grow your Page engagement and reach — but Facebook's promotion policies are stricter than most platforms. Here's how to run a legally compliant, transparent giveaway that your audience trusts.
+        </p>
+      </section>
+
+      {/* Why Facebook */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Why Facebook Giveaways Still Drive Massive Reach in 2026</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          With over 3 billion monthly active users, Facebook remains the largest social platform for community-focused giveaways — especially for local businesses, Facebook Groups, and niche communities.
+        </p>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="text-sm font-semibold text-foreground flex items-center gap-2"><Trophy className="w-4 h-4 text-primary" /> What a Facebook giveaway delivers:</p>
+          <ul class="space-y-1 text-sm text-muted-foreground">
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> Post reach 3–10× your normal reach through shares and comments</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> Strong performance in Facebook Groups — community feel drives trust</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> Email list growth if you require email sign-up as entry method</li>
+          </ul>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      {/* Facebook Policies */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Facebook Promotion Policies — What You Must Know</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Facebook has specific rules for promotions. Violating them can get your post removed or your Page penalized. The most important rule:
+        </p>
+        <div class="bg-red-500/5 border border-red-500/20 rounded-xl p-5 space-y-3">
+          <p class="text-sm font-bold text-red-400">Prohibited (Facebook will remove these):</p>
+          {prohibitedRules.map((rule, i) => (
+            <div key={i} class="flex items-start gap-2">
+              <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+              <span class="text-sm text-muted-foreground">{rule}</span>
+            </div>
+          ))}
+        </div>
+        <div class="bg-green-500/5 border border-green-500/20 rounded-xl p-5 space-y-3">
+          <p class="text-sm font-bold text-green-400">Allowed entry methods:</p>
+          {allowedRules.map((rule, i) => (
+            <div key={i} class="flex items-start gap-2">
+              <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+              <span class="text-sm text-muted-foreground">{rule}</span>
+            </div>
+          ))}
+        </div>
+        <p class="text-xs text-muted-foreground">Facebook also requires you to include a complete release of Facebook and acknowledge the promotion is not sponsored, endorsed, or administered by Facebook.</p>
+      </section>
+
+      {/* Step by Step */}
+      <section class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">How to Run a Facebook Giveaway (Step by Step)</h2>
+        <div class="space-y-4">
+          {steps.map((step) => (
+            <div key={step.n} class="bg-card border border-border rounded-xl p-5 space-y-3">
+              <div class="flex items-start gap-3">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex-shrink-0">{step.n}</span>
+                <h3 class="font-semibold text-foreground text-lg leading-tight">{step.title}</h3>
+              </div>
+              <p class="text-muted-foreground text-sm leading-relaxed pl-11">{step.body}</p>
+              {step.tip && (
+                <div class="ml-11 bg-muted/50 rounded-lg p-3 text-sm flex items-start gap-2">
+                  <Lightbulb className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                  <span class="text-muted-foreground">{step.tip}</span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      {/* Mistakes */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">5 Facebook Giveaway Mistakes to Avoid</h2>
+        <div class="grid gap-4">
+          {mistakes.map((item, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-4 space-y-2">
+              <div class="flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 text-yellow-400 flex-shrink-0 mt-0.5" />
+                <p class="text-sm font-semibold text-foreground">{item.mistake}</p>
+              </div>
+              <p class="text-xs text-muted-foreground pl-6">{item.fix}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section class="bg-primary/5 border border-primary/20 rounded-2xl p-6 md:p-8 space-y-4 text-center">
+        <h2 class="text-xl font-bold text-foreground">Ready to pick your Facebook winner?</h2>
+        <p class="text-muted-foreground">Use the free tool trusted by thousands of creators for fair, transparent Facebook giveaways.</p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <a
+            href="/facebook-giveaway-picker"
+            class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity"
+          >
+            Facebook Giveaway Picker <ArrowRight className="w-5 h-5" />
+          </a>
+          <a
+            href="/blog"
+            class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:border-primary/50 transition-colors"
+          >
+            More Guides <ArrowRight className="w-5 h-5" />
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug="/blog/facebook-giveaway-guide" client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

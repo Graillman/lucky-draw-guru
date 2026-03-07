@@ -1,0 +1,305 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, Lightbulb, Trophy, Users, Video, AlertTriangle } from 'lucide-react';
+
+const title = "How to Pick a Winner on YouTube: Complete Giveaway Guide 2026";
+const description = "Step-by-step guide to running a fair YouTube giveaway. Learn how to collect comment entries, pick a random winner, and comply with YouTube's policies.";
+const canonical = "/blog/youtube-giveaway-guide";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Pick a Winner on YouTube: Complete Giveaway Guide 2026",
+  "description": "How to run a fair YouTube giveaway and pick a random winner from comments transparently.",
+  "author": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2025-09-01",
+  "dateModified": "2026-03-01",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/youtube-giveaway-guide" },
+};
+
+const ytRules = [
+  {
+    rule: "You must comply with all applicable laws",
+    detail: "This includes local lottery and sweepstakes laws. In many countries, giveaways that require purchase or payment to enter are legally lotteries and require registration. Free entry = safer legally.",
+  },
+  {
+    rule: "You are solely responsible for the promotion",
+    detail: "YouTube's terms explicitly state they are not sponsors or administrators of your giveaway. Don't suggest YouTube is involved.",
+  },
+  {
+    rule: "Include full official rules",
+    detail: "Your video description or a linked page should include: eligibility (age, country), how to enter, prize description, how winner is selected, and how winner is notified.",
+  },
+  {
+    rule: "No artificially inflated metrics",
+    detail: "Asking people to like and comment just to boost engagement (without genuine intent) is against YouTube's inauthentic engagement policy. Frame the giveaway genuinely.",
+  },
+  {
+    rule: "Add the paid promotion disclosure if sponsored",
+    detail: "If a brand is providing the prize in exchange for promotion, you must check the 'paid promotion' box in YouTube Studio and disclose it verbally or in the description.",
+  },
+];
+
+const steps = [
+  {
+    title: "Choose your entry format",
+    content: "The most common YouTube giveaway format: subscribe to the channel + like the video + leave a comment. The comment is critical — it's what you'll draw from, and it's the most auditable entry method. Specify exactly what to comment (e.g., 'comment your favourite video of mine' or simply 'comment ENTER'). This gives you a clear, searchable list of entrants.",
+    tip: "Avoid requiring people to tag friends as an entry requirement. It inflates comments with accounts that didn't consent to enter and creates an unclean entry list.",
+  },
+  {
+    title: "Announce the giveaway clearly in your video",
+    content: "State the prize, how to enter, the closing date, and how you'll pick the winner in the first 60 seconds of the video. Repeat the entry instructions at the end. Use on-screen text to reinforce the steps. The clearer your instructions, the better quality your entry list will be.",
+    tip: "Pin a comment with the entry instructions immediately after uploading. Pinned comments are the first thing viewers see in the comments section.",
+  },
+  {
+    title: "Let the giveaway run for 7–14 days",
+    content: "Short giveaways (under 3 days) don't give YouTube's algorithm time to push your video to new viewers. 7–14 days is the sweet spot — long enough to reach a wide audience, short enough to maintain excitement. Post reminder Shorts or Community posts at the 3-day and 1-day remaining marks.",
+  },
+  {
+    title: "Export and clean your entry list",
+    content: "When the giveaway closes, you need to collect all valid comments. YouTube doesn't offer native comment export, but you can use YouTube Studio's comment filter to review comments, or third-party tools like YouTube Comment Picker or manually scroll through and copy. Remove: duplicate entries from the same user, comments that don't follow the entry format, and bot-looking accounts (no profile picture, 0 videos, created recently).",
+    tip: "For giveaways with thousands of entries, use YouTube Studio's comment search feature to filter by keyword (e.g., search 'ENTER' if that was the required word).",
+  },
+  {
+    title: "Pick the winner with a random wheel — on camera",
+    content: "This is the most important step for credibility. Film yourself picking the winner. Open realwheelpicker.com, paste all valid usernames (one per line), and spin the wheel on screen. Record the full process. Post the winner announcement as a separate video or as a Community post. The video proof is your protection against accusations of rigging.",
+    tip: "Use your phone to film your screen while you do the draw on your computer. Or use OBS to record a screen capture. The draw video doesn't need to be edited — raw and uncut is actually more credible.",
+  },
+  {
+    title: "Contact the winner and follow up",
+    content: "Reply to the winner's comment tagging them, and send a Community post announcing the winner. Give them 48–72 hours to respond via comment or DM. If no response, draw an alternate winner using the same method. Post a follow-up video or Community update showing the prize was delivered — this closes the loop and builds trust for your next giveaway.",
+  },
+];
+
+const verifySteps = [
+  "Once you have a winner, check their YouTube channel. Look for a 'Subscribed' indicator, or visit their channel — if they're subscribed, YouTube shows it.",
+  "Check if they've liked the video: YouTube doesn't show individual likes publicly, so you usually have to trust this requirement or remove it from your entry conditions.",
+  "Verify their comment exists and matches the entry format. Search for their username in the video's comments.",
+  "If they fail any check, draw an alternate winner and document why the original was disqualified.",
+  "Always announce the full name/username of the winner publicly — never just contact someone privately without public announcement. This is what builds community trust.",
+];
+
+const prizes = [
+  { channel: "Gaming channels", prize: "Gaming peripherals, Steam games, Xbox/PS gift cards, gaming chair" },
+  { channel: "Tech/review channels", prize: "Gadgets you've reviewed, software licenses, tech accessories" },
+  { channel: "Cooking/food channels", prize: "Cookware, specialty ingredients, cookbook, cooking class access" },
+  { channel: "Fitness channels", prize: "Gym equipment, supplements, workout programs, sports gear" },
+  { channel: "Music channels", prize: "DAW software, plugins, virtual instrument packs, studio accessories" },
+  { channel: "Educational channels", prize: "Course access, books, premium tool subscriptions, 1-on-1 coaching session" },
+];
+
+const mistakes = [
+  {
+    mistake: "No official rules document",
+    fix: "Always have a linked official rules page or at minimum include all terms in the video description. Without this you have no legal protection if the winner disputes something.",
+  },
+  {
+    mistake: "Picking the winner without video proof",
+    fix: "Record the draw process. A simple phone recording of the random picker spinning is enough. Post it publicly — it's the strongest proof you have.",
+  },
+  {
+    mistake: "Running a giveaway on a video with other content",
+    fix: "Dedicated giveaway videos or giveaways embedded in relevant content perform far better than random giveaway announcements on unrelated videos. The audience needs to care about the prize.",
+  },
+  {
+    mistake: "Forgetting to set a specific time zone",
+    fix: "\"Closes Friday at midnight\" is ambiguous. \"Closes Friday March 14 at 11:59pm EST\" is not. Ambiguous end times create disputes.",
+  },
+  {
+    mistake: "Not vetting the winner's channel before announcing",
+    fix: "Check that the winner is a real account — not a bot, not the creator's secondary account, not someone who entered 5 minutes before the deadline with a brand-new channel. A 30-second check before announcing protects your reputation.",
+  },
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      {/* Header */}
+      <section class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary transition-colors">Blog</a>
+          <span>/</span>
+          <span>YouTube Giveaway Guide</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          How to Pick a Winner on YouTube: Complete Giveaway Guide
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          YouTube giveaways are one of the best ways to reward your subscribers and boost channel engagement — but they need to be handled carefully. YouTube's policies are stricter than other platforms, and your audience expects complete transparency. This guide covers everything from setting up the giveaway to picking a verifiable random winner.
+        </p>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>7 min read</span>
+          <span>·</span>
+          <span>Updated February 2026</span>
+        </div>
+      </section>
+
+      {/* Why YouTube Giveaways */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Video className="w-5 h-5 text-primary" /> Why Run a YouTube Giveaway?
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          YouTube rewards watch time and engagement above all else. A well-run giveaway accomplishes both: it attracts viewers who stay to the end of your video (for the giveaway rules) and floods the comments section with activity. YouTube's algorithm interprets high comment velocity as a signal to push your video to more people's recommendation feeds.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The secondary benefit is subscriber growth. Giveaways that require a channel subscription attract new subscribers who came for the prize but stay for the content — especially if your giveaway is relevant to your niche.
+        </p>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 space-y-2">
+          <p class="font-semibold text-foreground text-sm">Typical YouTube giveaway results:</p>
+          <ul class="space-y-1 text-sm text-muted-foreground">
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> 5–20× more comments than regular videos</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> Higher average watch time (viewers stay for the full entry instructions)</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> 10–30% subscriber increase on smaller channels during active giveaway period</li>
+          </ul>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      {/* YouTube Rules */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <AlertTriangle className="w-5 h-5 text-yellow-500" /> YouTube's Giveaway Policies: Know These First
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          YouTube has specific rules for promotions and contests. Violating them can result in video removal or channel strikes. Key rules:
+        </p>
+        <ul class="space-y-3">
+          {ytRules.map((r, i) => (
+            <li key={i} class="border border-border rounded-lg p-4 space-y-1">
+              <p class="font-semibold text-foreground text-sm">{r.rule}</p>
+              <p class="text-xs text-muted-foreground">{r.detail}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Step by Step */}
+      <section class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">How to Run a YouTube Giveaway (Step by Step)</h2>
+        <div class="space-y-4">
+          {steps.map((s, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-6 space-y-3">
+              <div class="flex items-center gap-3">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex-shrink-0">{i + 1}</span>
+                <h3 class="text-lg font-semibold text-foreground">{s.title}</h3>
+              </div>
+              <p class="text-muted-foreground leading-relaxed pl-11">{s.content}</p>
+              {s.tip && (
+                <div class="bg-muted/40 rounded-lg p-3 ml-11 flex items-start gap-2">
+                  <Lightbulb className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                  <p class="text-sm text-muted-foreground"><strong class="text-foreground">Pro tip:</strong> {s.tip}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      {/* Verification */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Users className="w-5 h-5 text-primary" /> How to Verify Entry Requirements
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          One of the biggest challenges in YouTube giveaways is verifying that winners actually met all entry conditions (subscribed, liked, commented). Here's a practical workflow:
+        </p>
+        <ol class="space-y-3">
+          {verifySteps.map((step, i) => (
+            <li key={i} class="flex items-start gap-3">
+              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary font-bold text-xs flex-shrink-0 mt-0.5">{i + 1}</span>
+              <span class="text-muted-foreground text-sm">{step}</span>
+            </li>
+          ))}
+        </ol>
+        <div class="bg-muted/30 rounded-xl p-4">
+          <p class="text-sm text-muted-foreground">
+            <strong class="text-foreground">Note on the "like" requirement:</strong> Many YouTubers drop the "like this video" entry requirement entirely because it can't be verified. If fairness and verifiability matter (they should), stick to subscribe + comment as your verifiable entry conditions.
+          </p>
+        </div>
+      </section>
+
+      {/* Best Prize Ideas */}
+      <section class="bg-primary/5 border border-primary/20 rounded-xl p-6 md:p-8 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Trophy className="w-5 h-5 text-primary" /> YouTube Giveaway Prize Ideas That Drive Real Subscribers
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Generic prizes (Amazon vouchers, iPhones) attract everyone but retain no one. Niche-relevant prizes attract the viewers you actually want to keep.
+        </p>
+        <div class="grid md:grid-cols-2 gap-4">
+          {prizes.map((p, i) => (
+            <div key={i} class="bg-card border border-border rounded-lg p-4 space-y-1">
+              <p class="font-semibold text-foreground text-sm">{p.channel}</p>
+              <p class="text-xs text-muted-foreground">{p.prize}</p>
+            </div>
+          ))}
+        </div>
+        <p class="text-xs text-muted-foreground">
+          Rule of thumb: if a non-subscriber would enter your giveaway just for the prize without caring about your content, the prize is too generic.
+        </p>
+      </section>
+
+      {/* Common Mistakes */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">5 YouTube Giveaway Mistakes to Avoid</h2>
+        <div class="grid gap-4">
+          {mistakes.map((m, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-5 space-y-2">
+              <div class="flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 text-yellow-500 flex-shrink-0 mt-0.5" />
+                <p class="font-semibold text-foreground text-sm">{m.mistake}</p>
+              </div>
+              <p class="text-sm text-muted-foreground pl-6"><strong class="text-foreground">Fix:</strong> {m.fix}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Conclusion */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Summary</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          A YouTube giveaway done right is one of the fastest legitimate ways to grow a channel. The formula is simple: relevant prize, clear entry instructions, transparent random draw, and public winner announcement. Every shortcut you take in this process reduces audience trust — and trust, once lost on YouTube, is very hard to rebuild.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The random draw is the moment that matters most. Film it. Use a visible, verifiable tool. Show your audience exactly how the winner was chosen. That transparency is what separates channels that run giveaways people believe in from channels that people suspect of rigging.
+        </p>
+      </section>
+
+      {/* CTA */}
+      <section class="text-center py-8 space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Pick Your YouTube Giveaway Winner</h2>
+        <p class="text-muted-foreground">Free random wheel picker — paste your comments and spin.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a
+            href="/giveaway-picker"
+            class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity"
+          >
+            Free Giveaway Picker <ArrowRight className="w-5 h-5" />
+          </a>
+          <a
+            href="/blog"
+            class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:border-primary/50 transition-colors"
+          >
+            More Guides <ArrowRight className="w-5 h-5" />
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug="/blog/youtube-giveaway-guide" client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

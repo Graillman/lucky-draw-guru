@@ -1,0 +1,162 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import { ArrowRight, Check } from 'lucide-react';
+
+const title = "Losowanie Online — Darmowe Koło Fortuny | Real Wheel Picker";
+const description = "Losowanie online za darmo. Kręć kołem fortuny i wybierz zwycięzcę w sposób sprawiedliwy i losowy. Bez rejestracji, kryptograficznie uczciwe.";
+const canonical = "/losowanie-online";
+const locale = "pl_PL";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Losowanie Online — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/losowanie-online",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Darmowe losowanie online. Koło fortuny z kryptograficzną losowością window.crypto.getRandomValues().",
+      "inLanguage": "pl",
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Czy losowanie online jest naprawdę losowe?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Tak. Real Wheel Picker używa window.crypto.getRandomValues(), kryptograficznego standardu nowoczesnych przeglądarek. Każdy uczestnik ma dokładnie takie samo prawdopodobieństwo wylosowania." },
+        },
+        {
+          "@type": "Question",
+          "name": "Czy mogę dodać własnych uczestników?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Tak. Kliknij na dowolną etykietę, aby ją edytować. Możesz dodać tylu uczestników, ile chcesz — koło dostosowuje się automatycznie." },
+        },
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Strona główna", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Losowanie Online" },
+      ],
+    },
+  ],
+};
+
+const defaultParticipants = [
+  { pseudo: "Uczestnik 1", weight: 1 },
+  { pseudo: "Uczestnik 2", weight: 1 },
+  { pseudo: "Uczestnik 3", weight: 1 },
+  { pseudo: "Uczestnik 4", weight: 1 },
+  { pseudo: "Uczestnik 5", weight: 1 },
+  { pseudo: "Uczestnik 6", weight: 1 },
+];
+
+const USOS = [
+  "Losowania konkursów — Instagram, TikTok, YouTube",
+  "Wybór uczniów w klasie — sprawiedliwy i losowy",
+  "Gry planszowe — kto zaczyna?",
+  "Podział na zespoły — losowy i uczciwy",
+  "Codzienne decyzje — co zjeść, gdzie pójść",
+  "Każde losowe wybranie",
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} locale={locale} jsonLd={jsonLd}>
+  <div class="relative min-h-screen overflow-hidden" style="background: var(--gradient-bg)">
+    <div aria-hidden class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div class="aurora-orb aurora-orb-gold"></div>
+      <div class="aurora-orb aurora-orb-purple"></div>
+      <div class="aurora-orb aurora-orb-blue"></div>
+    </div>
+    <div class="relative z-10">
+      <HeaderIsland client:load />
+      <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+
+        <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+          <a href="/" class="hover:text-primary transition-colors">Strona główna</a>
+          <span>/</span>
+          <span class="text-foreground">Losowanie Online</span>
+        </nav>
+
+        <section class="text-center space-y-4 py-2">
+          <h1 class="text-2xl md:text-4xl font-bold text-foreground leading-tight">
+            Losowanie Online — Darmowe Koło Fortuny
+          </h1>
+          <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            Dodaj uczestników, zakręć kołem i wylosuj zwycięzcę w sposób sprawiedliwy i przejrzysty. Za darmo, bez rejestracji, kryptograficznie uczciwe.
+          </p>
+        </section>
+
+        <section class="bg-card border border-border rounded-xl p-5 text-sm text-muted-foreground leading-relaxed">
+          <p>
+            <strong class="text-foreground">Losowanie online:</strong> Wpisz uczestników, kliknij Zakręć i wynik jest losowany za pomocą <code>window.crypto.getRandomValues()</code> — każdy uczestnik ma dokładnie takie samo prawdopodobieństwo. Zero stronniczości, zero manipulacji.
+          </p>
+        </section>
+
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+
+        <section class="space-y-4">
+          <h2 class="text-xl font-bold text-foreground">Kiedy używać losowania online?</h2>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {USOS.map((uso, i) => (
+              <li class="flex items-start gap-3 bg-card border border-border rounded-xl p-4">
+                <Check className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                <span class="text-sm text-muted-foreground">{uso}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <AdPlaceholder position="after-use-cases" client:visible />
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Więcej narzędzi</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              { label: "Random Winner Picker", href: "/random-winner-picker" },
+              { label: "Yes or No Wheel", href: "/yes-or-no-wheel" },
+              { label: "Coin Flip", href: "/coin-flip" },
+            ].map((link) => (
+              <a href={link.href}
+                class="p-4 bg-card border border-border rounded-xl text-center hover:border-primary/50 hover:shadow-md transition-all text-sm font-semibold text-foreground">
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Często zadawane pytania</h2>
+          <div class="space-y-3">
+            {[
+              ["Czy losowanie online jest naprawdę losowe?", "Tak. Używamy window.crypto.getRandomValues(), kryptograficznego standardu przeglądarek. Każdy uczestnik ma dokładnie takie samo prawdopodobieństwo."],
+              ["Czy mogę dodać własnych uczestników?", "Tak. Kliknij na etykietę, aby ją edytować. Dodaj tylu uczestników, ilu chcesz."],
+              ["Czy to jest darmowe?", "Całkowicie darmowe. Bez rejestracji, bez pobierania, bez płatności."],
+            ].map(([q, a], i) => (
+              <div class="bg-card border border-border rounded-xl p-5">
+                <p class="font-semibold text-foreground mb-2">{q}</p>
+                <p class="text-muted-foreground">{a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="text-center py-6">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Pełne narzędzie <ArrowRight className="w-4 h-4" />
+          </a>
+        </section>
+
+        <AdPlaceholder position="bottom" client:visible />
+      </main>
+      <GlobalFooterIsland client:idle />
+    </div>
+  </div>
+</Layout>

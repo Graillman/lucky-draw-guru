@@ -1,0 +1,295 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertCircle, Trophy, Share2, Users, Star } from 'lucide-react';
+
+const title = "How to Run a Fair Instagram Giveaway: Complete 2026 Guide";
+const description = "Step-by-step guide to running a legitimate Instagram giveaway. Learn how to pick a random winner from comments fairly, avoid cheating, and grow your audience.";
+const canonical = "/blog/how-to-run-instagram-giveaway";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Run a Fair Instagram Giveaway: Complete 2026 Guide",
+  "description": "Step-by-step guide to running a legitimate Instagram giveaway and picking a random winner from comments fairly.",
+  "author": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2025-01-15",
+  "dateModified": "2026-03-01",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/how-to-run-instagram-giveaway" },
+};
+
+const entryMethods = [
+  { rank: "1", method: "Tag friends in comments", desc: "Each tagged friend sees your post. 2–3 tags per entry is the sweet spot — more feels spammy.", impact: "Very High" },
+  { rank: "2", method: "Follow your account", desc: "Ensures new followers. Always combine with other requirements so entries have real value.", impact: "High" },
+  { rank: "3", method: "Like the post", desc: "Easy barrier, boosts engagement signal to the algorithm immediately.", impact: "High" },
+  { rank: "4", method: "Share to Stories", desc: "Exponential reach. Ask for screenshot as proof to count as a valid entry.", impact: "Very High" },
+  { rank: "5", method: "Comment with a specific word/emoji", desc: "Makes it easy to filter and count eligible entries when picking a winner.", impact: "Medium" },
+];
+
+const mistakes = [
+  { mistake: "Picking a winner manually", fix: "Always use a verifiable random tool like Real Wheel Picker — and record the screen." },
+  { mistake: "Running the giveaway for too long", fix: "3–5 days max. Longer giveaways lose momentum and attract fake accounts." },
+  { mistake: "Prizes irrelevant to your niche", fix: "An iPhone attracts everyone but converts nobody. A niche-specific prize attracts your ideal follower." },
+  { mistake: "No winner announcement", fix: "Always announce. Followers who didn't win will watch anyway, and it builds anticipation for next time." },
+  { mistake: "Not checking Instagram's promotion guidelines", fix: "Read Instagram's official promotions policy before running any giveaway to stay compliant." },
+];
+
+const checklist = [
+  "Prize chosen — relevant to your niche and audience",
+  "Entry requirements defined (follow, like, tag X friends)",
+  "End date set (3–5 days from now)",
+  "Caption includes Instagram non-affiliation disclaimer",
+  "Eligibility clearly stated (age, country, language)",
+  "Caption includes how and when winner will be chosen",
+  "Real Wheel Picker bookmarked for winner selection",
+  "Screen recording software ready (Loom, QuickTime, etc.)",
+  "Winner announced publicly within 24h of giveaway end",
+  "DM sent to winner with prize instructions",
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      {/* Hero */}
+      <section class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary transition-colors">Blog</a>
+          <span>/</span>
+          <span>Instagram Giveaway Guide</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          How to Run a Fair Instagram Giveaway: Complete 2026 Guide
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          Instagram giveaways are one of the fastest ways to grow your following and engage your audience — but only if done right. A poorly run giveaway can destroy trust and even get your account flagged. This guide covers everything: setup, rules, picking a winner, and proof of fairness.
+        </p>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>8 min read</span>
+          <span>·</span>
+          <span>Updated March 2026</span>
+        </div>
+      </section>
+
+      {/* Table of Contents */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-3">
+        <h2 class="font-bold text-foreground">In this guide</h2>
+        <ol class="space-y-1 text-sm text-primary list-decimal list-inside">
+          <li><a href="#why-giveaways" class="hover:underline">Why Instagram giveaways work</a></li>
+          <li><a href="#rules" class="hover:underline">Setting up your giveaway rules</a></li>
+          <li><a href="#entry-methods" class="hover:underline">Best entry methods</a></li>
+          <li><a href="#pick-winner" class="hover:underline">How to pick a random winner from comments</a></li>
+          <li><a href="#announce" class="hover:underline">Announcing and verifying the winner</a></li>
+          <li><a href="#mistakes" class="hover:underline">Common mistakes to avoid</a></li>
+          <li><a href="#checklist" class="hover:underline">Complete giveaway checklist</a></li>
+        </ol>
+      </section>
+
+      {/* Section 1 */}
+      <section id="why-giveaways" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Why Instagram Giveaways Work</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          When structured correctly, Instagram giveaways can generate hundreds or even thousands of new followers within 24–72 hours. The mechanics are simple: you offer something valuable, ask followers to like, comment, or tag friends as entry requirements, and the Instagram algorithm amplifies the post because of high engagement.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Studies show that accounts running giveaways grow <strong class="text-foreground">70% faster</strong> than those that don't during the campaign period. The key metric Instagram's algorithm rewards is <em>saves and shares</em> — both of which naturally spike during giveaways.
+        </p>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">What makes a giveaway go viral?</p>
+          <ul class="space-y-1 text-sm text-muted-foreground">
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /> A prize that your specific audience genuinely wants</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /> A "tag a friend" entry requirement (each tag = new potential follower)</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /> A clear, transparent winner selection process</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /> Short duration (3–5 days maximum)</li>
+          </ul>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      {/* Section 2 */}
+      <section id="rules" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Setting Up Your Giveaway Rules</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Instagram requires giveaways to include a clear disclaimer stating the promotion is not affiliated with or endorsed by Instagram. Skipping this can result in post removal or account action.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Your rules should clearly state: who is eligible (age, country), how to enter, what the prize is, the end date, and how the winner will be chosen and notified.
+        </p>
+        <div class="bg-card border border-border rounded-xl p-5 space-y-3">
+          <p class="font-semibold text-foreground">Example caption template:</p>
+          <div class="bg-muted/30 rounded-lg p-4 text-sm text-muted-foreground font-mono leading-relaxed">
+            🎁 GIVEAWAY — [Prize name]!<br /><br />
+            To enter:<br />
+            1. Follow @yourhandle<br />
+            2. Like this post<br />
+            3. Tag 2 friends in the comments<br /><br />
+            Winner announced [date]. Open to residents of [country], 18+.<br />
+            This promotion is not affiliated with or endorsed by Instagram.
+          </div>
+        </div>
+      </section>
+
+      {/* Section 3 */}
+      <section id="entry-methods" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Best Entry Methods (Ranked by Effectiveness)</h2>
+        <div class="space-y-3">
+          {entryMethods.map((item) => (
+            <div key={item.rank} class="bg-card border border-border rounded-xl p-5 flex gap-4">
+              <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <span class="text-primary font-bold text-sm">{item.rank}</span>
+              </div>
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <h3 class="font-semibold text-foreground">{item.method}</h3>
+                  <span class="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">{item.impact}</span>
+                </div>
+                <p class="text-sm text-muted-foreground">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Section 4 */}
+      <section id="pick-winner" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">How to Pick a Random Winner from Instagram Comments</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          This is where most creators make mistakes. Scrolling through comments and "randomly" picking someone is not random — it's biased. People who comment first or comment multiple times get more visibility. Your audience will notice.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The correct method: collect all eligible usernames, paste them into a random picker tool, and let the algorithm choose. This is provably fair and you can record the screen for proof.
+        </p>
+
+        <div class="bg-card border border-border rounded-xl p-6 space-y-4">
+          <h3 class="text-lg font-semibold text-foreground flex items-center gap-2">
+            <Trophy className="w-5 h-5 text-primary" /> Step-by-step: fair winner selection
+          </h3>
+          <ol class="space-y-3 text-muted-foreground">
+            <li class="flex gap-3">
+              <span class="w-6 h-6 rounded-full bg-primary/10 text-primary text-xs flex items-center justify-center font-bold flex-shrink-0">1</span>
+              <span>Collect all comments that meet your entry requirements (followed + tagged friends)</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="w-6 h-6 rounded-full bg-primary/10 text-primary text-xs flex items-center justify-center font-bold flex-shrink-0">2</span>
+              <span>Copy all eligible usernames into a list (one per line)</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="w-6 h-6 rounded-full bg-primary/10 text-primary text-xs flex items-center justify-center font-bold flex-shrink-0">3</span>
+              <span>Paste the list into <a href="/instagram-giveaway-picker" class="text-primary hover:underline">Real Wheel Picker's Instagram Giveaway tool</a></span>
+            </li>
+            <li class="flex gap-3">
+              <span class="w-6 h-6 rounded-full bg-primary/10 text-primary text-xs flex items-center justify-center font-bold flex-shrink-0">4</span>
+              <span>Screen-record the spin so you have proof of the selection</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="w-6 h-6 rounded-full bg-primary/10 text-primary text-xs flex items-center justify-center font-bold flex-shrink-0">5</span>
+              <span>Share the recording in your Stories when announcing the winner</span>
+            </li>
+          </ol>
+        </div>
+
+        <div class="text-center">
+          <a
+            href="/instagram-giveaway-picker"
+            class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity"
+          >
+            Use the Instagram Giveaway Picker <ArrowRight className="w-4 h-4" />
+          </a>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      {/* Section 5 */}
+      <section id="announce" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Announcing and Verifying the Winner</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Announce the winner publicly in a new post or Story within 24 hours of the giveaway ending. Tag them directly. Send a DM simultaneously so they don't miss it.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Give winners 48–72 hours to respond. If they don't, you can legitimately pick a runner-up using the same random selection process. Document this in your announcement.
+        </p>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground flex items-center gap-2"><Share2 className="w-4 h-4 text-primary" /> Winner announcement best practices</p>
+          <ul class="space-y-1 text-sm text-muted-foreground">
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /> Post the screen recording of the wheel spin as proof</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /> Tag the winner in both the post and a Story</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /> Send a DM with delivery instructions</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" /> Post a follow-up when the prize is delivered (builds trust for future giveaways)</li>
+          </ul>
+        </div>
+      </section>
+
+      {/* Section 6 */}
+      <section id="mistakes" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Common Mistakes That Kill Giveaway Credibility</h2>
+        <div class="space-y-3">
+          {mistakes.map((item, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-5 space-y-2">
+              <div class="flex items-start gap-2">
+                <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+                <p class="font-semibold text-foreground">{item.mistake}</p>
+              </div>
+              <p class="text-sm text-muted-foreground pl-7"><strong class="text-foreground">Fix:</strong> {item.fix}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Section 7 */}
+      <section id="checklist" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Complete Instagram Giveaway Checklist</h2>
+        <div class="bg-card border border-border rounded-xl p-6 space-y-3">
+          {checklist.map((item, i) => (
+            <label key={i} class="flex items-start gap-3 cursor-pointer group">
+              <div class="w-5 h-5 rounded border border-border bg-muted/30 flex-shrink-0 mt-0.5 group-hover:border-primary transition-colors" />
+              <span class="text-sm text-muted-foreground">{item}</span>
+            </label>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section class="bg-primary/5 border border-primary/20 rounded-xl p-8 text-center space-y-4">
+        <Trophy className="w-10 h-10 text-primary mx-auto" />
+        <h2 class="text-2xl font-bold text-foreground">Ready to run your giveaway?</h2>
+        <p class="text-muted-foreground">Use our free Instagram Giveaway Picker to select a winner — no signup, no ads during selection, just fair randomness.</p>
+        <div class="flex flex-wrap gap-3 justify-center">
+          <a href="/instagram-giveaway-picker" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Instagram Giveaway Picker <ArrowRight className="w-4 h-4" />
+          </a>
+          <a href="/giveaway-picker" class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-6 py-3 rounded-xl font-semibold hover:border-primary transition-colors">
+            General Giveaway Picker
+          </a>
+        </div>
+      </section>
+
+      {/* Related Articles */}
+      <section class="space-y-4">
+        <h2 class="text-xl font-bold text-foreground">Related guides</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <a href="/blog/online-giveaway-guide" class="bg-card border border-border rounded-xl p-5 hover:border-primary transition-colors space-y-2">
+            <p class="font-semibold text-foreground text-sm">How to Run a Fair Online Giveaway</p>
+            <p class="text-xs text-muted-foreground">Best practices for any platform — not just Instagram</p>
+            <span class="text-xs text-primary flex items-center gap-1">Read guide <ArrowRight className="w-3 h-3" /></span>
+          </a>
+          <a href="/blog/spin-wheel-ideas" class="bg-card border border-border rounded-xl p-5 hover:border-primary transition-colors space-y-2">
+            <p class="font-semibold text-foreground text-sm">50 Spin the Wheel Ideas</p>
+            <p class="text-xs text-muted-foreground">Creative ways to use a random wheel for prizes and fun</p>
+            <span class="text-xs text-primary flex items-center gap-1">Read guide <ArrowRight className="w-3 h-3" /></span>
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug="/blog/how-to-run-instagram-giveaway" client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

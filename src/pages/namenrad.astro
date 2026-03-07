@@ -1,0 +1,141 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import { ArrowRight } from 'lucide-react';
+
+const title = "Namenrad Online — Zufälligen Namen auswählen | Real Wheel Picker";
+const description = "Drehe das Namenrad und wähle einen zufälligen Namen aus deiner Liste. Perfekt für Lehrer, Verlosungen und Gruppenentscheidungen. Kostenlos, ohne Anmeldung.";
+const canonical = "/namenrad";
+const locale = "de_DE";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Namenrad — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/namenrad",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "inLanguage": "de",
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Wie funktioniert das Namenrad?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Namen eingeben, auf Drehen klicken und das Rad wählt zufällig einen aus. Jeder Name hat die gleiche Wahrscheinlichkeit ausgewählt zu werden." },
+        },
+        {
+          "@type": "Question",
+          "name": "Kann ich das Namenrad im Unterricht verwenden?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Ja, das Namenrad ist ideal für Lehrer, um Schüler zufällig für Antworten, Präsentationen oder Aufgaben auszuwählen. Klasse hinzufügen und drehen." },
+        },
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Namenrad" },
+      ],
+    },
+  ],
+};
+
+const defaultParticipants = [
+  { pseudo: "Anna", weight: 1 },
+  { pseudo: "Ben", weight: 1 },
+  { pseudo: "Clara", weight: 1 },
+  { pseudo: "David", weight: 1 },
+  { pseudo: "Emma", weight: 1 },
+  { pseudo: "Felix", weight: 1 },
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} locale={locale} jsonLd={jsonLd}>
+  <div class="relative min-h-screen overflow-hidden" style="background: var(--gradient-bg)">
+    <div aria-hidden class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div class="aurora-orb aurora-orb-gold"></div>
+      <div class="aurora-orb aurora-orb-purple"></div>
+      <div class="aurora-orb aurora-orb-blue"></div>
+    </div>
+    <div class="relative z-10">
+      <HeaderIsland client:load />
+      <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+
+        <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+          <a href="/" class="hover:text-primary transition-colors">Home</a>
+          <span>/</span>
+          <span class="text-foreground">Namenrad</span>
+        </nav>
+
+        <section class="text-center space-y-4 py-2">
+          <h1 class="text-2xl md:text-4xl font-bold text-foreground leading-tight">
+            Namenrad Online — Zufälligen Namen auswählen
+          </h1>
+          <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            Namen hinzufügen, Rad drehen, zufälligen Namen erhalten. Ideal für Lehrer, Verlosungen und alle Gruppenentscheidungen.
+          </p>
+        </section>
+
+        <section class="bg-card border border-border rounded-xl p-5 text-sm text-muted-foreground leading-relaxed">
+          <p>
+            <strong class="text-foreground">Namenrad:</strong> Trage alle Namen ein, drehe das Rad und erhalte sofort einen zufälligen Namen. Kryptografisch fair — mit <code>window.crypto.getRandomValues()</code>. Jeder Name hat exakt die gleiche Wahrscheinlichkeit.
+          </p>
+        </section>
+
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Einsatzmöglichkeiten</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[
+              ["Unterricht", "Schüler für Antworten, Präsentationen oder Aufgaben auswählen."],
+              ["Verlosungen", "Gewinner fair und transparent auswählen."],
+              ["Gruppenspiele", "Entscheiden, wer anfängt oder eine Aufgabe übernimmt."],
+              ["Team-Meetings", "Zufällig Moderatoren oder Aufgaben vergeben."],
+            ].map(([title, desc], i) => (
+              <div class="bg-card border border-border rounded-xl p-4">
+                <p class="font-semibold text-foreground mb-1">{title}</p>
+                <p class="text-sm text-muted-foreground">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <AdPlaceholder position="after-use-cases" client:visible />
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Weitere Tools</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              { label: "Zufallsgenerator", href: "/zufallsgenerator" },
+              { label: "Classroom Picker", href: "/classroom-picker" },
+              { label: "Team Generator", href: "/team-generator" },
+            ].map((link) => (
+              <a href={link.href}
+                class="p-4 bg-card border border-border rounded-xl text-center hover:border-primary/50 hover:shadow-md transition-all text-sm font-semibold text-foreground">
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section class="text-center py-6">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Vollständiges Tool <ArrowRight className="w-4 h-4" />
+          </a>
+        </section>
+
+        <AdPlaceholder position="bottom" client:visible />
+      </main>
+      <GlobalFooterIsland client:idle />
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,234 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertTriangle, Lightbulb, Trophy, Video } from 'lucide-react';
+
+const title = "How to Pick a Winner on Twitch: Complete Streamer Giveaway Guide 2026";
+const description = "Run a fair Twitch giveaway live on stream. Learn how to collect entries from chat, pick a random winner on camera, and follow Twitch's guidelines.";
+const canonical = "/blog/twitch-giveaway-guide";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Pick a Winner on Twitch: Complete Streamer Giveaway Guide 2026",
+  "description": "Run a fair Twitch giveaway live on stream.",
+  "author": { "@type": "Organization", "name": "RealWheelPicker" },
+  "publisher": { "@type": "Organization", "name": "RealWheelPicker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2025-12-01",
+};
+
+const entryRows = [
+  { method: "Chat command (!enter)", pros: "Easy to automate with bots", best: "Large streams with bots" },
+  { method: "Manual chat keyword", pros: "Simple, no bot needed", best: "Small/mid streams" },
+  { method: "Subscriber-only", pros: "Rewards paying supporters", best: "Sub appreciation streams" },
+  { method: "Follow + chat", pros: "Grows your follow count", best: "Growth-focused streams" },
+  { method: "Channel Points redemption", pros: "Integrates with Twitch rewards", best: "Engaged communities" },
+];
+
+const steps = [
+  {
+    n: 1,
+    title: "Announce the Giveaway Early",
+    body: "Tell your chat 15-30 minutes before the draw. Use a !giveaway command or Streamlabs/StreamElements alert. Pin the entry instructions in chat. The more warning you give, the higher the entry count.",
+    tip: "Post on social media before the stream: \"Going live in 1 hour — subscriber giveaway tonight!\" This drives viewers specifically to your stream.",
+  },
+  {
+    n: 2,
+    title: "Set Your Entry Conditions",
+    body: "Be crystal clear: who is eligible (everyone? subs only? follows required?), how to enter (type !enter, or type a keyword), and when the draw happens. Ambiguity causes arguments in chat.",
+    tip: "Use a timed overlay (OBS or Streamlabs) showing a countdown to the giveaway. Creates anticipation and keeps people watching.",
+  },
+  {
+    n: 3,
+    title: "Collect Your Entries",
+    body: "For manual keyword draws: monitor chat and copy all usernames who typed the keyword during the window. For bot-assisted draws: export the entry list from your bot (StreamElements has a built-in giveaway system). Remove duplicate entries.",
+    tip: "Even with a bot, read through the list before pasting — bots sometimes have issues with display names vs. usernames.",
+  },
+  {
+    n: 4,
+    title: "Share Your Screen and Spin Live",
+    body: "Open realwheelpicker.com, paste your list, and share your browser on stream. Let your chat see the full list before spinning — this proves no names were added or removed. Then hit spin and let the wheel do its work live.",
+    tip: "Mute the game audio for the spin moment. Let the wheel sound play through your stream. The silence + wheel spin creates a perfect climactic moment.",
+  },
+  {
+    n: 5,
+    title: "Announce the Winner in Chat",
+    body: "Call out the winner's name: \"Let's go! [Username] wins! Congratulations! Please DM me or open a support ticket on Discord to claim your prize.\" Give them 10-15 minutes to respond if you're still live. If they don't respond, draw a backup winner.",
+    tip: "Ask your chat to hype up the winner. \"GG @[winner]\" flooding chat is a great moment for clips.",
+  },
+  {
+    n: 6,
+    title: "Deliver and Clip the Moment",
+    body: "DM the winner on Twitch or Discord to collect prize delivery details. Clip the winner reveal moment for Twitter, TikTok, and YouTube Shorts. These clips are excellent marketing for future streams.",
+    tip: "A \"reacting to winning the giveaway\" moment (if the winner is in voice chat or video) makes incredible content.",
+  },
+];
+
+const prizeCategories = [
+  { cat: "Gaming", items: ["Steam gift cards ($25-50)", "Game codes for new releases", "In-game currency (Valorant Points, V-Bucks)", "Gaming peripherals (headsets, mice)"] },
+  { cat: "Streaming & Creator", items: ["Twitch subscription gift (1-12 months)", "Discord Nitro", "Streamlabs Pro subscription", "Webcam or capture card"] },
+  { cat: "Cash & Vouchers", items: ["Amazon gift cards (universal)", "PayPal cash", "Store credit for your merch", "Charity donation in winner's name"] },
+  { cat: "Experiences", items: ["1-on-1 game session with you", "Custom art commission", "Shoutout package", "Early access to your content"] },
+];
+
+const twitchRules = [
+  { ok: true, text: "Viewer and follower giveaways are allowed" },
+  { ok: true, text: "Subscriber-exclusive giveaways are allowed" },
+  { ok: true, text: "Sponsored giveaways are allowed (disclose partnerships)" },
+  { ok: false, text: "Do not require payment to enter — this makes it an illegal lottery" },
+  { ok: false, text: "Do not run giveaways that violate local gambling laws" },
+  { ok: false, text: "Cash giveaways require extra care — consult local regulations" },
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-4xl mx-auto px-4 py-8 space-y-10">
+
+      {/* Hero */}
+      <section class="space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xs px-2 py-0.5 rounded-full font-medium bg-purple-500/10 text-purple-400">Giveaways</span>
+          <span class="text-xs text-muted-foreground">Dec 1, 2025 • 9 min read</span>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold text-foreground leading-tight">
+          How to Pick a Winner on Twitch: Complete Streamer Giveaway Guide 2026
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          Twitch giveaways are one of the most powerful tools in a streamer's toolkit — they spike viewer counts, boost chat activity, and reward the community that makes your stream possible. Done right, a giveaway can be the highlight of your stream. Here's everything you need to know.
+        </p>
+      </section>
+
+      {/* Why Twitch giveaways */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Why Twitch Giveaways Work So Well</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Unlike social media giveaways where most people see a static post, Twitch giveaways happen live. Your entire chat watches the wheel spin in real time. That shared moment of anticipation creates genuine community engagement.
+        </p>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="text-sm font-semibold text-foreground flex items-center gap-2"><Video className="w-4 h-4 text-primary" /> What a Twitch giveaway delivers:</p>
+          <ul class="space-y-1 text-sm text-muted-foreground">
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> Viewer count spikes — people join specifically for giveaway streams</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> Chat explosion — new followers/subs pour in when giveaway is announced</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> Community bonding — the live moment creates shared memories</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> Clip content — the winner reveal moment clips well for social media</li>
+          </ul>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      {/* Entry Types */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Twitch Giveaway Entry Types</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-2 pr-4 text-foreground font-semibold">Entry Method</th>
+                <th class="text-left py-2 pr-4 text-foreground font-semibold">Pros</th>
+                <th class="text-left py-2 text-foreground font-semibold">Best For</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border/50">
+              {entryRows.map((row, i) => (
+                <tr key={i}>
+                  <td class="py-2 pr-4 text-foreground font-medium">{row.method}</td>
+                  <td class="py-2 pr-4 text-muted-foreground">{row.pros}</td>
+                  <td class="py-2 text-muted-foreground">{row.best}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Step by Step */}
+      <section class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">How to Run a Twitch Giveaway Live on Stream</h2>
+        <div class="space-y-4">
+          {steps.map((step) => (
+            <div key={step.n} class="bg-card border border-border rounded-xl p-5 space-y-3">
+              <div class="flex items-start gap-3">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex-shrink-0">{step.n}</span>
+                <h3 class="font-semibold text-foreground text-lg leading-tight">{step.title}</h3>
+              </div>
+              <p class="text-muted-foreground text-sm leading-relaxed pl-11">{step.body}</p>
+              {step.tip && (
+                <div class="ml-11 bg-muted/50 rounded-lg p-3 text-sm flex items-start gap-2">
+                  <Lightbulb className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                  <span class="text-muted-foreground">{step.tip}</span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      {/* Prize Ideas */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Best Prizes for Twitch Giveaways</h2>
+        <div class="grid sm:grid-cols-2 gap-3">
+          {prizeCategories.map((cat, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-4 space-y-2">
+              <h3 class="font-semibold text-foreground text-sm">{cat.cat}</h3>
+              <ul class="space-y-1">
+                {cat.items.map((item, j) => (
+                  <li key={j} class="text-xs text-muted-foreground flex items-center gap-1.5">
+                    <span class="w-1 h-1 rounded-full bg-primary flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Twitch rules */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Twitch Giveaway Rules & Guidelines</h2>
+        <p class="text-muted-foreground leading-relaxed">Twitch's Terms of Service and community guidelines are relatively permissive around giveaways, but here are the key rules:</p>
+        <div class="space-y-2">
+          {twitchRules.map((item, i) => (
+            <div key={i} class={`flex items-start gap-3 p-3 rounded-lg ${item.ok ? "bg-green-500/5 border border-green-500/20" : "bg-red-500/5 border border-red-500/20"}`}>
+              {item.ok
+                ? <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                : <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />}
+              <span class="text-sm text-muted-foreground">{item.text}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section class="bg-primary/5 border border-primary/20 rounded-2xl p-6 md:p-8 space-y-4 text-center">
+        <h2 class="text-xl font-bold text-foreground">Ready to run your Twitch giveaway?</h2>
+        <p class="text-muted-foreground">Screen-share RealWheelPicker live on stream for a transparent, exciting draw your chat will love.</p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <a
+            href="/twitch-giveaway-picker"
+            class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity"
+          >
+            Twitch Giveaway Picker <ArrowRight className="w-5 h-5" />
+          </a>
+          <a
+            href="/blog"
+            class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:border-primary/50 transition-colors"
+          >
+            More Guides <ArrowRight className="w-5 h-5" />
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug="/blog/twitch-giveaway-guide" client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

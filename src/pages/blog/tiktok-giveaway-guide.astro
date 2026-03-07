@@ -1,0 +1,269 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertTriangle, Lightbulb, Trophy, Users, Video } from 'lucide-react';
+
+const title = "How to Pick a Winner on TikTok: Complete Giveaway Guide 2026";
+const description = "Step-by-step guide to running a fair TikTok giveaway or live draw. Learn how to collect entries, pick a random winner, and stay compliant with TikTok's rules.";
+const canonical = "/blog/tiktok-giveaway-guide";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Pick a Winner on TikTok: Complete Giveaway Guide 2026",
+  "description": "Step-by-step guide to running a fair TikTok giveaway or live draw and picking a random winner transparently.",
+  "author": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2025-07-01",
+  "dateModified": "2026-03-01",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/tiktok-giveaway-guide" },
+};
+
+const steps = [
+  {
+    step: "Step 1",
+    title: "Define the Entry Method",
+    content: "The most common TikTok giveaway format is: Follow + Like + Comment. Each of these actions is trackable. Make the entry requirement explicit in your video caption and on-screen text. Example: \"Follow me, like this video, and comment your country to enter.\" Keep it simple — too many steps (share to story, tag 3 friends, etc.) reduce participation significantly.",
+    tip: "Requiring a comment is the most valuable entry step because it directly boosts your engagement signal for the algorithm.",
+  },
+  {
+    step: "Step 2",
+    title: "Set a Clear End Date",
+    content: "Always announce when the giveaway closes. \"Winner picked Friday at 8pm EST\" is better than \"winner picked soon.\" A fixed deadline creates urgency and makes your timeline credible. Pin a comment or use a countdown sticker in a follow-up Story to remind people.",
+    tip: "Run giveaways for 3–7 days. Less than 3 days doesn't give the algorithm time to push the video. More than 14 days and people lose interest.",
+  },
+  {
+    step: "Step 3",
+    title: "Collect Entries",
+    content: "Once the giveaway closes, scroll through all comments and copy the usernames of people who completed all entry requirements. Paste them into a text document, one per line. If you have thousands of comments, you can use TikTok's comment export (on TikTok Studio / Creator Center) to download them as a CSV. Filter for unique commenters — don't count someone multiple times if they commented twice.",
+    tip: "For large giveaways (1,000+ entries), copy comments in batches and paste them into a spreadsheet first to remove duplicates before pasting into the picker.",
+  },
+  {
+    step: "Step 4",
+    title: "Pick the Winner Transparently",
+    content: "This is the most important step for building trust. Go live or record yourself picking the winner using a random wheel picker. Paste all the usernames into realwheelpicker.com, spin the wheel on screen, and announce the winner in real time. The visual spin is crucial — it shows your audience the process was random and not predetermined.",
+    tip: "Screen-record the spin and post it as a separate TikTok. This video typically gets high engagement because people watch to see if they won.",
+  },
+  {
+    step: "Step 5",
+    title: "Announce and DM the Winner",
+    content: "Tag the winner in a comment on the original giveaway video and send them a DM. Give them 48 hours to respond before picking an alternate winner. Always mention in your announcement that the winner has 48 hours — this protects you if they don't respond and you need to reroll.",
+  },
+];
+
+const rules = [
+  { rule: "No cash or cash-equivalent prizes without proper disclosures", detail: "Gift cards, PayPal transfers, and crypto are considered cash equivalents in most jurisdictions. Check your local promotional laws." },
+  { rule: "Sponsored giveaways must be disclosed", detail: "If a brand is paying you to run the giveaway, you must add the #ad or #sponsored tag per FTC guidelines (US) and equivalent rules in other countries." },
+  { rule: "No 'follow to enter' as the sole requirement in some regions", detail: "Some interpretations of platform rules flag 'follow-gating' as artificial inflation. Adding a comment or like requirement keeps you safe." },
+  { rule: "Age restrictions apply", detail: "If your prize could be considered unsuitable for minors, state a minimum age in your giveaway terms." },
+  { rule: "No lotteries (money in = chance to win money out)", detail: "If participants pay to enter, that's legally a lottery in most countries. Free-entry giveaways are generally safe." },
+];
+
+const liveSteps = [
+  "Open TikTok LIVE (you need 1,000+ followers). Announce you're about to pick the winner — this alone will draw viewers.",
+  "On a second device (or in a split-screen app), open realwheelpicker.com and paste your entry list.",
+  "Share your screen so your live audience can see the wheel. Most phones support screen mirroring to LIVE via the \"Screen Share\" button in the LIVE controls.",
+  "Spin the wheel live. The visual randomness is the proof your audience needs that the draw is fair.",
+  "Read the winner's username on camera. Your live viewers become your witnesses — this is social proof that the giveaway was real.",
+];
+
+const mistakes = [
+  { mistake: "Picking the winner in DMs without recording it", fix: "Always record or go live for the draw. Screenshots of you DMing 'you won' are not credible proof." },
+  { mistake: "Forgetting to verify the winner met all entry requirements", fix: "Before announcing, check that the winner follows you, liked the video, and commented as required." },
+  { mistake: "Giving away a prize you don't actually have yet", fix: "Have the prize in hand (or confirmed from the supplier) before running the giveaway. Shipping delays kill trust." },
+  { mistake: "Setting vague terms", fix: "Write 3 lines of terms: eligible countries, minimum age, end date, and how the winner will be contacted." },
+  { mistake: "Picking from a biased list", fix: "If you manually scroll comments and pick 'at random,' it's not random. Use a proper random tool. Your audience will notice and call it out." },
+];
+
+const toolPoints = [
+  "Is visually engaging (a spinning wheel is much more credible on video than a text prompt)",
+  "Handles large lists without crashing (we support unlimited participants)",
+  "Runs in the browser — no software download needed",
+  "Works during a TikTok LIVE screen share on mobile",
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      {/* Header */}
+      <section class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary transition-colors">Blog</a>
+          <span>/</span>
+          <span>TikTok Giveaway Guide</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          How to Pick a Winner on TikTok: Complete Giveaway Guide
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          TikTok giveaways can explode your follower count overnight — but only if they're run fairly and transparently. Here's everything you need to know: how to collect entries, how to pick a winner your audience trusts, and how to avoid common mistakes that get accounts flagged.
+        </p>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>8 min read</span>
+          <span>·</span>
+          <span>Updated February 2026</span>
+        </div>
+      </section>
+
+      {/* Why TikTok Giveaways Work */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Video className="w-5 h-5 text-primary" /> Why TikTok Giveaways Drive Real Growth
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          TikTok's algorithm rewards engagement — and giveaways are one of the most reliable ways to manufacture engagement signals at scale. A well-structured giveaway that requires users to follow, like, and comment can generate thousands of interactions within hours, which the algorithm interprets as a signal to push your video to a wider audience.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The key word is "well-structured." Poorly organized giveaways — where the winner-picking process is opaque or seems unfair — actually damage trust and can produce a flood of negative comments that hurt your engagement rate. This guide focuses on making the whole process transparent and credible.
+        </p>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 space-y-2">
+          <p class="font-semibold text-foreground text-sm">Typical results from a structured TikTok giveaway:</p>
+          <ul class="space-y-1 text-sm text-muted-foreground">
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> 3–10× comment rate vs. standard posts</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> 500–5,000 new followers per giveaway (account-size dependent)</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> Algorithm boost that can outlast the giveaway video by weeks</li>
+          </ul>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      {/* Step by Step */}
+      <section class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">Step-by-Step: How to Run a TikTok Giveaway</h2>
+        <div class="space-y-4">
+          {steps.map((s, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-6 space-y-3">
+              <div class="flex items-center gap-3">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex-shrink-0">{i + 1}</span>
+                <h3 class="text-lg font-semibold text-foreground">{s.title}</h3>
+              </div>
+              <p class="text-muted-foreground leading-relaxed pl-11">{s.content}</p>
+              {s.tip && (
+                <div class="bg-muted/40 rounded-lg p-3 ml-11 flex items-start gap-2">
+                  <Lightbulb className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                  <p class="text-sm text-muted-foreground"><strong class="text-foreground">Pro tip:</strong> {s.tip}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* TikTok Rules */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <AlertTriangle className="w-5 h-5 text-yellow-500" /> TikTok's Giveaway Rules: What You Must Know
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          TikTok does not allow certain types of promotions and can remove content or restrict accounts for violations. Here's what matters:
+        </p>
+        <ul class="space-y-3">
+          {rules.map((r, i) => (
+            <li key={i} class="border border-border rounded-lg p-4 space-y-1">
+              <p class="font-semibold text-foreground text-sm">{r.rule}</p>
+              <p class="text-xs text-muted-foreground">{r.detail}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Live Draw */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Video className="w-5 h-5 text-primary" /> Running a Live Draw on TikTok LIVE
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Going live to pick the winner is the gold standard for TikTok giveaway transparency. Here's how to set it up:
+        </p>
+        <ol class="space-y-3">
+          {liveSteps.map((step, i) => (
+            <li key={i} class="flex items-start gap-3">
+              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary font-bold text-xs flex-shrink-0 mt-0.5">{i + 1}</span>
+              <span class="text-muted-foreground text-sm">{step}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      {/* Common Mistakes */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">5 TikTok Giveaway Mistakes to Avoid</h2>
+        <div class="grid gap-4">
+          {mistakes.map((m, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-5 space-y-2">
+              <div class="flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 text-yellow-500 flex-shrink-0 mt-0.5" />
+                <p class="font-semibold text-foreground text-sm">{m.mistake}</p>
+              </div>
+              <p class="text-sm text-muted-foreground pl-6"><strong class="text-foreground">Fix:</strong> {m.fix}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Tools Section */}
+      <section class="bg-primary/5 border border-primary/20 rounded-xl p-6 md:p-8 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Trophy className="w-5 h-5 text-primary" /> The Best Free Tools for TikTok Giveaways
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          For the actual winner draw, you need a tool that:
+        </p>
+        <ul class="space-y-2">
+          {toolPoints.map((point, i) => (
+            <li key={i} class="flex items-start gap-2">
+              <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+              <span class="text-sm text-muted-foreground">{point}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="text-muted-foreground leading-relaxed">
+          Real Wheel Picker is purpose-built for exactly this use case. Paste your list, spin on camera, done. No signup, no watermark on the wheel, no delays.
+        </p>
+      </section>
+
+      {/* Conclusion */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">The Bottom Line</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          A TikTok giveaway is one of the highest-leverage growth tactics available to creators — but only when executed properly. The entry mechanic drives engagement, the live draw builds trust, and the winner announcement keeps people watching your next video. Get those three elements right and a single giveaway can set you on a growth trajectory that lasts months.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The tool you use to pick the winner matters more than most creators think. Audiences in 2026 are sophisticated — they know what a fake wheel looks like. Use something real, transparent, and built for exactly this purpose.
+        </p>
+      </section>
+
+      {/* CTA */}
+      <section class="text-center py-8 space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Ready to Run Your TikTok Giveaway?</h2>
+        <p class="text-muted-foreground">Pick a winner in seconds with our free random wheel picker.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a
+            href="/giveaway-picker"
+            class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity"
+          >
+            Free Giveaway Picker <ArrowRight className="w-5 h-5" />
+          </a>
+          <a
+            href="/blog"
+            class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:border-primary/50 transition-colors"
+          >
+            More Guides <ArrowRight className="w-5 h-5" />
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug="/blog/tiktok-giveaway-guide" client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

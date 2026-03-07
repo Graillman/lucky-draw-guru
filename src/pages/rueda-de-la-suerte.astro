@@ -1,0 +1,160 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import { ArrowRight, Check } from 'lucide-react';
+
+const title = "Rueda de la Suerte Online Gratis — Gira y Elige | Real Wheel Picker";
+const description = "Gira la rueda de la suerte online y obtén un resultado aleatorio al instante. Añade tus opciones, gira y deja que la suerte decida. Gratis, sin registro.";
+const canonical = "/rueda-de-la-suerte";
+const locale = "es_ES";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Rueda de la Suerte Online — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/rueda-de-la-suerte",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Rueda de la suerte online gratis. Gira para obtener un resultado aleatorio justo usando criptografía.",
+      "inLanguage": "es",
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿La rueda de la suerte es realmente aleatoria?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Sí. Real Wheel Picker usa window.crypto.getRandomValues(), el estándar criptográfico de los navegadores modernos. Cada opción tiene exactamente la misma probabilidad de ser seleccionada." },
+        },
+        {
+          "@type": "Question",
+          "name": "¿Puedo personalizar las opciones de la rueda?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Sí. Haz clic en cualquier etiqueta para editarla y añade tantas opciones como necesites. La rueda se adapta automáticamente." },
+        },
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Rueda de la Suerte" },
+      ],
+    },
+  ],
+};
+
+const defaultParticipants = [
+  { pseudo: "Opción 1", weight: 1 },
+  { pseudo: "Opción 2", weight: 1 },
+  { pseudo: "Opción 3", weight: 1 },
+  { pseudo: "Opción 4", weight: 1 },
+];
+
+const USOS = [
+  "Decisiones del día a día — qué comer, adónde ir",
+  "Sorteos y concursos en redes sociales",
+  "Juegos de mesa — quién empieza",
+  "Clases — seleccionar alumnos aleatoriamente",
+  "Grupos y equipos de trabajo",
+  "Cualquier elección aleatoria justa",
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} locale={locale} jsonLd={jsonLd}>
+  <div class="relative min-h-screen overflow-hidden" style="background: var(--gradient-bg)">
+    <div aria-hidden class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div class="aurora-orb aurora-orb-gold"></div>
+      <div class="aurora-orb aurora-orb-purple"></div>
+      <div class="aurora-orb aurora-orb-blue"></div>
+    </div>
+    <div class="relative z-10">
+      <HeaderIsland client:load />
+      <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+
+        <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+          <a href="/" class="hover:text-primary transition-colors">Home</a>
+          <span>/</span>
+          <span class="text-foreground">Rueda de la Suerte</span>
+        </nav>
+
+        <section class="text-center space-y-4 py-2">
+          <h1 class="text-2xl md:text-4xl font-bold text-foreground leading-tight">
+            Rueda de la Suerte Online — Gira y Deja que la Suerte Decida
+          </h1>
+          <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            ¿No puedes decidir? Añade tus opciones, gira la rueda y obtén un resultado aleatorio justo al instante. Gratis, sin registro, criptográficamente imparcial.
+          </p>
+        </section>
+
+        <section class="bg-card border border-border rounded-xl p-5 text-sm text-muted-foreground leading-relaxed">
+          <p>
+            <strong class="text-foreground">Rueda de la suerte online:</strong> Escribe tus opciones, haz clic en Girar y la rueda selecciona una al azar con <code>window.crypto.getRandomValues()</code>. Cada opción tiene exactamente la misma probabilidad. Transparente, instantáneo, gratuito.
+          </p>
+        </section>
+
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+
+        <section class="space-y-4">
+          <h2 class="text-xl font-bold text-foreground">Usos de la rueda de la suerte</h2>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {USOS.map((uso, i) => (
+              <li class="flex items-start gap-3 bg-card border border-border rounded-xl p-4">
+                <Check className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                <span class="text-sm text-muted-foreground">{uso}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <AdPlaceholder position="after-use-cases" client:visible />
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Más herramientas</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              { label: "Sorteo Online", href: "/sorteo-online" },
+              { label: "Generador de Nombres", href: "/generador-de-nombres" },
+              { label: "Decisión Aleatoria", href: "/random-decision-maker" },
+            ].map((link) => (
+              <a href={link.href}
+                class="p-4 bg-card border border-border rounded-xl text-center hover:border-primary/50 hover:shadow-md transition-all text-sm font-semibold text-foreground">
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Preguntas frecuentes</h2>
+          <div class="space-y-3">
+            {[
+              ["¿La rueda de la suerte es realmente aleatoria?", "Sí. Usamos window.crypto.getRandomValues(), el estándar criptográfico de los navegadores. Cada opción tiene exactamente la misma probabilidad."],
+              ["¿Puedo personalizar las opciones?", "Sí. Haz clic en cualquier etiqueta para editarla. Añade las opciones que quieras."],
+              ["¿Es gratis?", "Completamente gratis. Sin registro, sin descargas, sin pagos."],
+            ].map(([q, a], i) => (
+              <div class="bg-card border border-border rounded-xl p-5">
+                <p class="font-semibold text-foreground mb-2">{q}</p>
+                <p class="text-muted-foreground">{a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="text-center py-6">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Herramienta completa <ArrowRight className="w-4 h-4" />
+          </a>
+        </section>
+
+        <AdPlaceholder position="bottom" client:visible />
+      </main>
+      <GlobalFooterIsland client:idle />
+    </div>
+  </div>
+</Layout>
