@@ -7,10 +7,25 @@ import AdPlaceholder from '@/components/AdPlaceholder';
 import { seoPages, type SEOPageConfig } from '@/data/seoPageConfig';
 
 export function getStaticPaths() {
-  return Object.values(seoPages).map((config: SEOPageConfig) => ({
-    params: { slug: config.slug },
-    props: { config },
-  }));
+  // Must be defined INSIDE getStaticPaths — Astro runs this in a separate context
+  const dedicatedPageSlugs = new Set([
+    'wheel-of-names',
+    'instagram-giveaway-picker',
+    'tiktok-giveaway-picker',
+    'youtube-giveaway-picker',
+    'discord-giveaway-picker',
+    'twitter-giveaway-picker',
+    'facebook-giveaway-picker',
+    'twitch-giveaway-picker',
+    'reddit-giveaway-picker',
+    'linkedin-giveaway-picker',
+  ]);
+  return Object.values(seoPages)
+    .filter((config: SEOPageConfig) => !dedicatedPageSlugs.has(config.slug))
+    .map((config: SEOPageConfig) => ({
+      params: { slug: config.slug },
+      props: { config },
+    }));
 }
 
 interface Props {
@@ -116,7 +131,7 @@ const hreflangLinks = alternates
       <!-- SEO bottom section -->
       <section class="py-8 px-6 rounded-xl border bg-primary/5 border-primary/20">
         <h2 class="text-xl md:text-2xl font-bold text-foreground mb-4">{config.seoTitle}</h2>
-        <p class="text-sm md:text-base text-muted-foreground leading-relaxed">{config.seoText}</p>
+        <p class="text-sm md:text-base text-muted-foreground leading-relaxed" set:html={config.seoText} />
       </section>
 
       {config.relatedBlogPost && (
