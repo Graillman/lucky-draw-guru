@@ -4,12 +4,7 @@ import { Dices } from "lucide-react";
 const GlobalFooter = () => {
   return (
     <footer className="border-t border-border bg-card/50 mt-12">
-      {/* Mobile sticky ad banner */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-secondary/95 backdrop-blur-sm border-t border-border flex items-center justify-center z-50">
-        <span className="text-xs text-muted-foreground">Ad space</span>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-4 py-10 pb-20 md:pb-10">
+<div className="max-w-6xl mx-auto px-4 py-10 pb-20 md:pb-10">
         {/* Brand tagline */}
         <div className="flex items-center gap-2 mb-8">
           <Dices className="w-5 h-5 text-primary" />

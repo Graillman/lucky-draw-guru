@@ -22,6 +22,7 @@ const WheelLogo = () => (
 
 const toolLinks = [
   { path: "/", label: "🎡 Spin the Wheel" },
+  { path: "/random-wheel", label: "🎰 Random Wheel" },
   { path: "/yes-or-no-wheel", label: "✅ Yes or No Wheel" },
   { path: "/random-number-generator", label: "🔢 Number Picker" },
   { path: "/giveaway-picker", label: "🎁 Giveaway Picker" },

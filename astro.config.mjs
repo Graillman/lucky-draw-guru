@@ -10,6 +10,9 @@ export default defineConfig({
   output: 'static',
   site: 'https://realwheelpicker.com',
   trailingSlash: 'never',
+  redirects: {
+    '/random-team-selector': '/team-generator',
+  },
   integrations: [
     react(),
     tailwind({
