@@ -1,0 +1,212 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Discord Giveaway Picker — No Bot Required | Real Wheel Picker";
+const description = "Pick Discord giveaway winners from reactions, roles, or messages. No bot installation needed. Visual wheel spin, cryptographically fair.";
+
+const faqItems = [
+  {
+    question: "Do I need to install anything on my Discord server?",
+    answer: "No. RealWheelPicker runs in your browser, completely separate from Discord. You just copy-paste usernames from Discord into the picker. No bots, no permissions, no risk.",
+  },
+  {
+    question: "How do I copy all users who reacted to a message?",
+    answer: "Click on the reaction count below the message. Discord shows a list of everyone who reacted. Copy the usernames from that list. For large reactions (100+), you may need to scroll and copy in batches.",
+  },
+  {
+    question: "Can I use this for Discord Nitro giveaways?",
+    answer: "Yes. Nitro giveaways are one of the most common use cases. Just collect entrant names by any method and spin the wheel.",
+  },
+  {
+    question: "Is this better than GiveawayBot?",
+    answer: "Different. GiveawayBot automates the entire flow but the draw is invisible. RealWheelPicker requires manual name collection but gives you a visual, recordable draw that proves fairness. Use whichever matters more for your community.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Discord Giveaway Picker — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/discord-giveaway-picker",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/discord-giveaway-picker"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Discord Giveaway Picker", url: "https://realwheelpicker.com/discord-giveaway-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Discord Giveaway Picker</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Discord Giveaway Picker — No Bot Required
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Collect participant names from reactions, roles, or messages. Paste them in, spin the wheel, prove the draw was fair.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No bot install • No server permissions</p>
+      </section>
+
+      <!-- How it works -->
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How Does the Discord Giveaway Picker Work?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Collect participant names from a Discord channel — via reactions, role members, or message senders — paste them into the wheel, and spin to draw a winner. No bot installation required. No server permissions needed. Just a browser tab.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Most Discord giveaway bots require admin access to your server, collect user data, and some even spam DMs. RealWheelPicker is the alternative: you export the names yourself, load them into a visual wheel, and the draw happens on your screen — not on someone else's server.
+        </p>
+      </section>
+
+      <!-- Interactive tool -->
+      <SEOPageIsland slug="discord-giveaway-picker" client:load />
+
+      <!-- Step-by-step guide -->
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Run a Discord Giveaway Without a Bot</h2>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Method 1: Reaction-Based Entry</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Post your giveaway announcement in a channel. Ask members to react with a specific emoji to enter. When the deadline hits, click the reaction to see who reacted. Copy the usernames from the reaction list. Paste into RealWheelPicker and spin.
+          </p>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Reactions work well because they're low-friction (one click to enter), easy to track, and the reaction count gives you an instant entry tally.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Method 2: Role-Based Entry</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Create a role like 'Giveaway Participant'. Have an admin assign the role to people who opt in. Go to Server Settings &gt; Members &gt; Filter by role. Copy the member list. Load into the picker and draw.
+          </p>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Best for servers where you want to limit entries to active members, verified users, or specific subscription tiers.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Method 3: Message-Based Entry</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Create a dedicated giveaway channel. Ask members to send a message to enter. Scroll through and copy unique usernames. Or use a Discord message export tool like DiscordChatExporter.
+          </p>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Best for engagement-focused giveaways where you want people to share something.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Why Not Just Use a Giveaway Bot?</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Giveaway bots work fine for simple draws. But they require bot permissions on your server, the draw happens invisibly — members just see 'Winner: @user', no visual proof the selection was fair, some bots collect user data or show ads in DMs.
+          </p>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            RealWheelPicker gives you the visual, recordable, shareable draw that bots can't.
+          </p>
+        </div>
+      </section>
+
+      <!-- Use Cases -->
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground text-center">Discord Giveaway Use Cases</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {[
+            { emoji: "🎁", title: "Server Giveaways", desc: "Reward engaged server members" },
+            { emoji: "👥", title: "Reaction Draws", desc: "Pick from emoji-reaction participants" },
+            { emoji: "🏆", title: "Community Events", desc: "Prizes for event participants" },
+            { emoji: "🎮", title: "Gaming Contests", desc: "Select winners for gaming tournaments" },
+            { emoji: "✨", title: "Role Rewards", desc: "Randomly assign special roles" },
+            { emoji: "💬", title: "Message Entries", desc: "Pick from channel message participants" },
+          ].map((c) => (
+            <div class="p-4 rounded-xl bg-card border border-border text-center hover:scale-105 transition-all hover:border-primary/50">
+              <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 bg-primary/10 text-2xl">{c.emoji}</div>
+              <h3 class="font-semibold text-foreground text-sm mb-1">{c.title}</h3>
+              <p class="text-xs text-muted-foreground">{c.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- SEO bottom -->
+      <section class="py-8 px-6 rounded-xl border bg-primary/5 border-primary/20 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Free Discord Giveaway Picker — No Bot Required</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Run transparent Discord giveaways without installing any bot on your server. Collect participant names from reactions, roles, or messages, paste them into the wheel, and spin to draw a winner your community trusts.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          No permissions needed, no data collected, no server risk. For giveaways on other platforms, see our <a href="/twitch-giveaway-picker" class="text-primary hover:underline">Twitch</a> and <a href="/reddit-giveaway-picker" class="text-primary hover:underline">Reddit</a> pickers.
+        </p>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/twitch-giveaway-picker", label: "Twitch Giveaway Picker", desc: "Pick winners from Twitch chat participants and subscribers." },
+            { href: "/reddit-giveaway-picker", label: "Reddit Giveaway Picker", desc: "Select random winners from Reddit post comments and upvoters." },
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Universal giveaway picker for any platform or contest." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

@@ -1,0 +1,212 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Facebook Giveaway Picker — Free Comment Winner Selector | Real Wheel Picker";
+const description = "Pick random winners from Facebook post comments, page followers, or group members. Visual wheel spin, cryptographically fair, no signup.";
+
+const faqItems = [
+  {
+    question: "Can I require people to share my post to enter?",
+    answer: "No. Facebook's Promotion Guidelines prohibit requiring shares on personal timelines as an entry method. You can ask people to comment, like, or react — but not share.",
+  },
+  {
+    question: "How do I see all comments on a large post?",
+    answer: "Switch the comment sort from 'Most Relevant' to 'All Comments' (dropdown at the top of the comments section). Then scroll to load all comments. For very large posts, comments may load in batches.",
+  },
+  {
+    question: "Should I use real names or ask for a specific comment?",
+    answer: "Facebook shows real full names by default. Asking for a specific comment (like 'Drop a gift emoji to enter') makes it easy to identify valid entries vs. unrelated comments.",
+  },
+  {
+    question: "Can I run giveaways in Facebook Groups?",
+    answer: "Yes, and they tend to get higher engagement than Page posts because group members are more active. Make sure you're an admin or have admin permission to run the contest.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Facebook Giveaway Picker — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/facebook-giveaway-picker",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/facebook-giveaway-picker"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Facebook Giveaway Picker", url: "https://realwheelpicker.com/facebook-giveaway-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Facebook Giveaway Picker</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Facebook Giveaway Picker — Draw Winners From Comments
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Pick random winners from Facebook post comments, page followers, or group members. Visual proof, cryptographic fairness.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No signup • No data collected</p>
+      </section>
+
+      <!-- How it works -->
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How Does the Facebook Giveaway Picker Work?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Collect commenter names from your Facebook post, paste them into the wheel, and spin to draw a winner. The draw is cryptographically random, visual, and recordable — everything you need for a Facebook contest that your community actually trusts.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Facebook giveaways are popular for local businesses, community groups, and brand pages. The platform's comment system makes it easy to collect entries, but the lack of a built-in picker means you need an external tool for the draw.
+        </p>
+      </section>
+
+      <!-- Interactive tool -->
+      <SEOPageIsland slug="facebook-giveaway-picker" client:load />
+
+      <!-- Step-by-step guide -->
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Run a Facebook Giveaway</h2>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">For Business Pages</h3>
+          <ol class="space-y-2 text-sm text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold">1.</span><span>Create a post with your prize, rules, and deadline</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">2.</span><span>Ask people to comment to enter (liking is harder to track)</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">3.</span><span>When the deadline passes, go to your post</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">4.</span><span>Copy all unique commenter names</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">5.</span><span>Paste into RealWheelPicker and spin</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">6.</span><span>Comment the winner on the original post and share the wheel recording</span></li>
+          </ol>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">For Facebook Groups</h3>
+          <ol class="space-y-2 text-sm text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold">1.</span><span>Create a giveaway post in your group</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">2.</span><span>Pin it to the top</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">3.</span><span>Set comment-to-enter rules</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">4.</span><span>After the deadline, copy participant names</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">5.</span><span>Draw and announce in the group</span></li>
+          </ol>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Collecting Names from Facebook Comments</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Click 'Most Relevant' and switch to 'All Comments' to see everything. Scroll through and copy names. For large posts (300+ comments), use Facebook's Graph API or tools like Woobox or ShortStack.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Facebook Promotion Rules (2026)</h3>
+          <ul class="space-y-2 text-sm text-muted-foreground">
+            <li class="flex gap-2"><span class="text-green-500 font-bold">✓</span><span>You CAN run promotions on Pages, Groups, and Events</span></li>
+            <li class="flex gap-2"><span class="text-red-500 font-bold">✗</span><span>You CANNOT require people to share on their timeline as an entry condition</span></li>
+            <li class="flex gap-2"><span class="text-primary font-bold">!</span><span>You MUST include: 'This promotion is not sponsored, endorsed, or administered by Meta/Facebook.'</span></li>
+            <li class="flex gap-2"><span class="text-primary font-bold">!</span><span>Clearly state minimum age for participation</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Use Cases -->
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground text-center">Facebook Giveaway Use Cases</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {[
+            { emoji: "🎁", title: "Post Comment Draws", desc: "Pick winners from post commenters" },
+            { emoji: "👥", title: "Page Giveaways", desc: "Engage your business page followers" },
+            { emoji: "👥", title: "Group Contests", desc: "Community draws in Facebook Groups" },
+            { emoji: "🏆", title: "Business Promotions", desc: "Drive local business engagement" },
+            { emoji: "✨", title: "Event Draws", desc: "Prizes for event attendees" },
+            { emoji: "📍", title: "Local Business Contests", desc: "Reach local community members" },
+          ].map((c) => (
+            <div class="p-4 rounded-xl bg-card border border-border text-center hover:scale-105 transition-all hover:border-primary/50">
+              <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 bg-primary/10 text-2xl">{c.emoji}</div>
+              <h3 class="font-semibold text-foreground text-sm mb-1">{c.title}</h3>
+              <p class="text-xs text-muted-foreground">{c.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- SEO bottom -->
+      <section class="py-8 px-6 rounded-xl border bg-primary/5 border-primary/20 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Free Facebook Giveaway Picker — Draw Winners From Comments</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Our Facebook giveaway picker randomly selects winners from your post's comment section. Visual wheel spin, cryptographic fairness, and recordable results — everything you need for community contests that build trust.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          For brand pages, local businesses, and Facebook Groups. Also available for <a href="/instagram-giveaway-picker" class="text-primary hover:underline">Instagram</a>, <a href="/twitter-giveaway-picker" class="text-primary hover:underline">Twitter/X</a>, and <a href="/linkedin-giveaway-picker" class="text-primary hover:underline">LinkedIn</a> giveaways.
+        </p>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/instagram-giveaway-picker", label: "Instagram Giveaway Picker", desc: "Pick winners from Instagram post comments and story mentions." },
+            { href: "/twitter-giveaway-picker", label: "Twitter/X Giveaway Picker", desc: "Select random winners from retweets, replies, and quote tweets." },
+            { href: "/linkedin-giveaway-picker", label: "LinkedIn Giveaway Picker", desc: "Draw winners from LinkedIn post comments and reactions." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>
