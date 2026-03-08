@@ -1,0 +1,196 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "TikTok Giveaway Picker — Free Random Winner Selector | Real Wheel Picker";
+const description = "Pick random winners from TikTok comments. Record the wheel spin, post it as your next TikTok. Cryptographic fairness, no signup.";
+
+const faqItems = [
+  {
+    question: "How do I export TikTok comments?",
+    answer: "TikTok doesn't have a built-in export. Use third-party tools like TokBoard or Phantombuster to scrape comments as a list. For small giveaways, manually copying usernames works fine.",
+  },
+  {
+    question: "Can I verify that entrants actually follow me?",
+    answer: "TikTok doesn't expose your follower list programmatically. You'll need to manually check the winner's profile to confirm they follow you. Check before announcing to avoid public awkwardness.",
+  },
+  {
+    question: "How do I handle duplicate comments?",
+    answer: "Decide in advance: one entry per person or multiple entries allowed. If one per person, deduplicate your username list before loading. If multiple entries are allowed, keep duplicates in the list — each comment counts as a separate entry.",
+  },
+  {
+    question: "Should I announce the winner on TikTok or DM them?",
+    answer: "Both. Post the wheel spin recording as a new video (it performs well algorithmically), AND DM the winner separately with claim instructions. Not everyone checks their tags.",
+  },
+  {
+    question: "What prizes work best for TikTok giveaways?",
+    answer: "Cash (via PayPal/Venmo), gift cards, and products your audience already wants. Physical products you can show on camera generate the best engagement. Avoid mystery prizes — they feel scammy on TikTok.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "TikTok Giveaway Picker — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/tiktok-giveaway-picker",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/tiktok-giveaway-picker"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "TikTok Giveaway Picker", url: "https://realwheelpicker.com/tiktok-giveaway-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">TikTok Giveaway Picker</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          TikTok Giveaway Picker — Select Winners Your Audience Trusts
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Export TikTok comments, load them into the wheel, spin live and post the recording as your next video.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- How it works -->
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How Does the TikTok Giveaway Picker Work?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Export your TikTok comment section, paste the usernames into the wheel, and spin to draw a random winner. The selection is cryptographically random and runs entirely in your browser — no data leaves your device.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          TikTok giveaways are the fastest-growing contest format on social media. But TikTok's comment section is chaotic: thousands of entries, spam accounts, duplicate comments, and users who didn't follow the rules. Our picker lets you clean the list and draw from verified entries only.
+        </p>
+      </section>
+
+      <!-- Interactive tool -->
+      <SEOPageIsland slug="tiktok-giveaway-picker" client:load />
+
+      <!-- Step-by-step guide -->
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Run a TikTok Giveaway (2026 Guide)</h2>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Step 1: Create Your Giveaway Video</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">Film a short engaging video. Show the prize clearly. State rules verbally AND in the caption. Use a trending sound. Best entry format: 'Comment [word] to enter!' drives engagement and is easy to verify.</p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Step 2: Collect Participant Names</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">TikTok doesn't have a native comment export. Manual (under 200 comments): scroll and copy. Export tools: TokBoard or Phantombuster. Clean the list: remove duplicates and obvious bots (generic names with random numbers).</p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Step 3: Draw the Winner</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">Paste cleaned usernames into RealWheelPicker. Screen-record the spin (TikTok users EXPECT to see the draw). Save the recording.</p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Step 4: Announce — Turn It Into Content</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">Post the screen recording as a new TikTok. Add text overlay: 'Picking the winner of the [prize] giveaway!' Use a suspenseful sound as the wheel slows down. Tag the winner in the caption. This video often gets MORE views than the original giveaway post.</p>
+        </div>
+      </section>
+
+      <!-- Use Cases -->
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground text-center">TikTok Giveaway Use Cases</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {[
+            { emoji: "🎥", title: "Comment Draws", desc: "Pick winners from video comments" },
+            { emoji: "🎁", title: "Duet/Stitch Contests", desc: "Select winners from duet entries" },
+            { emoji: "👥", title: "Follower Milestones", desc: "Celebrate with a follower giveaway" },
+            { emoji: "🏆", title: "Live Giveaways", desc: "Draw winners during TikTok Live" },
+            { emoji: "✨", title: "Brand Deals", desc: "Professional sponsored giveaways" },
+            { emoji: "📱", title: "TikTok LIVE", desc: "Real-time draws on TikTok LIVE" },
+          ].map((c) => (
+            <div class="p-4 rounded-xl bg-card border border-border text-center hover:scale-105 transition-all hover:border-primary/50">
+              <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 bg-primary/10 text-2xl">{c.emoji}</div>
+              <h3 class="font-semibold text-foreground text-sm mb-1">{c.title}</h3>
+              <p class="text-xs text-muted-foreground">{c.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- SEO bottom -->
+      <section class="py-8 px-6 rounded-xl border bg-primary/5 border-primary/20 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Free TikTok Giveaway Picker — Draw Winners Your Audience Trusts</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Our TikTok giveaway picker selects random winners from your comment section with cryptographic fairness. Record the wheel spin, post it as a follow-up TikTok, and turn your giveaway announcement into viral content. No app needed, no account required. Paste usernames, spin, pick a winner.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          For giveaways on other platforms, see our <a href="/instagram-giveaway-picker" class="text-primary hover:underline">Instagram (/instagram-giveaway-picker)</a>, <a href="/youtube-giveaway-picker" class="text-primary hover:underline">YouTube (/youtube-giveaway-picker)</a>, and <a href="/twitch-giveaway-picker" class="text-primary hover:underline">Twitch (/twitch-giveaway-picker)</a> pickers.
+        </p>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/instagram-giveaway-picker", label: "Instagram Giveaway Picker", desc: "Pick random winners from Instagram comments and post the draw to your Story." },
+            { href: "/youtube-giveaway-picker", label: "YouTube Giveaway Picker", desc: "Export YouTube comments and spin the wheel on camera for your next upload." },
+            { href: "/twitch-giveaway-picker", label: "Twitch Giveaway Picker", desc: "Draw winners live from Twitch chat with cryptographic fairness." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>
