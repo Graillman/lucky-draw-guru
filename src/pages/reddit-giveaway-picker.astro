@@ -1,0 +1,185 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Reddit Giveaway Picker — Transparent Subreddit Draws | Real Wheel Picker";
+const description = "Pick random winners from Reddit post comments. Set account age/karma minimums. Visual proof for your subreddit. Cryptographically fair, no signup.";
+
+const faqItems = [
+  {
+    question: "How do I prevent alt account entries?",
+    answer: "Set minimum requirements: account age (30-90 days), minimum karma (50-100), and prior activity in the subreddit. This won't stop determined cheaters but filters out casual alt entries.",
+  },
+  {
+    question: "Can I run giveaways in any subreddit?",
+    answer: "No. Each subreddit has its own rules. Many prohibit self-promotion and giveaways. Always check the sidebar and contact mods before posting.",
+  },
+  {
+    question: "How do I announce the winner?",
+    answer: "Edit your original post with the winner's username and a link to the wheel spin recording (upload to Imgur or YouTube). Also comment on the thread and tag the winner with u/username.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Reddit Giveaway Picker — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/reddit-giveaway-picker",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/reddit-giveaway-picker"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Reddit Giveaway Picker", url: "https://realwheelpicker.com/reddit-giveaway-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Reddit Giveaway Picker</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Reddit Giveaway Picker — Transparent Draws for Subreddits
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Pick winners from Reddit comments with cryptographic fairness. Post the wheel spin as proof and keep your community's trust.
+        </p>
+      </section>
+
+      <!-- How it works -->
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How Does the Reddit Giveaway Picker Work?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Collect usernames from your Reddit post's comment section, load them into the wheel, and spin to pick a random winner. Cryptographic randomness ensures every commenter has an equal shot.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Reddit communities value transparency more than any other platform. Redditors will call out unfair draws instantly. The visual wheel spin — recorded and posted as proof — is the best way to maintain trust in your subreddit.
+        </p>
+      </section>
+
+      <!-- Interactive tool -->
+      <SEOPageIsland slug="reddit-giveaway-picker" client:load />
+
+      <!-- Step-by-step guide -->
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Run a Reddit Giveaway</h2>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Choosing a Subreddit</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Post in your own subreddit if you have one. Or find relevant subreddits that allow giveaways (check the sidebar rules). Popular giveaway subreddits: r/giveaways, r/RandomActsOfGaming, r/FREE, r/contests. Always contact the mods before posting if it's not your own sub.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Collecting Comment Usernames</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Manual method: Open your giveaway post, sort by 'New' to see all comments, copy unique usernames. Reddit API/PRAW (Python): For larger threads, use Reddit's API or the PRAW Python library to extract all commenter usernames programmatically. Third-party: RedditMetis or old.reddit.com for easier comment browsing.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Reddit-Specific Best Practices</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Set a minimum account age requirement (accounts must be 30+ days old) to prevent alt accounts. Minimum karma requirement helps filter bots. State 'One entry per person' explicitly — Reddit users WILL create alts. Post a follow-up comment with the winner and a link to the wheel spin recording. Cross-reference winners with their post history to make sure it's a real account.
+          </p>
+        </div>
+      </section>
+
+      <!-- Use Cases -->
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground text-center">Use Cases</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {[
+            { emoji: "🎁", title: "Subreddit Giveaways", desc: "Reward community members" },
+            { emoji: "👥", title: "r/giveaways Posts", desc: "Join dedicated giveaway subs" },
+            { emoji: "🎮", title: "Gaming Contests", desc: "r/RandomActsOfGaming draws" },
+            { emoji: "🏆", title: "AMA Prizes", desc: "Pick winners from AMA participants" },
+            { emoji: "✨", title: "Milestone Celebrations", desc: "Subscriber count rewards" },
+            { emoji: "📊", title: "Community Polls", desc: "Random reward from voters" },
+          ].map((c) => (
+            <div class="p-4 rounded-xl bg-card border border-border text-center hover:scale-105 transition-all hover:border-primary/50">
+              <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 bg-primary/10 text-2xl">{c.emoji}</div>
+              <h3 class="font-semibold text-foreground text-sm mb-1">{c.title}</h3>
+              <p class="text-xs text-muted-foreground">{c.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- SEO bottom -->
+      <section class="py-8 px-6 rounded-xl border bg-primary/5 border-primary/20 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Free Reddit Giveaway Picker — Transparent Draws for Reddit Communities</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Our Reddit giveaway picker selects random winners from your thread with cryptographic fairness. Record the wheel spin, post the proof, and keep your subreddit's trust intact. Built for r/giveaways, r/RandomActsOfGaming, and any community that values transparency. For other platforms, see our Discord (<a href="/discord-giveaway-picker" class="text-primary hover:underline">/discord-giveaway-picker</a>) and Twitter/X (<a href="/twitter-giveaway-picker" class="text-primary hover:underline">/twitter-giveaway-picker</a>) pickers.
+        </p>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/discord-giveaway-picker", label: "Discord Giveaway Picker", desc: "Pick winners from Discord server members or reactions." },
+            { href: "/twitter-giveaway-picker", label: "Twitter/X Giveaway Picker", desc: "Select random winners from Twitter/X replies and retweets." },
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Run transparent prize draws for contests and promotions." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

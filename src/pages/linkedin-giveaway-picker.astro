@@ -1,0 +1,185 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "LinkedIn Giveaway Picker — Professional Contest Draws | Real Wheel Picker";
+const description = "Pick winners from LinkedIn post comments fairly. Perfect for B2B giveaways, course draws, and event ticket contests. Cryptographically random, no signup.";
+
+const faqItems = [
+  {
+    question: "Are giveaways allowed on LinkedIn?",
+    answer: "Yes. LinkedIn doesn't prohibit contests or giveaways in posts. However, the content must comply with LinkedIn's Professional Community Policies — keep it professional and relevant to your industry.",
+  },
+  {
+    question: "What prizes work best on LinkedIn?",
+    answer: "Professional development resources: books, online courses, conference tickets, software licenses, coaching sessions, or consulting time. These attract your target audience, not random giveaway hunters.",
+  },
+  {
+    question: "How do I export LinkedIn comments?",
+    answer: "LinkedIn doesn't offer a native export or support third-party scrapers easily due to privacy restrictions. For most LinkedIn giveaways (typically under 200 comments), manually copying names is the practical approach.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "LinkedIn Giveaway Picker — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/linkedin-giveaway-picker",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/linkedin-giveaway-picker"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "LinkedIn Giveaway Picker", url: "https://realwheelpicker.com/linkedin-giveaway-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">LinkedIn Giveaway Picker</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          LinkedIn Giveaway Picker — Professional Contest Draws
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Run B2B contests and course giveaways that boost your post reach and build industry credibility.
+        </p>
+      </section>
+
+      <!-- How it works -->
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How Does the LinkedIn Giveaway Picker Work?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Collect participant names from the comments on your LinkedIn post, load them into the wheel, and spin to select a winner. The cryptographic random selection is fair, auditable, and professional enough for a B2B audience.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          LinkedIn giveaways are underused. Most marketers don't realize that LinkedIn's algorithm aggressively boosts posts with high comment counts — a well-structured giveaway can 5-10x your normal post reach. The key is keeping it professional and relevant to your industry.
+        </p>
+      </section>
+
+      <!-- Interactive tool -->
+      <SEOPageIsland slug="linkedin-giveaway-picker" client:load />
+
+      <!-- Step-by-step guide -->
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Run a LinkedIn Giveaway (B2B Style)</h2>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">What Works on LinkedIn</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            LinkedIn isn't Instagram. Your audience is professionals. The giveaway must feel relevant, not gimmicky. Effective formats: 'Comment your biggest challenge in [industry] for a chance to win [book/course/tool]', 'Share your prediction for [industry trend in 2026] — best answer wins a coaching session', 'We're giving away 3 annual licenses of [tool]. Comment why you'd use it.' What to avoid: 'Like and comment to win an iPad' (feels off-brand), generic gift cards, mystery prizes.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Collecting Entries from LinkedIn</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Go to your post. Scroll through comments. Copy the names of valid commenters. LinkedIn shows real full names — use these directly. LinkedIn doesn't have comment export tools. For posts with 100+ comments, you'll need to scroll and copy manually.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Announcing the Winner — The Professional Way</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Comment on your original post: 'Thanks to everyone who participated! After [X] entries, the wheel selected [Name]. Congrats!' Tag the winner. Post a screenshot or recording of the wheel (optional but builds trust). Thank participants individually if the count is manageable. This engagement further boosts the post's algorithm performance.
+          </p>
+        </div>
+      </section>
+
+      <!-- Use Cases -->
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground text-center">Use Cases</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {[
+            { emoji: "💼", title: "B2B Contests", desc: "Professional course and tool giveaways" },
+            { emoji: "📚", title: "Book Giveaways", desc: "Industry book bundles for your audience" },
+            { emoji: "🎫", title: "Event Tickets", desc: "Conference and webinar ticket draws" },
+            { emoji: "🏆", title: "Course Access", desc: "Online course license giveaways" },
+            { emoji: "✨", title: "Coaching Sessions", desc: "Consulting time prize draws" },
+            { emoji: "📈", title: "Thought Leadership", desc: "Comment-to-enter industry discussions" },
+          ].map((c) => (
+            <div class="p-4 rounded-xl bg-card border border-border text-center hover:scale-105 transition-all hover:border-primary/50">
+              <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 bg-primary/10 text-2xl">{c.emoji}</div>
+              <h3 class="font-semibold text-foreground text-sm mb-1">{c.title}</h3>
+              <p class="text-xs text-muted-foreground">{c.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- SEO bottom -->
+      <section class="py-8 px-6 rounded-xl border bg-primary/5 border-primary/20 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Free LinkedIn Giveaway Picker — Professional Contest Draws</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Our LinkedIn giveaway picker brings transparent, random winner selection to professional networking. Run B2B contests, course giveaways, and event ticket drawings that boost your post reach and build industry credibility. For consumer-facing giveaways on other platforms, see our Instagram (<a href="/instagram-giveaway-picker" class="text-primary hover:underline">/instagram-giveaway-picker</a>), Facebook (<a href="/facebook-giveaway-picker" class="text-primary hover:underline">/facebook-giveaway-picker</a>), and Twitter/X (<a href="/twitter-giveaway-picker" class="text-primary hover:underline">/twitter-giveaway-picker</a>) pickers.
+        </p>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/instagram-giveaway-picker", label: "Instagram Giveaway Picker", desc: "Pick winners from Instagram post comments." },
+            { href: "/facebook-giveaway-picker", label: "Facebook Giveaway Picker", desc: "Select random winners from Facebook post comments." },
+            { href: "/twitter-giveaway-picker", label: "Twitter/X Giveaway Picker", desc: "Pick winners from Twitter/X replies and retweets." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>
