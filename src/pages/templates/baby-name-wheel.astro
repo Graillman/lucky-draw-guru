@@ -1,0 +1,196 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Baby Name Spinner Wheel — Pick a Name by Chance";
+const description = "Can't decide on a baby name? Put your top choices on the wheel and let fate decide. A fun way to narrow down your shortlist.";
+const canonical = "/templates/baby-name-wheel";
+
+const faqItems = [
+  {
+    question: "What if the wheel picks a name I hate?",
+    answer: "Remove it from the wheel and spin again. The wheel works best when all remaining options are ones you could genuinely accept.",
+  },
+  {
+    question: "Can I use this for pet names too?",
+    answer: "Absolutely — it works for any naming decision. Pets, characters, businesses, whatever needs a name.",
+  },
+  {
+    question: "Should we tell people the wheel picked the name?",
+    answer: "That's up to you. Some parents love the story; others prefer to say they 'just loved it.' Either way, it's a great conversation starter.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Emma", weight: 1 },
+  { pseudo: "Liam", weight: 1 },
+  { pseudo: "Olivia", weight: 1 },
+  { pseudo: "Noah", weight: 1 },
+  { pseudo: "Ava", weight: 1 },
+  { pseudo: "James", weight: 1 },
+  { pseudo: "Sophia", weight: 1 },
+  { pseudo: "Lucas", weight: 1 },
+  { pseudo: "Mia", weight: 1 },
+  { pseudo: "Ethan", weight: 1 },
+  { pseudo: "Isabella", weight: 1 },
+  { pseudo: "Mason", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/baby-name-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Baby Name Wheel", url: "https://realwheelpicker.com/templates/baby-name-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Baby Name Wheel</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Baby Name Spinner Wheel — Pick a Name by Chance
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Can't decide on a baby name? Put your shortlist on the wheel and let fate break the deadlock. Pre-loaded with 12 popular names.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Baby Name Dilemma</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            You've been arguing about baby names for weeks. Both of you have strong opinions. The list is down to 8 names and nobody will budge. The wheel doesn't have feelings — it just picks.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Use the Baby Name Wheel</h2>
+          <ol class="space-y-2 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold">1.</span><span>Both parents add names they genuinely love to the wheel (not just ones they're willing to tolerate).</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">2.</span><span>Remove names that either parent has a strong veto against.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">3.</span><span>Spin. Whatever lands is your leading candidate.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">4.</span><span>If you both feel immediate relief that it didn't land on something else — that's information. Spin again.</span></li>
+          </ol>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Gender-Neutral Name Wheel</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Add names that work for any gender: River, Sage, Quinn, Jordan, Rowan, Blake, Alex, Casey, Morgan, Avery, Finley, Reese.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Name Origin Themes</h2>
+          <div class="space-y-3">
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Classic English</p>
+              <p class="text-muted-foreground text-sm">William, Charlotte, Henry, Eleanor, George, Alice</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Irish</p>
+              <p class="text-muted-foreground text-sm">Aoife, Ciarán, Siobhán, Padraig, Niamh, Darragh</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Scandinavian</p>
+              <p class="text-muted-foreground text-sm">Astrid, Lars, Freya, Bjorn, Ingrid, Magnus</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Japanese</p>
+              <p class="text-muted-foreground text-sm">Hana, Kenji, Yuki, Riku, Sakura, Haruto</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">After the Spin</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Live with the chosen name for 24 hours. Say it out loud. Imagine calling it across a playground. If it still feels right, you might have found your answer. If it feels wrong, remove it from the wheel and spin again.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random name from your list without the wheel animation." },
+            { href: "/party-wheel", label: "Party Wheel", desc: "Pre-loaded with party game ideas for your next gathering." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

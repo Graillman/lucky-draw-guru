@@ -1,0 +1,180 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Random Color Wheel — Spin to Pick a Random Color";
+const description = "Spin the color wheel for design decisions, art projects, and games. Random color selection made visual and instant.";
+const canonical = "/templates/color-wheel-picker";
+
+const faqItems = [
+  {
+    question: "Can I add specific hex colors or Pantone shades?",
+    answer: "Add any color name you want — specific shades like 'Cobalt Blue' or 'Burnt Sienna' work perfectly.",
+  },
+  {
+    question: "Is this useful for interior design?",
+    answer: "Yes — put your shortlisted paint colors on the wheel. Spin to pick which room to test each color in first.",
+  },
+  {
+    question: "Can I use this for fashion?",
+    answer: "Absolutely. Spin to pick the accent color for your outfit. Great for building capsule wardrobe variety.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Red", weight: 1 },
+  { pseudo: "Blue", weight: 1 },
+  { pseudo: "Green", weight: 1 },
+  { pseudo: "Yellow", weight: 1 },
+  { pseudo: "Purple", weight: 1 },
+  { pseudo: "Orange", weight: 1 },
+  { pseudo: "Pink", weight: 1 },
+  { pseudo: "Teal", weight: 1 },
+  { pseudo: "Gold", weight: 1 },
+  { pseudo: "Black", weight: 1 },
+  { pseudo: "White", weight: 1 },
+  { pseudo: "Coral", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/color-wheel-picker",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Color Wheel Picker", url: "https://realwheelpicker.com/templates/color-wheel-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Color Wheel Picker</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Random Color Wheel — Spin to Pick a Random Color
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Spin the color wheel for design decisions, art projects, and games. Random color selection made visual and instant.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Creative Uses for the Random Color Wheel</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            <span class="font-semibold text-foreground">Art challenge:</span> Spin to pick your primary color for today's painting or drawing. Constraint breeds creativity — working with a color you wouldn't normally choose produces surprising results.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            <span class="font-semibold text-foreground">Design decisions:</span> Can't choose between several brand color options? Put them all on the wheel. Spin. Commit to prototyping with that color first.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            <span class="font-semibold text-foreground">Teaching color theory:</span> Teachers use random color selection to give students the same constraint — paint with this color using only tints and shades.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Color Mixing Challenge</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Spin twice. Mix the two colors you land on. Challenge: create three variations (light, medium, dark) using only those colors plus white and black.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            This constraint forces creative exploration. Landing on two colors you wouldn't normally pair — say, Gold and Teal — produces unexpected combinations that often turn out stronger than your first instinct would suggest.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Game Night Uses</h2>
+          <div class="space-y-3">
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Charades variant</p>
+              <p class="text-muted-foreground text-sm">Spin for a color, act out or describe something that matches. Team guesses the color you were given.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Drawing challenge</p>
+              <p class="text-muted-foreground text-sm">Everyone gets the same random color. Draw something beautiful using only variations of that color.</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
+            { href: "/weighted-random-picker", label: "Weighted Picker", desc: "Assign different probabilities to each option." },
+            { href: "/templates/wheel-of-fortune", label: "Wheel of Fortune", desc: "Prize wheel game for parties and game nights." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

@@ -1,0 +1,178 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Wheel of Fortune — Free Online Spinning Wheel Game";
+const description = "Play Wheel of Fortune online. Customize with your own prizes and spin. Free, no download, instant.";
+const canonical = "/templates/wheel-of-fortune";
+
+const faqItems = [
+  {
+    question: "Is this the real Wheel of Fortune game?",
+    answer: "No — this is a free spinner wheel inspired by the format. You provide the puzzle and the prizes. We spin the wheel.",
+  },
+  {
+    question: "Can I add my own prize amounts?",
+    answer: "Yes — replace any value with your own prizes, amounts, or challenges.",
+  },
+  {
+    question: "How do I play in teams?",
+    answer: "Split players into teams. Each team spins once per round. Track earnings on a whiteboard. Highest total at end wins.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "$100", weight: 1 },
+  { pseudo: "$200", weight: 1 },
+  { pseudo: "$500", weight: 1 },
+  { pseudo: "$1000", weight: 1 },
+  { pseudo: "Bankrupt", weight: 1 },
+  { pseudo: "Lose a Turn", weight: 1 },
+  { pseudo: "Free Spin", weight: 1 },
+  { pseudo: "$300", weight: 1 },
+  { pseudo: "$750", weight: 1 },
+  { pseudo: "Jackpot!", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/wheel-of-fortune",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Wheel of Fortune", url: "https://realwheelpicker.com/templates/wheel-of-fortune" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Wheel of Fortune</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Wheel of Fortune — Free Online Spinning Wheel Game
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          The classic game show format, now available as a free online spinner. Set up your prize wheel, take turns spinning, and see what fate has in store.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Play Wheel of Fortune</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            The classic game show format, now available as a free online spinner. Set up your prize wheel, take turns spinning, and see what fate has in store. Perfect for family game nights, classroom games, and custom prize drawings.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            Classic setup: Land on a dollar amount, guess a letter. If the letter is in the puzzle, earn the money. Land on Bankrupt and lose everything. Land on Free Spin and get another turn.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Custom Prize Wheel</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Replace the default values with your own prizes. Use it for office raffle prizes, birthday party prizes, or custom game shows. Replace dollar amounts with gift ideas, activities, or dares.
+          </p>
+          <div class="space-y-3">
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Office raffle</p>
+              <p class="text-muted-foreground text-sm">Extra PTO day, Gift card, Coffee on the boss, Work from home week</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Birthday party</p>
+              <p class="text-muted-foreground text-sm">Choose the movie, Pick the restaurant, Skip a chore, Double dessert</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Party Version</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            For parties: Replace the prizes with dares, compliments, or tasks. Bankrupt becomes "tell an embarrassing story." Jackpot becomes "pick any prize." The spinner adds the excitement of a real game show to any gathering.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The visual drama of the wheel slowing down — pointer clicking through segments — builds anticipation that no app or card game can match. That moment of uncertainty before the wheel stops is what makes it memorable.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
+            { href: "/random-number-generator", label: "Random Number Generator", desc: "Pick a random number from any range instantly." },
+            { href: "/party-wheel", label: "Party Wheel", desc: "Pre-loaded with party games and activities." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

@@ -1,0 +1,198 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Date Night Spinner — What Should We Do Tonight?";
+const description = "Stuck in a routine? Spin the date night wheel for a random activity idea. Pre-loaded with 10 ideas from cozy to adventurous.";
+const canonical = "/templates/date-night-wheel";
+
+const faqItems = [
+  {
+    question: "What if we spin and neither of us is excited?",
+    answer: "Allow one re-spin per month. But try the original result first — you're often more excited once you commit to the plan.",
+  },
+  {
+    question: "Can we add our own ideas?",
+    answer: "Yes — replace any defaults with ideas specific to your city, budget, or interests. Personal touches make it more fun.",
+  },
+  {
+    question: "What if the activity requires advance planning?",
+    answer: "Spin a week ahead if needed. Or have 'instant' and 'planned' wheels — spin the instant one for tonight, spin the planned one for a future special evening.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Cook together", weight: 1 },
+  { pseudo: "Restaurant", weight: 1 },
+  { pseudo: "Movie night", weight: 1 },
+  { pseudo: "Game night", weight: 1 },
+  { pseudo: "Stargazing", weight: 1 },
+  { pseudo: "DIY spa", weight: 1 },
+  { pseudo: "Picnic", weight: 1 },
+  { pseudo: "Bowling", weight: 1 },
+  { pseudo: "Art class", weight: 1 },
+  { pseudo: "Road trip", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/date-night-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Date Night Wheel", url: "https://realwheelpicker.com/templates/date-night-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Date Night Wheel</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Date Night Spinner — What Should We Do Tonight?
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Stuck in a routine? Spin the wheel for a random date night idea. Pre-loaded with 10 activities from cozy to adventurous.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Breaking Out of the Routine</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Most couples default to the same 3 activities: restaurant, movie, stay home. Not because they're out of ideas, but because planning feels like work at the end of a long day. The date night wheel makes a decision for you in 3 seconds.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">How It Works</h2>
+          <ol class="space-y-2 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold">1.</span><span>Each person adds 5 ideas they genuinely want to do.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">2.</span><span>Put all ideas on the wheel.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">3.</span><span>Spin. Commit to whatever it lands on, even if it's not your first choice.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">4.</span><span>The surprise is part of the fun.</span></li>
+          </ol>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Categories of Date Ideas</h2>
+          <div class="space-y-3">
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Cozy</p>
+              <p class="text-muted-foreground text-sm">Cook a new recipe together, board game night, movie marathon with themed snacks, puzzle night.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Active</p>
+              <p class="text-muted-foreground text-sm">Hiking, rock climbing gym, kayaking, dancing class, mini golf.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Creative</p>
+              <p class="text-muted-foreground text-sm">Pottery class, paint night, cooking class, escape room, improv show.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Spontaneous</p>
+              <p class="text-muted-foreground text-sm">Drive somewhere random, try a restaurant in a new neighborhood, visit a museum you've never been to.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Free / Cheap</p>
+              <p class="text-muted-foreground text-sm">Stargazing, picnic in the park, free outdoor concert, library book exchange.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Monthly Date Jar Alternative</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Write 20 date ideas on slips of paper. Put in a jar. Draw one each week. The wheel is the digital version of this classic system — easier to customize and always available.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Making It Special</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Whatever the wheel picks, commit fully. If it says "DIY spa," actually set it up properly — candles, music, face masks. If it says "bowling," make it a competition with a prize for the winner. Half-hearted execution kills any date idea.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random name from your list without the wheel animation." },
+            { href: "/party-wheel", label: "Party Wheel", desc: "Pre-loaded with party game ideas for your next gathering." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

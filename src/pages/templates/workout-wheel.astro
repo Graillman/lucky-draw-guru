@@ -1,0 +1,192 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Workout Spinner Wheel — Random Exercise Generator";
+const description = "Spin for your next exercise. Pre-loaded with 12 bodyweight workouts. Build random circuits that keep your training unpredictable and effective.";
+const canonical = "/templates/workout-wheel";
+
+const faqItems = [
+  {
+    question: "How many exercises should I put on the wheel?",
+    answer: "8-12 exercises is ideal for variety. Too few and you'll repeat too often; too many and some exercises won't appear in a single circuit.",
+  },
+  {
+    question: "Can I use this for stretching too?",
+    answer: "Yes. Create a 'cool-down wheel' with stretches — hamstring stretch, hip flexor, shoulder roll, etc. Spin for your post-workout stretch routine.",
+  },
+  {
+    question: "What if I spin the same exercise twice in a row?",
+    answer: "Do it again — it's random, and sometimes your body needs the extra reps. Or set a rule: remove each exercise after it's spun once per circuit.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Push-ups", weight: 1 },
+  { pseudo: "Squats", weight: 1 },
+  { pseudo: "Lunges", weight: 1 },
+  { pseudo: "Plank 30s", weight: 1 },
+  { pseudo: "Burpees", weight: 1 },
+  { pseudo: "Mountain Climbers", weight: 1 },
+  { pseudo: "Jumping Jacks", weight: 1 },
+  { pseudo: "High Knees", weight: 1 },
+  { pseudo: "Tricep Dips", weight: 1 },
+  { pseudo: "Crunches", weight: 1 },
+  { pseudo: "Wall Sit 30s", weight: 1 },
+  { pseudo: "Jump Squats", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/workout-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Workout Wheel", url: "https://realwheelpicker.com/templates/workout-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Workout Wheel</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Workout Spinner Wheel — Random Exercise Generator
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Spin for your next exercise. Build unpredictable circuits that challenge your body every session. No planning required.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Random Workouts Work Better</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Your body adapts to predictable exercise routines within 4-6 weeks. Adaptation is the enemy of progress. A random workout wheel breaks adaptation cycles by ensuring your muscles never know what's coming next.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The unpredictability also fights workout boredom — one of the top reasons people quit exercise programs. When each circuit is different, you stay engaged. You can't go on autopilot if you don't know what exercise is next.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Build a Random Circuit</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Spin for an exercise, do 10-15 reps (or 30 seconds for timed exercises), rest 30 seconds, then spin again. Five to eight spins equals one complete circuit. Complete three circuits for a full workout. No planning required, no repeating the same sequence every session.
+          </p>
+          <div class="p-4 rounded-lg bg-primary/5 border border-primary/20 space-y-2">
+            <p class="font-semibold text-foreground text-sm">AMRAP Mode</p>
+            <p class="text-muted-foreground text-sm">Set a 20-minute timer. Spin. Do the exercise for 30 seconds. Spin again immediately. Keep going until the timer ends. Count your total rounds. Try to beat your score next session.</p>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Customize Your Wheel</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Replace the default exercises with options matched to your fitness level and goals:
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 rounded-lg bg-card border border-border">
+              <p class="font-semibold text-foreground text-sm mb-2">Beginner</p>
+              <p class="text-muted-foreground text-sm">Remove burpees and jump squats, add walk-in-place and knee push-ups.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-card border border-border">
+              <p class="font-semibold text-foreground text-sm mb-2">Advanced</p>
+              <p class="text-muted-foreground text-sm">Add pull-ups, pike push-ups, pistol squats, plyometric lunges.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-card border border-border">
+              <p class="font-semibold text-foreground text-sm mb-2">Upper body focus</p>
+              <p class="text-muted-foreground text-sm">Push-ups, tricep dips, shoulder taps, arm circles, commando planks.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-card border border-border">
+              <p class="font-semibold text-foreground text-sm mb-2">Core focus</p>
+              <p class="text-muted-foreground text-sm">Crunches, planks, bicycle kicks, leg raises, Russian twists.</p>
+            </div>
+          </div>
+          <p class="text-muted-foreground leading-relaxed">
+            You can also create theme-based wheels: a "hotel room workout" with no-equipment moves, or a "5-minute break" wheel with light stretches you can do at your desk. The wheel works for any category of movement you put in it.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random name from your list without the wheel animation." },
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Run transparent prize draws for contests and promotions." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

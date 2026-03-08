@@ -1,0 +1,191 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Random Letter Wheel — Alphabet Spinner A to Z";
+const description = "Spin to pick a random letter. For Scattergories, word games, name games, and classroom activities. Instant, free.";
+const canonical = "/templates/alphabet-wheel";
+
+const faqItems = [
+  {
+    question: "Does the wheel have all 26 letters?",
+    answer: "Yes — A through Z, all equally weighted.",
+  },
+  {
+    question: "Can I remove vowels for harder games?",
+    answer: "Customize the wheel to remove A, E, I, O, U for a consonants-only challenge.",
+  },
+  {
+    question: "What's the best use for this in class?",
+    answer: "Scattergories-style games where students race to list words by category starting with the spun letter. Works for any age group.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "A", weight: 1 },
+  { pseudo: "B", weight: 1 },
+  { pseudo: "C", weight: 1 },
+  { pseudo: "D", weight: 1 },
+  { pseudo: "E", weight: 1 },
+  { pseudo: "F", weight: 1 },
+  { pseudo: "G", weight: 1 },
+  { pseudo: "H", weight: 1 },
+  { pseudo: "I", weight: 1 },
+  { pseudo: "J", weight: 1 },
+  { pseudo: "K", weight: 1 },
+  { pseudo: "L", weight: 1 },
+  { pseudo: "M", weight: 1 },
+  { pseudo: "N", weight: 1 },
+  { pseudo: "O", weight: 1 },
+  { pseudo: "P", weight: 1 },
+  { pseudo: "Q", weight: 1 },
+  { pseudo: "R", weight: 1 },
+  { pseudo: "S", weight: 1 },
+  { pseudo: "T", weight: 1 },
+  { pseudo: "U", weight: 1 },
+  { pseudo: "V", weight: 1 },
+  { pseudo: "W", weight: 1 },
+  { pseudo: "X", weight: 1 },
+  { pseudo: "Y", weight: 1 },
+  { pseudo: "Z", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/alphabet-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Alphabet Wheel", url: "https://realwheelpicker.com/templates/alphabet-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Alphabet Wheel</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Random Letter Wheel — Alphabet Spinner A to Z
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Spin to pick a random letter from A to Z. Perfect for Scattergories, word games, name games, and classroom activities.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Games That Use Random Letters</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            <span class="font-semibold text-foreground">Scattergories:</span> Spin for the letter, then race to fill categories (animal, city, food, etc.) starting with that letter. First person to complete all categories with that letter wins the round.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            <span class="font-semibold text-foreground">Name Game:</span> Spin for a letter. Everyone must say a name (person, place, or thing) starting with that letter within 5 seconds. Miss it and you're out.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            <span class="font-semibold text-foreground">Word Builder:</span> Each player spins 5 times. Use the letters you land on to build the longest possible word. Letters can be rearranged freely.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">For Teachers</h2>
+          <div class="space-y-3">
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Vocabulary practice</p>
+              <p class="text-muted-foreground text-sm">Spin for a letter, students must write 5 words starting with that letter in 60 seconds.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Phonics (kids)</p>
+              <p class="text-muted-foreground text-sm">Spin for a letter, students say a word and the sound the letter makes.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Spelling bee</p>
+              <p class="text-muted-foreground text-sm">Spin to pick the starting letter, then give a word starting with that letter.</p>
+            </div>
+          </div>
+          <p class="text-muted-foreground leading-relaxed">
+            The visual format of a spinning wheel keeps student attention far better than a random number generator or simply calling out letters. The anticipation of where it lands creates natural engagement without additional effort from the teacher.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/classroom-picker", label: "Classroom Picker", desc: "Pick a random student or group for classroom activities." },
+            { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
+            { href: "/templates/number-wheel-1-10", label: "Number Wheel 1-10", desc: "Spin to pick a random number from 1 to 10." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

@@ -1,0 +1,200 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Random Country Generator — Spin the World Wheel";
+const description = "Spin to pick a random country. Perfect for geography games, travel planning, and education. 195 countries or customize your own list.";
+const canonical = "/templates/random-country-wheel";
+
+const faqItems = [
+  {
+    question: "Does this wheel have all 195 countries?",
+    answer: "The default wheel has 12 popular countries. You can customize it with any countries you want — just edit the list.",
+  },
+  {
+    question: "Can I use this for a geography quiz?",
+    answer: "Yes. Spin the wheel, then challenge participants to identify the country's capital, flag, or location on a map.",
+  },
+  {
+    question: "How do I add more countries?",
+    answer: "Clear the current list and paste your own. You can add all 195 countries for a truly global wheel.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Japan", weight: 1 },
+  { pseudo: "Brazil", weight: 1 },
+  { pseudo: "France", weight: 1 },
+  { pseudo: "Australia", weight: 1 },
+  { pseudo: "Egypt", weight: 1 },
+  { pseudo: "Canada", weight: 1 },
+  { pseudo: "Mexico", weight: 1 },
+  { pseudo: "India", weight: 1 },
+  { pseudo: "Italy", weight: 1 },
+  { pseudo: "South Korea", weight: 1 },
+  { pseudo: "Norway", weight: 1 },
+  { pseudo: "Peru", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/random-country-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Random Country Wheel", url: "https://realwheelpicker.com/templates/random-country-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Random Country Wheel</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Random Country Generator — Spin the World Wheel
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Spin to pick a random country. Great for geography games, travel planning, cooking challenges, and classroom activities.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Uses for the Random Country Wheel</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Geography quiz host? Use the wheel to pick the next country to identify. Homeschool teacher? Spin to choose which country your students research this week. Adventurous cook? Spin the wheel and cook a dish from whatever country it lands on — a fun way to explore world cuisines every week without having to make the choice yourself.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The randomness is the feature: when the wheel picks for you, you're pushed toward countries you wouldn't have chosen on your own. That's the point. Every spin is a small adventure.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Country Cuisine Challenge</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Pick a country each week and cook one dish from that country. Japan means sushi or ramen. Brazil means feijoada. Egypt means koshari or ful medames. India means dahl or biryani. This challenge has become popular on food blogs and family YouTube channels as a way to explore global cooking without leaving home.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The wheel removes the selection paralysis. Instead of debating which cuisine to try this week, you spin. Whatever lands, you research one dish from that country and cook it before the next spin. Over a year, you'll have explored 52 countries through their food.
+          </p>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {[
+              { country: "Japan", dish: "Ramen or sushi" },
+              { country: "Mexico", dish: "Enchiladas" },
+              { country: "India", dish: "Biryani" },
+              { country: "France", dish: "Ratatouille" },
+              { country: "Peru", dish: "Ceviche" },
+              { country: "South Korea", dish: "Bibimbap" },
+              { country: "Egypt", dish: "Koshari" },
+              { country: "Norway", dish: "Gravlax" },
+            ].map(({ country, dish }) => (
+              <div class="p-3 rounded-lg bg-primary/5 border border-primary/20 text-center">
+                <p class="font-semibold text-foreground text-sm">{country}</p>
+                <p class="text-muted-foreground text-xs mt-1">{dish}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">For Travelers and Bucket List Builders</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Can't decide where to travel next? Put your shortlist on the wheel and spin. No more analysis paralysis between five equally appealing destinations. The wheel commits. You book. Many travelers report this method being surprisingly satisfying — the anticipation of the spin builds excitement for whatever destination wins.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            For bucket list builders, spin the full world wheel and add wherever it lands to your list. Replace the default countries with all 195 to get a truly global random destination generator. You might discover a country you'd never have considered that ends up being the best trip you ever take.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">In the Classroom</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Geography teachers use random country wheels to keep lessons unpredictable. Spin for the country you'll study today. Spin for the country students present their research on. Spin to choose which team gets which country in a global competition simulation.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The random selection removes any perception of favoritism in assignment — nobody chose the difficult country deliberately. It also naturally distributes attention across the world rather than gravitating toward the same well-known nations. Students who research less-covered countries often produce more original and interesting work.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random name from your list without the wheel animation." },
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Run transparent prize draws for contests and promotions." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

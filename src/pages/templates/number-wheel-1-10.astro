@@ -1,0 +1,178 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Number Wheel 1 to 10 — Random Number Spinner";
+const description = "Spin to pick a random number from 1 to 10. For games, guessing contests, and classroom activities. Instant, free.";
+const canonical = "/templates/number-wheel-1-10";
+
+const faqItems = [
+  {
+    question: "Is this truly random?",
+    answer: "Yes — uses cryptographic randomness via the Web Crypto API. Each spin is independent and cannot be predicted.",
+  },
+  {
+    question: "Can I change the range to 1-100?",
+    answer: "You can add any numbers. For large ranges, the random number generator (/random-number-generator) may be more convenient.",
+  },
+  {
+    question: "What's the difference between this and dice?",
+    answer: "A 10-sided wheel lets you add, remove, or customize values. A standard die is fixed. The wheel is more flexible.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "1", weight: 1 },
+  { pseudo: "2", weight: 1 },
+  { pseudo: "3", weight: 1 },
+  { pseudo: "4", weight: 1 },
+  { pseudo: "5", weight: 1 },
+  { pseudo: "6", weight: 1 },
+  { pseudo: "7", weight: 1 },
+  { pseudo: "8", weight: 1 },
+  { pseudo: "9", weight: 1 },
+  { pseudo: "10", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/number-wheel-1-10",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Number Wheel 1-10", url: "https://realwheelpicker.com/templates/number-wheel-1-10" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Number Wheel 1-10</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Number Wheel 1 to 10 — Random Number Spinner
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Spin to pick a random number from 1 to 10. For games, guessing contests, and classroom activities.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Uses for the 1-10 Number Wheel</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            <span class="font-semibold text-foreground">Guessing game:</span> Think of a number 1-10. Someone spins. If the wheel matches, they win. Simple, fast, endlessly repeatable.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            <span class="font-semibold text-foreground">Classroom:</span> Use for random student selection (assign each student a number), random problem selection on a worksheet, or random group assignment.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            <span class="font-semibold text-foreground">Decision making:</span> Can't choose between options? Number them 1-10. Spin. Done.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Scaling Up or Down</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Need 1-6 for dice simulation? Remove numbers 7-10. Need 1-20? Add numbers 11-20. The wheel adapts to whatever range you need.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            For custom probability, use the weighted picker instead — assign higher weights to numbers you want to appear more often. For completely standard equal-probability ranges, this wheel is faster to set up.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Party Games</h2>
+          <div class="space-y-3">
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">The Price Is Right style</p>
+              <p class="text-muted-foreground text-sm">Pick a number, then reveal the answer. Closest to the actual number without going over wins.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Hot or cold</p>
+              <p class="text-muted-foreground text-sm">One person thinks of a number. Others guess. Wheel picks the next guesser.</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/random-number-generator", label: "Random Number Generator", desc: "Pick any number from any range — no wheel needed." },
+            { href: "/weighted-random-picker", label: "Weighted Picker", desc: "Assign different probabilities to each number." },
+            { href: "/templates/alphabet-wheel", label: "Alphabet Wheel", desc: "Spin to pick a random letter A-Z." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

@@ -1,0 +1,195 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Drinking Game Wheel — Free Party Spinner (21+)";
+const description = "Spin for drinking game challenges. Pre-loaded with 8 classic party prompts for adults 21+. The wheel picks, you drink.";
+const canonical = "/templates/drinking-game-wheel";
+
+const faqItems = [
+  {
+    question: "Can I customize the games?",
+    answer: "Yes — remove any game you don't know the rules for and add your favorites. You can also add 'Drink 2' or 'Skip Turn' as wheel options.",
+  },
+  {
+    question: "What's the ideal number of players?",
+    answer: "4-8 players is the sweet spot. Fewer than 4 makes some games awkward; more than 10 makes rounds too long.",
+  },
+  {
+    question: "Can this be used without alcohol?",
+    answer: "Absolutely. Replace drinking with push-ups, telling a joke, or any other light penalty. Makes it great for teens or sober party nights too.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Waterfall", weight: 1 },
+  { pseudo: "Never Have I Ever", weight: 1 },
+  { pseudo: "Categories", weight: 1 },
+  { pseudo: "Rhyme Time", weight: 1 },
+  { pseudo: "Most Likely To", weight: 1 },
+  { pseudo: "Kings Rule", weight: 1 },
+  { pseudo: "Truth or Drink", weight: 1 },
+  { pseudo: "Two Truths One Lie", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/drinking-game-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Drinking Game Wheel", url: "https://realwheelpicker.com/templates/drinking-game-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Drinking Game Wheel</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Drinking Game Wheel — Free Party Spinner (21+)
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Spin the wheel and let it pick your next drinking game. Pre-loaded with 8 classics. For responsible adults 21+ only.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Drinking Game Rules Made Easy</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            The hardest part of any drinking game night isn't the drinking — it's agreeing on which game to play. The drinking game wheel solves that instantly. Spin, play the game it lands on, drink appropriately. Rotate after each round.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Classic Games Explained</h2>
+          <div class="space-y-3">
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Waterfall</p>
+              <p class="text-muted-foreground text-sm">Everyone drinks at the same time. The person who spun stops when they want. The next person can't stop until they do, and so on around the circle.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Never Have I Ever</p>
+              <p class="text-muted-foreground text-sm">Person who spun says "Never have I ever [something]." Everyone who HAS done it drinks.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Categories</p>
+              <p class="text-muted-foreground text-sm">Pick a category (car brands, countries, etc.). Go around the circle naming items. First person who can't name one drinks.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Rhyme Time</p>
+              <p class="text-muted-foreground text-sm">Person who spun says a word. Go around the circle rhyming words. First person to fail or repeat drinks.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Most Likely To</p>
+              <p class="text-muted-foreground text-sm">Person who spun asks "Who's most likely to [something]?" Everyone points at someone. Most pointed-at person drinks.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Two Truths One Lie</p>
+              <p class="text-muted-foreground text-sm">Tell two truths and one lie. Others guess the lie. Wrong guessers drink.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">House Rules</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Set clear rules before starting: What counts as a "drink"? Is there a maximum? What's the "pass" penalty? House rules prevent arguments and make the game run smoother.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Safety First</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Always have non-alcoholic alternatives available. Never pressure anyone to drink. Have a designated driver or ride-share plan ready. This wheel is for responsible adult fun only.
+          </p>
+          <ul class="space-y-2 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Keep non-alcoholic drinks on hand for anyone who wants to participate without alcohol.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Pace yourself — the wheel picks the game, not the intensity.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Plan your ride home before the night starts. Never drink and drive.</span></li>
+          </ul>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random name from your list without the wheel animation." },
+            { href: "/party-wheel", label: "Party Wheel", desc: "Pre-loaded with party game ideas for your next gathering." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

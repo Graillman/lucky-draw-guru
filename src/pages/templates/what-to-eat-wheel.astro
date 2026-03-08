@@ -1,0 +1,215 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "What Should I Eat? — Food Spinner Wheel | Decide Now";
+const description = "Can't decide what to eat? Spin the food wheel. Pre-loaded with 12 meal ideas for lunch, dinner, and takeout. End the debate instantly.";
+const canonical = "/templates/what-to-eat-wheel";
+
+const faqItems = [
+  {
+    question: "What if I don't like what it lands on?",
+    answer: "That's the point — commit before you spin. But if you genuinely can't (allergies, ingredients not available), one re-spin is allowed.",
+  },
+  {
+    question: "Can I add restaurants instead of cuisines?",
+    answer: "Absolutely. Replace the food types with your local restaurant names for a 'where should we eat' wheel.",
+  },
+  {
+    question: "Is there a healthy eating mode?",
+    answer: "Customize the wheel with only healthy options. Remove fast food, add vegetables. The wheel doesn't judge your choices.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Pizza", weight: 1 },
+  { pseudo: "Sushi", weight: 1 },
+  { pseudo: "Burgers", weight: 1 },
+  { pseudo: "Tacos", weight: 1 },
+  { pseudo: "Pasta", weight: 1 },
+  { pseudo: "Indian Curry", weight: 1 },
+  { pseudo: "Thai Food", weight: 1 },
+  { pseudo: "Chinese Takeout", weight: 1 },
+  { pseudo: "Salad", weight: 1 },
+  { pseudo: "Sandwich", weight: 1 },
+  { pseudo: "Ramen", weight: 1 },
+  { pseudo: "Mediterranean", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/what-to-eat-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "What to Eat Wheel", url: "https://realwheelpicker.com/templates/what-to-eat-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">What to Eat Wheel</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          What Should I Eat? — Food Spinner Wheel
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          End the meal debate in 3 seconds. Spin the food wheel and commit to the result. No more scrolling delivery apps.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Stop Scrolling Delivery Apps — Let the Wheel Decide</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            The average person spends 11 minutes deciding what to eat every single meal. That's over 200 hours per year staring at Uber Eats, DoorDash, or an open fridge. The food wheel ends the cycle in 3 seconds.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The problem isn't indecision — it's the paradox of choice. When every option is equally available, the brain stalls. A spinning wheel short-circuits the comparison loop by making the decision external. You're not choosing; you're accepting the result of a fair random process. It's surprisingly satisfying.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            Spin the wheel, look at where it lands, and notice your gut reaction. If you feel relief, great — that's dinner. If you feel a flash of disappointment, that tells you something too: you already knew what you wanted. Either way, the wheel gets you to an answer faster than any app.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Use the Food Wheel</h2>
+          <div class="space-y-4">
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">For solo decisions</p>
+              <p class="text-muted-foreground text-sm">Spin and commit. No re-spins. Whatever it lands on, that's dinner. The re-spin loophole defeats the purpose — if you're going to re-spin until you get what you wanted, you already knew what you wanted.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">For couples</p>
+              <p class="text-muted-foreground text-sm">Each person gets one veto per week. Spin the wheel. If neither vetoes, that's the answer. This prevents the infinite "I don't know, what do you want?" loop that wastes more time than the meal itself takes to cook.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">For groups</p>
+              <p class="text-muted-foreground text-sm">Everyone adds one suggestion to the wheel. Spin to decide. No arguments — everyone had input, the wheel had the final say. This scales to any group size.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Customize by Meal Type</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            The default wheel covers popular cuisines. Replace or supplement with options suited to your situation:
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 rounded-lg bg-card border border-border">
+              <p class="font-semibold text-foreground text-sm mb-2">Quick lunch</p>
+              <p class="text-muted-foreground text-sm">Sandwich, Leftover, Wrap, Soup, Grain Bowl, Smoothie</p>
+            </div>
+            <div class="p-4 rounded-lg bg-card border border-border">
+              <p class="font-semibold text-foreground text-sm mb-2">Date night</p>
+              <p class="text-muted-foreground text-sm">Italian, Japanese, Steakhouse, French, Seafood, Tapas</p>
+            </div>
+            <div class="p-4 rounded-lg bg-card border border-border">
+              <p class="font-semibold text-foreground text-sm mb-2">Budget meals</p>
+              <p class="text-muted-foreground text-sm">Rice & Beans, Pasta, Stir-fry, Omelette, Quesadilla, Soup</p>
+            </div>
+            <div class="p-4 rounded-lg bg-card border border-border">
+              <p class="font-semibold text-foreground text-sm mb-2">Healthy options</p>
+              <p class="text-muted-foreground text-sm">Poke Bowl, Salad, Grilled Chicken, Sushi, Buddha Bowl, Fish</p>
+            </div>
+          </div>
+          <p class="text-muted-foreground leading-relaxed">
+            Clear the default list and paste your own options. If you order from specific restaurants regularly, replace cuisine types with restaurant names. "Thai Food" becomes "Lotus Garden" or whatever your local spot is called.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Psychology of Food Decisions</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Decision fatigue is real. By the end of the day, your brain has made thousands of micro-decisions and it's exhausted. Outsourcing one decision to a random wheel isn't lazy — it's efficient.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            Research from Cornell University found that people make an average of 226 food-related decisions daily. Reducing even a few per meal creates measurable cognitive relief. The food wheel removes one decision from the stack entirely. What you eat tonight is no longer a question — it's a spin.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            There's also an element of novelty: when the wheel lands on something you wouldn't have chosen yourself, you often discover you enjoy it more than expected. Removing your own bias from the selection process occasionally leads you somewhere better.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random name from your list without the wheel animation." },
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Run transparent prize draws for contests and promotions." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

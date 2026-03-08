@@ -1,0 +1,191 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Icebreaker Wheel — Random Questions for Teams & Groups";
+const description = "Spin for icebreaker questions at meetings, team retreats, and classes. Break the awkward silence with random conversation starters.";
+const canonical = "/templates/icebreaker-wheel";
+
+const faqItems = [
+  {
+    question: "How many icebreaker questions should I use?",
+    answer: "10-20 is ideal. Fewer than 8 and you'll repeat questions quickly; more than 25 and you'll never use most of them.",
+  },
+  {
+    question: "Can I use this for recurring weekly meetings?",
+    answer: "Yes — the random spin means you'll rarely get the same question twice. Just add more questions over time.",
+  },
+  {
+    question: "What if someone doesn't want to answer?",
+    answer: "Always allow a pass. Forced sharing creates the opposite of psychological safety. Let people skip without comment.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Hidden talent?", weight: 1 },
+  { pseudo: "Best vacation?", weight: 1 },
+  { pseudo: "First job?", weight: 1 },
+  { pseudo: "Unpopular opinion?", weight: 1 },
+  { pseudo: "Childhood dream?", weight: 1 },
+  { pseudo: "Guilty pleasure?", weight: 1 },
+  { pseudo: "Fun fact about you?", weight: 1 },
+  { pseudo: "Favorite tradition?", weight: 1 },
+  { pseudo: "Most used app?", weight: 1 },
+  { pseudo: "Dream dinner guest?", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/icebreaker-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Icebreaker Wheel", url: "https://realwheelpicker.com/templates/icebreaker-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Icebreaker Wheel</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Icebreaker Wheel — Random Questions for Teams &amp; Groups
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Spin for a random icebreaker question. Perfect for meetings, team retreats, and classrooms. Pre-loaded with 10 conversation starters.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Icebreakers Fail (And How the Wheel Fixes It)</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Traditional icebreakers fail because they're predictable and awkward. "Tell us your name and one interesting fact" produces boring answers because people freeze under pressure. A random wheel removes the paralysis — there's no decision to make, just a question to answer.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Perfect for Remote Teams</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Start every Zoom meeting with one wheel spin. Whoever answers goes next. 3 minutes of random conversation before the agenda starts makes the whole meeting more human and productive. Teams that know each other have better collaborative outcomes.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">For Classroom Settings</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Spin at the start of class to warm up discussions. Students who might never volunteer suddenly participate because the question is clearly random, not a test. Great for the first week of school or whenever a class needs energy.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Customize by Context</h2>
+          <div class="space-y-3">
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Professional setting</p>
+              <p class="text-muted-foreground text-sm">Keep it work-appropriate — favorite project, dream collaboration, best career lesson.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Social setting</p>
+              <p class="text-muted-foreground text-sm">Get personal — embarrassing story, bucket list item, irrational fear.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Kids / students</p>
+              <p class="text-muted-foreground text-sm">Keep it fun — favorite superhero, best school memory, dream job.</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Creative teams</p>
+              <p class="text-muted-foreground text-sm">Add creative prompts — if you were a color, if your life was a movie genre, dream project you'd work on.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Follow-Up Rule</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            The best icebreakers lead to conversations, not monologues. After each answer, allow one follow-up question from the group. This turns a 30-second answer into a 2-minute connection.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random name from your list without the wheel animation." },
+            { href: "/party-wheel", label: "Party Wheel", desc: "Pre-loaded with party game ideas for your next gathering." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>
