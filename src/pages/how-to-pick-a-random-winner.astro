@@ -1,0 +1,319 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+import SchemaHowTo from '@/components/SchemaHowTo.astro';
+
+const title = "How to Pick a Random Winner — Fair Selection Guide (2026)";
+const description = "Step-by-step guide to picking contest and giveaway winners fairly. Methods, tools, and legal tips for transparent random selection.";
+
+const howToSteps = [
+  {
+    name: "Collect participant names",
+    text: "Export or compile all eligible participant names from your contest, class roster, or event registration. Remove duplicates and verify eligibility before the draw.",
+  },
+  {
+    name: "Choose your selection method",
+    text: "Use a spinner wheel for visual transparency, a random number generator for simplicity, or a shuffle algorithm for multiple winners. Visual methods are best for audience trust.",
+  },
+  {
+    name: "Use a cryptographically secure tool",
+    text: "Open RealWheelPicker.com and paste your list. The tool uses crypto.getRandomValues() for genuine randomness — the same standard used in SSL encryption and password generation.",
+  },
+  {
+    name: "Record the selection process",
+    text: "Screen-record the wheel spin to create verifiable proof of fair selection. Share this recording with your audience immediately after the draw.",
+  },
+  {
+    name: "Announce and document the result",
+    text: "Share the recording publicly, notify the winner via direct message, and set a claim deadline (usually 24-48 hours). If the winner doesn't respond, spin again.",
+  },
+];
+
+const faqItems = [
+  {
+    question: "What's the fairest way to pick a random winner?",
+    answer: "Use a cryptographically secure spinner wheel and record the process. Tools like RealWheelPicker use crypto.getRandomValues() — the same randomness standard used in encryption — making manipulation impossible. Recording the spin provides public proof.",
+  },
+  {
+    question: "Can I pick a winner from Instagram comments manually?",
+    answer: "Technically yes, but it opens you to accusations of bias. A visible wheel spin with everyone's name is far more credible. Copy commenter usernames, paste them into a wheel picker, and spin live or record it.",
+  },
+  {
+    question: "How do I pick multiple winners fairly?",
+    answer: "Either spin multiple times (removing each winner before the next spin) or use a shuffle algorithm that randomizes the entire list at once. Both methods are fair — the shuffle is faster for 5+ winners.",
+  },
+  {
+    question: "Do I need to verify winner eligibility before or after the draw?",
+    answer: "Before is better. Pre-screen your entry list to remove ineligible participants (duplicate accounts, accounts created after the contest started, etc.) before the public draw. This avoids awkward eligibility disputes after announcing a winner.",
+  },
+  {
+    question: "What if someone accuses me of rigging the draw?",
+    answer: "Your screen recording is your defense. A live or recorded wheel spin with all names visible is essentially irrefutable. Share the recording publicly. If you used a verifiable tool with a public audit trail, there's nothing to hide.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/how-to-pick-a-random-winner",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Real Wheel Picker",
+    "url": "https://realwheelpicker.com",
+  },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/how-to-pick-a-random-winner"
+  jsonLd={jsonLd}
+>
+  <SchemaHowTo
+    name="How to Pick a Random Winner Fairly"
+    description="A step-by-step guide to selecting contest and giveaway winners fairly using cryptographically secure tools."
+    steps={howToSteps}
+  />
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "How to Pick a Random Winner", url: "https://realwheelpicker.com/how-to-pick-a-random-winner" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">How to Pick a Random Winner</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          How to Pick a Random Winner Fairly (2026 Guide)
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          A practical, step-by-step guide to selecting contest and giveaway winners in a way your audience will trust — with the right tools, methods, and legal documentation.
+        </p>
+        <p class="text-sm text-muted-foreground">Free tool included • No signup • Cryptographically fair</p>
+      </section>
+
+      <!-- HowTo Steps -->
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">5 Steps to Pick a Winner Fairly</h2>
+        <ol class="space-y-5">
+          {howToSteps.map((step, i) => (
+            <li class="flex gap-4">
+              <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center mt-0.5">{i + 1}</span>
+              <div class="space-y-1">
+                <p class="font-semibold text-foreground">{step.name}</p>
+                <p class="text-muted-foreground text-sm leading-relaxed">{step.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <!-- Interactive tool -->
+      <SEOPageIsland slug="how-to-pick-a-random-winner" client:load />
+
+      <!-- Why Fair Winner Selection Matters -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Fair Winner Selection Matters</h2>
+        <div class="space-y-4 text-muted-foreground leading-relaxed">
+          <p>
+            When you run a contest or giveaway, your audience trusts you to pick the winner fairly. A perceived rigged draw can destroy months of community building overnight. Courts in some jurisdictions treat online contests as regulated promotions — using a verifiable random tool isn't just ethical, it may be legally required.
+          </p>
+          <p>
+            The difference between "I picked someone I liked" and "the wheel chose at random with 847 people watching" is enormous for your credibility.
+          </p>
+        </div>
+      </section>
+
+      <!-- 3 Methods -->
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">3 Methods to Pick a Random Winner</h2>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Method 1: Spinner Wheel <span class="text-sm font-normal text-primary">(Best for Transparency)</span></h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            A spinning wheel with visible segments is the gold standard for audience trust. Everyone can see every participant's name. The spin is visible. The result is instant and undeniable. Record the spin and post it — this is proof that can't be questioned.
+          </p>
+          <p class="text-sm text-muted-foreground">
+            <strong class="text-foreground">Best for:</strong> Social media giveaways, live streams, classroom draws.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Method 2: Random Number Generator</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Assign each participant a number, then generate a random number between 1 and the total count. Simple, fast, and explainable. Less visually engaging than a wheel but perfectly fair.
+          </p>
+          <p class="text-sm text-muted-foreground">
+            <strong class="text-foreground">Best for:</strong> Large lists (1000+ entries), technical audiences.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Method 3: Shuffle Algorithm</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            For multiple winners, shuffle the entire list and take the top N entries. Every permutation is equally likely. Better than drawing one at a time for large prize pools.
+          </p>
+          <p class="text-sm text-muted-foreground">
+            <strong class="text-foreground">Best for:</strong> Selecting 5, 10, or 50+ winners from a large pool.
+          </p>
+        </div>
+      </section>
+
+      <!-- What Makes Random Selection Truly Fair -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">What Makes a Random Selection Truly Fair?</h2>
+        <div class="space-y-4 text-muted-foreground leading-relaxed">
+          <p>Not all "random" tools are equal. The key question is: what's the source of randomness?</p>
+        </div>
+        <div class="space-y-3">
+          <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+            <p class="font-semibold text-foreground flex items-center gap-2">
+              <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">Math.random()</code>
+              <span class="text-xs font-normal text-yellow-500 bg-yellow-500/10 px-2 py-0.5 rounded-full">Pseudo-random</span>
+            </p>
+            <p class="text-sm text-muted-foreground leading-relaxed">
+              The sequence is deterministic if you know the seed. Technically gameable by someone with access to the initial state.
+            </p>
+          </div>
+          <div class="p-5 rounded-xl border bg-card border-primary/30 space-y-2">
+            <p class="font-semibold text-foreground flex items-center gap-2">
+              <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">crypto.getRandomValues()</code>
+              <span class="text-xs font-normal text-green-500 bg-green-500/10 px-2 py-0.5 rounded-full">Cryptographically secure</span>
+            </p>
+            <p class="text-sm text-muted-foreground leading-relaxed">
+              Based on system entropy (hardware randomness). Cannot be predicted or manipulated. The same standard used in banking encryption and password managers.
+            </p>
+          </div>
+        </div>
+        <p class="text-muted-foreground leading-relaxed text-sm">
+          RealWheelPicker uses <code class="bg-muted px-1 rounded text-sm font-mono">crypto.getRandomValues()</code> exclusively. When you spin, even we can't predict the result.
+        </p>
+      </section>
+
+      <!-- Legal Considerations -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Legal Considerations for Contest Winner Selection</h2>
+        <div class="space-y-4 text-muted-foreground leading-relaxed">
+          <p>
+            In many countries, giveaways with purchase requirements are legally considered lotteries and require permits. Free-to-enter contests avoid this, but documentation of fair selection is still important.
+          </p>
+        </div>
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <p class="font-semibold text-foreground">Minimum documentation you should keep:</p>
+          <ul class="space-y-2 text-sm text-muted-foreground">
+            <li class="flex gap-3">
+              <span class="text-primary font-bold mt-0.5">•</span>
+              <span>A record of all entries received</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-primary font-bold mt-0.5">•</span>
+              <span>Documentation of the random selection method used</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-primary font-bold mt-0.5">•</span>
+              <span>The screen recording of the draw</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-primary font-bold mt-0.5">•</span>
+              <span>Written notification sent to the winner</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-primary font-bold mt-0.5">•</span>
+              <span>Records kept for at least 12 months</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- How to Handle No-Shows -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Handle Winner No-Shows</h2>
+        <div class="space-y-4 text-muted-foreground leading-relaxed">
+          <p>
+            Set a clear claim deadline in your contest rules (24-48 hours is standard). If the winner doesn't respond:
+          </p>
+        </div>
+        <div class="p-6 rounded-xl border bg-card border-border space-y-2">
+          <ol class="space-y-3 text-sm text-muted-foreground">
+            <li class="flex gap-3">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center">1</span>
+              <span>Publicly announce that the original winner didn't claim the prize</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center">2</span>
+              <span>Spin again with the remaining eligible participants</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center">3</span>
+              <span>Document this second draw the same way as the first</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center">4</span>
+              <span>Never quietly replace the winner without a public announcement</span>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random name from any list instantly, without the wheel animation." },
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Run transparent prize draws for contests and promotions." },
+            { href: "/weighted-random-picker", label: "Weighted Random Picker", desc: "Assign different probabilities to each entry for weighted draws." },
+            { href: "/random-wheel", label: "Random Wheel", desc: "A customizable spinning wheel for any random selection task." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>
