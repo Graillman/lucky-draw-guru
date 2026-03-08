@@ -12,15 +12,8 @@ const AdPlaceholder = ({ position, mode = "simple" }: AdPlaceholderProps) => {
     "bottom": "h-28",
   };
 
-  return (
-    <div 
-      className={`${heights[position]} bg-secondary/30 rounded-lg border border-dashed flex items-center justify-center transition-colors duration-300 ${
-        isAdvanced ? "border-accent/30" : "border-border"
-      }`}
-    >
-      <span className="text-xs text-muted-foreground">Ad</span>
-    </div>
-  );
+  // Ad slot: activate when AdSense approved
+  return <div style={{ display: "none" }} aria-hidden="true" />;
 };
 
 export default AdPlaceholder;
