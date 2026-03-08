@@ -39,6 +39,19 @@ const jsonLd = {
   operatingSystem: "All",
   offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
 };
+
+const BASE = 'https://realwheelpicker.com';
+const alternateMap: Record<string, { en: string; fr: string }> = {
+  'wheel-of-names': { en: `${BASE}/wheel-of-names`, fr: `${BASE}/roue-des-noms` },
+};
+const alternates = alternateMap[config.slug];
+const hreflangLinks = alternates
+  ? [
+      { hreflang: 'en', href: alternates.en },
+      { hreflang: 'fr', href: alternates.fr },
+      { hreflang: 'x-default', href: alternates.en },
+    ]
+  : undefined;
 ---
 
 <Layout
@@ -46,6 +59,7 @@ const jsonLd = {
   description={config.metaDescription}
   canonical={`/${config.slug}`}
   jsonLd={jsonLd}
+  hreflangLinks={hreflangLinks}
 >
   <div class="min-h-screen" style="background: var(--gradient-bg)">
     <HeaderIsland client:load />

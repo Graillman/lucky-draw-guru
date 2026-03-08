@@ -56,7 +56,17 @@ const jsonLd = {
 };
 ---
 
-<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  hreflangLinks={[
+    { hreflang: 'en', href: 'https://realwheelpicker.com/' },
+    { hreflang: 'fr', href: 'https://realwheelpicker.com/tirage-au-sort' },
+    { hreflang: 'x-default', href: 'https://realwheelpicker.com/' },
+  ]}
+>
   <!-- Static h1 for SEO crawlers -->
   <h1 class="sr-only">Spin the Wheel — Free Online Random Picker</h1>
   <HeaderIsland client:load />
