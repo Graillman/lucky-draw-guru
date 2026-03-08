@@ -14,12 +14,38 @@
   <url><loc>https://realwheelpicker.com/wheel-of-names</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://realwheelpicker.com/party-wheel</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://realwheelpicker.com/random-team-selector</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://realwheelpicker.com/tiktok-giveaway-picker</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/youtube-giveaway-picker</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/discord-giveaway-picker</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/twitter-giveaway-picker</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/facebook-giveaway-picker</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/twitch-giveaway-picker</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/reddit-giveaway-picker</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/linkedin-giveaway-picker</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
   <!-- Content Pages -->
-  <url><loc>https://realwheelpicker.com/how-to-pick-a-random-winner</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/how-to-pick-a-random-winner</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://realwheelpicker.com/faq</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://realwheelpicker.com/about</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://realwheelpicker.com/contact</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
+
+  <!-- Templates -->
+  <url><loc>https://realwheelpicker.com/templates</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://realwheelpicker.com/templates/truth-or-dare-wheel</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/templates/what-to-eat-wheel</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/templates/random-country-wheel</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/templates/workout-wheel</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/templates/movie-picker-wheel</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/templates/drinking-game-wheel</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://realwheelpicker.com/templates/baby-name-wheel</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/templates/icebreaker-wheel</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/templates/chore-wheel</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://realwheelpicker.com/templates/date-night-wheel</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/templates/wheel-of-fortune</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/templates/alphabet-wheel</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/templates/color-wheel-picker</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://realwheelpicker.com/templates/would-you-rather-wheel</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/templates/number-wheel-1-10</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
   <!-- Blog -->
   <url><loc>https://realwheelpicker.com/blog</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -29,6 +55,23 @@
   <url><loc>https://realwheelpicker.com/blog/spin-wheel-team-generator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://realwheelpicker.com/blog/weighted-random-picker</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://realwheelpicker.com/blog/spin-wheel-ideas</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/is-wheel-of-names-really-random</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/how-to-run-tiktok-giveaway-2026</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/secret-santa-guide</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/best-random-picker-tools</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/discord-giveaway-guide</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/facebook-giveaway-guide</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/linkedin-giveaway-guide</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/reddit-giveaway-guide</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/tiktok-giveaway-guide</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/twitch-giveaway-guide</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/twitter-giveaway-guide</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://realwheelpicker.com/blog/youtube-giveaway-guide</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+  <!-- Localized Tools -->
+  <url><loc>https://realwheelpicker.com/tirage-au-sort</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/roue-des-noms</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://realwheelpicker.com/tirage-aleatoire</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
   <!-- Legal -->
   <url><loc>https://realwheelpicker.com/privacy-policy</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
