@@ -67,7 +67,16 @@ const SEOPageIslandInner = ({ slug }: SEOPageIslandProps) => {
     }
   }, [winners, participants, setParticipants]);
 
-  if (!isLoaded) return <div className="min-h-[400px] flex items-center justify-center">Loading...</div>;
+  if (!isLoaded) return (
+    <div className="flex items-center justify-center w-full aspect-square max-w-md mx-auto">
+      <div className="relative w-full aspect-square rounded-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 animate-pulse">
+        <div className="absolute inset-4 rounded-full bg-white/50 dark:bg-gray-900/50"></div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-gray-400 dark:text-gray-500 text-sm font-medium">Preparing wheel...</span>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className={`flex flex-col lg:flex-row gap-6 items-start transition-all duration-500 ${isAdvanced ? "p-6 rounded-xl bg-accent/5 border border-accent/20" : ""}`}>
