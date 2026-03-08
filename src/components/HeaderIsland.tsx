@@ -30,6 +30,7 @@ const toolLinks = [
   { path: "/party-wheel", label: "🎉 Party Wheel" },
   { path: "/classroom-picker", label: "🎓 Classroom Picker" },
   { path: "/weighted-random-picker", label: "⚖️ Weighted Picker" },
+  { path: "/templates", label: "📋 Templates" },
 ];
 
 const HeaderIsland = () => {

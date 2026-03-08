@@ -17,7 +17,7 @@ const GlobalFooter = () => {
           <span className="text-muted-foreground text-sm">— Free Online Spinner Wheel</span>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           {/* Tools */}
           <div className="space-y-3">
             <h4 className="font-semibold text-sm text-foreground">Tools</h4>
@@ -39,6 +39,19 @@ const GlobalFooter = () => {
               <Link to="/blog" className="hover:text-primary transition-colors">Blog</Link>
               <Link to="/about" className="hover:text-primary transition-colors">About</Link>
               <Link to="/contact" className="hover:text-primary transition-colors">Contact</Link>
+            </nav>
+          </div>
+
+          {/* Templates */}
+          <div className="space-y-3">
+            <h4 className="font-semibold text-sm text-foreground">Templates</h4>
+            <nav className="flex flex-col gap-1.5 text-xs text-muted-foreground">
+              <a href="/templates/truth-or-dare-wheel" className="hover:text-primary transition-colors">Truth or Dare</a>
+              <a href="/templates/what-to-eat-wheel" className="hover:text-primary transition-colors">What to Eat</a>
+              <a href="/templates/workout-wheel" className="hover:text-primary transition-colors">Workout Wheel</a>
+              <a href="/templates/movie-picker-wheel" className="hover:text-primary transition-colors">Movie Picker</a>
+              <a href="/templates/icebreaker-wheel" className="hover:text-primary transition-colors">Icebreaker</a>
+              <a href="/templates" className="hover:text-primary transition-colors font-medium">View All →</a>
             </nav>
           </div>
 
