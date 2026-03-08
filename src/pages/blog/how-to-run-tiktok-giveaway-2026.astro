@@ -1,0 +1,278 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertTriangle, Lightbulb, Trophy, Users, Video } from 'lucide-react';
+
+const title = "How to Run a TikTok Giveaway in 2026 (Complete Guide)";
+const description = "Step-by-step guide to running TikTok giveaways that grow your audience. Entry formats, comment collection, winner selection, and legal compliance.";
+const canonical = "/blog/how-to-run-tiktok-giveaway-2026";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Run a TikTok Giveaway in 2026 (Complete Guide)",
+  "description": "Step-by-step guide to running TikTok giveaways that grow your audience. Entry formats, comment collection, winner selection, and legal compliance.",
+  "author": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2026-03-03",
+  "dateModified": "2026-03-08",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/how-to-run-tiktok-giveaway-2026" },
+};
+
+const entryFormats = [
+  {
+    title: "Comment to enter (recommended)",
+    content: "Ask viewers to comment something specific: their answer to a question, an emoji, or a keyword. This is the easiest to track and generates the highest engagement signal.",
+    tip: "Example: \"Comment your dream travel destination for a chance to win a $100 flight voucher!\"",
+  },
+  {
+    title: "Follow + like + comment",
+    content: "The standard format. Gets you follower growth AND engagement. Make sure the comment requirement adds something to avoid low-quality spam.",
+    tip: null,
+  },
+  {
+    title: "Duet or stitch to enter",
+    content: "Creates a viral loop — each entry is a new video that reaches that person's audience. Higher friction means fewer entries, but each entry is worth more in terms of reach.",
+    tip: null,
+  },
+];
+
+const legalPoints = [
+  "Include \"Not sponsored or endorsed by TikTok\" in your caption.",
+  "Don't require a purchase to enter (that makes it an illegal lottery in most places).",
+  "State minimum age for entry (18+ recommended).",
+  "If you're in the US and the prize is worth $600+, the winner owes taxes.",
+  "If it's a brand partnership, FTC requires clear disclosure (#ad, #sponsored).",
+  "Keep records of rules, entries, and the draw for at least 1 year.",
+];
+
+const afterSteps = [
+  "Follow up: thank participants in a story or video.",
+  "Analyze: check your follower growth and engagement rate.",
+  "Plan the next one: regular giveaways build anticipation and train your audience to stay engaged.",
+  "Leverage the content: pin the giveaway and winner announcement videos to your profile.",
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      {/* Header */}
+      <section class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary transition-colors">Blog</a>
+          <span>/</span>
+          <span>How to Run a TikTok Giveaway in 2026</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          How to Run a TikTok Giveaway in 2026 (Complete Guide)
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          TikTok giveaways are the fastest way to grow an engaged audience on the platform. A well-run contest can add thousands of followers in days — but a poorly run one can damage your credibility permanently.
+        </p>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>7 min read</span>
+          <span>·</span>
+          <span>Updated March 2026</span>
+        </div>
+      </section>
+
+      {/* Why TikTok Giveaways Work */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Video className="w-5 h-5 text-primary" /> Why TikTok Giveaways Work
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          TikTok's algorithm rewards engagement signals: comments, shares, saves, and watch time. A giveaway post naturally generates massive comment counts, which tells the algorithm to push it to more people. This creates a flywheel: more reach → more entries → more comments → even more reach.
+        </p>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 space-y-2">
+          <p class="font-semibold text-foreground text-sm">The result:</p>
+          <ul class="space-y-1 text-sm text-muted-foreground">
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> Giveaway videos routinely outperform regular content by 3–10× in views</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> Algorithm boost that can extend well beyond the giveaway period</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> New followers who are actively engaged, not passive scroll-bys</li>
+          </ul>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      {/* Entry Formats */}
+      <section class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">Choosing Your Entry Format</h2>
+        <div class="space-y-4">
+          {entryFormats.map((format, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-6 space-y-3">
+              <div class="flex items-center gap-3">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex-shrink-0">{i + 1}</span>
+                <h3 class="text-lg font-semibold text-foreground">{format.title}</h3>
+              </div>
+              <p class="text-muted-foreground leading-relaxed pl-11">{format.content}</p>
+              {format.tip && (
+                <div class="bg-muted/40 rounded-lg p-3 ml-11 flex items-start gap-2">
+                  <Lightbulb className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                  <p class="text-sm text-muted-foreground">{format.tip}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Prize Selection */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Trophy className="w-5 h-5 text-primary" /> Selecting the Right Prize
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The prize determines who enters. Choose wrong and you'll attract giveaway bots instead of your target audience.
+        </p>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <p class="font-semibold text-foreground text-sm flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary" /> Good prizes</p>
+            <ul class="space-y-1 text-sm text-muted-foreground pl-6">
+              <li>Products relevant to your niche</li>
+              <li>Gift cards to stores your audience actually shops at</li>
+              <li>Experiences (concert tickets, travel vouchers)</li>
+              <li>Cash</li>
+            </ul>
+          </div>
+          <div class="space-y-2">
+            <p class="font-semibold text-foreground text-sm flex items-center gap-2"><AlertTriangle className="w-4 h-4 text-yellow-500" /> Prizes to avoid</p>
+            <ul class="space-y-1 text-sm text-muted-foreground pl-6">
+              <li>Mystery boxes (feel scammy)</li>
+              <li>Your own course as the only prize (looks self-serving)</li>
+              <li>Items with no clear value</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Collecting Entries */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Users className="w-5 h-5 text-primary" /> Collecting and Cleaning Entries
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          When the deadline hits:
+        </p>
+        <ol class="space-y-3">
+          {[
+            "Export comments using TokBoard or manually copy usernames.",
+            "Remove duplicate usernames (one entry per person unless rules say otherwise).",
+            "Remove obvious bots (no profile picture, random character names, zero followers).",
+            "If following was required, spot-check the winner.",
+          ].map((step, i) => (
+            <li key={i} class="flex items-start gap-3">
+              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary font-bold text-xs flex-shrink-0 mt-0.5">{i + 1}</span>
+              <span class="text-muted-foreground text-sm">{step}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      {/* Drawing the Winner */}
+      <section class="bg-primary/5 border border-primary/20 rounded-xl p-6 md:p-8 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Trophy className="w-5 h-5 text-primary" /> Drawing the Winner
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Use RealWheelPicker's <a href="/tiktok-giveaway-picker" class="text-primary hover:underline">TikTok Giveaway Picker</a>:
+        </p>
+        <ol class="space-y-3">
+          {[
+            "Paste your cleaned list of usernames.",
+            "Start a screen recording.",
+            "Spin the wheel.",
+            "Save the recording.",
+          ].map((step, i) => (
+            <li key={i} class="flex items-start gap-3">
+              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary font-bold text-xs flex-shrink-0 mt-0.5">{i + 1}</span>
+              <span class="text-muted-foreground text-sm">{step}</span>
+            </li>
+          ))}
+        </ol>
+        <div class="bg-muted/40 rounded-lg p-4 flex items-start gap-2">
+          <Lightbulb className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+          <p class="text-sm text-muted-foreground"><strong class="text-foreground">Critical step:</strong> Post the wheel spin recording as a new TikTok. This video often gets as many views as the original giveaway because people come back to see who won.</p>
+        </div>
+      </section>
+
+      {/* Legal Compliance */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <AlertTriangle className="w-5 h-5 text-yellow-500" /> Legal Compliance Basics
+        </h2>
+        <ul class="space-y-3">
+          {legalPoints.map((point, i) => (
+            <li key={i} class="border border-border rounded-lg p-4">
+              <p class="text-sm text-muted-foreground flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                {point}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* After the Giveaway */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Video className="w-5 h-5 text-primary" /> After the Giveaway
+        </h2>
+        <ul class="space-y-3">
+          {afterSteps.map((step, i) => (
+            <li key={i} class="flex items-start gap-3">
+              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary font-bold text-xs flex-shrink-0 mt-0.5">{i + 1}</span>
+              <span class="text-muted-foreground text-sm">{step}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Conclusion */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">The Bottom Line</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          A well-executed TikTok giveaway isn't just a promotion — it's a content strategy. The giveaway itself, the draw, the winner announcement, and the winner's reaction are all separate pieces of content that your audience wants to see.
+        </p>
+      </section>
+
+      {/* CTA */}
+      <section class="text-center py-8 space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Ready to Pick Your Winner?</h2>
+        <p class="text-muted-foreground">Free random pickers for TikTok, Instagram, Discord, and more.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a
+            href="/tiktok-giveaway-picker"
+            class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity"
+          >
+            TikTok Giveaway Picker <ArrowRight className="w-5 h-5" />
+          </a>
+          <a
+            href="/instagram-giveaway-picker"
+            class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:border-primary/50 transition-colors"
+          >
+            Instagram Picker <ArrowRight className="w-5 h-5" />
+          </a>
+          <a
+            href="/discord-giveaway-picker"
+            class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:border-primary/50 transition-colors"
+          >
+            Discord Picker <ArrowRight className="w-5 h-5" />
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug="/blog/how-to-run-tiktok-giveaway-2026" client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

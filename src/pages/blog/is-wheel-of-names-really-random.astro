@@ -1,0 +1,190 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertTriangle, Lightbulb, Shield } from 'lucide-react';
+
+const title = "Is Wheel of Names Really Random? The Math Behind Spinner Wheels";
+const description = "How do online spinner wheels generate random results? We explain crypto.getRandomValues(), modulo bias, and why some wheels are fairer than others.";
+const canonical = "/blog/is-wheel-of-names-really-random";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Is Wheel of Names Really Random? The Math Behind Spinner Wheels",
+  "description": "How do online spinner wheels generate random results? We explain crypto.getRandomValues(), modulo bias, and why some wheels are fairer than others.",
+  "author": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2026-03-01",
+  "dateModified": "2026-03-08",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/is-wheel-of-names-really-random" },
+};
+
+const fairnessPoints = [
+  {
+    number: "1",
+    title: "Uniform distribution",
+    content: "Each segment must have an exactly equal probability of being selected. If you have 10 names, each should have a 10% chance. This sounds obvious, but many implementations get it subtly wrong due to modulo bias.",
+  },
+  {
+    number: "2",
+    title: "Independence",
+    content: "Each spin must be independent of every previous spin. The result of spin #47 should have zero influence on spin #48.",
+  },
+  {
+    number: "3",
+    title: "Unpredictability",
+    content: "No observer — including the developer — should be able to predict the result before the wheel stops. This is where cryptographic randomness matters.",
+  },
+];
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      {/* Header */}
+      <section class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary transition-colors">Blog</a>
+          <span>/</span>
+          <span>Is Wheel of Names Really Random?</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Is Wheel of Names Really Random? The Math Behind Spinner Wheels
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          You spin an online wheel. It lands on a name. But was the selection actually random, or did the code just make it look that way? This is a fair question — and the answer depends entirely on how the wheel was built.
+        </p>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>5 min read</span>
+          <span>·</span>
+          <span>Updated March 2026</span>
+        </div>
+      </section>
+
+      {/* Two Types of Random */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <Shield className="w-5 h-5 text-primary" /> Two Types of Random: Pseudo vs. Cryptographic
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Most programming languages come with a built-in random function. In JavaScript, it's <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">Math.random()</code>. This function is "pseudo-random" — it follows a deterministic algorithm seeded by an initial value. Given the same seed, it produces the same sequence every time.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          For casual use, pseudo-random is fine. But for anything where fairness matters — giveaways, student selection, raffles — it has a problem: the sequence is technically predictable.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Cryptographic randomness is different. Functions like <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">crypto.getRandomValues()</code> pull entropy from your operating system's hardware: timing variations in your CPU, electrical noise in your circuits, mouse movements, and keystroke timing. This entropy pool is genuinely unpredictable — not even the developer who wrote the code can predict the next value.
+        </p>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 space-y-2">
+          <p class="font-semibold text-foreground text-sm">At a glance:</p>
+          <ul class="space-y-1 text-sm text-muted-foreground">
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> <strong class="text-foreground">Math.random()</strong> — fast, pseudo-random, technically predictable</li>
+            <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> <strong class="text-foreground">crypto.getRandomValues()</strong> — slower, hardware-seeded, genuinely unpredictable</li>
+          </ul>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      {/* What Makes a Wheel Fair */}
+      <section class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">What Makes a Wheel "Fair"?</h2>
+        <div class="space-y-4">
+          {fairnessPoints.map((point, i) => (
+            <div key={i} class="bg-card border border-border rounded-xl p-6 space-y-3">
+              <div class="flex items-center gap-3">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex-shrink-0">{point.number}</span>
+                <h3 class="text-lg font-semibold text-foreground">{point.title}</h3>
+              </div>
+              <p class="text-muted-foreground leading-relaxed pl-11">{point.content}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Modulo Bias */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <AlertTriangle className="w-5 h-5 text-yellow-500" /> The Modulo Bias Problem
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Here's a subtle bug that affects many random number implementations:
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Say you want a random number between 0 and 9 (10 options). Your random function produces a number between 0 and 255 (a single random byte). The naive approach: <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">randomByte % 10</code>.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The problem: 256 doesn't divide evenly by 10. Numbers 0–5 each have a 26/256 chance, while numbers 6–9 each have a 25/256 chance. That's a 4% bias. Small, but real — and it compounds over thousands of spins.
+        </p>
+        <div class="bg-muted/40 rounded-lg p-4 flex items-start gap-2">
+          <Lightbulb className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+          <p class="text-sm text-muted-foreground"><strong class="text-foreground">The fix — rejection sampling:</strong> If the random byte falls in the biased range, throw it away and generate a new one. At RealWheelPicker, we use rejection sampling on top of <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">crypto.getRandomValues()</code> to eliminate modulo bias entirely.</p>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      {/* How to Test */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground flex items-center gap-2">
+          <CheckCircle className="w-5 h-5 text-primary" /> How to Test If a Wheel Is Fair
+        </h2>
+        <p class="text-muted-foreground leading-relaxed">
+          If you're skeptical about any spinner wheel (including ours), here's how to test it:
+        </p>
+        <ol class="space-y-3">
+          {[
+            "Set up a wheel with 4 equal segments (A, B, C, D).",
+            "Spin 1,000 times and record results.",
+            "Each segment should land on approximately 250 times.",
+            "Run a chi-squared test: if the p-value is above 0.05, the distribution is consistent with true randomness.",
+          ].map((step, i) => (
+            <li key={i} class="flex items-start gap-3">
+              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary font-bold text-xs flex-shrink-0 mt-0.5">{i + 1}</span>
+              <span class="text-muted-foreground text-sm">{step}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* Bottom Line */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">The Bottom Line</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Not all spinner wheels are created equal. Look for two things: <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">crypto.getRandomValues()</code> (not <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">Math.random()</code>) and rejection sampling (not modulo). If a wheel uses both, it's as fair as mathematics allows.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Our <a href="/wheel-of-names" class="text-primary hover:underline">wheel of names</a>, <a href="/giveaway-picker" class="text-primary hover:underline">giveaway picker</a>, and every other tool on RealWheelPicker uses this exact approach. The code runs in your browser, the randomness comes from your hardware, and we never see the results.
+        </p>
+      </section>
+
+      {/* CTA */}
+      <section class="text-center py-8 space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Try Our Cryptographically Fair Wheel</h2>
+        <p class="text-muted-foreground">Spin a wheel that uses <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">crypto.getRandomValues()</code> and rejection sampling — no Math.random() shortcuts.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a
+            href="/wheel-of-names"
+            class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity"
+          >
+            Wheel of Names <ArrowRight className="w-5 h-5" />
+          </a>
+          <a
+            href="/giveaway-picker"
+            class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:border-primary/50 transition-colors"
+          >
+            Giveaway Picker <ArrowRight className="w-5 h-5" />
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug="/blog/is-wheel-of-names-really-random" client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>
