@@ -29,7 +29,7 @@ function findPages(dir, base = '') {
 function getPriority(urlPath) {
   if (urlPath === '/' || urlPath === '') return '1.0';
   if (urlPath === '404') return null; // exclude 404
-  if (urlPath === 'embed') return null; // exclude embed tool
+  if (urlPath === 'embed') return '0.4'; // embed tool
   if (/^(wheel-of-names|random-name-picker|random-wheel|giveaway-picker)$/.test(urlPath)) return '0.9';
   if (/^(instagram|tiktok|youtube|discord|twitter|facebook|twitch|reddit|linkedin)-giveaway-picker$/.test(urlPath)) return '0.8';
   if (/^(yes-or-no-wheel|team-generator|random-number-generator|party-wheel|classroom-picker|weighted-random-picker|secret-santa-picker|raffle-picker)$/.test(urlPath)) return '0.8';

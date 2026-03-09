@@ -367,6 +367,7 @@ const HomepageIslandInner = () => {
             <div className="space-y-4">
               <h2 className="text-2xl font-bold text-foreground">Popular Use Cases</h2>
               <ul className="list-disc pl-6 space-y-1">
+                <li><a href="/random-wheel" className="text-primary hover:underline">Custom spinner wheel</a> — Add any options and spin to decide anything</li>
                 <li><a href="/giveaway-picker" className="text-primary hover:underline">Instagram &amp; TikTok giveaways</a> — Pick contest winners transparently</li>
                 <li><a href="/classroom-picker" className="text-primary hover:underline">Classroom activities</a> — Select students randomly</li>
                 <li><a href="/team-generator" className="text-primary hover:underline">Team assignments</a> — Split into random groups</li>

@@ -36,8 +36,8 @@ export const seoPages: Record<string, SEOPageConfig> = {
     ],
     seoTitle: "Free Online Random Wheel Picker",
     seoText: "Looking for a random wheel to pick a winner? Our free random wheel picker lets you spin and get instant, unbiased results. Whether you need a random wheel for giveaways, classroom activities, or team decisions, this online random picker is the perfect tool. No signup required - just paste names, spin the wheel, and get your winner. Trusted by streamers, teachers, and businesses worldwide for fair random selection.",
-    metaTitle: "Random Wheel — Free Spin the Wheel Picker Online",
-    metaDescription: "Create a custom wheel with your options and spin to decide. Cryptographically random, instant results. The fastest free spinner wheel online.",
+    metaTitle: "Random Wheel — Free Custom Spinner | Decide Anything",
+    metaDescription: "Create a custom wheel with any options and spin. Cryptographically random, instant results, no signup. The fastest free spinner wheel online.",
   },
   "wheel-of-names": {
     slug: "wheel-of-names",
