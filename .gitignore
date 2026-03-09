@@ -9,3 +9,8 @@ dist/
 src/_pages_old/
 # old Vite entry
 index.html
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
