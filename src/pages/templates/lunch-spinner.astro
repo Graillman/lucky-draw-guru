@@ -1,0 +1,168 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Lunch Spinner Wheel — What to Eat for Lunch?";
+const description = "Spin the lunch wheel to decide what to eat at noon. 12 options from sandwiches to sushi. Settle the daily lunch debate in one spin. Free, instant.";
+const canonical = "/templates/lunch-spinner";
+
+const faqItems = [
+  {
+    question: "Can I use this for office lunch decisions?",
+    answer: "Perfect for offices. Load the wheel with nearby restaurants or cuisine options everyone's okay with. One spin, everyone agrees, order placed. The wheel handles the politics.",
+  },
+  {
+    question: "What if I land on something I don't have ingredients for?",
+    answer: "Spin again, or treat it as inspiration — a 'grain bowl' result might become a rice and veggie dish with whatever's in the fridge. Use the result as a starting point, not a strict rule.",
+  },
+  {
+    question: "How is this different from the What to Eat wheel?",
+    answer: "The lunch spinner focuses on midday meal options — quick, practical choices you can actually get during a lunch break. It's optimized for workday decisions rather than general meal ideas.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Sandwich", weight: 1 },
+  { pseudo: "Salad", weight: 1 },
+  { pseudo: "Leftovers", weight: 1 },
+  { pseudo: "Soup", weight: 1 },
+  { pseudo: "Wrap", weight: 1 },
+  { pseudo: "Grain Bowl", weight: 1 },
+  { pseudo: "Sushi", weight: 1 },
+  { pseudo: "Pizza Slice", weight: 1 },
+  { pseudo: "Quesadilla", weight: 1 },
+  { pseudo: "Smoothie Bowl", weight: 1 },
+  { pseudo: "Tacos", weight: 1 },
+  { pseudo: "Stir Fry", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/lunch-spinner",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Lunch Spinner Wheel", url: "https://realwheelpicker.com/templates/lunch-spinner" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Lunch Spinner Wheel</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Lunch Spinner Wheel — What to Eat for Lunch?
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          It's noon. You're hungry but indecisive. One spin decides your lunch. No more wasted break time staring at delivery apps.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Daily Lunch Problem</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Lunch decision fatigue is real. By midday you've already made hundreds of small decisions, and "what should I eat?" is the last thing your brain wants to handle. Studies on decision fatigue show that the quality of decisions degrades throughout the day — which is why lunch is where most people give up and get the same thing again.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The lunch spinner offloads that decision entirely. Spin once, commit, eat. You get variety without the mental effort. And if you make the wheel with options you're always happy to eat, any result is a good result.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            For home workers, add your staple ingredients as options. For office workers, add the nearby places you'd happily walk to. The wheel works for both "what should I cook" and "where should I order."
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Group Lunch Decisions Made Easy</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Team lunch is the hardest version of this problem. Five people, five opinions, one budget. The wheel removes the politics. Everyone nominates one option, you add all of them to the wheel, and one spin settles it. The key rule: whoever spins doesn't get to spin again if they don't like the result.
+          </p>
+          <ul class="space-y-2 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Let the newest team member spin — a nice ritual for onboarding.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Set a "no repeats this week" rule to enforce variety.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Include a "fend for yourself" option to respect solo lunch preferences.</span></li>
+          </ul>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/what-to-eat-wheel", label: "What to Eat Wheel", desc: "For any meal, not just lunch — spin for a random meal idea." },
+            { href: "/templates/restaurant-picker", label: "Restaurant Picker", desc: "Going out? Pick a cuisine type or restaurant to visit." },
+            { href: "/templates/dessert-picker", label: "Dessert Picker Wheel", desc: "Follow up a great lunch with a randomly selected dessert." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

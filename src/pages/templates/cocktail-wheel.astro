@@ -1,0 +1,177 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Cocktail Spinner Wheel — Random Drink Picker (21+)";
+const description = "Spin the cocktail wheel for a random drink suggestion. 12 classic cocktails pre-loaded. Perfect for bars, parties, and home bartending nights. 21+ only.";
+const canonical = "/templates/cocktail-wheel";
+
+const faqItems = [
+  {
+    question: "Can I add my own cocktail recipes?",
+    answer: "Yes — replace any item with your own cocktail names or even full recipes. The wheel works with any text, so 'Spicy Jalapeño Margarita' or 'House Special' are valid entries.",
+  },
+  {
+    question: "How do I use this at a bar?",
+    answer: "Show the bartender your spin result. Most bartenders are familiar with the classic cocktails on this wheel. For home bars, look up the recipe for whatever you land on and attempt it — that's half the fun.",
+  },
+  {
+    question: "What if I land on something I don't have ingredients for?",
+    answer: "Spin again, or challenge yourself to make a simpler version of the result. A Negroni without Campari becomes something else entirely — and that's an adventure.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Margarita", weight: 1 },
+  { pseudo: "Old Fashioned", weight: 1 },
+  { pseudo: "Mojito", weight: 1 },
+  { pseudo: "Negroni", weight: 1 },
+  { pseudo: "Cosmopolitan", weight: 1 },
+  { pseudo: "Whiskey Sour", weight: 1 },
+  { pseudo: "Piña Colada", weight: 1 },
+  { pseudo: "Mai Tai", weight: 1 },
+  { pseudo: "Espresso Martini", weight: 1 },
+  { pseudo: "Moscow Mule", weight: 1 },
+  { pseudo: "Daiquiri", weight: 1 },
+  { pseudo: "Manhattan", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/cocktail-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Cocktail Spinner Wheel", url: "https://realwheelpicker.com/templates/cocktail-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Cocktail Spinner Wheel</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Cocktail Spinner Wheel — Random Drink Picker (21+)
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Can't decide what to drink? Spin the cocktail wheel for your next order. 12 classics ready to go. Customize with your favorites or seasonal specials.
+        </p>
+        <p class="text-sm text-muted-foreground">For adults 21+ • Free • No account required</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Random Cocktail Picking for Parties and Bars</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            The cocktail wheel works for two situations: when you genuinely can't choose, and when you want to be adventurous. In the first case, the wheel eliminates choice paralysis at the bar. In the second, it forces you outside the same order you always make.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            For home bar nights, load the wheel with cocktails you have ingredients for. Spin at the start of each round. The host makes whatever the wheel picks, and everyone tries something they might not have chosen themselves. It turns a regular night in into a mini cocktail menu experience.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            For bar crawls or group outings, use the wheel to pick the first round for everyone. When the group commits to one spin result, it speeds up ordering and creates a shared experience from drink one.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Quick Cocktail Guide</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            If you land on something unfamiliar, here's a quick reference:
+          </p>
+          <div class="space-y-2 text-muted-foreground">
+            <div class="p-3 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm">Negroni</p>
+              <p class="text-xs">Gin, Campari, sweet vermouth — equal parts. Stirred, served on ice with orange peel. Bitter, complex, acquired taste that most people come to love.</p>
+            </div>
+            <div class="p-3 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm">Old Fashioned</p>
+              <p class="text-xs">Whiskey (bourbon or rye), sugar, Angostura bitters, orange peel. The original cocktail. Simple, strong, timeless.</p>
+            </div>
+            <div class="p-3 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm">Espresso Martini</p>
+              <p class="text-xs">Vodka, espresso, coffee liqueur. Shaken hard for the foam on top. The modern crowd-pleaser — energizing and dessert-like.</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/drinking-game-wheel", label: "Drinking Game Wheel", desc: "Party drinking games — spin for your next challenge." },
+            { href: "/templates/restaurant-picker", label: "Restaurant Picker", desc: "Decide where to go for drinks and dinner tonight." },
+            { href: "/templates/dare-wheel", label: "Dare Wheel", desc: "Party challenges for game nights and social gatherings." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

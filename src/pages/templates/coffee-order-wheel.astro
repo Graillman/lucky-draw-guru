@@ -1,0 +1,178 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Coffee Order Spinner — Random Drink Generator";
+const description = "Spin the coffee wheel to discover your next drink order. 12 options from espresso to cold brew. Great for coffee shop adventures and breaking routine.";
+const canonical = "/templates/coffee-order-wheel";
+
+const faqItems = [
+  {
+    question: "What if I land on something with dairy and I'm lactose intolerant?",
+    answer: "Customize the wheel — remove items you can't have or add your dairy-free alternatives. Swap 'Latte' for 'Oat Milk Latte' or 'Almond Cappuccino'. The wheel adapts to your preferences.",
+  },
+  {
+    question: "Can I use this at a coffee shop with friends?",
+    answer: "Absolutely. Pass your phone around and let each person spin for their order. It's a fun way to try something new when everyone's tempted to order the same thing every time.",
+  },
+  {
+    question: "Is the Affogato really a coffee drink?",
+    answer: "It's a dessert and a coffee in one — espresso poured over vanilla ice cream. Technically a beverage, definitely a treat. Landing on it is a win.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Espresso", weight: 1 },
+  { pseudo: "Latte", weight: 1 },
+  { pseudo: "Cappuccino", weight: 1 },
+  { pseudo: "Americano", weight: 1 },
+  { pseudo: "Flat White", weight: 1 },
+  { pseudo: "Cold Brew", weight: 1 },
+  { pseudo: "Mocha", weight: 1 },
+  { pseudo: "Chai Latte", weight: 1 },
+  { pseudo: "Matcha Latte", weight: 1 },
+  { pseudo: "Iced Coffee", weight: 1 },
+  { pseudo: "Cortado", weight: 1 },
+  { pseudo: "Affogato", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/coffee-order-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Coffee Order Spinner", url: "https://realwheelpicker.com/templates/coffee-order-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Coffee Order Spinner</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Coffee Order Spinner — Random Drink Generator
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Break out of your coffee rut. Spin the wheel and try something different today — from a bold espresso to a creamy matcha latte.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Break Your Coffee Routine</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Most people order the same coffee drink every single day. Not because it's objectively the best, but because it's familiar and ordering something new requires decision energy you don't have at 8am. The coffee spinner handles the decision for you.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            Give yourself a week of spinning for your order. You might discover a cortado is exactly what you've been missing, or that cold brew on a Wednesday changes the whole workday. The wheel introduces low-stakes variety that makes your coffee routine interesting again.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            If you land on something you genuinely dislike, remove it from the wheel. After a few weeks you'll have a curated list of drinks you actually enjoy — a personal coffee menu built through experimentation.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Know Your Options</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Not all coffee drinks are created equal. Here's a quick reference for what you might land on:
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {[
+              ["Espresso", "Pure, concentrated shot — intense flavor, quick drink"],
+              ["Flat White", "Like a latte but less milk, stronger coffee flavor"],
+              ["Cortado", "Equal parts espresso and steamed milk — balanced"],
+              ["Cold Brew", "Steeped overnight, low acidity, naturally sweet"],
+              ["Affogato", "Espresso shot over vanilla ice cream — dessert hybrid"],
+              ["Chai Latte", "Spiced tea with steamed milk — caffeine but no coffee"],
+            ].map(([name, desc]) => (
+              <div class="p-3 rounded-lg bg-primary/5 border border-primary/20">
+                <p class="font-semibold text-foreground text-sm">{name}</p>
+                <p class="text-muted-foreground text-xs mt-1">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/restaurant-picker", label: "Restaurant Picker Wheel", desc: "Decide where to eat for your next meal or coffee outing." },
+            { href: "/templates/lunch-spinner", label: "Lunch Spinner", desc: "What to eat for lunch? Let the wheel decide." },
+            { href: "/yes-or-no-wheel", label: "Yes or No Wheel", desc: "Quick binary decisions — should I get a second coffee?" },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

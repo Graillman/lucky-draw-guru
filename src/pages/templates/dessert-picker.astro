@@ -1,0 +1,169 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Dessert Picker Wheel — Random Sweet Treat Spinner";
+const description = "Spin the dessert wheel for a random sweet treat. 12 options from ice cream to tiramisu. Perfect for restaurants, home baking, and dessert debates. Free.";
+const canonical = "/templates/dessert-picker";
+
+const faqItems = [
+  {
+    question: "Can I use this at a restaurant to pick dessert?",
+    answer: "Yes — load the wheel with items from the actual dessert menu, spin, and order whatever lands. It removes the guilt of 'should I really get dessert?' and makes it fate's decision instead.",
+  },
+  {
+    question: "What if I don't know how to make the dessert I land on?",
+    answer: "Treat it as a baking adventure. Landing on Crème Brûlée and attempting it at home for the first time is more memorable than getting your usual brownie. The wheel pushes you toward new skills.",
+  },
+  {
+    question: "How do I make the wheel kid-friendly?",
+    answer: "Replace sophisticated options like Tiramisu with kid favorites: Brownie, Ice Cream Sundae, Cupcake, Pudding, Jello. Customize it for whoever is spinning.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Ice Cream", weight: 1 },
+  { pseudo: "Cake", weight: 1 },
+  { pseudo: "Cookies", weight: 1 },
+  { pseudo: "Brownie", weight: 1 },
+  { pseudo: "Pie", weight: 1 },
+  { pseudo: "Cheesecake", weight: 1 },
+  { pseudo: "Crème Brûlée", weight: 1 },
+  { pseudo: "Tiramisu", weight: 1 },
+  { pseudo: "Churros", weight: 1 },
+  { pseudo: "Mochi", weight: 1 },
+  { pseudo: "Waffles", weight: 1 },
+  { pseudo: "Fruit Tart", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/dessert-picker",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Dessert Picker Wheel", url: "https://realwheelpicker.com/templates/dessert-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Dessert Picker Wheel</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Dessert Picker Wheel — Random Sweet Treat Spinner
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Can't choose between cheesecake and tiramisu? Let the dessert wheel decide. Spin for your sweet fate — no guilt, just randomness.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Case for Random Dessert Selection</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Dessert decisions have a unique psychological trap: you want to try something new, but you keep ordering the same thing because it's safe. The dessert wheel breaks that cycle by removing the safety option from your hands. Whatever the wheel picks, that's what you're having.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            This is especially powerful when baking at home. Instead of defaulting to brownies every weekend, spin for your next baking project. You might discover that making a fruit tart from scratch is both easier and more impressive than expected. The wheel builds your dessert repertoire one spin at a time.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            For families with kids, the dessert wheel becomes a ritual. Friday night dessert is whatever the wheel picks. Kids love the anticipation of the spin, and parents enjoy not being asked "can we have ice cream?" for the thousandth time — the wheel handles the decision democratically.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Dessert Night Ideas</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Use the dessert wheel to run a themed dessert night with friends or family:
+          </p>
+          <ul class="space-y-2 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Bake-off:</strong> Everyone spins, each person makes their result. Compare and taste-test at the end of the night.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Restaurant roulette:</strong> Research which local spot does each dessert best, then visit based on your spin.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">International dessert tour:</strong> Load the wheel with desserts from different countries and make one per week.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Dessert exchange:</strong> Each person spins and brings that dessert to a group gathering.</span></li>
+          </ul>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/lunch-spinner", label: "Lunch Spinner", desc: "Decide what to eat for lunch before worrying about dessert." },
+            { href: "/templates/restaurant-picker", label: "Restaurant Picker", desc: "Pick where to go for your full meal, dessert included." },
+            { href: "/templates/what-to-eat-wheel", label: "What to Eat Wheel", desc: "General meal idea spinner for any time of day." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>
