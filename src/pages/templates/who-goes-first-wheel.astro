@@ -1,0 +1,163 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Who Goes First? — Random Turn Order Spinner";
+const description = "Spin the wheel to decide who goes first. 8 player slots pre-loaded — replace with real names. Instant, fair, impartial. Works for any game or group activity.";
+const canonical = "/templates/who-goes-first-wheel";
+
+const faqItems = [
+  {
+    question: "How do I replace the player names?",
+    answer: "Edit the wheel items and replace 'Player 1', 'Player 2', etc. with your actual player names. The wheel then randomly selects whoever goes first with completely equal odds for every player.",
+  },
+  {
+    question: "Can I use this for more than 8 players?",
+    answer: "Yes — add as many players as you need. The wheel scales to any number of participants. For large groups, you can also use it to pick turn order for all players: spin once for first, remove the winner, spin again for second, and so on.",
+  },
+  {
+    question: "Is the spin truly random?",
+    answer: "Yes. The wheel uses a cryptographically random algorithm for each spin. There's no pattern, no memory of previous results, and no weighting toward any player unless you manually adjust weights.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Player 1", weight: 1 },
+  { pseudo: "Player 2", weight: 1 },
+  { pseudo: "Player 3", weight: 1 },
+  { pseudo: "Player 4", weight: 1 },
+  { pseudo: "Player 5", weight: 1 },
+  { pseudo: "Player 6", weight: 1 },
+  { pseudo: "Player 7", weight: 1 },
+  { pseudo: "Player 8", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/who-goes-first-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Who Goes First Wheel", url: "https://realwheelpicker.com/templates/who-goes-first-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Who Goes First Wheel</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Who Goes First? — Random Turn Order Spinner
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          No more rock-paper-scissors or "youngest goes first" arguments. Spin the wheel for a genuinely fair, random selection of who takes the first turn. Replace the names with your players.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Fairest Way to Pick Who Goes First</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Every game with turn order has the same problem: how do you fairly pick who goes first without arguments? The traditional methods all have problems. Dice rolls require dice. Rock-paper-scissors leads to double-elimination disputes. "Youngest goes first" advantages younger players every game. "The host decides" creates favoritism accusations.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The spin wheel is the most visually satisfying and demonstrably fair method. Everyone watches the same spin. The result is visible and indisputable. There's no hidden randomness, no mechanical failure, and no human bias. The wheel picked — that's final.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            For games where turn order matters significantly (Catan, Ticket to Ride, any strategy game), the who-goes-first wheel removes one more potential argument from the session so you can focus on actually playing.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Uses Beyond Board Games</h2>
+          <ul class="space-y-2 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Classroom:</strong> Pick which student answers first, presents first, or reads first.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Meetings:</strong> Randomly select who gives their update first in standup or retrospectives.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Sports:</strong> Pick which team calls the coin toss, shoots first, or picks their side.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Chores:</strong> Spin to decide who does the least popular task in a household rotation.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Video games:</strong> Who picks the game, who hosts, who gets the controller first.</span></li>
+          </ul>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Full-featured name picker for larger groups and giveaways." },
+            { href: "/templates/board-game-picker", label: "Board Game Picker", desc: "After deciding who goes first, spin for which game to play." },
+            { href: "/templates/standup-order-wheel", label: "Standup Order Picker", desc: "Random dev team order for daily standups and meetings." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

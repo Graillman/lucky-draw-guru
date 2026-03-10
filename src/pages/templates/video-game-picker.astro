@@ -1,0 +1,169 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Video Game Picker Wheel — What Should I Play?";
+const description = "Spin the video game picker wheel to decide what to play next. 12 genres pre-loaded. Perfect when you have too many games and can't pick one. Free, instant.";
+const canonical = "/templates/video-game-picker";
+
+const faqItems = [
+  {
+    question: "Can I add specific game titles instead of genres?",
+    answer: "Absolutely. Replace the genre labels with actual titles from your library — 'Elden Ring', 'Minecraft', 'FIFA 25'. The wheel works perfectly with game names, making it a great 'what should I play tonight?' tool.",
+  },
+  {
+    question: "What if I spin a genre I don't have a game for?",
+    answer: "Use it as a discovery prompt. No horror games? That spin might be the nudge you needed to check out what's on sale. Or just spin again — you control which genres appear on your wheel.",
+  },
+  {
+    question: "Can I use this to pick co-op games with friends?",
+    answer: "Yes — load the wheel with games you all own and are willing to play together. Spin once to decide the session's game. Works great over Discord for gaming nights where everyone's debating what to load up.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Action RPG", weight: 1 },
+  { pseudo: "FPS Shooter", weight: 1 },
+  { pseudo: "Indie Game", weight: 1 },
+  { pseudo: "Puzzle Game", weight: 1 },
+  { pseudo: "Sports Game", weight: 1 },
+  { pseudo: "Fighting Game", weight: 1 },
+  { pseudo: "Racing Game", weight: 1 },
+  { pseudo: "Horror Game", weight: 1 },
+  { pseudo: "Strategy", weight: 1 },
+  { pseudo: "Sandbox", weight: 1 },
+  { pseudo: "Party Game", weight: 1 },
+  { pseudo: "Platformer", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/video-game-picker",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Video Game Picker Wheel", url: "https://realwheelpicker.com/templates/video-game-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Video Game Picker Wheel</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Video Game Picker Wheel — What Should I Play?
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Too many games, not enough decisiveness. Spin the wheel and commit to whatever genre (or game) it picks. No more 30 minutes of browsing your library doing nothing.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Backlog Problem</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Every gamer has the same problem: a massive backlog of unplayed games and a decision paralysis that kicks in every single session. You scroll your library for 20 minutes, click into a game, read the loading screen, and then back out to browse again. The playing never starts.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The video game picker wheel fixes this by removing choice from the equation. Load it with your actual unplayed games, spin once, and that's your game for the session. The commitment is easier when it's "the wheel chose this" rather than "I chose this and gave up on everything else."
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            For genre-based spinning, use it as a discovery prompt. Landing on "Indie Game" when you usually play shooters might lead to the best gaming experience of the year — something you'd never have picked deliberately.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Multiplayer Game Night Decisions</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Group gaming has the same debate problem as restaurant picking: everyone has a preference, nobody wants to be the one who "chose wrong." The wheel handles this for gaming nights too.
+          </p>
+          <ul class="space-y-2 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Add games everyone owns to the wheel, spin to pick the first game of the night.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Use it to pick whose turn it is to choose the game — spin player names, winner picks.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>For tournaments, spin to determine brackets, game order, or who faces who.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Add a "random indie" option to force the group into something unexpected at least once a month.</span></li>
+          </ul>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/board-game-picker", label: "Board Game Picker", desc: "For offline gaming nights — random board game selector." },
+            { href: "/templates/roblox-wheel", label: "Roblox Game Picker", desc: "Spin for a random Roblox game to play next." },
+            { href: "/templates/who-goes-first-wheel", label: "Who Goes First Wheel", desc: "Randomly determine who goes first in any game." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

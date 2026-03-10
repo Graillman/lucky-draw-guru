@@ -1,0 +1,172 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Never Have I Ever Wheel — Random Questions Spinner";
+const description = "Spin the Never Have I Ever wheel for random questions. 10 prompts pre-loaded. Perfect for parties, sleepovers, and icebreakers. Free, instant, customizable.";
+const canonical = "/templates/never-have-i-ever-wheel";
+
+const faqItems = [
+  {
+    question: "How do you play Never Have I Ever with a wheel?",
+    answer: "Spin the wheel to get a prompt. Everyone who HAS done it raises their hand (or takes a sip, depending on your rules). Everyone who hasn't done it keeps their hand down. Go around a few times. The person who has done the most things 'wins' — or loses, depending on perspective.",
+  },
+  {
+    question: "Is this appropriate for kids?",
+    answer: "The pre-loaded prompts are mild and family-appropriate. You can further edit them to remove anything that doesn't fit your group. Add kid-friendly versions like 'Never have I ever stayed up past midnight' or 'Never have I ever eaten a whole pizza'.",
+  },
+  {
+    question: "How many prompts should I put on the wheel?",
+    answer: "10-15 is ideal. Enough variety for a full game session without running out of questions, but not so many that the same prompt never comes up twice and tension never builds.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Traveled solo", weight: 1 },
+  { pseudo: "Lied to skip work", weight: 1 },
+  { pseudo: "Eaten off the floor", weight: 1 },
+  { pseudo: "Ghosted someone", weight: 1 },
+  { pseudo: "Sung karaoke", weight: 1 },
+  { pseudo: "Skipped school", weight: 1 },
+  { pseudo: "Cried at a movie", weight: 1 },
+  { pseudo: "Broken a bone", weight: 1 },
+  { pseudo: "Met a celebrity", weight: 1 },
+  { pseudo: "Slept in public", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/never-have-i-ever-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Never Have I Ever Wheel", url: "https://realwheelpicker.com/templates/never-have-i-ever-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Never Have I Ever Wheel</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Never Have I Ever Wheel — Random Questions Spinner
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Spin for your next Never Have I Ever prompt. No more blanking on questions mid-game. Let the wheel keep the conversation going all night.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Play Never Have I Ever</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Never Have I Ever is a party game where players take turns making statements about things they have never done. Anyone who HAS done the thing must acknowledge it — and in drinking game versions, take a sip. The original version requires creative prompt generation, which is where games slow down and people repeat themselves.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The wheel solves the blank-mind problem. Instead of everyone trying to think of interesting prompts on the spot, the wheel generates them randomly. This keeps the game moving and surfaces prompts that nobody would think to say out loud unprompted.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            Customize the wheel with prompts you know will land well for your specific group. Generic prompts work, but prompts built around shared history ("Never have I ever forgotten someone's name at work") create better moments.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Prompt Ideas by Occasion</h2>
+          <div class="space-y-3">
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Family-Friendly</p>
+              <p class="text-muted-foreground text-sm">Stayed up all night, eaten a whole pizza, won a competition, been on TV, visited another country</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Work Team</p>
+              <p class="text-muted-foreground text-sm">Fallen asleep in a meeting, sent an email to the wrong person, worked from a vacation spot, been promoted unexpectedly</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">College / Adult Friends</p>
+              <p class="text-muted-foreground text-sm">Missed a flight, been to a music festival, lived alone, adopted a pet, learned a language</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/truth-or-dare-wheel", label: "Truth or Dare Wheel", desc: "For when you want truths and dares alongside the never-evers." },
+            { href: "/templates/dare-wheel", label: "Dare Wheel", desc: "Pure challenge-based party game for more active groups." },
+            { href: "/templates/would-you-rather-wheel", label: "Would You Rather Wheel", desc: "Another great conversation-starting party game format." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

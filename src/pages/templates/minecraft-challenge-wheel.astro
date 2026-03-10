@@ -1,0 +1,172 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Minecraft Challenge Wheel — Random Run Ideas";
+const description = "Spin the Minecraft challenge wheel for a random run idea. 10 challenges pre-loaded from no armor to hardcore mode. Break your usual playstyle. Free, instant.";
+const canonical = "/templates/minecraft-challenge-wheel";
+
+const faqItems = [
+  {
+    question: "Can I add my own custom Minecraft challenges?",
+    answer: "Yes — edit the wheel with any challenge you want. Add modded challenges, speedrun categories, or rules specific to your playstyle. The wheel works with any text, so 'No pickaxe run' or 'Only wood tools forever' are valid entries.",
+  },
+  {
+    question: "How do I play the 'No crafting table' challenge?",
+    answer: "You can only use items found in chests, mob drops, or naturally occurring in the world. No crafting at all — which means no tools beyond what you find. It's a brutal survival test that changes the entire game loop.",
+  },
+  {
+    question: "Can I use this for YouTube challenge content?",
+    answer: "Absolutely. Load the wheel with your planned challenge series, spin on camera for content variety, and commit to the result. It adds genuine randomness and viewer engagement to challenge videos.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "No armor run", weight: 1 },
+  { pseudo: "Build a castle first", weight: 1 },
+  { pseudo: "Speedrun to credits", weight: 1 },
+  { pseudo: "Nether only", weight: 1 },
+  { pseudo: "Vegetarian challenge", weight: 1 },
+  { pseudo: "One biome only", weight: 1 },
+  { pseudo: "Underground base only", weight: 1 },
+  { pseudo: "No crafting table", weight: 1 },
+  { pseudo: "Hardcore mode", weight: 1 },
+  { pseudo: "Peaceful difficulty only", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/minecraft-challenge-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Minecraft Challenge Wheel", url: "https://realwheelpicker.com/templates/minecraft-challenge-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Minecraft Challenge Wheel</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Minecraft Challenge Wheel — Random Run Ideas
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Bored of your usual Minecraft playstyle? Spin the wheel and commit to a random challenge run. From no-armor survival to hardcore mode — fate decides your restrictions.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Challenge Runs Make Minecraft Fresh Again</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            After hundreds of hours in Minecraft, the default survival loop gets predictable. You know the optimal path: punch tree, craft tools, mine for diamonds, build a base, defeat the Ender Dragon. The challenge wheel breaks that pattern by imposing random restrictions that force creative problem-solving.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            A no-armor run makes every cave terrifying again. A nether-only run completely changes your resource pool and base-building approach. A vegetarian challenge forces you to think about food sources you never touch in a normal playthrough. Each restriction transforms the game into something genuinely new.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The wheel adds a second layer: you don't pick the challenge, fate does. This removes the temptation to choose the easiest option and forces you into territory you might not have selected yourself — which is where the most memorable runs happen.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Challenge Difficulty Breakdown</h2>
+          <div class="space-y-3">
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Beginner Challenges</p>
+              <p class="text-muted-foreground text-sm">Build a castle first, Peaceful difficulty only, One biome only — adds goals without extreme restrictions</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Intermediate Challenges</p>
+              <p class="text-muted-foreground text-sm">No armor run, Vegetarian challenge, Underground base only, Speedrun — changes playstyle significantly</p>
+            </div>
+            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <p class="font-semibold text-foreground text-sm mb-1">Expert Challenges</p>
+              <p class="text-muted-foreground text-sm">Nether only, No crafting table, Hardcore mode — near-impossible without experience and strategy</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/roblox-wheel", label: "Roblox Game Picker", desc: "Spin for a random Roblox game when Minecraft needs a break." },
+            { href: "/templates/video-game-picker", label: "Video Game Picker", desc: "Random game genre selector for all platforms." },
+            { href: "/templates/fortnite-drop-wheel", label: "Fortnite Drop Location Wheel", desc: "Random drop location picker for Fortnite matches." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

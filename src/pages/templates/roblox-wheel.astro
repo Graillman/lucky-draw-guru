@@ -1,0 +1,178 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Roblox Game Picker — Random Roblox Spinner Wheel";
+const description = "Spin the Roblox wheel to pick a random game to play. 12 popular Roblox games pre-loaded. Perfect for when you can't decide what to play. Free, instant.";
+const canonical = "/templates/roblox-wheel";
+
+const faqItems = [
+  {
+    question: "Can I add my own favorite Roblox games?",
+    answer: "Yes — edit the wheel and replace any game with your favorites. Add your most-played games, games on your wishlist, or new ones you want to try. The wheel works with any Roblox game name.",
+  },
+  {
+    question: "Can I use this with friends to pick what to play together?",
+    answer: "Perfect for that. Share the link with your friends, agree on the list, and spin together over voice chat. Whoever spins has to host the chosen game. Makes picking a co-op session instant.",
+  },
+  {
+    question: "What if I land on a game I don't have access to?",
+    answer: "Remove it from the wheel before spinning so it's not an option. Only keep games you can actually play right now for the smoothest experience.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Adopt Me", weight: 1 },
+  { pseudo: "Brookhaven", weight: 1 },
+  { pseudo: "Tower of Hell", weight: 1 },
+  { pseudo: "Blox Fruits", weight: 1 },
+  { pseudo: "Murder Mystery 2", weight: 1 },
+  { pseudo: "Royal High", weight: 1 },
+  { pseudo: "Jailbreak", weight: 1 },
+  { pseudo: "Pet Simulator X", weight: 1 },
+  { pseudo: "Arsenal", weight: 1 },
+  { pseudo: "MeepCity", weight: 1 },
+  { pseudo: "Doors", weight: 1 },
+  { pseudo: "Work at Pizza Place", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/roblox-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Roblox Game Picker Wheel", url: "https://realwheelpicker.com/templates/roblox-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Roblox Game Picker</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Roblox Game Picker — Random Roblox Spinner Wheel
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Too many Roblox games to choose from? Spin the wheel and jump straight in. 12 popular games pre-loaded — customize with your personal favorites.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Roblox Players Need a Game Picker</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Roblox has over 40 million games. Even narrowing it down to your favorites list, choosing what to play can take longer than an actual game session. The Roblox wheel solves this by making the choice instant and random — which often leads to the most fun sessions because you're playing something unexpected.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The wheel is especially useful for group sessions. When you're in a voice call with friends and everyone's asking "what should we play?", spinning the wheel ends the conversation in one click. The result is binding — whoever spun the wheel has to stick with the pick.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            Customize the wheel to include only games you and your friends actively play. Remove anything nobody's touched in months, and add newly released games you want to try. The wheel becomes a shortlist of actually good options, not a full catalogue of everything.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">About the Pre-Loaded Games</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            The 12 games pre-loaded on this wheel are among the most popular on Roblox as of 2024-2025, spanning different genres so there's variety in whatever you land on:
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {[
+              ["Adopt Me", "Pet adoption and trading simulation"],
+              ["Blox Fruits", "Action RPG with devil fruits and combat"],
+              ["Tower of Hell", "Obby parkour challenge tower"],
+              ["Jailbreak", "Open-world cops and robbers"],
+              ["Doors", "Horror exploration with monsters"],
+              ["Arsenal", "FPS shooter with weapon progression"],
+            ].map(([name, desc]) => (
+              <div class="p-3 rounded-lg bg-primary/5 border border-primary/20">
+                <p class="font-semibold text-foreground text-sm">{name}</p>
+                <p class="text-muted-foreground text-xs mt-1">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/video-game-picker", label: "Video Game Picker", desc: "For non-Roblox gaming — spin for a random game genre or title." },
+            { href: "/templates/minecraft-challenge-wheel", label: "Minecraft Challenge Wheel", desc: "Random Minecraft run ideas and challenge modes." },
+            { href: "/templates/who-goes-first-wheel", label: "Who Goes First Wheel", desc: "Randomly pick who starts or hosts the next game session." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

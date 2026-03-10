@@ -1,0 +1,164 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Fortnite Drop Location Wheel — Where to Land";
+const description = "Spin the Fortnite drop wheel to pick a random landing spot. 10 locations pre-loaded. Perfect for challenge runs and breaking your drop routine. Free, instant.";
+const canonical = "/templates/fortnite-drop-wheel";
+
+const faqItems = [
+  {
+    question: "Can I update the locations for the current season?",
+    answer: "Yes — Fortnite's map changes every season with new named locations. Edit the wheel to add current POIs and remove deprecated ones. The wheel stays accurate as long as you keep it updated.",
+  },
+  {
+    question: "How do I use this in a squad game?",
+    answer: "Spin before the match starts and all squad members commit to the result. The person who spins doesn't get a veto. This forces the squad to play unfamiliar locations and often leads to the most chaotic and memorable games.",
+  },
+  {
+    question: "What if I land on a hot-drop location?",
+    answer: "That's part of the fun. Landing at Tilted Towers knowing it's a hot drop is a completely different experience than landing there by accident. The wheel makes it intentional — embrace the chaos.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Tilted Towers", weight: 1 },
+  { pseudo: "Pleasant Park", weight: 1 },
+  { pseudo: "Retail Row", weight: 1 },
+  { pseudo: "Lazy Lake", weight: 1 },
+  { pseudo: "Salty Springs", weight: 1 },
+  { pseudo: "Sweaty Sands", weight: 1 },
+  { pseudo: "Misty Meadows", weight: 1 },
+  { pseudo: "Holly Hedges", weight: 1 },
+  { pseudo: "Dirty Docks", weight: 1 },
+  { pseudo: "Craggy Cliffs", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/fortnite-drop-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Fortnite Drop Location Wheel", url: "https://realwheelpicker.com/templates/fortnite-drop-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Fortnite Drop Location Wheel</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Fortnite Drop Location Wheel — Where to Land
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Stop dropping the same spot every match. Spin the wheel for a random Fortnite landing location and force yourself into unfamiliar territory. Update locations each season.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Break Your Drop Spot Habit</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Every Fortnite player has a comfort drop. You know the loot route, the chests, the rotations. That familiarity makes you better at one location but worse at the overall map. The drop wheel forces you to learn every POI instead of one.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            Random drops improve your game in unexpected ways: you discover loot patterns you didn't know existed, you practice rotations from every corner of the map, and you stop being predictable to opponents who might recognize your playstyle. The discomfort of unfamiliar drops is exactly where improvement happens.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            For squads, the drop wheel is also a great team-building tool. Everyone commits before the match — no arguments mid-bus about where to go. The wheel decided, and you play it out together.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Challenge Ideas with the Drop Wheel</h2>
+          <ul class="space-y-2 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Hot Drop Challenge:</strong> Add only hot-drop locations and survive as long as possible from pure combat.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Safe Drop Week:</strong> Add only quiet, low-traffic zones to practice late-game survival and circle rotations.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Location Bingo:</strong> Spin a new location each match and mark it off — first to complete the map wins the challenge.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Solo Grind:</strong> Commit to every spin result for 10 matches and track your placement average. Compare to your usual drop spot stats.</span></li>
+          </ul>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/minecraft-challenge-wheel", label: "Minecraft Challenge Wheel", desc: "Random run ideas for Minecraft when Fortnite needs a break." },
+            { href: "/templates/video-game-picker", label: "Video Game Picker", desc: "Spin for a random game genre across all platforms." },
+            { href: "/templates/who-goes-first-wheel", label: "Who Goes First Wheel", desc: "Decide who picks the next game mode or leads the squad." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>
