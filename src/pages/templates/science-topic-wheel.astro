@@ -1,0 +1,163 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Science Topic Spinner — Random Subject Picker";
+const description = "Spin for a random science topic. Pre-loaded with 12 subjects. Perfect for class presentations, study sessions, and science projects.";
+const canonical = "/templates/science-topic-wheel";
+
+const faqItems = [
+  {
+    question: "Can I use this for any grade level?",
+    answer: "Yes. The default topics work for middle and high school. For younger students, simplify to topics like Animals, Plants, Weather, and Space. For university level, replace with your course-specific subjects.",
+  },
+  {
+    question: "How do teachers use this in class?",
+    answer: "Spin to assign random science topics for group projects or presentations. Every student gets a different subject without the teacher having to manually assign them, and the randomness feels fair to everyone.",
+  },
+  {
+    question: "Can I add my own science topics?",
+    answer: "Absolutely. Clear the default list and type in the exact topics from your curriculum — chapter names, unit titles, or specific concepts. The wheel works with any text you add.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Gravity", weight: 1 },
+  { pseudo: "Photosynthesis", weight: 1 },
+  { pseudo: "Volcanoes", weight: 1 },
+  { pseudo: "The Solar System", weight: 1 },
+  { pseudo: "DNA & Genetics", weight: 1 },
+  { pseudo: "Electricity", weight: 1 },
+  { pseudo: "Weather Systems", weight: 1 },
+  { pseudo: "Ecosystems", weight: 1 },
+  { pseudo: "Chemical Reactions", weight: 1 },
+  { pseudo: "Evolution", weight: 1 },
+  { pseudo: "Sound Waves", weight: 1 },
+  { pseudo: "The Water Cycle", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/science-topic-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Science Topic Spinner", url: "https://realwheelpicker.com/templates/science-topic-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Science Topic Spinner</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Science Topic Spinner — Random Subject Picker
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Assign random science topics for presentations, projects, and study activities. Replace the defaults with your curriculum topics.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Random Science Topic Assignment — Fair and Fast</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Assigning science topics manually is tedious. Students always have opinions about what's "easier" or "better," and manual assignment feels arbitrary to them even when it isn't. A spinning wheel removes the perception of bias entirely — the result is obviously random, and every student can see the process was fair.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The default topics cover the core areas of a standard science curriculum: physics (gravity, electricity, sound), biology (photosynthesis, DNA, ecosystems, evolution), earth science (volcanoes, weather, the water cycle), chemistry (chemical reactions), and space science (the solar system). Replace any of them with your exact unit topics.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Use This in Your Classroom</h2>
+          <ul class="space-y-2 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Group projects:</strong> Each group spins once. No topic repeats until all groups have a unique assignment.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Class warm-up:</strong> Spin at the start of class to pick the first discussion topic or review question area.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Study sessions:</strong> Students spin to pick which topic they review next, adding unpredictability to solo study.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Science fair:</strong> Use the wheel to randomly assign research categories, ensuring variety across projects.</span></li>
+          </ul>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/classroom-picker", label: "Classroom Picker", desc: "Pick a random student for questions, presentations, or activities." },
+            { href: "/templates/math-problem-wheel", label: "Math Problem Spinner", desc: "Spin for random math topics — addition to algebra." },
+            { href: "/templates/writing-prompt-wheel", label: "Writing Prompt Spinner", desc: "Random creative writing prompts for English class." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

@@ -1,0 +1,166 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Math Problem Spinner — Random Question Generator";
+const description = "Spin the math wheel to get a random topic for practice or classroom activities. 12 math areas from addition to algebra. Free, instant, customizable for any level.";
+const canonical = "/templates/math-problem-wheel";
+
+const faqItems = [
+  {
+    question: "How do teachers use this in the classroom?",
+    answer: "Spin to pick the math topic for a warm-up question, then write a specific problem on the board. Or spin to decide which student answers, or which category to focus on during a review session. It adds energy and unpredictability to math practice.",
+  },
+  {
+    question: "Can I use this for specific grade levels?",
+    answer: "Yes — customize the wheel for your curriculum. Remove advanced topics like Square Roots for younger students, or replace basic Addition with Calculus or Statistics for older students. The wheel adapts to any level.",
+  },
+  {
+    question: "Is this good for self-study?",
+    answer: "Great for self-study. Spin to pick your practice topic for the day, removing the temptation to only practice the areas you're already good at. Random selection forces balanced coverage across all math topics.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Addition", weight: 1 },
+  { pseudo: "Subtraction", weight: 1 },
+  { pseudo: "Multiplication", weight: 1 },
+  { pseudo: "Division", weight: 1 },
+  { pseudo: "Fractions", weight: 1 },
+  { pseudo: "Percentages", weight: 1 },
+  { pseudo: "Algebra", weight: 1 },
+  { pseudo: "Geometry", weight: 1 },
+  { pseudo: "Word Problem", weight: 1 },
+  { pseudo: "Mental Math", weight: 1 },
+  { pseudo: "Decimals", weight: 1 },
+  { pseudo: "Square Roots", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/math-problem-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Math Problem Spinner", url: "https://realwheelpicker.com/templates/math-problem-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Math Problem Spinner</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Math Problem Spinner — Random Question Generator
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Spin to pick a random math topic for practice, warm-ups, or classroom activities. 12 topics from mental math to algebra — customize for any grade level.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Using Random Selection in Math Education</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            One of the biggest barriers to effective math practice is selective avoidance — students (and adults) naturally gravitate toward problems they're already comfortable with. If you find fractions easy, you practice fractions. If word problems are hard, you avoid them. Random topic selection breaks this pattern by removing the choice entirely.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            For teachers, the math spinner adds a game element to practice sessions. Instead of announcing "open to page 47," spinning the wheel to reveal today's topic creates engagement. Students pay attention during the spin. The visual randomness makes the selection feel fair and exciting rather than arbitrary.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            For students practicing independently, spin for your daily focus topic. Over a week of spinning, you'll naturally cover all areas rather than spending 100% of your time on comfortable material. This leads to more balanced preparation for exams that cover everything.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Classroom Activity Ideas</h2>
+          <ul class="space-y-2 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Warm-Up Roulette:</strong> Start each class with a 5-minute wheel spin. Write a problem of that type on the board, students solve it silently, then discuss.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Team Challenge:</strong> Divide into teams, spin for a topic, each team races to write 3 problems of that type. Other team solves them.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Review Marathon:</strong> Spin once per student, each student must solve a problem of their topic on the board. Class votes on correctness.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Homework Generator:</strong> Spin to determine which topic makes up 50% of the next homework assignment. Adds variety to traditionally static homework sets.</span></li>
+          </ul>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/science-topic-wheel", label: "Science Topic Spinner", desc: "Random science subject picker for classroom activities and study." },
+            { href: "/templates/vocabulary-wheel", label: "Vocabulary Wheel", desc: "Random word practice for vocabulary building and spelling." },
+            { href: "/classroom-picker", label: "Classroom Picker", desc: "Pick a random student name for answering questions." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

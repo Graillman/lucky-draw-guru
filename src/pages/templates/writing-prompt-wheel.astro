@@ -1,0 +1,167 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Writing Prompt Spinner — Random Story Starter";
+const description = "Spin the writing prompt wheel for a random story starter. 10 unique prompts pre-loaded. Beat writer's block instantly. Great for writers, students, and NaNoWriMo. Free.";
+const canonical = "/templates/writing-prompt-wheel";
+
+const faqItems = [
+  {
+    question: "How long should I write for each prompt?",
+    answer: "There's no rule. Some writers use prompts for 10-minute free-writing sessions. Others use them as seeds for full short stories or novels. The prompt is just the starting point — you decide where to take it and how far.",
+  },
+  {
+    question: "Can I add my own writing prompts?",
+    answer: "Yes — edit the wheel and add any prompts that inspire you. Genre-specific prompts (horror, romance, sci-fi), prompts from writing books, or your own original starters all work perfectly on the wheel.",
+  },
+  {
+    question: "What if the prompt doesn't match my genre?",
+    answer: "That's a feature, not a bug. A horror writer using a romance prompt, or a sci-fi writer using a fantasy prompt, produces unexpected creative combinations. The constraint of an 'wrong genre' prompt often generates the most original work.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "A letter from the future", weight: 1 },
+  { pseudo: "The last person on Mars", weight: 1 },
+  { pseudo: "A door that shouldn't exist", weight: 1 },
+  { pseudo: "The memory thief", weight: 1 },
+  { pseudo: "Waking up as someone else", weight: 1 },
+  { pseudo: "The missing week", weight: 1 },
+  { pseudo: "A gift that changes everything", weight: 1 },
+  { pseudo: "The town that forgot", weight: 1 },
+  { pseudo: "The last day", weight: 1 },
+  { pseudo: "An impossible choice", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/writing-prompt-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Writing Prompt Spinner", url: "https://realwheelpicker.com/templates/writing-prompt-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Writing Prompt Spinner</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Writing Prompt Spinner — Random Story Starter
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Spin the wheel and start writing. No more staring at a blank page. 10 evocative story starters pre-loaded — add your own prompts and build a custom creative tool.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Using Prompts to Beat Writer's Block</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Writer's block is mostly a problem of infinite possibility. When you can write anything, choosing what to write becomes paralyzing. A prompt eliminates that paralysis by collapsing your options to one — this prompt, right now, go.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The spinning wheel adds a ritual to prompt selection. The act of spinning, watching the wheel slow, and seeing the result creates a moment of anticipation that primes your creative brain before you write a single word. By the time the wheel stops, you're already imagining possibilities.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            For regular writing practice, set a timer (10 to 30 minutes), spin the wheel, and write without stopping until the timer ends. Don't edit, don't pause, don't judge. The goal is words on the page. Do this daily and writer's block becomes a memory.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Prompt Expansion Techniques</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            A prompt is a seed. Here's how to expand any single-line prompt into a full story concept:
+          </p>
+          <ul class="space-y-2 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Who?</strong> Who is the protagonist? What do they want? What stands in their way?</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">When?</strong> What era, season, or time of day? How does this affect the story's mood?</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Where?</strong> What setting makes this premise more interesting? A city? A spaceship? A childhood home?</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">What if?</strong> Add one unexpected twist. "A door that shouldn't exist" + "and it opens to a version of your own house where everything is slightly wrong."</span></li>
+          </ul>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/reading-genre-wheel", label: "Book Genre Spinner", desc: "Get reading inspiration before you write — explore other authors' approaches." },
+            { href: "/templates/vocabulary-wheel", label: "Vocabulary Wheel", desc: "Build your writing vocabulary with random word practice." },
+            { href: "/templates/hobby-wheel", label: "Random Hobby Spinner", desc: "Other creative pursuits to complement your writing practice." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

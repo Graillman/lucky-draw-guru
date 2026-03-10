@@ -1,0 +1,166 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Book Genre Spinner — What Should I Read Next?";
+const description = "Spin the book genre wheel to discover your next read. 12 genres from fantasy to biography. Break reading ruts and explore new shelves. Free, instant, no account.";
+const canonical = "/templates/reading-genre-wheel";
+
+const faqItems = [
+  {
+    question: "Should I spin for the genre or for a specific book?",
+    answer: "Either works. Spin for the genre to narrow your search, then pick any book in that category. Or load the wheel with specific titles from your reading list and let the wheel pick your exact next book. Both approaches work well.",
+  },
+  {
+    question: "What if I land on a genre I've never read before?",
+    answer: "That's the best outcome. Ask a librarian, check bestseller lists in that genre, or look up award winners. First-time genre exploration with a trusted recommendation almost always reveals a new favorite.",
+  },
+  {
+    question: "Can I use this for a book club?",
+    answer: "Yes — load the wheel with books all members have nominated, spin to pick the next selection. Everyone had a say in what's on the wheel, so the final pick feels democratic. The wheel removes the politics of choosing.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Fantasy", weight: 1 },
+  { pseudo: "Sci-Fi", weight: 1 },
+  { pseudo: "Mystery", weight: 1 },
+  { pseudo: "Romance", weight: 1 },
+  { pseudo: "Thriller", weight: 1 },
+  { pseudo: "Historical Fiction", weight: 1 },
+  { pseudo: "Biography", weight: 1 },
+  { pseudo: "Self-Help", weight: 1 },
+  { pseudo: "Horror", weight: 1 },
+  { pseudo: "Poetry", weight: 1 },
+  { pseudo: "Comedy", weight: 1 },
+  { pseudo: "Non-Fiction", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/reading-genre-wheel",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Book Genre Spinner", url: "https://realwheelpicker.com/templates/reading-genre-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Book Genre Spinner</span>
+      </nav>
+
+      <!-- Hero -->
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Book Genre Spinner — What Should I Read Next?
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Stuck in a reading rut? Spin the genre wheel and commit to something new. Let randomness expand your literary world — one spin, one genre, one great book.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <!-- Wheel -->
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <!-- Article Content -->
+      <section class="space-y-8">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Break Out of Your Reading Comfort Zone</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Most readers have a home genre — the section they instinctively gravitate toward in any bookstore. That loyalty is fine, but it leaves entire shelves unexplored. Readers who stay in one genre miss the empathy-building of literary fiction, the mind-expansion of science fiction, and the pure entertainment of a well-crafted mystery.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The genre wheel is a commitment device. When the wheel picks Historical Fiction and you've never read it before, the social contract of the wheel makes it easier to try. You didn't choose it in a moment of personal risk — the wheel chose it. That small psychological shift removes the "what if I don't like it?" hesitation.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            Set a reading challenge: try one book from every genre on the wheel this year. 12 genres, 12 books, 12 new perspectives. The wheel tracks which categories remain and keeps the challenge moving forward.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Genre Reading Challenge Ideas</h2>
+          <ul class="space-y-2 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Genre-a-Month:</strong> Read one book per genre per month. Spin at the start of each month to determine the genre.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Book Club Roulette:</strong> Each member nominates one book, add all nominations to the wheel, spin for the club's next pick.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Library Adventure:</strong> Spin the genre, go to a library or bookstore, and pick the first interesting book you find in that section.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Reading Bingo:</strong> Create a bingo card with all 12 genres and cross them off as you finish books. The wheel ensures you don't repeat genres.</span></li>
+          </ul>
+        </div>
+
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/writing-prompt-wheel", label: "Writing Prompt Spinner", desc: "After reading, get inspired to write — random story starters." },
+            { href: "/templates/movie-picker-wheel", label: "Movie Picker Wheel", desc: "When you'd rather watch than read — random movie picker." },
+            { href: "/templates/hobby-wheel", label: "Random Hobby Spinner", desc: "Other creative activities beyond reading to explore." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a
+                href={href}
+                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
+              >
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>
