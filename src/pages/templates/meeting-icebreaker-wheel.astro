@@ -1,0 +1,139 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Meeting Icebreaker Spinner — Quick Team Questions";
+const description = "Start meetings with a random icebreaker question. Pre-loaded with 8 professional prompts. Spin, ask, answer, move on. Under 2 minutes.";
+const canonical = "/templates/meeting-icebreaker-wheel";
+
+const faqItems = [
+  {
+    question: "How long should meeting icebreakers take?",
+    answer: "Under 2 minutes for small teams, up to 5 minutes for larger groups. Keep it moving — one spin, one question, everyone answers quickly. The goal is warmth and presence, not a therapy session.",
+  },
+  {
+    question: "Are these appropriate for all workplace cultures?",
+    answer: "The defaults are intentionally neutral and professional. Customize them for your team's culture — a startup might want more creative prompts, while a corporate team might want strictly work-related questions.",
+  },
+  {
+    question: "Can I use this for virtual meetings?",
+    answer: "Works great for remote teams. Screen-share the wheel, spin live, and let everyone answer in the chat or unmute in order. It's even more valuable remotely where casual conversation doesn't happen naturally.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Highlight of your week?", weight: 1 },
+  { pseudo: "Learning something new?", weight: 1 },
+  { pseudo: "Best meal lately?", weight: 1 },
+  { pseudo: "Morning routine tip?", weight: 1 },
+  { pseudo: "Podcast recommendation?", weight: 1 },
+  { pseudo: "Unpopular work opinion?", weight: 1 },
+  { pseudo: "Superpower you'd want?", weight: 1 },
+  { pseudo: "Weekend plans?", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/meeting-icebreaker-wheel",
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Meeting Icebreaker Spinner", url: "https://realwheelpicker.com/templates/meeting-icebreaker-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Meeting Icebreaker Spinner</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Meeting Icebreaker Spinner — Quick Team Questions
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Start every meeting with a random question that actually gets people talking. No awkward silence, no boring introductions. Just spin and go.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <section class="space-y-8">
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Meeting Icebreakers Work (When Done Right)</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Most meeting icebreakers fail because they're either too personal (making introverts uncomfortable) or too generic ("tell us one fun fact about yourself" — nobody has a good answer on the spot). The wheel solves both problems: the question is random and pre-prepared, and everyone answers the same thing, which levels the playing field.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The act of spinning also creates a small shared moment before the meeting's actual content. Teams that start meetings with brief informal connection report higher engagement throughout the session. The wheel keeps it structured so it doesn't eat into meeting time.
+          </p>
+        </div>
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Customize for Your Team</h2>
+          <ul class="space-y-2 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Remote teams:</strong> Add questions about home setup, time zone morning routines, or local weather.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Weekly standups:</strong> Keep prompts quick — "one word for your week" or "energy level 1-10".</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Monthly all-hands:</strong> More substantial questions — "biggest win this month" or "what you're most excited about Q2".</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/standup-order-wheel", label: "Standup Order Picker", desc: "Randomize who goes first in your daily standup." },
+            { href: "/templates/sprint-retrospective-wheel", label: "Sprint Retro Wheel", desc: "Spin for retrospective discussion topics." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random team member for any task or activity." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

@@ -1,0 +1,133 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Team Building Activity Spinner — Group Activities";
+const description = "Spin for a random team building activity. Pre-loaded with 10 proven activities for offsites, retreats, and virtual team events.";
+const canonical = "/templates/team-building-wheel";
+
+const faqItems = [
+  {
+    question: "How do we use this for a remote team?",
+    answer: "Several activities work great remotely: Two truths one lie, Trivia, Show and tell, Speed networking (in breakout rooms), and Pair interviews. Mark which ones are remote-compatible and spin from that subset.",
+  },
+  {
+    question: "How long do team building activities typically take?",
+    answer: "15-30 minutes for most of these. Speed networking and trivia can be longer if you want. For half-day retreats, spin 3-4 activities with breaks in between. For a 30-minute team call, spin once and do that one activity well.",
+  },
+  {
+    question: "Can I add activities specific to our company culture?",
+    answer: "Absolutely — and you should. Generic activities matter less than ones tailored to your team's interests and inside jokes. Add your own and remove anything that wouldn't land.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Two truths, one lie", weight: 1 },
+  { pseudo: "Scavenger hunt", weight: 1 },
+  { pseudo: "Trivia game", weight: 1 },
+  { pseudo: "Escape room", weight: 1 },
+  { pseudo: "Show and tell", weight: 1 },
+  { pseudo: "Pair interviews", weight: 1 },
+  { pseudo: "Talent show", weight: 1 },
+  { pseudo: "Build a tower", weight: 1 },
+  { pseudo: "Speed networking", weight: 1 },
+  { pseudo: "Cooking challenge", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/team-building-wheel",
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Team Building Activity Spinner", url: "https://realwheelpicker.com/templates/team-building-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Team Building Activity Spinner</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Team Building Activity Spinner — Random Group Activities
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Stop debating which team activity to do. Spin, then commit. Works for in-person retreats and remote events.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <section class="space-y-8">
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Random Selection Works for Team Activities</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Choosing team activities by committee is famously slow. Some people want something active, others prefer low-key. Someone always vetoes the suggestion they personally find awkward. The negotiation takes longer than the activity would have.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            Pre-loading the wheel with activities that have already been screened for your team's culture and logistics removes the debate. Everyone agreed to the list; the wheel just picks from it. The randomness also adds a bit of suspense that makes people more curious about what they'll be doing.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/meeting-icebreaker-wheel", label: "Meeting Icebreaker Spinner", desc: "Quick questions to warm up any team gathering." },
+            { href: "/team-generator", label: "Team Generator", desc: "Randomly split your group into balanced teams for activities." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick who goes first, who leads, or who presents." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

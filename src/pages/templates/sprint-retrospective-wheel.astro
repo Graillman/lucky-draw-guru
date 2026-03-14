@@ -1,0 +1,131 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Sprint Retro Wheel — Random Discussion Topics";
+const description = "Spin for sprint retrospective discussion prompts. Keep retros fresh and focused. Pre-loaded with 8 proven prompts for agile teams.";
+const canonical = "/templates/sprint-retrospective-wheel";
+
+const faqItems = [
+  {
+    question: "How do we structure a retro using this wheel?",
+    answer: "Spin 3-4 times to pick the topics for the session. Spend 5-10 minutes on each. This keeps retros focused and under 45 minutes, which prevents the energy drain of open-ended sessions.",
+  },
+  {
+    question: "Can we add our own retro formats?",
+    answer: "Yes. Replace defaults with prompts specific to your team's current challenges — 'On-call pain points', 'Documentation gaps', 'Cross-team dependencies'. The wheel works for any retrospective format.",
+  },
+  {
+    question: "How often should we change the prompts?",
+    answer: "Every 2-3 sprints. Using the same prompts repeatedly reduces engagement. Refresh the wheel with new questions when you notice shorter answers and less discussion.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "What went well?", weight: 1 },
+  { pseudo: "What to improve?", weight: 1 },
+  { pseudo: "Biggest blocker?", weight: 1 },
+  { pseudo: "Team highlight?", weight: 1 },
+  { pseudo: "Process to change?", weight: 1 },
+  { pseudo: "Communication check", weight: 1 },
+  { pseudo: "Tool feedback?", weight: 1 },
+  { pseudo: "Workload balance?", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/sprint-retrospective-wheel",
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Sprint Retro Wheel", url: "https://realwheelpicker.com/templates/sprint-retrospective-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Sprint Retro Wheel</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Sprint Retro Wheel — Random Discussion Topics
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Break the "Start, Stop, Continue" rut. Spin for fresh retrospective prompts that actually spark discussion.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <section class="space-y-8">
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Most Retros Feel Stale</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Teams that run the same retro format every sprint get diminishing returns. After a few months, answers get shorter, participation drops, and the retro becomes a ritual instead of a tool. The wheel injects variety without requiring the facilitator to redesign the session from scratch.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            Spin 3-4 topics at the start of the session and post them visibly. Teams know what's being discussed and can mentally prepare while previous topics wrap up. The randomness also prevents the same vocal members from steering the agenda toward their preferred topics every sprint.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/standup-order-wheel", label: "Standup Order Picker", desc: "Randomize your daily standup speaking order." },
+            { href: "/templates/meeting-icebreaker-wheel", label: "Meeting Icebreaker Spinner", desc: "Warm up any team meeting with a quick question." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick who facilitates the next retro." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

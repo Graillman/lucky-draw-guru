@@ -1,0 +1,131 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Standup Order Picker — Random Dev Team Sequence";
+const description = "Spin to randomize your daily standup order. Replace the default names with your team. Fair, instant, no more same-person-always-goes-first.";
+const canonical = "/templates/standup-order-wheel";
+
+const faqItems = [
+  {
+    question: "How do we use this for a remote standup?",
+    answer: "Screen-share the wheel during your standup video call. Whoever is facilitating spins once per person. The name that comes up goes next. Remove each name after they've spoken to avoid picking the same person twice.",
+  },
+  {
+    question: "Should I remove names after they speak?",
+    answer: "Yes. Click 'Remove winner' after each spin to ensure everyone goes exactly once before the wheel resets. This gives you a random order without repetition.",
+  },
+  {
+    question: "Why randomize standup order at all?",
+    answer: "Predictable order causes people to 'mentally check out' until it's their turn. Random order keeps everyone engaged because they don't know when they'll be called. It also prevents the same person from always going first (which affects tone-setting) or last (rushing).",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Alice", weight: 1 },
+  { pseudo: "Bob", weight: 1 },
+  { pseudo: "Charlie", weight: 1 },
+  { pseudo: "Diana", weight: 1 },
+  { pseudo: "Eve", weight: 1 },
+  { pseudo: "Frank", weight: 1 },
+  { pseudo: "Grace", weight: 1 },
+  { pseudo: "Henry", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/standup-order-wheel",
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Standup Order Picker", url: "https://realwheelpicker.com/templates/standup-order-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Standup Order Picker</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Standup Order Picker — Random Dev Team Sequence
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Replace the example names with your team, spin once per person, and run your most engaging standup yet. No more alphabetical order, no more going-around-the-table predictability.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <section class="space-y-8">
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Problem with Fixed Standup Order</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            When standups always go in the same order — alphabetically, by Slack joining date, or just however it started — team members optimize for their slot. People who go first give brief updates because they haven't heard context yet. People who go last rush or get cut off. People in the middle mentally disengage.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            Random order keeps everyone present. You don't know when you'll be called, so you stay ready. The wheel also adds a tiny bit of ceremony to an otherwise routine meeting — watching the wheel spin and waiting for your name creates a small moment of attention before you speak.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/meeting-icebreaker-wheel", label: "Meeting Icebreaker Spinner", desc: "Warm up your standup with a quick team question first." },
+            { href: "/templates/sprint-retrospective-wheel", label: "Sprint Retro Wheel", desc: "Random discussion prompts for your next retrospective." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick one random team member for task assignment." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>
