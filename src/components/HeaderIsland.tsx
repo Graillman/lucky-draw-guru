@@ -26,11 +26,15 @@ const toolLinks = [
   { path: "/yes-or-no-wheel", label: "✅ Yes or No Wheel" },
   { path: "/random-number-generator", label: "🔢 Number Picker" },
   { path: "/giveaway-picker", label: "🎁 Giveaway Picker" },
+  { path: "/social-giveaway", label: "📲 Social Giveaway Picker" },
   { path: "/instagram-giveaway-picker", label: "📸 Instagram Picker" },
   { path: "/team-generator", label: "👥 Team Generator" },
   { path: "/party-wheel", label: "🎉 Party Wheel" },
+  { path: "/spin-the-bottle", label: "🍾 Spin the Bottle" },
   { path: "/classroom-picker", label: "🎓 Classroom Picker" },
+  { path: "/teacher-picker", label: "🏫 Teacher Picker" },
   { path: "/weighted-random-picker", label: "⚖️ Weighted Picker" },
+  { path: "/probability-picker", label: "📊 Probability Picker" },
   { path: "/templates", label: "📋 Templates" },
 ];
 

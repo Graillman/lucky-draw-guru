@@ -19,11 +19,12 @@ const GlobalFooter = () => {
             <nav className="flex flex-col gap-1.5 text-xs text-muted-foreground">
               <Link to="/" className="hover:text-primary transition-colors">Spin the Wheel</Link>
               <Link to="/yes-or-no-wheel" className="hover:text-primary transition-colors">Yes or No Wheel</Link>
+              <a href="/social-giveaway" className="hover:text-primary transition-colors">Social Giveaway Picker</a>
+              <a href="/spin-the-bottle" className="hover:text-primary transition-colors">Spin the Bottle</a>
+              <a href="/probability-picker" className="hover:text-primary transition-colors">Probability Picker</a>
+              <a href="/teacher-picker" className="hover:text-primary transition-colors">Teacher Picker</a>
               <Link to="/team-generator" className="hover:text-primary transition-colors">Team Generator</Link>
-              <Link to="/random-number-generator" className="hover:text-primary transition-colors">Number Picker</Link>
               <Link to="/giveaway-picker" className="hover:text-primary transition-colors">Giveaway Picker</Link>
-              <Link to="/party-wheel" className="hover:text-primary transition-colors">Party Wheel</Link>
-              <Link to="/classroom-picker" className="hover:text-primary transition-colors">Classroom Picker</Link>
             </nav>
           </div>
 
@@ -34,6 +35,8 @@ const GlobalFooter = () => {
               <Link to="/blog" className="hover:text-primary transition-colors">Blog</Link>
               <Link to="/about" className="hover:text-primary transition-colors">About</Link>
               <Link to="/contact" className="hover:text-primary transition-colors">Contact</Link>
+              <a href="/tirage-au-sort" className="hover:text-primary transition-colors">Tirage au Sort</a>
+              <a href="/jeu-de-la-bouteille" className="hover:text-primary transition-colors">Jeu de la Bouteille</a>
             </nav>
           </div>
 
