@@ -41,12 +41,13 @@ const GlobalFooter = () => {
           <div className="space-y-3">
             <h4 className="font-semibold text-sm text-foreground">Templates</h4>
             <nav className="flex flex-col gap-1.5 text-xs text-muted-foreground">
-              <a href="/templates/truth-or-dare-wheel" className="hover:text-primary transition-colors">Truth or Dare</a>
-              <a href="/templates/what-to-eat-wheel" className="hover:text-primary transition-colors">What to Eat</a>
-              <a href="/templates/workout-wheel" className="hover:text-primary transition-colors">Workout Wheel</a>
-              <a href="/templates/movie-picker-wheel" className="hover:text-primary transition-colors">Movie Picker</a>
-              <a href="/templates/icebreaker-wheel" className="hover:text-primary transition-colors">Icebreaker</a>
-              <a href="/templates" className="hover:text-primary transition-colors font-medium">View All →</a>
+              <a href="/templates/restaurant-picker" className="hover:text-primary transition-colors">Restaurant Picker</a>
+              <a href="/templates/halloween-costume-wheel" className="hover:text-primary transition-colors">Halloween Costumes</a>
+              <a href="/templates/christmas-gift-wheel" className="hover:text-primary transition-colors">Christmas Gifts</a>
+              <a href="/templates/roblox-wheel" className="hover:text-primary transition-colors">Roblox Wheel</a>
+              <a href="/templates/video-game-picker" className="hover:text-primary transition-colors">Video Game Picker</a>
+              <a href="/templates/travel-destination-wheel" className="hover:text-primary transition-colors">Travel Destination</a>
+              <a href="/templates" className="hover:text-primary transition-colors font-medium">View All 50 →</a>
             </nav>
           </div>
 
