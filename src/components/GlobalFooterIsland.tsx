@@ -18,11 +18,9 @@ const WheelLogoSmall = () => (
 const GlobalFooterIsland = () => {
   return (
     <footer className="border-t border-border bg-card/50 mt-12">
-      <div className="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-secondary/95 backdrop-blur-sm border-t border-border flex items-center justify-center z-50">
-        <span className="text-xs text-muted-foreground">Ad space</span>
-      </div>
+      {/* Mobile sticky ad banner — activated when AdSense approved */}
 
-      <div className="max-w-6xl mx-auto px-4 py-10 pb-20 md:pb-10">
+      <div className="max-w-6xl mx-auto px-4 py-10">
         <div className="flex items-center gap-2 mb-8">
           <WheelLogoSmall />
           <span className="font-bold text-foreground">Real Wheel Picker</span>
