@@ -1,0 +1,142 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Gift Idea Spinner — Random Present Generator";
+const description = "Stuck on what gift to get? Spin for a random gift category. Perfect for birthdays, holidays, and Secret Santa. Free, instant, no signup.";
+const canonical = "/templates/gift-idea-wheel";
+
+const faqItems = [
+  {
+    question: "How do I use this for Secret Santa?",
+    answer: "Spin to get a gift category, then use that as inspiration to find something specific. 'Experience' might mean a cooking class or concert tickets. 'Tech gadget' might mean wireless earbuds or a smart plug. The wheel narrows your search without dictating the exact gift.",
+  },
+  {
+    question: "Can I set a budget filter?",
+    answer: "Customize the wheel with your actual budget categories — 'Under $25', 'Under $50', '$50-100', 'Splurge' — and spin to pick a tier. Then shop within that budget instead of being paralyzed by all price points.",
+  },
+  {
+    question: "What if I land on something I know they won't like?",
+    answer: "Re-spin. The wheel is a brainstorming tool, not a mandate. If 'Tech gadget' obviously doesn't fit the recipient, spin again. Two re-spins maximum keeps the game honest while still being practical.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Book", weight: 1 },
+  { pseudo: "Experience gift", weight: 1 },
+  { pseudo: "Tech gadget", weight: 1 },
+  { pseudo: "Clothing item", weight: 1 },
+  { pseudo: "Subscription box", weight: 1 },
+  { pseudo: "Homemade gift", weight: 1 },
+  { pseudo: "Gift card", weight: 1 },
+  { pseudo: "Art or print", weight: 1 },
+  { pseudo: "Kitchen item", weight: 1 },
+  { pseudo: "Plant or garden", weight: 1 },
+  { pseudo: "Wellness item", weight: 1 },
+  { pseudo: "Personalized gift", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/gift-idea-wheel",
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Gift Idea Spinner", url: "https://realwheelpicker.com/templates/gift-idea-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Gift Idea Spinner</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Gift Idea Spinner — Random Present Generator
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Stop staring at Amazon with no idea where to start. Spin for a gift category and narrow your search instantly.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <section class="space-y-8">
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">From Category to Perfect Gift</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Gift shopping is hard because every category of gift is valid for most people. The wheel picks a starting direction so you search "best experience gifts for hikers" instead of just scrolling endlessly. A random constraint makes you more creative, not less — you find gifts you'd never have thought of otherwise.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            Use the wheel as your first step, not your last. Once it picks "Experience gift," you do a 10-minute search within that category for the recipient. That focused search produces better results than open-ended browsing.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Secret Santa & Group Gift Ideas</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            For Secret Santa events, customize the wheel with your budget limit per category. Everyone in the group spins their own wheel, and you get a diverse range of gift types across the event. Alternatively, use the <a href="/secret-santa-picker" class="text-primary underline hover:no-underline">Secret Santa Picker</a> to assign who gives to whom, then use this wheel for inspiration on what to give.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/secret-santa-picker", label: "Secret Santa Picker", desc: "Randomly assign who gives to whom in your group." },
+            { href: "/templates/christmas-gift-wheel", label: "Christmas Gift Spinner", desc: "Holiday-specific gift ideas by category and budget." },
+            { href: "/random-wheel", label: "Random Wheel", desc: "Build a custom wheel with specific gift ideas for one person." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

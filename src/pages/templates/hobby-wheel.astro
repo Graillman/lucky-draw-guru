@@ -1,0 +1,148 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Random Hobby Spinner — What to Do When Bored";
+const description = "Spin for a random hobby or activity. Beat boredom with unexpected fun. Pre-loaded with 12 activities — customize with your own interests.";
+const canonical = "/templates/hobby-wheel";
+
+const faqItems = [
+  {
+    question: "What if the wheel picks something I don't have equipment for?",
+    answer: "Remove activities you can't do or don't want to try. The wheel works best when every option is genuinely possible right now. Keep it to activities you could start within 5 minutes.",
+  },
+  {
+    question: "Can I use this for discovering new hobbies?",
+    answer: "That's a great use case. Load it with activities you've been curious about but never tried. Spin and commit to spending 30 minutes on whatever it picks. You might discover something you love.",
+  },
+  {
+    question: "How is this different from just picking something myself?",
+    answer: "When you're bored, decision fatigue makes it hard to pick anything. The wheel removes the choice paralysis and adds a small element of surprise that makes starting the activity more fun.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Draw something", weight: 1 },
+  { pseudo: "Learn a song", weight: 1 },
+  { pseudo: "Cook a new recipe", weight: 1 },
+  { pseudo: "Go for a walk", weight: 1 },
+  { pseudo: "Read a chapter", weight: 1 },
+  { pseudo: "Organize a space", weight: 1 },
+  { pseudo: "Write a letter", weight: 1 },
+  { pseudo: "Try yoga", weight: 1 },
+  { pseudo: "Learn a card trick", weight: 1 },
+  { pseudo: "Start a puzzle", weight: 1 },
+  { pseudo: "Photo walk outside", weight: 1 },
+  { pseudo: "Code something small", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/hobby-wheel",
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Random Hobby Spinner", url: "https://realwheelpicker.com/templates/hobby-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Random Hobby Spinner</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Random Hobby Spinner — What to Do When Bored
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Can't decide what to do with your free time? Spin the hobby wheel and start something new. Every spin is a tiny adventure.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <section class="space-y-8">
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Boredom Needs a Wheel</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Boredom is rarely about having nothing to do — it's about having too many things to do and not being able to pick any of them. You scroll through options, nothing feels right, and you end up doing the default (usually your phone) instead of something you'd actually enjoy.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The hobby wheel removes the selection step entirely. Whatever it lands on, you do for at least 20 minutes without switching. The constraint of commitment is what makes it work — once you've started drawing, writing, or cooking, you often find the initial resistance disappears within a few minutes.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Build Your Personal Wheel</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            The best hobby wheel is personalized. Replace the defaults with activities that are actually interesting to you and accessible right now. Consider adding a mix of:
+          </p>
+          <ul class="space-y-2 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Creative:</strong> Drawing, writing, music, crafts, photography</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Physical:</strong> Walk, stretch, bike, yoga, quick workout</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Learning:</strong> Language lesson, reading, online course, coding</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Social:</strong> Call a friend, write a letter, plan a meetup</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/weekend-activity-wheel", label: "Weekend Activity Spinner", desc: "Bigger weekend plans — from hikes to game nights." },
+            { href: "/templates/self-care-wheel", label: "Self-Care Wheel", desc: "Spin for a random wellness activity." },
+            { href: "/random-wheel", label: "Random Wheel", desc: "Build a fully custom wheel with your own hobby list." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

@@ -1,0 +1,133 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "New Year Resolution Wheel — Random Goals Spinner";
+const description = "Can't decide on a resolution? Spin the wheel and commit. Pre-loaded with 10 popular goals. Free, instant, no signup required.";
+const canonical = "/templates/new-years-resolution-wheel";
+
+const faqItems = [
+  {
+    question: "Is picking a resolution randomly actually effective?",
+    answer: "Surprisingly, yes. Most people fail resolutions not because they picked the wrong goal but because they committed to too many at once. A wheel forces you to pick just one, and the act of spinning creates a moment of commitment that feels more decisive than just thinking about it.",
+  },
+  {
+    question: "What if I land on something I've tried and failed at before?",
+    answer: "That might be exactly what you need. The wheel picking it again is a reminder it's still important to you. Consider spinning again and treating it as 'revisiting', not failing — the approach might differ this time.",
+  },
+  {
+    question: "Can I add specific measurable goals instead of categories?",
+    answer: "Absolutely. Instead of 'Exercise more', add 'Run 3x per week' or 'Walk 10,000 steps daily'. The more specific your wheel items, the more actionable the result.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Exercise more", weight: 1 },
+  { pseudo: "Read 12 books", weight: 1 },
+  { pseudo: "Learn a language", weight: 1 },
+  { pseudo: "Save more money", weight: 1 },
+  { pseudo: "Cook at home", weight: 1 },
+  { pseudo: "Meditate daily", weight: 1 },
+  { pseudo: "Reduce screen time", weight: 1 },
+  { pseudo: "Travel somewhere new", weight: 1 },
+  { pseudo: "Start a side project", weight: 1 },
+  { pseudo: "Volunteer regularly", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/new-years-resolution-wheel",
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "New Year Resolution Wheel", url: "https://realwheelpicker.com/templates/new-years-resolution-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">New Year Resolution Wheel</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          New Year Resolution Wheel — Random Goals Spinner
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Stop making 10 resolutions and keeping none. Spin for one goal. Commit to just that. One focused resolution beats ten abandoned ones.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <section class="space-y-8">
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why One Resolution Beats Ten</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            The average person makes 3-5 New Year's resolutions. Studies show fewer than 10% stick to all of them past February. The problem isn't willpower — it's spreading limited attention across too many habit changes at once.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            Pick one. Do it properly. The wheel helps you commit to one thing instead of listing everything you've been meaning to change. Once you've spun, add only that resolution to your calendar, set a system for tracking it, and ignore the rest until next year.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/new-year-party-wheel", label: "New Year's Eve Party Wheel", desc: "Spin for party activities and countdown challenges." },
+            { href: "/templates/self-care-wheel", label: "Self-Care Wheel", desc: "Daily wellness activities to support your resolution." },
+            { href: "/yes-or-no-wheel", label: "Yes or No Wheel", desc: "Simple commitment tool — should I start this resolution today?" },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

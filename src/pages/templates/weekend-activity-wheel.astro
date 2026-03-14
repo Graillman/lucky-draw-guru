@@ -1,0 +1,142 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Weekend Activity Spinner — What to Do This Weekend";
+const description = "Can't decide what to do this weekend? Spin the wheel. Pre-loaded with 12 activities from relaxing to adventurous. Free, instant, no signup.";
+const canonical = "/templates/weekend-activity-wheel";
+
+const faqItems = [
+  {
+    question: "How do I pick activities for the whole weekend vs. one day?",
+    answer: "Spin twice — once for Saturday, once for Sunday. Or spin for a morning activity and an afternoon activity separately. The wheel is most useful when you commit to a specific time slot.",
+  },
+  {
+    question: "What if the wheel picks something too adventurous for the weather?",
+    answer: "Remove weather-dependent options in advance, or have a simple rule: if the weather doesn't cooperate, re-spin once. This keeps the randomness while being practical.",
+  },
+  {
+    question: "Can I use this with friends or a partner?",
+    answer: "Yes — everyone adds one suggestion to the wheel, then you spin together. Since everyone contributed, the result feels fair and no one feels their preference was ignored.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Movie marathon", weight: 1 },
+  { pseudo: "Hiking trail", weight: 1 },
+  { pseudo: "Brunch out", weight: 1 },
+  { pseudo: "Museum visit", weight: 1 },
+  { pseudo: "Farmers market", weight: 1 },
+  { pseudo: "Beach or lake", weight: 1 },
+  { pseudo: "Game night", weight: 1 },
+  { pseudo: "Cooking project", weight: 1 },
+  { pseudo: "Day trip nearby", weight: 1 },
+  { pseudo: "Bike ride", weight: 1 },
+  { pseudo: "Thrift shopping", weight: 1 },
+  { pseudo: "Spa day at home", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/weekend-activity-wheel",
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Weekend Activity Spinner", url: "https://realwheelpicker.com/templates/weekend-activity-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Weekend Activity Spinner</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Weekend Activity Spinner — What to Do This Weekend
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Stop wasting Saturday morning deciding what to do. Spin the wheel, get a plan, and actually enjoy your weekend.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <section class="space-y-8">
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Problem with Weekend Planning</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Most weekends don't fail because nothing was available — they fail because decision fatigue kicks in before anything gets decided. You talk about going hiking but never pick which trail. You say you want to try a new restaurant but can't agree on which one. By noon Saturday, the best options have passed.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The weekend activity wheel forces a decision in two seconds. You've already pre-loaded it with activities you'd enjoy. Whatever it picks, you start planning that activity instead of staying in the loop of "what do you want to do?"
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Make It Your Weekend Ritual</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Spin every Friday evening as a ritual with whoever you'll spend the weekend with. It sets a positive tone — you have a plan before the weekend starts. Customize the wheel seasonally: add outdoor options in summer, cozy indoor activities in winter.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/hobby-wheel", label: "Hobby Wheel", desc: "Shorter activities — spin when you have an hour to fill." },
+            { href: "/templates/travel-destination-wheel", label: "Travel Destination Spinner", desc: "Ready for a bigger adventure? Spin for a travel destination." },
+            { href: "/templates/date-night-wheel", label: "Date Night Wheel", desc: "Spin for a random date night idea — dinner, activity, and more." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>
