@@ -43,6 +43,10 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
   const startTimeRef = useRef<number>(0);
   const selectedWinnersRef = useRef<string[]>([]);
   const lastTickSegmentRef = useRef(-1);
+  // Idle rotation — slow spin before first user interaction
+  const idleAnimRef = useRef<number>();
+  const hasSpunRef = useRef(false);
+  const idleLastTimeRef = useRef(0);
 
   const isAdvanced = mode === "advanced";
   
@@ -269,6 +273,34 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     ctx.fill();
 
   }, [rotation, segments, participants.length, mode, themeColor, themeColorDark, themeColorGlow, themeColorHalf, themeColorLight, themeStroke]);
+
+  // Idle rotation — 1 revolution per ~20s, stops on first spin
+  useEffect(() => {
+    if (hasSpunRef.current) return;
+
+    const IDLE_SPEED = (2 * Math.PI) / 20000; // rad/ms
+    idleLastTimeRef.current = performance.now();
+
+    const tick = (now: number) => {
+      const dt = Math.min(now - idleLastTimeRef.current, 50); // cap dt to avoid jumps
+      idleLastTimeRef.current = now;
+      setRotation(r => r + IDLE_SPEED * dt);
+      idleAnimRef.current = requestAnimationFrame(tick);
+    };
+
+    idleAnimRef.current = requestAnimationFrame(tick);
+    return () => { if (idleAnimRef.current) cancelAnimationFrame(idleAnimRef.current); };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Stop idle when user triggers a spin
+  useEffect(() => {
+    if (!isSpinning) return;
+    hasSpunRef.current = true;
+    if (idleAnimRef.current) {
+      cancelAnimationFrame(idleAnimRef.current);
+      idleAnimRef.current = undefined;
+    }
+  }, [isSpinning]);
 
   // Animation - select winner FIRST, then animate to that position
   useEffect(() => {
