@@ -10,12 +10,39 @@ import { Language, languageNames, languageFlags } from "@/lib/i18n";
 
 const languages: Language[] = ['en', 'es', 'fr', 'de', 'pt', 'it'];
 
+// Mapping from language to its "home" page URL
+const HOME_ROUTES: Record<Language, string> = {
+  en: '/',
+  fr: '/tirage-au-sort',
+  es: '/sorteo-online',
+  pt: '/sorteio-online',
+  de: '/zufallsgenerator',
+  it: '/sorteggio-online',
+};
+
+// Set of all known home paths for redirect detection
+const HOME_PATHS = new Set(Object.values(HOME_ROUTES));
+
 interface LanguageSelectorProps {
   mode?: "simple" | "advanced";
 }
 
 export function LanguageSelector({ mode = "simple" }: LanguageSelectorProps) {
   const { language, setLanguage } = useLanguage();
+
+  const handleSelect = (lang: Language) => {
+    setLanguage(lang);
+    if (typeof window !== 'undefined') {
+      const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+      const normalizedPath = currentPath === '' ? '/' : currentPath;
+      if (HOME_PATHS.has(normalizedPath) || normalizedPath === '/') {
+        const target = HOME_ROUTES[lang];
+        if (target !== normalizedPath) {
+          window.location.href = target;
+        }
+      }
+    }
+  };
 
   return (
     <DropdownMenu>
@@ -29,7 +56,7 @@ export function LanguageSelector({ mode = "simple" }: LanguageSelectorProps) {
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang}
-            onClick={() => setLanguage(lang)}
+            onClick={() => handleSelect(lang)}
             className={`gap-3 cursor-pointer transition-all ${
               language === lang
                 ? 'bg-primary/10 text-primary font-semibold'

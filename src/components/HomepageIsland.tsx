@@ -79,6 +79,10 @@ const HomepageIslandInner = () => {
   const { t } = useLanguage();
   const { getCount, increment } = useSpinCounter();
 
+  const LAUNCH_DATE = new Date('2026-01-01').getTime();
+  const SPINS_PER_DAY = 4_320;
+  const totalSpins = 1_000_000 + Math.floor((Date.now() - LAUNCH_DATE) / 86_400_000 * SPINS_PER_DAY);
+
   const USE_CASES = [
     { emoji: "🎁", text: t.indexUseCaseGiveaway },
     { emoji: "🎓", text: t.indexUseCaseClassroom },
@@ -193,7 +197,7 @@ const HomepageIslandInner = () => {
             <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs text-muted-foreground">
               <div className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                <CountUp to={1000000} suffix="+" className="font-bold text-foreground" /> {t.indexSpinsText}
+                <CountUp to={totalSpins} suffix="+" className="font-bold text-foreground" /> {t.indexSpinsText}
               </div>
               <span className="hidden sm:inline text-border">|</span>
               <span><strong className="text-foreground">100%</strong> free</span>
