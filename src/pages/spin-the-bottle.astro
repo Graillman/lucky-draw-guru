@@ -1,0 +1,171 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SpinTheBottleIsland from '@/components/SpinTheBottleIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Spin the Bottle — Free Online Bottle Spin Game";
+const description = "Play spin the bottle online. Add player names, spin the animated bottle, and see who it points to. Free, no app needed. Perfect for parties and game nights.";
+const canonical = "/spin-the-bottle";
+
+const faqItems = [
+  {
+    question: "How many players can join?",
+    answer: "The bottle game supports 2 to 20 players. For the best visual experience, 4 to 10 players works well. You can add or remove players between rounds without resetting the game.",
+  },
+  {
+    question: "Is the spin result really random?",
+    answer: "Yes. The final angle uses crypto.getRandomValues(), a cryptographically secure random number generator built into browsers. The result cannot be predicted or manipulated.",
+  },
+  {
+    question: "Can I use this for something other than the classic game?",
+    answer: "Absolutely. Use it to pick who pays the dinner bill, who presents first in class, who chooses tonight's movie, or who draws a card. Any situation where you need to randomly point to one person in a group works perfectly.",
+  },
+  {
+    question: "Does it work on phones?",
+    answer: "Yes. The bottle game is fully responsive and works on all mobile browsers. Tap the bottle or the Spin button to start. The player names scale down for smaller screens.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/spin-the-bottle",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  hreflangLinks={[
+    { hreflang: "en", href: "https://realwheelpicker.com/spin-the-bottle" },
+    { hreflang: "fr", href: "https://realwheelpicker.com/jeu-de-la-bouteille" },
+    { hreflang: "x-default", href: "https://realwheelpicker.com/spin-the-bottle" },
+  ]}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Spin the Bottle", url: "https://realwheelpicker.com/spin-the-bottle" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Spin the Bottle</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Spin the Bottle — Free Online Bottle Spin
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Add your players, tap the bottle, and watch it spin. Works on any device. Perfect for
+          parties, game nights, and any situation where you need to randomly pick someone.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Works on mobile • Crypto fair</p>
+      </section>
+
+      <section class="flex flex-col items-center">
+        <SpinTheBottleIsland client:load />
+      </section>
+
+      <section class="space-y-8">
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Play Spin the Bottle</h2>
+          <ol class="space-y-3 text-muted-foreground">
+            <li class="flex gap-3">
+              <span class="text-primary font-bold shrink-0">1.</span>
+              <span><strong class="text-foreground">Add players:</strong> Replace the default names with the names of everyone in your group. You can have 2 to 20 players. Tap "+" or press Enter to add each name.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-primary font-bold shrink-0">2.</span>
+              <span><strong class="text-foreground">Spin:</strong> Click the bottle itself or the "Spin the Bottle" button. The bottle rotates with a realistic easing animation and stops pointing at a random player.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-primary font-bold shrink-0">3.</span>
+              <span><strong class="text-foreground">See who's chosen:</strong> The selected player's name lights up in the circle and appears below the bottle. Spin again for the next round.</span>
+            </li>
+          </ol>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Spin the Bottle Variants & Rules</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            The classic spin-the-bottle game has been around for decades, but modern versions go way
+            beyond the original. Here are popular variants you can play using this tool:
+          </p>
+          <ul class="space-y-2 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold shrink-0">→</span><span><strong class="text-foreground">Truth or Dare:</strong> The bottle points to a player who must then spin the <a href="/party-wheel" class="text-primary hover:underline">party wheel</a> to get a truth or dare prompt.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold shrink-0">→</span><span><strong class="text-foreground">Question round:</strong> The chosen player must answer any question from the group honestly. Good for icebreakers and getting to know people.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold shrink-0">→</span><span><strong class="text-foreground">Task assignment:</strong> Each round, the pointed player takes on a task, dare, or challenge. Works great for party forfeits.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold shrink-0">→</span><span><strong class="text-foreground">Team selection:</strong> Use it to randomly assign players to teams before a game. Spin until each team has enough members.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold shrink-0">→</span><span><strong class="text-foreground">Bill splitter:</strong> Sitting at a restaurant and nobody wants to calculate the tip? Spin to decide who takes charge of splitting the bill.</span></li>
+          </ul>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Use a Digital Bottle Instead of a Real One?</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            A physical bottle on a table works, but a digital version has real advantages: you can
+            play at a virtual party, you see everyone's name clearly instead of guessing who's at
+            what angle, and there's no dispute about exactly who the bottle is "really" pointing at.
+            The physics simulation uses a random final angle with a smooth deceleration curve, so
+            each spin feels genuinely random and satisfying to watch.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The spin history at the right lets you track who's been chosen across multiple rounds,
+            so you can ensure fair distribution — nobody gets picked three times in a row while
+            someone else never gets chosen.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/party-wheel", label: "Party Wheel", desc: "Truth or Dare, Never Have I Ever, and more party games." },
+            { href: "/templates/truth-or-dare-wheel", label: "Truth or Dare Wheel", desc: "Pre-loaded truth and dare prompts for any group." },
+            { href: "/templates/never-have-i-ever-wheel", label: "Never Have I Ever Wheel", desc: "Classic party questions for any group size." },
+            { href: "/templates/dare-wheel", label: "Dare Wheel", desc: "Random dares for party games and challenges." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

@@ -1,0 +1,156 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SpinTheBottleIsland from '@/components/SpinTheBottleIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Jeu de la Bouteille en Ligne — Tourner la Bouteille Gratuit";
+const description = "Jouez au jeu de la bouteille en ligne. Ajoutez les noms des joueurs, faites tourner la bouteille animée et voyez vers qui elle pointe. Gratuit, sans application.";
+const canonical = "/jeu-de-la-bouteille";
+
+const faqItems = [
+  {
+    question: "Combien de joueurs peut-on ajouter ?",
+    answer: "Le jeu de la bouteille supporte de 2 à 20 joueurs. Pour une meilleure expérience visuelle, 4 à 10 joueurs est idéal. Vous pouvez ajouter ou supprimer des joueurs entre les tours.",
+  },
+  {
+    question: "Le résultat est-il vraiment aléatoire ?",
+    answer: "Oui. L'angle final utilise crypto.getRandomValues(), un générateur de nombres aléatoires cryptographiquement sécurisé intégré aux navigateurs. Le résultat ne peut pas être prédit ou manipulé.",
+  },
+  {
+    question: "Peut-on l'utiliser pour autre chose que le jeu classique ?",
+    answer: "Tout à fait. Utilisez-le pour décider qui paye l'addition, qui passe en premier, qui choisit le film du soir, ou qui pioche une carte. N'importe quelle situation où il faut désigner une personne au hasard dans un groupe.",
+  },
+  {
+    question: "Fonctionne-t-il sur téléphone ?",
+    answer: "Oui. Le jeu est entièrement responsive et fonctionne sur tous les navigateurs mobiles. Tapez la bouteille ou le bouton pour tourner. Les noms s'adaptent aux petits écrans.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/jeu-de-la-bouteille",
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  locale="fr_FR"
+  hreflangLinks={[
+    { hreflang: "fr", href: "https://realwheelpicker.com/jeu-de-la-bouteille" },
+    { hreflang: "en", href: "https://realwheelpicker.com/spin-the-bottle" },
+    { hreflang: "x-default", href: "https://realwheelpicker.com/spin-the-bottle" },
+  ]}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Accueil", url: "https://realwheelpicker.com" },
+    { name: "Jeu de la Bouteille", url: "https://realwheelpicker.com/jeu-de-la-bouteille" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Accueil</a>
+        <span>/</span>
+        <span class="text-foreground">Jeu de la Bouteille</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Jeu de la Bouteille en Ligne — Tourner la Bouteille
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Ajoutez les noms de vos joueurs, tapez la bouteille et regardez-la tourner. Fonctionne
+          sur tous les appareils. Parfait pour les soirées et les jeux en groupe.
+        </p>
+        <p class="text-sm text-muted-foreground">Gratuit • Sans compte • Mobile • Résultat crypto-sécurisé</p>
+      </section>
+
+      <section class="flex flex-col items-center">
+        <SpinTheBottleIsland lang="fr" client:load />
+      </section>
+
+      <section class="space-y-8">
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Comment jouer au jeu de la bouteille en ligne</h2>
+          <ol class="space-y-3 text-muted-foreground">
+            <li class="flex gap-3">
+              <span class="text-primary font-bold shrink-0">1.</span>
+              <span><strong class="text-foreground">Ajoutez les joueurs :</strong> Remplacez les noms par défaut par les prénoms de votre groupe. Tapez sur "+" ou appuyez sur Entrée pour ajouter chaque joueur.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-primary font-bold shrink-0">2.</span>
+              <span><strong class="text-foreground">Tournez :</strong> Cliquez sur la bouteille ou le bouton "Tourner la Bouteille". La bouteille tourne avec une animation réaliste et s'arrête sur un joueur aléatoire.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-primary font-bold shrink-0">3.</span>
+              <span><strong class="text-foreground">Découvrez le résultat :</strong> Le nom du joueur désigné s'illumine dans le cercle. Retournez pour le tour suivant.</span>
+            </li>
+          </ol>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Variantes et règles du jeu de la bouteille</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Le jeu de la bouteille classique existe depuis des décennies, mais les versions modernes
+            vont bien au-delà de l'original. Voici des variantes populaires que vous pouvez jouer
+            avec cet outil :
+          </p>
+          <ul class="space-y-2 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold shrink-0">→</span><span><strong class="text-foreground">Vérité ou Défi :</strong> La bouteille désigne un joueur qui doit choisir entre répondre à une question sincère ou relever un défi.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold shrink-0">→</span><span><strong class="text-foreground">Tour de question :</strong> Le joueur désigné doit répondre honnêtement à n'importe quelle question du groupe. Idéal pour faire connaissance.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold shrink-0">→</span><span><strong class="text-foreground">Attribution de tâche :</strong> À chaque tour, le joueur désigné prend en charge une tâche ou un gage. Parfait pour les soirées.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold shrink-0">→</span><span><strong class="text-foreground">Formation d'équipes :</strong> Utilisez-le pour répartir aléatoirement les joueurs en équipes avant un jeu.</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Questions fréquentes</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Outils similaires</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/tirage-au-sort", label: "Tirage au Sort", desc: "Roue de tirage au sort en ligne, gratuite." },
+            { href: "/roue-des-noms", label: "Roue des Noms", desc: "Roulette de noms aléatoire." },
+            { href: "/spin-the-bottle", label: "Spin the Bottle (EN)", desc: "Version anglaise de ce jeu." },
+            { href: "/templates", label: "Tous les templates", desc: "50 roues prêtes à utiliser." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>
