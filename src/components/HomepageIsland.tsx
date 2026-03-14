@@ -287,14 +287,31 @@ const HomepageIslandInner = () => {
               )}
 
               {/* Winner history */}
-              {winnerHistory.length > 1 && (
+              {winnerHistory.length >= 1 && (
                 <div className={`px-4 py-3 rounded-lg border text-sm ${isAdvanced ? "border-accent/20 bg-accent/5" : "border-border bg-secondary/20"}`}>
-                  <p className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wide">{t.indexPreviousDraws}</p>
-                  <div className="space-y-1">
-                    {winnerHistory.slice(1).map((draw, i) => (
-                      <p key={i} className="text-xs text-muted-foreground">
-                        <span className={`font-medium ${isAdvanced ? "text-accent" : "text-primary"}`}>{draw.join(', ')}</span>
-                      </p>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                      {t.indexPreviousDraws} ({winnerHistory.length})
+                    </p>
+                    <button
+                      onClick={() => setWinnerHistory([])}
+                      className="text-xs text-muted-foreground/50 hover:text-destructive transition-colors"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {(winners.length > 0 ? winnerHistory.slice(1) : winnerHistory).map((draw, i) => (
+                      <span
+                        key={i}
+                        className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                          isAdvanced
+                            ? "bg-accent/10 text-accent border border-accent/20"
+                            : "bg-primary/10 text-primary border border-primary/20"
+                        }`}
+                      >
+                        {draw.join(', ')}
+                      </span>
                     ))}
                   </div>
                 </div>
