@@ -1,0 +1,172 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import ProbabilityPickerIsland from '@/components/ProbabilityPickerIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Probability Picker — Weighted Wheel With Real-Time Odds Calculator";
+const description = "Assign custom probabilities to each option with visual sliders. See exact odds in real-time. The only weighted spinner with a built-in probability calculator and live percentage display.";
+const canonical = "/probability-picker";
+
+const faqItems = [
+  {
+    question: "What's the difference between weight and probability?",
+    answer: "A weight is a relative number you assign to each option. Probability is the actual chance of that option winning, calculated as weight ÷ total weight × 100%. If Option A has weight 40 and Option B has weight 60, A has a 40% chance and B has a 60% chance.",
+  },
+  {
+    question: "How is this different from the basic weighted picker?",
+    answer: "The basic weighted picker (/weighted-random-picker) uses simple +/- buttons. This probability picker uses sliders with real-time percentage display and a full probability table, making it easier to visualize and set exact odds for each option.",
+  },
+  {
+    question: "Can I make an option impossible to win?",
+    answer: "The minimum weight is 1, so no option can have 0% probability as long as it's on the wheel. To exclude an option entirely, remove it from the list using the ✕ button.",
+  },
+  {
+    question: "Is this useful for simulating loot tables or raffle tickets?",
+    answer: "Yes. Set weights to simulate different ticket quantities (3 tickets = weight 3), loot table drop rates (legendary = weight 1, common = weight 50), or any scenario where different outcomes have different likelihoods.",
+  },
+  {
+    question: "Does the spinner actually use the weights correctly?",
+    answer: "Yes. The wheel segments are proportional to the weights, and the random selection algorithm uses a weighted probability distribution. An option with weight 40 out of a total of 100 has exactly a 40% chance of being selected.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/probability-picker",
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Probability Picker", url: "https://realwheelpicker.com/probability-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg-purple)">
+    <HeaderIsland client:load />
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Probability Picker</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Probability Picker — Real-Time Weighted Odds
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Set custom weights with sliders. See exact probabilities update in real-time.
+          Spin a proportional wheel with built-in fairness visualization.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Crypto-secure randomness</p>
+      </section>
+
+      <ProbabilityPickerIsland client:load />
+
+      <section class="space-y-8 text-muted-foreground">
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">How Weighted Probability Works</h2>
+          <p class="leading-relaxed">
+            In a standard random picker, every option has an equal chance of winning. A weighted picker
+            changes this by assigning a "weight" to each option. The probability of any option winning
+            is its weight divided by the total weight of all options.
+          </p>
+          <p class="leading-relaxed font-mono text-sm bg-secondary/30 px-4 py-3 rounded-lg border border-border">
+            P(Option X) = weight(X) ÷ Σ(all weights) × 100%
+          </p>
+          <p class="leading-relaxed">
+            For example: if you have three options with weights 50, 30, and 20, the total weight is 100.
+            The first option has a 50% chance, the second 30%, and the third 20%. Adjust the sliders
+            and watch the probabilities update live.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Use Cases for Weighted Probability</h2>
+          <ul class="space-y-3">
+            <li class="flex gap-3">
+              <span class="text-primary font-bold shrink-0">→</span>
+              <span><strong class="text-foreground">Raffle with multiple tickets:</strong> Give people with more tickets a higher weight. If Alice has 5 tickets and Bob has 2, set Alice's weight to 5 and Bob's to 2. Their actual odds are 71.4% and 28.6%.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-primary font-bold shrink-0">→</span>
+              <span><strong class="text-foreground">Loot tables for games:</strong> Simulate RPG item drops. Set Legendary to weight 1, Rare to 10, Uncommon to 30, Common to 60. The wheel shows the exact drop rates visually.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-primary font-bold shrink-0">→</span>
+              <span><strong class="text-foreground">Decision with preferences:</strong> You want pizza more than sushi, but both are on the table. Set pizza to 70 and sushi to 30 — you get a biased random decision that still keeps both in play.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-primary font-bold shrink-0">→</span>
+              <span><strong class="text-foreground">Classroom engagement:</strong> Give students who haven't been called recently a higher weight, so the picker naturally corrects for participation imbalances.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-primary font-bold shrink-0">→</span>
+              <span><strong class="text-foreground">Gamification / reward tiers:</strong> Spin a weighted wheel for employee recognition programs where high performers have a better — but not guaranteed — chance of winning the top prize.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Visualize Probabilities in Real-Time?</h2>
+          <p class="leading-relaxed">
+            Weighted pickers without visual feedback create uncertainty. If you set weights to 40, 30, 20,
+            and 10, most people can't quickly calculate that the first option wins 40% of the time. A live
+            percentage display eliminates this guesswork — you can see exactly how likely each option is
+            before you spin.
+          </p>
+          <p class="leading-relaxed">
+            This transparency matters especially for giveaways and raffles where multiple ticket holders
+            are watching. Showing "Alice: 33.3% — Bob: 20% — Carol: 46.7%" before the spin makes
+            the process auditable and builds trust with your audience.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/weighted-random-picker", label: "Weighted Random Picker", desc: "Simpler weighted spinner with +/- buttons." },
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Fair random winner for online giveaways." },
+            { href: "/blog/weighted-random-picker", label: "How Weighted Randomness Works", desc: "Deep dive into the math behind weighted selection." },
+            { href: "/templates", label: "All Templates", desc: "50 pre-loaded wheel templates." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>
