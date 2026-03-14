@@ -19,9 +19,10 @@ import LocalStorageNotice from "@/components/LocalStorageNotice";
 import { useLocalStorageParticipants } from "@/hooks/useLocalStorageParticipants";
 import PopularTemplates from "@/components/PopularTemplates";
 import { ConfettiEffect } from "@/components/ConfettiEffect";
-import { WheelThemePicker, WHEEL_THEMES } from "@/components/WheelThemePicker";
+import { WHEEL_THEMES } from "@/components/WheelThemePicker";
+import { CustomizePanel, useCustomizeConfig } from "@/components/CustomizePanel";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Gift, Hash, Users, PartyPopper, GraduationCap, Scale, Instagram, Dices, Edit3, Share2, Volume2, VolumeX } from "lucide-react";
+import { Gift, Hash, Users, PartyPopper, GraduationCap, Scale, Instagram, Dices, Edit3, Share2, Settings2 } from "lucide-react";
 import { buildShareURL, readShareURLConfig } from "@/hooks/useShareableURL";
 import { toast } from "sonner";
 
@@ -88,10 +89,9 @@ const HomepageIslandInner = () => {
     { emoji: "🎮", text: t.indexUseCasePresentation },
   ];
 
-  const { enabled: soundEnabled, toggle: toggleSound, playTick, playFanfare } = useWheelSound();
-  const [wheelTheme, setWheelTheme] = useState(() => {
-    try { return localStorage.getItem("wheelTheme") || "classic"; } catch { return "classic"; }
-  });
+  const { playTick, playFanfare } = useWheelSound();
+  const [customizeConfig, setCustomizeConfig] = useCustomizeConfig();
+  const [showCustomize, setShowCustomize] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [mode, setMode] = useState<"simple" | "advanced">("simple");
   const [winners, setWinners] = useState<string[]>([]);
@@ -104,10 +104,6 @@ const HomepageIslandInner = () => {
   const [hasInitialized, setHasInitialized] = useState(false);
   const [spinCount, setSpinCount] = useState(() => getCount());
 
-  const handleThemeChange = (theme: string) => {
-    setWheelTheme(theme);
-    try { localStorage.setItem("wheelTheme", theme); } catch {}
-  };
 
   if (isLoaded && !hasInitialized) {
     const shared = readShareURLConfig();
@@ -142,9 +138,9 @@ const HomepageIslandInner = () => {
     setIsSpinning(false);
     setSpinCount(increment());
     setWinnerHistory(prev => [selectedWinners, ...prev].slice(0, 5));
-    setShowConfetti(true);
-    playFanfare();
-  }, [increment, playFanfare]);
+    if (customizeConfig.launchConfetti) setShowConfetti(true);
+    if (customizeConfig.resultSoundEnabled) playFanfare();
+  }, [increment, playFanfare, customizeConfig.launchConfetti, customizeConfig.resultSoundEnabled]);
 
   const handleRelaunch = useCallback(() => {
     setWinners([]);
@@ -173,6 +169,13 @@ const HomepageIslandInner = () => {
   return (
     <div className="relative min-h-screen overflow-hidden" style={{ background: isAdvanced ? "var(--gradient-bg-purple)" : "var(--gradient-bg)" }}>
       <ConfettiEffect active={showConfetti} onComplete={() => setShowConfetti(false)} />
+      {showCustomize && (
+        <CustomizePanel
+          config={customizeConfig}
+          onChange={setCustomizeConfig}
+          onClose={() => setShowCustomize(false)}
+        />
+      )}
       {/* Aurora background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <div className={`aurora-orb ${isAdvanced ? "aurora-orb-purple" : "aurora-orb-gold"}`} />
@@ -240,16 +243,20 @@ const HomepageIslandInner = () => {
                 )}
               </div>
 
-              {/* Wheel theme + sound controls */}
+              {/* Customize button */}
               <div className="flex items-center justify-between gap-2 px-1">
-                <WheelThemePicker selected={wheelTheme} onChange={handleThemeChange} />
                 <button
-                  onClick={toggleSound}
-                  title={soundEnabled ? "Mute sounds" : "Enable sounds"}
-                  className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                  onClick={() => setShowCustomize(true)}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-border bg-card/60 hover:border-primary/40 hover:shadow-sm transition-all text-sm font-medium text-muted-foreground hover:text-foreground"
                 >
-                  {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+                  <Settings2 className="w-4 h-4" />
+                  <span>Customize</span>
                 </button>
+                <div
+                  className="w-5 h-5 rounded-full border-2 border-foreground/20 flex-shrink-0"
+                  style={{ background: WHEEL_THEMES[customizeConfig.theme]?.preview ?? "#e53e3e" }}
+                  title={`Theme: ${WHEEL_THEMES[customizeConfig.theme]?.label ?? customizeConfig.theme}`}
+                />
               </div>
 
               {/* Wheel */}
@@ -262,8 +269,8 @@ const HomepageIslandInner = () => {
                     mode={mode}
                     winnersCount={winnersCount}
                     onSpin={handleDraw}
-                    onTick={playTick}
-                    colors={WHEEL_THEMES[wheelTheme]?.colors}
+                    onTick={customizeConfig.spinSoundEnabled ? playTick : undefined}
+                    colors={WHEEL_THEMES[customizeConfig.theme]?.colors}
                   />
                 ) : (
                   <CasinoRoulette participants={displayParticipants} isSpinning={isSpinning} onComplete={handleWheelComplete} mode={mode} winnersCount={winnersCount} />
@@ -281,7 +288,14 @@ const HomepageIslandInner = () => {
               {/* Winner result */}
               {winners.length > 0 && !isSpinning && (
                 <div className="space-y-4">
-                  <WinnerResult winners={winners} onRelaunch={handleRelaunch} onRemoveWinnersAndRespin={handleRemoveWinnersAndRespin} canRemoveWinners={participants.length > winnersCount + 1} drawTitle={drawTitle} mode={mode} />
+                  <WinnerResult
+                    winners={winners}
+                    onRelaunch={handleRelaunch}
+                    onRemoveWinnersAndRespin={customizeConfig.showRemoveButton ? handleRemoveWinnersAndRespin : undefined}
+                    canRemoveWinners={participants.length > winnersCount + 1}
+                    drawTitle={drawTitle}
+                    mode={mode}
+                  />
                   <NextToolSuggestion currentPath="/" mode={mode} />
                 </div>
               )}
