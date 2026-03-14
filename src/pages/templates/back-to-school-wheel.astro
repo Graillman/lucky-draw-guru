@@ -1,0 +1,133 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Back to School Wheel — Random Subject & Study Activity Picker";
+const description = "Spin for a random subject to study or school activity. Pre-loaded with 10 back-to-school topics. Beat study procrastination — spin and start.";
+const canonical = "/templates/back-to-school-wheel";
+
+const faqItems = [
+  {
+    question: "How can teachers use this in the classroom?",
+    answer: "Spin to pick which student answers next, which topic to review, which group presents first, or which activity to do for a free block. Works for any grade level — just replace the defaults with your subject matter.",
+  },
+  {
+    question: "How should students use this for studying?",
+    answer: "Load it with all subjects you need to study. Spin to pick where to start. Once you finish 25-30 minutes on that subject, spin again for the next one. Randomizing study order prevents overloading any one subject and keeps sessions interesting.",
+  },
+  {
+    question: "Can parents use this for school prep activities?",
+    answer: "Yes. Load it with back-to-school tasks: buy supplies, label books, set up study space, review summer work, plan schedule. Spin to delegate tasks among siblings or decide what to tackle first.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Math review", weight: 1 },
+  { pseudo: "Reading practice", weight: 1 },
+  { pseudo: "Science chapter", weight: 1 },
+  { pseudo: "History notes", weight: 1 },
+  { pseudo: "English writing", weight: 1 },
+  { pseudo: "Vocabulary drill", weight: 1 },
+  { pseudo: "Study flashcards", weight: 1 },
+  { pseudo: "Practice test", weight: 1 },
+  { pseudo: "Art project", weight: 1 },
+  { pseudo: "PE / exercise", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/back-to-school-wheel",
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Back to School Wheel", url: "https://realwheelpicker.com/templates/back-to-school-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Back to School Wheel</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Back to School Wheel — Random Subject & Activity Picker
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Replace the defaults with your actual subjects or school tasks. Spin to decide what to work on first. Works for students, teachers, and parents organizing back-to-school prep.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <section class="space-y-8">
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Random Study Order Works</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Students who always study the same subjects in the same order hit a predictable pattern: they over-invest in the first subject (because they're fresh) and rush through the last one (because they're tired). Random order distributes attention more evenly across subjects and prevents the bias of "saving the hard one for when I have more energy" — which usually means not doing it at all.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            For teachers, a spinning wheel during class participation creates fairness and engagement. Students who know they might be called at any time pay more attention than those who know they won't be called for 15 minutes.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/vocabulary-wheel", label: "Vocabulary Wheel", desc: "Spin to practice random vocabulary words." },
+            { href: "/templates/math-problem-wheel", label: "Math Problem Wheel", desc: "Random math topics for drills and practice." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Call on random students during class." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

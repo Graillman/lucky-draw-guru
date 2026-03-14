@@ -1,0 +1,133 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Valentine's Day Idea Wheel — Random Date & Gift Ideas";
+const description = "Spin for a random Valentine's Day idea. Pre-loaded with 10 date night and gift ideas for couples. Works for planning dates, activities, and surprises.";
+const canonical = "/templates/valentines-day-wheel";
+
+const faqItems = [
+  {
+    question: "What if we both want to spin to decide?",
+    answer: "Load the wheel together with date ideas you've both agreed are acceptable. Each idea on the wheel is one you'd both enjoy — the spin just picks which one you do. Removing the negotiation is the whole point.",
+  },
+  {
+    question: "Is this good for long-distance couples?",
+    answer: "Yes. Add remote-friendly options: virtual movie night, online cooking class together, care package theme, video call dinner. Customize the wheel for what's actually possible in your situation.",
+  },
+  {
+    question: "What are good last-minute Valentine's Day ideas?",
+    answer: "Cooking a nice dinner at home, a movie marathon with their favorite films, handwritten letter with their favorite snacks, a walk to a meaningful place, or recreating your first date. All achievable same-day.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Fancy dinner out", weight: 1 },
+  { pseudo: "Cook together", weight: 1 },
+  { pseudo: "Movie marathon", weight: 1 },
+  { pseudo: "Weekend getaway", weight: 1 },
+  { pseudo: "Spa day", weight: 1 },
+  { pseudo: "Picnic in the park", weight: 1 },
+  { pseudo: "Cooking class", weight: 1 },
+  { pseudo: "Sunset hike", weight: 1 },
+  { pseudo: "Board game night", weight: 1 },
+  { pseudo: "Surprise breakfast", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/valentines-day-wheel",
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Valentine's Day Idea Wheel", url: "https://realwheelpicker.com/templates/valentines-day-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Valentine's Day Idea Wheel</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Valentine's Day Wheel — Random Date & Gift Ideas
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Add ideas you'd both actually enjoy, spin together, and commit to the plan. Takes the pressure off planning and makes deciding feel like part of the fun.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <section class="space-y-8">
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Make Planning Part of the Romance</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            The classic Valentine's Day planning dynamic: one person asks "what do you want to do?", the other says "I don't mind, anything is fine", and somehow nothing gets booked until February 13th. The wheel breaks this loop.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            Build the wheel together — each of you adds 3-4 ideas to the list. Everything on the wheel is something both of you would enjoy. Spin together. The result feels shared and spontaneous without the usual back-and-forth negotiation. You spend the time planning the date, not deciding whether to go on one.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/gift-idea-wheel", label: "Gift Idea Wheel", desc: "Random gift ideas for any occasion." },
+            { href: "/templates/restaurant-picker", label: "Restaurant Picker", desc: "Spin to decide where to go for dinner." },
+            { href: "/yes-or-no-wheel", label: "Yes or No Wheel", desc: "Quick binary decisions for borderline plans." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>

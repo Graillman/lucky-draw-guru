@@ -1,0 +1,133 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Halloween Costume Picker — Random Costume Ideas Wheel";
+const description = "Can't decide what to wear for Halloween? Spin the wheel for a random costume idea. Pre-loaded with 10 classic and creative Halloween costumes.";
+const canonical = "/templates/halloween-costume-wheel";
+
+const faqItems = [
+  {
+    question: "What if I spin a costume I can't make in time?",
+    answer: "Remove it from the wheel before spinning. Only keep costumes you're realistically able to pull off with your budget and timeline. The wheel picks from the options you give it — curate the list first, then spin.",
+  },
+  {
+    question: "Can I use this for group Halloween costumes?",
+    answer: "Absolutely. Load the wheel with themed group options (Stranger Things characters, Avengers, Scooby-Doo crew) and spin once per person. You can even do a second spin to assign which character each person gets.",
+  },
+  {
+    question: "What are the easiest last-minute Halloween costumes?",
+    answer: "Ghost (white sheet), cat (black clothes + ears), vampire (dark clothes + fake fangs), witch (black dress + hat), and zombie (ripped old clothes + makeup) are all achievable in under an hour. Add your own to the wheel.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Vampire", weight: 1 },
+  { pseudo: "Witch", weight: 1 },
+  { pseudo: "Zombie", weight: 1 },
+  { pseudo: "Ghost", weight: 1 },
+  { pseudo: "Werewolf", weight: 1 },
+  { pseudo: "Skeleton", weight: 1 },
+  { pseudo: "Frankenstein", weight: 1 },
+  { pseudo: "Mummy", weight: 1 },
+  { pseudo: "Devil", weight: 1 },
+  { pseudo: "Black cat", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": "https://realwheelpicker.com/templates/halloween-costume-wheel",
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Halloween Costume Picker", url: "https://realwheelpicker.com/templates/halloween-costume-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Halloween Costume Picker</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Halloween Costume Picker — Random Costume Ideas
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Stop scrolling Pinterest for hours. Spin the wheel, commit to the costume, start planning. Works for solo costumes, couples, and group themes.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+      </section>
+
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <section class="space-y-8">
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Halloween Costume Paralysis Problem</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            There are thousands of Halloween costume ideas online. That's the problem. Too many options trigger decision paralysis — you spend two weeks browsing ideas, narrowing it to five finalists, and then can't choose between them. The costume you wore last year was probably picked the same way: you eventually just grabbed something because time ran out.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The wheel forces a decision. Load it with the costumes you're actually willing to wear — anything left on the wheel is acceptable — and spin. The randomness removes the pressure of "did I pick the best one?" You picked one. That's the win.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/templates/dare-wheel", label: "Dare Wheel", desc: "Halloween party dares for trick-or-treat games." },
+            { href: "/templates/never-have-i-ever-wheel", label: "Never Have I Ever Wheel", desc: "Halloween party game for any group size." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick who hosts the Halloween party or buys supplies." },
+            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:load />
+  </div>
+</Layout>
