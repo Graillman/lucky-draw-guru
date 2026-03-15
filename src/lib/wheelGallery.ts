@@ -12,6 +12,7 @@ export interface SavedWheel {
 }
 
 export async function getPublicWheels(limit = 30): Promise<SavedWheel[]> {
+  if (!supabase) return [];
   const { data } = await supabase
     .from('saved_wheels')
     .select('*')
@@ -28,6 +29,7 @@ export async function saveWheel(wheel: {
   border_style?: string;
   author_name?: string;
 }): Promise<string | null> {
+  if (!supabase) return null;
   const { data, error } = await supabase
     .from('saved_wheels')
     .insert([{ ...wheel, is_public: true }])
@@ -38,6 +40,7 @@ export async function saveWheel(wheel: {
 }
 
 export async function getWheelById(id: string): Promise<SavedWheel | null> {
+  if (!supabase) return null;
   const { data } = await supabase
     .from('saved_wheels')
     .select('*')
@@ -47,5 +50,6 @@ export async function getWheelById(id: string): Promise<SavedWheel | null> {
 }
 
 export async function incrementWheelSpins(id: string): Promise<void> {
+  if (!supabase) return;
   await supabase.rpc('increment_wheel_spins', { wheel_id: id });
 }

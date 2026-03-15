@@ -79,6 +79,6 @@ for (const page of pages) {
 
 xml += `</urlset>`;
 
-const outputPath = path.join(__dirname, '..', 'public', 'sitemap.xml');
+const outputPath = path.join(__dirname, '..', 'dist', 'sitemap.xml');
 fs.writeFileSync(outputPath, xml);
-console.log(`✅ Sitemap generated: ${count} URLs → public/sitemap.xml`);
+console.log(`✅ Sitemap generated: ${count} URLs → dist/sitemap.xml`);

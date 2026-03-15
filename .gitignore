@@ -9,3 +9,5 @@ dist/
 src/_pages_old/
 # old Vite entry
 index.html
+# Generated at build time — never commit
+public/sitemap.xml

@@ -5,6 +5,7 @@ let flushTimeout: ReturnType<typeof setTimeout> | null = null;
 const FALLBACK = 1_315_354;
 
 export async function getSpinCount(): Promise<number> {
+  if (!supabase) return FALLBACK;
   try {
     const { data } = await supabase
       .from('spin_counter')
@@ -18,6 +19,7 @@ export async function getSpinCount(): Promise<number> {
 }
 
 export function recordSpin() {
+  if (!supabase) return;
   localBuffer++;
   if (!flushTimeout) {
     flushTimeout = setTimeout(async () => {
@@ -25,7 +27,7 @@ export function recordSpin() {
       localBuffer = 0;
       flushTimeout = null;
       try {
-        await supabase.rpc('increment_spins', { amount });
+        await supabase!.rpc('increment_spins', { amount });
       } catch (e) {
         console.error('Failed to flush spins:', e);
       }
