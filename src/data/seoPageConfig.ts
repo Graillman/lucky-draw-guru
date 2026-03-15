@@ -16,6 +16,7 @@ export interface SEOPageConfig {
   metaTitle: string;
   metaDescription: string;
   relatedBlogPost?: { slug: string; title: string };
+  faqs?: { question: string; answer: string }[];
 }
 
 export const seoPages: Record<string, SEOPageConfig> = {
@@ -25,7 +26,7 @@ export const seoPages: Record<string, SEOPageConfig> = {
     subtitle: "Spin a random wheel to pick a winner instantly. Free, fast and fair.",
     microText: "Free • No signup • Instant result",
     howItWorksTitle: "How does this random wheel work?",
-    howItWorksText: "Enter names or options, spin the colorful wheel, and watch it land on a random result. Our algorithm ensures true randomness - everything runs locally in your browser with no data stored. Perfect for making quick, unbiased decisions.",
+    howItWorksText: "Enter any names or options — type them in, paste a list, or load a template. Hit the Spin button and watch the wheel rotate with a smooth, satisfying animation before landing on a cryptographically random result. Each segment of the wheel represents one entry, and all entries have equal-sized segments by default, making the fairness immediately visible. The entire process runs inside your browser using the Web Crypto API — no server, no storage, no tracking. Spin as many times as you want, screen-record the result for your audience, or share a pre-loaded wheel link with your entries already set.",
     whenToUseTitle: "When should you use a random wheel?",
     useCases: [
       { icon: "gift", title: "Social Media Giveaways", description: "Pick winners fairly for Instagram & TikTok contests" },
@@ -34,10 +35,29 @@ export const seoPages: Record<string, SEOPageConfig> = {
       { icon: "users", title: "Team Decisions", description: "Assign tasks or pick who goes first" },
       { icon: "sparkles", title: "Party Games", description: "Add excitement to any gathering" },
     ],
-    seoTitle: "Free Online Random Wheel Picker",
-    seoText: "Looking for a random wheel to pick a winner? Our free random wheel picker lets you spin and get instant, unbiased results. Whether you need a random wheel for giveaways, classroom activities, or team decisions, this online random picker is the perfect tool. No signup required - just paste names, spin the wheel, and get your winner. Trusted by streamers, teachers, and businesses worldwide for fair random selection.",
+    seoTitle: "Free Online Random Wheel Picker — Spin to Decide",
+    seoText: `Our free random wheel picker is the fastest way to make unbiased decisions online. Add any options you want — names, tasks, prizes, yes/no, colors, anything — and spin the wheel to get an instant random result. No account required, no ads blocking the wheel, no limit on spins.
+
+<strong class="text-foreground">What makes our random wheel different?</strong>
+<ul class="list-disc pl-5 mt-2 space-y-1">
+<li><strong class="text-foreground">Crypto-grade randomness.</strong> We use <code>crypto.getRandomValues()</code> for every spin. This is not a basic Math.random() — it's the same cryptographic RNG used in TLS, encryption keys, and blockchain. Your result cannot be predicted or manipulated.</li>
+<li><strong class="text-foreground">Visual and screen-recordable.</strong> The spinning animation is smooth and clear, making it ideal for recording your draw as proof of fairness. Post the clip to Instagram Stories, TikTok, or your Discord server.</li>
+<li><strong class="text-foreground">Shareable pre-loaded wheels.</strong> Click the share icon to copy a URL that opens the wheel with your entries already set. No exporting, no extra steps.</li>
+<li><strong class="text-foreground">Multiple winners support.</strong> Need to pick 3 prize winners? Use the winner count selector and spin once — the wheel picks them sequentially, each from the remaining pool.</li>
+</ul>
+
+<strong class="text-foreground">Popular uses for a random wheel</strong>
+Giveaways and contest draws, classroom random student pickers, team standup order, office lunch deciders, party game starters, Dungeons & Dragons random encounter tables, workout challenge wheels, and anything else where you want a fair, visually engaging random decision.
+
+For weighted draws where some entries have higher odds, see our <a href="/weighted-random-picker" class="text-primary underline hover:no-underline">weighted random picker</a>. For social media giveaways with comment filtering, see our <a href="/social-giveaway" class="text-primary underline hover:no-underline">social giveaway picker</a>.`,
     metaTitle: "Random Wheel — Free Custom Spinner | Decide Anything",
     metaDescription: "Create a custom wheel with any options and spin. Cryptographically random, instant results, no signup. The fastest free spinner wheel online.",
+    faqs: [
+      { question: "Can I add any type of content to the random wheel?", answer: "Yes. You can add names, words, numbers, emojis, short phrases — anything up to about 30 characters per entry displays well on the wheel. There is no restriction on what the entries represent." },
+      { question: "How do I share my random wheel with someone?", answer: "Click the share icon next to the draw title. A unique URL is copied to your clipboard. Anyone who opens that link will see the wheel pre-loaded with your exact entries. No account needed on either end." },
+      { question: "Is there a limit on how many options I can add?", answer: "No hard limit. The wheel renders clearly up to about 50 options. For larger lists, segments become smaller but the random selection is not affected. For very large lists, a text list view is often clearer." },
+      { question: "Can I use the random wheel offline?", answer: "Yes — once the page is loaded in your browser, spinning works without an internet connection. The randomness runs locally via your browser's crypto API, not a server." },
+    ],
   },
   "wheel-of-names": {
     slug: "wheel-of-names",
@@ -65,7 +85,7 @@ export const seoPages: Record<string, SEOPageConfig> = {
     subtitle: "Paste your list and pick a random name in seconds. Zero bias guaranteed.",
     microText: "Free • No signup • Instant result",
     howItWorksTitle: "How does this random name picker work?",
-    howItWorksText: "Add names to your list, hit the spin button, and our random name picker will select one or more names with complete fairness. The selection uses true randomness generated in your browser - no server involvement means no possibility of manipulation.",
+    howItWorksText: "Add names to your list by typing them one by one, pasting a comma-separated list, or entering one name per line. Hit the Spin button and watch the colorful wheel rotate until it lands on a randomly chosen name. The selection uses the Web Crypto API — the same cryptographically secure randomness used in online banking — running entirely inside your browser. No data is sent to any server, nothing is stored, and the result is mathematically impossible to predict or manipulate in advance. You can pick multiple winners in a single session, remove names after they win, and re-spin for a second draw. The wheel visually shows every participant with equal-sized segments, making fairness obvious to anyone watching. Perfect for screen-recording or livestreaming your selection to prove the draw was transparent.",
     whenToUseTitle: "When should you use a random name picker?",
     useCases: [
       { icon: "gift", title: "Giveaway Selection", description: "Pick winners from contest entries" },
@@ -74,10 +94,30 @@ export const seoPages: Record<string, SEOPageConfig> = {
       { icon: "video", title: "Stream Interactions", description: "Select viewers for rewards" },
       { icon: "trophy", title: "Prize Draws", description: "Run transparent prize selections" },
     ],
-    seoTitle: "Free Random Name Picker Online",
-    seoText: "Looking for a random name picker to select names fairly? Our free online random name picker lets you add a list of names and pick one or more at random. Whether you're a teacher needing a student picker, a streamer selecting viewers, or running a giveaway, this random picker delivers unbiased results every time. No registration needed - just paste, spin, and pick a winner instantly.",
+    seoTitle: "Free Random Name Picker Online — No Signup Required",
+    seoText: `Looking for a random name picker that is fast, fair, and completely free? Our online random name picker lets you add any list of names and pick one or more at random with a visual spinning wheel. There is no account, no app to install, and no limit on how many names you can add or how many times you spin.
+
+<strong class="text-foreground">Who uses our random name picker?</strong>
+<ul class="list-disc pl-5 mt-2 space-y-1">
+<li><strong class="text-foreground">Teachers and educators</strong> use it to call on students fairly, assign classroom roles, or pick who presents next. A random name picker for classroom use removes any perception of favoritism.</li>
+<li><strong class="text-foreground">Content creators and streamers</strong> pick random viewers for giveaways, shoutouts, or game invites live on Twitch, YouTube, or TikTok. Spinning the wheel on screen proves the selection is random.</li>
+<li><strong class="text-foreground">HR teams and managers</strong> use it to assign tasks, decide meeting order, or run office raffles without bias.</li>
+<li><strong class="text-foreground">Party hosts</strong> pick who goes first in games, who answers the dare, or who selects the next song.</li>
+</ul>
+
+<strong class="text-foreground">Privacy and fairness</strong>
+Every spin uses <code>crypto.getRandomValues()</code> — a cryptographically secure RNG built into every modern browser. The result is not predictable, not reproducible, and not influenced by us. Your list of names never leaves your device. When you close the tab, everything is gone.
+
+<strong class="text-foreground">Need more than a simple picker?</strong>
+Try our <a href="/weighted-random-picker" class="text-primary underline hover:no-underline">weighted random picker</a> if some participants deserve higher odds (e.g., for loyalty programs or multi-ticket raffles). For social media giveaways, our <a href="/social-giveaway" class="text-primary underline hover:no-underline">social giveaway picker</a> lets you paste raw Instagram or TikTok comments and filter by keyword, tags, and duplicates before spinning.`,
     metaTitle: "Random Name Picker — Free Wheel Spinner | No Signup",
     metaDescription: "Pick a random name in 2 seconds. Paste your list, spin the wheel, get a fair result. Free, private, cryptographically random. No account needed.",
+    faqs: [
+      { question: "How many names can I add to the random name picker?", answer: "There is no hard limit. The wheel renders clearly up to about 50 names. Beyond that, names get smaller but the randomness is not affected. For very large lists (500+ names), consider using the textarea bulk-paste mode." },
+      { question: "Can I pick multiple winners at once?", answer: "Yes. Use the winners count selector to pick 2, 3, or more winners in a single spin. Each winner is selected from the remaining pool so no name is chosen twice in the same draw." },
+      { question: "Is the random name picker truly random?", answer: "Yes. We use crypto.getRandomValues(), the same cryptographically secure API used in encryption and online banking. The result is not predictable before the spin, and we never influence or record any selection." },
+      { question: "Can I remove a name after it wins so it can't win again?", answer: "Yes. After a winner is announced, a 'Remove winner & spin again' button appears. Click it and the winner is removed from the wheel before the next draw starts automatically." },
+    ],
   },
   "giveaway-picker": {
     slug: "giveaway-picker",
@@ -85,7 +125,7 @@ export const seoPages: Record<string, SEOPageConfig> = {
     subtitle: "Run transparent giveaways and select winners your audience will trust.",
     microText: "Free • No signup • Instant result",
     howItWorksTitle: "How does this giveaway picker work?",
-    howItWorksText: "Paste your list of contest participants, set how many winners you need, and spin. Our giveaway picker uses cryptographically secure randomness to ensure every participant has a fair chance. Show your audience the live spin for complete transparency.",
+    howItWorksText: "Paste your list of contest participants — one name per line, or comma-separated — set how many winners you need, and click Spin. The wheel rotates and lands on a cryptographically random winner. Every participant has an equal-sized segment, making the fairness visually clear to anyone watching. Screen-record the spin and post the clip to prove your giveaway was legitimate. Pick one winner or multiple winners in a single session. Remove winners between draws to avoid repeats. No account required and no data is stored or sent to any server.",
     whenToUseTitle: "When should you use a giveaway picker?",
     useCases: [
       { icon: "gift", title: "Instagram Giveaways", description: "Pick winners from comments or followers" },
@@ -94,10 +134,31 @@ export const seoPages: Record<string, SEOPageConfig> = {
       { icon: "trophy", title: "Multiple Winners", description: "Select 1, 5, or 10+ winners at once" },
       { icon: "users", title: "Community Events", description: "Reward engaged community members" },
     ],
-    seoTitle: "Free Giveaway Picker for Contests",
-    seoText: `Need a giveaway picker for your Instagram, TikTok, or YouTube contest? Our free giveaway picker makes selecting winners transparent and trustworthy. Perfect for social media giveaways, subscriber rewards, and brand promotions. Pick one or multiple winners with our random picker - show your audience the live spin and prove the draw is fair. No account needed, no data stored - just honest, instant winner selection. For raffles where participants have multiple tickets, use our <a href="/weighted-random-picker" class="text-primary underline hover:no-underline">weighted random picker</a> to assign different odds per person. Need a step-by-step walkthrough? Read our <a href="/how-to-pick-a-random-winner" class="text-primary underline hover:no-underline">guide on picking random winners fairly</a>.`,
+    seoTitle: "Free Giveaway Picker — Pick Winners Transparently",
+    seoText: `Need a giveaway picker your audience will trust? Our free visual giveaway picker lets you paste a list of entries, spin a colorful wheel, and select one or more random winners in seconds. Screen-recording the spin is the fastest way to prove your contest was fair.
+
+<strong class="text-foreground">How to run a giveaway with our picker</strong>
+<ol class="list-decimal pl-5 mt-2 space-y-1">
+<li>Collect your entries: copy comments from Instagram, TikTok, or YouTube, or paste usernames from your spreadsheet.</li>
+<li>Paste them into the wheel — one per line.</li>
+<li>Set the number of winners (1 to 10+).</li>
+<li>Click Spin, screen-record the result.</li>
+<li>Post the clip and announce the winner.</li>
+</ol>
+
+<strong class="text-foreground">Why transparent giveaways matter</strong>
+Audiences are increasingly skeptical of "random" winner selections. A visual, screen-recorded wheel spin is the gold standard for proving fairness. Unlike screenshot-based picks or private tools, our spinning wheel shows the entire participant list and the live animation — there is nothing to hide and nothing can be faked after the fact.
+
+<strong class="text-foreground">Advanced giveaway scenarios</strong>
+For Instagram or TikTok giveaways where you need to filter comments by keyword (e.g., "ENTER"), remove duplicate usernames, or exclude suspicious bot accounts, use our <a href="/social-giveaway" class="text-primary underline hover:no-underline">social giveaway picker</a> — it parses raw copied comments automatically. For raffles where some participants have multiple tickets, our <a href="/weighted-random-picker" class="text-primary underline hover:no-underline">weighted random picker</a> lets you assign custom odds per person. Need a step-by-step walkthrough? Read our <a href="/how-to-pick-a-random-winner" class="text-primary underline hover:no-underline">guide on picking random winners fairly</a>.`,
     metaTitle: "Giveaway Picker Wheel — Free Random Winner Generator",
     metaDescription: "Run transparent giveaways with a visual spinner wheel. Paste entries, spin, screen-record the result. Cryptographically fair. No signup.",
+    faqs: [
+      { question: "Can I use this for Instagram giveaway winner selection?", answer: "Yes. Paste your Instagram comment usernames into the wheel and spin. For automatic comment parsing with keyword and tag filters, use our dedicated Social Giveaway Picker which handles raw Instagram comment formats." },
+      { question: "How do I pick multiple winners?", answer: "Use the winners count selector above the wheel. Set it to 2, 3, or more and a single spin will select that many winners in sequence, each from the remaining pool so no one wins twice." },
+      { question: "Can I screen-record the giveaway spin as proof?", answer: "Yes — that's one of the main use cases. The wheel animation is designed to be clear and visually engaging on recordings. Use your platform's built-in screen recorder or tools like OBS to capture the spin and post it as proof." },
+      { question: "Is this giveaway picker accepted as proof of fairness on social media?", answer: "Most platforms do not have official requirements for how winners are selected, as long as the process is not fraudulent. A screen-recorded visual wheel spin is widely accepted by audiences as proof of a fair draw." },
+    ],
   },
   "weighted-random-picker": {
     slug: "weighted-random-picker",
