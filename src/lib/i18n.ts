@@ -355,6 +355,16 @@ export interface Translations {
   indexUseCaseDinner: string;
   indexUseCaseTodo: string;
   indexUseCasePresentation: string;
+
+  // Value proposition cards (replaces static Astro HTML)
+  indexValueTitle: string;
+  indexValue1Title: string;
+  indexValue1Text: string;
+  indexValue2Title: string;
+  indexValue2Text: string;
+  indexValue3Title: string;
+  indexValue3Text: string;
+  indexAllToolsTitle: string;
 }
 
 export const translations: Record<Language, Translations> = {
@@ -712,8 +722,16 @@ export const translations: Record<Language, Translations> = {
     indexUseCaseDinner: '🤔 Dinner decisions — Can\'t decide where to eat? Add restaurant names and let the wheel decide.',
     indexUseCaseTodo: '📋 Task delegation — Assign chores, tasks, or project responsibilities randomly. No arguments.',
     indexUseCasePresentation: '🎮 Presentations — Call on students, pick speakers, or decide the order of presentations.',
+    indexValueTitle: 'The Fairest Way to Pick a Random Winner',
+    indexValue1Title: 'Cryptographically Random',
+    indexValue1Text: 'Every spin uses crypto.getRandomValues() — the same security standard behind banking apps. Not pseudo-random. Genuinely unpredictable.',
+    indexValue2Title: '100% Private',
+    indexValue2Text: 'Everything runs in your browser. No data is sent to any server. Your list stays on your device and disappears when you close the tab.',
+    indexValue3Title: 'Instant & Free',
+    indexValue3Text: 'No account needed. No download. Works on any device — phones, tablets, laptops, and smartboards.',
+    indexAllToolsTitle: 'All Free Tools — No Signup Required',
   },
-  
+
   es: {
     heroTitle: 'Sorteo Aleatorio',
     heroSubtitle: 'Elige un ganador al instante con probabilidades iguales o personalizadas.',
@@ -1063,6 +1081,14 @@ export const translations: Record<Language, Translations> = {
     indexUseCaseDinner: '🤔 Decisión de cena — ¿No puedes decidir dónde comer? Agrega restaurantes y deja que la ruleta decida.',
     indexUseCaseTodo: '📋 Delegación de tareas — Asigna tareas o responsabilidades al azar. Sin discusiones.',
     indexUseCasePresentation: '🎮 Presentaciones — Llama a estudiantes, elige ponentes o decide el orden de presentaciones.',
+    indexValueTitle: 'La forma más justa de elegir un ganador aleatorio',
+    indexValue1Title: 'Aleatoriedad criptográfica',
+    indexValue1Text: 'Cada giro usa crypto.getRandomValues() — el mismo estándar de seguridad que las apps bancarias.',
+    indexValue2Title: '100% Privado',
+    indexValue2Text: 'Todo funciona en tu navegador. No se envían datos a ningún servidor.',
+    indexValue3Title: 'Instantáneo y Gratuito',
+    indexValue3Text: 'Sin cuenta. Sin descarga. Funciona en cualquier dispositivo.',
+    indexAllToolsTitle: 'Todas las herramientas gratuitas — Sin registro',
   },
   fr: {
     heroTitle: "Tirage au sort",
@@ -1413,6 +1439,14 @@ export const translations: Record<Language, Translations> = {
     indexUseCaseDinner: '🤔 Décision du dîner — Impossible de choisir où manger ? Ajoutez des restaurants et laissez la roue décider.',
     indexUseCaseTodo: '📋 Délégation de tâches — Attribuez les tâches ou responsabilités au hasard. Pas de disputes.',
     indexUseCasePresentation: '🎮 Présentations — Désignez des étudiants, choisissez des orateurs ou décidez l\'ordre des présentations.',
+    indexValueTitle: 'La façon la plus équitable de choisir un gagnant',
+    indexValue1Title: 'Crypto-aléatoire',
+    indexValue1Text: 'Chaque tirage utilise crypto.getRandomValues() — le même standard de sécurité que les applis bancaires. Vraiment imprévisible.',
+    indexValue2Title: '100% Privé',
+    indexValue2Text: 'Tout s\'exécute dans votre navigateur. Aucune donnée n\'est envoyée à un serveur. Votre liste reste sur votre appareil.',
+    indexValue3Title: 'Instantané & Gratuit',
+    indexValue3Text: 'Sans compte. Sans téléchargement. Fonctionne sur tous les appareils — téléphones, tablettes, ordinateurs.',
+    indexAllToolsTitle: 'Tous les outils gratuits — Sans inscription',
   },
   de: {
     heroTitle: 'Zufallsauslosung',
@@ -1763,6 +1797,14 @@ export const translations: Record<Language, Translations> = {
     indexUseCaseDinner: '🤔 Abendessen-Entscheidung — Kann nicht entscheiden wo essen? Restaurants hinzufügen und Rad entscheiden lassen.',
     indexUseCaseTodo: '📋 Aufgabenverteilung — Haushaltsaufgaben oder Projektverantwortlichkeiten zufällig zuweisen.',
     indexUseCasePresentation: '🎮 Präsentationen — Schüler aufrufen, Redner wählen oder Reihenfolge der Präsentationen bestimmen.',
+    indexValueTitle: 'Die fairste Art, einen zufälligen Gewinner zu wählen',
+    indexValue1Title: 'Kryptografisch zufällig',
+    indexValue1Text: 'Jede Drehung verwendet crypto.getRandomValues() — denselben Sicherheitsstandard wie Banking-Apps.',
+    indexValue2Title: '100% Privat',
+    indexValue2Text: 'Alles läuft in Ihrem Browser. Keine Daten werden an einen Server gesendet.',
+    indexValue3Title: 'Sofort & Kostenlos',
+    indexValue3Text: 'Kein Konto erforderlich. Kein Download. Funktioniert auf allen Geräten.',
+    indexAllToolsTitle: 'Alle kostenlosen Tools — Keine Anmeldung erforderlich',
   },
   pt: {
     heroTitle: 'Sorteio Aleatório',
@@ -2113,6 +2155,14 @@ export const translations: Record<Language, Translations> = {
     indexUseCaseDinner: '🤔 Decisão do jantar — Não consegue decidir onde comer? Adicione restaurantes e deixe a roleta decidir.',
     indexUseCaseTodo: '📋 Delegação de tarefas — Atribua tarefas ou responsabilidades aleatoriamente. Sem discussões.',
     indexUseCasePresentation: '🎮 Apresentações — Chame alunos, escolha apresentadores ou decida a ordem das apresentações.',
+    indexValueTitle: 'A forma mais justa de escolher um vencedor aleatório',
+    indexValue1Title: 'Criptograficamente aleatório',
+    indexValue1Text: 'Cada giro usa crypto.getRandomValues() — o mesmo padrão de segurança dos apps bancários.',
+    indexValue2Title: '100% Privado',
+    indexValue2Text: 'Tudo funciona no seu navegador. Nenhum dado é enviado a um servidor.',
+    indexValue3Title: 'Instantâneo & Gratuito',
+    indexValue3Text: 'Sem conta. Sem download. Funciona em qualquer dispositivo.',
+    indexAllToolsTitle: 'Todas as ferramentas gratuitas — Sem cadastro',
   },
   it: {
     heroTitle: 'Estrazione Casuale',
@@ -2463,6 +2513,14 @@ export const translations: Record<Language, Translations> = {
     indexUseCaseDinner: '🤔 Decisione cena — Non riesci a decidere dove mangiare? Aggiungi ristoranti e lascia che la ruota decida.',
     indexUseCaseTodo: '📋 Delegazione compiti — Assegna compiti o responsabilità casualmente. Senza discussioni.',
     indexUseCasePresentation: '🎮 Presentazioni — Chiama studenti, scegli oratori o decidi l\'ordine delle presentazioni.',
+    indexValueTitle: 'Il modo più equo per scegliere un vincitore casuale',
+    indexValue1Title: 'Casuale crittograficamente',
+    indexValue1Text: 'Ogni giro usa crypto.getRandomValues() — lo stesso standard di sicurezza delle app bancarie.',
+    indexValue2Title: '100% Privato',
+    indexValue2Text: 'Tutto funziona nel tuo browser. Nessun dato viene inviato a un server.',
+    indexValue3Title: 'Istantaneo & Gratuito',
+    indexValue3Text: 'Nessun account. Nessun download. Funziona su qualsiasi dispositivo.',
+    indexAllToolsTitle: 'Tutti gli strumenti gratuiti — Nessuna registrazione',
   },
 };
 

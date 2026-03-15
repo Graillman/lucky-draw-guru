@@ -504,6 +504,24 @@ const HomepageIslandInner = () => {
             </div>
           </div>
 
+          {/* VALUE PROPOSITION */}
+          <section className="space-y-6 pt-4">
+            <h2 className="text-2xl font-bold text-foreground text-center">{t.indexValueTitle}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                { emoji: '🎯', title: t.indexValue1Title, text: t.indexValue1Text },
+                { emoji: '🔒', title: t.indexValue2Title, text: t.indexValue2Text },
+                { emoji: '⚡', title: t.indexValue3Title, text: t.indexValue3Text },
+              ].map(({ emoji, title, text }, i) => (
+                <div key={i} className="text-center p-6 rounded-xl border border-border bg-card/60">
+                  <div className="text-3xl mb-3">{emoji}</div>
+                  <h3 className="font-semibold text-foreground mb-2">{title}</h3>
+                  <p className="text-sm text-muted-foreground">{text}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
           {/* USE CASES */}
           <section className="space-y-6 pt-4">
             <div className="text-center space-y-2">
