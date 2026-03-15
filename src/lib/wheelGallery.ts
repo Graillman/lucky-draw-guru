@@ -47,8 +47,5 @@ export async function getWheelById(id: string): Promise<SavedWheel | null> {
 }
 
 export async function incrementWheelSpins(id: string): Promise<void> {
-  await supabase
-    .from('saved_wheels')
-    .update({ spin_count: supabase.rpc('increment_spins') } as never)
-    .eq('id', id);
+  await supabase.rpc('increment_wheel_spins', { wheel_id: id });
 }

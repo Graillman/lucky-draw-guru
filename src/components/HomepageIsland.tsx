@@ -19,6 +19,7 @@ import { Gift, Hash, Users, PartyPopper, GraduationCap, Scale, Instagram, Dices,
 import { buildShareURL, readShareURLConfig } from "@/hooks/useShareableURL";
 import { saveWheel, getWheelById } from "@/lib/wheelGallery";
 import { toast } from "sonner";
+import { Toaster } from "sonner";
 
 const DEFAULT_NAMES: ParticipantEntry[] = [
   { pseudo: "Emma", weight: 1 },
@@ -292,14 +293,23 @@ const HomepageIslandInner = () => {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--gradient-bg)' }}>
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+      <div className="relative min-h-screen overflow-hidden" style={{ background: "var(--gradient-bg)" }}>
+        <Toaster position="top-center" richColors />
+        <div className="relative z-10">
+          <main className="max-w-6xl mx-auto px-4 py-2">
+            <div className="animate-pulse space-y-4 pt-8">
+              <div className="h-8 bg-muted rounded-lg w-64 mx-auto" />
+              <div className="h-4 bg-muted rounded w-48 mx-auto" />
+            </div>
+          </main>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="relative min-h-screen overflow-hidden" style={{ background: "var(--gradient-bg)" }}>
+      <Toaster position="top-center" richColors />
       <ConfettiEffect active={showConfetti} onComplete={() => setShowConfetti(false)} />
       {showCustomize && (
         <CustomizePanel
