@@ -1,0 +1,26 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import GalleryIsland from '@/components/GalleryIsland';
+
+const title = "Wheel Gallery — Community Wheels | Real Wheel Picker";
+const description = "Browse wheels created by the community. Animals, travel, food, games — find the perfect pre-made wheel or save and share your own.";
+const canonical = "/gallery";
+---
+<Layout title={title} description={description} canonical={canonical}>
+  <HeaderIsland client:load />
+  <main class="max-w-6xl mx-auto px-4 py-10">
+    <div class="text-center mb-10">
+      <h1 class="text-3xl font-bold text-foreground mb-2">Wheel Gallery</h1>
+      <p class="text-muted-foreground max-w-xl mx-auto">
+        Browse wheels made by the community. Click any wheel to load it instantly — then spin!
+      </p>
+      <a href="/" class="mt-4 inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground rounded-xl font-medium hover:opacity-90 transition-opacity text-sm">
+        🎡 Create your own wheel
+      </a>
+    </div>
+    <GalleryIsland client:load />
+  </main>
+  <GlobalFooterIsland client:load />
+</Layout>

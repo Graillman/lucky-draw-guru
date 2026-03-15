@@ -15,8 +15,9 @@ import { ConfettiEffect } from "@/components/ConfettiEffect";
 import { WHEEL_THEMES } from "@/components/WheelThemePicker";
 import { CustomizePanel, useCustomizeConfig } from "@/components/CustomizePanel";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Gift, Hash, Users, PartyPopper, GraduationCap, Scale, Instagram, Dices, Edit3, Share2, Settings2, Maximize2, Minimize2 } from "lucide-react";
+import { Gift, Hash, Users, PartyPopper, GraduationCap, Scale, Instagram, Dices, Edit3, Share2, Settings2, Maximize2, Minimize2, BookMarked } from "lucide-react";
 import { buildShareURL, readShareURLConfig } from "@/hooks/useShareableURL";
+import { saveWheel } from "@/lib/wheelGallery";
 import { toast } from "sonner";
 
 const DEFAULT_NAMES: ParticipantEntry[] = [
@@ -168,11 +169,7 @@ function OdometerNumber({ value }: { value: number }) {
 const HomepageIslandInner = () => {
   const { participants, setParticipants, isLoaded } = useLocalStorageParticipants();
   const { t, language } = useLanguage();
-  const { getCount, increment } = useSpinCounter();
-
-  const LAUNCH_DATE = new Date('2026-01-01').getTime();
-  const SPINS_PER_DAY = 4_320;
-  const totalSpins = 1_000_000 + Math.floor((Date.now() - LAUNCH_DATE) / 86_400_000 * SPINS_PER_DAY);
+  const { getCount, increment, globalCount } = useSpinCounter();
 
   const USE_CASES = [
     t.indexUseCaseGiveaway,
@@ -197,7 +194,7 @@ const HomepageIslandInner = () => {
   const [winnerHistory, setWinnerHistory] = useState<string[][]>([]);
   const titleInputRef = useRef<HTMLInputElement>(null);
   const [hasInitialized, setHasInitialized] = useState(false);
-  const [spinCount, setSpinCount] = useState(() => getCount());
+  const [spinCount, setSpinCount] = useState(0);
   const [activeTab, setActiveTab] = useState<'entries' | 'results'>('entries');
 
   if (isLoaded && !hasInitialized) {
@@ -218,6 +215,29 @@ const HomepageIslandInner = () => {
     }).catch(() => {
       toast.error("Could not copy — please copy the URL from your browser bar.");
     });
+  };
+
+  const [isSaving, setIsSaving] = useState(false);
+  const handleSaveWheel = async () => {
+    const names = (participants.length > 0 ? participants : DEFAULT_NAMES).map(p => p.pseudo);
+    if (names.length < 2) return;
+    setIsSaving(true);
+    const title = drawTitle || 'My Wheel';
+    const id = await saveWheel({
+      title,
+      items: names,
+      theme: customizeConfig.theme || 'default',
+      border_style: customizeConfig.borderStyle || 'default',
+      author_name: 'Anonymous',
+    });
+    setIsSaving(false);
+    if (id) {
+      const url = `${window.location.origin}/gallery`;
+      navigator.clipboard.writeText(url).catch(() => {});
+      toast.success('Wheel saved to the gallery! 🎡', { description: 'Link to gallery copied.' });
+    } else {
+      toast.error('Could not save wheel. Try again.');
+    }
   };
 
   const displayParticipants = participants.length >= 2 ? participants : DEFAULT_NAMES;
@@ -287,7 +307,7 @@ const HomepageIslandInner = () => {
             <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs text-muted-foreground">
               <div className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                <OdometerNumber value={totalSpins + spinCount} />
+                <OdometerNumber value={globalCount + spinCount} />
                 <span>+ {t.indexSpinsText}</span>
               </div>
               <span className="hidden sm:inline text-border">|</span>
@@ -338,14 +358,23 @@ const HomepageIslandInner = () => {
                 )}
               </div>
 
-              {/* Customize button */}
-              <div className="flex items-center justify-center px-1">
+              {/* Customize + Save buttons */}
+              <div className="flex items-center justify-center gap-2 px-1">
                 <button
                   onClick={() => setShowCustomize(true)}
                   className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-border bg-card/60 hover:border-primary/40 hover:shadow-sm transition-all text-sm font-medium text-muted-foreground hover:text-foreground"
                 >
                   <Settings2 className="w-4 h-4" />
                   <span>Customize</span>
+                </button>
+                <button
+                  onClick={handleSaveWheel}
+                  disabled={isSaving}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-border bg-card/60 hover:border-primary/40 hover:shadow-sm transition-all text-sm font-medium text-muted-foreground hover:text-foreground disabled:opacity-50"
+                  title="Save to gallery"
+                >
+                  <BookMarked className="w-4 h-4" />
+                  <span>{isSaving ? 'Saving…' : 'Save'}</span>
                 </button>
               </div>
 

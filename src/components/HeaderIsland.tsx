@@ -143,6 +143,15 @@ const HeaderIsland = () => {
           </a>
 
           <a
+            href="/gallery"
+            className={`hidden md:block px-3 py-1.5 rounded-md transition-colors ${
+              isActive("/gallery") ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Gallery
+          </a>
+
+          <a
             href="/about"
             className={`hidden md:block px-3 py-1.5 rounded-md transition-colors ${
               isActive("/about") ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground"
