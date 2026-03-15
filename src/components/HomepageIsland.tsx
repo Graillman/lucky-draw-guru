@@ -17,7 +17,7 @@ import { CustomizePanel, useCustomizeConfig } from "@/components/CustomizePanel"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Gift, Hash, Users, PartyPopper, GraduationCap, Scale, Instagram, Dices, Edit3, Share2, Settings2, Maximize2, Minimize2, BookMarked } from "lucide-react";
 import { buildShareURL, readShareURLConfig } from "@/hooks/useShareableURL";
-import { saveWheel } from "@/lib/wheelGallery";
+import { saveWheel, getWheelById } from "@/lib/wheelGallery";
 import { toast } from "sonner";
 
 const DEFAULT_NAMES: ParticipantEntry[] = [
@@ -197,7 +197,26 @@ const HomepageIslandInner = () => {
   const [spinCount, setSpinCount] = useState(0);
   const [activeTab, setActiveTab] = useState<'entries' | 'results'>('entries');
 
-  if (isLoaded && !hasInitialized) {
+  useEffect(() => {
+    if (!isLoaded || hasInitialized) return;
+    setHasInitialized(true);
+
+    // ?wheel=UUID — load from gallery (Supabase)
+    const params = new URLSearchParams(window.location.search);
+    const wheelId = params.get('wheel');
+    if (wheelId) {
+      getWheelById(wheelId).then(w => {
+        if (w && w.items.length >= 2) {
+          setParticipants(w.items.map(pseudo => ({ pseudo, weight: 1 })));
+          setDrawTitle(w.title);
+        } else if (participants.length === 0) {
+          setParticipants(DEFAULT_NAMES);
+        }
+      });
+      return;
+    }
+
+    // ?entries=... — legacy share URL
     const shared = readShareURLConfig();
     if (shared && shared.items && shared.items.length > 0) {
       setParticipants(shared.items);
@@ -205,8 +224,7 @@ const HomepageIslandInner = () => {
     } else if (participants.length === 0) {
       setParticipants(DEFAULT_NAMES);
     }
-    setHasInitialized(true);
-  }
+  }, [isLoaded, hasInitialized]);
 
   const handleShare = () => {
     const url = buildShareURL(participants.length > 0 ? participants : DEFAULT_NAMES, drawTitle || undefined);
