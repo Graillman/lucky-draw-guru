@@ -197,11 +197,6 @@ const ParticipantInput = ({ mode, participants, onParticipantsChange }: Particip
 
   return (
     <section className="space-y-4">
-      {/* Ad Placeholder - Above Tool */}
-      <div className="h-24 bg-secondary/30 rounded-lg border border-dashed border-border flex items-center justify-center">
-        <span className="text-xs text-muted-foreground">{t.adSpace}</span>
-      </div>
-
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Input Area - Left Column */}
         <div className="space-y-3">

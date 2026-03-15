@@ -4,20 +4,13 @@ import { useWheelSound } from "@/hooks/useWheelSound";
 import NextToolSuggestion from "@/components/NextToolSuggestion";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import DrawModes from "@/components/DrawModes";
 import ParticipantInput, { ParticipantEntry } from "@/components/ParticipantInput";
 import DrawButton from "@/components/DrawButton";
 import WinnerResult from "@/components/WinnerResult";
 import { SpinningWheel } from "@/components/SpinningWheel";
-import { CasinoRoulette } from "@/components/CasinoRoulette";
-import { DrawTitleInput } from "@/components/DrawTitleInput";
-import { WinnersCountInput } from "@/components/WinnersCountInput";
 import MicroTrustIndicators from "@/components/MicroTrustIndicators";
-import AdvancedModeExplainer from "@/components/AdvancedModeExplainer";
-import AdPlaceholder from "@/components/AdPlaceholder";
 import LocalStorageNotice from "@/components/LocalStorageNotice";
 import { useLocalStorageParticipants } from "@/hooks/useLocalStorageParticipants";
-import PopularTemplates from "@/components/PopularTemplates";
 import { ConfettiEffect } from "@/components/ConfettiEffect";
 import { WHEEL_THEMES } from "@/components/WheelThemePicker";
 import { CustomizePanel, useCustomizeConfig } from "@/components/CustomizePanel";
@@ -97,17 +90,15 @@ const HomepageIslandInner = () => {
   const [customizeConfig, setCustomizeConfig] = useCustomizeConfig();
   const [showCustomize, setShowCustomize] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
-  const [mode, setMode] = useState<"simple" | "advanced">("simple");
   const [winners, setWinners] = useState<string[]>([]);
   const [isSpinning, setIsSpinning] = useState(false);
   const [drawTitle, setDrawTitle] = useState("");
   const [editingTitle, setEditingTitle] = useState(false);
-  const [winnersCount, setWinnersCount] = useState(1);
   const [winnerHistory, setWinnerHistory] = useState<string[][]>([]);
   const titleInputRef = useRef<HTMLInputElement>(null);
   const [hasInitialized, setHasInitialized] = useState(false);
   const [spinCount, setSpinCount] = useState(() => getCount());
-
+  const [activeTab, setActiveTab] = useState<'entries' | 'results'>('entries');
 
   if (isLoaded && !hasInitialized) {
     const shared = readShareURLConfig();
@@ -141,7 +132,8 @@ const HomepageIslandInner = () => {
     setWinners(selectedWinners);
     setIsSpinning(false);
     setSpinCount(increment());
-    setWinnerHistory(prev => [selectedWinners, ...prev].slice(0, 5));
+    setWinnerHistory(prev => [selectedWinners, ...prev].slice(0, 20));
+    setActiveTab('results');
     if (customizeConfig.launchConfetti) setShowConfetti(true);
     if (customizeConfig.resultSoundEnabled) playFanfare();
   }, [increment, playFanfare, customizeConfig.launchConfetti, customizeConfig.resultSoundEnabled]);
@@ -160,8 +152,6 @@ const HomepageIslandInner = () => {
     }
   }, [winners, participants, setParticipants]);
 
-  const isAdvanced = mode === "advanced";
-
   if (!isLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--gradient-bg)' }}>
@@ -171,7 +161,7 @@ const HomepageIslandInner = () => {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden" style={{ background: isAdvanced ? "var(--gradient-bg-purple)" : "var(--gradient-bg)" }}>
+    <div className="relative min-h-screen overflow-hidden" style={{ background: "var(--gradient-bg)" }}>
       <ConfettiEffect active={showConfetti} onComplete={() => setShowConfetti(false)} />
       {showCustomize && (
         <CustomizePanel
@@ -182,15 +172,15 @@ const HomepageIslandInner = () => {
       )}
       {/* Aurora background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        <div className={`aurora-orb ${isAdvanced ? "aurora-orb-purple" : "aurora-orb-gold"}`} />
-        <div className={`aurora-orb ${isAdvanced ? "aurora-orb-gold" : "aurora-orb-purple"}`} />
+        <div className="aurora-orb aurora-orb-gold" />
+        <div className="aurora-orb aurora-orb-purple" />
         <div className="aurora-orb aurora-orb-blue" />
       </div>
       <div className="relative z-10">
         <main className="max-w-6xl mx-auto px-4 py-2 space-y-6">
 
-          {/* Hero — compact */}
-          <section className="text-center space-y-2 pt-1">
+          {/* Trust signals bar */}
+          <section className="text-center space-y-1 pt-1">
             <h1 className="text-lg md:text-2xl font-bold text-foreground leading-tight">
               {t.indexPageTitle}
             </h1>
@@ -225,13 +215,13 @@ const HomepageIslandInner = () => {
                     onBlur={() => setEditingTitle(false)}
                     onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') setEditingTitle(false); }}
                     placeholder="Draw title (optional)"
-                    className={`text-center text-xl md:text-2xl font-bold bg-transparent border-b-2 outline-none w-full max-w-sm ${isAdvanced ? "text-accent border-accent" : "text-primary border-primary"}`}
+                    className="text-center text-xl md:text-2xl font-bold bg-transparent border-b-2 outline-none w-full max-w-sm text-primary border-primary"
                   />
                 ) : (
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setEditingTitle(true)}
-                      className={`group flex items-center gap-2 text-xl md:text-2xl font-bold transition-colors ${drawTitle ? (isAdvanced ? "text-accent" : "text-primary") : "text-muted-foreground/40 hover:text-muted-foreground"}`}
+                      className={`group flex items-center gap-2 text-xl md:text-2xl font-bold transition-colors ${drawTitle ? "text-primary" : "text-muted-foreground/40 hover:text-muted-foreground"}`}
                     >
                       <span>{drawTitle || t.tapToSpin}</span>
                       <Edit3 className="w-4 h-4 opacity-0 group-hover:opacity-60 transition-opacity" />
@@ -248,7 +238,7 @@ const HomepageIslandInner = () => {
               </div>
 
               {/* Customize button */}
-              <div className="flex items-center justify-between gap-2 px-1">
+              <div className="flex items-center justify-center px-1">
                 <button
                   onClick={() => setShowCustomize(true)}
                   className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-border bg-card/60 hover:border-primary/40 hover:shadow-sm transition-all text-sm font-medium text-muted-foreground hover:text-foreground"
@@ -256,36 +246,27 @@ const HomepageIslandInner = () => {
                   <Settings2 className="w-4 h-4" />
                   <span>Customize</span>
                 </button>
-                <div
-                  className="w-5 h-5 rounded-full border-2 border-foreground/20 flex-shrink-0"
-                  style={{ background: WHEEL_THEMES[customizeConfig.theme]?.preview ?? "#e53e3e" }}
-                  title={`Theme: ${WHEEL_THEMES[customizeConfig.theme]?.label ?? customizeConfig.theme}`}
-                />
               </div>
 
               {/* Wheel */}
               <div className="relative">
-                {winnersCount === 1 ? (
-                  <SpinningWheel
-                    participants={displayParticipants}
-                    isSpinning={isSpinning}
-                    onComplete={handleWheelComplete}
-                    mode={mode}
-                    winnersCount={winnersCount}
-                    onSpin={handleDraw}
-                    onTick={customizeConfig.spinSoundEnabled ? playTick : undefined}
-                    colors={WHEEL_THEMES[customizeConfig.theme]?.colors}
-                  />
-                ) : (
-                  <CasinoRoulette participants={displayParticipants} isSpinning={isSpinning} onComplete={handleWheelComplete} mode={mode} winnersCount={winnersCount} />
-                )}
+                <SpinningWheel
+                  participants={displayParticipants}
+                  isSpinning={isSpinning}
+                  onComplete={handleWheelComplete}
+                  mode="simple"
+                  winnersCount={1}
+                  onSpin={handleDraw}
+                  onTick={customizeConfig.spinSoundEnabled ? playTick : undefined}
+                  colors={WHEEL_THEMES[customizeConfig.theme]?.colors}
+                />
               </div>
 
               {/* Spin button */}
               {!isSpinning && winners.length === 0 && (
                 <div className="space-y-3">
-                  <DrawButton onDraw={handleDraw} isSpinning={isSpinning} disabled={displayParticipants.length < 2} participantCount={displayParticipants.length} mode={mode} />
-                  <MicroTrustIndicators mode={mode} />
+                  <DrawButton onDraw={handleDraw} isSpinning={isSpinning} disabled={displayParticipants.length < 2} participantCount={displayParticipants.length} mode="simple" />
+                  <MicroTrustIndicators mode="simple" />
                 </div>
               )}
 
@@ -296,55 +277,75 @@ const HomepageIslandInner = () => {
                     winners={winners}
                     onRelaunch={handleRelaunch}
                     onRemoveWinnersAndRespin={customizeConfig.showRemoveButton ? handleRemoveWinnersAndRespin : undefined}
-                    canRemoveWinners={participants.length > winnersCount + 1}
+                    canRemoveWinners={participants.length > 2}
                     drawTitle={drawTitle}
-                    mode={mode}
+                    mode="simple"
                   />
-                  <NextToolSuggestion currentPath="/" mode={mode} />
-                </div>
-              )}
-
-              {/* Winner history */}
-              {winnerHistory.length >= 1 && (
-                <div className={`px-4 py-3 rounded-lg border text-sm ${isAdvanced ? "border-accent/20 bg-accent/5" : "border-border bg-secondary/20"}`}>
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                      {t.indexPreviousDraws} ({winnerHistory.length})
-                    </p>
-                    <button
-                      onClick={() => setWinnerHistory([])}
-                      className="text-xs text-muted-foreground/50 hover:text-destructive transition-colors"
-                    >
-                      Clear
-                    </button>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {(winners.length > 0 ? winnerHistory.slice(1) : winnerHistory).map((draw, i) => (
-                      <span
-                        key={i}
-                        className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                          isAdvanced
-                            ? "bg-accent/10 text-accent border border-accent/20"
-                            : "bg-primary/10 text-primary border border-primary/20"
-                        }`}
-                      >
-                        {draw.join(', ')}
-                      </span>
-                    ))}
-                  </div>
+                  <NextToolSuggestion currentPath="/" mode="simple" />
                 </div>
               )}
             </div>
 
-            {/* RIGHT: Config panel */}
-            <div className="flex-1 w-full space-y-4 min-w-0">
-              <DrawModes mode={mode} onModeChange={setMode} />
-              <PopularTemplates onApplyTemplate={setParticipants} mode={mode} />
-              <WinnersCountInput count={winnersCount} onCountChange={setWinnersCount} maxWinners={Math.max(1, displayParticipants.length - 1)} mode={mode} />
-              {mode === "advanced" && <AdvancedModeExplainer participants={participants} mode={mode} />}
-              <ParticipantInput mode={mode} participants={participants} onParticipantsChange={setParticipants} />
-              {participants.length > 0 && <LocalStorageNotice mode={mode} />}
-              <AdPlaceholder position="after-use-cases" />
+            {/* RIGHT: Entries / Results panel */}
+            <div className="flex-1 w-full min-w-0 bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
+
+              {/* Tabs */}
+              <div className="flex border-b border-border">
+                <button
+                  onClick={() => setActiveTab('entries')}
+                  className={`flex-1 py-3 text-sm font-medium transition-colors ${
+                    activeTab === 'entries'
+                      ? 'text-primary border-b-2 border-primary -mb-px bg-primary/5'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Entries ({displayParticipants.length})
+                </button>
+                <button
+                  onClick={() => setActiveTab('results')}
+                  className={`flex-1 py-3 text-sm font-medium transition-colors ${
+                    activeTab === 'results'
+                      ? 'text-primary border-b-2 border-primary -mb-px bg-primary/5'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Results{winnerHistory.length > 0 ? ` (${winnerHistory.length})` : ''}
+                </button>
+              </div>
+
+              {/* Entries tab */}
+              {activeTab === 'entries' && (
+                <div className="p-4 space-y-3">
+                  <ParticipantInput mode="simple" participants={participants} onParticipantsChange={setParticipants} />
+                  {participants.length > 0 && <LocalStorageNotice mode="simple" />}
+                </div>
+              )}
+
+              {/* Results tab */}
+              {activeTab === 'results' && (
+                <div className="p-4">
+                  {winnerHistory.length === 0 ? (
+                    <div className="py-12 text-center">
+                      <p className="text-sm text-muted-foreground">Spin the wheel to see results here</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {winnerHistory.map((draw, i) => (
+                        <div key={i} className="flex items-center gap-3 px-3 py-2 rounded-lg bg-secondary/30">
+                          <span className="text-xs text-muted-foreground w-6 text-right shrink-0">{winnerHistory.length - i}.</span>
+                          <span className="text-sm font-medium text-foreground">{draw.join(', ')}</span>
+                        </div>
+                      ))}
+                      <button
+                        onClick={() => setWinnerHistory([])}
+                        className="text-xs text-muted-foreground hover:text-destructive transition-colors mt-2 block"
+                      >
+                        Clear results
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -356,7 +357,7 @@ const HomepageIslandInner = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {USE_CASES.map(({ emoji, text }, i) => (
-                <div key={i} className={`flex gap-3 p-4 rounded-xl bg-card border transition-all hover:border-primary/40 ${isAdvanced ? "border-accent/20" : "border-border"}`}>
+                <div key={i} className="flex gap-3 p-4 rounded-xl bg-card border border-border transition-all hover:border-primary/40">
                   <span className="text-2xl flex-shrink-0">{emoji}</span>
                   <p className="text-sm text-muted-foreground leading-relaxed">{text}</p>
                 </div>
@@ -459,8 +460,6 @@ const HomepageIslandInner = () => {
               })}
             </div>
           </section>
-
-          <AdPlaceholder position="bottom" />
         </main>
       </div>
     </div>

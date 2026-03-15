@@ -32,16 +32,7 @@ export function LanguageSelector({ mode = "simple" }: LanguageSelectorProps) {
 
   const handleSelect = (lang: Language) => {
     setLanguage(lang);
-    if (typeof window !== 'undefined') {
-      const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
-      const normalizedPath = currentPath === '' ? '/' : currentPath;
-      if (HOME_PATHS.has(normalizedPath) || normalizedPath === '/') {
-        const target = HOME_ROUTES[lang];
-        if (target !== normalizedPath) {
-          window.location.href = target;
-        }
-      }
-    }
+    // No redirect — language changes translate in-place via LanguageContext
   };
 
   return (

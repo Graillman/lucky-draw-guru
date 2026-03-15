@@ -70,7 +70,7 @@ export default function SpinTheBottleIsland({ lang = 'en' }: SpinTheBottleProps)
         {/* Game area */}
         <div className="flex flex-col items-center flex-1">
           {/* Circle with players + bottle */}
-          <div className="relative w-72 h-72 sm:w-80 sm:h-80 select-none">
+          <div className="relative w-80 h-80 sm:w-[420px] sm:h-[420px] select-none">
 
             {/* Dashed circle */}
             <div className="absolute inset-6 rounded-full border-2 border-dashed border-border" />
@@ -109,7 +109,7 @@ export default function SpinTheBottleIsland({ lang = 'en' }: SpinTheBottleProps)
               onClick={spin}
               title={isSpinning ? '' : ui.spinBtn}
             >
-              <svg width="100" height="100" viewBox="0 0 100 100" style={{ display: 'block' }}>
+              <svg width="160" height="160" viewBox="0 0 100 100" style={{ display: 'block' }}>
                 {/* Bottle pointer dot */}
                 <circle cx="50" cy="10" r="7" fill="#f59e0b" />
                 {/* Bottle neck */}
