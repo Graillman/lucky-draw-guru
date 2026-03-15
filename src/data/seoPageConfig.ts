@@ -177,7 +177,7 @@ For Instagram or TikTok giveaways where you need to filter comments by keyword (
     ],
     seoTitle: "Free Weighted Random Picker Online",
     seoText: "Need a weighted random picker where some participants have better chances? Our free weighted draw tool lets you assign custom probabilities to each entry. Perfect for loyalty programs, tiered giveaways, and engagement-based rewards. Unlike regular random pickers, this weighted picker calculates and displays exact odds - maintaining transparency while allowing customization. Advanced random selection with no signup required. How Weighted Probability Works: The formula is simple — Probability = (Your Weight ÷ Total Weight) × 100. Example: with weights of 2, 1, 1, the probabilities are 50%, 25%, 25%. With 5, 3, 2 the probabilities are 50%, 30%, 20%. The wheel segment sizes match these percentages exactly — what you see is the actual probability. No hidden weighting, no algorithmic surprises. For raffles where one person bought multiple tickets, just assign them a weight equal to their ticket count. For loyalty programs, weight by purchase frequency. The math is transparent and verifiable.",
-    metaTitle: "Weighted Random Picker — Spin Wheel with Custom Odds",
+    metaTitle: "Weighted Random Picker — Custom Odds Spinner Wheel",
     metaDescription: "Assign different probabilities to each option and spin. See the exact odds visually. Perfect for raffles, games, and fair weighted selection.",
     relatedBlogPost: { slug: "/blog/weighted-random-picker", title: "How to Use a Weighted Random Picker for Giveaways" },
   },
