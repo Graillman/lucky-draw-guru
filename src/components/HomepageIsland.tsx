@@ -14,8 +14,7 @@ import { useLocalStorageParticipants } from "@/hooks/useLocalStorageParticipants
 import { ConfettiEffect } from "@/components/ConfettiEffect";
 import { WHEEL_THEMES } from "@/components/WheelThemePicker";
 import { CustomizePanel, useCustomizeConfig } from "@/components/CustomizePanel";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Gift, Hash, Users, PartyPopper, GraduationCap, Scale, Instagram, Dices, Edit3, Share2, Settings2, Maximize2, Minimize2, BookMarked } from "lucide-react";
+import { Edit3, Share2, Settings2, Maximize2, Minimize2, BookMarked } from "lucide-react";
 import { buildShareURL, readShareURLConfig } from "@/hooks/useShareableURL";
 import { saveWheel, getWheelById } from "@/lib/wheelGallery";
 import { toast } from "sonner";
@@ -32,81 +31,6 @@ const DEFAULT_NAMES: ParticipantEntry[] = [
   { pseudo: "Ethan", weight: 1 },
 ];
 
-const toolCards = [
-  { path: "/yes-or-no-wheel", icon: Dices, titleKey: "yesNoWheel", descKey: "yesNoWheelDesc" },
-  { path: "/random-number-generator", icon: Hash, titleKey: "numberPicker", descKey: "numberPickerDesc" },
-  { path: "/giveaway-picker", icon: Gift, titleKey: "giveawayPicker", descKey: "giveawayPickerDesc" },
-  { path: "/instagram-giveaway-picker", icon: Instagram, titleKey: "instagramPicker", descKey: "instagramPickerDesc" },
-  { path: "/team-generator", icon: Users, titleKey: "teamGenerator", descKey: "teamGeneratorDesc" },
-  { path: "/party-wheel", icon: PartyPopper, titleKey: "partyWheel", descKey: "partyWheelDesc" },
-  { path: "/classroom-picker", icon: GraduationCap, titleKey: "classroomPicker", descKey: "classroomPickerDesc" },
-  { path: "/weighted-random-picker", icon: Scale, titleKey: "weightedPicker", descKey: "weightedPickerDesc" },
-] as const;
-
-type ToolCardKey = typeof toolCards[number]["titleKey"] | typeof toolCards[number]["descKey"];
-
-const TOOL_LABELS: Record<string, Record<ToolCardKey, string>> = {
-  en: {
-    yesNoWheel: "Yes or No Wheel", yesNoWheelDesc: "Quick binary decisions",
-    numberPicker: "Number Picker", numberPickerDesc: "Random number by spinning",
-    giveawayPicker: "Giveaway Picker", giveawayPickerDesc: "Fair contest winners",
-    instagramPicker: "Instagram Picker", instagramPickerDesc: "Pick from comments",
-    teamGenerator: "Team Generator", teamGeneratorDesc: "Split into random groups",
-    partyWheel: "Party Wheel", partyWheelDesc: "Truth or Dare & more",
-    classroomPicker: "Classroom Picker", classroomPickerDesc: "Random student selector",
-    weightedPicker: "Weighted Picker", weightedPickerDesc: "Custom probabilities",
-  },
-  fr: {
-    yesNoWheel: "Roue Oui ou Non", yesNoWheelDesc: "Décisions rapides",
-    numberPicker: "Générateur de Nombres", numberPickerDesc: "Nombre aléatoire en tournant",
-    giveawayPicker: "Sélecteur de Giveaway", giveawayPickerDesc: "Gagnants de concours",
-    instagramPicker: "Sélecteur Instagram", instagramPickerDesc: "Choisir parmi les commentaires",
-    teamGenerator: "Générateur d'Équipes", teamGeneratorDesc: "Diviser en groupes aléatoires",
-    partyWheel: "Roue de Soirée", partyWheelDesc: "Action ou Vérité & plus",
-    classroomPicker: "Sélecteur de Classe", classroomPickerDesc: "Sélection d'élèves aléatoire",
-    weightedPicker: "Sélecteur Pondéré", weightedPickerDesc: "Probabilités personnalisées",
-  },
-  de: {
-    yesNoWheel: "Ja oder Nein Rad", yesNoWheelDesc: "Schnelle Binärentscheidungen",
-    numberPicker: "Zahlengenerator", numberPickerDesc: "Zufallszahl durch Drehen",
-    giveawayPicker: "Gewinnspiel-Picker", giveawayPickerDesc: "Faire Gewinner-Auswahl",
-    instagramPicker: "Instagram-Picker", instagramPickerDesc: "Aus Kommentaren wählen",
-    teamGenerator: "Team-Generator", teamGeneratorDesc: "In Zufallsgruppen aufteilen",
-    partyWheel: "Party-Rad", partyWheelDesc: "Wahrheit oder Pflicht & mehr",
-    classroomPicker: "Klassen-Picker", classroomPickerDesc: "Zufälliger Schüler-Wähler",
-    weightedPicker: "Gewichteter Picker", weightedPickerDesc: "Benutzerdefinierte Wahrscheinlichkeiten",
-  },
-  es: {
-    yesNoWheel: "Ruleta Sí o No", yesNoWheelDesc: "Decisiones binarias rápidas",
-    numberPicker: "Generador de Números", numberPickerDesc: "Número aleatorio girando",
-    giveawayPicker: "Selector de Sorteos", giveawayPickerDesc: "Ganadores de concursos",
-    instagramPicker: "Selector de Instagram", instagramPickerDesc: "Elegir de comentarios",
-    teamGenerator: "Generador de Equipos", teamGeneratorDesc: "Dividir en grupos aleatorios",
-    partyWheel: "Ruleta de Fiesta", partyWheelDesc: "Verdad o reto & más",
-    classroomPicker: "Selector de Clase", classroomPickerDesc: "Selector aleatorio de estudiantes",
-    weightedPicker: "Selector Ponderado", weightedPickerDesc: "Probabilidades personalizadas",
-  },
-  pt: {
-    yesNoWheel: "Roda Sim ou Não", yesNoWheelDesc: "Decisões binárias rápidas",
-    numberPicker: "Gerador de Números", numberPickerDesc: "Número aleatório girando",
-    giveawayPicker: "Seletor de Sorteios", giveawayPickerDesc: "Vencedores de concursos",
-    instagramPicker: "Seletor do Instagram", instagramPickerDesc: "Escolher de comentários",
-    teamGenerator: "Gerador de Equipes", teamGeneratorDesc: "Dividir em grupos aleatórios",
-    partyWheel: "Roda de Festa", partyWheelDesc: "Verdade ou desafio & mais",
-    classroomPicker: "Seletor de Turma", classroomPickerDesc: "Seleção aleatória de alunos",
-    weightedPicker: "Seletor Ponderado", weightedPickerDesc: "Probabilidades personalizadas",
-  },
-  it: {
-    yesNoWheel: "Ruota Sì o No", yesNoWheelDesc: "Decisioni binarie rapide",
-    numberPicker: "Generatore di Numeri", numberPickerDesc: "Numero casuale girando",
-    giveawayPicker: "Selettore di Giveaway", giveawayPickerDesc: "Vincitori di concorsi",
-    instagramPicker: "Selettore Instagram", instagramPickerDesc: "Scegliere dai commenti",
-    teamGenerator: "Generatore di Team", teamGeneratorDesc: "Dividere in gruppi casuali",
-    partyWheel: "Ruota della Festa", partyWheelDesc: "Verità o sfida & altro",
-    classroomPicker: "Selettore di Classe", classroomPickerDesc: "Selettore casuale di studenti",
-    weightedPicker: "Selettore Ponderato", weightedPickerDesc: "Probabilità personalizzate",
-  },
-};
 
 // Fullscreen toggle button
 function FullscreenButton() {
@@ -171,18 +95,6 @@ const HomepageIslandInner = () => {
   const { participants, setParticipants, isLoaded } = useLocalStorageParticipants();
   const { t, language } = useLanguage();
   const { getCount, increment, globalCount } = useSpinCounter();
-
-  const USE_CASES = [
-    t.indexUseCaseGiveaway,
-    t.indexUseCaseClassroom,
-    t.indexUseCaseStandup,
-    t.indexUseCaseParty,
-    t.indexUseCaseDinner,
-    t.indexUseCaseTodo,
-    t.indexUseCasePresentation,
-  ];
-
-  const toolLabels = TOOL_LABELS[language] ?? TOOL_LABELS['en'];
 
   const { playTick, playFanfare } = useWheelSound();
   const [customizeConfig, setCustomizeConfig] = useCustomizeConfig();
@@ -514,126 +426,6 @@ const HomepageIslandInner = () => {
             </div>
           </div>
 
-          {/* VALUE PROPOSITION */}
-          <section className="space-y-6 pt-4">
-            <h2 className="text-2xl font-bold text-foreground text-center">{t.indexValueTitle}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[
-                { emoji: '🎯', title: t.indexValue1Title, text: t.indexValue1Text },
-                { emoji: '🔒', title: t.indexValue2Title, text: t.indexValue2Text },
-                { emoji: '⚡', title: t.indexValue3Title, text: t.indexValue3Text },
-              ].map(({ emoji, title, text }, i) => (
-                <div key={i} className="text-center p-6 rounded-xl border border-border bg-card/60">
-                  <div className="text-3xl mb-3">{emoji}</div>
-                  <h3 className="font-semibold text-foreground mb-2">{title}</h3>
-                  <p className="text-sm text-muted-foreground">{text}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* USE CASES */}
-          <section className="space-y-6 pt-4">
-            <div className="text-center space-y-2">
-              <h2 className="text-2xl font-bold text-foreground">{t.indexWhatIsTitle}</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">{t.indexWhatIsText}</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {USE_CASES.map((text, i) => (
-                <div key={i} className="flex gap-3 p-4 rounded-xl bg-card border border-border transition-all hover:border-primary/40">
-                  <p className="text-sm text-muted-foreground leading-relaxed">{text}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* HOW TO */}
-          <section className="space-y-6">
-            <h2 className="text-2xl font-bold text-foreground">{t.indexHowToTitle}</h2>
-            <ol className="list-decimal pl-6 space-y-3 text-muted-foreground">
-              <li>
-                <strong className="text-foreground">{t.indexHowToStep1Title}:</strong>{' '}
-                {t.indexHowToStep1Text}
-              </li>
-              <li>
-                <strong className="text-foreground">{t.indexHowToStep2Title}:</strong>{' '}
-                {t.indexHowToStep2Text}
-              </li>
-              <li>
-                <strong className="text-foreground">{t.indexHowToStep3Title}:</strong>{' '}
-                {t.indexHowToStep3Text}
-              </li>
-            </ol>
-          </section>
-
-          {/* WHY US */}
-          <section className="space-y-4">
-            <h2 className="text-2xl font-bold text-foreground">{t.indexWhyTitle}</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {[
-                { title: t.indexWhyFair, text: t.indexWhyFairText },
-                { title: t.indexWhyFree, text: t.indexWhyFreeText },
-                { title: t.indexWhyNoSignup, text: t.indexWhyNoSignupText },
-                { title: t.indexWhyPrivate, text: t.indexWhyPrivateText },
-              ].map(({ title, text }, i) => (
-                <div key={i} className="flex gap-3 p-4 rounded-xl bg-card border border-border">
-                  <div>
-                    <p className="font-semibold text-foreground text-sm">{title}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">{text}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* SEO FAQ */}
-          <section className="space-y-4">
-            <h2 className="text-2xl font-bold text-foreground">{t.faqTitle}</h2>
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="1">
-                <AccordionTrigger>{t.faqQ1}</AccordionTrigger>
-                <AccordionContent>{t.faqA1}</AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="2">
-                <AccordionTrigger>{t.faqQ3}</AccordionTrigger>
-                <AccordionContent>{t.faqA3}</AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="3">
-                <AccordionTrigger>{t.faqQ6}</AccordionTrigger>
-                <AccordionContent>{t.faqA6}</AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="4">
-                <AccordionTrigger>{t.faqQ8}</AccordionTrigger>
-                <AccordionContent>{t.faqA8}</AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="5">
-                <AccordionTrigger>{t.faqQ7}</AccordionTrigger>
-                <AccordionContent>{t.faqA7}</AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </section>
-
-          {/* Our Tools Grid */}
-          <section className="space-y-6">
-            <h2 className="text-2xl font-bold text-foreground text-center">{t.indexOurTools}</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {toolCards.map((tool) => {
-                const Icon = tool.icon;
-                const labels = toolLabels;
-                return (
-                  <a
-                    key={tool.path}
-                    href={tool.path}
-                    className="p-4 bg-card border border-border rounded-xl text-center hover:border-primary/50 hover:shadow-lg transition-all group"
-                  >
-                    <Icon className="w-8 h-8 text-primary mx-auto mb-2 group-hover:scale-110 transition-transform" />
-                    <h3 className="font-semibold text-sm text-foreground">{labels[tool.titleKey]}</h3>
-                    <p className="text-xs text-muted-foreground mt-1">{labels[tool.descKey]}</p>
-                  </a>
-                );
-              })}
-            </div>
-          </section>
         </main>
       </div>
     </div>
