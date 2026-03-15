@@ -7,6 +7,7 @@ export interface CustomizeConfig {
   spinDuration: number;       // seconds: 3–15
   spinSoundEnabled: boolean;
   spinSoundVolume: number;    // 0–100
+  tickSound: string;          // sound style key
   // After spin
   resultSoundEnabled: boolean;
   resultSoundVolume: number;
@@ -14,17 +15,20 @@ export interface CustomizeConfig {
   showRemoveButton: boolean;
   // Appearance
   theme: string;
+  borderStyle: string;        // 'default' | 'white' | 'rainbow' | 'none' | 'gold'
 }
 
 export const DEFAULT_CONFIG: CustomizeConfig = {
   spinDuration: 5,
   spinSoundEnabled: true,
   spinSoundVolume: 70,
+  tickSound: "click",
   resultSoundEnabled: true,
   resultSoundVolume: 70,
   launchConfetti: true,
   showRemoveButton: true,
   theme: "classic",
+  borderStyle: "default",
 };
 
 const STORAGE_KEY = "wheelConfig";
@@ -192,6 +196,37 @@ export function CustomizePanel({ config, onChange, onClose }: Props) {
                   })}
                 </div>
               </div>
+
+              <div>
+                <p className="text-sm font-medium text-foreground mb-3">Wheel border</p>
+                <div className="grid grid-cols-5 gap-2">
+                  {[
+                    { key: "default", label: "Default", color: "hsl(45,93%,58%)" },
+                    { key: "white",   label: "White",   color: "#ffffff" },
+                    { key: "gold",    label: "Gold",    color: "#FFD700" },
+                    { key: "rainbow", label: "🌈",       color: "linear-gradient(135deg,#f00,#ff0,#0f0,#00f,#f0f)" },
+                    { key: "none",    label: "None",    color: "transparent" },
+                  ].map(b => (
+                    <button
+                      key={b.key}
+                      onClick={() => set("borderStyle", b.key)}
+                      className={`p-2 rounded-xl border-2 transition-all text-center ${
+                        config.borderStyle === b.key
+                          ? "border-primary shadow-md bg-primary/5"
+                          : "border-transparent hover:border-border bg-muted/40"
+                      }`}
+                    >
+                      <div
+                        className="w-8 h-8 mx-auto rounded-full mb-1 border border-muted"
+                        style={{ background: b.color }}
+                      />
+                      <span className={`text-[10px] font-medium ${config.borderStyle === b.key ? "text-primary" : "text-muted-foreground"}`}>
+                        {b.label}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
 
@@ -213,6 +248,36 @@ export function CustomizePanel({ config, onChange, onClose }: Props) {
                   left="Silent" right="Loud"
                 />
               )}
+              <div>
+                <p className="text-sm font-medium text-foreground mb-3">Tick sound style</p>
+                <div className="grid grid-cols-4 gap-2">
+                  {[
+                    { key: "click",  label: "Click",  emoji: "🖱️" },
+                    { key: "tick",   label: "Tick",   emoji: "⏱️" },
+                    { key: "wood",   label: "Wood",   emoji: "🪵" },
+                    { key: "ping",   label: "Ping",   emoji: "🔔" },
+                    { key: "casino", label: "Casino", emoji: "🎰" },
+                    { key: "deep",   label: "Deep",   emoji: "🥁" },
+                    { key: "soft",   label: "Soft",   emoji: "✨" },
+                    { key: "spring", label: "Spring", emoji: "🌿" },
+                  ].map(s => (
+                    <button
+                      key={s.key}
+                      onClick={() => set("tickSound", s.key)}
+                      className={`p-2 rounded-xl border-2 transition-all text-center ${
+                        config.tickSound === s.key
+                          ? "border-primary shadow-md bg-primary/5"
+                          : "border-transparent hover:border-border bg-muted/40"
+                      }`}
+                    >
+                      <div className="text-lg mb-0.5">{s.emoji}</div>
+                      <span className={`text-[10px] font-medium ${config.tickSound === s.key ? "text-primary" : "text-muted-foreground"}`}>
+                        {s.label}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
               <Slider
                 label="Spin duration"
                 value={config.spinDuration}

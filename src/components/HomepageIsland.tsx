@@ -15,7 +15,7 @@ import { ConfettiEffect } from "@/components/ConfettiEffect";
 import { WHEEL_THEMES } from "@/components/WheelThemePicker";
 import { CustomizePanel, useCustomizeConfig } from "@/components/CustomizePanel";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Gift, Hash, Users, PartyPopper, GraduationCap, Scale, Instagram, Dices, Edit3, Share2, Settings2 } from "lucide-react";
+import { Gift, Hash, Users, PartyPopper, GraduationCap, Scale, Instagram, Dices, Edit3, Share2, Settings2, Maximize2, Minimize2 } from "lucide-react";
 import { buildShareURL, readShareURLConfig } from "@/hooks/useShareableURL";
 import { toast } from "sonner";
 
@@ -105,6 +105,32 @@ const TOOL_LABELS: Record<string, Record<ToolCardKey, string>> = {
     weightedPicker: "Selettore Ponderato", weightedPickerDesc: "Probabilità personalizzate",
   },
 };
+
+// Fullscreen toggle button
+function FullscreenButton() {
+  const [isFs, setIsFs] = useState(false);
+  useEffect(() => {
+    const h = () => setIsFs(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', h);
+    return () => document.removeEventListener('fullscreenchange', h);
+  }, []);
+  const toggle = () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen().catch(() => {});
+  };
+  return (
+    <button
+      onClick={toggle}
+      title={isFs ? "Exit fullscreen" : "Fullscreen"}
+      className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+    >
+      {isFs
+        ? <Minimize2 className="w-4 h-4" />
+        : <Maximize2 className="w-4 h-4" />
+      }
+    </button>
+  );
+}
 
 // Odometer digit roller — electric clock style
 function OdometerDigit({ value }: { value: number }) {
@@ -325,6 +351,10 @@ const HomepageIslandInner = () => {
 
               {/* Wheel — clicking it also spins */}
               <div className="relative">
+                {/* Fullscreen button — top right of wheel area */}
+                <div className="absolute top-2 right-2 z-10">
+                  <FullscreenButton />
+                </div>
                 <SpinningWheel
                   participants={displayParticipants}
                   isSpinning={isSpinning}
@@ -332,8 +362,11 @@ const HomepageIslandInner = () => {
                   mode="simple"
                   winnersCount={1}
                   onSpin={handleDraw}
-                  onTick={customizeConfig.spinSoundEnabled ? playTick : undefined}
+                  onTick={customizeConfig.spinSoundEnabled
+                    ? () => playTick(customizeConfig.tickSound)
+                    : undefined}
                   colors={WHEEL_THEMES[customizeConfig.theme]?.colors}
+                  borderStyle={customizeConfig.borderStyle}
                 />
               </div>
 

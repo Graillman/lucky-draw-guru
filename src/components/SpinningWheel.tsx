@@ -16,6 +16,7 @@ interface SpinningWheelProps {
   onSpin?: () => void;
   onTick?: () => void;
   colors?: string[];
+  borderStyle?: string; // 'default' | 'white' | 'gold' | 'rainbow' | 'none'
 }
 
 const DEFAULT_COLORS = [
@@ -33,7 +34,7 @@ const DEFAULT_COLORS = [
   'hsl(0, 75%, 55%)',    // Crimson
 ];
 
-export function SpinningWheel({ participants, isSpinning, onComplete, mode, winnersCount, onSpin, onTick, colors }: SpinningWheelProps) {
+export function SpinningWheel({ participants, isSpinning, onComplete, mode, winnersCount, onSpin, onTick, colors, borderStyle = 'default' }: SpinningWheelProps) {
   const COLORS = colors && colors.length > 0 ? colors : DEFAULT_COLORS;
   const { t } = useLanguage();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -183,12 +184,33 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
       ctx.restore();
     });
 
-    // Outer ring
-    ctx.beginPath();
-    ctx.arc(center, center, radius, 0, Math.PI * 2);
-    ctx.strokeStyle = themeColor;
-    ctx.lineWidth = 4;
-    ctx.stroke();
+    // Outer ring — style driven by borderStyle prop
+    if (borderStyle !== 'none') {
+      ctx.beginPath();
+      ctx.arc(center, center, radius, 0, Math.PI * 2);
+      if (borderStyle === 'rainbow') {
+        // Approximate rainbow with a conic gradient by drawing multiple arcs
+        const steps = 12;
+        const hueStep = 360 / steps;
+        for (let ri = 0; ri < steps; ri++) {
+          const startA = (ri / steps) * Math.PI * 2 - Math.PI / 2;
+          const endA = ((ri + 1) / steps) * Math.PI * 2 - Math.PI / 2;
+          ctx.beginPath();
+          ctx.arc(center, center, radius, startA, endA);
+          ctx.strokeStyle = `hsl(${ri * hueStep}, 100%, 55%)`;
+          ctx.lineWidth = 6;
+          ctx.stroke();
+        }
+      } else {
+        ctx.beginPath();
+        ctx.arc(center, center, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = borderStyle === 'white' ? '#ffffff'
+          : borderStyle === 'gold' ? '#FFD700'
+          : themeColor;
+        ctx.lineWidth = 4;
+        ctx.stroke();
+      }
+    }
     
     // Inner decorative ring
     ctx.beginPath();
@@ -272,7 +294,7 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     ctx.fillStyle = 'rgba(255,255,255,0.3)';
     ctx.fill();
 
-  }, [rotation, segments, participants.length, mode, themeColor, themeColorDark, themeColorGlow, themeColorHalf, themeColorLight, themeStroke]);
+  }, [rotation, segments, participants.length, mode, themeColor, themeColorDark, themeColorGlow, themeColorHalf, themeColorLight, themeStroke, borderStyle]);
 
   // Idle rotation — 1 revolution per ~20s, stops on first spin
   useEffect(() => {
