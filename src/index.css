@@ -274,6 +274,32 @@
     66% { transform: translate(-20px, 15px) scale(0.95); }
   }
 
+  /* Rainbow rotating border for spin button */
+  @keyframes rainbow-spin {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .rainbow-border-wrap {
+    padding: 3px;
+    border-radius: 14px;
+    background: linear-gradient(270deg, #ff0000, #ff7700, #ffff00, #00dd00, #0077ff, #8800ff, #ff0000);
+    background-size: 400% 400%;
+    animation: rainbow-spin 3s linear infinite;
+  }
+
+  /* Odometer digit roller */
+  .odometer-digit {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    line-height: 1;
+  }
+  .odometer-strip {
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
   @keyframes bounce-subtle {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-5px); }

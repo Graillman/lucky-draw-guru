@@ -49,72 +49,41 @@ const ParticipantInput = ({ mode, participants, onParticipantsChange }: Particip
     onParticipantsChange(parsed);
   }, [parseParticipants, onParticipantsChange]);
 
-  // Sort A-Z - works on current textarea content
+  // Sync textarea when participants loaded externally (e.g. from localStorage)
+  useEffect(() => {
+    if (textareaValue === '' && participants.length > 0) {
+      setTextareaValue(participants.map(p => p.pseudo).join('\n'));
+    }
+  }, [participants]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Sort A-Z - works on participants prop (works even if textarea was never typed in)
   const handleSortAZ = useCallback(() => {
-    // Parse current text first
-    const names = textareaValue
-      .split(/[\s,\n]+/)
-      .map(name => name.trim())
-      .filter(name => name.length > 0);
-    
-    if (names.length < 2) return;
-    
-    const sorted = [...new Set(names)].sort((a, b) => a.localeCompare(b));
-    const newText = sorted.join('\n');
-    setTextareaValue(newText);
-    
-    const newParticipants = sorted.map(pseudo => {
-      const existing = participants.find(p => p.pseudo === pseudo);
-      return { pseudo, weight: existing?.weight ?? 1 };
-    });
-    onParticipantsChange(newParticipants);
-  }, [textareaValue, participants, onParticipantsChange]);
+    if (participants.length < 2) return;
+    const sorted = [...participants].sort((a, b) => a.pseudo.localeCompare(b.pseudo));
+    onParticipantsChange(sorted);
+    setTextareaValue(sorted.map(p => p.pseudo).join('\n'));
+  }, [participants, onParticipantsChange]);
 
   // Sort Z-A
   const handleSortZA = useCallback(() => {
-    const names = textareaValue
-      .split(/[\s,\n]+/)
-      .map(name => name.trim())
-      .filter(name => name.length > 0);
-    
-    if (names.length < 2) return;
-    
-    const sorted = [...new Set(names)].sort((a, b) => b.localeCompare(a));
-    const newText = sorted.join('\n');
-    setTextareaValue(newText);
-    
-    const newParticipants = sorted.map(pseudo => {
-      const existing = participants.find(p => p.pseudo === pseudo);
-      return { pseudo, weight: existing?.weight ?? 1 };
-    });
-    onParticipantsChange(newParticipants);
-  }, [textareaValue, participants, onParticipantsChange]);
+    if (participants.length < 2) return;
+    const sorted = [...participants].sort((a, b) => b.pseudo.localeCompare(a.pseudo));
+    onParticipantsChange(sorted);
+    setTextareaValue(sorted.map(p => p.pseudo).join('\n'));
+  }, [participants, onParticipantsChange]);
 
   // Shuffle
   const handleShuffle = useCallback(() => {
-    const names = textareaValue
-      .split(/[\s,\n]+/)
-      .map(name => name.trim())
-      .filter(name => name.length > 0);
-    
-    if (names.length < 2) return;
-    
-    const uniqueNames = [...new Set(names)];
+    if (participants.length < 2) return;
+    const shuffled = [...participants];
     // Fisher-Yates shuffle
-    for (let i = uniqueNames.length - 1; i > 0; i--) {
+    for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(cryptoRandom() * (i + 1));
-      [uniqueNames[i], uniqueNames[j]] = [uniqueNames[j], uniqueNames[i]];
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-    
-    const newText = uniqueNames.join('\n');
-    setTextareaValue(newText);
-    
-    const newParticipants = uniqueNames.map(pseudo => {
-      const existing = participants.find(p => p.pseudo === pseudo);
-      return { pseudo, weight: existing?.weight ?? 1 };
-    });
-    onParticipantsChange(newParticipants);
-  }, [textareaValue, participants, onParticipantsChange]);
+    onParticipantsChange(shuffled);
+    setTextareaValue(shuffled.map(p => p.pseudo).join('\n'));
+  }, [participants, onParticipantsChange]);
 
   // Format: one per line - splits by spaces/commas and puts each name on new line
   const handleOnePerLine = useCallback(() => {

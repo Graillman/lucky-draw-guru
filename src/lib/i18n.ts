@@ -320,6 +320,41 @@ export interface Translations {
   
   // Common
   loading: string;
+
+  // Homepage Island
+  indexPageTitle: string;
+  indexSpinsText: string;
+  tapToSpin: string;
+  indexEntriesTab: string;
+  indexResultsTab: string;
+  indexNoResults: string;
+  indexClearResults: string;
+  indexWhatIsTitle: string;
+  indexWhatIsText: string;
+  indexHowToTitle: string;
+  indexHowToStep1Title: string;
+  indexHowToStep1Text: string;
+  indexHowToStep2Title: string;
+  indexHowToStep2Text: string;
+  indexHowToStep3Title: string;
+  indexHowToStep3Text: string;
+  indexWhyTitle: string;
+  indexWhyFair: string;
+  indexWhyFairText: string;
+  indexWhyFree: string;
+  indexWhyFreeText: string;
+  indexWhyNoSignup: string;
+  indexWhyNoSignupText: string;
+  indexWhyPrivate: string;
+  indexWhyPrivateText: string;
+  indexOurTools: string;
+  indexUseCaseGiveaway: string;
+  indexUseCaseClassroom: string;
+  indexUseCaseStandup: string;
+  indexUseCaseParty: string;
+  indexUseCaseDinner: string;
+  indexUseCaseTodo: string;
+  indexUseCasePresentation: string;
 }
 
 export const translations: Record<Language, Translations> = {
@@ -642,6 +677,41 @@ export const translations: Record<Language, Translations> = {
     
     // Common
     loading: 'Loading...',
+
+    // Homepage Island
+    indexPageTitle: 'Spin the Wheel — Free Random Picker',
+    indexSpinsText: 'spins completed',
+    tapToSpin: 'Click to spin',
+    indexEntriesTab: 'Entries',
+    indexResultsTab: 'Results',
+    indexNoResults: 'Spin the wheel to see results here',
+    indexClearResults: 'Clear results',
+    indexWhatIsTitle: 'When to use the spinning wheel?',
+    indexWhatIsText: 'From Instagram giveaways to classroom activities — the spinning wheel is the fairest way to make a random decision.',
+    indexHowToTitle: 'How to use the wheel',
+    indexHowToStep1Title: 'Add your entries',
+    indexHowToStep1Text: 'Type names one by one, paste a list, or use one of our pre-made templates.',
+    indexHowToStep2Title: 'Click Spin',
+    indexHowToStep2Text: 'Hit the "Spin the Wheel" button and watch the colorful wheel rotate with smooth animation.',
+    indexHowToStep3Title: 'Get your result',
+    indexHowToStep3Text: 'The wheel lands on a random winner. Copy the result, share it, or spin again.',
+    indexWhyTitle: 'Why use our random wheel?',
+    indexWhyFair: '100% Fair',
+    indexWhyFairText: 'Web Crypto API — same tech as online banking.',
+    indexWhyFree: 'Completely Free',
+    indexWhyFreeText: 'No premium tiers, no fees, no limits on spins.',
+    indexWhyNoSignup: 'No Signup',
+    indexWhyNoSignupText: 'Start instantly — no account, no email.',
+    indexWhyPrivate: 'Privacy First',
+    indexWhyPrivateText: 'Everything runs in your browser. Zero data sent.',
+    indexOurTools: 'Our Tools',
+    indexUseCaseGiveaway: '🎁 Giveaways & contests — Pick winners from Instagram, TikTok, or Discord comments fairly and transparently. Show your audience the live spin.',
+    indexUseCaseClassroom: '🎓 Classrooms & training — Select students randomly for questions, presentations, or team assignments. Fair for everyone.',
+    indexUseCaseStandup: '🏢 Standup meetings — Randomize who speaks first in daily standups. Keeps meetings fresh and fair.',
+    indexUseCaseParty: '🎉 Party games — Truth or Dare, Never Have I Ever, random challenges. Add any options and spin.',
+    indexUseCaseDinner: '🤔 Dinner decisions — Can\'t decide where to eat? Add restaurant names and let the wheel decide.',
+    indexUseCaseTodo: '📋 Task delegation — Assign chores, tasks, or project responsibilities randomly. No arguments.',
+    indexUseCasePresentation: '🎮 Presentations — Call on students, pick speakers, or decide the order of presentations.',
   },
   
   es: {
@@ -958,6 +1028,41 @@ export const translations: Record<Language, Translations> = {
     
     // Common
     loading: 'Cargando...',
+
+    // Homepage Island
+    indexPageTitle: 'Ruleta Aleatoria — Sorteo Gratuito',
+    indexSpinsText: 'giros completados',
+    tapToSpin: 'Clic para girar',
+    indexEntriesTab: 'Participantes',
+    indexResultsTab: 'Resultados',
+    indexNoResults: 'Gira la ruleta para ver resultados',
+    indexClearResults: 'Borrar resultados',
+    indexWhatIsTitle: '¿Cuándo usar la ruleta aleatoria?',
+    indexWhatIsText: 'Desde sorteos de Instagram hasta actividades en clase — la ruleta es la forma más justa de tomar una decisión aleatoria.',
+    indexHowToTitle: 'Cómo usar la ruleta',
+    indexHowToStep1Title: 'Agrega tus entradas',
+    indexHowToStep1Text: 'Escribe nombres uno a uno, pega una lista o usa una de nuestras plantillas.',
+    indexHowToStep2Title: 'Haz clic en Girar',
+    indexHowToStep2Text: 'Pulsa el botón "Girar la Ruleta" y observa la animación del giro.',
+    indexHowToStep3Title: 'Obtén tu resultado',
+    indexHowToStep3Text: 'La ruleta se detiene en un ganador aleatorio. Copia el resultado, compártelo o gira de nuevo.',
+    indexWhyTitle: '¿Por qué usar nuestra ruleta?',
+    indexWhyFair: '100% Justo',
+    indexWhyFairText: 'API Web Crypto — misma tecnología que la banca online.',
+    indexWhyFree: 'Completamente Gratis',
+    indexWhyFreeText: 'Sin niveles premium, sin tarifas, sin límites en los giros.',
+    indexWhyNoSignup: 'Sin Registro',
+    indexWhyNoSignupText: 'Empieza instantáneamente — sin cuenta, sin email.',
+    indexWhyPrivate: 'Privacidad Primero',
+    indexWhyPrivateText: 'Todo funciona en tu navegador. Cero datos enviados.',
+    indexOurTools: 'Nuestras Herramientas',
+    indexUseCaseGiveaway: '🎁 Sorteos y concursos — Selecciona ganadores de comentarios de Instagram, TikTok o Discord de forma transparente.',
+    indexUseCaseClassroom: '🎓 Aulas y formación — Selecciona estudiantes aleatoriamente para preguntas, presentaciones o trabajos en grupo.',
+    indexUseCaseStandup: '🏢 Reuniones de equipo — Aleatoriza quién habla primero en los standup diarios.',
+    indexUseCaseParty: '🎉 Juegos de fiesta — Verdad o reto, desafíos. Agrega cualquier opción.',
+    indexUseCaseDinner: '🤔 Decisión de cena — ¿No puedes decidir dónde comer? Agrega restaurantes y deja que la ruleta decida.',
+    indexUseCaseTodo: '📋 Delegación de tareas — Asigna tareas o responsabilidades al azar. Sin discusiones.',
+    indexUseCasePresentation: '🎮 Presentaciones — Llama a estudiantes, elige ponentes o decide el orden de presentaciones.',
   },
   fr: {
     heroTitle: "Tirage au sort",
@@ -1273,6 +1378,41 @@ export const translations: Record<Language, Translations> = {
     
     // Common
     loading: 'Chargement...',
+
+    // Homepage Island
+    indexPageTitle: 'Roue aléatoire — Tirage au sort gratuit',
+    indexSpinsText: 'tirages effectués',
+    tapToSpin: 'Cliquer pour tourner',
+    indexEntriesTab: 'Participants',
+    indexResultsTab: 'Résultats',
+    indexNoResults: 'Tournez la roue pour voir les résultats',
+    indexClearResults: 'Effacer les résultats',
+    indexWhatIsTitle: 'Quand utiliser la roue aléatoire ?',
+    indexWhatIsText: 'Des giveaways Instagram aux activités en classe — la roue est la façon la plus équitable de prendre une décision au hasard.',
+    indexHowToTitle: 'Comment utiliser la roue',
+    indexHowToStep1Title: 'Ajoutez vos participants',
+    indexHowToStep1Text: 'Tapez des noms un par un, collez une liste ou utilisez un de nos modèles prédéfinis.',
+    indexHowToStep2Title: 'Cliquez sur Tourner',
+    indexHowToStep2Text: 'Appuyez sur le bouton "Lancer le tirage" et regardez la roue tourner avec une animation fluide.',
+    indexHowToStep3Title: 'Obtenez votre résultat',
+    indexHowToStep3Text: 'La roue s\'arrête sur un gagnant aléatoire. Copiez le résultat, partagez-le, ou relancez.',
+    indexWhyTitle: 'Pourquoi utiliser notre roue aléatoire ?',
+    indexWhyFair: '100% Équitable',
+    indexWhyFairText: 'API Web Crypto — même technologie que les banques.',
+    indexWhyFree: 'Entièrement gratuit',
+    indexWhyFreeText: 'Pas d\'abonnement, pas de frais, tirages illimités.',
+    indexWhyNoSignup: 'Sans inscription',
+    indexWhyNoSignupText: 'Commencez instantanément — pas de compte, pas d\'email.',
+    indexWhyPrivate: 'Vie privée d\'abord',
+    indexWhyPrivateText: 'Tout fonctionne dans votre navigateur. Aucune donnée envoyée.',
+    indexOurTools: 'Nos Outils',
+    indexUseCaseGiveaway: '🎁 Giveaways & concours — Sélectionnez des gagnants depuis les commentaires Instagram, TikTok ou Discord de façon transparente.',
+    indexUseCaseClassroom: '🎓 Salles de classe — Sélectionnez des élèves aléatoirement pour des questions, exposés ou travaux de groupe.',
+    indexUseCaseStandup: '🏢 Réunions d\'équipe — Randomisez qui parle en premier dans les réunions quotidiennes.',
+    indexUseCaseParty: '🎉 Jeux de soirée — Action ou Vérité, jeux de défis. Ajoutez n\'importe quelle option.',
+    indexUseCaseDinner: '🤔 Décision du dîner — Impossible de choisir où manger ? Ajoutez des restaurants et laissez la roue décider.',
+    indexUseCaseTodo: '📋 Délégation de tâches — Attribuez les tâches ou responsabilités au hasard. Pas de disputes.',
+    indexUseCasePresentation: '🎮 Présentations — Désignez des étudiants, choisissez des orateurs ou décidez l\'ordre des présentations.',
   },
   de: {
     heroTitle: 'Zufallsauslosung',
@@ -1588,6 +1728,41 @@ export const translations: Record<Language, Translations> = {
     
     // Common
     loading: 'Laden...',
+
+    // Homepage Island
+    indexPageTitle: 'Glücksrad — Kostenloser Zufallsgenerator',
+    indexSpinsText: 'Drehungen abgeschlossen',
+    tapToSpin: 'Zum Drehen klicken',
+    indexEntriesTab: 'Teilnehmer',
+    indexResultsTab: 'Ergebnisse',
+    indexNoResults: 'Dreht das Rad um Ergebnisse zu sehen',
+    indexClearResults: 'Ergebnisse löschen',
+    indexWhatIsTitle: 'Wann benutzt man das Glücksrad?',
+    indexWhatIsText: 'Von Instagram-Gewinnspielen bis zu Schulaktivitäten — das Rad ist die fairste Methode, eine zufällige Entscheidung zu treffen.',
+    indexHowToTitle: 'So benutzt du das Rad',
+    indexHowToStep1Title: 'Einträge hinzufügen',
+    indexHowToStep1Text: 'Namen einzeln eingeben, eine Liste einfügen oder eine unserer Vorlagen verwenden.',
+    indexHowToStep2Title: 'Drehen klicken',
+    indexHowToStep2Text: 'Drücke den "Rad drehen" Knopf und schau der farbigen Radanimation zu.',
+    indexHowToStep3Title: 'Ergebnis erhalten',
+    indexHowToStep3Text: 'Das Rad stoppt bei einem zufälligen Gewinner. Kopiere das Ergebnis, teile es oder drehe erneut.',
+    indexWhyTitle: 'Warum unser Zufallsrad?',
+    indexWhyFair: '100% Fair',
+    indexWhyFairText: 'Web Crypto API — gleiche Technologie wie Online-Banking.',
+    indexWhyFree: 'Völlig kostenlos',
+    indexWhyFreeText: 'Keine Premiumstufen, keine Gebühren, unbegrenzte Drehungen.',
+    indexWhyNoSignup: 'Keine Anmeldung',
+    indexWhyNoSignupText: 'Sofort starten — kein Konto, keine E-Mail.',
+    indexWhyPrivate: 'Privatsphäre zuerst',
+    indexWhyPrivateText: 'Alles läuft in deinem Browser. Keine Daten gesendet.',
+    indexOurTools: 'Unsere Werkzeuge',
+    indexUseCaseGiveaway: '🎁 Gewinnspiele & Wettbewerbe — Wähle Gewinner aus Instagram-, TikTok- oder Discord-Kommentaren fair und transparent.',
+    indexUseCaseClassroom: '🎓 Klassenzimmer & Training — Schüler zufällig für Fragen, Präsentationen oder Gruppenarbeiten auswählen.',
+    indexUseCaseStandup: '🏢 Team-Meetings — Wer spricht zuerst beim täglichen Standup? Immer fair.',
+    indexUseCaseParty: '🎉 Partyspiele — Wahrheit oder Pflicht, Challenges. Beliebige Optionen hinzufügen.',
+    indexUseCaseDinner: '🤔 Abendessen-Entscheidung — Kann nicht entscheiden wo essen? Restaurants hinzufügen und Rad entscheiden lassen.',
+    indexUseCaseTodo: '📋 Aufgabenverteilung — Haushaltsaufgaben oder Projektverantwortlichkeiten zufällig zuweisen.',
+    indexUseCasePresentation: '🎮 Präsentationen — Schüler aufrufen, Redner wählen oder Reihenfolge der Präsentationen bestimmen.',
   },
   pt: {
     heroTitle: 'Sorteio Aleatório',
@@ -1903,6 +2078,41 @@ export const translations: Record<Language, Translations> = {
     
     // Common
     loading: 'Carregando...',
+
+    // Homepage Island
+    indexPageTitle: 'Roleta Aleatória — Sorteio Gratuito',
+    indexSpinsText: 'sorteios concluídos',
+    tapToSpin: 'Clique para girar',
+    indexEntriesTab: 'Participantes',
+    indexResultsTab: 'Resultados',
+    indexNoResults: 'Gire a roleta para ver os resultados',
+    indexClearResults: 'Limpar resultados',
+    indexWhatIsTitle: 'Quando usar a roleta aleatória?',
+    indexWhatIsText: 'De sorteios no Instagram a atividades em sala de aula — a roleta é a maneira mais justa de tomar uma decisão aleatória.',
+    indexHowToTitle: 'Como usar a roleta',
+    indexHowToStep1Title: 'Adicione suas entradas',
+    indexHowToStep1Text: 'Digite nomes um a um, cole uma lista ou use um dos nossos modelos.',
+    indexHowToStep2Title: 'Clique em Girar',
+    indexHowToStep2Text: 'Pressione o botão "Girar a Roleta" e assista à animação colorida.',
+    indexHowToStep3Title: 'Obtenha seu resultado',
+    indexHowToStep3Text: 'A roleta para em um vencedor aleatório. Copie o resultado, compartilhe ou gire novamente.',
+    indexWhyTitle: 'Por que usar nossa roleta aleatória?',
+    indexWhyFair: '100% Justo',
+    indexWhyFairText: 'API Web Crypto — mesma tecnologia do banco online.',
+    indexWhyFree: 'Completamente Grátis',
+    indexWhyFreeText: 'Sem níveis premium, sem taxas, sem limites de giros.',
+    indexWhyNoSignup: 'Sem Cadastro',
+    indexWhyNoSignupText: 'Comece instantaneamente — sem conta, sem email.',
+    indexWhyPrivate: 'Privacidade em Primeiro',
+    indexWhyPrivateText: 'Tudo funciona no seu navegador. Zero dados enviados.',
+    indexOurTools: 'Nossas Ferramentas',
+    indexUseCaseGiveaway: '🎁 Sorteios e concursos — Selecione vencedores dos comentários do Instagram, TikTok ou Discord de forma transparente.',
+    indexUseCaseClassroom: '🎓 Salas de aula e treinamento — Selecione alunos aleatoriamente para perguntas, apresentações ou trabalhos em grupo.',
+    indexUseCaseStandup: '🏢 Reuniões de equipe — Aleatorize quem fala primeiro nos standups diários.',
+    indexUseCaseParty: '🎉 Jogos de festa — Verdade ou desafio, missões. Adicione qualquer opção.',
+    indexUseCaseDinner: '🤔 Decisão do jantar — Não consegue decidir onde comer? Adicione restaurantes e deixe a roleta decidir.',
+    indexUseCaseTodo: '📋 Delegação de tarefas — Atribua tarefas ou responsabilidades aleatoriamente. Sem discussões.',
+    indexUseCasePresentation: '🎮 Apresentações — Chame alunos, escolha apresentadores ou decida a ordem das apresentações.',
   },
   it: {
     heroTitle: 'Estrazione Casuale',
@@ -2218,6 +2428,41 @@ export const translations: Record<Language, Translations> = {
     
     // Common
     loading: 'Caricamento...',
+
+    // Homepage Island
+    indexPageTitle: 'Ruota della Fortuna — Sorteggio Gratuito',
+    indexSpinsText: 'giri completati',
+    tapToSpin: 'Clicca per girare',
+    indexEntriesTab: 'Partecipanti',
+    indexResultsTab: 'Risultati',
+    indexNoResults: 'Gira la ruota per vedere i risultati',
+    indexClearResults: 'Cancella risultati',
+    indexWhatIsTitle: 'Quando usare la ruota della fortuna?',
+    indexWhatIsText: 'Dai giveaway su Instagram alle attività in classe — la ruota è il modo più equo per prendere una decisione casuale.',
+    indexHowToTitle: 'Come usare la ruota',
+    indexHowToStep1Title: 'Aggiungi le tue voci',
+    indexHowToStep1Text: 'Digita i nomi uno per uno, incolla una lista o usa uno dei nostri modelli.',
+    indexHowToStep2Title: 'Clicca su Gira',
+    indexHowToStep2Text: 'Premi il pulsante "Gira la Ruota" e guarda l\'animazione colorata.',
+    indexHowToStep3Title: 'Ottieni il tuo risultato',
+    indexHowToStep3Text: 'La ruota si ferma su un vincitore casuale. Copia il risultato, condividilo o gira di nuovo.',
+    indexWhyTitle: 'Perché usare la nostra ruota casuale?',
+    indexWhyFair: '100% Equo',
+    indexWhyFairText: 'API Web Crypto — stessa tecnologia del banking online.',
+    indexWhyFree: 'Completamente Gratuito',
+    indexWhyFreeText: 'Nessun livello premium, nessuna tariffa, giri illimitati.',
+    indexWhyNoSignup: 'Nessuna Registrazione',
+    indexWhyNoSignupText: 'Inizia immediatamente — nessun account, nessuna email.',
+    indexWhyPrivate: 'Privacy Prima di Tutto',
+    indexWhyPrivateText: 'Tutto funziona nel tuo browser. Zero dati inviati.',
+    indexOurTools: 'I Nostri Strumenti',
+    indexUseCaseGiveaway: '🎁 Giveaway e concorsi — Seleziona i vincitori dai commenti Instagram, TikTok o Discord in modo trasparente.',
+    indexUseCaseClassroom: '🎓 Aule e formazione — Seleziona gli studenti casualmente per domande, presentazioni o lavori di gruppo.',
+    indexUseCaseStandup: '🏢 Riunioni di team — Randomizza chi parla per primo nei daily standup.',
+    indexUseCaseParty: '🎉 Giochi di festa — Verità o sfida, missioni. Aggiungi qualsiasi opzione.',
+    indexUseCaseDinner: '🤔 Decisione cena — Non riesci a decidere dove mangiare? Aggiungi ristoranti e lascia che la ruota decida.',
+    indexUseCaseTodo: '📋 Delegazione compiti — Assegna compiti o responsabilità casualmente. Senza discussioni.',
+    indexUseCasePresentation: '🎮 Presentazioni — Chiama studenti, scegli oratori o decidi l\'ordine delle presentazioni.',
   },
 };
 

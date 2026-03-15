@@ -14,44 +14,49 @@ interface LanguageProviderProps {
   children: ReactNode;
 }
 
+const LANG_EVENT = 'rwp:langChange';
+const LANG_CHOSEN_KEY = 'rwp_lang_chosen';
+
 // Detect browser language and map to supported languages
 const detectBrowserLanguage = (): Language => {
   if (typeof window === 'undefined') return 'en';
-  
-  // Get browser languages (ordered by preference)
   const browserLanguages = navigator.languages || [navigator.language];
-  
-  // Supported language codes
   const supportedLanguages: Language[] = ['en', 'es', 'fr', 'de', 'pt', 'it'];
-  
   for (const browserLang of browserLanguages) {
-    // Get the primary language code (e.g., 'en-US' -> 'en')
     const primaryLang = browserLang.split('-')[0].toLowerCase() as Language;
-    
     if (supportedLanguages.includes(primaryLang)) {
       return primaryLang;
     }
   }
-  
-  // Default to English if no match
   return 'en';
 };
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
   const [language, setLanguageState] = useState<Language>(() => {
-    // Try to get saved language from localStorage first
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('language') as Language;
-      if (saved && translations[saved]) {
-        return saved;
+      // Only use saved language if user explicitly chose it (not auto-detected)
+      const wasChosen = localStorage.getItem(LANG_CHOSEN_KEY) === '1';
+      if (wasChosen) {
+        const saved = localStorage.getItem('language') as Language;
+        if (saved && translations[saved]) return saved;
       }
-      // No saved preference - detect from browser
+      // Auto-detect from browser
       return detectBrowserLanguage();
     }
     return 'en';
   });
 
-  // Update document lang attribute on mount and language change
+  // Listen for cross-island language changes (other Astro islands changing language)
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const lang = (e as CustomEvent<Language>).detail;
+      if (translations[lang]) setLanguageState(lang);
+    };
+    window.addEventListener(LANG_EVENT, handler);
+    return () => window.removeEventListener(LANG_EVENT, handler);
+  }, []);
+
+  // Update document lang attribute on language change
   useEffect(() => {
     document.documentElement.lang = language;
   }, [language]);
@@ -59,8 +64,10 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem('language', lang);
-    // Update document lang attribute
+    localStorage.setItem(LANG_CHOSEN_KEY, '1');
     document.documentElement.lang = lang;
+    // Broadcast to all other Astro islands so they sync immediately
+    window.dispatchEvent(new CustomEvent(LANG_EVENT, { detail: lang }));
   }, []);
 
   const t = translations[language];

@@ -86,7 +86,7 @@ const HeaderIsland = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-card/90 backdrop-blur-md border-b border-border">
+    <header className="sticky top-0 z-50 w-full bg-card/90 backdrop-blur-md border-b border-border shadow-[0_2px_20px_-4px_rgba(0,0,0,0.15)]">
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-2">
         <a href="/" className="flex items-center gap-2 shrink-0">
           <WheelLogo />

@@ -31,45 +31,117 @@ const DEFAULT_NAMES: ParticipantEntry[] = [
 ];
 
 const toolCards = [
-  { path: "/yes-or-no-wheel", icon: Dices, title: "Yes or No Wheel", desc: "Quick binary decisions" },
-  { path: "/random-number-generator", icon: Hash, title: "Number Picker", desc: "Random number by spinning" },
-  { path: "/giveaway-picker", icon: Gift, title: "Giveaway Picker", desc: "Fair contest winners" },
-  { path: "/instagram-giveaway-picker", icon: Instagram, title: "Instagram Picker", desc: "Pick from comments" },
-  { path: "/team-generator", icon: Users, title: "Team Generator", desc: "Split into random groups" },
-  { path: "/party-wheel", icon: PartyPopper, title: "Party Wheel", desc: "Truth or Dare & more" },
-  { path: "/classroom-picker", icon: GraduationCap, title: "Classroom Picker", desc: "Random student selector" },
-  { path: "/weighted-random-picker", icon: Scale, title: "Weighted Picker", desc: "Custom probabilities" },
-];
+  { path: "/yes-or-no-wheel", icon: Dices, titleKey: "yesNoWheel", descKey: "yesNoWheelDesc" },
+  { path: "/random-number-generator", icon: Hash, titleKey: "numberPicker", descKey: "numberPickerDesc" },
+  { path: "/giveaway-picker", icon: Gift, titleKey: "giveawayPicker", descKey: "giveawayPickerDesc" },
+  { path: "/instagram-giveaway-picker", icon: Instagram, titleKey: "instagramPicker", descKey: "instagramPickerDesc" },
+  { path: "/team-generator", icon: Users, titleKey: "teamGenerator", descKey: "teamGeneratorDesc" },
+  { path: "/party-wheel", icon: PartyPopper, titleKey: "partyWheel", descKey: "partyWheelDesc" },
+  { path: "/classroom-picker", icon: GraduationCap, titleKey: "classroomPicker", descKey: "classroomPickerDesc" },
+  { path: "/weighted-random-picker", icon: Scale, titleKey: "weightedPicker", descKey: "weightedPickerDesc" },
+] as const;
 
-function CountUp({ to, suffix = "", className = "" }: { to: number; suffix?: string; className?: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const started = useRef(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting || started.current) return;
-      started.current = true;
-      const duration = 1600;
-      const start = performance.now();
-      const tick = (now: number) => {
-        const p = Math.min((now - start) / duration, 1);
-        const ease = 1 - Math.pow(1 - p, 3);
-        const val = Math.round(ease * to);
-        el.textContent = new Intl.NumberFormat("en-US").format(val) + suffix;
-        if (p < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    }, { threshold: 0.5 });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [to, suffix]);
-  return <span ref={ref} className={className}>0{suffix}</span>;
+type ToolCardKey = typeof toolCards[number]["titleKey"] | typeof toolCards[number]["descKey"];
+
+const TOOL_LABELS: Record<string, Record<ToolCardKey, string>> = {
+  en: {
+    yesNoWheel: "Yes or No Wheel", yesNoWheelDesc: "Quick binary decisions",
+    numberPicker: "Number Picker", numberPickerDesc: "Random number by spinning",
+    giveawayPicker: "Giveaway Picker", giveawayPickerDesc: "Fair contest winners",
+    instagramPicker: "Instagram Picker", instagramPickerDesc: "Pick from comments",
+    teamGenerator: "Team Generator", teamGeneratorDesc: "Split into random groups",
+    partyWheel: "Party Wheel", partyWheelDesc: "Truth or Dare & more",
+    classroomPicker: "Classroom Picker", classroomPickerDesc: "Random student selector",
+    weightedPicker: "Weighted Picker", weightedPickerDesc: "Custom probabilities",
+  },
+  fr: {
+    yesNoWheel: "Roue Oui ou Non", yesNoWheelDesc: "Décisions rapides",
+    numberPicker: "Générateur de Nombres", numberPickerDesc: "Nombre aléatoire en tournant",
+    giveawayPicker: "Sélecteur de Giveaway", giveawayPickerDesc: "Gagnants de concours",
+    instagramPicker: "Sélecteur Instagram", instagramPickerDesc: "Choisir parmi les commentaires",
+    teamGenerator: "Générateur d'Équipes", teamGeneratorDesc: "Diviser en groupes aléatoires",
+    partyWheel: "Roue de Soirée", partyWheelDesc: "Action ou Vérité & plus",
+    classroomPicker: "Sélecteur de Classe", classroomPickerDesc: "Sélection d'élèves aléatoire",
+    weightedPicker: "Sélecteur Pondéré", weightedPickerDesc: "Probabilités personnalisées",
+  },
+  de: {
+    yesNoWheel: "Ja oder Nein Rad", yesNoWheelDesc: "Schnelle Binärentscheidungen",
+    numberPicker: "Zahlengenerator", numberPickerDesc: "Zufallszahl durch Drehen",
+    giveawayPicker: "Gewinnspiel-Picker", giveawayPickerDesc: "Faire Gewinner-Auswahl",
+    instagramPicker: "Instagram-Picker", instagramPickerDesc: "Aus Kommentaren wählen",
+    teamGenerator: "Team-Generator", teamGeneratorDesc: "In Zufallsgruppen aufteilen",
+    partyWheel: "Party-Rad", partyWheelDesc: "Wahrheit oder Pflicht & mehr",
+    classroomPicker: "Klassen-Picker", classroomPickerDesc: "Zufälliger Schüler-Wähler",
+    weightedPicker: "Gewichteter Picker", weightedPickerDesc: "Benutzerdefinierte Wahrscheinlichkeiten",
+  },
+  es: {
+    yesNoWheel: "Ruleta Sí o No", yesNoWheelDesc: "Decisiones binarias rápidas",
+    numberPicker: "Generador de Números", numberPickerDesc: "Número aleatorio girando",
+    giveawayPicker: "Selector de Sorteos", giveawayPickerDesc: "Ganadores de concursos",
+    instagramPicker: "Selector de Instagram", instagramPickerDesc: "Elegir de comentarios",
+    teamGenerator: "Generador de Equipos", teamGeneratorDesc: "Dividir en grupos aleatorios",
+    partyWheel: "Ruleta de Fiesta", partyWheelDesc: "Verdad o reto & más",
+    classroomPicker: "Selector de Clase", classroomPickerDesc: "Selector aleatorio de estudiantes",
+    weightedPicker: "Selector Ponderado", weightedPickerDesc: "Probabilidades personalizadas",
+  },
+  pt: {
+    yesNoWheel: "Roda Sim ou Não", yesNoWheelDesc: "Decisões binárias rápidas",
+    numberPicker: "Gerador de Números", numberPickerDesc: "Número aleatório girando",
+    giveawayPicker: "Seletor de Sorteios", giveawayPickerDesc: "Vencedores de concursos",
+    instagramPicker: "Seletor do Instagram", instagramPickerDesc: "Escolher de comentários",
+    teamGenerator: "Gerador de Equipes", teamGeneratorDesc: "Dividir em grupos aleatórios",
+    partyWheel: "Roda de Festa", partyWheelDesc: "Verdade ou desafio & mais",
+    classroomPicker: "Seletor de Turma", classroomPickerDesc: "Seleção aleatória de alunos",
+    weightedPicker: "Seletor Ponderado", weightedPickerDesc: "Probabilidades personalizadas",
+  },
+  it: {
+    yesNoWheel: "Ruota Sì o No", yesNoWheelDesc: "Decisioni binarie rapide",
+    numberPicker: "Generatore di Numeri", numberPickerDesc: "Numero casuale girando",
+    giveawayPicker: "Selettore di Giveaway", giveawayPickerDesc: "Vincitori di concorsi",
+    instagramPicker: "Selettore Instagram", instagramPickerDesc: "Scegliere dai commenti",
+    teamGenerator: "Generatore di Team", teamGeneratorDesc: "Dividere in gruppi casuali",
+    partyWheel: "Ruota della Festa", partyWheelDesc: "Verità o sfida & altro",
+    classroomPicker: "Selettore di Classe", classroomPickerDesc: "Selettore casuale di studenti",
+    weightedPicker: "Selettore Ponderato", weightedPickerDesc: "Probabilità personalizzate",
+  },
+};
+
+// Odometer digit roller — electric clock style
+function OdometerDigit({ value }: { value: number }) {
+  return (
+    <span className="odometer-digit" style={{ height: '1.1em', width: '0.65em' }}>
+      <span
+        className="odometer-strip flex flex-col"
+        style={{ transform: `translateY(-${value * (100 / 10)}%)`, height: '1000%' }}
+      >
+        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(d => (
+          <span key={d} style={{ height: '10%', lineHeight: '1.1em', display: 'block', textAlign: 'center' }}>
+            {d}
+          </span>
+        ))}
+      </span>
+    </span>
+  );
+}
+
+function OdometerNumber({ value }: { value: number }) {
+  const str = new Intl.NumberFormat('en-US').format(value);
+  return (
+    <span className="font-mono font-bold text-foreground" style={{ display: 'inline-flex', alignItems: 'baseline', overflow: 'hidden', height: '1.1em' }}>
+      {str.split('').map((char, i) =>
+        /\d/.test(char) ? (
+          <OdometerDigit key={i} value={parseInt(char)} />
+        ) : (
+          <span key={i} style={{ width: '0.35em', display: 'inline-block', textAlign: 'center' }}>{char}</span>
+        )
+      )}
+    </span>
+  );
 }
 
 const HomepageIslandInner = () => {
   const { participants, setParticipants, isLoaded } = useLocalStorageParticipants();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { getCount, increment } = useSpinCounter();
 
   const LAUNCH_DATE = new Date('2026-01-01').getTime();
@@ -77,14 +149,16 @@ const HomepageIslandInner = () => {
   const totalSpins = 1_000_000 + Math.floor((Date.now() - LAUNCH_DATE) / 86_400_000 * SPINS_PER_DAY);
 
   const USE_CASES = [
-    { emoji: "🎁", text: t.indexUseCaseGiveaway },
-    { emoji: "🎓", text: t.indexUseCaseClassroom },
-    { emoji: "🏢", text: t.indexUseCaseStandup },
-    { emoji: "🎉", text: t.indexUseCaseParty },
-    { emoji: "🤔", text: t.indexUseCaseDinner },
-    { emoji: "📋", text: t.indexUseCaseTodo },
-    { emoji: "🎮", text: t.indexUseCasePresentation },
+    t.indexUseCaseGiveaway,
+    t.indexUseCaseClassroom,
+    t.indexUseCaseStandup,
+    t.indexUseCaseParty,
+    t.indexUseCaseDinner,
+    t.indexUseCaseTodo,
+    t.indexUseCasePresentation,
   ];
+
+  const toolLabels = TOOL_LABELS[language] ?? TOOL_LABELS['en'];
 
   const { playTick, playFanfare } = useWheelSound();
   const [customizeConfig, setCustomizeConfig] = useCustomizeConfig();
@@ -187,7 +261,8 @@ const HomepageIslandInner = () => {
             <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs text-muted-foreground">
               <div className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                <CountUp to={totalSpins} suffix="+" className="font-bold text-foreground" /> {t.indexSpinsText}
+                <OdometerNumber value={totalSpins + spinCount} />
+                <span>+ {t.indexSpinsText}</span>
               </div>
               <span className="hidden sm:inline text-border">|</span>
               <span><strong className="text-foreground">100%</strong> free</span>
@@ -248,7 +323,7 @@ const HomepageIslandInner = () => {
                 </button>
               </div>
 
-              {/* Wheel */}
+              {/* Wheel — clicking it also spins */}
               <div className="relative">
                 <SpinningWheel
                   participants={displayParticipants}
@@ -299,7 +374,7 @@ const HomepageIslandInner = () => {
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
-                  Entries ({displayParticipants.length})
+                  {t.indexEntriesTab} ({displayParticipants.length})
                 </button>
                 <button
                   onClick={() => setActiveTab('results')}
@@ -309,7 +384,7 @@ const HomepageIslandInner = () => {
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
-                  Results{winnerHistory.length > 0 ? ` (${winnerHistory.length})` : ''}
+                  {t.indexResultsTab}{winnerHistory.length > 0 ? ` (${winnerHistory.length})` : ''}
                 </button>
               </div>
 
@@ -326,7 +401,7 @@ const HomepageIslandInner = () => {
                 <div className="p-4">
                   {winnerHistory.length === 0 ? (
                     <div className="py-12 text-center">
-                      <p className="text-sm text-muted-foreground">Spin the wheel to see results here</p>
+                      <p className="text-sm text-muted-foreground">{t.indexNoResults}</p>
                     </div>
                   ) : (
                     <div className="space-y-2">
@@ -340,7 +415,7 @@ const HomepageIslandInner = () => {
                         onClick={() => setWinnerHistory([])}
                         className="text-xs text-muted-foreground hover:text-destructive transition-colors mt-2 block"
                       >
-                        Clear results
+                        {t.indexClearResults}
                       </button>
                     </div>
                   )}
@@ -356,88 +431,78 @@ const HomepageIslandInner = () => {
               <p className="text-muted-foreground max-w-2xl mx-auto">{t.indexWhatIsText}</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {USE_CASES.map(({ emoji, text }, i) => (
+              {USE_CASES.map((text, i) => (
                 <div key={i} className="flex gap-3 p-4 rounded-xl bg-card border border-border transition-all hover:border-primary/40">
-                  <span className="text-2xl flex-shrink-0">{emoji}</span>
                   <p className="text-sm text-muted-foreground leading-relaxed">{text}</p>
                 </div>
               ))}
             </div>
           </section>
 
-          {/* Wheel preview image */}
-          <div className="flex justify-center">
-            <img
-              src="/wheel-preview.svg"
-              alt="Free spinning wheel random picker — roue de la fortune en ligne — rueda de la suerte — tirage au sort — free random wheel"
-              width="200"
-              height="200"
-              loading="lazy"
-              className="opacity-60 hover:opacity-100 transition-opacity rounded-full"
-            />
-          </div>
+          {/* HOW TO */}
+          <section className="space-y-6">
+            <h2 className="text-2xl font-bold text-foreground">{t.indexHowToTitle}</h2>
+            <ol className="list-decimal pl-6 space-y-3 text-muted-foreground">
+              <li>
+                <strong className="text-foreground">{t.indexHowToStep1Title}:</strong>{' '}
+                {t.indexHowToStep1Text}
+              </li>
+              <li>
+                <strong className="text-foreground">{t.indexHowToStep2Title}:</strong>{' '}
+                {t.indexHowToStep2Text}
+              </li>
+              <li>
+                <strong className="text-foreground">{t.indexHowToStep3Title}:</strong>{' '}
+                {t.indexHowToStep3Text}
+              </li>
+            </ol>
+          </section>
 
-          {/* SEO Content */}
-          <section className="space-y-8 text-muted-foreground">
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-foreground">{t.indexHowToTitle}</h2>
-              <ol className="list-decimal pl-6 space-y-2">
-                <li><strong>Add your entries:</strong> Type names one by one, paste a list, or use one of our pre-made templates.</li>
-                <li><strong>Click Spin:</strong> Hit the "Spin the Wheel" button and watch the colorful casino wheel rotate with smooth animation.</li>
-                <li><strong>Get your result:</strong> The wheel lands on a random winner. Copy the result, share it, or spin again.</li>
-              </ol>
+          {/* WHY US */}
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-foreground">{t.indexWhyTitle}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[
+                { title: t.indexWhyFair, text: t.indexWhyFairText },
+                { title: t.indexWhyFree, text: t.indexWhyFreeText },
+                { title: t.indexWhyNoSignup, text: t.indexWhyNoSignupText },
+                { title: t.indexWhyPrivate, text: t.indexWhyPrivateText },
+              ].map(({ title, text }, i) => (
+                <div key={i} className="flex gap-3 p-4 rounded-xl bg-card border border-border">
+                  <div>
+                    <p className="font-semibold text-foreground text-sm">{title}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{text}</p>
+                  </div>
+                </div>
+              ))}
             </div>
+          </section>
 
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-foreground">Why Use Our Random Wheel?</h2>
-              <ul className="list-disc pl-6 space-y-2">
-                <li><strong>100% Fair:</strong> We use the Web Crypto API for cryptographically secure randomness — the same technology used in online banking.</li>
-                <li><strong>Completely Free:</strong> No premium tiers, no hidden fees, no limits on spins or participants.</li>
-                <li><strong>Fully Customizable:</strong> Add any entries, set custom probabilities with weighted mode, set a draw title.</li>
-                <li><strong>No Signup Required:</strong> Start using instantly — no account, no email.</li>
-                <li><strong>Privacy First:</strong> Everything runs in your browser. Zero data sent to servers.</li>
-                <li><strong>Works Everywhere:</strong> Fully responsive on phones, tablets, and desktops.</li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-foreground">Popular Use Cases</h2>
-              <ul className="list-disc pl-6 space-y-1">
-                <li><a href="/random-wheel" className="text-primary hover:underline">Custom spinner wheel</a> — Add any options and spin to decide anything</li>
-                <li><a href="/giveaway-picker" className="text-primary hover:underline">Instagram &amp; TikTok giveaways</a> — Pick contest winners transparently</li>
-                <li><a href="/classroom-picker" className="text-primary hover:underline">Classroom activities</a> — Select students randomly</li>
-                <li><a href="/team-generator" className="text-primary hover:underline">Team assignments</a> — Split into random groups</li>
-                <li><a href="/party-wheel" className="text-primary hover:underline">Party games</a> — Truth or Dare &amp; more</li>
-                <li><a href="/yes-or-no-wheel" className="text-primary hover:underline">Quick decisions</a> — Yes or No wheel</li>
-                <li><a href="/weighted-random-picker" className="text-primary hover:underline">Weighted selections</a> — Custom probabilities</li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-foreground">{t.faqTitle}</h2>
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="1">
-                  <AccordionTrigger>{t.faqQ1}</AccordionTrigger>
-                  <AccordionContent>{t.faqA1}</AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="2">
-                  <AccordionTrigger>{t.faqQ3}</AccordionTrigger>
-                  <AccordionContent>{t.faqA3}</AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="3">
-                  <AccordionTrigger>{t.faqQ6}</AccordionTrigger>
-                  <AccordionContent>{t.faqA6}</AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="4">
-                  <AccordionTrigger>{t.faqQ8}</AccordionTrigger>
-                  <AccordionContent>{t.faqA8}</AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="5">
-                  <AccordionTrigger>{t.faqQ7}</AccordionTrigger>
-                  <AccordionContent>{t.faqA7}</AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </div>
+          {/* SEO FAQ */}
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-foreground">{t.faqTitle}</h2>
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="1">
+                <AccordionTrigger>{t.faqQ1}</AccordionTrigger>
+                <AccordionContent>{t.faqA1}</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="2">
+                <AccordionTrigger>{t.faqQ3}</AccordionTrigger>
+                <AccordionContent>{t.faqA3}</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="3">
+                <AccordionTrigger>{t.faqQ6}</AccordionTrigger>
+                <AccordionContent>{t.faqA6}</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="4">
+                <AccordionTrigger>{t.faqQ8}</AccordionTrigger>
+                <AccordionContent>{t.faqA8}</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="5">
+                <AccordionTrigger>{t.faqQ7}</AccordionTrigger>
+                <AccordionContent>{t.faqA7}</AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </section>
 
           {/* Our Tools Grid */}
@@ -446,6 +511,7 @@ const HomepageIslandInner = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {toolCards.map((tool) => {
                 const Icon = tool.icon;
+                const labels = toolLabels;
                 return (
                   <a
                     key={tool.path}
@@ -453,8 +519,8 @@ const HomepageIslandInner = () => {
                     className="p-4 bg-card border border-border rounded-xl text-center hover:border-primary/50 hover:shadow-lg transition-all group"
                   >
                     <Icon className="w-8 h-8 text-primary mx-auto mb-2 group-hover:scale-110 transition-transform" />
-                    <h3 className="font-semibold text-sm text-foreground">{tool.title}</h3>
-                    <p className="text-xs text-muted-foreground mt-1">{tool.desc}</p>
+                    <h3 className="font-semibold text-sm text-foreground">{labels[tool.titleKey]}</h3>
+                    <p className="text-xs text-muted-foreground mt-1">{labels[tool.descKey]}</p>
                   </a>
                 );
               })}
