@@ -259,9 +259,19 @@ const HomepageIslandInner = () => {
       <div className="relative z-10">
         <main className="max-w-6xl mx-auto px-4 py-2 space-y-4">
 
-          {/* Page title — compact, SEO h1 */}
-          <h1 className="text-center text-base md:text-xl font-bold text-foreground leading-tight pt-1">
-            {t.indexPageTitle}
+          {/* Page title — dynamic call-to-action above the wheel */}
+          <h1 className={`text-center font-bold leading-tight pt-1 transition-all duration-500 ${
+            winners.length > 0 && !isSpinning
+              ? 'text-xl md:text-2xl text-primary'
+              : isSpinning
+                ? 'text-base md:text-lg text-muted-foreground animate-pulse'
+                : 'text-lg md:text-2xl text-foreground'
+          }`}>
+            {winners.length > 0 && !isSpinning
+              ? `🎉 ${winners[0]}`
+              : isSpinning
+                ? t.spinningText
+                : t.tapToSpin}
           </h1>
 
           {/* MAIN AREA: 2-column on desktop */}

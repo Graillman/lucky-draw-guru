@@ -41,6 +41,7 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
   const { t } = useLanguage();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [rotation, setRotation] = useState(0);
+  const rotationRef = useRef(0); // Always up-to-date rotation (avoids stale closure)
   const [isAnimating, setIsAnimating] = useState(false);
   const animationRef = useRef<number>();
   const startTimeRef = useRef<number>(0);
@@ -330,7 +331,11 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     const tick = (now: number) => {
       const dt = Math.min(now - idleLastTimeRef.current, 50); // cap dt to avoid jumps
       idleLastTimeRef.current = now;
-      setRotation(r => r + IDLE_SPEED * dt);
+      setRotation(r => {
+        const next = r + IDLE_SPEED * dt;
+        rotationRef.current = next;
+        return next;
+      });
       idleAnimRef.current = requestAnimationFrame(tick);
     };
 
@@ -396,22 +401,23 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     }
     
     // Calculate the angle where the winner segment is at the top (under the pointer)
-    // The pointer is at the top (12 o'clock position = -π/2 or 3π/2)
-    // We need to rotate so the middle of the winner segment aligns with the pointer
+    // Use rotationRef.current (always fresh) to avoid any stale-closure mismatch
+    const currentRotation = rotationRef.current;
     const winnerMidAngle = (winner.startAngle + winner.endAngle) / 2;
-    
-    // The wheel rotates clockwise. To land on winner, we need:
-    // Final position where pointer (at top = 0 in canvas coords after -π/2 offset) points to winner
-    // Since segments are drawn with -π/2 offset, the pointer at top corresponds to angle 0 in segment space
-    // We want winnerMidAngle to be at the top, so we rotate by (2π - winnerMidAngle)
+
+    // The pointer points straight up from center. Segments are drawn with -π/2 offset.
+    // For winner's midpoint to sit under the pointer at rotation=R:
+    //   winnerMidAngle - π/2 + R ≡ -π/2  →  R ≡ -winnerMidAngle ≡ 2π - winnerMidAngle
     const spins = 6 + cryptoRandom() * 4; // 6-10 full spins
-    const baseRotation = rotation % (Math.PI * 2); // Current position normalized
-    const targetAngleForWinner = (Math.PI * 2) - winnerMidAngle; // Where winner should end up
-    const additionalRotation = targetAngleForWinner - baseRotation;
+    const baseRotation = currentRotation % (Math.PI * 2);
+    const targetAngleForWinner = (Math.PI * 2) - winnerMidAngle;
+    // Ensure we always spin forward: if additionalRotation would be negative, add 2π
+    let additionalRotation = targetAngleForWinner - baseRotation;
+    if (additionalRotation < 0) additionalRotation += Math.PI * 2;
     const totalRotation = spins * Math.PI * 2 + additionalRotation;
-    
+
     const duration = 5000; // 5 seconds for more suspense
-    const startRotation = rotation;
+    const startRotation = currentRotation;
 
     const animate = () => {
       const elapsed = Date.now() - startTimeRef.current;
@@ -421,6 +427,7 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
       const easeOut = 1 - Math.pow(1 - progress, 4);
       
       const newRotation = startRotation + totalRotation * easeOut;
+      rotationRef.current = newRotation;
       setRotation(newRotation);
 
       // Tick sound: detect segment crossing at the pointer (top)
