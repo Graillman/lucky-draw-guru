@@ -277,8 +277,8 @@ const HomepageIslandInner = () => {
           {/* MAIN AREA: 2-column on desktop */}
           <div className="flex flex-col lg:flex-row gap-6 items-start">
 
-            {/* LEFT: Wheel zone */}
-            <div className="flex-shrink-0 w-full lg:w-auto space-y-2">
+            {/* LEFT: Wheel zone — flex-1 so it takes remaining space and centers the wheel */}
+            <div className="flex-1 w-full flex flex-col items-center space-y-2">
 
               {/* Wheel */}
               <SpinningWheel
