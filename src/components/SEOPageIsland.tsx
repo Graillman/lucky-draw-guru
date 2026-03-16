@@ -23,6 +23,22 @@ const DEFAULT_NAMES: ParticipantEntry[] = [
   { pseudo: "Fatima", weight: 1 },
 ];
 
+const iconEmoji: Record<string, string> = {
+  gift: '🎁',
+  video: '🎥',
+  graduation: '🎓',
+  users: '👥',
+  chart: '📊',
+  trophy: '🏆',
+  sparkles: '✨',
+};
+
+interface UseCase {
+  icon: string;
+  title: string;
+  description: string;
+}
+
 interface SEOPageIslandProps {
   slug: string;
   h1?: string;
@@ -30,9 +46,15 @@ interface SEOPageIslandProps {
   microText?: string;
   howItWorksTitle?: string;
   howItWorksText?: string;
+  whenToUseTitle?: string;
+  useCases?: UseCase[];
+  seoTitle?: string;
+  seoText?: string;
+  faqs?: Array<{ question: string; answer: string }>;
+  relatedBlogPost?: { slug: string; title: string };
 }
 
-const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, howItWorksText }: SEOPageIslandProps) => {
+const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, howItWorksText, whenToUseTitle, useCases, seoTitle, seoText, faqs, relatedBlogPost }: SEOPageIslandProps) => {
   const { participants, setParticipants, isLoaded } = useLocalStorageParticipants();
   const { t } = useLanguage();
   const [mode, setMode] = useState<"simple" | "advanced">(
@@ -54,6 +76,11 @@ const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, ho
   const displayMicroText = pageT?.microText ?? microText;
   const displayHowItWorksTitle = pageT?.howItWorksTitle ?? howItWorksTitle;
   const displayHowItWorksText = pageT?.howItWorksText ?? howItWorksText;
+  const displayWhenToUseTitle = pageT?.whenToUseTitle ?? whenToUseTitle;
+  const displayUseCases = pageT?.useCases ?? useCases;
+  const displaySeoTitle = pageT?.seoTitle ?? seoTitle;
+  const displaySeoText = pageT?.seoText ?? seoText;
+  const displayFaqs = pageT?.faqs ?? faqs;
 
   const scrollToWheel = useCallback(() => {
     wheelSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -203,6 +230,60 @@ const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, ho
           {participants.length > 0 && <LocalStorageNotice mode={mode} />}
         </div>
       </div>
+
+      {/* Use Cases */}
+      {displayWhenToUseTitle && displayUseCases && displayUseCases.length > 0 && (
+        <section className="py-8 space-y-6">
+          <h2 className="text-xl md:text-2xl font-bold text-foreground text-center">{displayWhenToUseTitle}</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {displayUseCases.map((useCase, i) => (
+              <div key={i} className="p-4 rounded-xl bg-card border border-border text-center hover:scale-105 transition-all hover:border-primary/50">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 bg-primary/10 text-2xl">
+                  {iconEmoji[useCase.icon] ?? '⭐'}
+                </div>
+                <h3 className="font-semibold text-foreground text-sm mb-1">{useCase.title}</h3>
+                <p className="text-xs text-muted-foreground">{useCase.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* SEO bottom section */}
+      {(displaySeoTitle || displaySeoText) && (
+        <section className="py-8 px-6 rounded-xl border bg-primary/5 border-primary/20">
+          {displaySeoTitle && <h2 className="text-xl md:text-2xl font-bold text-foreground mb-4">{displaySeoTitle}</h2>}
+          {displaySeoText && <p className="text-sm md:text-base text-muted-foreground leading-relaxed" dangerouslySetInnerHTML={{ __html: displaySeoText }} />}
+        </section>
+      )}
+
+      {/* Related blog post */}
+      {relatedBlogPost && (
+        <section className="p-6 rounded-xl border bg-primary/5 border-primary/20">
+          <p className="text-sm text-muted-foreground mb-2">{t.relatedBlogPostLabel}</p>
+          <a href={relatedBlogPost.slug} className="font-semibold text-primary hover:underline">
+            {relatedBlogPost.title} →
+          </a>
+        </section>
+      )}
+
+      {/* FAQs */}
+      {displayFaqs && displayFaqs.length > 0 && (
+        <section className="space-y-4 py-4">
+          <h2 className="text-xl md:text-2xl font-bold text-foreground">{t.faqsTitle}</h2>
+          <div className="space-y-3">
+            {displayFaqs.map(({ question, answer }, i) => (
+              <details key={i} className="bg-card border border-border rounded-xl p-5 group">
+                <summary className="font-semibold text-foreground cursor-pointer list-none flex items-center justify-between gap-2">
+                  {question}
+                  <span className="text-muted-foreground shrink-0 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p className="text-muted-foreground text-sm leading-relaxed mt-3">{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 };

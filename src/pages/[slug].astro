@@ -35,16 +35,6 @@ interface Props {
 
 const { config } = Astro.props;
 
-const iconEmoji: Record<string, string> = {
-  gift: '🎁',
-  video: '🎥',
-  graduation: '🎓',
-  users: '👥',
-  chart: '📊',
-  trophy: '🏆',
-  sparkles: '✨',
-};
-
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
@@ -83,7 +73,7 @@ const hreflangLinks = alternates
 
     <main class="max-w-5xl mx-auto px-4 py-6 space-y-8 md:space-y-12">
 
-      <!-- Interactive tool with translated hero + how-it-works -->
+      <!-- Interactive tool with all sections (translated via React) -->
       <SEOPageIsland
         slug={config.slug}
         h1={config.h1}
@@ -91,63 +81,14 @@ const hreflangLinks = alternates
         microText={config.microText}
         howItWorksTitle={config.howItWorksTitle}
         howItWorksText={config.howItWorksText}
+        whenToUseTitle={config.whenToUseTitle}
+        useCases={config.useCases}
+        seoTitle={config.seoTitle}
+        seoText={config.seoText}
+        faqs={config.faqs}
+        relatedBlogPost={config.relatedBlogPost}
         client:load
       />
-
-      <!-- Use Cases -->
-      <section class="py-8 space-y-6">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground text-center">
-          {config.whenToUseTitle}
-        </h2>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {config.useCases.map((useCase) => (
-            <div class="p-4 rounded-xl bg-card border border-border text-center hover:scale-105 transition-all hover:border-primary/50">
-              <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 bg-primary/10 text-2xl">
-                {iconEmoji[useCase.icon] ?? '⭐'}
-              </div>
-              <h3 class="font-semibold text-foreground text-sm mb-1">{useCase.title}</h3>
-              <p class="text-xs text-muted-foreground">{useCase.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <AdPlaceholder position="after-use-cases" client:visible />
-
-      <!-- SEO bottom section -->
-      <section class="py-8 px-6 rounded-xl border bg-primary/5 border-primary/20">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground mb-4">{config.seoTitle}</h2>
-        <p class="text-sm md:text-base text-muted-foreground leading-relaxed" set:html={config.seoText} />
-      </section>
-
-      {config.relatedBlogPost && (
-        <section class="p-6 rounded-xl border bg-primary/5 border-primary/20">
-          <p class="text-sm text-muted-foreground mb-2">Want a step-by-step guide?</p>
-          <a
-            href={config.relatedBlogPost.slug}
-            class="font-semibold text-primary hover:underline"
-          >
-            {config.relatedBlogPost.title} →
-          </a>
-        </section>
-      )}
-
-      {config.faqs && config.faqs.length > 0 && (
-        <section class="space-y-4 py-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-          <div class="space-y-3">
-            {config.faqs.map(({ question, answer }) => (
-              <details class="bg-card border border-border rounded-xl p-5 group">
-                <summary class="font-semibold text-foreground cursor-pointer list-none flex items-center justify-between gap-2">
-                  {question}
-                  <span class="text-muted-foreground shrink-0 group-open:rotate-180 transition-transform">▾</span>
-                </summary>
-                <p class="text-muted-foreground text-sm leading-relaxed mt-3">{answer}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-      )}
 
       <AdPlaceholder position="bottom" client:visible />
 
