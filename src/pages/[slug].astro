@@ -83,32 +83,16 @@ const hreflangLinks = alternates
 
     <main class="max-w-5xl mx-auto px-4 py-6 space-y-8 md:space-y-12">
 
-      <!-- Hero -->
-      <section class="text-center space-y-6 py-4 md:py-8">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          {config.h1}
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          {config.subtitle}
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No signup • Instant result</p>
-      </section>
-
-      <!-- How it works -->
-      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30">
-        <div class="flex items-start gap-4">
-          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-lg">
-            ❓
-          </div>
-          <div class="space-y-2">
-            <h2 class="text-lg md:text-xl font-bold text-foreground">{config.howItWorksTitle}</h2>
-            <p class="text-sm md:text-base text-muted-foreground leading-relaxed">{config.howItWorksText}</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Interactive tool (React island) -->
-      <SEOPageIsland slug={config.slug} client:load />
+      <!-- Interactive tool with translated hero + how-it-works -->
+      <SEOPageIsland
+        slug={config.slug}
+        h1={config.h1}
+        subtitle={config.subtitle}
+        microText={config.microText}
+        howItWorksTitle={config.howItWorksTitle}
+        howItWorksText={config.howItWorksText}
+        client:load
+      />
 
       <!-- Use Cases -->
       <section class="py-8 space-y-6">

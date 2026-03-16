@@ -3,6 +3,9 @@ export type Language = 'en' | 'es' | 'fr' | 'de' | 'pt' | 'it';
 export interface SEOPageTranslations {
   h1: string;
   subtitle: string;
+  microText?: string;
+  howItWorksTitle?: string;
+  howItWorksText?: string;
 }
 
 export interface Translations {
@@ -15,13 +18,8 @@ export interface Translations {
   microText: string;
   
   // SEO Pages translations
-  seoPages: {
-    'random-wheel': SEOPageTranslations;
-    'wheel-of-names': SEOPageTranslations;
-    'random-name-picker': SEOPageTranslations;
-    'giveaway-picker': SEOPageTranslations;
-    'weighted-random-picker': SEOPageTranslations;
-  };
+  seoPages: Record<string, SEOPageTranslations>;
+  preparingWheel: string;
   stepPaste: string;
   stepSpin: string;
   stepWin: string;
@@ -675,28 +673,21 @@ export const translations: Record<Language, Translations> = {
     
     // SEO Pages
     seoPages: {
-      'random-wheel': {
-        h1: 'Random Wheel Picker – Spin the Wheel Online',
-        subtitle: 'Spin a random wheel to pick a winner instantly. Free, fast and fair.',
-      },
-      'wheel-of-names': {
-        h1: 'Wheel of Names – Pick a Random Name Instantly',
-        subtitle: 'Enter names, spin the wheel, and let fate decide. Fair and transparent.',
-      },
-      'random-name-picker': {
-        h1: 'Random Name Picker – Select Names Fairly',
-        subtitle: 'Paste your list and pick a random name in seconds. Zero bias guaranteed.',
-      },
-      'giveaway-picker': {
-        h1: 'Giveaway Picker – Pick Contest Winners Fairly',
-        subtitle: 'Run transparent giveaways and select winners your audience will trust.',
-      },
-      'weighted-random-picker': {
-        h1: 'Weighted Random Picker – Custom Probability Draws',
-        subtitle: 'Assign different chances to each participant for advanced selection scenarios.',
-      },
+      'random-wheel': { h1: 'Random Wheel Picker – Spin the Wheel Online', subtitle: 'Spin a random wheel to pick a winner instantly. Free, fast and fair.', microText: 'Free • No signup • Instant result', howItWorksTitle: 'How does this random wheel work?', howItWorksText: 'Enter any names or options — type them in, paste a list, or load a template. Hit the Spin button and watch the wheel rotate with a smooth animation.' },
+      'wheel-of-names': { h1: 'Wheel of Names – Pick a Random Name Instantly', subtitle: 'Enter names, spin the wheel, and let fate decide. Fair and transparent.', microText: 'Free • No signup • Instant result', howItWorksTitle: 'How does this wheel of names work?', howItWorksText: 'Simply paste your list of names, click spin, and watch the wheel rotate until it lands on a randomly selected name.' },
+      'random-name-picker': { h1: 'Random Name Picker – Select Names Fairly', subtitle: 'Paste your list and pick a random name in seconds. Zero bias guaranteed.', microText: 'Free • No signup • Instant result', howItWorksTitle: 'How does this random name picker work?', howItWorksText: 'Add names to your list, hit the Spin button and watch the wheel rotate until it lands on a randomly chosen name.' },
+      'giveaway-picker': { h1: 'Giveaway Picker – Pick Contest Winners Fairly', subtitle: 'Run transparent giveaways and select winners your audience will trust.', microText: 'Free • No signup • Instant result', howItWorksTitle: 'How does this giveaway picker work?', howItWorksText: 'Paste your list of participants or usernames, spin the wheel, and let the random selection pick your winner. Screen-record the spin for proof of transparency.' },
+      'weighted-random-picker': { h1: 'Weighted Random Picker – Custom Probability Draws', subtitle: 'Assign different chances to each participant for advanced selection scenarios.', microText: 'Free • No signup • Instant result', howItWorksTitle: 'How does the weighted random picker work?', howItWorksText: 'Add participants and assign each a weight (higher = more chances). The wheel sizes are proportional to the weights, making it visually clear who has more chances.' },
+      'yes-or-no-wheel': { h1: 'Yes or No Wheel – Let the Wheel Decide', subtitle: "Can't make up your mind? Spin the yes or no wheel for an instant answer.", microText: 'Free • No account • Instant answer', howItWorksTitle: 'How does the yes or no wheel work?', howItWorksText: "Just click Spin and let the wheel decide between Yes and No. It uses cryptographically secure randomness — neither option is favored. You can add more options like 'Maybe' if needed." },
+      'team-generator': { h1: 'Random Team Generator – Fair Team Splits', subtitle: 'Divide your group into balanced, random teams instantly.', microText: 'Free • No signup • Instant result', howItWorksTitle: 'How does the team generator work?', howItWorksText: 'Add participant names, set the number of teams or team size, and spin. The tool randomly assigns participants to teams using cryptographic randomness for fair splits.' },
+      'random-number-generator': { h1: 'Random Number Generator – Pick a Number Instantly', subtitle: 'Generate truly random numbers in any range. No patterns, no bias.', microText: 'Free • No account • Instant result', howItWorksTitle: 'How does this random number generator work?', howItWorksText: "Set your range (min and max), click spin, and get a cryptographically random number. Uses the Web Crypto API for true randomness — not predictable Math.random()." },
+      'party-wheel': { h1: 'Party Wheel – Fun Random Challenges & Dares', subtitle: 'Spin the party wheel for random challenges, tasks, and dares. Perfect for game nights.', microText: 'Free • No signup • Instant fun', howItWorksTitle: 'How does the party wheel work?', howItWorksText: 'Load the wheel with party challenges, dares, or tasks, then spin to randomly assign them. You can use the pre-loaded party options or customize with your own challenges.' },
+      'classroom-picker': { h1: 'Classroom Picker – Randomly Select Students', subtitle: 'Pick students randomly for questions, tasks, and activities. Fair and stress-free.', microText: 'Free • No signup • Instant result', howItWorksTitle: 'How does this classroom picker work?', howItWorksText: "Add your students' names to the list and click spin. The wheel randomly selects a student, ensuring every student has a fair and equal chance of being chosen." },
+      'secret-santa-picker': { h1: 'Secret Santa Picker – Assign Gift-Givers Randomly', subtitle: 'Organize your Secret Santa gift exchange in seconds. Fair, anonymous, and fun.', microText: 'Free • No signup • Instant result', howItWorksTitle: 'How does the Secret Santa picker work?', howItWorksText: "Add participants' names, click spin, and the wheel assigns each person a random gift recipient. Everyone gets assigned someone to buy for, completely at random." },
+      'raffle-picker': { h1: 'Raffle Picker – Pick Random Raffle Winners', subtitle: 'Run fair raffle draws and pick winners at random. Transparent and trustworthy.', microText: 'Free • No signup • Instant result', howItWorksTitle: 'How does this raffle picker work?', howItWorksText: 'Enter your raffle tickets or participant names, spin the wheel, and the random selection picks your winner. You can pick multiple winners for multiple prizes.' },
     },
-    
+    preparingWheel: 'Preparing wheel...',
+
     // Common
     loading: 'Loading...',
 
@@ -1042,28 +1033,21 @@ export const translations: Record<Language, Translations> = {
     
     // SEO Pages
     seoPages: {
-      'random-wheel': {
-        h1: 'Selector de Rueda Aleatoria – Gira la Rueda Online',
-        subtitle: 'Gira una rueda aleatoria para elegir un ganador al instante. Gratis, rápido y justo.',
-      },
-      'wheel-of-names': {
-        h1: 'Rueda de Nombres – Elige un Nombre al Azar',
-        subtitle: 'Ingresa nombres, gira la rueda y deja que el destino decida. Justo y transparente.',
-      },
-      'random-name-picker': {
-        h1: 'Selector de Nombres Aleatorio – Selecciona Nombres Justamente',
-        subtitle: 'Pega tu lista y elige un nombre al azar en segundos. Sin sesgo garantizado.',
-      },
-      'giveaway-picker': {
-        h1: 'Selector de Sorteos – Elige Ganadores de Concursos',
-        subtitle: 'Realiza sorteos transparentes y selecciona ganadores en los que tu audiencia confiará.',
-      },
-      'weighted-random-picker': {
-        h1: 'Selector Aleatorio Ponderado – Sorteos con Probabilidad Personalizada',
-        subtitle: 'Asigna diferentes probabilidades a cada participante para escenarios avanzados.',
-      },
+      'random-wheel': { h1: 'Ruleta Aleatoria – Gira la Rueda Online', subtitle: 'Gira una ruleta aleatoria para elegir un ganador al instante. Gratis, rápido y justo.', microText: 'Gratis • Sin registro • Resultado instantáneo', howItWorksTitle: '¿Cómo funciona esta ruleta aleatoria?', howItWorksText: 'Escribe nombres u opciones, pega una lista o carga una plantilla. Pulsa Girar y observa cómo la rueda gira con una animación fluida.' },
+      'wheel-of-names': { h1: 'Ruleta de Nombres – Elige un Nombre al Azar', subtitle: 'Escribe los nombres, gira la rueda y deja que el azar decida. Justo y transparente.', microText: 'Gratis • Sin registro • Resultado instantáneo', howItWorksTitle: '¿Cómo funciona esta ruleta de nombres?', howItWorksText: 'Pega tu lista de nombres, haz clic en girar y observa la rueda hasta que se detenga en un nombre elegido al azar.' },
+      'random-name-picker': { h1: 'Selector de Nombres Aleatorio – Elige con Equidad', subtitle: 'Pega tu lista y elige un nombre al azar en segundos. Sin sesgos, garantizado.', microText: 'Gratis • Sin registro • Resultado instantáneo', howItWorksTitle: '¿Cómo funciona este selector de nombres?', howItWorksText: 'Añade nombres a tu lista, pulsa Girar y observa la rueda hasta que se detenga en un nombre elegido aleatoriamente.' },
+      'giveaway-picker': { h1: 'Selector de Sorteos – Elige Ganadores de Forma Justa', subtitle: 'Realiza sorteos transparentes y elige ganadores en los que tu audiencia confíe.', microText: 'Gratis • Sin registro • Resultado instantáneo', howItWorksTitle: '¿Cómo funciona este selector de sorteos?', howItWorksText: 'Pega la lista de participantes o nombres de usuario, gira la rueda y deja que la selección aleatoria elija al ganador. Graba la pantalla como prueba de transparencia.' },
+      'weighted-random-picker': { h1: 'Ruleta con Probabilidades – Sorteos Personalizados', subtitle: 'Asigna diferentes probabilidades a cada participante para selecciones avanzadas.', microText: 'Gratis • Sin registro • Resultado instantáneo', howItWorksTitle: '¿Cómo funciona la ruleta con probabilidades?', howItWorksText: 'Añade participantes y asigna a cada uno un peso (más alto = más probabilidades). Los segmentos de la rueda son proporcionales a los pesos.' },
+      'yes-or-no-wheel': { h1: 'Ruleta Sí o No – Deja que la Rueda Decida', subtitle: '¿No puedes decidirte? Gira la ruleta sí o no para obtener una respuesta al instante.', microText: 'Gratis • Sin cuenta • Respuesta instantánea', howItWorksTitle: '¿Cómo funciona la ruleta sí o no?', howItWorksText: "Haz clic en Girar y deja que la rueda elija entre Sí y No. Usa aleatoriedad criptográfica, ninguna opción tiene ventaja. Puedes añadir opciones como 'Tal vez' si lo necesitas." },
+      'team-generator': { h1: 'Generador de Equipos – División Justa y Aleatoria', subtitle: 'Divide tu grupo en equipos equilibrados y aleatorios al instante.', microText: 'Gratis • Sin registro • Resultado instantáneo', howItWorksTitle: '¿Cómo funciona el generador de equipos?', howItWorksText: 'Añade nombres, define el número de equipos o el tamaño y gira. La herramienta asigna participantes a equipos usando aleatoriedad criptográfica para una división justa.' },
+      'random-number-generator': { h1: 'Generador de Números Aleatorios – Obtén un Número al Instante', subtitle: 'Genera números verdaderamente aleatorios en cualquier rango. Sin patrones ni sesgos.', microText: 'Gratis • Sin cuenta • Resultado instantáneo', howItWorksTitle: '¿Cómo funciona este generador de números aleatorios?', howItWorksText: 'Define tu rango (mínimo y máximo), haz clic en girar y obtén un número aleatorio criptográfico. Usa la Web Crypto API para verdadera aleatoriedad.' },
+      'party-wheel': { h1: 'Ruleta de Fiestas – Retos y Desafíos Aleatorios', subtitle: 'Gira la ruleta de fiestas para retos, tareas y desafíos aleatorios. Perfecta para noches de juegos.', microText: 'Gratis • Sin registro • Diversión instantánea', howItWorksTitle: '¿Cómo funciona la ruleta de fiestas?', howItWorksText: 'Carga la rueda con retos, desafíos o tareas y gira para asignarlos al azar. Puedes usar las opciones predefinidas o personalizarlas con tus propios desafíos.' },
+      'classroom-picker': { h1: 'Selector para el Aula – Elige Estudiantes al Azar', subtitle: 'Selecciona estudiantes aleatoriamente para preguntas, tareas y actividades. Justo y sin estrés.', microText: 'Gratis • Sin registro • Resultado instantáneo', howItWorksTitle: '¿Cómo funciona este selector para el aula?', howItWorksText: 'Añade los nombres de tus alumnos y haz clic en girar. La rueda selecciona un estudiante al azar, garantizando que todos tengan las mismas posibilidades.' },
+      'secret-santa-picker': { h1: 'Sorteo de Amigo Invisible – Asigna Regalos al Azar', subtitle: 'Organiza tu intercambio de regalos en segundos. Justo, anónimo y divertido.', microText: 'Gratis • Sin registro • Resultado instantáneo', howItWorksTitle: '¿Cómo funciona el sorteo de amigo invisible?', howItWorksText: 'Añade los nombres de los participantes, haz clic en girar y la rueda asigna a cada persona un destinatario de regalo al azar.' },
+      'raffle-picker': { h1: 'Selector de Rifa – Elige Ganadores al Azar', subtitle: 'Realiza rifas justas y elige ganadores aleatoriamente. Transparente y confiable.', microText: 'Gratis • Sin registro • Resultado instantáneo', howItWorksTitle: '¿Cómo funciona este selector de rifa?', howItWorksText: 'Escribe los boletos o nombres de participantes, gira la rueda y la selección aleatoria elige al ganador. Puedes seleccionar varios ganadores para varios premios.' },
     },
-    
+    preparingWheel: 'Preparando la rueda...',
+
     // Common
     loading: 'Cargando...',
 
@@ -1408,28 +1392,21 @@ export const translations: Record<Language, Translations> = {
     
     // SEO Pages
     seoPages: {
-      'random-wheel': {
-        h1: 'Roue Aléatoire – Faites Tourner la Roue en Ligne',
-        subtitle: 'Faites tourner une roue aléatoire pour choisir un gagnant instantanément. Gratuit, rapide et équitable.',
-      },
-      'wheel-of-names': {
-        h1: 'Roue des Noms – Choisissez un Nom au Hasard',
-        subtitle: 'Entrez des noms, faites tourner la roue et laissez le destin décider. Équitable et transparent.',
-      },
-      'random-name-picker': {
-        h1: 'Sélecteur de Noms Aléatoire – Sélectionnez des Noms Équitablement',
-        subtitle: 'Collez votre liste et choisissez un nom au hasard en quelques secondes. Zéro biais garanti.',
-      },
-      'giveaway-picker': {
-        h1: 'Sélecteur de Giveaway – Choisissez les Gagnants Équitablement',
-        subtitle: 'Organisez des tirages transparents et sélectionnez des gagnants en qui votre audience aura confiance.',
-      },
-      'weighted-random-picker': {
-        h1: 'Sélecteur Aléatoire Pondéré – Tirages à Probabilités Personnalisées',
-        subtitle: 'Attribuez des probabilités différentes à chaque participant pour des scénarios avancés.',
-      },
+      'random-wheel': { h1: 'Roue Aléatoire – Faites Tourner la Roue en Ligne', subtitle: 'Faites tourner une roue aléatoire pour désigner un gagnant instantanément. Gratuit, rapide et équitable.', microText: 'Gratuit • Sans inscription • Résultat immédiat', howItWorksTitle: 'Comment fonctionne cette roue aléatoire ?', howItWorksText: "Saisissez des noms ou des options — tapez-les, collez une liste ou chargez un modèle. Cliquez sur Tourner et regardez la roue s'animer en douceur." },
+      'wheel-of-names': { h1: 'Roue des Noms – Tirez un Nom au Sort Instantanément', subtitle: 'Entrez des noms, faites tourner la roue et laissez le destin décider. Équitable et transparent.', microText: 'Gratuit • Sans inscription • Résultat immédiat', howItWorksTitle: 'Comment fonctionne cette roue des noms ?', howItWorksText: "Collez votre liste de noms, cliquez sur Tourner et regardez la roue s'arrêter sur un nom sélectionné aléatoirement." },
+      'random-name-picker': { h1: 'Tirage au Sort de Noms – Sélectionnez Équitablement', subtitle: 'Collez votre liste et tirez un nom au sort en quelques secondes. Zéro biais, garanti.', microText: 'Gratuit • Sans inscription • Résultat immédiat', howItWorksTitle: 'Comment fonctionne ce tirage au sort de noms ?', howItWorksText: "Ajoutez des noms à votre liste, cliquez sur Tourner et regardez la roue s'arrêter sur un nom choisi aléatoirement." },
+      'giveaway-picker': { h1: 'Tirage de Concours – Désignez des Gagnants Équitablement', subtitle: 'Organisez des concours transparents et choisissez des gagnants en qui votre audience aura confiance.', microText: 'Gratuit • Sans inscription • Résultat immédiat', howItWorksTitle: 'Comment fonctionne ce tirage de concours ?', howItWorksText: "Collez votre liste de participants ou de noms d'utilisateur, faites tourner la roue et laissez la sélection aléatoire désigner votre gagnant." },
+      'weighted-random-picker': { h1: 'Roue Pondérée – Tirages avec Probabilités Personnalisées', subtitle: 'Attribuez des chances différentes à chaque participant pour des scénarios de sélection avancés.', microText: 'Gratuit • Sans inscription • Résultat immédiat', howItWorksTitle: 'Comment fonctionne la roue pondérée ?', howItWorksText: 'Ajoutez des participants et attribuez à chacun un poids (plus élevé = plus de chances). Les segments de la roue sont proportionnels aux poids.' },
+      'yes-or-no-wheel': { h1: 'Roue Oui ou Non – Laissez la Roue Décider', subtitle: "Vous n'arrivez pas à vous décider ? Faites tourner la roue oui ou non pour une réponse immédiate.", microText: 'Gratuit • Sans compte • Réponse immédiate', howItWorksTitle: 'Comment fonctionne la roue oui ou non ?', howItWorksText: "Cliquez simplement sur Tourner et laissez la roue choisir entre Oui et Non. Elle utilise un aléatoire cryptographique — aucune option n'est favorisée." },
+      'team-generator': { h1: "Générateur d'Équipes – Répartition Équitable et Aléatoire", subtitle: 'Divisez votre groupe en équipes équilibrées et aléatoires en un instant.', microText: 'Gratuit • Sans inscription • Résultat immédiat', howItWorksTitle: "Comment fonctionne le générateur d'équipes ?", howItWorksText: "Ajoutez les noms des participants, définissez le nombre d'équipes ou la taille souhaitée, puis faites tourner. L'outil répartit les participants grâce à un aléatoire cryptographique." },
+      'random-number-generator': { h1: 'Générateur de Nombres Aléatoires – Obtenez un Nombre Instantanément', subtitle: "Générez des nombres vraiment aléatoires dans n'importe quelle plage. Sans motifs ni biais.", microText: 'Gratuit • Sans compte • Résultat immédiat', howItWorksTitle: 'Comment fonctionne ce générateur de nombres aléatoires ?', howItWorksText: "Définissez votre plage (min et max), cliquez sur Tourner et obtenez un nombre cryptographiquement aléatoire. Utilise la Web Crypto API pour un vrai aléatoire." },
+      'party-wheel': { h1: 'Roue de Soirée – Défis et Gages Aléatoires', subtitle: 'Faites tourner la roue de soirée pour des défis, tâches et gages aléatoires. Parfait pour les soirées de jeux.', microText: 'Gratuit • Sans inscription • Fun immédiat', howItWorksTitle: 'Comment fonctionne la roue de soirée ?', howItWorksText: 'Chargez la roue avec des défis, gages ou tâches, puis faites-la tourner pour les attribuer aléatoirement. Utilisez les options prédéfinies ou personnalisez-les avec vos propres défis.' },
+      'classroom-picker': { h1: 'Tirage en Classe – Sélectionnez des Élèves au Hasard', subtitle: 'Choisissez des élèves aléatoirement pour des questions, tâches et activités. Équitable et sans stress.', microText: 'Gratuit • Sans inscription • Résultat immédiat', howItWorksTitle: 'Comment fonctionne ce tirage en classe ?', howItWorksText: "Ajoutez les noms de vos élèves et cliquez sur Tourner. La roue sélectionne un élève au hasard, garantissant que chacun a une chance égale et équitable d'être choisi." },
+      'secret-santa-picker': { h1: 'Tirage Père Noël Secret – Attribuez les Cadeaux au Hasard', subtitle: 'Organisez votre échange de cadeaux en quelques secondes. Équitable, anonyme et amusant.', microText: 'Gratuit • Sans inscription • Résultat immédiat', howItWorksTitle: 'Comment fonctionne le tirage Père Noël secret ?', howItWorksText: 'Ajoutez les noms des participants, cliquez sur Tourner et la roue attribue à chacun un destinataire de cadeau au hasard.' },
+      'raffle-picker': { h1: 'Tirage au Sort – Désignez des Gagnants Aléatoirement', subtitle: 'Organisez des tirages équitables et choisissez des gagnants au hasard. Transparent et fiable.', microText: 'Gratuit • Sans inscription • Résultat immédiat', howItWorksTitle: 'Comment fonctionne ce tirage au sort ?', howItWorksText: "Entrez vos numéros de billets ou noms de participants, faites tourner la roue et la sélection aléatoire désigne votre gagnant. Vous pouvez tirer plusieurs gagnants pour plusieurs lots." },
     },
-    
+    preparingWheel: 'Préparation de la roue...',
+
     // Common
     loading: 'Chargement...',
 
@@ -1774,28 +1751,21 @@ export const translations: Record<Language, Translations> = {
     
     // SEO Pages
     seoPages: {
-      'random-wheel': {
-        h1: 'Zufallsrad – Drehen Sie das Rad Online',
-        subtitle: 'Drehen Sie ein Zufallsrad, um sofort einen Gewinner zu wählen. Kostenlos, schnell und fair.',
-      },
-      'wheel-of-names': {
-        h1: 'Namensrad – Wählen Sie einen Namen zufällig',
-        subtitle: 'Geben Sie Namen ein, drehen Sie das Rad und lassen Sie das Schicksal entscheiden. Fair und transparent.',
-      },
-      'random-name-picker': {
-        h1: 'Zufälliger Namenswähler – Namen fair auswählen',
-        subtitle: 'Fügen Sie Ihre Liste ein und wählen Sie in Sekunden einen zufälligen Namen. Garantiert unvoreingenommen.',
-      },
-      'giveaway-picker': {
-        h1: 'Gewinnspiel-Picker – Wählen Sie Gewinner fair',
-        subtitle: 'Führen Sie transparente Gewinnspiele durch und wählen Sie Gewinner, denen Ihr Publikum vertrauen wird.',
-      },
-      'weighted-random-picker': {
-        h1: 'Gewichteter Zufallswähler – Benutzerdefinierte Wahrscheinlichkeiten',
-        subtitle: 'Weisen Sie jedem Teilnehmer unterschiedliche Chancen für fortgeschrittene Auswahlszenarien zu.',
-      },
+      'random-wheel': { h1: 'Zufallsrad – Online das Rad drehen', subtitle: 'Drehen Sie ein Zufallsrad, um sofort einen Gewinner zu ermitteln. Kostenlos, schnell und fair.', microText: 'Kostenlos • Ohne Anmeldung • Sofortiges Ergebnis', howItWorksTitle: 'Wie funktioniert dieses Zufallsrad?', howItWorksText: 'Geben Sie Namen oder Optionen ein, fügen Sie eine Liste ein oder laden Sie eine Vorlage. Klicken Sie auf Drehen und beobachten Sie das Rad in einer flüssigen Animation.' },
+      'wheel-of-names': { h1: 'Namensrad – Zufällig einen Namen auswählen', subtitle: 'Namen eingeben, Rad drehen und das Schicksal entscheiden lassen. Fair und transparent.', microText: 'Kostenlos • Ohne Anmeldung • Sofortiges Ergebnis', howItWorksTitle: 'Wie funktioniert dieses Namensrad?', howItWorksText: 'Fügen Sie Ihre Namensliste ein, klicken Sie auf Drehen und beobachten Sie das Rad, bis es auf einem zufällig ausgewählten Namen stoppt.' },
+      'random-name-picker': { h1: 'Zufälliger Namenswähler – Namen fair auswählen', subtitle: 'Liste einfügen und in Sekunden einen zufälligen Namen auswählen. Absolut unvoreingenommen.', microText: 'Kostenlos • Ohne Anmeldung • Sofortiges Ergebnis', howItWorksTitle: 'Wie funktioniert dieser Namenswähler?', howItWorksText: 'Fügen Sie Namen zur Liste hinzu, klicken Sie auf Drehen und beobachten Sie das Rad, bis es auf einem zufällig gewählten Namen stoppt.' },
+      'giveaway-picker': { h1: 'Gewinnspiel-Picker – Gewinner fair auswählen', subtitle: 'Führen Sie transparente Gewinnspiele durch und wählen Sie Gewinner aus, denen Ihr Publikum vertrauen kann.', microText: 'Kostenlos • Ohne Anmeldung • Sofortiges Ergebnis', howItWorksTitle: 'Wie funktioniert dieser Gewinnspiel-Picker?', howItWorksText: 'Fügen Sie Ihre Teilnehmer- oder Benutzerliste ein, drehen Sie das Rad und lassen Sie die Zufallsauswahl Ihren Gewinner bestimmen.' },
+      'weighted-random-picker': { h1: 'Gewichtetes Zufallsrad – Individuelle Wahrscheinlichkeiten', subtitle: 'Weisen Sie jedem Teilnehmer unterschiedliche Chancen für erweiterte Auswahlszenarien zu.', microText: 'Kostenlos • Ohne Anmeldung • Sofortiges Ergebnis', howItWorksTitle: 'Wie funktioniert das gewichtete Zufallsrad?', howItWorksText: 'Fügen Sie Teilnehmer hinzu und weisen Sie jedem ein Gewicht zu (höher = mehr Chancen). Die Radsegmente sind proportional zu den Gewichten.' },
+      'yes-or-no-wheel': { h1: 'Ja-oder-Nein-Rad – Die Entscheidung dem Rad überlassen', subtitle: 'Unentschlossen? Drehen Sie das Ja-oder-Nein-Rad für eine sofortige Antwort.', microText: 'Kostenlos • Kein Konto • Sofortige Antwort', howItWorksTitle: 'Wie funktioniert das Ja-oder-Nein-Rad?', howItWorksText: "Klicken Sie einfach auf Drehen und lassen Sie das Rad zwischen Ja und Nein entscheiden. Es verwendet kryptografische Zufälligkeit – keine Option wird bevorzugt." },
+      'team-generator': { h1: 'Team-Generator – Faire und zufällige Teamaufteilung', subtitle: 'Teilen Sie Ihre Gruppe sofort in ausgewogene, zufällige Teams auf.', microText: 'Kostenlos • Ohne Anmeldung • Sofortiges Ergebnis', howItWorksTitle: 'Wie funktioniert der Team-Generator?', howItWorksText: 'Namen eingeben, Teamanzahl oder Teamgröße festlegen und drehen. Das Tool weist Teilnehmer mithilfe kryptografischer Zufälligkeit den Teams zu.' },
+      'random-number-generator': { h1: 'Zufallszahlengenerator – Sofort eine Zahl auswählen', subtitle: 'Wirklich zufällige Zahlen in jedem Bereich generieren. Keine Muster, kein Bias.', microText: 'Kostenlos • Kein Konto • Sofortiges Ergebnis', howItWorksTitle: 'Wie funktioniert dieser Zufallszahlengenerator?', howItWorksText: 'Legen Sie Ihren Bereich (Min. und Max.) fest, klicken Sie auf Drehen und erhalten Sie eine kryptografisch zufällige Zahl.' },
+      'party-wheel': { h1: 'Party-Rad – Zufällige Challenges und Mutproben', subtitle: 'Drehen Sie das Party-Rad für zufällige Challenges, Aufgaben und Mutproben. Perfekt für Spieleabende.', microText: 'Kostenlos • Ohne Anmeldung • Sofortiger Spaß', howItWorksTitle: 'Wie funktioniert das Party-Rad?', howItWorksText: 'Laden Sie das Rad mit Party-Challenges, Mutproben oder Aufgaben und drehen Sie es zur zufälligen Zuweisung. Nutzen Sie die vorgeladenen Optionen oder passen Sie das Rad an.' },
+      'classroom-picker': { h1: 'Klassenzimmer-Picker – Schüler zufällig auswählen', subtitle: 'Schüler zufällig für Fragen, Aufgaben und Aktivitäten auswählen. Fair und stressfrei.', microText: 'Kostenlos • Ohne Anmeldung • Sofortiges Ergebnis', howItWorksTitle: 'Wie funktioniert dieser Klassenzimmer-Picker?', howItWorksText: 'Fügen Sie die Namen Ihrer Schüler hinzu und klicken Sie auf Drehen. Das Rad wählt einen Schüler zufällig aus und stellt sicher, dass jeder die gleiche faire Chance hat.' },
+      'secret-santa-picker': { h1: 'Wichteln-Picker – Geschenkgeber zufällig zuweisen', subtitle: 'Organisieren Sie Ihren Wichtel-Austausch in Sekunden. Fair, anonym und unterhaltsam.', microText: 'Kostenlos • Ohne Anmeldung • Sofortiges Ergebnis', howItWorksTitle: 'Wie funktioniert der Wichteln-Picker?', howItWorksText: 'Fügen Sie die Namen der Teilnehmer hinzu, klicken Sie auf Drehen und das Rad weist jeder Person zufällig einen Beschenkten zu.' },
+      'raffle-picker': { h1: 'Tombola-Picker – Zufällig Gewinner auswählen', subtitle: 'Faire Tombola-Ziehungen durchführen und Gewinner zufällig bestimmen. Transparent und vertrauenswürdig.', microText: 'Kostenlos • Ohne Anmeldung • Sofortiges Ergebnis', howItWorksTitle: 'Wie funktioniert dieser Tombola-Picker?', howItWorksText: 'Geben Sie Ihre Los-Nummern oder Teilnehmernamen ein, drehen Sie das Rad und die Zufallsauswahl bestimmt Ihren Gewinner.' },
     },
-    
+    preparingWheel: 'Rad wird vorbereitet...',
+
     // Common
     loading: 'Laden...',
 
@@ -2140,28 +2110,21 @@ export const translations: Record<Language, Translations> = {
     
     // SEO Pages
     seoPages: {
-      'random-wheel': {
-        h1: 'Roda Aleatória – Gire a Roda Online',
-        subtitle: 'Gire uma roda aleatória para escolher um vencedor instantaneamente. Grátis, rápido e justo.',
-      },
-      'wheel-of-names': {
-        h1: 'Roda de Nomes – Escolha um Nome Aleatório',
-        subtitle: 'Insira nomes, gire a roda e deixe o destino decidir. Justo e transparente.',
-      },
-      'random-name-picker': {
-        h1: 'Seletor de Nomes Aleatório – Selecione Nomes Justamente',
-        subtitle: 'Cole sua lista e escolha um nome aleatório em segundos. Zero viés garantido.',
-      },
-      'giveaway-picker': {
-        h1: 'Seletor de Sorteios – Escolha Vencedores Justamente',
-        subtitle: 'Realize sorteios transparentes e selecione vencedores em quem seu público confiará.',
-      },
-      'weighted-random-picker': {
-        h1: 'Seletor Aleatório Ponderado – Sorteios com Probabilidade Personalizada',
-        subtitle: 'Atribua probabilidades diferentes a cada participante para cenários avançados.',
-      },
+      'random-wheel': { h1: 'Roleta Aleatória – Gire a Roda Online', subtitle: 'Gire uma roleta aleatória para escolher um vencedor na hora. Grátis, rápido e justo.', microText: 'Grátis • Sem cadastro • Resultado imediato', howItWorksTitle: 'Como funciona essa roleta aleatória?', howItWorksText: 'Digite nomes ou opções, cole uma lista ou carregue um modelo. Clique em Girar e assista a roda girar com uma animação suave.' },
+      'wheel-of-names': { h1: 'Roleta de Nomes – Escolha um Nome Aleatório na Hora', subtitle: 'Digite os nomes, gire a roda e deixe o destino decidir. Justo e transparente.', microText: 'Grátis • Sem cadastro • Resultado imediato', howItWorksTitle: 'Como funciona essa roleta de nomes?', howItWorksText: 'Cole sua lista de nomes, clique em girar e veja a roda girar até parar em um nome escolhido aleatoriamente.' },
+      'random-name-picker': { h1: 'Sorteio de Nomes – Escolha com Justiça', subtitle: 'Cole sua lista e sorteie um nome em segundos. Zero viés, garantido.', microText: 'Grátis • Sem cadastro • Resultado imediato', howItWorksTitle: 'Como funciona esse sorteio de nomes?', howItWorksText: 'Adicione nomes à sua lista, clique em Girar e veja a roda girar até parar em um nome escolhido aleatoriamente.' },
+      'giveaway-picker': { h1: 'Sorteador de Brindes – Escolha Ganhadores com Justiça', subtitle: 'Faça sorteios transparentes e escolha ganhadores em quem seu público vai confiar.', microText: 'Grátis • Sem cadastro • Resultado imediato', howItWorksTitle: 'Como funciona esse sorteador de brindes?', howItWorksText: 'Cole a lista de participantes ou usuários, gire a roda e deixe a seleção aleatória escolher o seu vencedor.' },
+      'weighted-random-picker': { h1: 'Roleta com Pesos – Sorteios com Probabilidades Personalizadas', subtitle: 'Atribua chances diferentes para cada participante em cenários de seleção avançados.', microText: 'Grátis • Sem cadastro • Resultado imediato', howItWorksTitle: 'Como funciona a roleta com pesos?', howItWorksText: 'Adicione participantes e atribua um peso a cada um (maior = mais chances). Os segmentos da roda são proporcionais aos pesos.' },
+      'yes-or-no-wheel': { h1: 'Roleta Sim ou Não – Deixe a Roda Decidir', subtitle: 'Sem conseguir se decidir? Gire a roleta sim ou não para uma resposta imediata.', microText: 'Grátis • Sem conta • Resposta imediata', howItWorksTitle: 'Como funciona a roleta sim ou não?', howItWorksText: "Clique em Girar e deixe a roda decidir entre Sim e Não. Usa aleatoriedade criptográfica — nenhuma opção é favorecida." },
+      'team-generator': { h1: 'Gerador de Times – Divisão Justa e Aleatória', subtitle: 'Divida seu grupo em times equilibrados e aleatórios na hora.', microText: 'Grátis • Sem cadastro • Resultado imediato', howItWorksTitle: 'Como funciona o gerador de times?', howItWorksText: 'Adicione os nomes dos participantes, defina o número de times ou o tamanho e gire. A ferramenta distribui os participantes usando aleatoriedade criptográfica.' },
+      'random-number-generator': { h1: 'Gerador de Números Aleatórios – Obtenha um Número na Hora', subtitle: 'Gere números verdadeiramente aleatórios em qualquer faixa. Sem padrões, sem viés.', microText: 'Grátis • Sem conta • Resultado imediato', howItWorksTitle: 'Como funciona esse gerador de números aleatórios?', howItWorksText: 'Defina sua faixa (mín. e máx.), clique em girar e obtenha um número criptograficamente aleatório.' },
+      'party-wheel': { h1: 'Roleta de Festa – Desafios e Penitências Aleatórias', subtitle: 'Gire a roleta de festa para desafios, tarefas e penitências aleatórias. Perfeita para noites de jogos.', microText: 'Grátis • Sem cadastro • Diversão imediata', howItWorksTitle: 'Como funciona a roleta de festa?', howItWorksText: 'Carregue a roda com desafios, penitências ou tarefas e gire para atribuí-los aleatoriamente. Use as opções pré-carregadas ou personalize com seus próprios desafios.' },
+      'classroom-picker': { h1: 'Sorteador de Alunos – Selecione Alunos Aleatoriamente', subtitle: 'Escolha alunos aleatoriamente para perguntas, tarefas e atividades. Justo e sem estresse.', microText: 'Grátis • Sem cadastro • Resultado imediato', howItWorksTitle: 'Como funciona esse sorteador de alunos?', howItWorksText: 'Adicione os nomes dos seus alunos e clique em girar. A roda seleciona um aluno aleatoriamente, garantindo que todos tenham uma chance igual.' },
+      'secret-santa-picker': { h1: 'Amigo Secreto – Atribua Presentes Aleatoriamente', subtitle: 'Organize sua troca de presentes em segundos. Justo, anônimo e divertido.', microText: 'Grátis • Sem cadastro • Resultado imediato', howItWorksTitle: 'Como funciona o sorteador de amigo secreto?', howItWorksText: 'Adicione os nomes dos participantes, clique em girar e a roda atribui a cada pessoa um destinatário de presente aleatório.' },
+      'raffle-picker': { h1: 'Sorteador de Rifa – Escolha Ganhadores Aleatoriamente', subtitle: 'Faça rifas justas e escolha ganhadores aleatoriamente. Transparente e confiável.', microText: 'Grátis • Sem cadastro • Resultado imediato', howItWorksTitle: 'Como funciona esse sorteador de rifa?', howItWorksText: 'Digite os bilhetes ou nomes dos participantes, gire a roda e a seleção aleatória escolhe o seu ganhador.' },
     },
-    
+    preparingWheel: 'Preparando a roda...',
+
     // Common
     loading: 'Carregando...',
 
@@ -2506,27 +2469,20 @@ export const translations: Record<Language, Translations> = {
     
     // SEO Pages
     seoPages: {
-      'random-wheel': {
-        h1: 'Ruota Casuale – Gira la Ruota Online',
-        subtitle: 'Gira una ruota casuale per scegliere un vincitore istantaneamente. Gratis, veloce e equo.',
-      },
-      'wheel-of-names': {
-        h1: 'Ruota dei Nomi – Scegli un Nome a Caso',
-        subtitle: 'Inserisci nomi, gira la ruota e lascia che il destino decida. Equo e trasparente.',
-      },
-      'random-name-picker': {
-        h1: 'Selettore di Nomi Casuale – Seleziona Nomi Equamente',
-        subtitle: 'Incolla la tua lista e scegli un nome casuale in pochi secondi. Zero pregiudizi garantiti.',
-      },
-      'giveaway-picker': {
-        h1: 'Selettore di Giveaway – Scegli i Vincitori Equamente',
-        subtitle: 'Organizza giveaway trasparenti e seleziona vincitori di cui il tuo pubblico si fiderà.',
-      },
-      'weighted-random-picker': {
-        h1: 'Selettore Casuale Ponderato – Estrazioni a Probabilità Personalizzata',
-        subtitle: 'Assegna probabilità diverse a ogni partecipante per scenari di selezione avanzati.',
-      },
+      'random-wheel': { h1: 'Ruota Casuale – Gira la Ruota Online', subtitle: 'Gira una ruota casuale per scegliere un vincitore all\'istante. Gratis, veloce e imparziale.', microText: 'Gratis • Senza registrazione • Risultato immediato', howItWorksTitle: 'Come funziona questa ruota casuale?', howItWorksText: 'Inserisci nomi o opzioni — scrivili, incolla una lista o carica un modello. Clicca su Gira e guarda la ruota ruotare con un\'animazione fluida.' },
+      'wheel-of-names': { h1: 'Ruota dei Nomi – Estrai un Nome a Caso all\'Istante', subtitle: 'Inserisci i nomi, gira la ruota e lascia che il destino decida. Giusto e trasparente.', microText: 'Gratis • Senza registrazione • Risultato immediato', howItWorksTitle: 'Come funziona questa ruota dei nomi?', howItWorksText: 'Incolla la tua lista di nomi, clicca su Gira e guarda la ruota girare finché non si ferma su un nome scelto a caso.' },
+      'random-name-picker': { h1: 'Estrazione Casuale di Nomi – Seleziona in Modo Equo', subtitle: 'Incolla la tua lista ed estrai un nome a caso in pochi secondi. Zero distorsioni, garantito.', microText: 'Gratis • Senza registrazione • Risultato immediato', howItWorksTitle: 'Come funziona questa estrazione casuale di nomi?', howItWorksText: 'Aggiungi nomi alla tua lista, clicca su Gira e guarda la ruota fermarsi su un nome scelto casualmente.' },
+      'giveaway-picker': { h1: 'Estrattore per Giveaway – Scegli i Vincitori in Modo Equo', subtitle: 'Organizza giveaway trasparenti e seleziona vincitori di cui il tuo pubblico si fiderà.', microText: 'Gratis • Senza registrazione • Risultato immediato', howItWorksTitle: 'Come funziona questo estrattore per giveaway?', howItWorksText: 'Incolla la lista dei partecipanti o dei nomi utente, gira la ruota e lascia che la selezione casuale scelga il tuo vincitore.' },
+      'weighted-random-picker': { h1: 'Ruota Ponderata – Estrazioni con Probabilità Personalizzate', subtitle: 'Assegna probabilità diverse a ciascun partecipante per scenari di selezione avanzati.', microText: 'Gratis • Senza registrazione • Risultato immediato', howItWorksTitle: 'Come funziona la ruota ponderata?', howItWorksText: 'Aggiungi i partecipanti e assegna a ciascuno un peso (più alto = più possibilità). I segmenti della ruota sono proporzionali ai pesi.' },
+      'yes-or-no-wheel': { h1: 'Ruota Sì o No – Lascia Decidere alla Ruota', subtitle: 'Non riesci a deciderti? Gira la ruota sì o no per una risposta immediata.', microText: 'Gratis • Senza account • Risposta immediata', howItWorksTitle: 'Come funziona la ruota sì o no?', howItWorksText: 'Clicca semplicemente su Gira e lascia che la ruota scelga tra Sì e No. Utilizza casualità crittografica — nessuna opzione è favorita.' },
+      'team-generator': { h1: 'Generatore di Squadre – Divisione Casuale ed Equa', subtitle: 'Dividi il tuo gruppo in squadre bilanciate e casuali all\'istante.', microText: 'Gratis • Senza registrazione • Risultato immediato', howItWorksTitle: 'Come funziona il generatore di squadre?', howItWorksText: 'Aggiungi i nomi dei partecipanti, imposta il numero di squadre o la dimensione e gira. Lo strumento assegna i partecipanti alle squadre con casualità crittografica.' },
+      'random-number-generator': { h1: 'Generatore di Numeri Casuali – Ottieni un Numero all\'Istante', subtitle: 'Genera numeri veramente casuali in qualsiasi intervallo. Nessun pattern, nessun bias.', microText: 'Gratis • Senza account • Risultato immediato', howItWorksTitle: 'Come funziona questo generatore di numeri casuali?', howItWorksText: 'Imposta il tuo intervallo (min e max), clicca su Gira e ottieni un numero crittograficamente casuale.' },
+      'party-wheel': { h1: 'Ruota della Festa – Sfide e Penitenze Casuali', subtitle: 'Gira la ruota della festa per sfide, compiti e penitenze casuali. Perfetta per le serate di giochi.', microText: 'Gratis • Senza registrazione • Divertimento immediato', howItWorksTitle: 'Come funziona la ruota della festa?', howItWorksText: 'Carica la ruota con sfide, penitenze o compiti, poi gira per assegnarli casualmente. Puoi usare le opzioni precaricate o personalizzarla con le tue sfide.' },
+      'classroom-picker': { h1: 'Estrattore per la Classe – Seleziona Studenti a Caso', subtitle: 'Scegli studenti casualmente per domande, compiti e attività. Equo e senza stress.', microText: 'Gratis • Senza registrazione • Risultato immediato', howItWorksTitle: 'Come funziona questo estrattore per la classe?', howItWorksText: 'Aggiungi i nomi dei tuoi studenti e clicca su Gira. La ruota seleziona casualmente uno studente, garantendo che tutti abbiano una possibilità uguale.' },
+      'secret-santa-picker': { h1: 'Estrattore Babbo Natale Segreto – Assegna i Regali a Caso', subtitle: 'Organizza il tuo scambio di regali in pochi secondi. Equo, anonimo e divertente.', microText: 'Gratis • Senza registrazione • Risultato immediato', howItWorksTitle: "Come funziona l'estrattore Babbo Natale segreto?", howItWorksText: 'Aggiungi i nomi dei partecipanti, clicca su Gira e la ruota assegna a ciascuno un destinatario del regalo scelto a caso.' },
+      'raffle-picker': { h1: 'Estrattore per Lotteria – Scegli i Vincitori a Caso', subtitle: 'Organizza lotterie eque e scegli i vincitori a caso. Trasparente e affidabile.', microText: 'Gratis • Senza registrazione • Risultato immediato', howItWorksTitle: 'Come funziona questo estrattore per lotteria?', howItWorksText: 'Inserisci i biglietti o i nomi dei partecipanti, gira la ruota e la selezione casuale sceglie il tuo vincitore.' },
     },
+    preparingWheel: 'Preparazione ruota...',
     
     // Common
     loading: 'Caricamento...',
