@@ -361,11 +361,13 @@ const HomepageIslandInner = () => {
               {/* Spin counter — digital clock style */}
               {(globalCount + spinCount) > 0 && (
                 <div className="flex flex-col items-center gap-0.5 py-1">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse shrink-0" />
-                    <OdometerNumber value={globalCount + spinCount} size="2.2rem" />
+                  <div className="flex flex-col items-center gap-1 px-4 py-2 rounded-lg border-2 border-black dark:border-white bg-black/5 dark:bg-white/5">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse shrink-0" />
+                      <OdometerNumber value={globalCount + spinCount} size="2.2rem" />
+                    </div>
+                    <span className="text-xs text-muted-foreground tracking-wide uppercase">{t.indexSpinsText}</span>
                   </div>
-                  <span className="text-xs text-muted-foreground tracking-wide uppercase">{t.indexSpinsText}</span>
                 </div>
               )}
 

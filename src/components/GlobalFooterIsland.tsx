@@ -47,7 +47,7 @@ const GlobalFooterIsland = () => {
           <div className="space-y-3">
             <h4 className="font-semibold text-sm text-foreground">Giveaways</h4>
             <nav className="flex flex-col gap-1.5 text-xs text-muted-foreground">
-              <a href="/instagram-giveaway-picker" className="hover:text-primary transition-colors">Instagram</a>
+              <a href="/giveaway-picker" className="hover:text-primary transition-colors">Instagram</a>
               <a href="/tiktok-giveaway-picker" className="hover:text-primary transition-colors">TikTok</a>
               <a href="/youtube-giveaway-picker" className="hover:text-primary transition-colors">YouTube</a>
               <a href="/discord-giveaway-picker" className="hover:text-primary transition-colors">Discord</a>
