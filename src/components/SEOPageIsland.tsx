@@ -54,9 +54,25 @@ interface SEOPageIslandProps {
   relatedBlogPost?: { slug: string; title: string };
 }
 
+// Pages where the "Tirage Personnalisé" (advanced/weighted) mode is relevant
+const ADVANCED_ALLOWED_SLUGS = new Set([
+  'weighted-random-picker',
+  'classroom-picker',
+  'instagram-giveaway-picker',
+  'tiktok-giveaway-picker',
+  'youtube-giveaway-picker',
+  'twitter-giveaway-picker',
+  'facebook-giveaway-picker',
+  'twitch-giveaway-picker',
+  'reddit-giveaway-picker',
+  'linkedin-giveaway-picker',
+  'discord-giveaway-picker',
+]);
+
 const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, howItWorksText, whenToUseTitle, useCases, seoTitle, seoText, faqs, relatedBlogPost }: SEOPageIslandProps) => {
   const { participants, setParticipants, isLoaded } = useLocalStorageParticipants();
   const { t } = useLanguage();
+  const allowAdvanced = ADVANCED_ALLOWED_SLUGS.has(slug);
   const [mode, setMode] = useState<"simple" | "advanced">(
     slug === "weighted-random-picker" ? "advanced" : "simple"
   );
@@ -211,7 +227,7 @@ const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, ho
 
         {/* RIGHT: Config */}
         <div className="flex-1 w-full space-y-4 min-w-0">
-          <DrawModes mode={mode} onModeChange={setMode} />
+          {allowAdvanced && <DrawModes mode={mode} onModeChange={setMode} />}
           <div className="grid grid-cols-2 gap-4">
             <DrawTitleInput title={drawTitle} onTitleChange={setDrawTitle} mode={mode} />
             <WinnersCountInput

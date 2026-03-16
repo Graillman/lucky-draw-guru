@@ -1,0 +1,187 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SocialGiveawayIsland from '@/components/SocialGiveawayIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+import AdPlaceholder from '@/components/AdPlaceholder';
+
+const title = "Giveaway Picker Wheel — Free Random Winner Generator";
+const description = "Pick giveaway winners fairly. Paste comments from Instagram, TikTok, YouTube or any platform. Filter by keywords, tags, duplicates. Spin the wheel live. Free, no signup.";
+const canonical = "/giveaway-picker";
+
+const faqItems = [
+  {
+    question: "Can I paste comments from Instagram or TikTok directly?",
+    answer: "Yes. Copy your comments directly from your phone or browser, paste them into the text area. The tool automatically extracts usernames from formats like '@user: comment text' as well as plain usernames one per line.",
+  },
+  {
+    question: "How do I filter by 'must tag 2 friends'?",
+    answer: "Use the 'Minimum @ tags in comment' filter. Set it to 2 and only participants whose comments contain at least 2 @mentions will be kept. This is the standard giveaway rule 'tag 2 friends to enter'.",
+  },
+  {
+    question: "Can I paste from Google Sheets or Excel?",
+    answer: "Yes. Copy your column of names from Google Sheets, Excel or Word and paste directly. The tool handles one name per line, tab-separated columns (it uses the first column), and @username formats.",
+  },
+  {
+    question: "How do I pick multiple winners at once?",
+    answer: "Use the 'Number of winners' selector in the wheel section. Set it to 2, 3, or more and each spin selects that many unique winners from your list.",
+  },
+  {
+    question: "Can I use this as proof that my giveaway was fair?",
+    answer: "Yes. Screen-record the spin (with your participant list visible) and post the video. The visual wheel animation shows all participants in real time — there is nothing to hide and the result cannot be manipulated after the fact.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: title,
+  url: "https://realwheelpicker.com/giveaway-picker",
+  description,
+  applicationCategory: "UtilitiesApplication",
+  operatingSystem: "All",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Giveaway Picker", url: "https://realwheelpicker.com/giveaway-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Giveaway Picker</span>
+      </nav>
+
+      <!-- Compact title so the tool is immediately visible -->
+      <h1 class="text-xl md:text-2xl font-bold text-center text-foreground">
+        Giveaway Picker – Pick Contest Winners Fairly
+      </h1>
+
+      <!-- Main tool: paste, filter, spin -->
+      <section>
+        <SocialGiveawayIsland client:load />
+      </section>
+
+      <AdPlaceholder position="bottom" client:visible />
+
+      <!-- How it works -->
+      <section class="space-y-6">
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Use the Giveaway Picker</h2>
+          <ol class="space-y-3 text-muted-foreground">
+            <li class="flex gap-3">
+              <span class="text-primary font-bold shrink-0">1.</span>
+              <span><strong class="text-foreground">Choose your platform</strong> — Instagram, TikTok, YouTube, Facebook, Twitch, Discord, and more.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-primary font-bold shrink-0">2.</span>
+              <span><strong class="text-foreground">Paste your participants</strong> — Copy comments directly from your post, or paste a list from Google Sheets, Excel, or Word. One name per line, or "username: comment" format. Tab-separated spreadsheet columns also work.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-primary font-bold shrink-0">3.</span>
+              <span><strong class="text-foreground">Set your rules</strong> — Filter by required keywords (e.g. "#giveaway"), minimum friend tags (@mentions), remove duplicates, and exclude suspected bots.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-primary font-bold shrink-0">4.</span>
+              <span><strong class="text-foreground">Spin the wheel</strong> — Click "Load into wheel & spin" to launch the draw. Screen-record the spin to post as transparent proof.</span>
+            </li>
+          </ol>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Giveaway Rules You Can Enforce</h2>
+          <ul class="space-y-3 text-muted-foreground">
+            <li class="flex gap-3"><span class="text-primary font-bold shrink-0">→</span><span><strong class="text-foreground">Tag 1 / 2 / 3 friends:</strong> Use the "Minimum @ tags" filter. Only entries with at least N @mentions are kept.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold shrink-0">→</span><span><strong class="text-foreground">Must comment a specific word:</strong> Use "Required keyword" (e.g. "ENTER", "#contest", "✅") — only matching comments stay.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold shrink-0">→</span><span><strong class="text-foreground">One entry per person:</strong> "Remove duplicate usernames" is on by default.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold shrink-0">→</span><span><strong class="text-foreground">Multiple entries per person:</strong> Toggle "Allow multiple entries" and set a max (e.g. 3) — useful when you give bonus entries for sharing.</span></li>
+            <li class="flex gap-3"><span class="text-primary font-bold shrink-0">→</span><span><strong class="text-foreground">No bots:</strong> "Exclude suspected bots" removes accounts with suspicious patterns (all numbers, no vowels, etc.).</span></li>
+          </ul>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Paste Formats Supported</h2>
+          <div class="grid sm:grid-cols-2 gap-4 text-sm text-muted-foreground">
+            <div class="p-3 rounded-lg bg-secondary/30 font-mono text-xs">
+              <p class="font-semibold text-foreground mb-1 font-sans">Instagram / TikTok format</p>
+              @alice: I love this! @bob @carol<br/>
+              @bob: Count me in! @alice<br/>
+              @carol: Amazing ❤️
+            </div>
+            <div class="p-3 rounded-lg bg-secondary/30 font-mono text-xs">
+              <p class="font-semibold text-foreground mb-1 font-sans">Plain usernames</p>
+              alice<br/>bob<br/>carol<br/>david
+            </div>
+            <div class="p-3 rounded-lg bg-secondary/30 font-mono text-xs">
+              <p class="font-semibold text-foreground mb-1 font-sans">Google Sheets / Excel (copy column)</p>
+              alice<br/>bob<br/>carol
+            </div>
+            <div class="p-3 rounded-lg bg-secondary/30 font-mono text-xs">
+              <p class="font-semibold text-foreground mb-1 font-sans">YouTube comments</p>
+              alice: Great video! 🎉<br/>bob: Entered! #giveaway
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <details class="bg-card border border-border rounded-xl p-5 group">
+              <summary class="font-semibold text-foreground cursor-pointer list-none flex items-center justify-between gap-2">
+                {question}
+                <span class="text-muted-foreground shrink-0 group-open:rotate-180 transition-transform">▾</span>
+              </summary>
+              <p class="text-muted-foreground text-sm leading-relaxed mt-3">{answer}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="grid sm:grid-cols-2 gap-3">
+          {[
+            { href: "/instagram-giveaway-picker", label: "Instagram Giveaway Picker", desc: "Dedicated picker for Instagram contests." },
+            { href: "/tiktok-giveaway-picker", label: "TikTok Giveaway Picker", desc: "Pick winners from TikTok comments." },
+            { href: "/youtube-giveaway-picker", label: "YouTube Giveaway Picker", desc: "Select from subscribers or commenters." },
+            { href: "/weighted-random-picker", label: "Weighted Random Picker", desc: "Assign different odds per participant." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

@@ -16,12 +16,12 @@ const DrawModes = ({ mode, onModeChange }: DrawModesProps) => {
         {t.drawModes}
       </h2>
       
-      <div className="flex flex-col md:flex-row items-stretch gap-4">
+      <div className="flex flex-col items-stretch gap-4">
         {/* Simple Mode */}
         <button
           onClick={() => onModeChange("simple")}
           className={cn(
-            "flex-1 p-6 rounded-xl border-2 transition-all text-left",
+            "flex-1 p-4 rounded-xl border-2 transition-all text-left",
             mode === "simple"
               ? "border-primary bg-primary/10"
               : "border-border bg-card hover:border-primary/50"
@@ -69,7 +69,7 @@ const DrawModes = ({ mode, onModeChange }: DrawModesProps) => {
         <button
           onClick={() => onModeChange("advanced")}
           className={cn(
-            "flex-1 p-6 rounded-xl border-2 transition-all text-left",
+            "flex-1 p-4 rounded-xl border-2 transition-all text-left",
             mode === "advanced"
               ? "border-accent bg-accent/10"
               : "border-border bg-card hover:border-accent/50"

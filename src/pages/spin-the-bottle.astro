@@ -65,19 +65,22 @@ const jsonLd = {
         <span class="text-foreground">Spin the Bottle</span>
       </nav>
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Spin the Bottle — Free Online Bottle Spin
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+      <!-- Compact title: visible but doesn't push the bottle below the fold -->
+      <h1 class="text-lg md:text-xl font-bold text-center text-foreground py-1">
+        Spin the Bottle — Free Online Game
+      </h1>
+
+      <section class="flex flex-col items-center">
+        <SpinTheBottleIsland client:load />
+      </section>
+
+      <!-- Full description below the interactive tool -->
+      <section class="text-center space-y-2 py-2">
+        <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
           Add your players, tap the bottle, and watch it spin. Works on any device. Perfect for
           parties, game nights, and any situation where you need to randomly pick someone.
         </p>
         <p class="text-sm text-muted-foreground">Free • No account • Works on mobile • Crypto fair</p>
-      </section>
-
-      <section class="flex flex-col items-center">
-        <SpinTheBottleIsland client:load />
       </section>
 
       <section class="space-y-8">

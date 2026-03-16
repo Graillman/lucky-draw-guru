@@ -13,6 +13,8 @@ interface FilterConfig {
   excludeBots: boolean;
   allowMultipleEntries: boolean;
   maxEntriesPerUser: number;
+  storyShareList: string; // whitelist of usernames who shared to story
+  winnersCount: number;
 }
 
 const PLATFORMS: { id: Platform; name: string; icon: string; hint: string }[] = [
@@ -41,6 +43,8 @@ const SocialGiveawayInner = () => {
     excludeBots: true,
     allowMultipleEntries: false,
     maxEntriesPerUser: 1,
+    storyShareList: '',
+    winnersCount: 1,
   });
   const [wheelParticipants, setWheelParticipants] = useState<{ pseudo: string; weight: number }[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -51,6 +55,12 @@ const SocialGiveawayInner = () => {
   const parsedEntries = useMemo((): ParsedEntry[] => {
     if (!rawInput.trim()) return [];
     return rawInput.split('\n').map(l => l.trim()).filter(Boolean).map(line => {
+      // Tab-separated (Google Sheets / Excel paste) — use first column as username
+      if (line.includes('\t')) {
+        const parts = line.split('\t');
+        return { username: parts[0].trim().replace(/^@/, ''), comment: parts.slice(1).join(' ').trim() };
+      }
+      // "username: comment" format (Instagram, YouTube, TikTok exports)
       const colonIndex = line.indexOf(':');
       if (colonIndex > 0 && colonIndex < 40) {
         return {
@@ -58,8 +68,9 @@ const SocialGiveawayInner = () => {
           comment: line.substring(colonIndex + 1).trim(),
         };
       }
+      // Plain username or @username
       return { username: line.replace(/^@/, '').trim(), comment: '' };
-    }).filter(e => e.username.length > 0);
+    }).filter(e => e.username.length > 0 && e.username.length <= 50);
   }, [rawInput]);
 
   const filteredEntries = useMemo((): ParsedEntry[] => {
@@ -83,6 +94,16 @@ const SocialGiveawayInner = () => {
         const hasNoVowels = name.length > 4 && !/[aeiou]/i.test(name.replace(/\d/g, ''));
         return digitRatio < 0.5 && !hasNoVowels;
       });
+    }
+
+    // Story share whitelist — only keep participants who also shared to story
+    if (filters.storyShareList.trim()) {
+      const storyUsers = new Set(
+        filters.storyShareList.split('\n')
+          .map(l => l.trim().replace(/^@/, '').toLowerCase())
+          .filter(Boolean)
+      );
+      entries = entries.filter(e => storyUsers.has(e.username.toLowerCase()));
     }
 
     if (filters.removeDuplicates) {
@@ -244,6 +265,21 @@ const SocialGiveawayInner = () => {
                 </select>
               </div>
             )}
+
+            {/* Story share whitelist */}
+            <div className="sm:col-span-2">
+              <label className="block text-sm font-medium mb-1 text-foreground">
+                Shared in story (optional whitelist)
+              </label>
+              <textarea
+                value={filters.storyShareList}
+                onChange={e => setFilters(f => ({ ...f, storyShareList: e.target.value }))}
+                placeholder={"If required, paste usernames of people who shared your story here (one per line).\nLeave empty to skip this filter."}
+                rows={3}
+                className="w-full px-3 py-2 rounded-lg border border-border bg-card font-mono text-sm resize-none focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-foreground"
+              />
+              <p className="text-xs text-muted-foreground mt-1">Only participants who also appear here will be kept.</p>
+            </div>
           </div>
 
           {/* Filter result + load button */}
@@ -256,13 +292,25 @@ const SocialGiveawayInner = () => {
                   <span className="text-xs text-muted-foreground ml-2">({parsedEntries.length - filteredEntries.length} removed)</span>
                 )}
               </div>
-              <button
-                onClick={loadIntoWheel}
-                disabled={filteredEntries.length < 2}
-                className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 hover:shadow-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                🎰 Load into wheel & spin
-              </button>
+              <div className="flex items-center gap-3 flex-wrap">
+                <div className="flex items-center gap-2">
+                  <label className="text-sm text-muted-foreground whitespace-nowrap">Winners:</label>
+                  <select
+                    value={filters.winnersCount}
+                    onChange={e => setFilters(f => ({ ...f, winnersCount: Number(e.target.value) }))}
+                    className="px-2 py-1.5 rounded-lg border border-border bg-card text-sm text-foreground outline-none focus:ring-2 focus:ring-primary"
+                  >
+                    {[1,2,3,4,5,10].map(n => <option key={n} value={n}>{n}</option>)}
+                  </select>
+                </div>
+                <button
+                  onClick={loadIntoWheel}
+                  disabled={filteredEntries.length < 2}
+                  className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 hover:shadow-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  🎰 Load into wheel & spin
+                </button>
+              </div>
             </div>
           </div>
         </section>
@@ -280,7 +328,7 @@ const SocialGiveawayInner = () => {
               isSpinning={isSpinning}
               onComplete={handleComplete}
               mode="simple"
-              winnersCount={1}
+              winnersCount={filters.winnersCount}
               onSpin={handleDraw}
             />
             {!isSpinning && winners.length === 0 && (

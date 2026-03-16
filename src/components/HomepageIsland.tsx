@@ -414,8 +414,8 @@ const HomepageIslandInner = () => {
               )}
             </div>
 
-            {/* RIGHT: Entries / Results panel */}
-            <div className="flex-1 w-full min-w-0 bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
+            {/* RIGHT: Entries / Results panel — fixed width to keep wheel centered */}
+            <div className="w-full lg:w-80 xl:w-96 min-w-0 bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
 
               {/* Tabs */}
               <div className="flex border-b border-border">
