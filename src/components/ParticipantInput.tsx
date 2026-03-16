@@ -1,4 +1,4 @@
-import { useState, useCallback, KeyboardEvent, ChangeEvent } from "react";
+import { useState, useCallback, useEffect, KeyboardEvent, ChangeEvent } from "react";
 import { cryptoRandom } from "@/lib/cryptoRandom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
