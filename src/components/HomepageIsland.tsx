@@ -270,31 +270,22 @@ const HomepageIslandInner = () => {
             {/* LEFT: Wheel zone */}
             <div className="flex-shrink-0 w-full lg:w-auto space-y-2">
 
-              {/* Draw title — editable */}
-              <div className="flex items-center justify-center min-h-[2rem]">
-                {editingTitle ? (
-                  <input
-                    ref={titleInputRef}
-                    autoFocus
-                    value={drawTitle}
-                    onChange={e => setDrawTitle(e.target.value)}
-                    onBlur={() => setEditingTitle(false)}
-                    onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') setEditingTitle(false); }}
-                    placeholder={t.drawTitlePlaceholder}
-                    className="text-center text-lg md:text-xl font-bold bg-transparent border-b-2 outline-none w-full max-w-sm text-primary border-primary"
-                  />
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => setEditingTitle(true)}
-                      className={`group flex items-center gap-2 text-lg md:text-xl font-bold transition-colors ${drawTitle ? "text-primary" : "text-muted-foreground/40 hover:text-muted-foreground"}`}
-                    >
-                      <span>{drawTitle || t.tapToSpin}</span>
-                      <Edit3 className="w-4 h-4 opacity-0 group-hover:opacity-60 transition-opacity" />
-                    </button>
-                  </div>
-                )}
-              </div>
+              {/* Wheel */}
+              <SpinningWheel
+                participants={displayParticipants}
+                isSpinning={isSpinning}
+                onComplete={handleWheelComplete}
+                mode="simple"
+                winnersCount={1}
+                onSpin={handleDraw}
+                onTick={customizeConfig.spinSoundEnabled
+                  ? () => playTick(customizeConfig.tickSound)
+                  : undefined}
+                colors={WHEEL_THEMES[customizeConfig.theme]?.colors}
+                borderStyle={customizeConfig.borderStyle}
+                backgroundImage={wheelBgImage ?? undefined}
+                size={600}
+              />
 
               {/* Toolbar: Customize | Save | Share | Add Image | Fullscreen */}
               <div className="flex items-center justify-center gap-1.5 px-1 flex-wrap">
@@ -341,22 +332,31 @@ const HomepageIslandInner = () => {
                 <FullscreenButton />
               </div>
 
-              {/* Wheel */}
-              <SpinningWheel
-                participants={displayParticipants}
-                isSpinning={isSpinning}
-                onComplete={handleWheelComplete}
-                mode="simple"
-                winnersCount={1}
-                onSpin={handleDraw}
-                onTick={customizeConfig.spinSoundEnabled
-                  ? () => playTick(customizeConfig.tickSound)
-                  : undefined}
-                colors={WHEEL_THEMES[customizeConfig.theme]?.colors}
-                borderStyle={customizeConfig.borderStyle}
-                backgroundImage={wheelBgImage ?? undefined}
-                size={560}
-              />
+              {/* Draw title — editable */}
+              <div className="flex items-center justify-center min-h-[2rem]">
+                {editingTitle ? (
+                  <input
+                    ref={titleInputRef}
+                    autoFocus
+                    value={drawTitle}
+                    onChange={e => setDrawTitle(e.target.value)}
+                    onBlur={() => setEditingTitle(false)}
+                    onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') setEditingTitle(false); }}
+                    placeholder={t.drawTitlePlaceholder}
+                    className="text-center text-lg md:text-xl font-bold bg-transparent border-b-2 outline-none w-full max-w-sm text-primary border-primary"
+                  />
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setEditingTitle(true)}
+                      className={`group flex items-center gap-2 text-lg md:text-xl font-bold transition-colors ${drawTitle ? "text-primary" : "text-muted-foreground/40 hover:text-muted-foreground"}`}
+                    >
+                      <span>{drawTitle || t.tapToSpin}</span>
+                      <Edit3 className="w-4 h-4 opacity-0 group-hover:opacity-60 transition-opacity" />
+                    </button>
+                  </div>
+                )}
+              </div>
 
               {/* Spin counter — digital clock style */}
               {(globalCount + spinCount) > 0 && (

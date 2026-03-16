@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { ParticipantEntry } from "@/components/ParticipantInput";
 
-const STORAGE_KEY = "realwheelpicker_participants";
+const STORAGE_KEY = "realwheelpicker_participants_v2";
 
 export const useLocalStorageParticipants = () => {
   const [participants, setParticipants] = useState<ParticipantEntry[]>([]);
