@@ -1,10 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { getSpinCount, recordSpin } from '@/lib/spinCounter';
 
-const FALLBACK = 1_315_354;
-
 export const useSpinCounter = () => {
-  const [globalCount, setGlobalCount] = useState<number>(FALLBACK);
+  const [globalCount, setGlobalCount] = useState<number>(0);
   const [localSpins, setLocalSpins] = useState(0);
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
 

@@ -94,7 +94,7 @@ function OdometerNumber({ value }: { value: number }) {
 const HomepageIslandInner = () => {
   const { participants, setParticipants, isLoaded } = useLocalStorageParticipants();
   const { t, language } = useLanguage();
-  const { increment } = useSpinCounter();
+  const { increment, globalCount } = useSpinCounter();
 
   const { playTick, playFanfare } = useWheelSound();
   const [customizeConfig, setCustomizeConfig] = useCustomizeConfig();
@@ -353,12 +353,12 @@ const HomepageIslandInner = () => {
 
               {/* Trust signals — below wheel */}
               <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground pb-1">
-                {spinCount > 0 && (
+                {(globalCount + spinCount) > 0 && (
                   <>
                     <div className="flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                      <OdometerNumber value={spinCount} />
-                      <span>{t.indexSpinsText}</span>
+                      <OdometerNumber value={globalCount + spinCount} />
+                      <span>+ {t.indexSpinsText}</span>
                     </div>
                     <span className="hidden sm:inline text-border">|</span>
                   </>

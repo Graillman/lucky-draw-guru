@@ -2,19 +2,17 @@ import { supabase } from './supabase';
 
 let localBuffer = 0;
 let flushTimeout: ReturnType<typeof setTimeout> | null = null;
-const FALLBACK = 1_315_354;
-
 export async function getSpinCount(): Promise<number> {
-  if (!supabase) return FALLBACK;
+  if (!supabase) return 0;
   try {
     const { data } = await supabase
       .from('spin_counter')
       .select('total_spins')
       .eq('id', 'global')
       .single();
-    return (data?.total_spins as number) || FALLBACK;
+    return (data?.total_spins as number) ?? 0;
   } catch {
-    return FALLBACK;
+    return 0;
   }
 }
 
