@@ -17,6 +17,8 @@ interface SpinningWheelProps {
   onTick?: () => void;
   colors?: string[];
   borderStyle?: string; // 'default' | 'white' | 'gold' | 'rainbow' | 'none'
+  backgroundImage?: string;
+  size?: number; // display size in px, default 480
 }
 
 const DEFAULT_COLORS = [
@@ -34,7 +36,7 @@ const DEFAULT_COLORS = [
   'hsl(0, 75%, 55%)',    // Crimson
 ];
 
-export function SpinningWheel({ participants, isSpinning, onComplete, mode, winnersCount, onSpin, onTick, colors, borderStyle = 'default' }: SpinningWheelProps) {
+export function SpinningWheel({ participants, isSpinning, onComplete, mode, winnersCount, onSpin, onTick, colors, borderStyle = 'default', backgroundImage, size = 480 }: SpinningWheelProps) {
   const COLORS = colors && colors.length > 0 ? colors : DEFAULT_COLORS;
   const { t } = useLanguage();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -79,9 +81,19 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     });
   }, [participants, mode]);
 
+  // Background image
+  const bgImgRef = useRef<HTMLImageElement | null>(null);
+  const [bgImgVersion, setBgImgVersion] = useState(0);
+  useEffect(() => {
+    if (!backgroundImage) { bgImgRef.current = null; return; }
+    const img = new Image();
+    img.onload = () => { bgImgRef.current = img; setBgImgVersion(v => v + 1); };
+    img.src = backgroundImage;
+  }, [backgroundImage]);
+
   // High DPI support
   const dpr = typeof window !== 'undefined' ? Math.min(window.devicePixelRatio || 1, 2) : 1;
-  const canvasDisplaySize = 480;
+  const canvasDisplaySize = size;
   const canvasPixelSize = canvasDisplaySize * dpr;
 
   // Draw the wheel
@@ -114,6 +126,18 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     ctx.arc(center, center, radius + 5, 0, Math.PI * 2);
     ctx.fillStyle = gradient;
     ctx.fill();
+
+    // Draw background image (clipped to wheel circle)
+    if (bgImgRef.current) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(center, center, radius, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.globalAlpha = 0.22;
+      ctx.drawImage(bgImgRef.current, center - radius, center - radius, radius * 2, radius * 2);
+      ctx.globalAlpha = 1;
+      ctx.restore();
+    }
 
     // Draw segments with 3D effect
     segments.forEach((segment) => {
@@ -294,7 +318,7 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     ctx.fillStyle = 'rgba(255,255,255,0.3)';
     ctx.fill();
 
-  }, [rotation, segments, participants.length, mode, themeColor, themeColorDark, themeColorGlow, themeColorHalf, themeColorLight, themeStroke, borderStyle]);
+  }, [rotation, segments, participants.length, mode, themeColor, themeColorDark, themeColorGlow, themeColorHalf, themeColorLight, themeStroke, borderStyle, bgImgVersion]);
 
   // Idle rotation — 1 revolution per ~20s, stops on first spin
   useEffect(() => {
@@ -468,8 +492,8 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
           height={canvasPixelSize}
           className="relative z-10 drop-shadow-2xl max-w-full"
           style={{
-            width: 'min(480px, 90vw)',
-            height: 'min(480px, 90vw)',
+            width: `min(${size}px, 90vw)`,
+            height: `min(${size}px, 90vw)`,
             cursor: onSpin && !isSpinning && !isAnimating ? 'pointer' : 'default',
           }}
           onClick={() => { if (onSpin && !isSpinning && !isAnimating) onSpin(); }}

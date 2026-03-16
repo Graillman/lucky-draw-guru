@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, ChangeEvent } from "react";
 import { useSpinCounter } from "@/hooks/useSpinCounter";
 import { useWheelSound } from "@/hooks/useWheelSound";
 import NextToolSuggestion from "@/components/NextToolSuggestion";
@@ -14,7 +14,7 @@ import { useLocalStorageParticipants } from "@/hooks/useLocalStorageParticipants
 import { ConfettiEffect } from "@/components/ConfettiEffect";
 import { WHEEL_THEMES } from "@/components/WheelThemePicker";
 import { CustomizePanel, useCustomizeConfig } from "@/components/CustomizePanel";
-import { Edit3, Share2, Settings2, Maximize2, Minimize2, BookMarked } from "lucide-react";
+import { Edit3, Share2, Settings2, Maximize2, Minimize2, BookMarked, ImagePlus } from "lucide-react";
 import { buildShareURL, readShareURLConfig } from "@/hooks/useShareableURL";
 import { saveWheel, getWheelById } from "@/lib/wheelGallery";
 import { toast } from "sonner";
@@ -94,7 +94,7 @@ function OdometerNumber({ value }: { value: number }) {
 const HomepageIslandInner = () => {
   const { participants, setParticipants, isLoaded } = useLocalStorageParticipants();
   const { t, language } = useLanguage();
-  const { getCount, increment, globalCount } = useSpinCounter();
+  const { increment } = useSpinCounter();
 
   const { playTick, playFanfare } = useWheelSound();
   const [customizeConfig, setCustomizeConfig] = useCustomizeConfig();
@@ -109,6 +109,16 @@ const HomepageIslandInner = () => {
   const [hasInitialized, setHasInitialized] = useState(false);
   const [spinCount, setSpinCount] = useState(0);
   const [activeTab, setActiveTab] = useState<'entries' | 'results'>('entries');
+  const [wheelBgImage, setWheelBgImage] = useState<string | null>(null);
+  const imgInputRef = useRef<HTMLInputElement>(null);
+  const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => setWheelBgImage(ev.target?.result as string);
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
 
   useEffect(() => {
     if (!isLoaded || hasInitialized) return;
@@ -122,6 +132,9 @@ const HomepageIslandInner = () => {
         if (w && w.items.length >= 2) {
           setParticipants(w.items.map(pseudo => ({ pseudo, weight: 1 })));
           setDrawTitle(w.title);
+          if (w.theme && WHEEL_THEMES[w.theme]) {
+            setCustomizeConfig({ ...customizeConfig, theme: w.theme });
+          }
         } else if (participants.length === 0) {
           setParticipants(DEFAULT_NAMES);
         }
@@ -237,36 +250,21 @@ const HomepageIslandInner = () => {
         <div className="aurora-orb aurora-orb-blue" />
       </div>
       <div className="relative z-10">
-        <main className="max-w-6xl mx-auto px-4 py-2 space-y-6">
+        <main className="max-w-6xl mx-auto px-4 py-2 space-y-4">
 
-          {/* Trust signals bar */}
-          <section className="text-center space-y-1 pt-1">
-            <h1 className="text-lg md:text-2xl font-bold text-foreground leading-tight">
-              {t.indexPageTitle}
-            </h1>
-            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs text-muted-foreground">
-              <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                <OdometerNumber value={globalCount + spinCount} />
-                <span>+ {t.indexSpinsText}</span>
-              </div>
-              <span className="hidden sm:inline text-border">|</span>
-              <span><strong className="text-foreground">100%</strong> free</span>
-              <span className="hidden sm:inline text-border">|</span>
-              <span><strong className="text-foreground">No</strong> signup</span>
-              <span className="hidden sm:inline text-border">|</span>
-              <span><strong className="text-foreground">Crypto</strong> fair</span>
-            </div>
-          </section>
+          {/* Page title — compact, SEO h1 */}
+          <h1 className="text-center text-base md:text-xl font-bold text-foreground leading-tight pt-1">
+            {t.indexPageTitle}
+          </h1>
 
           {/* MAIN AREA: 2-column on desktop */}
           <div className="flex flex-col lg:flex-row gap-6 items-start">
 
             {/* LEFT: Wheel zone */}
-            <div className="flex-shrink-0 w-full lg:w-auto space-y-3">
+            <div className="flex-shrink-0 w-full lg:w-auto space-y-2">
 
               {/* Draw title — editable */}
-              <div className="flex items-center justify-center min-h-[2.5rem]">
+              <div className="flex items-center justify-center min-h-[2rem]">
                 {editingTitle ? (
                   <input
                     ref={titleInputRef}
@@ -276,67 +274,100 @@ const HomepageIslandInner = () => {
                     onBlur={() => setEditingTitle(false)}
                     onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') setEditingTitle(false); }}
                     placeholder="Draw title (optional)"
-                    className="text-center text-xl md:text-2xl font-bold bg-transparent border-b-2 outline-none w-full max-w-sm text-primary border-primary"
+                    className="text-center text-lg md:text-xl font-bold bg-transparent border-b-2 outline-none w-full max-w-sm text-primary border-primary"
                   />
                 ) : (
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setEditingTitle(true)}
-                      className={`group flex items-center gap-2 text-xl md:text-2xl font-bold transition-colors ${drawTitle ? "text-primary" : "text-muted-foreground/40 hover:text-muted-foreground"}`}
+                      className={`group flex items-center gap-2 text-lg md:text-xl font-bold transition-colors ${drawTitle ? "text-primary" : "text-muted-foreground/40 hover:text-muted-foreground"}`}
                     >
                       <span>{drawTitle || t.tapToSpin}</span>
                       <Edit3 className="w-4 h-4 opacity-0 group-hover:opacity-60 transition-opacity" />
-                    </button>
-                    <button
-                      onClick={handleShare}
-                      title="Copy shareable link"
-                      className="p-1.5 rounded-lg text-muted-foreground/50 hover:text-primary hover:bg-primary/10 transition-colors"
-                    >
-                      <Share2 className="w-4 h-4" />
                     </button>
                   </div>
                 )}
               </div>
 
-              {/* Customize + Save buttons */}
-              <div className="flex items-center justify-center gap-2 px-1">
+              {/* Toolbar: Customize | Save | Share | Add Image | Fullscreen */}
+              <div className="flex items-center justify-center gap-1.5 px-1 flex-wrap">
                 <button
                   onClick={() => setShowCustomize(true)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-border bg-card/60 hover:border-primary/40 hover:shadow-sm transition-all text-sm font-medium text-muted-foreground hover:text-foreground"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card/60 hover:border-primary/40 hover:shadow-sm transition-all text-xs font-medium text-muted-foreground hover:text-foreground"
                 >
-                  <Settings2 className="w-4 h-4" />
+                  <Settings2 className="w-3.5 h-3.5" />
                   <span>Customize</span>
                 </button>
                 <button
                   onClick={handleSaveWheel}
                   disabled={isSaving}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-border bg-card/60 hover:border-primary/40 hover:shadow-sm transition-all text-sm font-medium text-muted-foreground hover:text-foreground disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card/60 hover:border-primary/40 hover:shadow-sm transition-all text-xs font-medium text-muted-foreground hover:text-foreground disabled:opacity-50"
                   title="Save to gallery"
                 >
-                  <BookMarked className="w-4 h-4" />
+                  <BookMarked className="w-3.5 h-3.5" />
                   <span>{isSaving ? 'Saving…' : 'Save'}</span>
                 </button>
+                <button
+                  onClick={handleShare}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card/60 hover:border-primary/40 hover:shadow-sm transition-all text-xs font-medium text-muted-foreground hover:text-foreground"
+                  title="Copy shareable link"
+                >
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>Share</span>
+                </button>
+                <button
+                  onClick={() => imgInputRef.current?.click()}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card/60 hover:border-primary/40 hover:shadow-sm transition-all text-xs font-medium text-muted-foreground hover:text-foreground"
+                  title="Add background image to wheel"
+                >
+                  <ImagePlus className="w-3.5 h-3.5" />
+                  <span>{wheelBgImage ? 'Change image' : 'Add image'}</span>
+                </button>
+                <input ref={imgInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                {wheelBgImage && (
+                  <button
+                    onClick={() => setWheelBgImage(null)}
+                    className="px-2 py-1.5 rounded-xl border border-border bg-card/60 hover:border-destructive/40 transition-all text-xs text-muted-foreground hover:text-destructive"
+                    title="Remove image"
+                  >✕</button>
+                )}
+                <FullscreenButton />
               </div>
 
-              {/* Wheel — clicking it also spins */}
-              <div className="relative">
-                {/* Fullscreen button — top right of wheel area */}
-                <div className="absolute top-2 right-2 z-10">
-                  <FullscreenButton />
-                </div>
-                <SpinningWheel
-                  participants={displayParticipants}
-                  isSpinning={isSpinning}
-                  onComplete={handleWheelComplete}
-                  mode="simple"
-                  winnersCount={1}
-                  onSpin={handleDraw}
-                  onTick={customizeConfig.spinSoundEnabled
-                    ? () => playTick(customizeConfig.tickSound)
-                    : undefined}
-                  colors={WHEEL_THEMES[customizeConfig.theme]?.colors}
-                  borderStyle={customizeConfig.borderStyle}
-                />
+              {/* Wheel */}
+              <SpinningWheel
+                participants={displayParticipants}
+                isSpinning={isSpinning}
+                onComplete={handleWheelComplete}
+                mode="simple"
+                winnersCount={1}
+                onSpin={handleDraw}
+                onTick={customizeConfig.spinSoundEnabled
+                  ? () => playTick(customizeConfig.tickSound)
+                  : undefined}
+                colors={WHEEL_THEMES[customizeConfig.theme]?.colors}
+                borderStyle={customizeConfig.borderStyle}
+                backgroundImage={wheelBgImage ?? undefined}
+                size={520}
+              />
+
+              {/* Trust signals — below wheel */}
+              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground pb-1">
+                {spinCount > 0 && (
+                  <>
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                      <OdometerNumber value={spinCount} />
+                      <span>{t.indexSpinsText}</span>
+                    </div>
+                    <span className="hidden sm:inline text-border">|</span>
+                  </>
+                )}
+                <span><strong className="text-foreground">100%</strong> free</span>
+                <span className="hidden sm:inline text-border">|</span>
+                <span><strong className="text-foreground">No</strong> signup</span>
+                <span className="hidden sm:inline text-border">|</span>
+                <span><strong className="text-foreground">Crypto</strong> fair</span>
               </div>
 
               {/* Spin button */}
