@@ -365,6 +365,18 @@ export interface Translations {
   indexValue3Title: string;
   indexValue3Text: string;
   indexAllToolsTitle: string;
+
+  // Toolbar buttons
+  toolbarCustomize: string;
+  toolbarSave: string;
+  toolbarSaving: string;
+  toolbarAddImage: string;
+  toolbarChangeImage: string;
+
+  // Trust signals below wheel
+  indexTrustFree: string;
+  indexTrustNoSignup: string;
+  indexTrustCrypto: string;
 }
 
 export const translations: Record<Language, Translations> = {
@@ -730,6 +742,14 @@ export const translations: Record<Language, Translations> = {
     indexValue3Title: 'Instant & Free',
     indexValue3Text: 'No account needed. No download. Works on any device — phones, tablets, laptops, and smartboards.',
     indexAllToolsTitle: 'All Free Tools — No Signup Required',
+    toolbarCustomize: 'Customize',
+    toolbarSave: 'Save',
+    toolbarSaving: 'Saving…',
+    toolbarAddImage: 'Add image',
+    toolbarChangeImage: 'Change image',
+    indexTrustFree: '100% free',
+    indexTrustNoSignup: 'No signup',
+    indexTrustCrypto: 'Crypto fair',
   },
 
   es: {
@@ -1089,6 +1109,14 @@ export const translations: Record<Language, Translations> = {
     indexValue3Title: 'Instantáneo y Gratuito',
     indexValue3Text: 'Sin cuenta. Sin descarga. Funciona en cualquier dispositivo.',
     indexAllToolsTitle: 'Todas las herramientas gratuitas — Sin registro',
+    toolbarCustomize: 'Personalizar',
+    toolbarSave: 'Guardar',
+    toolbarSaving: 'Guardando…',
+    toolbarAddImage: 'Añadir imagen',
+    toolbarChangeImage: 'Cambiar imagen',
+    indexTrustFree: '100% gratis',
+    indexTrustNoSignup: 'Sin registro',
+    indexTrustCrypto: 'Cripto justo',
   },
   fr: {
     heroTitle: "Tirage au sort",
@@ -1447,6 +1475,14 @@ export const translations: Record<Language, Translations> = {
     indexValue3Title: 'Instantané & Gratuit',
     indexValue3Text: 'Sans compte. Sans téléchargement. Fonctionne sur tous les appareils — téléphones, tablettes, ordinateurs.',
     indexAllToolsTitle: 'Tous les outils gratuits — Sans inscription',
+    toolbarCustomize: 'Personnaliser',
+    toolbarSave: 'Sauvegarder',
+    toolbarSaving: 'Sauvegarde…',
+    toolbarAddImage: 'Ajouter image',
+    toolbarChangeImage: 'Changer image',
+    indexTrustFree: '100% gratuit',
+    indexTrustNoSignup: 'Sans inscription',
+    indexTrustCrypto: 'Crypto équitable',
   },
   de: {
     heroTitle: 'Zufallsauslosung',
@@ -1805,6 +1841,14 @@ export const translations: Record<Language, Translations> = {
     indexValue3Title: 'Sofort & Kostenlos',
     indexValue3Text: 'Kein Konto erforderlich. Kein Download. Funktioniert auf allen Geräten.',
     indexAllToolsTitle: 'Alle kostenlosen Tools — Keine Anmeldung erforderlich',
+    toolbarCustomize: 'Anpassen',
+    toolbarSave: 'Speichern',
+    toolbarSaving: 'Speichert…',
+    toolbarAddImage: 'Bild hinzufügen',
+    toolbarChangeImage: 'Bild ändern',
+    indexTrustFree: '100% kostenlos',
+    indexTrustNoSignup: 'Ohne Anmeldung',
+    indexTrustCrypto: 'Krypto-fair',
   },
   pt: {
     heroTitle: 'Sorteio Aleatório',
@@ -2163,6 +2207,14 @@ export const translations: Record<Language, Translations> = {
     indexValue3Title: 'Instantâneo & Gratuito',
     indexValue3Text: 'Sem conta. Sem download. Funciona em qualquer dispositivo.',
     indexAllToolsTitle: 'Todas as ferramentas gratuitas — Sem cadastro',
+    toolbarCustomize: 'Personalizar',
+    toolbarSave: 'Salvar',
+    toolbarSaving: 'Salvando…',
+    toolbarAddImage: 'Adicionar imagem',
+    toolbarChangeImage: 'Trocar imagem',
+    indexTrustFree: '100% gratuito',
+    indexTrustNoSignup: 'Sem cadastro',
+    indexTrustCrypto: 'Cripto justo',
   },
   it: {
     heroTitle: 'Estrazione Casuale',
@@ -2521,6 +2573,14 @@ export const translations: Record<Language, Translations> = {
     indexValue3Title: 'Istantaneo & Gratuito',
     indexValue3Text: 'Nessun account. Nessun download. Funziona su qualsiasi dispositivo.',
     indexAllToolsTitle: 'Tutti gli strumenti gratuiti — Nessuna registrazione',
+    toolbarCustomize: 'Personalizza',
+    toolbarSave: 'Salva',
+    toolbarSaving: 'Salvataggio…',
+    toolbarAddImage: 'Aggiungi immagine',
+    toolbarChangeImage: 'Cambia immagine',
+    indexTrustFree: '100% gratuito',
+    indexTrustNoSignup: 'Senza registrazione',
+    indexTrustCrypto: 'Cripto equo',
   },
 };
 

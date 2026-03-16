@@ -21,14 +21,14 @@ import { toast } from "sonner";
 import { Toaster } from "sonner";
 
 const DEFAULT_NAMES: ParticipantEntry[] = [
+  { pseudo: "Alice", weight: 1 },
+  { pseudo: "Bruno", weight: 1 },
+  { pseudo: "Clara", weight: 1 },
+  { pseudo: "David", weight: 1 },
   { pseudo: "Emma", weight: 1 },
-  { pseudo: "Lucas", weight: 1 },
-  { pseudo: "Olivia", weight: 1 },
-  { pseudo: "Noah", weight: 1 },
-  { pseudo: "Sophia", weight: 1 },
-  { pseudo: "Liam", weight: 1 },
-  { pseudo: "Mia", weight: 1 },
-  { pseudo: "Ethan", weight: 1 },
+  { pseudo: "Fatima", weight: 1 },
+  { pseudo: "Gabriel", weight: 1 },
+  { pseudo: "Hannah", weight: 1 },
 ];
 
 
@@ -58,16 +58,21 @@ function FullscreenButton() {
   );
 }
 
-// Odometer digit roller — electric clock style
-function OdometerDigit({ value }: { value: number }) {
+// Odometer digit roller — digital clock style
+function OdometerDigit({ value, size = '2rem' }: { value: number; size?: string }) {
   return (
-    <span className="odometer-digit" style={{ height: '1.1em', width: '0.65em' }}>
+    <span className="odometer-digit" style={{ height: size, width: `calc(${size} * 0.65)`, display: 'inline-block', overflow: 'hidden', position: 'relative' }}>
       <span
         className="odometer-strip flex flex-col"
-        style={{ transform: `translateY(-${value * (100 / 10)}%)`, height: '1000%' }}
+        style={{
+          transform: `translateY(-${value * 10}%)`,
+          height: '1000%',
+          transition: 'transform 0.4s cubic-bezier(0.4,0,0.2,1)',
+          position: 'absolute', top: 0, left: 0, right: 0,
+        }}
       >
         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(d => (
-          <span key={d} style={{ height: '10%', lineHeight: '1.1em', display: 'block', textAlign: 'center' }}>
+          <span key={d} style={{ height: '10%', lineHeight: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {d}
           </span>
         ))}
@@ -76,15 +81,17 @@ function OdometerDigit({ value }: { value: number }) {
   );
 }
 
-function OdometerNumber({ value }: { value: number }) {
+function OdometerNumber({ value, size = '2rem' }: { value: number; size?: string }) {
   const str = new Intl.NumberFormat('en-US').format(value);
   return (
-    <span className="font-mono font-bold text-foreground" style={{ display: 'inline-flex', alignItems: 'baseline', overflow: 'hidden', height: '1.1em' }}>
+    <span className="font-mono font-bold text-foreground tabular-nums" style={{ display: 'inline-flex', alignItems: 'center', height: size, overflow: 'hidden' }}>
       {str.split('').map((char, i) =>
         /\d/.test(char) ? (
-          <OdometerDigit key={i} value={parseInt(char)} />
+          <OdometerDigit key={i} value={parseInt(char)} size={size} />
         ) : (
-          <span key={i} style={{ width: '0.35em', display: 'inline-block', textAlign: 'center' }}>{char}</span>
+          <span key={i} style={{ width: `calc(${size} * 0.35)`, display: 'inline-block', textAlign: 'center', lineHeight: size }}>
+            {char}
+          </span>
         )
       )}
     </span>
@@ -273,7 +280,7 @@ const HomepageIslandInner = () => {
                     onChange={e => setDrawTitle(e.target.value)}
                     onBlur={() => setEditingTitle(false)}
                     onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') setEditingTitle(false); }}
-                    placeholder="Draw title (optional)"
+                    placeholder={t.drawTitlePlaceholder}
                     className="text-center text-lg md:text-xl font-bold bg-transparent border-b-2 outline-none w-full max-w-sm text-primary border-primary"
                   />
                 ) : (
@@ -296,7 +303,7 @@ const HomepageIslandInner = () => {
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card/60 hover:border-primary/40 hover:shadow-sm transition-all text-xs font-medium text-muted-foreground hover:text-foreground"
                 >
                   <Settings2 className="w-3.5 h-3.5" />
-                  <span>Customize</span>
+                  <span>{t.toolbarCustomize}</span>
                 </button>
                 <button
                   onClick={handleSaveWheel}
@@ -305,7 +312,7 @@ const HomepageIslandInner = () => {
                   title="Save to gallery"
                 >
                   <BookMarked className="w-3.5 h-3.5" />
-                  <span>{isSaving ? 'Saving…' : 'Save'}</span>
+                  <span>{isSaving ? t.toolbarSaving : t.toolbarSave}</span>
                 </button>
                 <button
                   onClick={handleShare}
@@ -313,7 +320,7 @@ const HomepageIslandInner = () => {
                   title="Copy shareable link"
                 >
                   <Share2 className="w-3.5 h-3.5" />
-                  <span>Share</span>
+                  <span>{t.share}</span>
                 </button>
                 <button
                   onClick={() => imgInputRef.current?.click()}
@@ -321,7 +328,7 @@ const HomepageIslandInner = () => {
                   title="Add background image to wheel"
                 >
                   <ImagePlus className="w-3.5 h-3.5" />
-                  <span>{wheelBgImage ? 'Change image' : 'Add image'}</span>
+                  <span>{wheelBgImage ? t.toolbarChangeImage : t.toolbarAddImage}</span>
                 </button>
                 <input ref={imgInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
                 {wheelBgImage && (
@@ -348,26 +355,27 @@ const HomepageIslandInner = () => {
                 colors={WHEEL_THEMES[customizeConfig.theme]?.colors}
                 borderStyle={customizeConfig.borderStyle}
                 backgroundImage={wheelBgImage ?? undefined}
-                size={520}
+                size={560}
               />
 
-              {/* Trust signals — below wheel */}
+              {/* Spin counter — digital clock style */}
+              {(globalCount + spinCount) > 0 && (
+                <div className="flex flex-col items-center gap-0.5 py-1">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse shrink-0" />
+                    <OdometerNumber value={globalCount + spinCount} size="2.2rem" />
+                  </div>
+                  <span className="text-xs text-muted-foreground tracking-wide uppercase">{t.indexSpinsText}</span>
+                </div>
+              )}
+
+              {/* Trust signals */}
               <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground pb-1">
-                {(globalCount + spinCount) > 0 && (
-                  <>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                      <OdometerNumber value={globalCount + spinCount} />
-                      <span>+ {t.indexSpinsText}</span>
-                    </div>
-                    <span className="hidden sm:inline text-border">|</span>
-                  </>
-                )}
-                <span><strong className="text-foreground">100%</strong> free</span>
+                <span><strong className="text-foreground">{t.indexTrustFree}</strong></span>
                 <span className="hidden sm:inline text-border">|</span>
-                <span><strong className="text-foreground">No</strong> signup</span>
+                <span><strong className="text-foreground">{t.indexTrustNoSignup}</strong></span>
                 <span className="hidden sm:inline text-border">|</span>
-                <span><strong className="text-foreground">Crypto</strong> fair</span>
+                <span><strong className="text-foreground">{t.indexTrustCrypto}</strong></span>
               </div>
 
               {/* Spin button */}
