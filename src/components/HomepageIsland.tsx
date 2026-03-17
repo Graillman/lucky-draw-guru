@@ -276,10 +276,10 @@ const HomepageIslandInner = () => {
           </h1>
 
           {/* MAIN AREA: 2-column on desktop */}
-          <div className="flex flex-col lg:flex-row xl:relative xl:block gap-6 xl:min-h-[760px] items-start">
+          <div className="flex flex-col lg:flex-row lg:justify-end gap-6 items-start">
 
-            {/* LEFT: Wheel zone — full width on xl so wheel is truly centered */}
-            <div className="lg:flex-1 xl:flex-none w-full flex flex-col items-center space-y-2">
+            {/* LEFT: Wheel zone — flex-none so it sizes to wheel width, group right-aligned = wheel near center */}
+            <div className="flex-none w-full lg:w-auto flex flex-col items-center space-y-2">
 
               {/* Wheel */}
               <SpinningWheel
@@ -415,8 +415,8 @@ const HomepageIslandInner = () => {
               )}
             </div>
 
-            {/* RIGHT: Entries / Results panel — absolute on xl so wheel is truly centered */}
-            <div className="w-full lg:w-80 xl:w-80 xl:absolute xl:right-0 xl:top-0 min-w-0 bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
+            {/* RIGHT: Entries / Results panel */}
+            <div className="w-full lg:w-80 min-w-0 bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
 
               {/* Tabs */}
               <div className="flex border-b border-border">
