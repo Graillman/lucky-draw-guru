@@ -116,6 +116,7 @@ const HomepageIslandInner = () => {
   const [hasInitialized, setHasInitialized] = useState(false);
   const [spinCount, setSpinCount] = useState(0);
   const [activeTab, setActiveTab] = useState<'entries' | 'results'>('entries');
+  const [showWinnerModal, setShowWinnerModal] = useState(false);
   const [wheelBgImage, setWheelBgImage] = useState<string | null>(null);
   const imgInputRef = useRef<HTMLInputElement>(null);
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -204,10 +205,23 @@ const HomepageIslandInner = () => {
     setIsSpinning(false);
     setSpinCount(increment());
     setWinnerHistory(prev => [selectedWinners, ...prev].slice(0, 20));
-    setActiveTab('results');
+    setShowWinnerModal(true);
     if (customizeConfig.launchConfetti) setShowConfetti(true);
     if (customizeConfig.resultSoundEnabled) playFanfare();
   }, [increment, playFanfare, customizeConfig.launchConfetti, customizeConfig.resultSoundEnabled]);
+
+  const handleCloseModal = useCallback(() => {
+    setShowWinnerModal(false);
+    setWinners([]);
+  }, []);
+
+  const handleRemoveFromModal = useCallback(() => {
+    if (winners.length > 0) {
+      setParticipants(participants.filter(p => !winners.includes(p.pseudo)));
+    }
+    setShowWinnerModal(false);
+    setWinners([]);
+  }, [winners, participants, setParticipants]);
 
   const handleRelaunch = useCallback(() => {
     setWinners([]);
@@ -244,6 +258,37 @@ const HomepageIslandInner = () => {
     <div className="relative min-h-screen overflow-hidden" style={{ background: "var(--gradient-bg)" }}>
       <Toaster position="top-center" richColors />
       <ConfettiEffect active={showConfetti} onComplete={() => setShowConfetti(false)} />
+
+      {/* Winner modal */}
+      {showWinnerModal && winners.length > 0 && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={handleCloseModal}>
+          <div className="bg-card rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden" onClick={e => e.stopPropagation()}>
+            <div className="bg-primary px-6 py-4">
+              <p className="text-primary-foreground font-bold text-lg text-center">{t.winnerModalTitle}</p>
+            </div>
+            <div className="px-6 py-10 text-center">
+              <p className="text-4xl font-bold text-foreground">{winners[0]}</p>
+            </div>
+            <div className="flex gap-3 px-6 pb-6">
+              <button
+                onClick={handleCloseModal}
+                className="flex-1 px-4 py-2.5 rounded-xl border border-border text-sm font-medium text-muted-foreground hover:bg-muted transition-colors"
+              >
+                {t.winnerModalClose}
+              </button>
+              {customizeConfig.showRemoveButton && participants.length > 2 && (
+                <button
+                  onClick={handleRemoveFromModal}
+                  className="flex-1 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
+                >
+                  {t.winnerModalRemove}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {showCustomize && (
         <CustomizePanel
           config={customizeConfig}
@@ -259,13 +304,6 @@ const HomepageIslandInner = () => {
       </div>
       <div className="relative z-10">
         <main className="max-w-7xl mx-auto px-4 pb-2 space-y-2">
-
-          {/* Winner banner — only shown when there's a result */}
-          {winners.length > 0 && !isSpinning && (
-            <h1 className="text-center font-bold leading-tight text-xl md:text-2xl text-primary transition-all duration-500">
-              🎉 {winners[0]}
-            </h1>
-          )}
 
           {/* MAIN AREA: 2-column on desktop */}
           <div className="flex flex-col lg:flex-row gap-4 items-start">
@@ -385,25 +423,10 @@ const HomepageIslandInner = () => {
               </div>
 
               {/* Spin button */}
-              {!isSpinning && winners.length === 0 && (
+              {!isSpinning && (
                 <div className="space-y-3">
                   <DrawButton onDraw={handleDraw} isSpinning={isSpinning} disabled={displayParticipants.length < 2} participantCount={displayParticipants.length} mode="simple" />
                   <MicroTrustIndicators mode="simple" />
-                </div>
-              )}
-
-              {/* Winner result */}
-              {winners.length > 0 && !isSpinning && (
-                <div className="space-y-4">
-                  <WinnerResult
-                    winners={winners}
-                    onRelaunch={handleRelaunch}
-                    onRemoveWinnersAndRespin={customizeConfig.showRemoveButton ? handleRemoveWinnersAndRespin : undefined}
-                    canRemoveWinners={participants.length > 2}
-                    drawTitle={drawTitle}
-                    mode="simple"
-                  />
-                  <NextToolSuggestion currentPath="/" mode="simple" />
                 </div>
               )}
             </div>

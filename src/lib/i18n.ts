@@ -418,6 +418,10 @@ export interface Translations {
   customizeShowRemoveDesc: string;
   customizeReset: string;
   customizeDone: string;
+  // Winner Modal
+  winnerModalTitle: string;
+  winnerModalClose: string;
+  winnerModalRemove: string;
 
   // Next Tool Suggestion
   nextToolTryAlso: string;
@@ -845,6 +849,9 @@ export const translations: Record<Language, Translations> = {
     customizeShowRemoveDesc: 'Display a button to remove the winner and spin again',
     customizeReset: 'Reset to defaults',
     customizeDone: 'Done',
+    winnerModalTitle: 'We have a winner!',
+    winnerModalClose: 'Close',
+    winnerModalRemove: 'Remove',
     nextToolTryAlso: 'Try also:',
     nextToolYesNo: 'Yes or No Wheel',
     nextToolTeam: 'Team Generator',
@@ -1258,6 +1265,9 @@ export const translations: Record<Language, Translations> = {
     customizeShowRemoveDesc: 'Muestra un botón para eliminar al ganador y girar de nuevo',
     customizeReset: 'Restablecer',
     customizeDone: 'Hecho',
+    winnerModalTitle: '¡Tenemos un ganador!',
+    winnerModalClose: 'Cerrar',
+    winnerModalRemove: 'Eliminar',
     nextToolTryAlso: 'Prueba también:',
     nextToolYesNo: 'Rueda Sí o No',
     nextToolTeam: 'Generador de equipos',
@@ -1670,6 +1680,9 @@ export const translations: Record<Language, Translations> = {
     customizeShowRemoveDesc: 'Affiche un bouton pour retirer le gagnant et relancer',
     customizeReset: 'Réinitialiser',
     customizeDone: 'Terminé',
+    winnerModalTitle: 'Nous avons un gagnant !',
+    winnerModalClose: 'Fermer',
+    winnerModalRemove: 'Retirer',
     nextToolTryAlso: 'Essayez aussi :',
     nextToolYesNo: 'Roue Oui ou Non',
     nextToolTeam: "Générateur d'équipes",
@@ -2082,6 +2095,9 @@ export const translations: Record<Language, Translations> = {
     customizeShowRemoveDesc: 'Zeigt eine Schaltfläche zum Entfernen des Gewinners und erneuten Drehen',
     customizeReset: 'Zurücksetzen',
     customizeDone: 'Fertig',
+    winnerModalTitle: 'Wir haben einen Gewinner!',
+    winnerModalClose: 'Schließen',
+    winnerModalRemove: 'Entfernen',
     nextToolTryAlso: 'Auch ausprobieren:',
     nextToolYesNo: 'Ja-oder-Nein-Rad',
     nextToolTeam: 'Team-Generator',
@@ -2494,6 +2510,9 @@ export const translations: Record<Language, Translations> = {
     customizeShowRemoveDesc: 'Exibe um botão para remover o vencedor e girar novamente',
     customizeReset: 'Redefinir',
     customizeDone: 'Concluído',
+    winnerModalTitle: 'Temos um vencedor!',
+    winnerModalClose: 'Fechar',
+    winnerModalRemove: 'Remover',
     nextToolTryAlso: 'Experimente também:',
     nextToolYesNo: 'Roda Sim ou Não',
     nextToolTeam: 'Gerador de equipes',
@@ -2906,6 +2925,9 @@ export const translations: Record<Language, Translations> = {
     customizeShowRemoveDesc: 'Mostra un pulsante per rimuovere il vincitore e girare di nuovo',
     customizeReset: 'Ripristina',
     customizeDone: 'Fatto',
+    winnerModalTitle: 'Abbiamo un vincitore!',
+    winnerModalClose: 'Chiudi',
+    winnerModalRemove: 'Rimuovi',
     nextToolTryAlso: 'Prova anche:',
     nextToolYesNo: 'Ruota Sì o No',
     nextToolTeam: 'Generatore di squadre',

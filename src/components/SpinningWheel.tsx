@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, useMemo } from "react";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { cryptoRandom } from "@/lib/cryptoRandom";
 
 interface Participant {
@@ -39,7 +38,6 @@ const DEFAULT_COLORS = [
 
 export function SpinningWheel({ participants, isSpinning, onComplete, mode, winnersCount, onSpin, onTick, colors, borderStyle = 'default', backgroundImage, size = 480, spinDuration = 11.5 }: SpinningWheelProps) {
   const COLORS = colors && colors.length > 0 ? colors : DEFAULT_COLORS;
-  const { t } = useLanguage();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [rotation, setRotation] = useState(0);
   const rotationRef = useRef(0); // Always up-to-date rotation (avoids stale closure)
@@ -483,11 +481,6 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
 
   return (
     <div className="flex flex-col items-center gap-4 py-8">
-      {isSpinning && (
-        <div className={`text-sm text-${colorClass} uppercase tracking-widest font-semibold animate-pulse`}>
-          {t.spinningText}
-        </div>
-      )}
       
       <div className="relative">
         {/* Animated glow effect */}
