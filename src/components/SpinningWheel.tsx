@@ -281,10 +281,27 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
 
     ctx.restore();
 
-    // Draw pointer (fixed, not rotating) - More elaborate design
+    // Determine which segment is under the pointer to color it accordingly
+    const rotMod = ((rotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+    const ptrInWheel = ((Math.PI * 2) - rotMod) % (Math.PI * 2);
+    let ptrSegIdx = segments.length - 1;
+    for (let i = 0; i < segments.length; i++) {
+      if (ptrInWheel >= segments[i].startAngle && ptrInWheel < segments[i].endAngle) {
+        ptrSegIdx = i;
+        break;
+      }
+    }
+    const segColor = segments[ptrSegIdx].color;
+    // Build light/dark variants from the HSL string for gradient
+    const hslM = segColor.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+    const ptrLight = hslM ? `hsl(${hslM[1]}, ${hslM[2]}%, ${Math.min(85, parseInt(hslM[3]) + 22)}%)` : segColor;
+    const ptrDark  = hslM ? `hsl(${hslM[1]}, ${hslM[2]}%, ${Math.max(15, parseInt(hslM[3]) - 15)}%)` : segColor;
+    const ptrStroke= hslM ? `hsl(${hslM[1]}, ${hslM[2]}%, ${Math.max(10, parseInt(hslM[3]) - 22)}%)` : segColor;
+
+    // Draw pointer (fixed, not rotating)
     const pointerHeight = 45;
     const pointerWidth = 28;
-    
+
     // Pointer shadow
     ctx.beginPath();
     ctx.moveTo(center - pointerWidth/2 + 2, 8);
@@ -293,13 +310,13 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     ctx.closePath();
     ctx.fillStyle = 'rgba(0,0,0,0.3)';
     ctx.fill();
-    
-    // Main pointer with gradient
+
+    // Main pointer with gradient using current segment's color
     const pointerGrad = ctx.createLinearGradient(center - pointerWidth/2, 0, center + pointerWidth/2, 0);
-    pointerGrad.addColorStop(0, themeColorDark);
-    pointerGrad.addColorStop(0.5, themeColorLight);
-    pointerGrad.addColorStop(1, themeColorDark);
-    
+    pointerGrad.addColorStop(0, ptrDark);
+    pointerGrad.addColorStop(0.5, ptrLight);
+    pointerGrad.addColorStop(1, ptrDark);
+
     ctx.beginPath();
     ctx.moveTo(center - pointerWidth/2, 5);
     ctx.lineTo(center + pointerWidth/2, 5);
@@ -307,10 +324,10 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     ctx.closePath();
     ctx.fillStyle = pointerGrad;
     ctx.fill();
-    ctx.strokeStyle = themeStroke;
+    ctx.strokeStyle = ptrStroke;
     ctx.lineWidth = 2;
     ctx.stroke();
-    
+
     // Pointer highlight
     ctx.beginPath();
     ctx.moveTo(center - pointerWidth/4, 10);
@@ -417,8 +434,8 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
       const elapsed = Date.now() - startTimeRef.current;
       const progress = Math.min(elapsed / duration, 1);
 
-      // Custom easing - starts fast, slows down very dramatically at end for suspense
-      const easeOut = 1 - Math.pow(1 - progress, 6);
+      // Custom easing - starts fast, slows down extremely at end for maximum suspense
+      const easeOut = 1 - Math.pow(1 - progress, 10);
       
       const newRotation = startRotation + totalRotation * easeOut;
       rotationRef.current = newRotation;
