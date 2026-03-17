@@ -1,12 +1,11 @@
-import React, { useState, useRef, useCallback } from 'react';
-
-interface SpinTheBottleProps {
-  lang?: 'en' | 'fr';
-}
+import React, { useState, useCallback } from 'react';
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const DEFAULTS = ['Alex', 'Jordan', 'Sam', 'Taylor', 'Morgan', 'Riley'];
 
-export default function SpinTheBottleIsland({ lang = 'en' }: SpinTheBottleProps) {
+function SpinTheBottleInner() {
+  const { t } = useLanguage();
   const [players, setPlayers] = useState<string[]>(DEFAULTS);
   const [newPlayer, setNewPlayer] = useState('');
   const [rotation, setRotation] = useState(0);
@@ -34,7 +33,7 @@ export default function SpinTheBottleIsland({ lang = 'en' }: SpinTheBottleProps)
 
     const rng = new Uint32Array(2);
     crypto.getRandomValues(rng);
-    const extraTurns = 4 + (rng[0] % 5); // 4–8 full rotations
+    const extraTurns = 4 + (rng[0] % 5);
     const finalSlice = rng[1] % players.length;
     const sliceAngle = 360 / players.length;
     const finalAngle = finalSlice * sliceAngle + sliceAngle / 2;
@@ -49,19 +48,7 @@ export default function SpinTheBottleIsland({ lang = 'en' }: SpinTheBottleProps)
     }, 4200);
   }, [isSpinning, players, rotation]);
 
-  const ui = {
-    title: lang === 'fr' ? 'Jeu de la Bouteille en Ligne' : 'Spin the Bottle',
-    addPlaceholder: lang === 'fr' ? 'Ajouter un joueur...' : 'Add a player...',
-    spinBtn: isSpinning
-      ? (lang === 'fr' ? '🍾 En cours...' : '🍾 Spinning...')
-      : (lang === 'fr' ? '🍾 Tourner la Bouteille' : '🍾 Spin the Bottle'),
-    players: lang === 'fr' ? 'Joueurs' : 'Players',
-    history: lang === 'fr' ? 'Historique' : 'History',
-    result: lang === 'fr' ? 'La bouteille désigne :' : 'The bottle chose:',
-    minPlayers: lang === 'fr' ? 'Ajoutez au moins 2 joueurs' : 'Add at least 2 players',
-  };
-
-  const RADIUS = 38; // % from center
+  const RADIUS = 38;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -69,13 +56,10 @@ export default function SpinTheBottleIsland({ lang = 'en' }: SpinTheBottleProps)
 
         {/* Game area */}
         <div className="flex flex-col items-center flex-1">
-          {/* Circle with players + bottle */}
           <div className="relative w-[380px] h-[380px] sm:w-[560px] sm:h-[560px] select-none">
 
-            {/* Dashed circle */}
             <div className="absolute inset-6 rounded-full border-2 border-dashed border-border" />
 
-            {/* Players around the circle */}
             {players.map((player, i) => {
               const angleDeg = (i * 360) / players.length - 90;
               const angleRad = (angleDeg * Math.PI) / 180;
@@ -98,7 +82,6 @@ export default function SpinTheBottleIsland({ lang = 'en' }: SpinTheBottleProps)
               );
             })}
 
-            {/* Bottle */}
             <div
               className="absolute top-1/2 left-1/2 cursor-pointer"
               style={{
@@ -107,18 +90,13 @@ export default function SpinTheBottleIsland({ lang = 'en' }: SpinTheBottleProps)
                 transformOrigin: 'center center',
               }}
               onClick={spin}
-              title={isSpinning ? '' : ui.spinBtn}
+              title={isSpinning ? '' : t.bottleSpin}
             >
               <svg width="260" height="260" viewBox="0 0 100 100" style={{ display: 'block' }}>
-                {/* Bottle pointer dot */}
                 <circle cx="50" cy="10" r="7" fill="#f59e0b" />
-                {/* Bottle neck */}
                 <rect x="44" y="16" width="12" height="22" rx="3" fill="url(#bottleGrad)" />
-                {/* Bottle body */}
                 <ellipse cx="50" cy="62" rx="16" ry="24" fill="url(#bottleGrad)" />
-                {/* Highlight */}
                 <ellipse cx="43" cy="58" rx="3.5" ry="12" fill="rgba(255,255,255,0.28)" transform="rotate(-8, 43, 58)" />
-                {/* Bottom oval */}
                 <ellipse cx="50" cy="84" rx="14" ry="4" fill="rgba(0,0,0,0.12)" />
                 <defs>
                   <linearGradient id="bottleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -130,19 +108,17 @@ export default function SpinTheBottleIsland({ lang = 'en' }: SpinTheBottleProps)
             </div>
           </div>
 
-          {/* Spin button */}
           <button
             onClick={spin}
             disabled={isSpinning || players.length < 2}
             className="mt-6 px-8 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-base hover:shadow-xl hover:scale-105 transition-all disabled:opacity-40 disabled:scale-100 disabled:cursor-not-allowed"
           >
-            {players.length < 2 ? ui.minPlayers : ui.spinBtn}
+            {players.length < 2 ? t.bottleMinPlayers : isSpinning ? t.bottleSpinning : t.bottleSpin}
           </button>
 
-          {/* Result */}
           {selectedPlayer && !isSpinning && (
             <div className="mt-4 text-center">
-              <p className="text-sm text-muted-foreground">{ui.result}</p>
+              <p className="text-sm text-muted-foreground">{t.bottleResult}</p>
               <p className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mt-1">
                 {selectedPlayer}
               </p>
@@ -154,14 +130,14 @@ export default function SpinTheBottleIsland({ lang = 'en' }: SpinTheBottleProps)
         <div className="w-full md:w-64 space-y-4">
 
           <div>
-            <h3 className="font-semibold mb-2 text-foreground">{ui.players} ({players.length}/20)</h3>
+            <h3 className="font-semibold mb-2 text-foreground">{t.bottlePlayers} ({players.length}/20)</h3>
             <div className="flex gap-2 mb-2">
               <input
                 type="text"
                 value={newPlayer}
                 onChange={e => setNewPlayer(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && addPlayer()}
-                placeholder={ui.addPlaceholder}
+                placeholder={t.bottleAddPlayer}
                 maxLength={20}
                 className="flex-1 px-3 py-2 rounded-lg border border-border bg-card text-sm text-foreground outline-none focus:ring-2 focus:ring-primary"
               />
@@ -197,8 +173,8 @@ export default function SpinTheBottleIsland({ lang = 'en' }: SpinTheBottleProps)
           {history.length > 0 && (
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h3 className="font-semibold text-sm text-foreground">{ui.history}</h3>
-                <button onClick={() => setHistory([])} className="text-xs text-muted-foreground/50 hover:text-destructive transition-colors">Clear</button>
+                <h3 className="font-semibold text-sm text-foreground">{t.bottleHistory}</h3>
+                <button onClick={() => setHistory([])} className="text-xs text-muted-foreground/50 hover:text-destructive transition-colors">{t.bottleClearHistory}</button>
               </div>
               <div className="space-y-1">
                 {history.map((name, i) => (
@@ -213,5 +189,13 @@ export default function SpinTheBottleIsland({ lang = 'en' }: SpinTheBottleProps)
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SpinTheBottleIsland() {
+  return (
+    <LanguageProvider>
+      <SpinTheBottleInner />
+    </LanguageProvider>
   );
 }

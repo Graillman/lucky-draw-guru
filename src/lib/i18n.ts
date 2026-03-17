@@ -163,6 +163,22 @@ export interface Translations {
   privacy: string;
   contact: string;
   mobileBanner: string;
+  localStorageSaved: string;
+  footerTools: string;
+  footerGiveaways: string;
+  footerResources: string;
+  footerTagline: string;
+  footerAllRights: string;
+
+  // Spin the Bottle
+  bottleAddPlayer: string;
+  bottleSpin: string;
+  bottleSpinning: string;
+  bottlePlayers: string;
+  bottleHistory: string;
+  bottleResult: string;
+  bottleMinPlayers: string;
+  bottleClearHistory: string;
   
   // FAQ Page
   faqTitle: string;
@@ -525,7 +541,21 @@ export const translations: Record<Language, Translations> = {
     privacy: 'Privacy',
     contact: 'Contact',
     mobileBanner: 'Mobile banner',
-    
+    localStorageSaved: 'Your list is saved locally in your browser.',
+    footerTools: 'Tools',
+    footerGiveaways: 'Giveaways',
+    footerResources: 'Resources',
+    footerTagline: '— Free Spin the Wheel Tool',
+    footerAllRights: 'All rights reserved.',
+    bottleAddPlayer: 'Add a player...',
+    bottleSpin: '🍾 Spin the Bottle',
+    bottleSpinning: '🍾 Spinning...',
+    bottlePlayers: 'Players',
+    bottleHistory: 'History',
+    bottleResult: 'The bottle chose:',
+    bottleMinPlayers: 'Add at least 2 players',
+    bottleClearHistory: 'Clear',
+
     // FAQ Page
     faqTitle: 'Frequently Asked Questions',
     faqSubtitle: 'Everything you need to know about our random picker tool',
@@ -890,7 +920,21 @@ export const translations: Record<Language, Translations> = {
     privacy: 'Privacidad',
     contact: 'Contacto',
     mobileBanner: 'Banner móvil',
-    
+    localStorageSaved: 'Tu lista está guardada localmente en tu navegador.',
+    footerTools: 'Herramientas',
+    footerGiveaways: 'Sorteos',
+    footerResources: 'Recursos',
+    footerTagline: '— Herramienta Gratuita de Ruleta',
+    footerAllRights: 'Todos los derechos reservados.',
+    bottleAddPlayer: 'Añadir jugador...',
+    bottleSpin: '🍾 Girar la Botella',
+    bottleSpinning: '🍾 Girando...',
+    bottlePlayers: 'Jugadores',
+    bottleHistory: 'Historial',
+    bottleResult: 'La botella elige:',
+    bottleMinPlayers: 'Añade al menos 2 jugadores',
+    bottleClearHistory: 'Borrar',
+
     // FAQ Page
     faqTitle: 'Preguntas Frecuentes',
     faqSubtitle: 'Todo lo que necesitas saber sobre nuestro selector aleatorio',
@@ -1254,7 +1298,21 @@ export const translations: Record<Language, Translations> = {
     privacy: 'Confidentialité',
     contact: 'Contact',
     mobileBanner: 'Bannière mobile',
-    
+    localStorageSaved: 'Votre liste est sauvegardée localement dans votre navigateur.',
+    footerTools: 'Outils',
+    footerGiveaways: 'Giveaways',
+    footerResources: 'Ressources',
+    footerTagline: '— Outil Gratuit de Roue',
+    footerAllRights: 'Tous droits réservés.',
+    bottleAddPlayer: 'Ajouter un joueur...',
+    bottleSpin: '🍾 Tourner la Bouteille',
+    bottleSpinning: '🍾 En cours...',
+    bottlePlayers: 'Joueurs',
+    bottleHistory: 'Historique',
+    bottleResult: 'La bouteille désigne :',
+    bottleMinPlayers: 'Ajoutez au moins 2 joueurs',
+    bottleClearHistory: 'Effacer',
+
     // FAQ Page
     faqTitle: 'Questions Fréquentes',
     faqSubtitle: 'Tout ce que vous devez savoir sur notre outil de tirage au sort',
@@ -1618,7 +1676,21 @@ export const translations: Record<Language, Translations> = {
     privacy: 'Datenschutz',
     contact: 'Kontakt',
     mobileBanner: 'Mobile Banner',
-    
+    localStorageSaved: 'Deine Liste wird lokal in deinem Browser gespeichert.',
+    footerTools: 'Tools',
+    footerGiveaways: 'Gewinnspiele',
+    footerResources: 'Ressourcen',
+    footerTagline: '— Kostenloses Drehrad-Tool',
+    footerAllRights: 'Alle Rechte vorbehalten.',
+    bottleAddPlayer: 'Spieler hinzufügen...',
+    bottleSpin: '🍾 Flasche drehen',
+    bottleSpinning: '🍾 Dreht...',
+    bottlePlayers: 'Spieler',
+    bottleHistory: 'Verlauf',
+    bottleResult: 'Die Flasche zeigt auf:',
+    bottleMinPlayers: 'Mindestens 2 Spieler hinzufügen',
+    bottleClearHistory: 'Löschen',
+
     // FAQ Page
     faqTitle: 'Häufig Gestellte Fragen',
     faqSubtitle: 'Alles, was Sie über unser Zufallsauswahl-Tool wissen müssen',
@@ -1982,7 +2054,21 @@ export const translations: Record<Language, Translations> = {
     privacy: 'Privacidade',
     contact: 'Contato',
     mobileBanner: 'Banner móvel',
-    
+    localStorageSaved: 'Sua lista está salva localmente no seu navegador.',
+    footerTools: 'Ferramentas',
+    footerGiveaways: 'Sorteios',
+    footerResources: 'Recursos',
+    footerTagline: '— Ferramenta Gratuita de Roleta',
+    footerAllRights: 'Todos os direitos reservados.',
+    bottleAddPlayer: 'Adicionar jogador...',
+    bottleSpin: '🍾 Girar a Garrafa',
+    bottleSpinning: '🍾 Girando...',
+    bottlePlayers: 'Jogadores',
+    bottleHistory: 'Histórico',
+    bottleResult: 'A garrafa aponta para:',
+    bottleMinPlayers: 'Adicione pelo menos 2 jogadores',
+    bottleClearHistory: 'Limpar',
+
     // FAQ Page
     faqTitle: 'Perguntas Frequentes',
     faqSubtitle: 'Tudo o que você precisa saber sobre nossa ferramenta de sorteio',
@@ -2346,7 +2432,21 @@ export const translations: Record<Language, Translations> = {
     privacy: 'Privacy',
     contact: 'Contatto',
     mobileBanner: 'Banner mobile',
-    
+    localStorageSaved: 'La tua lista è salvata localmente nel tuo browser.',
+    footerTools: 'Strumenti',
+    footerGiveaways: 'Giveaway',
+    footerResources: 'Risorse',
+    footerTagline: '— Strumento Gratuito per la Ruota',
+    footerAllRights: 'Tutti i diritti riservati.',
+    bottleAddPlayer: 'Aggiungi giocatore...',
+    bottleSpin: '🍾 Gira la Bottiglia',
+    bottleSpinning: '🍾 Girando...',
+    bottlePlayers: 'Giocatori',
+    bottleHistory: 'Cronologia',
+    bottleResult: 'La bottiglia indica:',
+    bottleMinPlayers: 'Aggiungi almeno 2 giocatori',
+    bottleClearHistory: 'Cancella',
+
     // FAQ Page
     faqTitle: 'Domande Frequenti',
     faqSubtitle: 'Tutto quello che devi sapere sul nostro strumento di estrazione casuale',

@@ -1,3 +1,6 @@
+import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
+import { Language } from "@/lib/i18n";
+
 const WheelLogoSmall = () => (
   <svg width="18" height="18" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <path d="M14 14 L14 2 A12 12 0 0 1 22.39 6 Z" fill="#e53e3e"/>
@@ -15,21 +18,53 @@ const WheelLogoSmall = () => (
   </svg>
 );
 
-const GlobalFooterIsland = () => {
+// Localized pages column per language
+const LOCAL_LINKS: Record<Language, { title: string; links: { href: string; label: string }[] }> = {
+  en: { title: 'En Français', links: [
+    { href: '/tirage-au-sort', label: 'Tirage au sort' },
+    { href: '/roue-des-noms', label: 'Roue des noms' },
+    { href: '/tirage-aleatoire', label: 'Tirage aléatoire' },
+  ]},
+  fr: { title: 'En Français', links: [
+    { href: '/tirage-au-sort', label: 'Tirage au sort' },
+    { href: '/roue-des-noms', label: 'Roue des noms' },
+    { href: '/tirage-aleatoire', label: 'Tirage aléatoire' },
+  ]},
+  de: { title: 'Auf Deutsch', links: [
+    { href: '/zufallsgenerator', label: 'Zufallsgenerator' },
+    { href: '/namenrad', label: 'Namenrad' },
+  ]},
+  es: { title: 'En Español', links: [
+    { href: '/sorteo-online', label: 'Sorteo online' },
+    { href: '/rueda-de-la-suerte', label: 'Rueda de la suerte' },
+    { href: '/generador-de-nombres', label: 'Generador de nombres' },
+  ]},
+  pt: { title: 'Em Português', links: [
+    { href: '/sorteio-online', label: 'Sorteio online' },
+    { href: '/roleta-de-nomes', label: 'Roleta de nomes' },
+  ]},
+  it: { title: 'In Italiano', links: [
+    { href: '/sorteggio-online', label: 'Sorteggio online' },
+    { href: '/ruota-dei-nomi', label: 'Ruota dei nomi' },
+  ]},
+};
+
+const GlobalFooterInner = () => {
+  const { t, language } = useLanguage();
+  const localCol = LOCAL_LINKS[language];
+
   return (
     <footer className="border-t border-border bg-card/50 mt-12">
-      {/* Mobile sticky ad banner — activated when AdSense approved */}
-
       <div className="max-w-6xl mx-auto px-4 py-10">
         <div className="flex items-center gap-2 mb-8">
           <WheelLogoSmall />
           <span className="font-bold text-foreground">Real Wheel Picker</span>
-          <span className="text-muted-foreground text-sm">— Free Spin the Wheel Tool</span>
+          <span className="text-muted-foreground text-sm">{t.footerTagline}</span>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           <div className="space-y-3">
-            <h4 className="font-semibold text-sm text-foreground">Tools</h4>
+            <h4 className="font-semibold text-sm text-foreground">{t.footerTools}</h4>
             <nav className="flex flex-col gap-1.5 text-xs text-muted-foreground">
               <a href="/" className="hover:text-primary transition-colors">Spin the Wheel</a>
               <a href="/yes-or-no-wheel" className="hover:text-primary transition-colors">Yes or No Wheel</a>
@@ -45,7 +80,7 @@ const GlobalFooterIsland = () => {
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-semibold text-sm text-foreground">Giveaways</h4>
+            <h4 className="font-semibold text-sm text-foreground">{t.footerGiveaways}</h4>
             <nav className="flex flex-col gap-1.5 text-xs text-muted-foreground">
               <a href="/giveaway-picker" className="hover:text-primary transition-colors">Instagram</a>
               <a href="/tiktok-giveaway-picker" className="hover:text-primary transition-colors">TikTok</a>
@@ -60,34 +95,40 @@ const GlobalFooterIsland = () => {
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-semibold text-sm text-foreground">Resources</h4>
+            <h4 className="font-semibold text-sm text-foreground">{t.footerResources}</h4>
             <nav className="flex flex-col gap-1.5 text-xs text-muted-foreground">
-              <a href="/blog" className="hover:text-primary transition-colors">Blog</a>
+              <a href="/blog" className="hover:text-primary transition-colors">{t.navBlog}</a>
               <a href="/embed" className="hover:text-primary transition-colors">Embed Widget</a>
-              <a href="/about" className="hover:text-primary transition-colors">About</a>
-              <a href="/contact" className="hover:text-primary transition-colors">Contact</a>
+              <a href="/about" className="hover:text-primary transition-colors">{t.navAbout}</a>
+              <a href="/contact" className="hover:text-primary transition-colors">{t.contact}</a>
               <a href="/faq" className="hover:text-primary transition-colors">FAQ</a>
-              <a href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</a>
+              <a href="/privacy-policy" className="hover:text-primary transition-colors">{t.privacy}</a>
               <a href="/terms-of-service" className="hover:text-primary transition-colors">Terms of Service</a>
             </nav>
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-semibold text-sm text-foreground">En Français</h4>
+            <h4 className="font-semibold text-sm text-foreground">{localCol.title}</h4>
             <nav className="flex flex-col gap-1.5 text-xs text-muted-foreground">
-              <a href="/tirage-au-sort" className="hover:text-primary transition-colors">Tirage au sort</a>
-              <a href="/roue-des-noms" className="hover:text-primary transition-colors">Roue des noms</a>
-              <a href="/tirage-aleatoire" className="hover:text-primary transition-colors">Tirage aléatoire</a>
+              {localCol.links.map(({ href, label }) => (
+                <a key={href} href={href} className="hover:text-primary transition-colors">{label}</a>
+              ))}
             </nav>
           </div>
         </div>
 
         <div className="border-t border-border pt-6 text-center text-xs text-muted-foreground">
-          <span>© {new Date().getFullYear()} Real Wheel Picker. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} Real Wheel Picker. {t.footerAllRights}</span>
         </div>
       </div>
     </footer>
   );
 };
+
+const GlobalFooterIsland = () => (
+  <LanguageProvider>
+    <GlobalFooterInner />
+  </LanguageProvider>
+);
 
 export default GlobalFooterIsland;

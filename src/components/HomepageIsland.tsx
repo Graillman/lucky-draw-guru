@@ -260,16 +260,10 @@ const HomepageIslandInner = () => {
       <div className="relative z-10">
         <main className="max-w-7xl mx-auto px-4 pb-2 space-y-2">
 
-          {/* Page title — only shown while spinning or when there's a winner */}
-          {(isSpinning || (winners.length > 0 && !isSpinning)) && (
-            <h1 className={`text-center font-bold leading-tight transition-all duration-500 ${
-              winners.length > 0 && !isSpinning
-                ? 'text-xl md:text-2xl text-primary'
-                : 'text-base md:text-lg text-muted-foreground animate-pulse'
-            }`}>
-              {winners.length > 0 && !isSpinning
-                ? `🎉 ${winners[0]}`
-                : t.spinningText}
+          {/* Winner banner — only shown when there's a result */}
+          {winners.length > 0 && !isSpinning && (
+            <h1 className="text-center font-bold leading-tight text-xl md:text-2xl text-primary transition-all duration-500">
+              🎉 {winners[0]}
             </h1>
           )}
 
