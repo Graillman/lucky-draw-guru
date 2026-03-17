@@ -359,35 +359,44 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
 
     setIsAnimating(true);
     startTimeRef.current = Date.now();
-    
-    // First, randomly select a winner based on weights
-    const totalWeight = segments.reduce((sum, s) => sum + s.weight, 0);
-    const random = cryptoRandom() * totalWeight;
-    let cumulative = 0;
-    let winnerIndex = 0;
-    
+
+    // Pick a random final rotation — winner is determined FROM the final angle,
+    // guaranteeing the pointer always matches the announced result.
+    const currentRotation = rotationRef.current;
+    const spins = 6 + cryptoRandom() * 4; // 6-10 full spins
+    const randomAngle = cryptoRandom() * Math.PI * 2;
+    const totalRotation = spins * Math.PI * 2 + randomAngle;
+    const finalRotation = currentRotation + totalRotation;
+
+    // Determine which segment is under the pointer at the final rotation.
+    // After rotation R, a wheel-space angle θ sits at canvas angle θ - π/2 + R.
+    // Pointer is at canvas angle -π/2, so the segment under the pointer satisfies:
+    //   θ - π/2 + R ≡ -π/2  →  θ ≡ -R  →  θ = (2π - (R mod 2π)) mod 2π
+    const finalRotMod = ((finalRotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+    const pointerInWheelSpace = ((Math.PI * 2) - finalRotMod) % (Math.PI * 2);
+
+    let winnerIndex = segments.length - 1;
     for (let i = 0; i < segments.length; i++) {
-      cumulative += segments[i].weight;
-      if (random <= cumulative) {
+      if (pointerInWheelSpace >= segments[i].startAngle && pointerInWheelSpace < segments[i].endAngle) {
         winnerIndex = i;
         break;
       }
     }
-    
+
     const winner = segments[winnerIndex];
     selectedWinnersRef.current = [winner.pseudo];
-    
-    // Handle multiple winners
+
+    // Handle multiple winners (additional picks by weight, separate from the wheel spin)
     if (winnersCount > 1) {
       const additionalWinners: string[] = [];
       const availableIndices = segments.map((_, i) => i).filter(i => i !== winnerIndex);
-      
+
       for (let i = 1; i < winnersCount && availableIndices.length > 0; i++) {
         const availableSegments = availableIndices.map(idx => segments[idx]);
         const availableTotalWeight = availableSegments.reduce((sum, s) => sum + s.weight, 0);
         const rand = cryptoRandom() * availableTotalWeight;
         let cum = 0;
-        
+
         for (let j = 0; j < availableSegments.length; j++) {
           cum += availableSegments[j].weight;
           if (rand <= cum) {
@@ -399,24 +408,8 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
       }
       selectedWinnersRef.current = [winner.pseudo, ...additionalWinners];
     }
-    
-    // Calculate the angle where the winner segment is at the top (under the pointer)
-    // Use rotationRef.current (always fresh) to avoid any stale-closure mismatch
-    const currentRotation = rotationRef.current;
-    const winnerMidAngle = (winner.startAngle + winner.endAngle) / 2;
 
-    // The pointer points straight up from center. Segments are drawn with -π/2 offset.
-    // For winner's midpoint to sit under the pointer at rotation=R:
-    //   winnerMidAngle - π/2 + R ≡ -π/2  →  R ≡ -winnerMidAngle ≡ 2π - winnerMidAngle
-    const spins = 6 + cryptoRandom() * 4; // 6-10 full spins
-    const baseRotation = currentRotation % (Math.PI * 2);
-    const targetAngleForWinner = (Math.PI * 2) - winnerMidAngle;
-    // Ensure we always spin forward: if additionalRotation would be negative, add 2π
-    let additionalRotation = targetAngleForWinner - baseRotation;
-    if (additionalRotation < 0) additionalRotation += Math.PI * 2;
-    const totalRotation = spins * Math.PI * 2 + additionalRotation;
-
-    const duration = 5000; // 5 seconds for more suspense
+    const duration = 5000;
     const startRotation = currentRotation;
 
     const animate = () => {
