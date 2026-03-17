@@ -40,6 +40,7 @@ export function LanguageSelector({ mode = "simple" }: LanguageSelectorProps) {
       <DropdownMenuTrigger asChild>
         <button className="flex items-center gap-1 px-2 py-1.5 text-sm rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
           <span className="text-base leading-none">{languageFlags[language]}</span>
+          <span className="text-xs font-semibold uppercase">{language}</span>
           <ChevronDown className="w-3 h-3" />
         </button>
       </DropdownMenuTrigger>

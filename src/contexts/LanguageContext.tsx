@@ -33,13 +33,8 @@ const detectBrowserLanguage = (): Language => {
 export function LanguageProvider({ children }: LanguageProviderProps) {
   const [language, setLanguageState] = useState<Language>(() => {
     if (typeof window !== 'undefined') {
-      // Always use saved language (whether chosen by user or previously auto-detected)
-      const saved = localStorage.getItem('language') as Language;
-      if (saved && translations[saved]) return saved;
-      // First visit: auto-detect and save so next visit uses same language
-      const detected = detectBrowserLanguage();
-      try { localStorage.setItem('language', detected); } catch (_) {}
-      return detected;
+      // Always use browser language — never remember previous choice
+      return detectBrowserLanguage();
     }
     return 'en';
   });
@@ -61,7 +56,7 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
 
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem('language', lang);
+    // No localStorage save — language always follows browser preference on reload
     document.documentElement.lang = lang;
     // Broadcast to all other Astro islands so they sync immediately
     window.dispatchEvent(new CustomEvent(LANG_EVENT, { detail: lang }));

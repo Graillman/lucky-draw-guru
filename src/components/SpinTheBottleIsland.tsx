@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
-const DEFAULTS = ['Alex', 'Jordan', 'Sam', 'Taylor', 'Morgan', 'Riley'];
+const DEFAULTS = ['Alice', 'Emma', 'Louis', 'Hugo', 'Sophie', 'Lucas'];
 
 function SpinTheBottleInner() {
   const { t } = useLanguage();
