@@ -228,12 +228,13 @@ const HomepageIslandInner = () => {
       <div className="relative min-h-screen overflow-hidden" style={{ background: "var(--gradient-bg)" }}>
         <Toaster position="top-center" richColors />
         <div className="relative z-10">
-          <main className="max-w-6xl mx-auto px-4 py-2">
+          <main className="max-w-7xl mx-auto px-4 py-2">
             <div className="animate-pulse space-y-4 pt-8">
               <div className="h-8 bg-muted rounded-lg w-64 mx-auto" />
               <div className="h-4 bg-muted rounded w-48 mx-auto" />
             </div>
           </main>
+
         </div>
       </div>
     );
@@ -257,7 +258,7 @@ const HomepageIslandInner = () => {
         <div className="aurora-orb aurora-orb-blue" />
       </div>
       <div className="relative z-10">
-        <main className="max-w-6xl mx-auto px-4 py-2 space-y-4">
+        <main className="max-w-7xl mx-auto px-4 py-2 space-y-4">
 
           {/* Page title — dynamic call-to-action above the wheel */}
           <h1 className={`text-center font-bold leading-tight pt-1 transition-all duration-500 ${
@@ -275,10 +276,10 @@ const HomepageIslandInner = () => {
           </h1>
 
           {/* MAIN AREA: 2-column on desktop */}
-          <div className="flex flex-col lg:flex-row gap-6 items-start">
+          <div className="flex flex-col lg:flex-row xl:relative xl:block gap-6 xl:min-h-[760px] items-start">
 
-            {/* LEFT: Wheel zone — flex-1 so it takes remaining space and centers the wheel */}
-            <div className="flex-1 w-full flex flex-col items-center space-y-2">
+            {/* LEFT: Wheel zone — full width on xl so wheel is truly centered */}
+            <div className="lg:flex-1 xl:flex-none w-full flex flex-col items-center space-y-2">
 
               {/* Wheel */}
               <SpinningWheel
@@ -414,8 +415,8 @@ const HomepageIslandInner = () => {
               )}
             </div>
 
-            {/* RIGHT: Entries / Results panel — fixed width to keep wheel centered */}
-            <div className="w-full lg:w-80 xl:w-96 min-w-0 bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
+            {/* RIGHT: Entries / Results panel — absolute on xl so wheel is truly centered */}
+            <div className="w-full lg:w-80 xl:w-80 xl:absolute xl:right-0 xl:top-0 min-w-0 bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
 
               {/* Tabs */}
               <div className="flex border-b border-border">
