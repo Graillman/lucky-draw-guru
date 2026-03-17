@@ -15,7 +15,6 @@ interface LanguageProviderProps {
 }
 
 const LANG_EVENT = 'rwp:langChange';
-const LANG_CHOSEN_KEY = 'rwp_lang_chosen';
 
 // Detect browser language and map to supported languages
 const detectBrowserLanguage = (): Language => {
@@ -34,14 +33,13 @@ const detectBrowserLanguage = (): Language => {
 export function LanguageProvider({ children }: LanguageProviderProps) {
   const [language, setLanguageState] = useState<Language>(() => {
     if (typeof window !== 'undefined') {
-      // Only use saved language if user explicitly chose it (not auto-detected)
-      const wasChosen = localStorage.getItem(LANG_CHOSEN_KEY) === '1';
-      if (wasChosen) {
-        const saved = localStorage.getItem('language') as Language;
-        if (saved && translations[saved]) return saved;
-      }
-      // Auto-detect from browser
-      return detectBrowserLanguage();
+      // Always use saved language (whether chosen by user or previously auto-detected)
+      const saved = localStorage.getItem('language') as Language;
+      if (saved && translations[saved]) return saved;
+      // First visit: auto-detect and save so next visit uses same language
+      const detected = detectBrowserLanguage();
+      try { localStorage.setItem('language', detected); } catch (_) {}
+      return detected;
     }
     return 'en';
   });
@@ -64,7 +62,6 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem('language', lang);
-    localStorage.setItem(LANG_CHOSEN_KEY, '1');
     document.documentElement.lang = lang;
     // Broadcast to all other Astro islands so they sync immediately
     window.dispatchEvent(new CustomEvent(LANG_EVENT, { detail: lang }));
