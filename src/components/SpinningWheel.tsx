@@ -436,8 +436,8 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
 
       // Physics-based easing: exponential velocity decay (friction model)
       // v(t) = v0 * e^(-k*t)  →  position = (1 - e^(-k*p)) / (1 - e^(-k))
-      // k=5 gives fast start + extremely slow, realistic creep at the end
-      const k = 5;
+      // k=10: velocity at end ≈ 0.0005 (near-zero → smooth natural stop, no abrupt cut)
+      const k = 10;
       const easeOut = (1 - Math.exp(-k * progress)) / (1 - Math.exp(-k));
       
       const newRotation = startRotation + totalRotation * easeOut;
