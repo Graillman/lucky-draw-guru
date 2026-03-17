@@ -435,7 +435,7 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
       const progress = Math.min(elapsed / duration, 1);
 
       // Custom easing - starts fast, slows down extremely at end for maximum suspense
-      const easeOut = 1 - Math.pow(1 - progress, 10);
+      const easeOut = 1 - Math.pow(1 - progress, 16);
       
       const newRotation = startRotation + totalRotation * easeOut;
       rotationRef.current = newRotation;
