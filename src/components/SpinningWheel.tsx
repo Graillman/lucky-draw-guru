@@ -37,7 +37,7 @@ const DEFAULT_COLORS = [
   'hsl(0, 75%, 55%)',    // Crimson
 ];
 
-export function SpinningWheel({ participants, isSpinning, onComplete, mode, winnersCount, onSpin, onTick, colors, borderStyle = 'default', backgroundImage, size = 480, spinDuration = 5 }: SpinningWheelProps) {
+export function SpinningWheel({ participants, isSpinning, onComplete, mode, winnersCount, onSpin, onTick, colors, borderStyle = 'default', backgroundImage, size = 480, spinDuration = 8 }: SpinningWheelProps) {
   const COLORS = colors && colors.length > 0 ? colors : DEFAULT_COLORS;
   const { t } = useLanguage();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -434,8 +434,11 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
       const elapsed = Date.now() - startTimeRef.current;
       const progress = Math.min(elapsed / duration, 1);
 
-      // Custom easing - starts fast, slows down extremely at end for maximum suspense
-      const easeOut = 1 - Math.pow(1 - progress, 16);
+      // Physics-based easing: exponential velocity decay (friction model)
+      // v(t) = v0 * e^(-k*t)  →  position = (1 - e^(-k*p)) / (1 - e^(-k))
+      // k=5 gives fast start + extremely slow, realistic creep at the end
+      const k = 5;
+      const easeOut = (1 - Math.exp(-k * progress)) / (1 - Math.exp(-k));
       
       const newRotation = startRotation + totalRotation * easeOut;
       rotationRef.current = newRotation;
