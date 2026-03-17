@@ -37,7 +37,8 @@ export function useCustomizeConfig(): [CustomizeConfig, (c: CustomizeConfig) => 
   const [config, setConfigState] = useState<CustomizeConfig>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) return { ...DEFAULT_CONFIG, ...JSON.parse(saved) };
+      // Always reset theme to default on each page load — user can change it in session
+      if (saved) return { ...DEFAULT_CONFIG, ...JSON.parse(saved), theme: DEFAULT_CONFIG.theme };
     } catch {}
     return DEFAULT_CONFIG;
   });

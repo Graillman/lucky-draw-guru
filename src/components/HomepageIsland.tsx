@@ -228,8 +228,8 @@ const HomepageIslandInner = () => {
       <div className="relative min-h-screen overflow-hidden" style={{ background: "var(--gradient-bg)" }}>
         <Toaster position="top-center" richColors />
         <div className="relative z-10">
-          <main className="max-w-7xl mx-auto px-4 py-2">
-            <div className="animate-pulse space-y-4 pt-8">
+          <main className="max-w-7xl mx-auto px-4 pb-2">
+            <div className="animate-pulse space-y-4 pt-4">
               <div className="h-8 bg-muted rounded-lg w-64 mx-auto" />
               <div className="h-4 bg-muted rounded w-48 mx-auto" />
             </div>
@@ -258,22 +258,20 @@ const HomepageIslandInner = () => {
         <div className="aurora-orb aurora-orb-blue" />
       </div>
       <div className="relative z-10">
-        <main className="max-w-7xl mx-auto px-4 py-2 space-y-4">
+        <main className="max-w-7xl mx-auto px-4 pb-2 space-y-2">
 
-          {/* Page title — dynamic call-to-action above the wheel */}
-          <h1 className={`text-center font-bold leading-tight pt-1 transition-all duration-500 ${
-            winners.length > 0 && !isSpinning
-              ? 'text-xl md:text-2xl text-primary'
-              : isSpinning
-                ? 'text-base md:text-lg text-muted-foreground animate-pulse'
-                : 'text-lg md:text-2xl text-foreground'
-          }`}>
-            {winners.length > 0 && !isSpinning
-              ? `🎉 ${winners[0]}`
-              : isSpinning
-                ? t.spinningText
-                : t.tapToSpin}
-          </h1>
+          {/* Page title — only shown while spinning or when there's a winner */}
+          {(isSpinning || (winners.length > 0 && !isSpinning)) && (
+            <h1 className={`text-center font-bold leading-tight transition-all duration-500 ${
+              winners.length > 0 && !isSpinning
+                ? 'text-xl md:text-2xl text-primary'
+                : 'text-base md:text-lg text-muted-foreground animate-pulse'
+            }`}>
+              {winners.length > 0 && !isSpinning
+                ? `🎉 ${winners[0]}`
+                : t.spinningText}
+            </h1>
+          )}
 
           {/* MAIN AREA: 2-column on desktop */}
           <div className="flex flex-col lg:flex-row gap-4 items-start">
@@ -362,7 +360,7 @@ const HomepageIslandInner = () => {
                       onClick={() => setEditingTitle(true)}
                       className={`group flex items-center gap-2 text-lg md:text-xl font-bold transition-colors ${drawTitle ? "text-primary" : "text-muted-foreground/40 hover:text-muted-foreground"}`}
                     >
-                      <span>{drawTitle || t.tapToSpin}</span>
+                      <span>{drawTitle || t.drawTitlePlaceholder}</span>
                       <Edit3 className="w-4 h-4 opacity-0 group-hover:opacity-60 transition-opacity" />
                     </button>
                   </div>

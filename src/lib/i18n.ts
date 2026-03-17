@@ -231,7 +231,10 @@ export interface Translations {
   navGuide: string;
   navFaq: string;
   navAbout: string;
-  
+  navBlog: string;
+  navGallery: string;
+  navFullscreen: string;
+
   // Instagram Giveaway Page
   igTitle: string;
   igSubtitle: string;
@@ -590,7 +593,10 @@ export const translations: Record<Language, Translations> = {
     navGuide: 'Guide',
     navFaq: 'FAQ',
     navAbout: 'About Us',
-    
+    navBlog: 'Blog',
+    navGallery: 'Gallery',
+    navFullscreen: 'Fullscreen',
+
     // Instagram Giveaway Page
     igTitle: 'Instagram Giveaway Picker',
     igSubtitle: 'Pick giveaway winners from Instagram comments fairly. Show your followers the transparent spin.',
@@ -952,7 +958,10 @@ export const translations: Record<Language, Translations> = {
     navGuide: 'Guía',
     navFaq: 'FAQ',
     navAbout: 'Sobre Nosotros',
-    
+    navBlog: 'Blog',
+    navGallery: 'Galería',
+    navFullscreen: 'Pantalla completa',
+
     // Instagram Giveaway Page
     igTitle: 'Selector de Sorteos de Instagram',
     igSubtitle: 'Elige ganadores de sorteos de los comentarios de Instagram de forma justa. Muestra a tus seguidores el giro transparente.',
@@ -1313,7 +1322,10 @@ export const translations: Record<Language, Translations> = {
     navGuide: 'Guide',
     navFaq: 'FAQ',
     navAbout: 'À Propos de Nous',
-    
+    navBlog: 'Blog',
+    navGallery: 'Galerie',
+    navFullscreen: 'Plein écran',
+
     // Instagram Giveaway Page
     igTitle: 'Sélecteur de Giveaway Instagram',
     igSubtitle: 'Choisissez les gagnants de vos giveaways Instagram équitablement. Montrez le tirage transparent à vos abonnés.',
@@ -1674,7 +1686,10 @@ export const translations: Record<Language, Translations> = {
     navGuide: 'Anleitung',
     navFaq: 'FAQ',
     navAbout: 'Über Uns',
-    
+    navBlog: 'Blog',
+    navGallery: 'Galerie',
+    navFullscreen: 'Vollbild',
+
     // Instagram Giveaway Page
     igTitle: 'Instagram Gewinnspiel-Picker',
     igSubtitle: 'Wähle Gewinner aus Instagram-Kommentaren fair aus. Zeige deinen Followern die transparente Ziehung.',
@@ -2035,7 +2050,10 @@ export const translations: Record<Language, Translations> = {
     navGuide: 'Guia',
     navFaq: 'FAQ',
     navAbout: 'Sobre Nós',
-    
+    navBlog: 'Blog',
+    navGallery: 'Galeria',
+    navFullscreen: 'Tela cheia',
+
     // Instagram Giveaway Page
     igTitle: 'Seletor de Sorteios do Instagram',
     igSubtitle: 'Escolha vencedores de sorteios dos comentários do Instagram de forma justa. Mostre aos seus seguidores o sorteio transparente.',
@@ -2396,7 +2414,10 @@ export const translations: Record<Language, Translations> = {
     navGuide: 'Guida',
     navFaq: 'FAQ',
     navAbout: 'Chi Siamo',
-    
+    navBlog: 'Blog',
+    navGallery: 'Galleria',
+    navFullscreen: 'Schermo intero',
+
     // Instagram Giveaway Page
     igTitle: 'Selettore di Giveaway Instagram',
     igSubtitle: 'Scegli i vincitori dei giveaway dai commenti Instagram in modo equo. Mostra ai tuoi follower l\'estrazione trasparente.',

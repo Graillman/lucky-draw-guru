@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { ChevronDown, Share2, Sun, Moon } from "lucide-react";
+import { ChevronDown, Share2, Sun, Moon, Maximize2, Minimize2 } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
-import { LanguageProvider } from "@/contexts/LanguageContext";
+import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
 
 const WheelLogo = () => (
   <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -35,9 +35,11 @@ const toolLinks = [
 ];
 
 const HeaderIsland = () => {
+  const { t } = useLanguage();
   const [toolsOpen, setToolsOpen] = useState(false);
   const [pathname, setPathname] = useState("");
   const [isDark, setIsDark] = useState(false);
+  const [isFs, setIsFs] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -56,8 +58,20 @@ const HeaderIsland = () => {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    const handleFsChange = () => setIsFs(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", handleFsChange);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("fullscreenchange", handleFsChange);
+    };
   }, []);
+
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen().catch(() => {});
+  };
 
   const toggleTheme = () => {
     const next = !isDark;
@@ -96,7 +110,7 @@ const HeaderIsland = () => {
               isActive("/") ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            Home
+            {t.navHome}
           </a>
 
           <div ref={dropdownRef} className="relative">
@@ -106,7 +120,7 @@ const HeaderIsland = () => {
                 toolsOpen ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              Tools
+              {t.navExploreTools}
               <ChevronDown className={`w-4 h-4 transition-transform ${toolsOpen ? "rotate-180" : ""}`} />
             </button>
             {toolsOpen && (
@@ -135,7 +149,7 @@ const HeaderIsland = () => {
               isActive("/blog") ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            Blog
+            {t.navBlog}
           </a>
 
           <a
@@ -144,7 +158,7 @@ const HeaderIsland = () => {
               isActive("/gallery") ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            Gallery
+            {t.navGallery}
           </a>
 
           <a
@@ -153,7 +167,7 @@ const HeaderIsland = () => {
               isActive("/about") ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            About
+            {t.navAbout}
           </a>
 
           <a
@@ -162,8 +176,17 @@ const HeaderIsland = () => {
               isActive("/contact") ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            Contact
+            {t.contact}
           </a>
+
+          <button
+            onClick={toggleFullscreen}
+            className="hidden md:flex items-center gap-1 px-3 py-1.5 rounded-md transition-colors text-muted-foreground hover:text-foreground"
+            title={t.navFullscreen}
+          >
+            {isFs ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            <span>{t.navFullscreen}</span>
+          </button>
         </nav>
 
         <div className="flex items-center gap-2 shrink-0">
