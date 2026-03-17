@@ -364,7 +364,7 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     // Pick a random final rotation — winner is determined FROM the final angle,
     // guaranteeing the pointer always matches the announced result.
     const currentRotation = rotationRef.current;
-    const spins = 6 + cryptoRandom() * 4; // 6-10 full spins
+    const spins = 3 + cryptoRandom() * 2; // 3-5 full spins — less frantic, more suspense at end
     const randomAngle = cryptoRandom() * Math.PI * 2;
     const totalRotation = spins * Math.PI * 2 + randomAngle;
     const finalRotation = currentRotation + totalRotation;

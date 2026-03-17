@@ -8,17 +8,20 @@ type SoundProfile = {
   gainPeak: number;
   decay: number;
   noisy?: boolean;
+  noiseGain?: number;    // gain of noise burst (default 0.15)
+  noiseFilter?: number;  // bandpass filter Hz for noise (makes it plastic/wood)
 };
 
 const SOUND_PROFILES: Record<string, SoundProfile> = {
-  click:  { type: "sawtooth", freq: 220,  gainPeak: 0.18, decay: 0.06, noisy: true },
-  tick:   { type: "triangle", freq: 600,  gainPeak: 0.12, decay: 0.05 },
-  wood:   { type: "sine",     freq: 160,  gainPeak: 0.20, decay: 0.08, noisy: true },
-  ping:   { type: "sine",     freq: 1200, gainPeak: 0.10, decay: 0.12 },
-  casino: { type: "sawtooth", freq: 350,  gainPeak: 0.14, decay: 0.06, noisy: true },
-  deep:   { type: "sine",     freq: 70,   gainPeak: 0.25, decay: 0.12, noisy: true },
-  soft:   { type: "sine",     freq: 320,  gainPeak: 0.07, decay: 0.09 },
-  spring: { type: "triangle", freq: 380,  freq2: 520, gainPeak: 0.13, decay: 0.07 },
+  // Realistic plastic/wood ratchet: mostly bandpass noise, barely any tone
+  click:  { type: "sine", freq: 180, gainPeak: 0.02, decay: 0.04, noisy: true, noiseGain: 0.22, noiseFilter: 550 },
+  tick:   { type: "triangle", freq: 400, gainPeak: 0.06, decay: 0.05, noisy: true, noiseGain: 0.10, noiseFilter: 700 },
+  wood:   { type: "sine",     freq: 120, gainPeak: 0.03, decay: 0.07, noisy: true, noiseGain: 0.28, noiseFilter: 350 },
+  ping:   { type: "sine",     freq: 900, gainPeak: 0.08, decay: 0.12 },
+  casino: { type: "sawtooth", freq: 280, gainPeak: 0.06, decay: 0.06, noisy: true, noiseGain: 0.18, noiseFilter: 500 },
+  deep:   { type: "sine",     freq: 70,  gainPeak: 0.12, decay: 0.12, noisy: true, noiseGain: 0.20, noiseFilter: 200 },
+  soft:   { type: "sine",     freq: 280, gainPeak: 0.04, decay: 0.09 },
+  spring: { type: "triangle", freq: 320, freq2: 450, gainPeak: 0.07, decay: 0.07 },
 };
 
 export function useWheelSound() {
@@ -53,17 +56,27 @@ export function useWheelSound() {
       gain.gain.exponentialRampToValueAtTime(0.001, t + profile.decay);
 
       if (profile.noisy) {
-        // Add a noise burst for woody/deep sounds
+        // Noise burst — bandpass-filtered for plastic/wood texture
         const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.05, ctx.sampleRate);
         const data = buffer.getChannelData(0);
-        for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * 0.3;
+        for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
         const noise = ctx.createBufferSource();
-        const noiseGain = ctx.createGain();
         noise.buffer = buffer;
-        noise.connect(noiseGain);
-        noiseGain.connect(ctx.destination);
-        noiseGain.gain.setValueAtTime(0.15, t);
+        const noiseGain = ctx.createGain();
+        const noisePeak = profile.noiseGain ?? 0.15;
+        noiseGain.gain.setValueAtTime(noisePeak, t);
         noiseGain.gain.exponentialRampToValueAtTime(0.001, t + profile.decay);
+        if (profile.noiseFilter) {
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.value = profile.noiseFilter;
+          filter.Q.value = 1.2;
+          noise.connect(filter);
+          filter.connect(noiseGain);
+        } else {
+          noise.connect(noiseGain);
+        }
+        noiseGain.connect(ctx.destination);
         noise.start(t);
         noise.stop(t + profile.decay);
       }

@@ -6,9 +6,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Language, languageNames, languageFlags } from "@/lib/i18n";
+import { Language, languageNames } from "@/lib/i18n";
 
 const languages: Language[] = ['en', 'es', 'fr', 'de', 'pt', 'it'];
+
+// Real flag images — work on all platforms including Windows (no emoji rendering issues)
+const flagImages: Record<Language, string> = {
+  en: 'https://flagcdn.com/w20/us.png',
+  fr: 'https://flagcdn.com/w20/fr.png',
+  es: 'https://flagcdn.com/w20/es.png',
+  de: 'https://flagcdn.com/w20/de.png',
+  pt: 'https://flagcdn.com/w20/pt.png',
+  it: 'https://flagcdn.com/w20/it.png',
+};
 
 // Mapping from language to its "home" page URL
 const HOME_ROUTES: Record<Language, string> = {
@@ -38,9 +48,9 @@ export function LanguageSelector({ mode = "simple" }: LanguageSelectorProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-1 px-2 py-1.5 text-sm rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
+        <button className="flex items-center gap-1.5 px-2 py-1.5 text-sm rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
+          <img src={flagImages[language]} alt={language.toUpperCase()} width="20" height="14" className="rounded-[2px] object-cover" />
           <span className="text-xs font-semibold">{language.toUpperCase()}</span>
-          <span className="text-base leading-none">{languageFlags[language]}</span>
           <ChevronDown className="w-3 h-3" />
         </button>
       </DropdownMenuTrigger>
@@ -55,7 +65,7 @@ export function LanguageSelector({ mode = "simple" }: LanguageSelectorProps) {
                 : 'hover:bg-muted'
             }`}
           >
-            <span className="text-base">{languageFlags[lang]}</span>
+            <img src={flagImages[lang]} alt={lang.toUpperCase()} width="20" height="14" className="rounded-[2px] object-cover" />
             <span className="text-sm">{languageNames[lang]}</span>
           </DropdownMenuItem>
         ))}
