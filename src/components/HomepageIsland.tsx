@@ -288,6 +288,7 @@ const HomepageIslandInner = () => {
                 borderStyle={customizeConfig.borderStyle}
                 backgroundImage={wheelBgImage ?? undefined}
                 size={600}
+                spinDuration={customizeConfig.spinDuration}
               />
 
               {/* Toolbar: Customize | Save | Share | Add Image | Fullscreen */}

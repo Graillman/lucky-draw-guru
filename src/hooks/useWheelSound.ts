@@ -11,14 +11,14 @@ type SoundProfile = {
 };
 
 const SOUND_PROFILES: Record<string, SoundProfile> = {
-  click:  { type: "square",   freq: 1200, gainPeak: 0.08, decay: 0.03 },
-  tick:   { type: "triangle", freq: 900,  gainPeak: 0.12, decay: 0.04 },
-  wood:   { type: "sine",     freq: 180,  gainPeak: 0.18, decay: 0.07, noisy: true },
-  ping:   { type: "sine",     freq: 1800, gainPeak: 0.10, decay: 0.12 },
-  casino: { type: "sawtooth", freq: 600,  gainPeak: 0.09, decay: 0.05 },
-  deep:   { type: "sine",     freq: 80,   gainPeak: 0.22, decay: 0.10, noisy: true },
-  soft:   { type: "sine",     freq: 440,  gainPeak: 0.06, decay: 0.08 },
-  spring: { type: "triangle", freq: 500,  freq2: 700, gainPeak: 0.11, decay: 0.06 },
+  click:  { type: "sawtooth", freq: 220,  gainPeak: 0.18, decay: 0.06, noisy: true },
+  tick:   { type: "triangle", freq: 600,  gainPeak: 0.12, decay: 0.05 },
+  wood:   { type: "sine",     freq: 160,  gainPeak: 0.20, decay: 0.08, noisy: true },
+  ping:   { type: "sine",     freq: 1200, gainPeak: 0.10, decay: 0.12 },
+  casino: { type: "sawtooth", freq: 350,  gainPeak: 0.14, decay: 0.06, noisy: true },
+  deep:   { type: "sine",     freq: 70,   gainPeak: 0.25, decay: 0.12, noisy: true },
+  soft:   { type: "sine",     freq: 320,  gainPeak: 0.07, decay: 0.09 },
+  spring: { type: "triangle", freq: 380,  freq2: 520, gainPeak: 0.13, decay: 0.07 },
 };
 
 export function useWheelSound() {

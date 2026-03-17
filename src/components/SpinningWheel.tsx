@@ -19,6 +19,7 @@ interface SpinningWheelProps {
   borderStyle?: string; // 'default' | 'white' | 'gold' | 'rainbow' | 'none'
   backgroundImage?: string;
   size?: number; // display size in px, default 480
+  spinDuration?: number; // seconds, default 5
 }
 
 const DEFAULT_COLORS = [
@@ -36,7 +37,7 @@ const DEFAULT_COLORS = [
   'hsl(0, 75%, 55%)',    // Crimson
 ];
 
-export function SpinningWheel({ participants, isSpinning, onComplete, mode, winnersCount, onSpin, onTick, colors, borderStyle = 'default', backgroundImage, size = 480 }: SpinningWheelProps) {
+export function SpinningWheel({ participants, isSpinning, onComplete, mode, winnersCount, onSpin, onTick, colors, borderStyle = 'default', backgroundImage, size = 480, spinDuration = 5 }: SpinningWheelProps) {
   const COLORS = colors && colors.length > 0 ? colors : DEFAULT_COLORS;
   const { t } = useLanguage();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -409,15 +410,15 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
       selectedWinnersRef.current = [winner.pseudo, ...additionalWinners];
     }
 
-    const duration = 5000;
+    const duration = spinDuration * 1000;
     const startRotation = currentRotation;
 
     const animate = () => {
       const elapsed = Date.now() - startTimeRef.current;
       const progress = Math.min(elapsed / duration, 1);
-      
-      // Custom easing - starts fast, slows down dramatically at end
-      const easeOut = 1 - Math.pow(1 - progress, 4);
+
+      // Custom easing - starts fast, slows down very dramatically at end for suspense
+      const easeOut = 1 - Math.pow(1 - progress, 6);
       
       const newRotation = startRotation + totalRotation * easeOut;
       rotationRef.current = newRotation;
@@ -478,13 +479,6 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
           }`} 
         />
         
-        {/* Outer decorative ring */}
-        <div className={`absolute inset-[-12px] rounded-full border-2 border-${colorClass}/30 ${isSpinning ? 'animate-spin' : ''}`} 
-          style={{ animationDuration: '3s' }}
-        />
-        <div className={`absolute inset-[-20px] rounded-full border border-${colorClass}/20 ${isSpinning ? 'animate-spin' : ''}`}
-          style={{ animationDuration: '5s', animationDirection: 'reverse' }}
-        />
         
         <canvas
           ref={canvasRef}
