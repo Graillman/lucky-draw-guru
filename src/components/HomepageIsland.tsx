@@ -162,9 +162,9 @@ const HomepageIslandInner = () => {
   const handleShare = () => {
     const url = buildShareURL(participants.length > 0 ? participants : DEFAULT_NAMES, drawTitle || undefined);
     navigator.clipboard.writeText(url).then(() => {
-      toast.success("Link copied! Share it to pre-load your wheel.");
+      toast.success(t.toastLinkCopied, { description: t.toastLinkCopiedDesc });
     }).catch(() => {
-      toast.error("Could not copy — please copy the URL from your browser bar.");
+      toast.error(t.toastCopyFailed);
     });
   };
 
@@ -185,9 +185,9 @@ const HomepageIslandInner = () => {
     if (id) {
       const url = `${window.location.origin}/gallery`;
       navigator.clipboard.writeText(url).catch(() => {});
-      toast.success('Wheel saved to the gallery! 🎡', { description: 'Link to gallery copied.' });
+      toast.success(t.toastWheelSaved, { description: t.toastGalleryCopied });
     } else {
-      toast.error('Could not save wheel. Try again.');
+      toast.error(t.toastSaveFailed);
     }
   };
 

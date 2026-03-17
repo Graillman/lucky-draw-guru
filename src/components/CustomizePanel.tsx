@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { X, Volume2, VolumeX, Sparkles, Palette } from "lucide-react";
 import { WHEEL_THEMES } from "@/components/WheelThemePicker";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export interface CustomizeConfig {
   // During spin
@@ -104,6 +105,7 @@ function Toggle({ label, desc, checked, onChange }: {
 
 export function CustomizePanel({ config, onChange, onClose }: Props) {
   const [tab, setTab] = useState<Tab>("appearance");
+  const { t } = useLanguage();
 
   const set = <K extends keyof CustomizeConfig>(key: K, value: CustomizeConfig[K]) => {
     onChange({ ...config, [key]: value });
@@ -117,9 +119,9 @@ export function CustomizePanel({ config, onChange, onClose }: Props) {
   }, [onClose]);
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
-    { id: "appearance", label: "Appearance", icon: <Palette className="w-3.5 h-3.5" /> },
-    { id: "spin",       label: "During Spin", icon: <Volume2 className="w-3.5 h-3.5" /> },
-    { id: "after",      label: "After Spin",  icon: <Sparkles className="w-3.5 h-3.5" /> },
+    { id: "appearance", label: t.customizeTabAppearance, icon: <Palette className="w-3.5 h-3.5" /> },
+    { id: "spin",       label: t.customizeTabDuringSpin, icon: <Volume2 className="w-3.5 h-3.5" /> },
+    { id: "after",      label: t.customizeTabAfterSpin,  icon: <Sparkles className="w-3.5 h-3.5" /> },
   ];
 
   return (
@@ -134,7 +136,7 @@ export function CustomizePanel({ config, onChange, onClose }: Props) {
       <div className="relative z-10 w-full max-w-md bg-card border border-border rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
-          <h2 className="font-bold text-lg text-foreground">Customize Wheel</h2>
+          <h2 className="font-bold text-lg text-foreground">{t.customizeTitle}</h2>
           <button
             onClick={onClose}
             className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
@@ -167,7 +169,7 @@ export function CustomizePanel({ config, onChange, onClose }: Props) {
           {tab === "appearance" && (
             <div className="space-y-5">
               <div>
-                <p className="text-sm font-medium text-foreground mb-3">Color theme</p>
+                <p className="text-sm font-medium text-foreground mb-3">{t.customizeColorTheme}</p>
                 <div className="grid grid-cols-3 gap-2">
                   {Object.entries(WHEEL_THEMES).map(([key, theme]) => {
                     const selected = config.theme === key;
@@ -199,7 +201,7 @@ export function CustomizePanel({ config, onChange, onClose }: Props) {
               </div>
 
               <div>
-                <p className="text-sm font-medium text-foreground mb-3">Wheel border</p>
+                <p className="text-sm font-medium text-foreground mb-3">{t.customizeBorder}</p>
                 <div className="grid grid-cols-5 gap-2">
                   {[
                     { key: "default", label: "Default", color: "hsl(45,93%,58%)" },
@@ -235,22 +237,22 @@ export function CustomizePanel({ config, onChange, onClose }: Props) {
           {tab === "spin" && (
             <div className="space-y-5">
               <Toggle
-                label="Tick sound"
-                desc="Play a click sound as the wheel passes each segment"
+                label={t.customizeTickSound}
+                desc={t.customizeTickSoundDesc}
                 checked={config.spinSoundEnabled}
                 onChange={v => set("spinSoundEnabled", v)}
               />
               {config.spinSoundEnabled && (
                 <Slider
-                  label="Tick volume"
+                  label={t.customizeTickVolume}
                   value={config.spinSoundVolume}
                   min={0} max={100}
                   onChange={v => set("spinSoundVolume", v)}
-                  left="Silent" right="Loud"
+                  left={t.customizeSilent} right={t.customizeLoud}
                 />
               )}
               <div>
-                <p className="text-sm font-medium text-foreground mb-3">Tick sound style</p>
+                <p className="text-sm font-medium text-foreground mb-3">{t.customizeTickStyle}</p>
                 <div className="grid grid-cols-4 gap-2">
                   {[
                     { key: "click",  label: "Click",  emoji: "🖱️" },
@@ -280,7 +282,7 @@ export function CustomizePanel({ config, onChange, onClose }: Props) {
                 </div>
               </div>
               <Slider
-                label="Spin duration"
+                label={t.customizeSpinDuration}
                 value={config.spinDuration}
                 min={3} max={15}
                 onChange={v => set("spinDuration", v)}
@@ -293,29 +295,29 @@ export function CustomizePanel({ config, onChange, onClose }: Props) {
           {tab === "after" && (
             <div className="space-y-5">
               <Toggle
-                label="Victory sound"
-                desc="Play a fanfare when the winner is revealed"
+                label={t.customizeVictorySound}
+                desc={t.customizeVictorySoundDesc}
                 checked={config.resultSoundEnabled}
                 onChange={v => set("resultSoundEnabled", v)}
               />
               {config.resultSoundEnabled && (
                 <Slider
-                  label="Victory volume"
+                  label={t.customizeVictoryVolume}
                   value={config.resultSoundVolume}
                   min={0} max={100}
                   onChange={v => set("resultSoundVolume", v)}
-                  left="Silent" right="Loud"
+                  left={t.customizeSilent} right={t.customizeLoud}
                 />
               )}
               <Toggle
-                label="Confetti"
-                desc="Launch a confetti burst when the winner is revealed"
+                label={t.customizeConfetti}
+                desc={t.customizeConfettiDesc}
                 checked={config.launchConfetti}
                 onChange={v => set("launchConfetti", v)}
               />
               <Toggle
-                label="Show Remove button"
-                desc="Display a button to remove the winner and spin again"
+                label={t.customizeShowRemove}
+                desc={t.customizeShowRemoveDesc}
                 checked={config.showRemoveButton}
                 onChange={v => set("showRemoveButton", v)}
               />
@@ -330,13 +332,13 @@ export function CustomizePanel({ config, onChange, onClose }: Props) {
             onClick={() => onChange(DEFAULT_CONFIG)}
             className="text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
-            Reset to defaults
+            {t.customizeReset}
           </button>
           <button
             onClick={onClose}
             className="px-4 py-1.5 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
           >
-            Done
+            {t.customizeDone}
           </button>
         </div>
       </div>
