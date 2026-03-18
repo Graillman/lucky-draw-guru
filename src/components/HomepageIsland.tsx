@@ -329,31 +329,35 @@ const HomepageIslandInner = () => {
       {/* Winner modal */}
       {showWinnerModal && winners.length > 0 && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={handleCloseModal}>
-          <div className="bg-card rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden" onClick={e => e.stopPropagation()}>
-            <div className="bg-primary px-6 py-4">
-              <p className="text-primary-foreground font-bold text-lg text-center">{t.winnerModalTitle}</p>
+          <div className="bg-card rounded-2xl shadow-2xl w-full max-w-xl mx-4 overflow-hidden" onClick={e => e.stopPropagation()}>
+            <div className="bg-primary px-6 py-3">
+              <p className="text-primary-foreground font-bold text-base text-center">{t.winnerModalTitle}</p>
             </div>
-            <div className="px-6 py-10 text-center">
-              <p className="text-4xl font-bold text-foreground">{winners[0]}</p>
-            </div>
-            <div className="flex gap-3 px-6 pb-6">
-              <button
-                onClick={handleCloseModal}
-                className="flex-1 px-4 py-2.5 rounded-xl border border-border text-sm font-medium text-muted-foreground hover:bg-muted transition-colors"
-              >
-                {t.winnerModalClose}
-              </button>
-              {customizeConfig.showRemoveButton && (() => {
-                const wParticipants = lastWinnerWheelIdx === 0 ? participants : extraWheels[lastWinnerWheelIdx - 1]?.participants ?? [];
-                return wParticipants.length > 2;
-              })() && (
+            <div className="flex items-center gap-4 px-6 py-6">
+              {/* Winner name — left */}
+              <div className="flex-1 min-w-0">
+                <p className="text-4xl font-bold text-foreground truncate">{winners[0]}</p>
+              </div>
+              {/* Buttons — right, stacked */}
+              <div className="flex flex-col gap-2 shrink-0">
                 <button
-                  onClick={handleRemoveFromModal}
-                  className="flex-1 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
+                  onClick={handleCloseModal}
+                  className="px-5 py-2.5 rounded-xl border border-border text-sm font-medium text-muted-foreground hover:bg-muted transition-colors whitespace-nowrap"
                 >
-                  {t.winnerModalRemove}
+                  {t.winnerModalClose}
                 </button>
-              )}
+                {customizeConfig.showRemoveButton && (() => {
+                  const wParticipants = lastWinnerWheelIdx === 0 ? participants : extraWheels[lastWinnerWheelIdx - 1]?.participants ?? [];
+                  return wParticipants.length > 2;
+                })() && (
+                  <button
+                    onClick={handleRemoveFromModal}
+                    className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors whitespace-nowrap"
+                  >
+                    {t.winnerModalRemove}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -384,7 +388,7 @@ const HomepageIslandInner = () => {
             <div className="flex-1 min-w-0 flex flex-col items-end space-y-2">
 
               {/* Wheels row */}
-              <div className={`flex flex-wrap gap-2 justify-end ${totalWheels > 1 ? 'items-end' : ''}`}>
+              <div className="flex flex-row flex-nowrap gap-2 justify-end items-center overflow-x-auto">
                 {Array.from({ length: totalWheels }, (_, idx) => (
                   <SpinningWheel
                     key={idx}
@@ -403,6 +407,7 @@ const HomepageIslandInner = () => {
                     size={wheelSize}
                     spinDuration={customizeConfig.spinDuration}
                     clickToSpinLabel={t.clickToSpin}
+                    compact={totalWheels > 1}
                   />
                 ))}
               </div>

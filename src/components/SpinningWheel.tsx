@@ -18,8 +18,9 @@ interface SpinningWheelProps {
   borderStyle?: string; // 'default' | 'white' | 'gold' | 'rainbow' | 'none'
   backgroundImage?: string;
   size?: number; // display size in px, default 480
-  spinDuration?: number; // seconds, default 7
+  spinDuration?: number; // seconds, default 8
   clickToSpinLabel?: string;
+  compact?: boolean; // true = reduced padding for multi-wheel mode
 }
 
 const DEFAULT_COLORS = [
@@ -37,17 +38,33 @@ const DEFAULT_COLORS = [
   'hsl(0, 75%, 55%)',    // Crimson
 ];
 
-export function SpinningWheel({ participants, isSpinning, onComplete, mode, winnersCount, onSpin, onTick, colors, borderStyle = 'default', backgroundImage, size = 480, spinDuration = 7, clickToSpinLabel }: SpinningWheelProps) {
+// Draw a rounded rectangle using arcTo (compatible with all browsers)
+function drawRoundRect(
+  ctx: CanvasRenderingContext2D,
+  x: number, y: number, w: number, h: number, r: number
+) {
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y,     x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x,     y + h, r);
+  ctx.arcTo(x,     y + h, x,     y,     r);
+  ctx.arcTo(x,     y,     x + w, y,     r);
+  ctx.closePath();
+}
+
+export function SpinningWheel({
+  participants, isSpinning, onComplete, mode, winnersCount,
+  onSpin, onTick, colors, borderStyle = 'default', backgroundImage,
+  size = 480, spinDuration = 8, clickToSpinLabel, compact = false
+}: SpinningWheelProps) {
   const COLORS = colors && colors.length > 0 ? colors : DEFAULT_COLORS;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [rotation, setRotation] = useState(0);
-  const rotationRef = useRef(0); // Always up-to-date rotation (avoids stale closure)
+  const rotationRef = useRef(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const animationRef = useRef<number>();
   const startTimeRef = useRef<number>(0);
   const selectedWinnersRef = useRef<string[]>([]);
   const lastTickSegmentRef = useRef(-1);
-  // Idle rotation — slow spin before first user interaction
   const idleAnimRef = useRef<number>();
   const hasSpunRef = useRef(false);
   const idleLastTimeRef = useRef(0);
@@ -59,8 +76,7 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
   useEffect(() => { onTickRef.current = onTick; }, [onTick]);
 
   const isAdvanced = mode === "advanced";
-  
-  // Theme colors based on mode
+
   const themeColor = isAdvanced ? 'hsl(262, 83%, 58%)' : 'hsl(45, 93%, 58%)';
   const themeColorLight = isAdvanced ? 'hsl(262, 83%, 65%)' : 'hsl(45, 93%, 65%)';
   const themeColorDark = isAdvanced ? 'hsl(262, 83%, 48%)' : 'hsl(45, 93%, 48%)';
@@ -68,10 +84,8 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
   const themeColorHalf = isAdvanced ? 'hsla(262, 83%, 58%, 0.5)' : 'hsla(45, 93%, 58%, 0.5)';
   const themeStroke = isAdvanced ? 'hsl(280, 90%, 40%)' : 'hsl(35, 90%, 40%)';
 
-  // Memoize segments calculation to keep them stable
   const segments = useMemo(() => {
     const totalWeight = participants.reduce((sum, p) => sum + (mode === "simple" ? 1 : p.weight), 0);
-    
     let currentAngle = 0;
     return participants.map((p, i) => {
       const weight = mode === "simple" ? 1 : p.weight;
@@ -88,7 +102,6 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     });
   }, [participants, mode]);
 
-  // Background image
   const bgImgRef = useRef<HTMLImageElement | null>(null);
   const [bgImgVersion, setBgImgVersion] = useState(0);
   useEffect(() => {
@@ -98,33 +111,32 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     img.src = backgroundImage;
   }, [backgroundImage]);
 
-  // High DPI support
   const dpr = typeof window !== 'undefined' ? Math.min(window.devicePixelRatio || 1, 2) : 1;
   const canvasDisplaySize = size;
   const canvasPixelSize = canvasDisplaySize * dpr;
 
-  // Draw the wheel
+  // ─── Draw effect ──────────────────────────────────────────────────────────
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set up high DPI canvas
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    
-    const size = canvasDisplaySize;
-    const center = size / 2;
-    const radius = size / 2 - 20;
 
-    ctx.clearRect(0, 0, size, size);
+    const sz = canvasDisplaySize;
+    const center = sz / 2;
+    const radius = sz / 2 - 20;
+
+    ctx.clearRect(0, 0, sz, sz);
+
+    // ── Rotated context (wheel body) ──
     ctx.save();
     ctx.translate(center, center);
     ctx.rotate(rotation);
     ctx.translate(-center, -center);
 
-    // Draw outer ring glow
+    // Outer glow
     const gradient = ctx.createRadialGradient(center, center, radius - 10, center, center, radius + 10);
     gradient.addColorStop(0, 'transparent');
     gradient.addColorStop(0.5, themeColorGlow);
@@ -134,7 +146,7 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     ctx.fillStyle = gradient;
     ctx.fill();
 
-    // Draw background image (clipped to wheel circle)
+    // Background image
     if (bgImgRef.current) {
       ctx.save();
       ctx.beginPath();
@@ -146,15 +158,14 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
       ctx.restore();
     }
 
-    // Draw segments with 3D effect
+    // Segments
     segments.forEach((segment) => {
-      // Main segment
+      // Fill segment
       ctx.beginPath();
       ctx.moveTo(center, center);
       ctx.arc(center, center, radius, segment.startAngle - Math.PI / 2, segment.endAngle - Math.PI / 2);
       ctx.closePath();
-      
-      // Create gradient for 3D effect
+
       const midAngle = (segment.startAngle + segment.endAngle) / 2 - Math.PI / 2;
       const gradX = center + Math.cos(midAngle) * radius * 0.5;
       const gradY = center + Math.sin(midAngle) * radius * 0.5;
@@ -162,16 +173,13 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
       segGradient.addColorStop(0, 'hsla(0, 0%, 100%, 0.2)');
       segGradient.addColorStop(0.3, segment.color);
       segGradient.addColorStop(1, segment.color);
-      
       ctx.fillStyle = segGradient;
       ctx.fill();
-      
-      // Segment border with glow
+
       ctx.strokeStyle = 'rgba(255,255,255,0.4)';
       ctx.lineWidth = 2;
       ctx.stroke();
 
-      // Inner shadow line
       ctx.beginPath();
       ctx.moveTo(center, center);
       ctx.lineTo(
@@ -182,52 +190,49 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      // Draw text with better styling
-      const textMidAngle = (segment.startAngle + segment.endAngle) / 2 - Math.PI / 2;
-      const textRadius = radius * 0.65;
-      const x = center + Math.cos(textMidAngle) * textRadius;
-      const y = center + Math.sin(textMidAngle) * textRadius;
-
+      // ── Horizontal text clipped to segment ──
       ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate(textMidAngle + Math.PI / 2);
-      
-      // Text styling
-      const fontSize = Math.min(16, 220 / participants.length);
+      // Clip to this segment's wedge
+      ctx.beginPath();
+      ctx.moveTo(center, center);
+      ctx.arc(center, center, radius - 2, segment.startAngle - Math.PI / 2, segment.endAngle - Math.PI / 2);
+      ctx.closePath();
+      ctx.clip();
+
+      const textMidAngle = (segment.startAngle + segment.endAngle) / 2 - Math.PI / 2;
+      const textRadius = radius * 0.62;
+      const tx = center + Math.cos(textMidAngle) * textRadius;
+      const ty = center + Math.sin(textMidAngle) * textRadius;
+
+      // Font size: proportional to wheel size, no fixed cap — scales naturally
+      const fontSize = Math.max(8, Math.round(sz * 0.044));
       ctx.font = `bold ${fontSize}px 'Space Grotesk', sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      
-      // Truncate long names
-      const maxLength = 10;
-      const displayName = segment.pseudo.length > maxLength 
-        ? segment.pseudo.substring(0, maxLength) + '…' 
+
+      const maxLength = 11;
+      const displayName = segment.pseudo.length > maxLength
+        ? segment.pseudo.substring(0, maxLength) + '…'
         : segment.pseudo;
-      
-      // Text shadow for depth
-      ctx.shadowColor = 'rgba(0,0,0,0.7)';
+
+      ctx.shadowColor = 'rgba(0,0,0,0.75)';
       ctx.shadowBlur = 4;
       ctx.shadowOffsetX = 1;
       ctx.shadowOffsetY = 1;
       ctx.fillStyle = '#fff';
-      ctx.fillText(displayName, 0, 0);
-      
+      // Draw text HORIZONTALLY (no rotation) centered at (tx, ty)
+      ctx.fillText(displayName, tx, ty);
       ctx.restore();
     });
 
-    // Outer ring — style driven by borderStyle prop
+    // Outer border
     if (borderStyle !== 'none') {
-      ctx.beginPath();
-      ctx.arc(center, center, radius, 0, Math.PI * 2);
       if (borderStyle === 'rainbow') {
-        // Approximate rainbow with a conic gradient by drawing multiple arcs
         const steps = 12;
         const hueStep = 360 / steps;
         for (let ri = 0; ri < steps; ri++) {
-          const startA = (ri / steps) * Math.PI * 2 - Math.PI / 2;
-          const endA = ((ri + 1) / steps) * Math.PI * 2 - Math.PI / 2;
           ctx.beginPath();
-          ctx.arc(center, center, radius, startA, endA);
+          ctx.arc(center, center, radius, (ri / steps) * Math.PI * 2 - Math.PI / 2, ((ri + 1) / steps) * Math.PI * 2 - Math.PI / 2);
           ctx.strokeStyle = `hsl(${ri * hueStep}, 100%, 55%)`;
           ctx.lineWidth = 6;
           ctx.stroke();
@@ -235,14 +240,12 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
       } else {
         ctx.beginPath();
         ctx.arc(center, center, radius, 0, Math.PI * 2);
-        ctx.strokeStyle = borderStyle === 'white' ? '#ffffff'
-          : borderStyle === 'gold' ? '#FFD700'
-          : themeColor;
+        ctx.strokeStyle = borderStyle === 'white' ? '#ffffff' : borderStyle === 'gold' ? '#FFD700' : themeColor;
         ctx.lineWidth = 4;
         ctx.stroke();
       }
     }
-    
+
     // Inner decorative ring
     ctx.beginPath();
     ctx.arc(center, center, radius - 8, 0, Math.PI * 2);
@@ -250,18 +253,16 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    // Draw center circle with gradient
+    // Center circle
     const centerGrad = ctx.createRadialGradient(center - 5, center - 5, 0, center, center, 35);
     centerGrad.addColorStop(0, 'hsl(222, 47%, 15%)');
     centerGrad.addColorStop(0.5, 'hsl(222, 47%, 8%)');
     centerGrad.addColorStop(1, 'hsl(222, 47%, 4%)');
-    
     ctx.beginPath();
     ctx.arc(center, center, 30, 0, Math.PI * 2);
     ctx.fillStyle = centerGrad;
     ctx.fill();
-    
-    // Center ring glow
+
     ctx.beginPath();
     ctx.arc(center, center, 30, 0, Math.PI * 2);
     ctx.strokeStyle = themeColor;
@@ -270,44 +271,38 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     ctx.shadowBlur = 15;
     ctx.stroke();
     ctx.shadowBlur = 0;
-    
-    // Inner center decoration
+
     ctx.beginPath();
     ctx.arc(center, center, 18, 0, Math.PI * 2);
     ctx.strokeStyle = themeColorHalf;
     ctx.lineWidth = 2;
     ctx.stroke();
-    
-    // Center dot
+
     ctx.beginPath();
     ctx.arc(center, center, 6, 0, Math.PI * 2);
     ctx.fillStyle = themeColor;
     ctx.fill();
 
-    ctx.restore();
+    ctx.restore(); // end of rotated context
 
-    // Determine which segment is under the pointer to color it accordingly
+    // ── Pointer (fixed) ──
     const rotMod = ((rotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
     const ptrInWheel = ((Math.PI * 2) - rotMod) % (Math.PI * 2);
     let ptrSegIdx = segments.length - 1;
     for (let i = 0; i < segments.length; i++) {
       if (ptrInWheel >= segments[i].startAngle && ptrInWheel < segments[i].endAngle) {
-        ptrSegIdx = i;
-        break;
+        ptrSegIdx = i; break;
       }
     }
     const segColor = segments[ptrSegIdx].color;
-    // Build light/dark variants from the HSL string for gradient
     const hslM = segColor.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
-    const ptrLight = hslM ? `hsl(${hslM[1]}, ${hslM[2]}%, ${Math.min(85, parseInt(hslM[3]) + 22)}%)` : segColor;
-    const ptrDark  = hslM ? `hsl(${hslM[1]}, ${hslM[2]}%, ${Math.max(15, parseInt(hslM[3]) - 15)}%)` : segColor;
-    const ptrStroke= hslM ? `hsl(${hslM[1]}, ${hslM[2]}%, ${Math.max(10, parseInt(hslM[3]) - 22)}%)` : segColor;
+    const ptrLight  = hslM ? `hsl(${hslM[1]}, ${hslM[2]}%, ${Math.min(85, parseInt(hslM[3]) + 22)}%)` : segColor;
+    const ptrDark   = hslM ? `hsl(${hslM[1]}, ${hslM[2]}%, ${Math.max(15, parseInt(hslM[3]) - 15)}%)` : segColor;
+    const ptrStroke = hslM ? `hsl(${hslM[1]}, ${hslM[2]}%, ${Math.max(10, parseInt(hslM[3]) - 22)}%)` : segColor;
 
-    // Draw pointer (fixed, not rotating)
     const pointerHeight = 45;
-    const pointerWidth = 28;
+    const pointerWidth  = 28;
 
-    // Pointer shadow
     ctx.beginPath();
     ctx.moveTo(center - pointerWidth/2 + 2, 8);
     ctx.lineTo(center + pointerWidth/2 + 2, 8);
@@ -316,12 +311,10 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     ctx.fillStyle = 'rgba(0,0,0,0.3)';
     ctx.fill();
 
-    // Main pointer with gradient using current segment's color
     const pointerGrad = ctx.createLinearGradient(center - pointerWidth/2, 0, center + pointerWidth/2, 0);
     pointerGrad.addColorStop(0, ptrDark);
     pointerGrad.addColorStop(0.5, ptrLight);
     pointerGrad.addColorStop(1, ptrDark);
-
     ctx.beginPath();
     ctx.moveTo(center - pointerWidth/2, 5);
     ctx.lineTo(center + pointerWidth/2, 5);
@@ -333,7 +326,6 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Pointer highlight
     ctx.beginPath();
     ctx.moveTo(center - pointerWidth/4, 10);
     ctx.lineTo(center + pointerWidth/6, 10);
@@ -342,17 +334,49 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     ctx.fillStyle = 'rgba(255,255,255,0.3)';
     ctx.fill();
 
-  }, [rotation, segments, participants.length, mode, themeColor, themeColorDark, themeColorGlow, themeColorHalf, themeColorLight, themeStroke, borderStyle, bgImgVersion]);
+    // ── "Click to spin" pill — drawn ON CANVAS, fixed position ──
+    if (clickToSpinLabel && !isAnimating) {
+      const textFontSize = Math.max(12, Math.round(sz * 0.048));
+      ctx.save();
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.font = `bold ${textFontSize}px 'Space Grotesk', sans-serif`;
+      const tw = ctx.measureText(clickToSpinLabel).width;
+      const padX = Math.round(textFontSize * 1.0);
+      const padY = Math.round(textFontSize * 0.45);
+      const rw   = tw + padX * 2;
+      const rh   = textFontSize + padY * 2;
+      const rx   = center - rw / 2;
+      const ry   = center - rh / 2;
+      const br   = rh / 2; // fully rounded = pill shape
+
+      // Pill background
+      ctx.beginPath();
+      drawRoundRect(ctx, rx, ry, rw, rh, br);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.90)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Text inside pill
+      ctx.fillStyle = '#1a1a1a';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(clickToSpinLabel, center, center);
+      ctx.restore();
+    }
+
+  }, [rotation, segments, participants.length, mode, themeColor, themeColorDark, themeColorGlow, themeColorHalf, themeColorLight, themeStroke, borderStyle, bgImgVersion, isAnimating, clickToSpinLabel]);
+  // ─────────────────────────────────────────────────────────────────────────
 
   // Idle rotation — 1 revolution per ~20s, stops on first spin
   useEffect(() => {
     if (hasSpunRef.current) return;
-
-    const IDLE_SPEED = (2 * Math.PI) / 20000; // rad/ms
+    const IDLE_SPEED = (2 * Math.PI) / 20000;
     idleLastTimeRef.current = performance.now();
-
     const tick = (now: number) => {
-      const dt = Math.min(now - idleLastTimeRef.current, 50); // cap dt to avoid jumps
+      const dt = Math.min(now - idleLastTimeRef.current, 50);
       idleLastTimeRef.current = now;
       setRotation(r => {
         const next = r + IDLE_SPEED * dt;
@@ -361,12 +385,10 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
       });
       idleAnimRef.current = requestAnimationFrame(tick);
     };
-
     idleAnimRef.current = requestAnimationFrame(tick);
     return () => { if (idleAnimRef.current) cancelAnimationFrame(idleAnimRef.current); };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Stop idle when user triggers a spin
   useEffect(() => {
     if (!isSpinning) return;
     hasSpunRef.current = true;
@@ -376,50 +398,39 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     }
   }, [isSpinning]);
 
-  // Animation - select winner FIRST, then animate to that position
+  // Animation
   useEffect(() => {
     if (!isSpinning || isAnimating) return;
 
     setIsAnimating(true);
     startTimeRef.current = Date.now();
 
-    // Pick a random final rotation — winner is determined FROM the final angle,
-    // guaranteeing the pointer always matches the announced result.
     const currentRotation = rotationRef.current;
-    const spins = 5 + cryptoRandom() * 2; // 5-7 full spins
+    const spins = 5 + cryptoRandom() * 2;
     const randomAngle = cryptoRandom() * Math.PI * 2;
     const totalRotation = spins * Math.PI * 2 + randomAngle;
     const finalRotation = currentRotation + totalRotation;
 
-    // Determine which segment is under the pointer at the final rotation.
-    // After rotation R, a wheel-space angle θ sits at canvas angle θ - π/2 + R.
-    // Pointer is at canvas angle -π/2, so the segment under the pointer satisfies:
-    //   θ - π/2 + R ≡ -π/2  →  θ ≡ -R  →  θ = (2π - (R mod 2π)) mod 2π
     const finalRotMod = ((finalRotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
     const pointerInWheelSpace = ((Math.PI * 2) - finalRotMod) % (Math.PI * 2);
 
     let winnerIndex = segments.length - 1;
     for (let i = 0; i < segments.length; i++) {
       if (pointerInWheelSpace >= segments[i].startAngle && pointerInWheelSpace < segments[i].endAngle) {
-        winnerIndex = i;
-        break;
+        winnerIndex = i; break;
       }
     }
 
-    const winner = segments[winnerIndex];
-    selectedWinnersRef.current = [winner.pseudo];
+    selectedWinnersRef.current = [segments[winnerIndex].pseudo];
 
-    // Handle multiple winners (additional picks by weight, separate from the wheel spin)
     if (winnersCount > 1) {
       const additionalWinners: string[] = [];
       const availableIndices = segments.map((_, i) => i).filter(i => i !== winnerIndex);
-
       for (let i = 1; i < winnersCount && availableIndices.length > 0; i++) {
         const availableSegments = availableIndices.map(idx => segments[idx]);
         const availableTotalWeight = availableSegments.reduce((sum, s) => sum + s.weight, 0);
         const rand = cryptoRandom() * availableTotalWeight;
         let cum = 0;
-
         for (let j = 0; j < availableSegments.length; j++) {
           cum += availableSegments[j].weight;
           if (rand <= cum) {
@@ -429,7 +440,7 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
           }
         }
       }
-      selectedWinnersRef.current = [winner.pseudo, ...additionalWinners];
+      selectedWinnersRef.current = [segments[winnerIndex].pseudo, ...additionalWinners];
     }
 
     const duration = spinDuration * 1000;
@@ -439,38 +450,31 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
       const elapsed = Date.now() - startTimeRef.current;
       const progress = Math.min(elapsed / duration, 1);
 
-      // 2-phase natural spin: hand pushes (acceleration) then releases (exponential friction)
-      // Phase 1 [0, push]: velocity ramps linearly 0 → v_peak  (like a hand pushing the wheel)
-      // Phase 2 [push, 1]: velocity decays exponentially  (free spin, realistic friction)
-      // Maths: normalize so total displacement integral = 1
-      const push = 0.18; // 18% of duration for push phase
-      const k    = 7;    // friction exponent — larger = sharper stop at end
-      // Integral of velocity in each phase (unnormalized)
-      const area1 = push / 2;                                    // triangle under linear ramp
-      const area2 = (1 - push) / k * (1 - Math.exp(-k));        // area under exp decay
+      // 2-phase: gentle push (10%) + long exponential friction (90%)
+      // — smoother, more realistic feel than pure ease-out
+      const push = 0.10;
+      const k    = 4.5;
+      const area1 = push / 2;
+      const area2 = (1 - push) / k * (1 - Math.exp(-k));
       const totalArea = area1 + area2;
       let easeOut: number;
       if (progress <= push) {
-        // Parabolic rise: pos = p² / (2*push)
         easeOut = (progress * progress / (2 * push)) / totalArea;
       } else {
-        // Exponential decay continuation
         const p2 = (progress - push) / (1 - push);
         easeOut = (area1 + (1 - push) / k * (1 - Math.exp(-k * p2))) / totalArea;
       }
-      
+
       const newRotation = startRotation + totalRotation * easeOut;
       rotationRef.current = newRotation;
       setRotation(newRotation);
 
-      // Tick sound: detect segment crossing at the pointer (top)
       if (onTickRef.current) {
         const pointerAngle = ((Math.PI / 2 - newRotation) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
         let currentSeg = segments.length - 1;
         for (let i = 0; i < segments.length; i++) {
           if (pointerAngle >= segments[i].startAngle && pointerAngle < segments[i].endAngle) {
-            currentSeg = i;
-            break;
+            currentSeg = i; break;
           }
         }
         if (currentSeg !== lastTickSegmentRef.current) {
@@ -488,66 +492,57 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
     };
 
     animationRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [isSpinning, segments, winnersCount]); // onComplete/onTick use refs — no need in deps
+    return () => { if (animationRef.current) cancelAnimationFrame(animationRef.current); };
+  }, [isSpinning, segments, winnersCount]); // callbacks use refs — no need in deps
 
   if (participants.length === 0) return null;
 
   const colorClass = isAdvanced ? "accent" : "primary";
 
+  // Displayed radius for click-zone check (accounting for possible CSS scaling)
+  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!onSpin || isSpinning || isAnimating) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = e.clientX - cx;
+    const dy = e.clientY - cy;
+    // Display radius in CSS pixels
+    const displayRadius = (rect.width / canvasDisplaySize) * (canvasDisplaySize / 2 - 20);
+    if (dx * dx + dy * dy <= displayRadius * displayRadius) {
+      onSpin();
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center gap-4 py-8">
-      
+    <div className={`flex flex-col items-center w-fit ${compact ? 'gap-1 py-2' : 'gap-4 py-8'}`}>
+
       <div className="relative">
-        {/* Animated glow effect */}
-        <div 
+        {/* Glow */}
+        <div
           className={`absolute inset-0 rounded-full transition-all duration-500 ${
-            isSpinning 
-              ? `bg-${colorClass}/30 blur-3xl scale-110 animate-pulse` 
+            isSpinning
+              ? `bg-${colorClass}/30 blur-3xl scale-110 animate-pulse`
               : `bg-${colorClass}/15 blur-2xl`
-          }`} 
+          }`}
         />
-        
-        
+
         <canvas
           ref={canvasRef}
           width={canvasPixelSize}
           height={canvasPixelSize}
-          className="relative z-10 drop-shadow-2xl max-w-full"
+          className="relative z-10 drop-shadow-2xl block"
           style={{
-            width: `min(${size}px, 90vw)`,
-            height: `min(${size}px, 90vw)`,
+            width:  `${canvasDisplaySize}px`,
+            height: `${canvasDisplaySize}px`,
+            maxWidth: '90vw',
+            maxHeight: '90vw',
             cursor: onSpin && !isSpinning && !isAnimating ? 'pointer' : 'default',
           }}
-          onClick={() => { if (onSpin && !isSpinning && !isAnimating) onSpin(); }}
-          title={onSpin && !isSpinning ? "Click to spin!" : undefined}
+          onClick={handleCanvasClick}
         />
 
-        {/* "Click to spin" label — fixed overlay, disappears while animating */}
-        {clickToSpinLabel && !isAnimating && !isSpinning && (
-          <div
-            className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
-            style={{ paddingTop: '8%' }}
-          >
-            <span
-              className="text-white font-bold text-center select-none"
-              style={{
-                fontSize: `${Math.max(12, Math.round(size * 0.048))}px`,
-                textShadow: '0 1px 6px rgba(0,0,0,0.75), 0 0 12px rgba(0,0,0,0.5)',
-                letterSpacing: '0.01em',
-              }}
-            >
-              {clickToSpinLabel}
-            </span>
-          </div>
-        )}
-        
-        {/* Sparkle effects when spinning */}
+        {/* Sparkles when spinning */}
         {isSpinning && (
           <>
             <div className={`absolute top-4 left-4 w-2 h-2 bg-${colorClass} rounded-full animate-ping`} />
