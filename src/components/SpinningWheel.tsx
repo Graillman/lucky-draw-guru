@@ -18,7 +18,8 @@ interface SpinningWheelProps {
   borderStyle?: string; // 'default' | 'white' | 'gold' | 'rainbow' | 'none'
   backgroundImage?: string;
   size?: number; // display size in px, default 480
-  spinDuration?: number; // seconds, default 5
+  spinDuration?: number; // seconds, default 7
+  clickToSpinLabel?: string;
 }
 
 const DEFAULT_COLORS = [
@@ -36,7 +37,7 @@ const DEFAULT_COLORS = [
   'hsl(0, 75%, 55%)',    // Crimson
 ];
 
-export function SpinningWheel({ participants, isSpinning, onComplete, mode, winnersCount, onSpin, onTick, colors, borderStyle = 'default', backgroundImage, size = 480, spinDuration = 11.5 }: SpinningWheelProps) {
+export function SpinningWheel({ participants, isSpinning, onComplete, mode, winnersCount, onSpin, onTick, colors, borderStyle = 'default', backgroundImage, size = 480, spinDuration = 7, clickToSpinLabel }: SpinningWheelProps) {
   const COLORS = colors && colors.length > 0 ? colors : DEFAULT_COLORS;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [rotation, setRotation] = useState(0);
@@ -50,6 +51,12 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
   const idleAnimRef = useRef<number>();
   const hasSpunRef = useRef(false);
   const idleLastTimeRef = useRef(0);
+
+  // Stable refs for callbacks — prevents animation restarts when parent re-renders
+  const onCompleteRef = useRef(onComplete);
+  const onTickRef = useRef(onTick);
+  useEffect(() => { onCompleteRef.current = onComplete; }, [onComplete]);
+  useEffect(() => { onTickRef.current = onTick; }, [onTick]);
 
   const isAdvanced = mode === "advanced";
   
@@ -432,18 +439,32 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
       const elapsed = Date.now() - startTimeRef.current;
       const progress = Math.min(elapsed / duration, 1);
 
-      // Physics-based easing: exponential velocity decay (friction model)
-      // v(t) = v0 * e^(-k*t)  →  position = (1 - e^(-k*p)) / (1 - e^(-k))
-      // k=10: velocity at end ≈ 0.0005 (near-zero → smooth natural stop, no abrupt cut)
-      const k = 10;
-      const easeOut = (1 - Math.exp(-k * progress)) / (1 - Math.exp(-k));
+      // 2-phase natural spin: hand pushes (acceleration) then releases (exponential friction)
+      // Phase 1 [0, push]: velocity ramps linearly 0 → v_peak  (like a hand pushing the wheel)
+      // Phase 2 [push, 1]: velocity decays exponentially  (free spin, realistic friction)
+      // Maths: normalize so total displacement integral = 1
+      const push = 0.18; // 18% of duration for push phase
+      const k    = 7;    // friction exponent — larger = sharper stop at end
+      // Integral of velocity in each phase (unnormalized)
+      const area1 = push / 2;                                    // triangle under linear ramp
+      const area2 = (1 - push) / k * (1 - Math.exp(-k));        // area under exp decay
+      const totalArea = area1 + area2;
+      let easeOut: number;
+      if (progress <= push) {
+        // Parabolic rise: pos = p² / (2*push)
+        easeOut = (progress * progress / (2 * push)) / totalArea;
+      } else {
+        // Exponential decay continuation
+        const p2 = (progress - push) / (1 - push);
+        easeOut = (area1 + (1 - push) / k * (1 - Math.exp(-k * p2))) / totalArea;
+      }
       
       const newRotation = startRotation + totalRotation * easeOut;
       rotationRef.current = newRotation;
       setRotation(newRotation);
 
       // Tick sound: detect segment crossing at the pointer (top)
-      if (onTick) {
+      if (onTickRef.current) {
         const pointerAngle = ((Math.PI / 2 - newRotation) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
         let currentSeg = segments.length - 1;
         for (let i = 0; i < segments.length; i++) {
@@ -454,7 +475,7 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
         }
         if (currentSeg !== lastTickSegmentRef.current) {
           lastTickSegmentRef.current = currentSeg;
-          onTick();
+          onTickRef.current();
         }
       }
 
@@ -462,7 +483,7 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
         animationRef.current = requestAnimationFrame(animate);
       } else {
         setIsAnimating(false);
-        onComplete(selectedWinnersRef.current);
+        onCompleteRef.current(selectedWinnersRef.current);
       }
     };
 
@@ -473,7 +494,7 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [isSpinning, segments, winnersCount, onComplete]);
+  }, [isSpinning, segments, winnersCount]); // onComplete/onTick use refs — no need in deps
 
   if (participants.length === 0) return null;
 
@@ -506,6 +527,25 @@ export function SpinningWheel({ participants, isSpinning, onComplete, mode, winn
           onClick={() => { if (onSpin && !isSpinning && !isAnimating) onSpin(); }}
           title={onSpin && !isSpinning ? "Click to spin!" : undefined}
         />
+
+        {/* "Click to spin" label — fixed overlay, disappears while animating */}
+        {clickToSpinLabel && !isAnimating && !isSpinning && (
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
+            style={{ paddingTop: '8%' }}
+          >
+            <span
+              className="text-white font-bold text-center select-none"
+              style={{
+                fontSize: `${Math.max(12, Math.round(size * 0.048))}px`,
+                textShadow: '0 1px 6px rgba(0,0,0,0.75), 0 0 12px rgba(0,0,0,0.5)',
+                letterSpacing: '0.01em',
+              }}
+            >
+              {clickToSpinLabel}
+            </span>
+          </div>
+        )}
         
         {/* Sparkle effects when spinning */}
         {isSpinning && (

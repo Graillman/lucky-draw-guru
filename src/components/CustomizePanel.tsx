@@ -20,7 +20,7 @@ export interface CustomizeConfig {
 }
 
 export const DEFAULT_CONFIG: CustomizeConfig = {
-  spinDuration: 11.5,
+  spinDuration: 7,
   spinSoundEnabled: true,
   spinSoundVolume: 70,
   tickSound: "click",

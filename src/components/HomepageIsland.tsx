@@ -1,12 +1,10 @@
 import { useState, useCallback, useRef, useEffect, ChangeEvent } from "react";
 import { useSpinCounter } from "@/hooks/useSpinCounter";
 import { useWheelSound } from "@/hooks/useWheelSound";
-import NextToolSuggestion from "@/components/NextToolSuggestion";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import ParticipantInput, { ParticipantEntry } from "@/components/ParticipantInput";
 import DrawButton from "@/components/DrawButton";
-import WinnerResult from "@/components/WinnerResult";
 import { SpinningWheel } from "@/components/SpinningWheel";
 import MicroTrustIndicators from "@/components/MicroTrustIndicators";
 import LocalStorageNotice from "@/components/LocalStorageNotice";
@@ -14,7 +12,7 @@ import { useLocalStorageParticipants } from "@/hooks/useLocalStorageParticipants
 import { ConfettiEffect } from "@/components/ConfettiEffect";
 import { WHEEL_THEMES } from "@/components/WheelThemePicker";
 import { CustomizePanel, useCustomizeConfig } from "@/components/CustomizePanel";
-import { Edit3, Share2, Settings2, Maximize2, Minimize2, BookMarked, ImagePlus } from "lucide-react";
+import { Edit3, Share2, Settings2, Maximize2, Minimize2, BookMarked, ImagePlus, Plus, X } from "lucide-react";
 import { buildShareURL, readShareURLConfig } from "@/hooks/useShareableURL";
 import { saveWheel, getWheelById } from "@/lib/wheelGallery";
 import { toast } from "sonner";
@@ -30,7 +28,6 @@ const DEFAULT_NAMES: ParticipantEntry[] = [
   { pseudo: "Gabriel", weight: 1 },
   { pseudo: "Hannah", weight: 1 },
 ];
-
 
 // Fullscreen toggle button
 function FullscreenButton() {
@@ -98,6 +95,11 @@ function OdometerNumber({ value, size = '2rem' }: { value: number; size?: string
   );
 }
 
+// Extra wheel data (wheels 2-5)
+interface ExtraWheel {
+  participants: ParticipantEntry[];
+}
+
 const HomepageIslandInner = () => {
   const { participants, setParticipants, isLoaded } = useLocalStorageParticipants();
   const { t, language } = useLanguage();
@@ -108,17 +110,22 @@ const HomepageIslandInner = () => {
   const [showCustomize, setShowCustomize] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [winners, setWinners] = useState<string[]>([]);
-  const [isSpinning, setIsSpinning] = useState(false);
   const [drawTitle, setDrawTitle] = useState("");
   const [editingTitle, setEditingTitle] = useState(false);
   const [winnerHistory, setWinnerHistory] = useState<string[][]>([]);
   const titleInputRef = useRef<HTMLInputElement>(null);
   const [hasInitialized, setHasInitialized] = useState(false);
   const [spinCount, setSpinCount] = useState(0);
-  const [activeTab, setActiveTab] = useState<'entries' | 'results'>('entries');
+  const [activeTab, setActiveTab] = useState<number | 'results'>(0); // 0..N = wheel panel, 'results' = results tab
   const [showWinnerModal, setShowWinnerModal] = useState(false);
   const [wheelBgImage, setWheelBgImage] = useState<string | null>(null);
   const imgInputRef = useRef<HTMLInputElement>(null);
+
+  // Multi-wheel state
+  const [extraWheels, setExtraWheels] = useState<ExtraWheel[]>([]);
+  const [wheelIsSpinning, setWheelIsSpinning] = useState<boolean[]>([false]);
+  const [lastWinnerWheelIdx, setLastWinnerWheelIdx] = useState(0);
+
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -194,21 +201,50 @@ const HomepageIslandInner = () => {
 
   const displayParticipants = participants.length >= 2 ? participants : DEFAULT_NAMES;
 
-  const handleDraw = useCallback(() => {
-    if (isSpinning || displayParticipants.length < 2) return;
-    setIsSpinning(true);
-    setWinners([]);
-  }, [isSpinning, displayParticipants.length]);
+  // Total wheel count: 1 primary + extras
+  const totalWheels = 1 + extraWheels.length;
 
-  const handleWheelComplete = useCallback((selectedWinners: string[]) => {
+  // Participants for each wheel (index 0 = primary)
+  const getWheelParticipants = useCallback((idx: number): ParticipantEntry[] => {
+    if (idx === 0) return displayParticipants;
+    const extra = extraWheels[idx - 1];
+    return extra && extra.participants.length >= 2 ? extra.participants : DEFAULT_NAMES;
+  }, [displayParticipants, extraWheels]);
+
+  // Responsive wheel size
+  const wheelSize = totalWheels === 1 ? 600 : totalWheels === 2 ? 380 : totalWheels === 3 ? 280 : 220;
+
+  // Spin a specific wheel
+  const handleWheelSpin = useCallback((idx: number) => {
+    if (wheelIsSpinning[idx]) return;
+    setWheelIsSpinning(prev => {
+      const a = [...prev];
+      a[idx] = true;
+      return a;
+    });
+  }, [wheelIsSpinning]);
+
+  // Wheel complete handler — curried by wheel index
+  const handleWheelComplete = useCallback((idx: number) => (selectedWinners: string[]) => {
+    setWheelIsSpinning(prev => {
+      const a = [...prev];
+      a[idx] = false;
+      return a;
+    });
     setWinners(selectedWinners);
-    setIsSpinning(false);
+    setLastWinnerWheelIdx(idx);
     setSpinCount(increment());
     setWinnerHistory(prev => [selectedWinners, ...prev].slice(0, 20));
     setShowWinnerModal(true);
     if (customizeConfig.launchConfetti) setShowConfetti(true);
     if (customizeConfig.resultSoundEnabled) playFanfare();
   }, [increment, playFanfare, customizeConfig.launchConfetti, customizeConfig.resultSoundEnabled]);
+
+  // Primary wheel draw (button below wheel)
+  const handleDraw = useCallback(() => {
+    if (wheelIsSpinning[0] || displayParticipants.length < 2) return;
+    setWheelIsSpinning(prev => { const a = [...prev]; a[0] = true; return a; });
+  }, [wheelIsSpinning, displayParticipants.length]);
 
   const handleCloseModal = useCallback(() => {
     setShowWinnerModal(false);
@@ -217,25 +253,55 @@ const HomepageIslandInner = () => {
 
   const handleRemoveFromModal = useCallback(() => {
     if (winners.length > 0) {
-      setParticipants(participants.filter(p => !winners.includes(p.pseudo)));
+      if (lastWinnerWheelIdx === 0) {
+        setParticipants(participants.filter(p => !winners.includes(p.pseudo)));
+      } else {
+        const eIdx = lastWinnerWheelIdx - 1;
+        setExtraWheels(prev => {
+          const next = [...prev];
+          next[eIdx] = { participants: next[eIdx].participants.filter(p => !winners.includes(p.pseudo)) };
+          return next;
+        });
+      }
     }
     setShowWinnerModal(false);
     setWinners([]);
-  }, [winners, participants, setParticipants]);
+  }, [winners, participants, setParticipants, lastWinnerWheelIdx]);
 
-  const handleRelaunch = useCallback(() => {
-    setWinners([]);
-    setTimeout(() => setIsSpinning(true), 100);
+  // Add wheel (max 5 total)
+  const addWheel = useCallback(() => {
+    if (totalWheels >= 5) return;
+    setExtraWheels(prev => [...prev, { participants: [...DEFAULT_NAMES] }]);
+    setWheelIsSpinning(prev => [...prev, false]);
+    setActiveTab(totalWheels); // select the new wheel's tab
+  }, [totalWheels]);
+
+  // Remove wheel N (N >= 1)
+  const removeWheel = useCallback((idx: number) => {
+    if (idx < 1) return;
+    setExtraWheels(prev => prev.filter((_, i) => i !== idx - 1));
+    setWheelIsSpinning(prev => prev.filter((_, i) => i !== idx));
+    setActiveTab(idx > 1 ? idx - 1 : 0);
   }, []);
 
-  const handleRemoveWinnersAndRespin = useCallback(() => {
-    if (winners.length > 0) {
-      const updatedParticipants = participants.filter(p => !winners.includes(p.pseudo));
-      setParticipants(updatedParticipants);
-      setWinners([]);
-      if (updatedParticipants.length >= 2) setTimeout(() => setIsSpinning(true), 100);
+  // Get/set participants for current panel tab
+  const activePanelParticipants: ParticipantEntry[] = activeTab === 'results' ? [] :
+    activeTab === 0 ? participants :
+    extraWheels[activeTab - 1]?.participants ?? DEFAULT_NAMES;
+
+  const setActivePanelParticipants = useCallback((ps: ParticipantEntry[]) => {
+    if (activeTab === 'results') return;
+    if (activeTab === 0) {
+      setParticipants(ps);
+    } else {
+      const eIdx = (activeTab as number) - 1;
+      setExtraWheels(prev => {
+        const next = [...prev];
+        next[eIdx] = { participants: ps };
+        return next;
+      });
     }
-  }, [winners, participants, setParticipants]);
+  }, [activeTab, setParticipants]);
 
   if (!isLoaded) {
     return (
@@ -248,11 +314,12 @@ const HomepageIslandInner = () => {
               <div className="h-4 bg-muted rounded w-48 mx-auto" />
             </div>
           </main>
-
         </div>
       </div>
     );
   }
+
+  const anySpinning = wheelIsSpinning.some(Boolean);
 
   return (
     <div className="relative min-h-screen overflow-hidden" style={{ background: "var(--gradient-bg)" }}>
@@ -276,7 +343,10 @@ const HomepageIslandInner = () => {
               >
                 {t.winnerModalClose}
               </button>
-              {customizeConfig.showRemoveButton && participants.length > 2 && (
+              {customizeConfig.showRemoveButton && (() => {
+                const wParticipants = lastWinnerWheelIdx === 0 ? participants : extraWheels[lastWinnerWheelIdx - 1]?.participants ?? [];
+                return wParticipants.length > 2;
+              })() && (
                 <button
                   onClick={handleRemoveFromModal}
                   className="flex-1 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
@@ -296,38 +366,46 @@ const HomepageIslandInner = () => {
           onClose={() => setShowCustomize(false)}
         />
       )}
+
       {/* Aurora background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <div className="aurora-orb aurora-orb-gold" />
         <div className="aurora-orb aurora-orb-purple" />
         <div className="aurora-orb aurora-orb-blue" />
       </div>
+
       <div className="relative z-10">
         <main className="max-w-7xl mx-auto px-4 pb-2 space-y-2">
 
           {/* MAIN AREA: 2-column on desktop */}
           <div className="flex flex-col lg:flex-row gap-4 items-start">
 
-            {/* LEFT: Wheel zone — items-end pushes wheel toward the right panel */}
+            {/* LEFT: Wheel zone */}
             <div className="flex-1 min-w-0 flex flex-col items-end space-y-2">
 
-              {/* Wheel */}
-              <SpinningWheel
-                participants={displayParticipants}
-                isSpinning={isSpinning}
-                onComplete={handleWheelComplete}
-                mode="simple"
-                winnersCount={1}
-                onSpin={handleDraw}
-                onTick={customizeConfig.spinSoundEnabled
-                  ? () => playTick(customizeConfig.tickSound)
-                  : undefined}
-                colors={WHEEL_THEMES[customizeConfig.theme]?.colors}
-                borderStyle={customizeConfig.borderStyle}
-                backgroundImage={wheelBgImage ?? undefined}
-                size={600}
-                spinDuration={customizeConfig.spinDuration}
-              />
+              {/* Wheels row */}
+              <div className={`flex flex-wrap gap-2 justify-end ${totalWheels > 1 ? 'items-end' : ''}`}>
+                {Array.from({ length: totalWheels }, (_, idx) => (
+                  <SpinningWheel
+                    key={idx}
+                    participants={getWheelParticipants(idx)}
+                    isSpinning={wheelIsSpinning[idx] ?? false}
+                    onComplete={handleWheelComplete(idx)}
+                    mode="simple"
+                    winnersCount={1}
+                    onSpin={() => handleWheelSpin(idx)}
+                    onTick={customizeConfig.spinSoundEnabled
+                      ? () => playTick(customizeConfig.tickSound)
+                      : undefined}
+                    colors={WHEEL_THEMES[customizeConfig.theme]?.colors}
+                    borderStyle={customizeConfig.borderStyle}
+                    backgroundImage={idx === 0 ? (wheelBgImage ?? undefined) : undefined}
+                    size={wheelSize}
+                    spinDuration={customizeConfig.spinDuration}
+                    clickToSpinLabel={t.clickToSpin}
+                  />
+                ))}
+              </div>
 
               {/* Toolbar: Customize | Save | Share | Add Image | Fullscreen */}
               <div className="flex items-center justify-center gap-1.5 px-1 flex-wrap">
@@ -422,10 +500,10 @@ const HomepageIslandInner = () => {
                 <span><strong className="text-foreground">{t.indexTrustCrypto}</strong></span>
               </div>
 
-              {/* Spin button */}
-              {!isSpinning && (
+              {/* Spin button (single wheel only) */}
+              {totalWheels === 1 && !wheelIsSpinning[0] && (
                 <div className="space-y-3">
-                  <DrawButton onDraw={handleDraw} isSpinning={isSpinning} disabled={displayParticipants.length < 2} participantCount={displayParticipants.length} mode="simple" />
+                  <DrawButton onDraw={handleDraw} isSpinning={false} disabled={displayParticipants.length < 2} participantCount={displayParticipants.length} mode="simple" />
                   <MicroTrustIndicators mode="simple" />
                 </div>
               )}
@@ -434,21 +512,24 @@ const HomepageIslandInner = () => {
             {/* RIGHT: Entries / Results panel */}
             <div className="w-full lg:w-72 shrink-0 bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
 
-              {/* Tabs */}
-              <div className="flex border-b border-border">
-                <button
-                  onClick={() => setActiveTab('entries')}
-                  className={`flex-1 py-3 text-sm font-medium transition-colors ${
-                    activeTab === 'entries'
-                      ? 'text-primary border-b-2 border-primary -mb-px bg-primary/5'
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  {t.indexEntriesTab} ({displayParticipants.length})
-                </button>
+              {/* Tabs: wheel tabs + results */}
+              <div className="flex border-b border-border overflow-x-auto">
+                {Array.from({ length: totalWheels }, (_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveTab(idx)}
+                    className={`flex-shrink-0 px-3 py-3 text-sm font-medium transition-colors ${
+                      activeTab === idx
+                        ? 'text-primary border-b-2 border-primary -mb-px bg-primary/5'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    {t.wheelPrefix} {idx + 1}
+                  </button>
+                ))}
                 <button
                   onClick={() => setActiveTab('results')}
-                  className={`flex-1 py-3 text-sm font-medium transition-colors ${
+                  className={`flex-shrink-0 px-3 py-3 text-sm font-medium transition-colors ${
                     activeTab === 'results'
                       ? 'text-primary border-b-2 border-primary -mb-px bg-primary/5'
                       : 'text-muted-foreground hover:text-foreground'
@@ -458,11 +539,38 @@ const HomepageIslandInner = () => {
                 </button>
               </div>
 
-              {/* Entries tab */}
-              {activeTab === 'entries' && (
+              {/* Wheel entries tab */}
+              {activeTab !== 'results' && (
                 <div className="p-4 space-y-3">
-                  <ParticipantInput mode="simple" participants={participants} onParticipantsChange={setParticipants} />
-                  {participants.length > 0 && <LocalStorageNotice mode="simple" />}
+                  <ParticipantInput
+                    mode="simple"
+                    participants={activePanelParticipants}
+                    onParticipantsChange={setActivePanelParticipants}
+                  />
+                  {activeTab === 0 && participants.length > 0 && <LocalStorageNotice mode="simple" />}
+
+                  {/* Remove wheel button (not for wheel 1) */}
+                  {(activeTab as number) > 0 && (
+                    <button
+                      onClick={() => removeWheel(activeTab as number)}
+                      className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl border border-destructive/30 text-xs font-medium text-destructive/70 hover:text-destructive hover:border-destructive hover:bg-destructive/5 transition-all"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                      {t.removeWheel} {t.wheelPrefix} {(activeTab as number) + 1}
+                    </button>
+                  )}
+
+                  {/* Add wheel button */}
+                  {totalWheels < 5 && (
+                    <button
+                      onClick={addWheel}
+                      className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl border border-dashed border-border hover:border-primary/40 hover:bg-primary/5 transition-all text-xs font-medium text-muted-foreground hover:text-foreground"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      {t.addWheel}
+                      <span className="ml-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary/15 text-primary uppercase tracking-wide">New</span>
+                    </button>
+                  )}
                 </div>
               )}
 
