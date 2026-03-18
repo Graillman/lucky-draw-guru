@@ -424,6 +424,7 @@ export interface Translations {
   winnerModalRemove: string;
   // Multi-wheel
   clickToSpin: string;
+  clickToSpinSub: string;
   addWheel: string;
   removeWheel: string;
   wheelPrefix: string;
@@ -858,6 +859,7 @@ export const translations: Record<Language, Translations> = {
     winnerModalClose: 'Close',
     winnerModalRemove: 'Remove',
     clickToSpin: 'Click to spin',
+    clickToSpinSub: 'or press Ctrl+Enter',
     addWheel: 'Add wheel',
     removeWheel: 'Remove',
     wheelPrefix: 'Wheel',
@@ -1278,6 +1280,7 @@ export const translations: Record<Language, Translations> = {
     winnerModalClose: 'Cerrar',
     winnerModalRemove: 'Eliminar',
     clickToSpin: 'Clic para girar',
+    clickToSpinSub: 'o pulsa Ctrl+Enter',
     addWheel: 'Añadir rueda',
     removeWheel: 'Eliminar',
     wheelPrefix: 'Rueda',
@@ -1697,6 +1700,7 @@ export const translations: Record<Language, Translations> = {
     winnerModalClose: 'Fermer',
     winnerModalRemove: 'Retirer',
     clickToSpin: 'Cliquez pour tourner',
+    clickToSpinSub: 'ou Ctrl+Entrée',
     addWheel: 'Ajouter une roue',
     removeWheel: 'Supprimer',
     wheelPrefix: 'Roue',
@@ -2116,6 +2120,7 @@ export const translations: Record<Language, Translations> = {
     winnerModalClose: 'Schließen',
     winnerModalRemove: 'Entfernen',
     clickToSpin: 'Klicken zum Drehen',
+    clickToSpinSub: 'oder Strg+Enter',
     addWheel: 'Rad hinzufügen',
     removeWheel: 'Entfernen',
     wheelPrefix: 'Rad',
@@ -2535,6 +2540,7 @@ export const translations: Record<Language, Translations> = {
     winnerModalClose: 'Fechar',
     winnerModalRemove: 'Remover',
     clickToSpin: 'Clique para girar',
+    clickToSpinSub: 'ou Ctrl+Enter',
     addWheel: 'Adicionar roda',
     removeWheel: 'Remover',
     wheelPrefix: 'Roda',
@@ -2954,6 +2960,7 @@ export const translations: Record<Language, Translations> = {
     winnerModalClose: 'Chiudi',
     winnerModalRemove: 'Rimuovi',
     clickToSpin: 'Clicca per girare',
+    clickToSpinSub: 'o Ctrl+Invio',
     addWheel: 'Aggiungi ruota',
     removeWheel: 'Rimuovi',
     wheelPrefix: 'Ruota',

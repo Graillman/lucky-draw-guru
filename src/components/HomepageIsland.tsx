@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect, ChangeEvent } from "react";
+import { useState, useCallback, useRef, useEffect, useMemo, ChangeEvent } from "react";
 import { useSpinCounter } from "@/hooks/useSpinCounter";
 import { useWheelSound } from "@/hooks/useWheelSound";
 import { LanguageProvider } from "@/contexts/LanguageContext";
@@ -124,7 +124,10 @@ const HomepageIslandInner = () => {
   // Multi-wheel state
   const [extraWheels, setExtraWheels] = useState<ExtraWheel[]>([]);
   const [wheelIsSpinning, setWheelIsSpinning] = useState<boolean[]>([false]);
-  const [lastWinnerWheelIdx, setLastWinnerWheelIdx] = useState(0);
+
+  // Multi-wheel winner collection: wait for ALL wheels to finish
+  const pendingWinnersRef = useRef<Map<number, string>>(new Map());
+  const [winnersForRemoval, setWinnersForRemoval] = useState<Array<{name: string, wheelIdx: number}>>([]);
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -211,8 +214,8 @@ const HomepageIslandInner = () => {
     return extra && extra.participants.length >= 2 ? extra.participants : DEFAULT_NAMES;
   }, [displayParticipants, extraWheels]);
 
-  // Responsive wheel size
-  const wheelSize = totalWheels === 1 ? 600 : totalWheels === 2 ? 380 : totalWheels === 3 ? 280 : 220;
+  // Responsive wheel size — shrinks so all wheels fit side by side
+  const wheelSize = totalWheels === 1 ? 600 : totalWheels === 2 ? 360 : totalWheels === 3 ? 250 : totalWheels === 4 ? 200 : 170;
 
   // Spin a specific wheel
   const handleWheelSpin = useCallback((idx: number) => {
@@ -224,21 +227,34 @@ const HomepageIslandInner = () => {
     });
   }, [wheelIsSpinning]);
 
-  // Wheel complete handler — curried by wheel index
+  // Wheel complete handler — just records the winner, doesn't show modal yet
   const handleWheelComplete = useCallback((idx: number) => (selectedWinners: string[]) => {
+    pendingWinnersRef.current.set(idx, selectedWinners[0]);
     setWheelIsSpinning(prev => {
       const a = [...prev];
       a[idx] = false;
       return a;
     });
-    setWinners(selectedWinners);
-    setLastWinnerWheelIdx(idx);
+  }, []);
+
+  // Show modal only when ALL spinning wheels have finished
+  useEffect(() => {
+    if (wheelIsSpinning.some(Boolean)) return;
+    if (pendingWinnersRef.current.size === 0) return;
+
+    const entries = Array.from(pendingWinnersRef.current.entries());
+    const allWinners = entries.map(([, name]) => name);
+    const removal = entries.map(([idx, name]) => ({ wheelIdx: idx, name }));
+    pendingWinnersRef.current.clear();
+
+    setWinners(allWinners);
+    setWinnersForRemoval(removal);
     setSpinCount(increment());
-    setWinnerHistory(prev => [selectedWinners, ...prev].slice(0, 20));
+    setWinnerHistory(prev => [allWinners, ...prev].slice(0, 20));
     setShowWinnerModal(true);
     if (customizeConfig.launchConfetti) setShowConfetti(true);
     if (customizeConfig.resultSoundEnabled) playFanfare();
-  }, [increment, playFanfare, customizeConfig.launchConfetti, customizeConfig.resultSoundEnabled]);
+  }, [wheelIsSpinning]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Primary wheel draw (button below wheel)
   const handleDraw = useCallback(() => {
@@ -249,24 +265,26 @@ const HomepageIslandInner = () => {
   const handleCloseModal = useCallback(() => {
     setShowWinnerModal(false);
     setWinners([]);
+    setWinnersForRemoval([]);
   }, []);
 
   const handleRemoveFromModal = useCallback(() => {
-    if (winners.length > 0) {
-      if (lastWinnerWheelIdx === 0) {
-        setParticipants(participants.filter(p => !winners.includes(p.pseudo)));
+    winnersForRemoval.forEach(({ name, wheelIdx }) => {
+      if (wheelIdx === 0) {
+        setParticipants(prev => prev.filter(p => p.pseudo !== name));
       } else {
-        const eIdx = lastWinnerWheelIdx - 1;
+        const eIdx = wheelIdx - 1;
         setExtraWheels(prev => {
           const next = [...prev];
-          next[eIdx] = { participants: next[eIdx].participants.filter(p => !winners.includes(p.pseudo)) };
+          if (next[eIdx]) next[eIdx] = { participants: next[eIdx].participants.filter(p => p.pseudo !== name) };
           return next;
         });
       }
-    }
+    });
     setShowWinnerModal(false);
     setWinners([]);
-  }, [winners, participants, setParticipants, lastWinnerWheelIdx]);
+    setWinnersForRemoval([]);
+  }, [winnersForRemoval, setParticipants]);
 
   // Add wheel (max 5 total)
   const addWheel = useCallback(() => {
@@ -333,10 +351,18 @@ const HomepageIslandInner = () => {
             <div className="bg-primary px-6 py-3">
               <p className="text-primary-foreground font-bold text-base text-center">{t.winnerModalTitle}</p>
             </div>
-            <div className="flex items-center gap-4 px-6 py-6">
-              {/* Winner name — left */}
-              <div className="flex-1 min-w-0">
-                <p className="text-4xl font-bold text-foreground truncate">{winners[0]}</p>
+            <div className="flex items-center gap-4 px-6 py-6 min-h-[96px]">
+              {/* Winner name(s) — left, vertically centered */}
+              <div className="flex-1 min-w-0 flex items-center">
+                {winners.length === 1 ? (
+                  <p className="text-4xl font-bold text-foreground truncate">{winners[0]}</p>
+                ) : (
+                  <div className="space-y-1 min-w-0 w-full">
+                    {winners.map((w, i) => (
+                      <p key={i} className="text-2xl font-bold text-foreground truncate">{w}</p>
+                    ))}
+                  </div>
+                )}
               </div>
               {/* Buttons — right, stacked */}
               <div className="flex flex-col gap-2 shrink-0">
@@ -346,10 +372,10 @@ const HomepageIslandInner = () => {
                 >
                   {t.winnerModalClose}
                 </button>
-                {customizeConfig.showRemoveButton && (() => {
-                  const wParticipants = lastWinnerWheelIdx === 0 ? participants : extraWheels[lastWinnerWheelIdx - 1]?.participants ?? [];
-                  return wParticipants.length > 2;
-                })() && (
+                {customizeConfig.showRemoveButton && winnersForRemoval.some(({ wheelIdx }) => {
+                  const wp = wheelIdx === 0 ? participants : extraWheels[wheelIdx - 1]?.participants ?? [];
+                  return wp.length > 2;
+                }) && (
                   <button
                     onClick={handleRemoveFromModal}
                     className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors whitespace-nowrap"
@@ -385,10 +411,10 @@ const HomepageIslandInner = () => {
           <div className="flex flex-col lg:flex-row gap-4 items-start">
 
             {/* LEFT: Wheel zone */}
-            <div className="flex-1 min-w-0 flex flex-col items-end space-y-2">
+            <div className="flex-1 min-w-0 flex flex-col items-center space-y-2">
 
               {/* Wheels row */}
-              <div className="flex flex-row flex-nowrap gap-2 justify-end items-center overflow-x-auto">
+              <div className="flex flex-row flex-nowrap gap-2 justify-center items-center overflow-x-auto max-w-full">
                 {Array.from({ length: totalWheels }, (_, idx) => (
                   <SpinningWheel
                     key={idx}
@@ -407,6 +433,7 @@ const HomepageIslandInner = () => {
                     size={wheelSize}
                     spinDuration={customizeConfig.spinDuration}
                     clickToSpinLabel={t.clickToSpin}
+                    clickToSpinSub={t.clickToSpinSub}
                     compact={totalWheels > 1}
                   />
                 ))}

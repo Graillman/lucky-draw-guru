@@ -20,6 +20,7 @@ interface SpinningWheelProps {
   size?: number; // display size in px, default 480
   spinDuration?: number; // seconds, default 8
   clickToSpinLabel?: string;
+  clickToSpinSub?: string;
   compact?: boolean; // true = reduced padding for multi-wheel mode
 }
 
@@ -54,7 +55,7 @@ function drawRoundRect(
 export function SpinningWheel({
   participants, isSpinning, onComplete, mode, winnersCount,
   onSpin, onTick, colors, borderStyle = 'default', backgroundImage,
-  size = 480, spinDuration = 8, clickToSpinLabel, compact = false
+  size = 480, spinDuration = 8, clickToSpinLabel, clickToSpinSub, compact = false
 }: SpinningWheelProps) {
   const COLORS = colors && colors.length > 0 ? colors : DEFAULT_COLORS;
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -334,40 +335,45 @@ export function SpinningWheel({
     ctx.fillStyle = 'rgba(255,255,255,0.3)';
     ctx.fill();
 
-    // ── "Click to spin" pill — drawn ON CANVAS, fixed position ──
+    // ── "Click to spin" — diagonal text like wheelofnames ──
     if (clickToSpinLabel && !isAnimating) {
-      const textFontSize = Math.max(12, Math.round(sz * 0.048));
       ctx.save();
-      ctx.shadowColor = 'transparent';
-      ctx.shadowBlur = 0;
-      ctx.font = `bold ${textFontSize}px 'Space Grotesk', sans-serif`;
-      const tw = ctx.measureText(clickToSpinLabel).width;
-      const padX = Math.round(textFontSize * 1.0);
-      const padY = Math.round(textFontSize * 0.45);
-      const rw   = tw + padX * 2;
-      const rh   = textFontSize + padY * 2;
-      const rx   = center - rw / 2;
-      const ry   = center - rh / 2;
-      const br   = rh / 2; // fully rounded = pill shape
-
-      // Pill background
+      // Clip to wheel circle so text doesn't bleed outside
       ctx.beginPath();
-      drawRoundRect(ctx, rx, ry, rw, rh, br);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.90)';
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
+      ctx.arc(center, center, radius - 4, 0, Math.PI * 2);
+      ctx.clip();
 
-      // Text inside pill
-      ctx.fillStyle = '#1a1a1a';
+      ctx.translate(center, center);
+      ctx.rotate(-Math.PI / 6); // -30 degrees diagonal
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(clickToSpinLabel, center, center);
+
+      const fs1 = Math.max(16, Math.round(sz * 0.09));
+      const fs2 = Math.max(10, Math.round(sz * 0.055));
+
+      ctx.shadowColor = 'rgba(0,0,0,0.75)';
+      ctx.shadowBlur = 8;
+      ctx.shadowOffsetX = 1;
+      ctx.shadowOffsetY = 2;
+
+      // Two lines: offset each by half the total height
+      const lineGap = fs1 * 0.35;
+      const y1 = clickToSpinSub ? -(fs1 * 0.5 + lineGap * 0.5) : 0;
+
+      ctx.font = `bold ${fs1}px 'Space Grotesk', sans-serif`;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(clickToSpinLabel, 0, y1);
+
+      if (clickToSpinSub) {
+        ctx.font = `bold ${fs2}px 'Space Grotesk', sans-serif`;
+        ctx.fillStyle = 'rgba(255,255,255,0.82)';
+        ctx.fillText(clickToSpinSub, 0, y1 + fs1 + lineGap);
+      }
+
       ctx.restore();
     }
 
-  }, [rotation, segments, participants.length, mode, themeColor, themeColorDark, themeColorGlow, themeColorHalf, themeColorLight, themeStroke, borderStyle, bgImgVersion, isAnimating, clickToSpinLabel]);
+  }, [rotation, segments, participants.length, mode, themeColor, themeColorDark, themeColorGlow, themeColorHalf, themeColorLight, themeStroke, borderStyle, bgImgVersion, isAnimating, clickToSpinLabel, clickToSpinSub]);
   // ─────────────────────────────────────────────────────────────────────────
 
   // Idle rotation — 1 revolution per ~20s, stops on first spin

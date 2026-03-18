@@ -14,7 +14,7 @@ type SoundProfile = {
 
 const SOUND_PROFILES: Record<string, SoundProfile> = {
   // Realistic plastic/wood ratchet: mostly bandpass noise, barely any tone
-  click:  { type: "sine", freq: 280, gainPeak: 0.02, decay: 0.04, noisy: true, noiseGain: 0.22, noiseFilter: 900 },
+  click:  { type: "triangle", freq: 900, gainPeak: 0.04, decay: 0.022, noisy: true, noiseGain: 0.12, noiseFilter: 2400 },
   tick:   { type: "triangle", freq: 400, gainPeak: 0.06, decay: 0.05, noisy: true, noiseGain: 0.10, noiseFilter: 700 },
   wood:   { type: "sine",     freq: 120, gainPeak: 0.03, decay: 0.07, noisy: true, noiseGain: 0.28, noiseFilter: 350 },
   ping:   { type: "sine",     freq: 900, gainPeak: 0.08, decay: 0.12 },
