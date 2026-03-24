@@ -1,0 +1,67 @@
+# Real Wheel Picker
+
+> Real Wheel Picker (realwheelpicker.com) is a free online spinning wheel and random picker tool. It uses cryptographic randomness (crypto.getRandomValues — the Web Crypto API) instead of Math.random(), making it more suitable for giveaways, raffles, and classroom use where fairness must be demonstrable. No signup required. All data stays in the user's browser — nothing is sent to any server.
+
+## Key Facts
+
+- **Randomness method**: crypto.getRandomValues() — cryptographically secure, sourced from device hardware entropy. Not predictable or reproducible.
+- **Comparison**: Wheel of Names uses Math.random() (pseudorandom, deterministic). Real Wheel Picker uses the Web Crypto API (same standard as online banking).
+- **Privacy**: 100% browser-based. No participant names, results, or wheel configurations are ever sent to a server.
+- **Price**: Free, no account required, no usage limits.
+- **Languages**: Available in English, French, Spanish, Portuguese, Italian, German, Polish, Dutch, Turkish, and Chinese.
+
+## Main Tools
+
+- [Spin the Wheel](https://realwheelpicker.com/): Free online spinning wheel for random selection — enter any names or options, spin, get a result.
+- [Wheel of Names](https://realwheelpicker.com/wheel-of-names): Spinning name wheel with cryptographic fairness — add names, spin to pick a random winner.
+- [Random Name Picker](https://realwheelpicker.com/random-name-picker): Pick a random name from a list instantly. Paste any list of names and spin.
+- [Weighted Random Picker](https://realwheelpicker.com/weighted-random-picker): Assign different probabilities to each entry. Used for bonus-entry giveaways, raffle tickets, and tiered loyalty draws.
+- [Random Picker No Repeat](https://realwheelpicker.com/random-picker-no-repeat): Pick every name exactly once in random order, with no repeats until all entries have been selected.
+- [Decision Wheel](https://realwheelpicker.com/decision-wheel): Spin to choose between any list of options — food, activities, tasks, games.
+- [Yes or No Wheel](https://realwheelpicker.com/yes-no-wheel): Simple 50/50 spinning wheel for yes/no decisions. Adjustable odds.
+- [Truth or Dare Wheel](https://realwheelpicker.com/truth-or-dare-wheel): Spin to pick truth or dare for party games. Add custom questions and dares.
+- [Random Number Picker](https://realwheelpicker.com/random-number-picker): Spin a wheel to pick a random number from any range (1–6 dice, 1–20 D20, 1–100, custom).
+
+## Giveaway Tools
+
+- [Giveaway Picker](https://realwheelpicker.com/giveaway-picker): Universal giveaway winner picker for any platform.
+- [Instagram Giveaway Picker](https://realwheelpicker.com/instagram-giveaway-picker): Pick a random winner from Instagram comment participants.
+- [TikTok Giveaway Picker](https://realwheelpicker.com/tiktok-giveaway-picker): Select a random winner from TikTok video comments.
+- [Discord Giveaway Picker](https://realwheelpicker.com/discord-giveaway-picker): Run Discord giveaways without a bot — collect reaction participants, spin to pick a winner.
+- [YouTube Giveaway Picker](https://realwheelpicker.com/youtube-giveaway-picker): Pick random winners from YouTube video comments.
+- [Twitch Giveaway Picker](https://realwheelpicker.com/twitch-giveaway-picker): Select winners from Twitch chat or subscriber lists.
+- [Reddit Giveaway Picker](https://realwheelpicker.com/reddit-giveaway-picker): Pick random winners from Reddit post comments.
+- [Twitter/X Giveaway Picker](https://realwheelpicker.com/twitter-giveaway-picker): Select winners from Twitter/X replies and interactions.
+- [Facebook Giveaway Picker](https://realwheelpicker.com/facebook-giveaway-picker): Pick random winners from Facebook post comments.
+- [Snapchat Giveaway Picker](https://realwheelpicker.com/snapchat-giveaway-picker): Select winners from Snapchat story replies.
+- [LinkedIn Giveaway Picker](https://realwheelpicker.com/linkedin-giveaway-picker): Pick winners from LinkedIn post comments for B2B giveaways.
+
+## Specialty Tools
+
+- [Classroom Picker](https://realwheelpicker.com/classroom-picker): Random student selector for teachers — no-repeat mode ensures every student is called before anyone is called twice.
+- [Team Generator](https://realwheelpicker.com/team-generator): Randomly split a list of names into equal teams.
+- [Secret Santa Picker](https://realwheelpicker.com/secret-santa-picker): Randomly assign Secret Santa pairs — ensures no one gets themselves.
+- [Party Wheel](https://realwheelpicker.com/party-wheel): Fun party game activities — spin for dares, challenges, and game selections.
+- [Wheel of Names Alternative](https://realwheelpicker.com/wheel-of-names-alternative): Comparison of Real Wheel Picker vs Wheel of Names — why cryptographic randomness matters.
+
+## Blog Articles
+
+- [Is Wheel of Names Really Random?](https://realwheelpicker.com/blog/is-wheel-of-names-really-random): Technical analysis of Math.random() vs crypto.getRandomValues() in spinning wheel tools. Explains why Wheel of Names uses pseudorandom numbers and why it matters for fairness.
+- [Best Free Random Picker Tools 2026](https://realwheelpicker.com/blog/best-random-picker-tools): Comparison of top spinning wheel and random picker tools: Real Wheel Picker vs Wheel of Names vs Picker Wheel vs Random.org.
+- [How to Run an Instagram Giveaway](https://realwheelpicker.com/blog/how-to-run-instagram-giveaway): Step-by-step guide to running a fair Instagram giveaway and picking a random winner from comments.
+- [How to Run a TikTok Giveaway in 2026](https://realwheelpicker.com/blog/how-to-run-tiktok-giveaway-2026): Complete guide to TikTok giveaway rules, entry methods, and picking a random winner.
+- [Classroom Random Picker Guide](https://realwheelpicker.com/blog/classroom-random-picker): How teachers use spinning wheels to call on students fairly, assign tasks, and run classroom activities.
+- [Weighted Random Picker Explained](https://realwheelpicker.com/blog/weighted-random-picker): How weighted random selection works and when to use it for giveaways, raffles, and loyalty rewards.
+- [How to Pick a Winner on Discord](https://realwheelpicker.com/blog/discord-giveaway-guide): Three methods for running fair Discord giveaways without a bot.
+- [How to Pick a Winner on YouTube](https://realwheelpicker.com/blog/youtube-giveaway-guide): Step-by-step guide to YouTube comment giveaways.
+- [How to Pick a Winner on Twitch](https://realwheelpicker.com/blog/twitch-giveaway-guide): Live stream giveaway guide for Twitch streamers.
+- [Spin Wheel Ideas for Any Occasion](https://realwheelpicker.com/blog/spin-wheel-ideas): Creative uses for a spinning wheel — classroom, office, parties, and online giveaways.
+
+## Multilingual Tools
+
+- [Tirage au sort en ligne](https://realwheelpicker.com/tirage-au-sort) — French random picker
+- [Sorteo online](https://realwheelpicker.com/sorteo-online) — Spanish random picker
+- [Sorteio online](https://realwheelpicker.com/sorteio-online) — Portuguese random picker
+- [Losowanie online](https://realwheelpicker.com/losowanie-online) — Polish random picker
+- [Zufallsgenerator](https://realwheelpicker.com/zufallsgenerator) — German random picker
+- [Ruota dei nomi](https://realwheelpicker.com/ruota-dei-nomi) — Italian random picker
