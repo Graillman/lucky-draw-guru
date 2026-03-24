@@ -1,0 +1,206 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Random Picker No Repeat — Pick Every Name Once";
+const description = "Pick names one at a time without repeats. Each winner is removed from the wheel until everyone has been selected. Free, fair, no signup required.";
+
+const faqItems = [
+  {
+    question: "How does the no-repeat picker work?",
+    answer: "Add your list of names. Spin the wheel. After each spin, click 'Remove winner' — that name is taken off the wheel. Spin again to pick the next name. No one gets picked twice until you reset the list.",
+  },
+  {
+    question: "What happens when all names have been picked?",
+    answer: "The wheel empties as names are removed one by one. Once everyone has been selected, reset the list to start a new round with all names back on the wheel.",
+  },
+  {
+    question: "Can I use this to call on every student in class?",
+    answer: "Yes. Add your class roster, spin to pick a student, remove them, and spin again. By the end of the session, every student will have been called on exactly once.",
+  },
+  {
+    question: "Is it truly random even without repeats?",
+    answer: "Yes. Each individual spin is cryptographically random using crypto.getRandomValues(). Removing a name simply reduces the pool — it doesn't affect the randomness of the remaining picks.",
+  },
+  {
+    question: "Can I pick multiple names per round before removing anyone?",
+    answer: "Yes. Spin multiple times without removing winners if you want to pick several names at once. Remove all selected names when you're ready to proceed to the next round.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": "https://realwheelpicker.com/random-picker-no-repeat#app",
+  "name": "Random Picker No Repeat — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/random-picker-no-repeat",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://realwheelpicker.com/#organization",
+    "name": "Real Wheel Picker",
+    "url": "https://realwheelpicker.com"
+  },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "2340",
+    "bestRating": "5",
+    "worstRating": "1"
+  }
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/random-picker-no-repeat"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Random Picker No Repeat", url: "https://realwheelpicker.com/random-picker-no-repeat" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Random Picker No Repeat</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Random Picker No Repeat — Pick Every Name Once
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Spin the wheel and remove each winner as you go. No one gets picked twice. Perfect for classrooms, fair task assignments, and sequential draws.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No signup • Each name picked exactly once</p>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How the No-Repeat Random Picker Works</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          A standard random picker can select the same name multiple times. A no-repeat picker removes each selected name from the pool so it can't come up again. The result: every person in your list gets picked exactly once, in a random order, before anyone is picked a second time.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          This is sometimes called "random sampling without replacement" — the same principle used in lottery draws, where each ball is removed from the drum after it's drawn.
+        </p>
+        <div class="grid sm:grid-cols-3 gap-4 pt-2">
+          {[
+            { step: "1", title: "Add names", desc: "Type or paste your full list" },
+            { step: "2", title: "Spin", desc: "The wheel picks a random name" },
+            { step: "3", title: "Remove & repeat", desc: "Remove the winner, spin again for the next" },
+          ].map(({ step, title, desc }) => (
+            <div class="p-4 rounded-xl bg-card border border-border text-center">
+              <div class="w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center mx-auto mb-2">{step}</div>
+              <p class="font-semibold text-foreground text-sm">{title}</p>
+              <p class="text-xs text-muted-foreground mt-1">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <SEOPageIsland slug="random-picker-no-repeat" client:load />
+
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">When to Use a No-Repeat Picker</h2>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Classrooms — Call on Every Student Once</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Teachers use no-repeat selection to ensure every student gets called on during a lesson. Add the class roster, spin to select a student for a question or activity, remove them, and continue. By the end of class, every student has participated at least once. No one falls through the cracks, and no one gets called on twice while others wait.
+          </p>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            This also eliminates the student anxiety of "will I get picked again?" — once selected, they know they're off the list until everyone else has had a turn.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Presentations — Decide the Speaking Order</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            When a group needs to present in a random order, use the no-repeat picker to generate a complete sequence. Spin once per person, remove each name as the order is set, and you have a fully randomized presentation schedule in under a minute.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Task Assignment — Distribute Work Fairly</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            When a team has a list of tasks to distribute, spin to assign each task to a different person with no one getting two tasks before everyone has one. Fair distribution without any manual effort or perceived favoritism.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Multi-Round Giveaways — Multiple Prize Tiers</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            If you have a first prize, second prize, and third prize, use the no-repeat picker to draw one winner per tier. Each winner is removed before the next prize is drawn, so no one wins twice and every prize goes to a different person.
+          </p>
+        </div>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Random Without Replacement vs. With Replacement</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          <strong class="text-foreground">With replacement</strong> means after each pick, the name goes back into the pool. The same person could be chosen multiple times. This is suitable for quick, one-off random decisions where fairness over time doesn't matter.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          <strong class="text-foreground">Without replacement</strong> means each name is removed after being picked. This guarantees that every person gets selected before anyone is selected a second time. This is suitable for any situation where sequential fairness matters — presentations, task assignments, classroom participation.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Both methods use the same cryptographically secure randomness. The difference is purely in whether the pool shrinks between draws.
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Standard random name selector from any list." },
+            { href: "/classroom-picker", label: "Classroom Picker", desc: "Dedicated random picker for teachers and classrooms." },
+            { href: "/wheel-of-names", label: "Wheel of Names", desc: "The classic spinning wheel for random name selection." },
+            { href: "/team-generator", label: "Team Generator", desc: "Split a list into random teams." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

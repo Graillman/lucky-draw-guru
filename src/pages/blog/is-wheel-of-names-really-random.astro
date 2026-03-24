@@ -151,6 +151,77 @@ const fairnessPoints = [
         </ol>
       </section>
 
+      {/* Which Tools Use Which Method */}
+      <section class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">Which Spinner Wheels Are Actually Cryptographically Random?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Most online spinner tools don't publish their source code, so we can only assess them by reading their JavaScript in the browser. Here's what a quick inspection reveals about the most popular options:
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left py-3 px-4 font-semibold text-foreground">Tool</th>
+                <th class="text-left py-3 px-4 font-semibold text-foreground">Random Method</th>
+                <th class="text-left py-3 px-4 font-semibold text-foreground">Modulo Bias Fix</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 text-foreground font-medium">RealWheelPicker</td>
+                <td class="py-3 px-4 text-green-600 dark:text-green-400">crypto.getRandomValues()</td>
+                <td class="py-3 px-4 text-green-600 dark:text-green-400">Yes — rejection sampling</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 text-muted-foreground">Wheel of Names</td>
+                <td class="py-3 px-4 text-yellow-600 dark:text-yellow-400">Math.random()</td>
+                <td class="py-3 px-4 text-red-500">Not applicable</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-3 px-4 text-muted-foreground">Generic spinner sites</td>
+                <td class="py-3 px-4 text-yellow-600 dark:text-yellow-400">Math.random() (typical)</td>
+                <td class="py-3 px-4 text-red-500">Rarely</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-sm text-muted-foreground">
+          To verify any site yourself: open the browser Developer Tools (F12), go to Sources, and search for "Math.random" or "getRandomValues" in the site's JavaScript files.
+        </p>
+      </section>
+
+      {/* Low Entropy Edge Case */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-4">
+        <h2 class="text-xl font-bold text-foreground">What Happens When Your Device Has Low Entropy?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">crypto.getRandomValues()</code> function pulls from your operating system's entropy pool — a reservoir filled by physical events like mouse movements, keyboard timings, and hardware interrupts. On a modern desktop or phone, this pool is effectively infinite and always full.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          On a fresh virtual machine or headless server with no user interaction, the entropy pool can theoretically be low immediately after boot. In this edge case, some implementations will block and wait until enough entropy is available before returning a value. Modern browsers handle this transparently — <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">crypto.getRandomValues()</code> in a web browser has never been observed to block in practice because browsers maintain their own entropy management layer on top of the OS.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          For practical purposes: if you're spinning a wheel on a phone or computer you've been using for more than a few seconds, entropy is a non-issue. The edge case matters for cryptographic key generation in data centers — not for picking a name from a list in a browser.
+        </p>
+      </section>
+
+      {/* Why This Matters for Giveaways */}
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Why It Actually Matters for Giveaways</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          For most classroom or party uses, the difference between <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">Math.random()</code> and <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">crypto.getRandomValues()</code> is negligible. Both will feel random. But for public-facing giveaways with real prizes, the distinction becomes important for two reasons:
+        </p>
+        <div class="space-y-3">
+          <div class="p-4 rounded-xl bg-primary/5 border border-primary/20">
+            <p class="font-semibold text-foreground mb-1">1. Legal defensibility</p>
+            <p class="text-sm text-muted-foreground">Some jurisdictions require demonstrably unbiased selection for prize draws. "We used crypto.getRandomValues()" is a verifiable, auditable statement. "We used Math.random()" is technically true but harder to defend in a dispute because it implies a predictable algorithm.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-primary/5 border border-primary/20">
+            <p class="font-semibold text-foreground mb-1">2. Trust from your audience</p>
+            <p class="text-sm text-muted-foreground">If a follower with technical knowledge checks how you picked your winner and sees that the wheel uses cryptographic randomness, they'll accept the result. If they see Math.random(), some will wonder whether the sequence was seeded to favor a specific outcome. Even if it wasn't, the perception of possible manipulation is the problem.</p>
+          </div>
+        </div>
+      </section>
+
       {/* Bottom Line */}
       <section class="space-y-4">
         <h2 class="text-2xl font-bold text-foreground">The Bottom Line</h2>
