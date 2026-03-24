@@ -99,23 +99,103 @@ const jsonLd = {
         <div class="p-6 rounded-xl border bg-card border-border space-y-3">
           <h3 class="text-lg font-bold text-foreground">Giveaways With Bonus Entries</h3>
           <p class="text-sm text-muted-foreground leading-relaxed">
-            "Like + share for 2 entries, comment for 1 entry." Set participants who did both to weight 3, those who only commented to weight 1. The picker handles the math automatically.
+            "Like + share for 2 entries, comment for 1 entry." Set participants who did both to weight 3, those who only commented to weight 1. The picker handles the math automatically — no spreadsheet, no manual duplicate entries.
+          </p>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            This is the most transparent approach: you publish the weighting rules before the draw, then run the weighted wheel on-screen. Your audience can verify that the segment sizes match the stated rules.
           </p>
         </div>
 
         <div class="p-6 rounded-xl border bg-card border-border space-y-3">
-          <h3 class="text-lg font-bold text-foreground">Raffle Tickets</h3>
+          <h3 class="text-lg font-bold text-foreground">Physical Raffle Tickets</h3>
           <p class="text-sm text-muted-foreground leading-relaxed">
-            Someone bought 5 raffle tickets? Set their weight to 5. Someone bought 1 ticket? Weight of 1. The wheel segment proportionally reflects each person's investment.
+            Someone bought 5 raffle tickets? Set their weight to 5. Someone bought 1 ticket? Weight of 1. The wheel segment proportionally reflects each person's investment — exactly like dropping 5 physical tickets into a drum versus 1.
+          </p>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            This replaces the need to type a name 5 times or manage duplicate entries. One line per person, one weight number, done.
           </p>
         </div>
 
         <div class="p-6 rounded-xl border bg-card border-border space-y-3">
-          <h3 class="text-lg font-bold text-foreground">Loyalty Rewards</h3>
+          <h3 class="text-lg font-bold text-foreground">Loyalty Rewards and Tier-Based Giveaways</h3>
           <p class="text-sm text-muted-foreground leading-relaxed">
-            Reward long-term subscribers or top customers with higher odds in your monthly draw. Transparent, auditable, and still visually fair to everyone watching.
+            Monthly subscriber giveaway where Patreon Tier 3 members get 3× the odds of Tier 1? Set Tier 3 weight to 3. Long-term customers get bonus chances? Reward them visually and transparently on the wheel.
+          </p>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Transparent weighted draws build community trust. Everyone can see that the person with the larger wheel segment genuinely has higher odds — and why.
           </p>
         </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Fantasy Draft Order With Weighted Priority</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            In some fantasy sports leagues, the team that finished last gets weighted priority in the draft lottery. Assign the last-place team a weight of 5, second-to-last a weight of 4, and so on. The draft order lottery is visually fair and reproducible.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Unequal Task Distribution</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Not all tasks are equal. If one team member has half the workload this week, give them a weight of 2 for extra task assignment probability. If someone just completed a big project, set them to weight 0.5. Use the wheel to distribute work roughly fairly without complex formulas.
+          </p>
+        </div>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Weighted Random Selection vs Standard Random — What's the Difference?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          In standard (unweighted) random selection, every entry has exactly the same probability: 1 divided by the total number of entries. With 10 entries, each has a 10% chance.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          In weighted selection, each entry has a probability proportional to its weight divided by the total weight. If Alice has weight 3 and Bob has weight 1, the total weight is 4. Alice's probability is 3/4 = 75%. Bob's is 1/4 = 25%.
+        </p>
+        <div class="overflow-x-auto rounded-xl border border-border mt-4">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-primary/10 border-b border-border">
+                <th class="text-left p-4 font-bold text-foreground">Participant</th>
+                <th class="text-center p-4 font-bold text-foreground">Weight</th>
+                <th class="text-center p-4 font-bold text-foreground">Probability</th>
+                <th class="text-center p-4 font-bold text-foreground">Wheel segment</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+              <tr class="bg-card"><td class="p-4 text-foreground">Alice</td><td class="p-4 text-center text-muted-foreground">3</td><td class="p-4 text-center text-green-600 font-semibold">75%</td><td class="p-4 text-center text-muted-foreground">Large (3/4 of wheel)</td></tr>
+              <tr class="bg-card/50"><td class="p-4 text-foreground">Bob</td><td class="p-4 text-center text-muted-foreground">1</td><td class="p-4 text-center text-muted-foreground">25%</td><td class="p-4 text-center text-muted-foreground">Small (1/4 of wheel)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-muted-foreground leading-relaxed text-sm mt-3">
+          The wheel visually represents these proportions — making the odds transparent and auditable to anyone watching the draw.
+        </p>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-card border-border space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How We Calculate Weighted Random Selection</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Real Wheel Picker uses a cryptographically secure implementation of weighted random selection:
+        </p>
+        <ol class="space-y-2 text-muted-foreground text-sm">
+          <li class="flex gap-3">
+            <span class="w-5 h-5 rounded-full bg-primary/20 text-primary font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
+            <span>Sum all weights to get the total weight pool</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="w-5 h-5 rounded-full bg-primary/20 text-primary font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
+            <span>Use <code class="bg-muted px-1 rounded text-foreground">crypto.getRandomValues()</code> to generate a cryptographically random number between 0 and the total weight</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="w-5 h-5 rounded-full bg-primary/20 text-primary font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
+            <span>Walk through entries in order, accumulating their weights, until the accumulated total exceeds the random number</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="w-5 h-5 rounded-full bg-primary/20 text-primary font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">4</span>
+            <span>The entry at that position is selected — with probability exactly proportional to its weight</span>
+          </li>
+        </ol>
+        <p class="text-muted-foreground leading-relaxed text-sm">
+          This is mathematically equivalent to putting weighted tickets in a drum and drawing one — just cryptographically secure and instantaneous.
+        </p>
       </section>
 
       <section class="space-y-4">

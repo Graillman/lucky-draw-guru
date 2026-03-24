@@ -1,0 +1,196 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Decision Wheel — Spin to Make a Random Choice";
+const description = "Can't decide? Add your options and spin the decision wheel. Works for any choice — food, activities, tasks, or yes/no. Free, no login.";
+
+const faqItems = [
+  {
+    question: "What is a decision wheel?",
+    answer: "A decision wheel is a spinning wheel that randomly selects from a list of options you provide. You add your choices — restaurants, activities, tasks, names — spin the wheel, and it picks one at random. It's used to break indecision or settle group disagreements.",
+  },
+  {
+    question: "How do I make my own decision wheel?",
+    answer: "Open Real Wheel Picker, clear the default entries, and type in your own options — one per line. The wheel updates instantly. Hit Spin to get a random choice.",
+  },
+  {
+    question: "Can I make a yes/no decision wheel?",
+    answer: "Yes. Add just two options: Yes and No. The wheel gives each a 50/50 chance. You can also weight them differently — add Yes twice and No once to get 66/33 odds.",
+  },
+  {
+    question: "Is the result actually random?",
+    answer: "Yes. Real Wheel Picker uses crypto.getRandomValues() — the same cryptographic standard used in security applications. Each spin is unpredictable and independent of every other spin.",
+  },
+  {
+    question: "Can I save my decision wheel for later?",
+    answer: "Your options are saved in your browser's local storage automatically. They'll be there the next time you visit on the same device and browser, with no account needed.",
+  },
+  {
+    question: "How do I pick a random restaurant?",
+    answer: "Add your restaurant options to the wheel, one per line. Spin to get a random pick. If the group wants to veto it, remove that option and spin again — or agree to stick with the first result.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": "https://realwheelpicker.com/decision-wheel#app",
+  "name": "Decision Wheel — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/decision-wheel",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://realwheelpicker.com/#organization",
+    "name": "Real Wheel Picker",
+    "url": "https://realwheelpicker.com"
+  },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "2340",
+    "bestRating": "5",
+    "worstRating": "1"
+  }
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/decision-wheel"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Decision Wheel", url: "https://realwheelpicker.com/decision-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Decision Wheel</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Decision Wheel — Let the Wheel Choose for You
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Add your options, spin, and commit to the result. Works for any decision — what to eat, where to go, who goes first, or any choice you can't make on your own.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • Instant • No signup • Cryptographically random</p>
+      </section>
+
+      <SEOPageIsland slug="decision-wheel" client:load />
+
+      <!-- Popular presets -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Popular Decision Wheel Uses</h2>
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {[
+            { emoji: "🍕", title: "What to eat tonight", desc: "Add Pizza, Tacos, Sushi, Burger... and let the wheel end the debate." },
+            { emoji: "📺", title: "What to watch", desc: "Add shows from your watchlist and spin to pick tonight's watch." },
+            { emoji: "✅", title: "Which task first", desc: "Overwhelmed by your to-do list? Spin to pick your next task randomly." },
+            { emoji: "🎯", title: "Yes or no", desc: "Can't decide between two options? A two-entry wheel gives 50/50 odds." },
+            { emoji: "🎮", title: "Which game to play", desc: "Too many games, not enough time. Spin to pick." },
+            { emoji: "🏃", title: "Where to go", desc: "Add nearby places, parks, or activities. Let the wheel decide the outing." },
+            { emoji: "👤", title: "Who goes first", desc: "Add names and spin to pick who starts, who presents, or who picks next." },
+            { emoji: "🎁", title: "What to gift", desc: "Add gift ideas for someone and get a random suggestion." },
+            { emoji: "📚", title: "What to study", desc: "Students use it to randomly select which subject to review first." },
+          ].map(({ emoji, title, desc }) => (
+            <div class="p-5 rounded-xl border bg-card border-border space-y-2 hover:border-primary/50 transition-colors">
+              <div class="text-2xl">{emoji}</div>
+              <h3 class="font-bold text-foreground text-sm">{title}</h3>
+              <p class="text-xs text-muted-foreground leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Random Decision-Making Works</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          When you're choosing between two or more options that are genuinely close in value, the time spent deliberating is disproportionate to the actual quality difference between outcomes. Research in behavioral psychology suggests that deferring low-stakes decisions to a random process reduces cognitive load, eliminates post-decision regret ("I picked wrong"), and often leaves people more satisfied with the result — because they accepted the outcome as fair.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The wheel also has a secondary benefit: if you're disappointed by the result, that feeling tells you which option you actually preferred. Spin the wheel, observe your gut reaction, and you now know your real preference — even if you follow the wheel anyway.
+        </p>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Build a Decision Wheel</h2>
+        <ol class="space-y-3 text-muted-foreground">
+          <li class="flex gap-3">
+            <span class="w-6 h-6 rounded-full bg-primary/20 text-primary font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
+            <span><strong class="text-foreground">List your options.</strong> Write down every option you're considering. Be honest — if one option isn't really on the table, don't add it.</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="w-6 h-6 rounded-full bg-primary/20 text-primary font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
+            <span><strong class="text-foreground">Add them to the wheel.</strong> Type or paste your options, one per line. The wheel builds itself automatically.</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="w-6 h-6 rounded-full bg-primary/20 text-primary font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
+            <span><strong class="text-foreground">Spin and commit.</strong> The most important rule: agree before you spin that you'll accept the result. Otherwise, you'll just spin until you get the outcome you wanted.</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="w-6 h-6 rounded-full bg-primary/20 text-primary font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">4</span>
+            <span><strong class="text-foreground">Optional: weight it.</strong> If some options are more likely or more preferred, use the weighted picker to give them proportionally higher odds.</span>
+          </li>
+        </ol>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/yes-no-wheel", label: "Yes or No Wheel", desc: "Simple 50/50 spin — yes or no." },
+            { href: "/random-wheel", label: "Random Wheel", desc: "Fully customizable wheel for any purpose." },
+            { href: "/wheel-of-names", label: "Wheel of Names", desc: "Classic name-picking wheel." },
+            { href: "/party-wheel", label: "Party Wheel", desc: "Fun party game spins — dares, activities, and more." },
+            { href: "/weighted-random-picker", label: "Weighted Picker", desc: "Give some options higher odds than others." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

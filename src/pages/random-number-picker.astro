@@ -1,0 +1,200 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Random Number Picker — Spin a Wheel to Pick a Random Number";
+const description = "Pick a random number by spinning a wheel. Set your range (1–10, 1–100, any range), spin, and get a cryptographically random result. Free, no signup.";
+
+const faqItems = [
+  {
+    question: "How do I pick a random number between 1 and 10?",
+    answer: "Add the numbers 1 through 10 to the wheel — one number per entry. Spin to get a random result. Or add any custom range of numbers you need.",
+  },
+  {
+    question: "Is this better than a dice roll?",
+    answer: "For standard dice ranges (1–6, 1–20), a physical die is fine. The wheel is useful when you need a non-standard range — like 1–37 for roulette, 1–52 for a card draw, or any custom set of numbers.",
+  },
+  {
+    question: "Can I use this as an online dice roller?",
+    answer: "Yes. Add 1, 2, 3, 4, 5, 6 to the wheel and spin for a dice roll. Add 1–20 for a D20 roll. Each spin is cryptographically random and independent.",
+  },
+  {
+    question: "What makes this more random than Math.random()?",
+    answer: "Real Wheel Picker uses crypto.getRandomValues() — cryptographic randomness sourced from your device's hardware entropy. Math.random() uses a deterministic algorithm seeded by a value like the system clock, making it potentially predictable. Crypto randomness is not predictable.",
+  },
+  {
+    question: "Can I add non-consecutive numbers?",
+    answer: "Yes. Add any set of numbers you want — 2, 5, 7, 13, 42. The wheel treats each entry equally (or you can weight them). Perfect for raffle ticket number draws or custom lottery picks.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": "https://realwheelpicker.com/random-number-picker#app",
+  "name": "Random Number Picker — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/random-number-picker",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://realwheelpicker.com/#organization",
+    "name": "Real Wheel Picker",
+    "url": "https://realwheelpicker.com"
+  },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "2340",
+    "bestRating": "5",
+    "worstRating": "1"
+  }
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/random-number-picker"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Random Number Picker", url: "https://realwheelpicker.com/random-number-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Random Number Picker</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Random Number Picker — Spin the Wheel
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Pick a random number visually. Add any range or any set of numbers, spin the wheel, and get a cryptographically random result. More transparent than a random number generator.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • Cryptographic randomness • No signup</p>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Common Number Ranges to Spin</h2>
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+          {[
+            { range: "1 – 6", use: "Standard die roll" },
+            { range: "1 – 10", use: "Basic random pick" },
+            { range: "1 – 20", use: "D20 dice (RPG)" },
+            { range: "1 – 100", use: "Percentile roll" },
+            { range: "1 – 52", use: "Playing card draw" },
+            { range: "0 – 36", use: "Roulette numbers" },
+          ].map(({ range, use }) => (
+            <div class="p-4 rounded-xl bg-card border border-border text-center">
+              <p class="font-bold text-primary text-lg">{range}</p>
+              <p class="text-xs text-muted-foreground mt-1">{use}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <SEOPageIsland slug="random-number-picker" client:load />
+
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">When to Use a Random Number Wheel</h2>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Raffle Ticket Draws</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            If your raffle tickets are numbered 1 through 500, add those numbers to the wheel and spin to draw the winning ticket number. The visual spin makes the draw transparent and shareable — a plain random number generator doesn't have the same impact.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Board Games and Tabletop RPG</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Missing a die? Use the wheel as a virtual dice roller. Add 1–6 for a standard die, 1–12 for a D12, or 1–20 for a D20. The spin animation makes it more engaging than typing a number into a calculator.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Classroom Number Activities</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Teachers use the number wheel for math activities, randomly assigning problems, picking page numbers for reading exercises, or generating numbers for mental math practice. The visual element keeps students engaged.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Custom Lottery Picks</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            For internal office pools or friendly lottery-style games, add your specific number set to the wheel. Remove numbers as they're drawn (using no-repeat mode) to ensure each number only appears once.
+          </p>
+        </div>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Why a Wheel Instead of a Random Number Generator?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          A plain random number generator just shows you a number. The wheel shows <em>everyone</em> how the number was selected — in real time, visually, with a result they can see landing. This matters for group settings where trust in the fairness of the draw is important.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          For a classroom, a raffle, or a game night, the wheel creates a shared experience. Everyone sees the same spin at the same moment. There's no question of "did you just pick that number, or was it really random?"
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          And unlike most random number generators that use <code class="bg-muted px-1 rounded text-foreground">Math.random()</code>, Real Wheel Picker uses <code class="bg-muted px-1 rounded text-foreground">crypto.getRandomValues()</code> — cryptographic randomness that can't be predicted or replicated.
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/random-wheel", label: "Random Wheel", desc: "Customizable wheel for any list of options." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Randomly pick a name from your list." },
+            { href: "/weighted-random-picker", label: "Weighted Random Picker", desc: "Different odds for different entries." },
+            { href: "/random-picker-no-repeat", label: "Random Picker No Repeat", desc: "Pick every number exactly once, in random order." },
+            { href: "/decision-wheel", label: "Decision Wheel", desc: "Use a wheel to make any random choice." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

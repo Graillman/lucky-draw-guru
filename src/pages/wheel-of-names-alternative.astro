@@ -1,0 +1,256 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Best Wheel of Names Alternative — Free Spinning Wheel Picker";
+const description = "Looking for a Wheel of Names alternative? Real Wheel Picker uses cryptographic randomness, has no ads on the wheel, and works on every device. Free, no signup.";
+
+const faqItems = [
+  {
+    question: "What is the best free alternative to Wheel of Names?",
+    answer: "Real Wheel Picker (realwheelpicker.com) is considered a top alternative. It uses cryptographic randomness (crypto.getRandomValues) instead of Math.random, has no ads interrupting the spin, supports weighted entries, and works on mobile and desktop without any login.",
+  },
+  {
+    question: "Is Real Wheel Picker really free like Wheel of Names?",
+    answer: "Yes. The core spinning wheel, name picker, giveaway tools, and all other features are completely free with no account required. Both tools are ad-supported but Real Wheel Picker keeps ads away from the main wheel area.",
+  },
+  {
+    question: "Does Real Wheel Picker work for classroom use?",
+    answer: "Yes. Teachers use it to pick students randomly, assign tasks, create random presentation orders, and run classroom activities. The no-repeat mode ensures every student gets picked once before anyone is picked twice.",
+  },
+  {
+    question: "What can Real Wheel Picker do that Wheel of Names cannot?",
+    answer: "Real Wheel Picker offers cryptographically secure randomness (not Math.random), a dedicated no-repeat picker mode, native giveaway pickers for Instagram, TikTok, Discord, Twitch, Reddit and more, and weighted entries for bonus-entry giveaways.",
+  },
+  {
+    question: "Can I use it for giveaways on social media?",
+    answer: "Yes. Real Wheel Picker has dedicated tools for Instagram giveaway winner selection, TikTok comment pickers, Discord server giveaways, YouTube giveaways, and more — all accessible directly from the main menu.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": "https://realwheelpicker.com/wheel-of-names-alternative#app",
+  "name": "Wheel of Names Alternative — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/wheel-of-names-alternative",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://realwheelpicker.com/#organization",
+    "name": "Real Wheel Picker",
+    "url": "https://realwheelpicker.com"
+  },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "2340",
+    "bestRating": "5",
+    "worstRating": "1"
+  }
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/wheel-of-names-alternative"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Wheel of Names Alternative", url: "https://realwheelpicker.com/wheel-of-names-alternative" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Wheel of Names Alternative</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Best Free Wheel of Names Alternative
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Real Wheel Picker gives you a genuinely random spinning wheel — no ads on the wheel, no login, and cryptographic fairness that Math.random can't match.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No signup • Cryptographically fair</p>
+      </section>
+
+      <SEOPageIsland slug="wheel-of-names-alternative" client:load />
+
+      <!-- Comparison Table -->
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Real Wheel Picker vs Wheel of Names — Side by Side</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Both tools let you spin a wheel to pick a random name. Here's how they compare on what actually matters.
+        </p>
+
+        <div class="overflow-x-auto rounded-xl border border-border">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-primary/10 border-b border-border">
+                <th class="text-left p-4 font-bold text-foreground">Feature</th>
+                <th class="text-center p-4 font-bold text-primary">Real Wheel Picker</th>
+                <th class="text-center p-4 font-bold text-muted-foreground">Wheel of Names</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+              <tr class="bg-card">
+                <td class="p-4 text-foreground font-medium">Randomness method</td>
+                <td class="p-4 text-center text-green-600 font-semibold">crypto.getRandomValues()</td>
+                <td class="p-4 text-center text-muted-foreground">Math.random()</td>
+              </tr>
+              <tr class="bg-card/50">
+                <td class="p-4 text-foreground font-medium">Ads on the wheel</td>
+                <td class="p-4 text-center text-green-600 font-semibold">No ads on wheel</td>
+                <td class="p-4 text-center text-muted-foreground">Ads around wheel</td>
+              </tr>
+              <tr class="bg-card">
+                <td class="p-4 text-foreground font-medium">Account required</td>
+                <td class="p-4 text-center text-green-600 font-semibold">Never</td>
+                <td class="p-4 text-center text-muted-foreground">None for basic</td>
+              </tr>
+              <tr class="bg-card/50">
+                <td class="p-4 text-foreground font-medium">Weighted entries</td>
+                <td class="p-4 text-center text-green-600 font-semibold">Yes — any weight</td>
+                <td class="p-4 text-center text-muted-foreground">Limited</td>
+              </tr>
+              <tr class="bg-card">
+                <td class="p-4 text-foreground font-medium">No-repeat mode</td>
+                <td class="p-4 text-center text-green-600 font-semibold">Dedicated page</td>
+                <td class="p-4 text-center text-muted-foreground">Manual removal</td>
+              </tr>
+              <tr class="bg-card/50">
+                <td class="p-4 text-foreground font-medium">Giveaway tools</td>
+                <td class="p-4 text-center text-green-600 font-semibold">Instagram, TikTok, Discord, Twitch, Reddit, YouTube</td>
+                <td class="p-4 text-center text-muted-foreground">None</td>
+              </tr>
+              <tr class="bg-card">
+                <td class="p-4 text-foreground font-medium">Mobile experience</td>
+                <td class="p-4 text-center text-green-600 font-semibold">Optimized</td>
+                <td class="p-4 text-center text-muted-foreground">Works but dated</td>
+              </tr>
+              <tr class="bg-card/50">
+                <td class="p-4 text-foreground font-medium">Privacy — data sent to server</td>
+                <td class="p-4 text-center text-green-600 font-semibold">Never — 100% browser</td>
+                <td class="p-4 text-center text-muted-foreground">Saves wheels server-side</td>
+              </tr>
+              <tr class="bg-card">
+                <td class="p-4 text-foreground font-medium">Price</td>
+                <td class="p-4 text-center text-green-600 font-semibold">Free</td>
+                <td class="p-4 text-center text-muted-foreground">Free (ads) / Paid plans</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Why the randomness difference matters -->
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Cryptographic Randomness Matters</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Most spinning wheel tools — including Wheel of Names — use JavaScript's built-in <code class="bg-muted px-1 rounded text-foreground">Math.random()</code>. This is a pseudo-random number generator: it produces numbers that look random but are generated by a deterministic formula seeded by a system value like the current timestamp.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Real Wheel Picker uses <code class="bg-muted px-1 rounded text-foreground">crypto.getRandomValues()</code> — the same standard used in cryptographic applications, password managers, and secure key generation. This pulls entropy directly from your device's hardware random number generator, making results impossible to predict or reproduce.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          For most casual uses, the difference is philosophical. For giveaways where real money or prizes are at stake — and where losers might claim the draw was rigged — being able to say "we use cryptographic randomness" is meaningful. It's the difference between "fair-enough" and "provably fair."
+        </p>
+      </section>
+
+      <!-- Use cases -->
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Who Should Switch to Real Wheel Picker?</h2>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Teachers and Educators</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Real Wheel Picker's no-repeat mode is designed specifically for classrooms. Spin to call on a student, remove them from the list, and continue until everyone has participated. No student gets called twice while others haven't been called once. This is something Wheel of Names doesn't offer as a native feature.
+          </p>
+          <a href="/classroom-picker" class="text-primary text-sm hover:underline">See the Classroom Picker →</a>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Giveaway Runners on Social Media</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            If you run giveaways on Instagram, TikTok, Discord, Twitch, or YouTube, Real Wheel Picker has a dedicated tool for each platform. Wheel of Names has no platform-specific giveaway features — it's only a generic name wheel. Dedicated tools mean faster setup and more defensible transparency when you announce your winner.
+          </p>
+          <a href="/giveaway-picker" class="text-primary text-sm hover:underline">See all Giveaway Pickers →</a>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Raffle Organizers With Unequal Ticket Counts</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            If someone bought 5 raffle tickets and someone else bought 1, you need weighted randomness — where the person with 5 tickets has 5× the odds. Real Wheel Picker's weighted picker handles this natively. Set each entry's weight and the wheel segments automatically reflect the odds.
+          </p>
+          <a href="/weighted-random-picker" class="text-primary text-sm hover:underline">See the Weighted Picker →</a>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Privacy-Conscious Users</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            When you save a wheel on Wheel of Names, the wheel configuration is stored on their servers. Real Wheel Picker runs entirely in your browser — your participant names, draw results, and configurations are never sent to any server. For sensitive draws (employee names, student lists, client data), that difference matters.
+          </p>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Tools -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Explore Real Wheel Picker Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/wheel-of-names", label: "Wheel of Names", desc: "The classic spinning name wheel, cryptographically fair." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Fast random selection from any list of names." },
+            { href: "/weighted-random-picker", label: "Weighted Random Picker", desc: "Different odds for different entries — perfect for tiered giveaways." },
+            { href: "/random-picker-no-repeat", label: "Random Picker No Repeat", desc: "Pick every name exactly once, in random order." },
+            { href: "/classroom-picker", label: "Classroom Picker", desc: "Designed for teachers — call on every student fairly." },
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Universal tool for social media giveaway winners." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

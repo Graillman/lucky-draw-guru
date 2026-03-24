@@ -1,0 +1,195 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Truth or Dare Wheel — Spin to Pick Truth or Dare";
+const description = "Spin the truth or dare wheel to randomly pick truth or dare for your next player. Add custom truths and dares or use defaults. Free, no login, works on any device.";
+
+const faqItems = [
+  {
+    question: "How does the truth or dare wheel work?",
+    answer: "Add 'Truth' and 'Dare' as your two wheel options (or add your specific truth questions and dare challenges directly). Spin to see what the current player gets. You can also spin a second time to pick which player goes next.",
+  },
+  {
+    question: "Can I add my own truth questions and dares?",
+    answer: "Yes. Instead of just 'Truth' and 'Dare', type in your specific questions and dares directly. 'What's your biggest secret?', 'Do 10 pushups', etc. The wheel picks one at random each spin.",
+  },
+  {
+    question: "Can the wheel also pick who goes next?",
+    answer: "Yes. Set up a second wheel with all the player names. After the current player completes their truth or dare, spin the name wheel to pick who goes next randomly — no arguing about whose turn it is.",
+  },
+  {
+    question: "Is this suitable for kids?",
+    answer: "Yes — with appropriate prompts. You control the content. Add kid-friendly challenges and questions for younger players. The wheel itself is just a random picker — the content is entirely up to you.",
+  },
+  {
+    question: "How many people can play?",
+    answer: "There's no limit. Add all player names to one wheel, spin to pick who plays, then spin the truth/dare wheel to pick what they do. Works for 2 players or 20.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": "https://realwheelpicker.com/truth-or-dare-wheel#app",
+  "name": "Truth or Dare Wheel — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/truth-or-dare-wheel",
+  "description": description,
+  "applicationCategory": "GameApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://realwheelpicker.com/#organization",
+    "name": "Real Wheel Picker",
+    "url": "https://realwheelpicker.com"
+  },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "2340",
+    "bestRating": "5",
+    "worstRating": "1"
+  }
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/truth-or-dare-wheel"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Truth or Dare Wheel", url: "https://realwheelpicker.com/truth-or-dare-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Truth or Dare Wheel</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Truth or Dare Wheel — Spin to Decide
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          No bottle, no arguments about whose turn it is. Spin the wheel to pick truth or dare, and spin a second wheel to pick who plays next. Free for any group size.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No login • Works on phones, tablets, and computers</p>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Set Up Truth or Dare with the Wheel</h2>
+        <div class="grid sm:grid-cols-2 gap-4 pt-2">
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center mb-2">1</div>
+            <p class="font-semibold text-foreground text-sm">Simple setup (2 options)</p>
+            <p class="text-xs text-muted-foreground">Add "Truth" and "Dare" as your two entries. Spin to randomly pick which one the current player faces.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center mb-2">2</div>
+            <p class="font-semibold text-foreground text-sm">Custom questions and dares</p>
+            <p class="text-xs text-muted-foreground">Add specific truth questions and dare challenges. The wheel picks one directly — no follow-up decision needed.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center mb-2">3</div>
+            <p class="font-semibold text-foreground text-sm">Pick who goes next</p>
+            <p class="text-xs text-muted-foreground">Open a second wheel tab with all player names. Spin it to pick the next player randomly — eliminates "I don't want to go".</p>
+          </div>
+          <div class="p-4 rounded-xl bg-card border border-border space-y-2">
+            <div class="w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center mb-2">4</div>
+            <p class="font-semibold text-foreground text-sm">No-repeat mode</p>
+            <p class="text-xs text-muted-foreground">Enable no-repeat mode so each question or dare can only come up once per round. Fresh experience every spin.</p>
+          </div>
+        </div>
+      </section>
+
+      <SEOPageIsland slug="truth-or-dare-wheel" client:load />
+
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Truth or Dare Wheel Ideas</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          You can add any combination of truths, dares, or other prompts. Here are some ideas to get started:
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+            <h3 class="text-lg font-bold text-foreground">Truth Ideas</h3>
+            <ul class="space-y-2 text-sm text-muted-foreground">
+              <li class="flex gap-2"><span class="text-primary">•</span> What is your most embarrassing memory?</li>
+              <li class="flex gap-2"><span class="text-primary">•</span> Have you ever lied to get out of trouble?</li>
+              <li class="flex gap-2"><span class="text-primary">•</span> Who is your celebrity crush?</li>
+              <li class="flex gap-2"><span class="text-primary">•</span> What's the weirdest thing you've ever eaten?</li>
+              <li class="flex gap-2"><span class="text-primary">•</span> What's a secret you've never told anyone?</li>
+              <li class="flex gap-2"><span class="text-primary">•</span> Have you ever cheated on a test?</li>
+            </ul>
+          </div>
+
+          <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+            <h3 class="text-lg font-bold text-foreground">Dare Ideas</h3>
+            <ul class="space-y-2 text-sm text-muted-foreground">
+              <li class="flex gap-2"><span class="text-primary">•</span> Do your best impression of someone in the room</li>
+              <li class="flex gap-2"><span class="text-primary">•</span> Text someone "I love you" from your contacts</li>
+              <li class="flex gap-2"><span class="text-primary">•</span> Speak in an accent for the next 5 minutes</li>
+              <li class="flex gap-2"><span class="text-primary">•</span> Do 15 jumping jacks right now</li>
+              <li class="flex gap-2"><span class="text-primary">•</span> Let someone post something on your social media</li>
+              <li class="flex gap-2"><span class="text-primary">•</span> Sing the chorus of any song out loud</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Party Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/party-wheel", label: "Party Wheel", desc: "General party game wheel for any group activity." },
+            { href: "/yes-no-wheel", label: "Yes or No Wheel", desc: "Simple 50/50 spin for quick decisions." },
+            { href: "/decision-wheel", label: "Decision Wheel", desc: "Let the wheel pick from any list of options." },
+            { href: "/wheel-of-names", label: "Wheel of Names", desc: "Spin to pick a random name from your list." },
+            { href: "/random-picker-no-repeat", label: "No-Repeat Picker", desc: "Ensure every player gets picked before anyone repeats." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>
