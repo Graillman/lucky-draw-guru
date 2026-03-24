@@ -1,0 +1,156 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Random Name Picker — Free Online Name Selector";
+const description = "Pick a random name from your list in one click. Add names, spin the wheel, get a fair result instantly. Free, no signup, works on any device.";
+
+const faqItems = [
+  {
+    question: "How do I add names to the picker?",
+    answer: "Type names one per line in the text area, or paste a list directly from Google Sheets, Excel, or a Word document. The tool accepts any format — one name per line works best.",
+  },
+  {
+    question: "Is the selection truly random?",
+    answer: "Yes. We use crypto.getRandomValues(), a cryptographically secure random function built into every modern browser. Each pick is independent and cannot be predicted or manipulated.",
+  },
+  {
+    question: "Can I remove the winner and pick again?",
+    answer: "Yes. After each spin, click 'Remove winner' to exclude them from the next draw. This ensures no one gets picked twice in the same session.",
+  },
+  {
+    question: "How many names can I add?",
+    answer: "There is no hard limit. The wheel handles hundreds of names smoothly. For very large lists, names get smaller on the wheel but the draw remains fair.",
+  },
+  {
+    question: "Do you store my name list?",
+    answer: "Never. Your data stays in your browser's memory only. Nothing is sent to any server. The list disappears when you close the tab.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Random Name Picker — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/random-name-picker",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/random-name-picker"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Random Name Picker", url: "https://realwheelpicker.com/random-name-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Random Name Picker</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Random Name Picker — Select Any Name Instantly
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Add your list of names, spin the wheel, and get a fair random result in seconds. Perfect for classrooms, teams, giveaways, and any situation where you need to pick fairly.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No signup • Cryptographically fair</p>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How Does the Random Name Picker Work?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Type or paste your list of names into the box. Hit spin. The wheel turns and lands on a cryptographically random result — every name has exactly the same probability of being chosen. No bias, no manipulation possible.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Everything runs entirely in your browser. No data is ever sent to a server. Your list is private and disappears when you close the tab.
+        </p>
+      </section>
+
+      <SEOPageIsland slug="random-name-picker" client:load />
+
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">When to Use a Random Name Picker</h2>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Teachers — Pick a Student Fairly</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Add your class roster and spin to call on students for questions or activities. Remove each selected student to avoid repeats. It removes the perception of favoritism and keeps students engaged because anyone could be next.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Teams — Assign Tasks or Roles</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Add team members and spin to decide who leads the next meeting, who takes on a task, or who presents first. The randomness removes any sense of favoritism or bias from the decision.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Giveaways — Pick a Winner</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Paste your participant list and spin to select a winner. Screen-record the spin for transparency. The visual wheel makes it obvious the result is fair.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/wheel-of-names", label: "Wheel of Names", desc: "The classic spinning wheel for picking random names." },
+            { href: "/team-generator", label: "Team Generator", desc: "Split a list of names into balanced random teams." },
+            { href: "/classroom-picker", label: "Classroom Picker", desc: "Dedicated random picker for teachers and classrooms." },
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Run transparent prize draws for contests and promotions." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

@@ -1,0 +1,155 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Snapchat Giveaway Picker — Free Random Winner Selector";
+const description = "Pick a random winner from your Snapchat giveaway. Paste participant usernames, spin the wheel, get a fair transparent result. Free, no signup.";
+
+const faqItems = [
+  {
+    question: "How do I collect Snapchat giveaway entries?",
+    answer: "Ask followers to send you a snap or reply to your story to enter. Collect their usernames manually as they come in, then paste the list into the picker.",
+  },
+  {
+    question: "Can I pick multiple winners?",
+    answer: "Yes. After each spin, click 'Remove winner' and spin again. Each winner is selected without replacement until you've picked as many as you need.",
+  },
+  {
+    question: "How do I prove the winner was picked fairly?",
+    answer: "Screen-record the spin on your phone or computer and post the video to your Snapchat story. The visual wheel animation makes it obvious the result is random and wasn't manipulated.",
+  },
+  {
+    question: "Is the selection random?",
+    answer: "Yes. We use crypto.getRandomValues() — the same cryptographic standard used in banking apps. Every participant has exactly the same probability of winning.",
+  },
+  {
+    question: "Do you store my follower list?",
+    answer: "Never. Your data stays in your browser only. Nothing is sent to any server.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Snapchat Giveaway Picker — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/snapchat-giveaway-picker",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/snapchat-giveaway-picker"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Snapchat Giveaway Picker", url: "https://realwheelpicker.com/snapchat-giveaway-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Snapchat Giveaway Picker</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Snapchat Giveaway Picker — Pick a Winner Fairly
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Collect participant usernames from your Snapchat giveaway, paste them in, and spin the wheel for a transparent random draw.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No bot needed • Screen-recordable</p>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Run a Snapchat Giveaway</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Snapchat doesn't have a built-in giveaway tool, so here's the simplest method: post your giveaway to your story or send it as a snap. Ask followers to reply with a specific message or snap to enter. Collect their usernames as entries come in, paste the list here, and spin for your winner.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Screen-record the spin and post it to your story as proof the selection was fair. Your followers will trust the result when they can see the wheel spin live.
+        </p>
+      </section>
+
+      <SEOPageIsland slug="snapchat-giveaway-picker" client:load />
+
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Step-by-Step Snapchat Giveaway Guide</h2>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Step 1 — Post Your Giveaway</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Create a story or snap announcing the giveaway. State clearly what the prize is, how to enter (e.g. "reply to this story"), and when the draw will happen.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Step 2 — Collect Entries</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            As replies or snaps come in, note down each participant's Snapchat username. You can keep a running list in a notes app and paste it here when the entry period closes.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Step 3 — Spin and Record</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Paste all usernames into the picker, start a screen recording, and spin. The wheel randomly selects your winner. Post the recording to your story so followers can see the draw was fair.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/instagram-giveaway-picker", label: "Instagram Giveaway Picker", desc: "Pick winners from Instagram comment giveaways." },
+            { href: "/tiktok-giveaway-picker", label: "TikTok Giveaway Picker", desc: "Select winners from TikTok contests." },
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Universal giveaway picker for any platform." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

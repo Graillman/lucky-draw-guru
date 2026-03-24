@@ -1,0 +1,162 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Team Generator — Random Team Maker | Free";
+const description = "Split any group into random teams in seconds. Add names, choose the number of teams, spin the wheel. Fair, instant, no signup required.";
+
+const faqItems = [
+  {
+    question: "How do I split people into teams?",
+    answer: "Add all names to the list, set the number of teams you want, and spin. The tool randomly distributes names into equal groups. If the number of people doesn't divide evenly, some teams will have one extra member.",
+  },
+  {
+    question: "Can I make teams of a specific size instead of a specific number?",
+    answer: "Yes. Instead of choosing the number of teams, set the team size (e.g. 4 people per team) and the tool will calculate how many teams you need automatically.",
+  },
+  {
+    question: "Is the team assignment truly random?",
+    answer: "Yes. Team assignments use crypto.getRandomValues() — the same cryptographic standard used in banking and encryption. No bias, no pattern, no manipulation possible.",
+  },
+  {
+    question: "Can I use this for sports teams?",
+    answer: "Absolutely. Add player names, set the number of teams, and spin. Works for football, basketball, any sport — or any activity where you need balanced random groups.",
+  },
+  {
+    question: "Do you save my name list?",
+    answer: "Never. Everything runs in your browser. Nothing is sent to any server. Your list disappears when you close the tab.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Team Generator — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/team-generator",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/team-generator"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Team Generator", url: "https://realwheelpicker.com/team-generator" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Team Generator</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Team Generator — Split Into Random Teams Instantly
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Add names, choose how many teams you need, and let the wheel decide. Fair, fast, and impossible to rig.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No signup • Cryptographically fair</p>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How Does the Team Generator Work?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Enter all participant names in the text box — one per line, or paste from a spreadsheet. Set the number of teams (or the team size). Click spin. The tool randomly assigns each name to a team using cryptographic randomness, ensuring no bias in the distribution.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Everything happens in your browser. No server, no data collection, no account needed.
+        </p>
+      </section>
+
+      <SEOPageIsland slug="team-generator" client:load />
+
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Use Cases for Random Team Generation</h2>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Classrooms — Group Projects</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Add your class roster and split into project groups in seconds. Random assignment prevents friend groups from always working together and exposes students to new collaborators.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Sports — Match Day Teams</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Add all players and generate balanced sides for a game. Random team selection keeps casual matches fun and prevents the same dominant team forming every time.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Offices — Workshop Groups</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Split employees into breakout groups for workshops, brainstorming sessions, or hackathons. Random mixing surfaces new ideas and avoids the usual silo effect.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Games — Multiplayer Matchmaking</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Randomize teams for board games, trivia nights, or any multiplayer activity. Fair teams, no arguments about who picked whom.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a single random name from your list." },
+            { href: "/wheel-of-names", label: "Wheel of Names", desc: "The spinning wheel for random name selection." },
+            { href: "/classroom-picker", label: "Classroom Picker", desc: "Dedicated random picker for teachers." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

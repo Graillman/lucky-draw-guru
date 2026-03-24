@@ -1,0 +1,151 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Party Wheel — Random Decision Maker for Games & Fun";
+const description = "Spin the party wheel to pick dares, games, challenges, or random decisions. Add your own options, spin, and let the wheel decide. Free, instant, no signup.";
+
+const faqItems = [
+  {
+    question: "What can I put on the party wheel?",
+    answer: "Anything. Dares, challenges, drinking game rules, truth or dare questions, game choices, activity ideas, or player names. The wheel works for any kind of party decision.",
+  },
+  {
+    question: "Can I save my party wheel for next time?",
+    answer: "Your list is saved in your browser's local storage. It will still be there next time you open the tool on the same device.",
+  },
+  {
+    question: "Does it work on a phone at a party?",
+    answer: "Yes. The wheel is fully touch-optimized. Swipe or tap to spin on any smartphone or tablet. Pass the phone around the table.",
+  },
+  {
+    question: "Can I add funny options or emojis?",
+    answer: "Yes. The wheel displays whatever text you add, including emojis. Add ✅ Dare, 🎤 Sing a song, 💃 Dance, or whatever fits your party theme.",
+  },
+  {
+    question: "How many options can I add?",
+    answer: "As many as you want. The wheel adjusts the segment sizes automatically. For larger lists, the text gets smaller but everything stays readable.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Party Wheel — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/party-wheel",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/party-wheel"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Party Wheel", url: "https://realwheelpicker.com/party-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Party Wheel</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Party Wheel — Spin to Decide Anything
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Add your options — dares, games, challenges, or names — and let the wheel make the decision. Perfect for any party game.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • Touch-friendly • No signup</p>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">What Can You Spin the Party Wheel For?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The party wheel is a blank canvas. Add any options you want and spin to get a random result. The wheel works for Truth or Dare, drinking games, activity choices, player selection, or any situation where you need a random decision with some drama.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Fully touch-optimized — pass your phone around, let everyone watch the spin, and accept the result. No arguing about what to do next.
+        </p>
+      </section>
+
+      <SEOPageIsland slug="party-wheel" client:load />
+
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Party Wheel Ideas</h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {[
+            { emoji: "😈", title: "Truth or Dare", desc: "Add truths, dares, or player names" },
+            { emoji: "🎮", title: "Game Selector", desc: "Can't agree on what to play? Spin." },
+            { emoji: "🍕", title: "Food Chooser", desc: "Pizza, tacos, burgers — let fate decide" },
+            { emoji: "🎵", title: "Song Challenge", desc: "Spin for a song to sing or hum" },
+            { emoji: "💃", title: "Dance Dare", desc: "Random dance moves or challenges" },
+            { emoji: "🎲", title: "Drinking Game", desc: "Add rules and spin for who drinks" },
+          ].map((c) => (
+            <div class="p-4 rounded-xl bg-card border border-border text-center hover:scale-105 transition-all hover:border-primary/50">
+              <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 bg-primary/10 text-2xl">{c.emoji}</div>
+              <h3 class="font-semibold text-foreground text-sm mb-1">{c.title}</h3>
+              <p class="text-xs text-muted-foreground">{c.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/wheel-of-names", label: "Wheel of Names", desc: "Pick a random name from your list." },
+            { href: "/spin-the-bottle", label: "Spin the Bottle", desc: "The classic party game, online." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Select a random player or participant." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

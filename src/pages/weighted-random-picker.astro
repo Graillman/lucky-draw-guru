@@ -1,0 +1,155 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Weighted Random Picker — Give Different Odds to Each Entry";
+const description = "Assign different chances to each participant. Give VIPs 3x the odds, bonus entries for sharing, or any custom weight. Spin the wheel. Free, no signup.";
+
+const faqItems = [
+  {
+    question: "What is a weighted random picker?",
+    answer: "A weighted random picker gives different probabilities to each entry. For example, if Alice has a weight of 3 and Bob has a weight of 1, Alice is 3 times more likely to be selected. This is useful for giveaways where some participants earned extra entries.",
+  },
+  {
+    question: "How do I add weights to entries?",
+    answer: "Add each entry with a number representing its weight. For example: 'Alice:3' gives Alice 3 entries, while 'Bob:1' gives Bob 1 entry. The higher the weight, the larger the wheel segment and the higher the chance of being selected.",
+  },
+  {
+    question: "Can I give bonus entries for sharing?",
+    answer: "Yes. If someone shared your post and earned a bonus entry, give them a weight of 2 instead of 1. Their name will appear on a larger wheel segment with double the odds.",
+  },
+  {
+    question: "Is it still random with weights?",
+    answer: "Yes. The selection is still cryptographically random — we use crypto.getRandomValues(). Weights only change the probability; they don't allow anyone to control or predict the result.",
+  },
+  {
+    question: "Do you store my participant list?",
+    answer: "Never. Everything runs in your browser. Nothing is sent to any server.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Weighted Random Picker — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/weighted-random-picker",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/weighted-random-picker"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Weighted Random Picker", url: "https://realwheelpicker.com/weighted-random-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Weighted Random Picker</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Weighted Random Picker — Custom Odds for Each Entry
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Give VIP participants more chances to win. Assign any weight to any entry — the wheel segment size reflects their odds. Still cryptographically fair.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No signup • Custom probabilities</p>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How Does Weighted Random Selection Work?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          In a standard random draw, every entry has the same chance. In a weighted draw, you can give some entries a higher probability. The wheel visually shows this: a participant with weight 3 gets a wheel segment 3 times larger than someone with weight 1.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Common uses: bonus entries for sharing a post, extra chances for VIP members, multiple raffle tickets per person, or loyalty-based odds.
+        </p>
+      </section>
+
+      <SEOPageIsland slug="weighted-random-picker" client:load />
+
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">When to Use Weighted Odds</h2>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Giveaways With Bonus Entries</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            "Like + share for 2 entries, comment for 1 entry." Set participants who did both to weight 3, those who only commented to weight 1. The picker handles the math automatically.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Raffle Tickets</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Someone bought 5 raffle tickets? Set their weight to 5. Someone bought 1 ticket? Weight of 1. The wheel segment proportionally reflects each person's investment.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h3 class="text-lg font-bold text-foreground">Loyalty Rewards</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Reward long-term subscribers or top customers with higher odds in your monthly draw. Transparent, auditable, and still visually fair to everyone watching.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Universal giveaway picker for any platform." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Equal-odds random name selection." },
+            { href: "/wheel-of-names", label: "Wheel of Names", desc: "The classic spinning wheel for random picks." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

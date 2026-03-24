@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /_astro/
-Disallow: /api/
 
 Sitemap: https://realwheelpicker.com/sitemap.xml
