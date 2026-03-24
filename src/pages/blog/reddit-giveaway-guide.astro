@@ -9,6 +9,19 @@ const title = "How to Pick a Winner on Reddit: Complete Giveaway Guide 2026";
 const description = "Step-by-step guide to running a fair Reddit giveaway and picking a random winner from comments. Includes Reddit rules, best practices, and free tools.";
 const canonical = "/blog/reddit-giveaway-guide";
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Pick a Winner on Reddit: Complete Giveaway Guide 2026",
+  "description": "Step-by-step guide to running a fair Reddit giveaway and picking a random winner from comments.",
+  "author": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2025-12-15",
+  "dateModified": "2026-03-24",
+  "image": "https://realwheelpicker.com/og-default.png",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/reddit-giveaway-guide" },
+};
+
 const steps = [
   {
     step: "Step 1",
@@ -60,7 +73,7 @@ const subreddits = [
 ];
 ---
 
-<Layout title={title} description={description} canonical={canonical}>
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <div style="background: var(--gradient-bg)">
     <HeaderIsland client:load />
     <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
