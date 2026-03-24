@@ -82,7 +82,17 @@ const USI = [
 ];
 ---
 
-<Layout title={title} description={description} canonical={canonical} locale={locale} jsonLd={jsonLd}>
+<Layout title={title} description={description} canonical={canonical} locale={locale} jsonLd={jsonLd}
+  hreflangLinks={[
+    { hreflang: 'en',       href: 'https://realwheelpicker.com/' },
+    { hreflang: 'fr',       href: 'https://realwheelpicker.com/tirage-au-sort' },
+    { hreflang: 'es',       href: 'https://realwheelpicker.com/sorteo-online' },
+    { hreflang: 'pt',       href: 'https://realwheelpicker.com/sorteio-online' },
+    { hreflang: 'it',       href: 'https://realwheelpicker.com/sorteggio-online' },
+    { hreflang: 'de',       href: 'https://realwheelpicker.com/zufallsgenerator' },
+    { hreflang: 'x-default', href: 'https://realwheelpicker.com/' },
+  ]}
+>
   <div class="relative min-h-screen overflow-hidden" style="background: var(--gradient-bg)">
     <div aria-hidden class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
       <div class="aurora-orb aurora-orb-gold"></div>

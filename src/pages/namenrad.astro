@@ -58,7 +58,17 @@ const defaultParticipants = [
 ];
 ---
 
-<Layout title={title} description={description} canonical={canonical} locale={locale} jsonLd={jsonLd}>
+<Layout title={title} description={description} canonical={canonical} locale={locale} jsonLd={jsonLd}
+  hreflangLinks={[
+    { hreflang: 'en',       href: 'https://realwheelpicker.com/wheel-of-names' },
+    { hreflang: 'fr',       href: 'https://realwheelpicker.com/roue-des-noms' },
+    { hreflang: 'es',       href: 'https://realwheelpicker.com/rueda-de-la-suerte' },
+    { hreflang: 'pt',       href: 'https://realwheelpicker.com/roleta-de-nomes' },
+    { hreflang: 'it',       href: 'https://realwheelpicker.com/ruota-dei-nomi' },
+    { hreflang: 'de',       href: 'https://realwheelpicker.com/namenrad' },
+    { hreflang: 'x-default', href: 'https://realwheelpicker.com/wheel-of-names' },
+  ]}
+>
   <div class="relative min-h-screen overflow-hidden" style="background: var(--gradient-bg)">
     <div aria-hidden class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
       <div class="aurora-orb aurora-orb-gold"></div>
