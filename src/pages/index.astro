@@ -17,12 +17,7 @@ const jsonLd = {
       "@id": "https://realwheelpicker.com/#website",
       "url": "https://realwheelpicker.com",
       "name": "Real Wheel Picker",
-      "description": "Free online spin the wheel and random picker.",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": { "@type": "EntryPoint", "urlTemplate": "https://realwheelpicker.com/?q={search_term_string}" },
-        "query-input": "required name=search_term_string"
-      }
+      "description": "Free online spin the wheel and random picker."
     },
     {
       "@type": "Organization",
@@ -31,11 +26,11 @@ const jsonLd = {
       "url": "https://realwheelpicker.com",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://realwheelpicker.com/og-default.png",
-        "width": 1200,
-        "height": 630
+        "url": "https://realwheelpicker.com/og-default.png"
       },
-      "sameAs": []
+      "sameAs": [
+        "https://twitter.com/realwheelpicker"
+      ]
     },
     {
       "@type": "SoftwareApplication",
@@ -46,6 +41,7 @@ const jsonLd = {
       "applicationCategory": "UtilitiesApplication",
       "operatingSystem": "All",
       "isAccessibleForFree": true,
+      "publisher": { "@id": "https://realwheelpicker.com/#organization" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
       "aggregateRating": {
         "@type": "AggregateRating",
@@ -63,17 +59,6 @@ const jsonLd = {
         "50+ pre-built wheel presets",
         "No signup required",
         "Mobile and desktop"
-      ]
-    },
-    {
-      "@type": "HowTo",
-      "name": "How to spin the wheel and pick a random winner",
-      "description": "Use Real Wheel Picker to randomly select a winner or make a fair random decision in seconds.",
-      "totalTime": "PT1M",
-      "step": [
-        { "@type": "HowToStep", "position": 1, "name": "Add your entries", "text": "Type names or options one by one, paste a comma-separated list, or choose a pre-built template." },
-        { "@type": "HowToStep", "position": 2, "name": "Click Spin the Wheel", "text": "Press the Spin button. The wheel rotates with a realistic animation and click sound powered by the Web Audio API." },
-        { "@type": "HowToStep", "position": 3, "name": "Get your winner", "text": "The wheel stops on a cryptographically random winner. Copy the result, share it on social media, or spin again instantly." }
       ]
     },
     {
