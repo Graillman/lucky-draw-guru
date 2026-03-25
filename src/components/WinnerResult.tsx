@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Copy, RotateCcw, Share2, Check, Trophy, UserMinus } from "lucide-react";
+import { Copy, RotateCcw, Share2, Check, Trophy, UserMinus, Twitter } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -29,9 +29,9 @@ const WinnerResult = ({
   const handleCopy = async () => {
     try {
       const winnersText = winners.map((w, i) => `${i + 1}. ${w}`).join('\n');
-      const text = drawTitle 
-        ? `🎉 ${drawTitle}\n${isMultipleWinners ? t.drawWinners : t.drawWinner}:\n${winnersText}`
-        : `🎉 ${isMultipleWinners ? t.drawWinners : t.drawWinner}:\n${winnersText}`;
+      const text = drawTitle
+        ? `🎉 ${drawTitle}\n${isMultipleWinners ? t.drawWinners : t.drawWinner}:\n${winnersText}\n\n🎲 Picked on realwheelpicker.com (cryptographically fair)`
+        : `🎉 ${isMultipleWinners ? t.drawWinners : t.drawWinner}:\n${winnersText}\n\n🎲 Picked on realwheelpicker.com (cryptographically fair)`;
       await navigator.clipboard.writeText(text);
       setCopied(true);
       toast({
@@ -48,14 +48,25 @@ const WinnerResult = ({
     }
   };
 
+  const handleTweet = () => {
+    const winnersText = winners.length === 1
+      ? winners[0]
+      : winners.map((w, i) => `${i + 1}. ${w}`).join(', ');
+    const base = drawTitle
+      ? `🎉 ${drawTitle} — Winner: ${winnersText}`
+      : `🎉 Winner: ${winnersText}`;
+    const tweet = `${base}\n\nPicked with cryptographic randomness on realwheelpicker.com — can't be rigged.`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}`, '_blank', 'noopener');
+  };
+
   const handleShare = async () => {
     const winnersText = winners.map((w, i) => `${i + 1}. ${w}`).join('\n');
-    const text = drawTitle 
-      ? `🎉 ${drawTitle}\n${isMultipleWinners ? t.drawWinners : t.drawWinner}:\n${winnersText}`
-      : `🎉 ${isMultipleWinners ? t.drawWinners : t.drawWinner}:\n${winnersText}`;
-    
+    const text = drawTitle
+      ? `🎉 ${drawTitle}\n${isMultipleWinners ? t.drawWinners : t.drawWinner}:\n${winnersText}\n\n🎲 Picked on realwheelpicker.com (cryptographically fair)`
+      : `🎉 ${isMultipleWinners ? t.drawWinners : t.drawWinner}:\n${winnersText}\n\n🎲 Picked on realwheelpicker.com (cryptographically fair)`;
+
     const shareData = {
-      title: drawTitle || "Random Picker - randompicker.com",
+      title: drawTitle || "Real Wheel Picker — realwheelpicker.com",
       text,
       url: window.location.href,
     };
@@ -131,6 +142,20 @@ const WinnerResult = ({
           ))}
         </div>
 
+        {/* Viral watermark — visible in screen recordings */}
+        <div className="flex items-center justify-center gap-1.5 mb-4 opacity-60 hover:opacity-100 transition-opacity">
+          <span className="text-xs text-muted-foreground">🎲</span>
+          <a
+            href="https://realwheelpicker.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-muted-foreground hover:text-primary transition-colors font-mono"
+          >
+            realwheelpicker.com
+          </a>
+          <span className="text-xs text-muted-foreground">· crypto fair</span>
+        </div>
+
         {/* Primary Actions */}
         <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 mb-4">
           <Button
@@ -187,13 +212,23 @@ const WinnerResult = ({
             variant="outline"
             size="default"
             onClick={handleShare}
-            className={isAdvanced 
-              ? "border-accent/50 hover:bg-accent/10" 
+            className={isAdvanced
+              ? "border-accent/50 hover:bg-accent/10"
               : "border-primary/50 hover:bg-primary/10"
             }
           >
             <Share2 className="w-4 h-4" />
             {t.share}
+          </Button>
+
+          <Button
+            variant="outline"
+            size="default"
+            onClick={handleTweet}
+            className="border-sky-500/50 hover:bg-sky-500/10 text-sky-400"
+          >
+            <Twitter className="w-4 h-4" />
+            Tweet
           </Button>
         </div>
       </div>
