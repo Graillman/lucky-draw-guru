@@ -1,0 +1,219 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Sweepstakes Picker — Free Random Winner Selector";
+const description = "Pick a random sweepstakes winner fairly. Paste your entrants list, spin the wheel, get a verifiable result. Cryptographically random, free, no signup required.";
+
+const faqItems = [
+  {
+    question: "What is a sweepstakes picker?",
+    answer: "A sweepstakes picker is a tool that randomly selects a winner from a list of entrants. It is used by brands, marketers, and contest organizers to pick sweepstakes winners in a way that is fair, transparent, and legally defensible.",
+  },
+  {
+    question: "How do I pick a random sweepstakes winner?",
+    answer: "Paste your list of eligible entrants — one name per line — into the wheel. Click Spin. The wheel randomly lands on a winner using cryptographic randomness. Screen-record the spin to document the selection process for your records.",
+  },
+  {
+    question: "Can I filter out duplicate entries?",
+    answer: "Yes. The tool automatically removes duplicate names by default. This ensures one entry per person, which is required by most sweepstakes rules.",
+  },
+  {
+    question: "Is this tool legally compliant for US sweepstakes?",
+    answer: "The tool provides cryptographically random selection, which satisfies the 'chance' requirement for sweepstakes. However, legal compliance also depends on your sweepstakes rules, eligibility requirements, and state-specific regulations. We recommend consulting the official FTC sweepstakes guidelines for US promotions.",
+  },
+  {
+    question: "Can I pick multiple winners for tiered prizes?",
+    answer: "Yes. Set the number of winners to 1st, 2nd, 3rd place, etc. Each winner is selected without replacement — no one wins twice.",
+  },
+  {
+    question: "How is this different from using a random number generator?",
+    answer: "A spinning wheel is visual and recordable. You can screen-record the spin with all entrant names visible and share the video as transparent proof of your drawing. Random number generators produce a number with no visible connection to your entrants list.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": "https://realwheelpicker.com/sweepstakes-picker#app",
+  "name": "Sweepstakes Picker — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/sweepstakes-picker",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "publisher": { "@type": "Organization", "@id": "https://realwheelpicker.com/#organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/sweepstakes-picker"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Sweepstakes Picker", url: "https://realwheelpicker.com/sweepstakes-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Sweepstakes Picker</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Sweepstakes Picker — Pick a Random Winner Fairly
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Select a sweepstakes winner from your entrants list using cryptographic randomness. Visual, recordable, and transparent — the right way to run a sweepstakes drawing.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No signup • No purchase necessary to use</p>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Pick a Sweepstakes Winner</h2>
+        <div class="grid sm:grid-cols-4 gap-4 pt-2">
+          {[
+            { step: "1", title: "Collect eligible entrants", desc: "Export or compile all eligible entries. Remove ineligible entrants before the draw." },
+            { step: "2", title: "Paste the list", desc: "Copy your entrants list and paste it into the wheel. One name or entry per line." },
+            { step: "3", title: "Set winners count", desc: "Set 1st, 2nd, 3rd place if needed. Each winner is picked without replacement." },
+            { step: "4", title: "Spin and record", desc: "Screen-record the spin for your records. The video documents the random selection." },
+          ].map(({ step, title, desc }) => (
+            <div class="p-4 rounded-xl bg-card border border-border text-center">
+              <div class="w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center mx-auto mb-2">{step}</div>
+              <p class="font-semibold text-foreground text-sm">{title}</p>
+              <p class="text-xs text-muted-foreground mt-1">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <SEOPageIsland slug="giveaway-picker" client:load />
+
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Sweepstakes vs. Raffle vs. Contest — What's the Difference?</h2>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="py-2 pr-4 font-semibold text-foreground">Type</th>
+                <th class="py-2 pr-4 font-semibold text-foreground">How winner is chosen</th>
+                <th class="py-2 pr-4 font-semibold text-foreground">Purchase required?</th>
+                <th class="py-2 font-semibold text-foreground">US legal status</th>
+              </tr>
+            </thead>
+            <tbody class="text-muted-foreground">
+              <tr class="border-b border-border/50">
+                <td class="py-2 pr-4 font-semibold text-foreground">Sweepstakes</td>
+                <td class="py-2 pr-4">Random chance</td>
+                <td class="py-2 pr-4">No (AMOE required)</td>
+                <td class="py-2">Legal in all 50 states</td>
+              </tr>
+              <tr class="border-b border-border/50">
+                <td class="py-2 pr-4 font-semibold text-foreground">Raffle</td>
+                <td class="py-2 pr-4">Random chance</td>
+                <td class="py-2 pr-4">Yes (ticket purchase)</td>
+                <td class="py-2">Regulated — varies by state</td>
+              </tr>
+              <tr>
+                <td class="py-2 pr-4 font-semibold text-foreground">Contest</td>
+                <td class="py-2 pr-4">Skill or judging</td>
+                <td class="py-2 pr-4">No</td>
+                <td class="py-2">Legal in all 50 states</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          Under US law, a sweepstakes must have a free alternative method of entry (AMOE) if a purchase is involved. The "chance" element is what our tool provides — a genuinely random, cryptographically secure selection from your eligible entrants list.
+        </p>
+      </section>
+
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Who Uses a Sweepstakes Picker?</h2>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          {[
+            { title: "Brand Promotions and Marketing", desc: "Brands run sweepstakes on Instagram, Facebook, TikTok, and email lists to grow their audience. A visual wheel draw can be posted as a Reel or Story to show followers the pick was fair." },
+            { title: "E-commerce Product Giveaways", desc: "Shopify and WooCommerce stores run sweepstakes to reward customers. Add order numbers or customer names and spin to pick the winner publicly." },
+            { title: "Newsletter and Email List Giveaways", desc: "Grow your email list with a sweepstakes. Export subscribers as a CSV, paste names into the wheel, spin to pick the winner." },
+            { title: "YouTube and Twitch Subscriber Sweepstakes", desc: "Creators run subscriber sweepstakes as milestone celebrations. Add subscriber names or channel member names, spin on stream, post the result." },
+            { title: "Social Media Contests", desc: "Comment, like, and follow giveaways on Instagram, TikTok, and Facebook. Paste comment usernames, filter by required tags, spin to select." },
+            { title: "Local Business Promotions", desc: "Restaurants, gyms, and retail stores run in-person or online sweepstakes. Collect entry forms, add to the wheel, draw in-store or on social media." },
+          ].map(({ title, desc }) => (
+            <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+              <h3 class="font-bold text-foreground">{title}</h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Cryptographic Randomness Matters for Sweepstakes</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The FTC requires that sweepstakes winners be selected by "chance." Most free wheel tools use <code class="text-primary font-mono text-sm">Math.random()</code> — a pseudorandom algorithm seeded by the system clock. It's statistically uniform but technically deterministic.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Real Wheel Picker uses <code class="text-primary font-mono text-sm">crypto.getRandomValues()</code> — the Web Crypto API, which pulls entropy from hardware sources in the CPU. This is the same cryptographic standard used in TLS certificates, secure password generation, and cryptographic key generation. The selection is genuinely unpredictable and not reproducible.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          For brands running official sweepstakes with legal disclosures, this provides a stronger technical basis for the "chance" element of the promotion.
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="grid sm:grid-cols-2 gap-3">
+          {[
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Full-featured picker with filters for social media contests." },
+            { href: "/raffle-picker", label: "Raffle Picker", desc: "Draw raffle winners with live wheel animation." },
+            { href: "/instagram-giveaway-picker", label: "Instagram Giveaway Picker", desc: "Pick winners from Instagram comment participants." },
+            { href: "/weighted-random-picker", label: "Weighted Random Picker", desc: "Give multiple entries to participants with bonus tickets." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

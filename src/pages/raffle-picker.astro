@@ -1,0 +1,187 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Raffle Picker — Free Online Raffle Draw Tool";
+const description = "Draw raffle winners fairly with a live spinning wheel. Add ticket holders or participant names, set the number of winners, and spin. Free, no signup, cryptographically random.";
+
+const faqItems = [
+  {
+    question: "How does the raffle picker work?",
+    answer: "Add the names of all raffle ticket holders or participants, choose how many winners to draw, and spin the wheel. The tool uses cryptographic randomness (crypto.getRandomValues) to ensure no result is predictable or manipulated. Each spin is fully independent.",
+  },
+  {
+    question: "Can someone hold multiple raffle tickets?",
+    answer: "Yes. Use the weighted mode — assign each participant a weight equal to the number of tickets they hold. Someone with 3 tickets gets 3x the odds of someone with 1 ticket. The wheel segments automatically reflect these proportions.",
+  },
+  {
+    question: "Can I draw multiple winners at once?",
+    answer: "Yes. Set the number of winners before spinning. The tool picks each winner without replacement — no one can win twice in the same draw.",
+  },
+  {
+    question: "Can I record the raffle draw as proof?",
+    answer: "Yes. Screen-record the spin with the participant list visible and share the video. The spinning animation shows all participants in real time — it's the standard way professional streamers and event organizers prove their draws are fair.",
+  },
+  {
+    question: "Is it free to use for charity or fundraising events?",
+    answer: "100% free with no usage limits. No account required. Use it at charity events, school fundraisers, club raffles, and any event where you need to draw winners transparently.",
+  },
+  {
+    question: "Do you store the participant list?",
+    answer: "Never. Everything runs in your browser. Nothing is sent to any server. The data disappears when you close the tab.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": "https://realwheelpicker.com/raffle-picker#app",
+  "name": "Raffle Picker — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/raffle-picker",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "publisher": { "@type": "Organization", "@id": "https://realwheelpicker.com/#organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/raffle-picker"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Raffle Picker", url: "https://realwheelpicker.com/raffle-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Raffle Picker</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Raffle Picker — Draw Winners Fairly and Live
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Run a transparent raffle draw for any event. Add ticket holders, set the number of winners, and spin the wheel live — on screen, in front of your audience.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No signup • Cryptographically fair</p>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Run a Raffle Draw</h2>
+        <div class="grid sm:grid-cols-4 gap-4 pt-2">
+          {[
+            { step: "1", title: "Add participants", desc: "Type or paste the names of all raffle ticket holders. One name per line." },
+            { step: "2", title: "Set ticket counts (optional)", desc: "If someone bought multiple tickets, use weights to give them proportional odds." },
+            { step: "3", title: "Choose winners", desc: "Set how many winners to draw — 1, 3, 5, or more." },
+            { step: "4", title: "Spin live", desc: "Click Spin. Record your screen to share as proof of a fair draw." },
+          ].map(({ step, title, desc }) => (
+            <div class="p-4 rounded-xl bg-card border border-border text-center">
+              <div class="w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center mx-auto mb-2">{step}</div>
+              <p class="font-semibold text-foreground text-sm">{title}</p>
+              <p class="text-xs text-muted-foreground mt-1">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <SEOPageIsland slug="raffle-picker" client:load />
+
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Raffle Use Cases</h2>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          {[
+            { title: "Charity and Fundraising Events", desc: "Draw raffle winners at school, church, or charity events. The live wheel animation builds excitement in the room. Screen-record the draw or project it on a screen for full transparency." },
+            { title: "Prize Giveaways with Ticket Sales", desc: "Sold physical raffle tickets? Add ticket numbers or buyer names and draw. Use the weighted mode if some buyers purchased multiple tickets — they automatically get proportional odds." },
+            { title: "Community and Club Raffles", desc: "Sports clubs, associations, HOAs — run your member raffle without a third-party service. Everything runs in the browser, no account needed, no service fees." },
+            { title: "Live Stream Fundraisers", desc: "Running a charity stream on Twitch or YouTube? Add donor names to the raffle wheel in real time and draw winners live on screen. Weighted by donation amount if you choose." },
+            { title: "Online Raffles via Social Media", desc: "Running a raffle on Instagram, TikTok, or Facebook? Paste the entrant list from your comments, spin the wheel, and post the video as proof." },
+            { title: "Corporate Events and Team Building", desc: "Employee appreciation raffles, holiday party prize draws, team-building activity selectors — a visual wheel draw is more engaging than pulling a name from a hat." },
+          ].map(({ title, desc }) => (
+            <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+              <h3 class="font-bold text-foreground">{title}</h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Raffle Picker vs. Drawing from a Hat</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="py-2 pr-4 font-semibold text-foreground">Feature</th>
+                <th class="py-2 pr-4 font-semibold text-primary">Raffle Picker (this tool)</th>
+                <th class="py-2 font-semibold text-muted-foreground">Drawing from a hat</th>
+              </tr>
+            </thead>
+            <tbody class="text-muted-foreground">
+              <tr class="border-b border-border/50"><td class="py-2 pr-4 text-foreground">Verifiably fair</td><td class="py-2 pr-4 text-primary">Yes — crypto randomness</td><td class="py-2">Debatable — no audit trail</td></tr>
+              <tr class="border-b border-border/50"><td class="py-2 pr-4 text-foreground">Recordable proof</td><td class="py-2 pr-4 text-primary">Yes — screen record the spin</td><td class="py-2">Difficult to verify</td></tr>
+              <tr class="border-b border-border/50"><td class="py-2 pr-4 text-foreground">Multiple ticket support</td><td class="py-2 pr-4 text-primary">Yes — weighted mode</td><td class="py-2">Requires printing extra tickets</td></tr>
+              <tr class="border-b border-border/50"><td class="py-2 pr-4 text-foreground">Multiple winners</td><td class="py-2 pr-4 text-primary">Yes — no replacement</td><td class="py-2">Requires multiple draws</td></tr>
+              <tr><td class="py-2 pr-4 text-foreground">Works for online events</td><td class="py-2 pr-4 text-primary">Yes</td><td class="py-2">No</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="grid sm:grid-cols-2 gap-3">
+          {[
+            { href: "/weighted-random-picker", label: "Weighted Random Picker", desc: "Assign different ticket counts — more tickets = higher odds." },
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Full-featured tool for social media contest draws." },
+            { href: "/random-picker-no-repeat", label: "No-Repeat Picker", desc: "Draw every name once before any repeats." },
+            { href: "/secret-santa-picker", label: "Secret Santa Picker", desc: "Randomly assign Secret Santa pairs for the holidays." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

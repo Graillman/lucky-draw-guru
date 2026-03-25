@@ -32,7 +32,7 @@ function getPriority(urlPath) {
   if (urlPath === 'embed') return '0.4'; // embed tool
   if (/^(wheel-of-names|random-name-picker|random-wheel|giveaway-picker)$/.test(urlPath)) return '0.9';
   if (/^(instagram|tiktok|youtube|discord|twitter|facebook|twitch|reddit|linkedin)-giveaway-picker$/.test(urlPath)) return '0.8';
-  if (/^(yes-or-no-wheel|yes-no-wheel|decision-wheel|truth-or-dare-wheel|random-number-picker|wheel-of-names-alternative|team-generator|random-number-generator|party-wheel|classroom-picker|weighted-random-picker|secret-santa-picker|raffle-picker|random-picker-no-repeat|snapchat-giveaway-picker)$/.test(urlPath)) return '0.8';
+  if (/^(yes-or-no-wheel|yes-no-wheel|decision-wheel|truth-or-dare-wheel|random-number-picker|wheel-of-names-alternative|team-generator|random-number-generator|party-wheel|classroom-picker|weighted-random-picker|secret-santa-picker|raffle-picker|random-picker-no-repeat|snapchat-giveaway-picker|random-wheel|sweepstakes-picker)$/.test(urlPath)) return '0.8';
   if (/^(roue-des-noms|tirage-au-sort|tirage-aleatoire|pile-ou-face)$/.test(urlPath)) return '0.8';
   if (/^(generador-de-nombres|roleta-de-nomes|rueda-de-la-suerte|ruota-dei-nomi|sorteo-online|sorteio-online|sorteggio-online|losowanie-online|namenrad|rad-van-fortuin|sans-carki|zhuanpan|zufallsgenerator)$/.test(urlPath)) return '0.7';
   if (urlPath === 'how-to-pick-a-random-winner') return '0.8';

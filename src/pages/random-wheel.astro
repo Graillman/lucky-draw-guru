@@ -1,0 +1,168 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SEOPageIsland from '@/components/SEOPageIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Random Wheel — Free Custom Spinner | Decide Anything";
+const description = "Create a custom spinning wheel with any options and spin for a random result. Cryptographically fair, instant, no signup. The fastest free random wheel online.";
+
+const faqItems = [
+  {
+    question: "Can I add any type of content to the random wheel?",
+    answer: "Yes. You can add names, words, numbers, emojis, short phrases — anything up to about 30 characters per entry displays well on the wheel. There is no restriction on what the entries represent.",
+  },
+  {
+    question: "How do I share my random wheel with someone?",
+    answer: "Click the share icon next to the draw title. A unique URL is copied to your clipboard. Anyone who opens that link will see the wheel pre-loaded with your exact entries. No account needed on either end.",
+  },
+  {
+    question: "Is there a limit on how many options I can add?",
+    answer: "No hard limit. The wheel renders clearly up to about 50 options. For larger lists, segments become smaller but the random selection is not affected.",
+  },
+  {
+    question: "Can I use the random wheel offline?",
+    answer: "Yes — once the page is loaded in your browser, spinning works without an internet connection. The randomness runs locally via your browser's crypto API, not a server.",
+  },
+  {
+    question: "How is this different from a basic random number generator?",
+    answer: "A spinning wheel is visual. You can record the spin and share it as proof that the result was random and unmanipulated. This matters for giveaways, classroom picks, and any situation where the audience needs to trust the result.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": "https://realwheelpicker.com/random-wheel#app",
+  "name": "Random Wheel — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/random-wheel",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "publisher": { "@type": "Organization", "@id": "https://realwheelpicker.com/#organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/random-wheel"
+  jsonLd={jsonLd}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Random Wheel", url: "https://realwheelpicker.com/random-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Random Wheel</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Random Wheel — Spin to Decide Anything
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Add any options — names, choices, tasks, numbers — and spin the wheel for an instant random result. Visual, fair, and screen-recordable for full transparency.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No signup • Cryptographically fair</p>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How the Random Wheel Works</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Enter any list of options — type them in, paste from a spreadsheet, or load a template. Hit Spin and the wheel rotates with a smooth animation before landing on a cryptographically random result. Each segment represents one entry, and every entry has exactly the same probability unless you set custom weights.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The randomness comes from <strong class="text-foreground">crypto.getRandomValues()</strong> — the Web Crypto API built into every modern browser. This is the same standard used in SSL encryption and password generation, not the predictable Math.random() used by most wheel tools.
+        </p>
+      </section>
+
+      <SEOPageIsland slug="random-wheel" client:load />
+
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">What Can You Use a Random Wheel For?</h2>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          {[
+            { title: "Giveaways and Contest Draws", desc: "Add participant names and spin to pick a winner live. Record the screen to post as transparent proof. Works for Instagram, TikTok, YouTube, Discord, Twitch, and any other platform." },
+            { title: "Classroom and Education", desc: "Add your class roster and spin to call on students randomly. Remove each selected student to avoid repeats. Eliminates the appearance of favoritism." },
+            { title: "Team Decisions and Meetings", desc: "Who presents first? Who takes on the extra task? Spin the wheel instead of arguing. Fast, fair, final." },
+            { title: "Party Games and Events", desc: "Truth or dare, spin the bottle alternatives, random challenge assignments, dinner decision-making — a spinning wheel adds excitement to any group activity." },
+            { title: "Food and Activity Decisions", desc: "Where to eat? What movie to watch? What to do this weekend? Stop the endless back-and-forth and let the wheel decide." },
+            { title: "D&D and Tabletop Games", desc: "Random encounters, weather tables, NPC reactions, loot tables — a visual random wheel makes tabletop gaming more dynamic." },
+          ].map(({ title, desc }) => (
+            <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+              <h3 class="font-bold text-foreground">{title}</h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Cryptographic Randomness Matters</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Most free wheel tools online use <code class="text-primary font-mono text-sm">Math.random()</code> — JavaScript's built-in random function. It works by taking a seed value (often the system clock) and running it through a formula. The output looks random, but it is technically deterministic and reproducible.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Real Wheel Picker uses <code class="text-primary font-mono text-sm">crypto.getRandomValues()</code>, which pulls entropy directly from hardware sources in your CPU and operating system. The result is genuinely unpredictable — the same standard used in generating cryptographic keys, TLS certificates, and secure passwords.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          For casual use, the difference is philosophical. For giveaways with real prizes, or classroom picks where fairness is scrutinized, it provides a defensible answer to anyone who questions the result.
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="grid sm:grid-cols-2 gap-3">
+          {[
+            { href: "/wheel-of-names", label: "Wheel of Names", desc: "Classic spinning wheel for picking random names." },
+            { href: "/weighted-random-picker", label: "Weighted Random Picker", desc: "Assign different odds to each entry." },
+            { href: "/random-picker-no-repeat", label: "No-Repeat Picker", desc: "Pick every name once before any repeats." },
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Full-featured tool for contest and giveaway draws." },
+            { href: "/yes-no-wheel", label: "Yes or No Wheel", desc: "Simple 50/50 spin for quick decisions." },
+            { href: "/decision-wheel", label: "Decision Wheel", desc: "Spin to choose between any list of options." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

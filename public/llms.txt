@@ -36,6 +36,12 @@
 - [Snapchat Giveaway Picker](https://realwheelpicker.com/snapchat-giveaway-picker): Select winners from Snapchat story replies.
 - [LinkedIn Giveaway Picker](https://realwheelpicker.com/linkedin-giveaway-picker): Pick winners from LinkedIn post comments for B2B giveaways.
 
+## More Picker Tools
+
+- [Random Wheel](https://realwheelpicker.com/random-wheel): Fully customizable spinning wheel for any purpose — names, choices, tasks, numbers, or any list of options.
+- [Raffle Picker](https://realwheelpicker.com/raffle-picker): Draw raffle winners fairly with a live spinning animation. Supports multiple ticket counts per participant via weighted mode.
+- [Sweepstakes Picker](https://realwheelpicker.com/sweepstakes-picker): Pick a random sweepstakes winner from an entrants list. Cryptographically random selection for US brand promotions, giveaways, and email list contests.
+
 ## Specialty Tools
 
 - [Classroom Picker](https://realwheelpicker.com/classroom-picker): Random student selector for teachers — no-repeat mode ensures every student is called before anyone is called twice.
