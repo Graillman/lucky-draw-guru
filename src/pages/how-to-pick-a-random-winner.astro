@@ -5,7 +5,6 @@ import GlobalFooterIsland from '@/components/GlobalFooterIsland';
 import SEOPageIsland from '@/components/SEOPageIsland';
 import SchemaFAQ from '@/components/SchemaFAQ.astro';
 import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
-import SchemaHowTo from '@/components/SchemaHowTo.astro';
 
 const title = "How to Pick a Random Winner — Fair Selection Guide (2026)";
 const description = "Step-by-step guide to picking contest and giveaway winners fairly. Methods, tools, and legal tips for transparent random selection.";
@@ -76,12 +75,7 @@ const jsonLd = {
   canonical="/how-to-pick-a-random-winner"
   jsonLd={jsonLd}
 >
-  <SchemaHowTo
-    name="How to Pick a Random Winner Fairly"
-    description="A step-by-step guide to selecting contest and giveaway winners fairly using cryptographically secure tools."
-    steps={howToSteps}
-  />
-  <SchemaFAQ items={faqItems} />
+<SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
     { name: "Home", url: "https://realwheelpicker.com" },
     { name: "How to Pick a Random Winner", url: "https://realwheelpicker.com/how-to-pick-a-random-winner" },
