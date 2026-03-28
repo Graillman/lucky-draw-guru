@@ -30,7 +30,7 @@ function getPriority(urlPath) {
   if (urlPath === '/' || urlPath === '') return '1.0';
   if (urlPath === '404') return null; // exclude 404
   if (urlPath === 'embed') return null; // no SEO value
-  if (urlPath === 'instagram-giveaway-picker') return null; // redirect
+  if (urlPath === 'instagram-giveaway-picker') return '0.9'; // full page now
   if (urlPath === 'social-giveaway') return null; // redirect
   if (urlPath === 'probability-picker') return null; // redirect
   if (urlPath === 'teacher-picker') return null; // redirect
