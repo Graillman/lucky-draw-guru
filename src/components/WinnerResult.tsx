@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Copy, RotateCcw, Share2, Check, Trophy, UserMinus, Twitter } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import AdUnit from "@/components/AdUnit";
 
 interface WinnerResultProps {
   winners: string[];
@@ -86,10 +87,8 @@ const WinnerResult = ({
 
   return (
     <div className="space-y-6">
-      {/* Ad Placeholder - After Result */}
-      <div className="h-24 bg-secondary/30 rounded-lg border border-dashed border-border flex items-center justify-center">
-        <span className="text-xs text-muted-foreground">{t.adSpace}</span>
-      </div>
+      {/* AdSense — After Result (replace slot ID with real one from AdSense dashboard) */}
+      <AdUnit slot="1234567890" format="horizontal" className="min-h-[90px] rounded-lg" />
 
       <div className={`text-center p-6 md:p-8 border-2 rounded-2xl animate-scale-in transition-all duration-300 ${
         isAdvanced 

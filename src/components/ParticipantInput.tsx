@@ -1,12 +1,12 @@
-import { useState, useCallback, useEffect, KeyboardEvent, ChangeEvent } from "react";
+import { useState, useCallback, useEffect, useRef, ChangeEvent } from "react";
 import { cryptoRandom } from "@/lib/cryptoRandom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
-  Settings, Trash2, Users, ChevronDown, ChevronUp, X, 
-  ArrowUpAZ, ArrowDownAZ, Shuffle, List, Type
+import {
+  Settings, Trash2, Users, ChevronDown, ChevronUp, X,
+  ArrowUpAZ, ArrowDownAZ, Shuffle, List, Upload
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -25,6 +25,7 @@ const ParticipantInput = ({ mode, participants, onParticipantsChange }: Particip
   const { t } = useLanguage();
   const [textareaValue, setTextareaValue] = useState("");
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const isAdvanced = mode === "advanced";
 
@@ -156,6 +157,29 @@ const ParticipantInput = ({ mode, participants, onParticipantsChange }: Particip
     setTextareaValue("");
   }, [onParticipantsChange]);
 
+  const handleFileImport = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const text = ev.target?.result as string;
+      // Split by newlines, commas, semicolons, or tabs
+      const lines = text.split(/[\r\n,;\t]+/)
+        .map(l => l.trim())
+        .filter(l => l.length > 0 && l.length < 200);
+      const parsed = [...new Set(lines)].map(pseudo => {
+        const existing = participants.find(p => p.pseudo === pseudo);
+        return { pseudo, weight: existing?.weight ?? 1 };
+      });
+      if (parsed.length > 0) {
+        onParticipantsChange(parsed);
+        setTextareaValue(parsed.map(p => p.pseudo).join('\n'));
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  }, [participants, onParticipantsChange]);
+
   const totalWeight = participants.reduce((sum, p) => sum + p.weight, 0);
 
   const getProbability = (weight: number) => {
@@ -184,6 +208,10 @@ const ParticipantInput = ({ mode, participants, onParticipantsChange }: Particip
             </Button>
             <Button variant="outline" size="sm" className="h-7 text-xs px-2 border-border hover:bg-primary/10" onClick={handleRemoveDuplicates} disabled={participants.length < 2} title={t.removeDuplicates}>
               <X className="w-3.5 h-3.5" />
+            </Button>
+            <input ref={fileInputRef} type="file" accept=".csv,.txt,.tsv" className="hidden" onChange={handleFileImport} />
+            <Button variant="outline" size="sm" className="h-7 text-xs px-2 border-border hover:bg-primary/10" onClick={() => fileInputRef.current?.click()} title="Import CSV or TXT file">
+              <Upload className="w-3.5 h-3.5" />
             </Button>
           </div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -267,6 +295,7 @@ const ParticipantInput = ({ mode, participants, onParticipantsChange }: Particip
             <Button variant="outline" size="sm" className="h-8 text-xs border-accent/30 hover:bg-accent/10" onClick={handleOnePerLine} disabled={participants.length === 0}><List className="w-3.5 h-3.5 mr-1.5" />{t.onePerLine}</Button>
             <Button variant="outline" size="sm" className="h-8 text-xs border-accent/30 hover:bg-accent/10" onClick={handleCommaSeparated} disabled={participants.length === 0}><span className="mr-1.5 font-mono">,</span>{t.commaSeparated}</Button>
             <Button variant="outline" size="sm" className="h-8 text-xs border-accent/30 hover:bg-accent/10" onClick={handleRemoveDuplicates} disabled={participants.length < 2}><X className="w-3.5 h-3.5 mr-1.5" />{t.removeDuplicates}</Button>
+            <Button variant="outline" size="sm" className="h-8 text-xs border-accent/30 hover:bg-accent/10" onClick={() => fileInputRef.current?.click()} title="Import CSV or TXT file"><Upload className="w-3.5 h-3.5 mr-1.5" />Import</Button>
           </div>
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">

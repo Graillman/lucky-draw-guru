@@ -1,5 +1,6 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
+import { useSpinCounter } from "@/hooks/useSpinCounter";
 import DrawModes from "@/components/DrawModes";
 import ParticipantInput from "@/components/ParticipantInput";
 import DrawButton from "@/components/DrawButton";
@@ -85,6 +86,14 @@ const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, ho
   const isAdvanced = mode === "advanced";
   const displayParticipants = participants.length >= 2 ? participants : DEFAULT_NAMES;
 
+  // Social proof counter
+  const { globalCount, increment } = useSpinCounter();
+  // Draw history: last 5 results with timestamps
+  const [drawHistory, setDrawHistory] = useState<Array<{ winners: string[]; time: number }>>([]);
+  // Countdown timer (null = off)
+  const [countdown, setCountdown] = useState<number | null>(null);
+  const [countdownEnabled, setCountdownEnabled] = useState(false);
+
   // Resolve page content from translations or fall back to English config props
   const pageT = t.seoPages?.[slug];
   const displayH1 = pageT?.h1 ?? h1;
@@ -98,20 +107,52 @@ const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, ho
   const displaySeoText = pageT?.seoText ?? seoText;
   const displayFaqs = pageT?.faqs ?? faqs;
 
+  // Load draw history from localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(`rw_hist_${slug}`);
+      if (saved) setDrawHistory(JSON.parse(saved));
+    } catch {}
+  }, [slug]);
+
+  // Countdown: tick down every second, spin at 0
+  useEffect(() => {
+    if (countdown === null) return;
+    if (countdown === 0) {
+      setCountdown(null);
+      setIsSpinning(true);
+      setWinners([]);
+      return;
+    }
+    const timer = setTimeout(() => setCountdown(c => c !== null ? c - 1 : null), 1000);
+    return () => clearTimeout(timer);
+  }, [countdown]);
+
   const scrollToWheel = useCallback(() => {
     wheelSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, []);
 
   const handleDraw = useCallback(() => {
-    if (isSpinning || displayParticipants.length < 2) return;
+    if (isSpinning || countdown !== null || displayParticipants.length < 2) return;
     scrollToWheel();
-    setTimeout(() => { setIsSpinning(true); setWinners([]); }, 300);
-  }, [isSpinning, displayParticipants.length, scrollToWheel]);
+    if (countdownEnabled) {
+      setTimeout(() => setCountdown(3), 300);
+    } else {
+      setTimeout(() => { setIsSpinning(true); setWinners([]); }, 300);
+    }
+  }, [isSpinning, countdown, countdownEnabled, displayParticipants.length, scrollToWheel]);
 
   const handleWheelComplete = useCallback((selectedWinners: string[]) => {
     setWinners(selectedWinners);
     setIsSpinning(false);
-  }, []);
+    increment();
+    const entry = { winners: selectedWinners, time: Date.now() };
+    setDrawHistory(prev => {
+      const updated = [entry, ...prev].slice(0, 5);
+      try { localStorage.setItem(`rw_hist_${slug}`, JSON.stringify(updated)); } catch {}
+      return updated;
+    });
+  }, [slug, increment]);
 
   const handleRelaunch = useCallback(() => { setWinners([]); handleDraw(); }, [handleDraw]);
 
@@ -178,7 +219,15 @@ const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, ho
       {/* Interactive wheel */}
       <div className={`flex flex-col lg:flex-row gap-6 items-start transition-all duration-500 ${isAdvanced ? "p-6 rounded-xl bg-accent/5 border border-accent/20" : ""}`}>
         {/* LEFT: Wheel */}
-        <div ref={wheelSectionRef} className="flex-shrink-0 w-full lg:w-auto space-y-3">
+        <div ref={wheelSectionRef} className="flex-shrink-0 w-full lg:w-auto space-y-3 relative">
+          {/* Countdown overlay */}
+          {countdown !== null && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 rounded-xl">
+              <span className="text-8xl font-black text-white drop-shadow-2xl" style={{ textShadow: '0 0 40px rgba(255,255,255,0.5)' }}>
+                {countdown === 0 ? '🎲' : countdown}
+              </span>
+            </div>
+          )}
           {drawTitle && (
             <h2 className={`text-2xl font-bold text-center ${isAdvanced ? "text-accent" : "text-primary"}`}>
               {drawTitle}
@@ -189,8 +238,10 @@ const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, ho
               participants={displayParticipants}
               isSpinning={isSpinning}
               onComplete={handleWheelComplete}
+              onSpin={handleDraw}
               mode={mode}
               winnersCount={winnersCount}
+              clickToSpinLabel="Click to spin"
             />
           ) : (
             <CasinoRoulette
@@ -246,6 +297,63 @@ const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, ho
           {participants.length > 0 && <LocalStorageNotice mode={mode} />}
         </div>
       </div>
+
+      {/* Social proof + countdown toggle */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        {globalCount > 500 && (
+          <div className="flex-1 flex items-center gap-3 px-4 py-3 rounded-xl border border-border bg-card/50">
+            <span className="text-xl">🌍</span>
+            <div>
+              <p className="text-sm font-bold text-foreground">{new Intl.NumberFormat('en-US').format(globalCount)} spins worldwide</p>
+              <p className="text-xs text-muted-foreground">Trusted by thousands of users</p>
+            </div>
+          </div>
+        )}
+        <button
+          onClick={() => setCountdownEnabled(!countdownEnabled)}
+          title="Toggle 3-2-1 countdown before each spin (great for streamers)"
+          className={`flex items-center gap-2 px-4 py-3 rounded-xl border transition-all text-sm font-medium ${
+            countdownEnabled
+              ? 'border-primary/50 bg-primary/10 text-primary'
+              : 'border-border bg-card/50 text-muted-foreground hover:text-foreground hover:border-primary/30'
+          }`}
+        >
+          <span>⏱</span>
+          <span>Countdown {countdownEnabled ? 'ON' : 'OFF'}</span>
+        </button>
+      </div>
+
+      {/* Draw history */}
+      {drawHistory.length > 0 && (
+        <div className="p-4 rounded-xl border border-border bg-card/50 space-y-2">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+              <span>📋</span> Recent draws
+            </h3>
+            <button
+              onClick={() => {
+                setDrawHistory([]);
+                try { localStorage.removeItem(`rw_hist_${slug}`); } catch {}
+              }}
+              className="text-xs text-muted-foreground hover:text-destructive transition-colors"
+            >
+              Clear
+            </button>
+          </div>
+          <div className="space-y-1.5">
+            {drawHistory.map((entry, i) => {
+              const diff = Math.floor((Date.now() - entry.time) / 1000);
+              const rel = diff < 60 ? 'just now' : diff < 3600 ? `${Math.floor(diff / 60)}m ago` : `${Math.floor(diff / 3600)}h ago`;
+              return (
+                <div key={i} className="flex items-center justify-between py-1.5 px-3 rounded-lg bg-secondary/30">
+                  <span className="text-sm font-medium text-foreground">{entry.winners.join(', ')}</span>
+                  <span className="text-xs text-muted-foreground">{rel}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Use Cases */}
       {displayWhenToUseTitle && displayUseCases && displayUseCases.length > 0 && (

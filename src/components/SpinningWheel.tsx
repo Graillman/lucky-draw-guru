@@ -76,6 +76,9 @@ export function SpinningWheel({
   useEffect(() => { onCompleteRef.current = onComplete; }, [onComplete]);
   useEffect(() => { onTickRef.current = onTick; }, [onTick]);
 
+  // Swipe-to-spin touch state
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+
   const isAdvanced = mode === "advanced";
 
   const themeColor = isAdvanced ? 'hsl(262, 83%, 58%)' : 'hsl(45, 93%, 58%)';
@@ -505,6 +508,23 @@ export function SpinningWheel({
 
   const colorClass = isAdvanced ? "accent" : "primary";
 
+  // Touch handlers — swipe anywhere on the canvas triggers spin
+  const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    const touch = e.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    if (!touchStartRef.current || !onSpin || isSpinning || isAnimating) return;
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - touchStartRef.current.x;
+    const dy = touch.clientY - touchStartRef.current.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    // Swipe of >40px OR tap (dist < 10) both trigger spin
+    if (dist > 40 || dist < 10) onSpin();
+    touchStartRef.current = null;
+  };
+
   // Displayed radius for click-zone check (accounting for possible CSS scaling)
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!onSpin || isSpinning || isAnimating) return;
@@ -546,6 +566,8 @@ export function SpinningWheel({
             cursor: onSpin && !isSpinning && !isAnimating ? 'pointer' : 'default',
           }}
           onClick={handleCanvasClick}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         />
 
         {/* Sparkles when spinning */}
