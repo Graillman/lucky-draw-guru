@@ -133,9 +133,10 @@ const jsonLd = {
         <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
         <ul class="space-y-3">
           {[
-            { href: "/random-name-picker", label: "Random Name Picker", desc: "General purpose random name selector." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "General purpose random name selector for any list." },
             { href: "/team-generator", label: "Team Generator", desc: "Split students into random groups for activities." },
             { href: "/wheel-of-names", label: "Wheel of Names", desc: "The classic spinning wheel for any name list." },
+            { href: "/weighted-random-picker", label: "Weighted Random Picker", desc: "Give extra chances to students who earned bonus points." },
           ].map(({ href, label, desc }) => (
             <li>
               <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
