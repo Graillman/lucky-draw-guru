@@ -20,6 +20,10 @@
 /ads.txt
   Cache-Control: public, max-age=86400
 
+# Allow embed page to be iframed
+/embed
+  X-Frame-Options: SAMEORIGIN
+
 # Security headers on all pages
 /*
   X-Content-Type-Options: nosniff

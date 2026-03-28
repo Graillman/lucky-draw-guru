@@ -37,12 +37,15 @@ const faqItems = [
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
+  "@id": "https://realwheelpicker.com/giveaway-picker#app",
   name: title,
   url: "https://realwheelpicker.com/giveaway-picker",
   description,
   applicationCategory: "UtilitiesApplication",
   operatingSystem: "All",
-  offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+  isAccessibleForFree: true,
+  publisher: { "@type": "Organization", "@id": "https://realwheelpicker.com/#organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
 };
 ---
 

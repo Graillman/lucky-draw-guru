@@ -17,7 +17,15 @@ const jsonLd = {
       "@id": "https://realwheelpicker.com/#website",
       "url": "https://realwheelpicker.com",
       "name": "Real Wheel Picker",
-      "description": "Free online spin the wheel and random picker."
+      "description": "Free online spin the wheel and random picker.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://realwheelpicker.com/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
     },
     {
       "@type": "Organization",

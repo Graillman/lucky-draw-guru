@@ -29,10 +29,15 @@ function findPages(dir, base = '') {
 function getPriority(urlPath) {
   if (urlPath === '/' || urlPath === '') return '1.0';
   if (urlPath === '404') return null; // exclude 404
-  if (urlPath === 'embed') return '0.4'; // embed tool
+  if (urlPath === 'embed') return null; // no SEO value
+  if (urlPath === 'instagram-giveaway-picker') return null; // redirect
+  if (urlPath === 'social-giveaway') return null; // redirect
+  if (urlPath === 'probability-picker') return null; // redirect
+  if (urlPath === 'teacher-picker') return null; // redirect
   if (/^(wheel-of-names|random-name-picker|random-wheel|giveaway-picker)$/.test(urlPath)) return '0.9';
-  if (/^(instagram|tiktok|youtube|discord|twitter|facebook|twitch|reddit|linkedin)-giveaway-picker$/.test(urlPath)) return '0.8';
-  if (/^(yes-or-no-wheel|yes-no-wheel|decision-wheel|truth-or-dare-wheel|random-number-picker|wheel-of-names-alternative|team-generator|random-number-generator|party-wheel|classroom-picker|weighted-random-picker|secret-santa-picker|raffle-picker|random-picker-no-repeat|snapchat-giveaway-picker|random-wheel|sweepstakes-picker)$/.test(urlPath)) return '0.8';
+  if (/^(tiktok|youtube|discord|twitter|facebook|twitch|reddit|linkedin|snapchat)-giveaway-picker$/.test(urlPath)) return '0.8';
+  if (urlPath === 'yes-or-no-wheel') return null; // duplicate of yes-no-wheel
+  if (/^(yes-no-wheel|decision-wheel|truth-or-dare-wheel|random-number-picker|wheel-of-names-alternative|team-generator|random-number-generator|party-wheel|classroom-picker|weighted-random-picker|secret-santa-picker|raffle-picker|random-picker-no-repeat|snapchat-giveaway-picker|random-wheel|sweepstakes-picker)$/.test(urlPath)) return '0.8';
   if (/^(roue-des-noms|tirage-au-sort|tirage-aleatoire|pile-ou-face)$/.test(urlPath)) return '0.8';
   if (/^(generador-de-nombres|roleta-de-nomes|rueda-de-la-suerte|ruota-dei-nomi|sorteo-online|sorteio-online|sorteggio-online|losowanie-online|namenrad|rad-van-fortuin|sans-carki|zhuanpan|zufallsgenerator)$/.test(urlPath)) return '0.7';
   if (urlPath === 'how-to-pick-a-random-winner') return '0.8';
@@ -43,6 +48,7 @@ function getPriority(urlPath) {
   if (/^(faq|about|contact)$/.test(urlPath)) return '0.4';
   if (/^(privacy-policy|terms-of-service)$/.test(urlPath)) return '0.2';
   if (urlPath === 'random-team-selector') return null; // redirect, skip
+  if (/^(spin-the-bottle|jeu-de-la-bouteille|gallery)$/.test(urlPath)) return '0.7';
   return '0.6';
 }
 

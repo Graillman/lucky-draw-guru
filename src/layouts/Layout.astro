@@ -12,6 +12,7 @@ interface Props {
   canonical?: string;
   ogImage?: string;
   ogImageAlt?: string;
+  ogType?: string;
   jsonLd?: Record<string, unknown>;
   locale?: string;
   hreflangLinks?: HreflangLink[];
@@ -23,6 +24,7 @@ const {
   canonical = '/',
   ogImage = 'https://realwheelpicker.com/og-default.png',
   ogImageAlt,
+  ogType = 'website',
   jsonLd,
   locale = 'en_US',
   hreflangLinks,
@@ -48,7 +50,8 @@ const resolvedHreflang: HreflangLink[] = hreflangLinks ?? [
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" /></noscript>
     <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
 
     <!-- Primary Meta -->
@@ -58,7 +61,7 @@ const resolvedHreflang: HreflangLink[] = hreflangLinks ?? [
     <link rel="canonical" href={canonicalUrl} />
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
