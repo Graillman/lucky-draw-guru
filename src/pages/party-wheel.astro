@@ -61,122 +61,231 @@ const jsonLd = {
 ---
 
 <style>
-  /* ─── Party dark background ─── */
-  .party-hero {
-    position: relative;
-    overflow: hidden;
-    background: #07000f;
+  /* ═══════════════════════════════════════════
+     GLOBAL PARTY BACKGROUND — covers entire page
+  ═══════════════════════════════════════════ */
+  .party-page {
+    background: #04000c;
     min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
   }
 
-  /* Animated spotlights */
-  .spot {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(90px);
+  /* ── Laser beams ── */
+  .laser-container {
+    position: fixed;
+    inset: 0;
     pointer-events: none;
-    will-change: transform, opacity;
+    z-index: 0;
+    overflow: hidden;
   }
-  .spot-pink {
-    width: 500px; height: 500px;
-    top: -120px; left: -80px;
-    background: radial-gradient(circle, rgba(255,0,110,0.35) 0%, transparent 70%);
-    animation: spotDrift1 7s ease-in-out infinite alternate;
-  }
-  .spot-blue {
-    width: 450px; height: 450px;
-    top: -100px; right: -60px;
-    background: radial-gradient(circle, rgba(58,134,255,0.3) 0%, transparent 70%);
-    animation: spotDrift2 9s ease-in-out infinite alternate;
-  }
-  .spot-purple {
-    width: 400px; height: 400px;
-    bottom: 0; left: 50%;
-    transform: translateX(-50%);
-    background: radial-gradient(circle, rgba(131,56,236,0.25) 0%, transparent 70%);
-    animation: spotDrift3 6s ease-in-out infinite alternate;
-  }
-  .spot-gold {
-    width: 300px; height: 300px;
-    top: 40%; right: 10%;
-    background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 70%);
-    animation: spotDrift4 8s ease-in-out infinite alternate;
-  }
-  .spot-green {
-    width: 280px; height: 280px;
-    bottom: 10%; left: 5%;
-    background: radial-gradient(circle, rgba(6,214,160,0.18) 0%, transparent 70%);
-    animation: spotDrift5 11s ease-in-out infinite alternate;
-  }
-
-  @keyframes spotDrift1 {
-    from { transform: translate(0, 0) scale(1); opacity: 0.7; }
-    to   { transform: translate(60px, 40px) scale(1.15); opacity: 1; }
-  }
-  @keyframes spotDrift2 {
-    from { transform: translate(0, 0) scale(1.1); opacity: 1; }
-    to   { transform: translate(-50px, 60px) scale(0.9); opacity: 0.6; }
-  }
-  @keyframes spotDrift3 {
-    from { transform: translateX(-50%) scale(1); opacity: 0.5; }
-    to   { transform: translateX(-40%) scale(1.2); opacity: 0.9; }
-  }
-  @keyframes spotDrift4 {
-    from { transform: translate(0, 0); opacity: 0.4; }
-    to   { transform: translate(-30px, -50px); opacity: 0.8; }
-  }
-  @keyframes spotDrift5 {
-    from { transform: translate(0, 0); opacity: 0.6; }
-    to   { transform: translate(40px, -30px); opacity: 0.3; }
-  }
-
-  /* Floating party particles */
-  .particle {
+  .laser {
     position: absolute;
+    width: 2px;
+    transform-origin: top center;
+    opacity: 0.6;
+    filter: blur(0.5px);
+    mix-blend-mode: screen;
+  }
+  .laser-1 {
+    height: 100vh; background: linear-gradient(to bottom, #ff006e, transparent);
+    left: 20%; top: 0;
+    animation: laserSweep1 4s ease-in-out infinite alternate;
+  }
+  .laser-2 {
+    height: 100vh; background: linear-gradient(to bottom, #3a86ff, transparent);
+    left: 50%; top: 0;
+    animation: laserSweep2 5s ease-in-out infinite alternate;
+  }
+  .laser-3 {
+    height: 100vh; background: linear-gradient(to bottom, #06d6a0, transparent);
+    left: 75%; top: 0;
+    animation: laserSweep3 3.5s ease-in-out infinite alternate;
+  }
+  .laser-4 {
+    height: 100vh; background: linear-gradient(to bottom, #ffd700, transparent);
+    left: 35%; top: 0;
+    animation: laserSweep4 6s ease-in-out infinite alternate;
+  }
+  .laser-5 {
+    height: 100vh; background: linear-gradient(to bottom, #8338ec, transparent);
+    left: 85%; top: 0;
+    animation: laserSweep1 7s ease-in-out infinite alternate-reverse;
+  }
+  .laser-6 {
+    height: 100vh; background: linear-gradient(to bottom, #ff006e, transparent);
+    left: 10%; top: 0;
+    animation: laserSweep3 4.5s ease-in-out infinite alternate-reverse;
+  }
+
+  @keyframes laserSweep1 {
+    from { transform: rotate(-35deg); opacity: 0.5; }
+    to   { transform: rotate(35deg);  opacity: 0.8; }
+  }
+  @keyframes laserSweep2 {
+    from { transform: rotate(40deg);  opacity: 0.7; }
+    to   { transform: rotate(-40deg); opacity: 0.4; }
+  }
+  @keyframes laserSweep3 {
+    from { transform: rotate(-20deg); opacity: 0.6; }
+    to   { transform: rotate(50deg);  opacity: 0.9; }
+  }
+  @keyframes laserSweep4 {
+    from { transform: rotate(25deg);  opacity: 0.3; }
+    to   { transform: rotate(-45deg); opacity: 0.7; }
+  }
+
+  /* ── Disco ball light reflections ── */
+  .disco-dot {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    z-index: 0;
+  }
+  @keyframes disco1 { 0%{transform:translate(0,0);opacity:0.9} 25%{transform:translate(180px,-120px);opacity:0.6} 50%{transform:translate(350px,80px);opacity:0.9} 75%{transform:translate(120px,200px);opacity:0.5} 100%{transform:translate(0,0);opacity:0.9} }
+  @keyframes disco2 { 0%{transform:translate(0,0);opacity:0.7} 33%{transform:translate(-200px,150px);opacity:0.9} 66%{transform:translate(-80px,-180px);opacity:0.5} 100%{transform:translate(0,0);opacity:0.7} }
+  @keyframes disco3 { 0%{transform:translate(0,0);opacity:0.8} 50%{transform:translate(250px,-200px);opacity:0.4} 100%{transform:translate(0,0);opacity:0.8} }
+  @keyframes disco4 { 0%{transform:translate(0,0)} 20%{transform:translate(-150px,100px)} 40%{transform:translate(200px,250px)} 60%{transform:translate(-50px,-150px)} 80%{transform:translate(300px,50px)} 100%{transform:translate(0,0)} }
+
+  /* ── Ambient glow pools ── */
+  .glow-pool {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-1 { width:600px;height:500px;background:radial-gradient(circle,rgba(255,0,110,0.25) 0%,transparent 70%);top:-150px;left:-100px;animation:glowPulse1 5s ease-in-out infinite alternate; }
+  .glow-2 { width:550px;height:550px;background:radial-gradient(circle,rgba(58,134,255,0.22) 0%,transparent 70%);top:-100px;right:-120px;animation:glowPulse2 7s ease-in-out infinite alternate; }
+  .glow-3 { width:400px;height:400px;background:radial-gradient(circle,rgba(131,56,236,0.2) 0%,transparent 70%);bottom:20%;left:50%;transform:translateX(-50%);animation:glowPulse3 6s ease-in-out infinite alternate; }
+  .glow-4 { width:300px;height:300px;background:radial-gradient(circle,rgba(6,214,160,0.18) 0%,transparent 70%);bottom:10%;right:5%;animation:glowPulse1 8s ease-in-out infinite alternate-reverse; }
+
+  @keyframes glowPulse1 { from{opacity:0.6;transform:scale(1)} to{opacity:1;transform:scale(1.15)} }
+  @keyframes glowPulse2 { from{opacity:1;transform:scale(1.1)} to{opacity:0.5;transform:scale(0.9)} }
+  @keyframes glowPulse3 { from{transform:translateX(-50%) scale(1);opacity:0.5} to{transform:translateX(-45%) scale(1.2);opacity:0.9} }
+
+  /* ── Confetti rain — more particles, faster, brighter ── */
+  .confetti {
+    position: fixed;
     border-radius: 2px;
     pointer-events: none;
-    animation: fall linear infinite;
-    opacity: 0.7;
+    z-index: 0;
+    animation: confettiFall linear infinite;
   }
-  @keyframes fall {
-    0%   { transform: translateY(-20px) rotate(0deg); opacity: 0; }
-    10%  { opacity: 0.8; }
-    90%  { opacity: 0.6; }
-    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  @keyframes confettiFall {
+    0%   { transform: translateY(-40px) rotate(0deg) scaleX(1);   opacity: 0; }
+    5%   { opacity: 1; }
+    92%  { opacity: 0.8; }
+    100% { transform: translateY(100vh) rotate(720deg) scaleX(-1); opacity: 0; }
   }
 
-  /* Floor/ceiling scan lines effect */
+  /* ── Crowd silhouettes at bottom ── */
+  .crowd {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    pointer-events: none;
+    z-index: 1;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 80'%3E%3Cpath fill='%23000' d='M0,80 L0,50 Q30,20 60,45 Q90,60 110,35 Q130,15 150,40 Q170,55 200,30 Q230,10 260,38 Q290,58 310,32 Q340,12 370,42 Q390,58 420,28 Q450,5 480,35 Q510,58 540,30 Q570,10 600,40 Q625,58 650,32 Q680,12 710,42 Q735,58 760,28 Q790,5 820,38 Q845,58 870,30 Q900,10 930,42 Q955,58 980,28 Q1010,5 1040,38 Q1065,58 1090,30 Q1120,10 1150,42 Q1175,60 1200,45 L1200,80 Z'/%3E%3C/svg%3E") bottom/cover no-repeat;
+    opacity: 0.7;
+  }
+
+  /* ── Strobe flash ── */
+  .strobe {
+    position: fixed;
+    inset: 0;
+    background: white;
+    pointer-events: none;
+    z-index: 2;
+    animation: strobe 8s ease-in-out infinite;
+    opacity: 0;
+  }
+  @keyframes strobe {
+    0%,94%,96%,98%,100% { opacity: 0; }
+    95%  { opacity: 0.03; }
+    97%  { opacity: 0.05; }
+    99%  { opacity: 0.02; }
+  }
+
+  /* ── Content layer ── */
+  .party-content {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* ── Scan lines ── */
   .scan-lines {
-    position: absolute;
+    position: fixed;
     inset: 0;
     background: repeating-linear-gradient(
       0deg,
       transparent,
       transparent 3px,
-      rgba(255,255,255,0.015) 3px,
-      rgba(255,255,255,0.015) 4px
+      rgba(255,255,255,0.012) 3px,
+      rgba(255,255,255,0.012) 4px
     );
     pointer-events: none;
+    z-index: 3;
   }
 
-  /* Party title glow */
+  /* ── Neon title ── */
   .party-title {
-    text-shadow: 0 0 40px rgba(255, 0, 110, 0.6), 0 0 80px rgba(58, 134, 255, 0.3);
+    text-shadow:
+      0 0 10px rgba(255, 0, 110, 0.9),
+      0 0 30px rgba(255, 0, 110, 0.6),
+      0 0 60px rgba(58, 134, 255, 0.4),
+      0 0 100px rgba(131, 56, 236, 0.3);
+    color: #fff;
   }
-  .party-subtitle {
-    color: rgba(255,255,255,0.55);
-  }
+  .party-subtitle { color: rgba(255,255,255,0.55); }
 
-  /* Tag pills */
   .party-tag {
     background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.8);
     border-radius: 9999px;
-    padding: 4px 14px;
+    padding: 5px 15px;
     font-size: 0.75rem;
     font-weight: 600;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(6px);
+    text-shadow: 0 0 8px currentColor;
+  }
+
+  /* ── Content section cards stay dark ── */
+  .party-section {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 1rem;
+    backdrop-filter: blur(8px);
+  }
+  .party-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 0.75rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .party-card:hover {
+    border-color: rgba(255, 0, 110, 0.5);
+    background: rgba(255,0,110,0.08);
+  }
+  .party-link {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 0.75rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .party-link:hover {
+    border-color: rgba(58,134,255,0.5);
+    box-shadow: 0 4px 20px rgba(58,134,255,0.2);
+  }
+  details.party-faq {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
   }
 </style>
 
@@ -187,141 +296,169 @@ const jsonLd = {
     { name: "Party Wheel", url: "https://realwheelpicker.com/party-wheel" },
   ]} />
 
-  <!-- ═══════════════════════════════════════════════════════════ -->
-  <!-- PARTY HERO — dark club atmosphere                          -->
-  <!-- ═══════════════════════════════════════════════════════════ -->
-  <div class="party-hero">
-    <!-- Atmospheric spotlights -->
-    <div class="spot spot-pink"></div>
-    <div class="spot spot-blue"></div>
-    <div class="spot spot-purple"></div>
-    <div class="spot spot-gold"></div>
-    <div class="spot spot-green"></div>
+  <div class="party-page">
+
+    <!-- Fixed atmospheric layers (behind everything) -->
+    <div class="glow-1 glow-pool"></div>
+    <div class="glow-2 glow-pool"></div>
+    <div class="glow-3 glow-pool"></div>
+    <div class="glow-4 glow-pool"></div>
     <div class="scan-lines"></div>
+    <div class="strobe"></div>
 
-    <!-- Falling confetti particles (CSS only) -->
-    <div class="particle" style="width:6px;height:6px;background:#FF006E;left:8%;animation-duration:4.2s;animation-delay:0s;"></div>
-    <div class="particle" style="width:4px;height:10px;background:#3A86FF;left:18%;animation-duration:5.1s;animation-delay:0.8s;"></div>
-    <div class="particle" style="width:8px;height:5px;background:#FFD700;left:32%;animation-duration:3.8s;animation-delay:1.5s;"></div>
-    <div class="particle" style="width:5px;height:5px;background:#06D6A0;left:47%;animation-duration:6.2s;animation-delay:0.3s;"></div>
-    <div class="particle" style="width:7px;height:4px;background:#8338EC;left:63%;animation-duration:4.7s;animation-delay:2.1s;"></div>
-    <div class="particle" style="width:4px;height:8px;background:#FF006E;left:75%;animation-duration:5.5s;animation-delay:0.6s;"></div>
-    <div class="particle" style="width:6px;height:6px;background:#FFD700;left:88%;animation-duration:3.5s;animation-delay:1.9s;"></div>
-    <div class="particle" style="width:5px;height:5px;background:#3A86FF;left:55%;animation-duration:4.9s;animation-delay:3.2s;"></div>
-    <div class="particle" style="width:8px;height:3px;background:#06D6A0;left:25%;animation-duration:6.8s;animation-delay:1.1s;"></div>
-    <div class="particle" style="width:4px;height:7px;background:#FF006E;left:92%;animation-duration:4.3s;animation-delay:2.7s;"></div>
-
-    <HeaderIsland client:load />
-
-    <div class="relative z-10 max-w-4xl mx-auto px-4 pt-4 pb-12">
-
-      <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
-        <a href="/" class="hover:text-white/60 transition-colors">Home</a>
-        <span>/</span>
-        <span class="text-white/50">Party Wheel</span>
-      </nav>
-
-      <!-- Party title -->
-      <div class="text-center mb-2">
-        <div class="text-4xl mb-2">🎉</div>
-        <h1 class="text-4xl md:text-6xl font-black text-white leading-tight party-title mb-3">
-          Party Wheel
-        </h1>
-        <p class="text-lg party-subtitle max-w-xl mx-auto mb-4">
-          Add dares, truths, challenges — let the wheel decide who goes next.
-        </p>
-        <div class="flex flex-wrap items-center justify-center gap-2">
-          <span class="party-tag">🎮 Truth or Dare</span>
-          <span class="party-tag">🎲 Party Games</span>
-          <span class="party-tag">💃 Dance Dares</span>
-          <span class="party-tag">📱 Mobile Ready</span>
-        </div>
-      </div>
-
-      <!-- THE WHEEL — front and center in the party -->
-      <div class="mt-6">
-        <SimpleWheelIsland
-          defaultParticipants={defaultParticipants}
-          client:load
-        />
-      </div>
+    <!-- Laser beams -->
+    <div class="laser-container">
+      <div class="laser laser-1"></div>
+      <div class="laser laser-2"></div>
+      <div class="laser laser-3"></div>
+      <div class="laser laser-4"></div>
+      <div class="laser laser-5"></div>
+      <div class="laser laser-6"></div>
     </div>
-  </div>
 
-  <!-- ═══════════════════════════════════════════════════════════ -->
-  <!-- CONTENT BELOW                                              -->
-  <!-- ═══════════════════════════════════════════════════════════ -->
-  <div style="background: var(--gradient-bg)">
-    <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+    <!-- Disco ball reflections — small bright dots moving across screen -->
+    <div class="disco-dot" style="width:5px;height:5px;background:#ff006e;left:15%;top:25%;box-shadow:0 0 6px #ff006e;animation:disco1 7s linear infinite;animation-delay:0s;"></div>
+    <div class="disco-dot" style="width:4px;height:4px;background:#3a86ff;left:60%;top:15%;box-shadow:0 0 5px #3a86ff;animation:disco2 9s linear infinite;animation-delay:1s;"></div>
+    <div class="disco-dot" style="width:6px;height:6px;background:#ffd700;left:80%;top:40%;box-shadow:0 0 8px #ffd700;animation:disco3 6s linear infinite;animation-delay:2s;"></div>
+    <div class="disco-dot" style="width:3px;height:3px;background:#06d6a0;left:30%;top:60%;box-shadow:0 0 5px #06d6a0;animation:disco4 8s linear infinite;animation-delay:0.5s;"></div>
+    <div class="disco-dot" style="width:5px;height:5px;background:#8338ec;left:50%;top:50%;box-shadow:0 0 7px #8338ec;animation:disco1 11s linear infinite;animation-delay:3s;"></div>
+    <div class="disco-dot" style="width:4px;height:4px;background:#ff006e;left:10%;top:70%;box-shadow:0 0 5px #ff006e;animation:disco2 7s linear infinite;animation-delay:1.5s;"></div>
+    <div class="disco-dot" style="width:5px;height:5px;background:#3a86ff;left:90%;top:30%;box-shadow:0 0 6px #3a86ff;animation:disco3 10s linear infinite;animation-delay:4s;"></div>
+    <div class="disco-dot" style="width:3px;height:3px;background:#ffd700;left:45%;top:80%;box-shadow:0 0 5px #ffd700;animation:disco4 6s linear infinite;animation-delay:2.5s;"></div>
+    <div class="disco-dot" style="width:6px;height:6px;background:#ff006e;left:70%;top:65%;box-shadow:0 0 8px #ff006e;animation:disco1 9s linear infinite;animation-delay:0.8s;"></div>
+    <div class="disco-dot" style="width:4px;height:4px;background:#06d6a0;left:25%;top:35%;box-shadow:0 0 6px #06d6a0;animation:disco2 8s linear infinite;animation-delay:3.5s;"></div>
 
-      <!-- Party Wheel Ideas grid -->
-      <section class="space-y-6">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Party Wheel Ideas</h2>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {[
-            { emoji: "😈", title: "Truth or Dare", desc: "Add truths, dares, or player names and spin" },
-            { emoji: "🎮", title: "Game Selector", desc: "Can't agree on what to play? Spin." },
-            { emoji: "🍕", title: "Food Chooser", desc: "Pizza, tacos, burgers — let fate decide" },
-            { emoji: "🎵", title: "Song Challenge", desc: "Spin for a song to sing, rap or hum" },
-            { emoji: "💃", title: "Dance Dare", desc: "Random dance moves or TikTok challenges" },
-            { emoji: "🎲", title: "Drinking Rules", desc: "Add game rules and spin for who drinks" },
-          ].map((c) => (
-            <div class="p-4 rounded-xl bg-card border border-border text-center hover:scale-105 transition-all hover:border-primary/50">
-              <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 bg-primary/10 text-2xl">{c.emoji}</div>
-              <h3 class="font-semibold text-foreground text-sm mb-1">{c.title}</h3>
-              <p class="text-xs text-muted-foreground">{c.desc}</p>
-            </div>
-          ))}
+    <!-- Confetti rain — 20 pieces, varied speeds & colors -->
+    <div class="confetti" style="width:7px;height:7px;background:#FF006E;left:5%;animation-duration:2.8s;animation-delay:0s;"></div>
+    <div class="confetti" style="width:5px;height:12px;background:#3A86FF;left:12%;animation-duration:3.3s;animation-delay:0.4s;"></div>
+    <div class="confetti" style="width:9px;height:5px;background:#FFD700;left:20%;animation-duration:2.5s;animation-delay:0.9s;"></div>
+    <div class="confetti" style="width:6px;height:6px;background:#06D6A0;left:28%;animation-duration:4.1s;animation-delay:0.2s;"></div>
+    <div class="confetti" style="width:8px;height:4px;background:#8338EC;left:37%;animation-duration:3.0s;animation-delay:1.5s;"></div>
+    <div class="confetti" style="width:5px;height:9px;background:#FF006E;left:45%;animation-duration:2.2s;animation-delay:0.7s;"></div>
+    <div class="confetti" style="width:7px;height:7px;background:#FFD700;left:54%;animation-duration:3.7s;animation-delay:1.2s;"></div>
+    <div class="confetti" style="width:4px;height:4px;background:#3A86FF;left:62%;animation-duration:2.9s;animation-delay:2.0s;"></div>
+    <div class="confetti" style="width:9px;height:3px;background:#06D6A0;left:70%;animation-duration:4.4s;animation-delay:0.6s;"></div>
+    <div class="confetti" style="width:5px;height:8px;background:#FF006E;left:78%;animation-duration:2.6s;animation-delay:1.8s;"></div>
+    <div class="confetti" style="width:6px;height:6px;background:#8338EC;left:85%;animation-duration:3.5s;animation-delay:0.3s;"></div>
+    <div class="confetti" style="width:7px;height:4px;background:#FFD700;left:92%;animation-duration:2.4s;animation-delay:1.1s;"></div>
+    <div class="confetti" style="width:4px;height:10px;background:#3A86FF;left:8%;animation-duration:3.9s;animation-delay:2.3s;"></div>
+    <div class="confetti" style="width:8px;height:8px;background:#FF006E;left:33%;animation-duration:2.7s;animation-delay:3.0s;"></div>
+    <div class="confetti" style="width:5px;height:5px;background:#06D6A0;left:58%;animation-duration:3.1s;animation-delay:1.6s;"></div>
+    <div class="confetti" style="width:6px;height:7px;background:#FFD700;left:42%;animation-duration:2.3s;animation-delay:2.8s;"></div>
+    <div class="confetti" style="width:3px;height:3px;background:#8338EC;left:66%;animation-duration:4.0s;animation-delay:0.1s;"></div>
+    <div class="confetti" style="width:9px;height:5px;background:#FF006E;left:50%;animation-duration:2.1s;animation-delay:3.5s;"></div>
+    <div class="confetti" style="width:4px;height:8px;background:#3A86FF;left:74%;animation-duration:3.6s;animation-delay:1.4s;"></div>
+    <div class="confetti" style="width:7px;height:4px;background:#06D6A0;left:96%;animation-duration:2.9s;animation-delay:2.1s;"></div>
+
+    <!-- Crowd silhouettes -->
+    <div class="crowd"></div>
+
+    <!-- ═══════════════ HERO ═══════════════ -->
+    <div class="party-content">
+      <HeaderIsland client:load />
+
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+
+        <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+          <span>/</span>
+          <span class="text-white/50">Party Wheel</span>
+        </nav>
+
+        <!-- Hero title -->
+        <div class="text-center mb-2">
+          <div class="text-5xl mb-3">🎉</div>
+          <h1 class="text-4xl md:text-6xl font-black leading-tight party-title mb-3">
+            Party Wheel
+          </h1>
+          <p class="text-lg party-subtitle max-w-xl mx-auto mb-4">
+            Add dares, truths, challenges — let the wheel decide who goes next.
+          </p>
+          <div class="flex flex-wrap items-center justify-center gap-2 mb-6">
+            <span class="party-tag">🎮 Truth or Dare</span>
+            <span class="party-tag">🎲 Party Games</span>
+            <span class="party-tag">💃 Dance Dares</span>
+            <span class="party-tag">📱 Mobile Ready</span>
+          </div>
         </div>
-      </section>
 
-      <!-- How it works -->
-      <section class="p-6 rounded-xl border bg-card border-border space-y-3">
-        <h2 class="text-lg font-bold text-foreground">How it works</h2>
-        <p class="text-sm text-muted-foreground leading-relaxed">
-          The party wheel comes pre-loaded with 10 fun options — Truth, Dare, Sing a Song, Dance Move and more. Click <strong class="text-foreground">✏️ Customize entries</strong> to add your own, remove ones you don't want, or build a completely custom list for your party. Pass your phone around, everyone watches the spin, nobody argues about what happens next.
-        </p>
-      </section>
+        <!-- THE WHEEL -->
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </div>
 
-      <!-- FAQs -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <details class="bg-card border border-border rounded-xl p-5 group">
-              <summary class="font-semibold text-foreground cursor-pointer list-none flex items-center justify-between gap-2">
-                {question}
-                <span class="text-muted-foreground shrink-0 group-open:rotate-180 transition-transform">▾</span>
-              </summary>
-              <p class="text-muted-foreground text-sm leading-relaxed mt-3">{answer}</p>
-            </details>
-          ))}
-        </div>
-      </section>
+      <!-- ═══════════════ CONTENT (same dark party bg) ═══════════════ -->
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
 
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/spin-the-bottle", label: "Spin the Bottle", desc: "The classic party game, online." },
-            { href: "/yes-no-wheel", label: "Yes or No Wheel", desc: "Quick yes/no decisions with a spin." },
-            { href: "/random-name-picker", label: "Random Name Picker", desc: "Select a random player or participant." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <!-- Party Wheel Ideas grid -->
+        <section class="space-y-6">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Party Wheel Ideas</h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {[
+              { emoji: "😈", title: "Truth or Dare", desc: "Add truths, dares, or player names and spin" },
+              { emoji: "🎮", title: "Game Selector", desc: "Can't agree on what to play? Spin." },
+              { emoji: "🍕", title: "Food Chooser", desc: "Pizza, tacos, burgers — let fate decide" },
+              { emoji: "🎵", title: "Song Challenge", desc: "Spin for a song to sing, rap or hum" },
+              { emoji: "💃", title: "Dance Dare", desc: "Random dance moves or TikTok challenges" },
+              { emoji: "🎲", title: "Drinking Rules", desc: "Add game rules and spin for who drinks" },
+            ].map((c) => (
+              <div class="party-card p-4 text-center">
+                <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-3 text-2xl" style="background:rgba(255,0,110,0.15);">{c.emoji}</div>
+                <h3 class="font-semibold text-white text-sm mb-1">{c.title}</h3>
+                <p class="text-xs text-white/50">{c.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-    </main>
-    <GlobalFooterIsland client:idle />
+        <!-- How it works -->
+        <section class="party-section p-6 space-y-3">
+          <h2 class="text-lg font-bold text-white">How it works</h2>
+          <p class="text-sm text-white/60 leading-relaxed">
+            The party wheel comes pre-loaded with 10 fun options — Truth, Dare, Sing a Song, Dance Move and more. Click <strong class="text-white">✏️ Customize entries</strong> to add your own, remove ones you don't want, or build a completely custom list for your party. Pass your phone around, everyone watches the spin, nobody argues about what happens next.
+          </p>
+        </section>
+
+        <!-- FAQs -->
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="party-faq group">
+                <summary class="font-semibold text-white cursor-pointer list-none flex items-center justify-between gap-2">
+                  {question}
+                  <span class="text-white/40 shrink-0 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p class="text-white/60 text-sm leading-relaxed mt-3">{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <!-- Related Tools -->
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/spin-the-bottle", label: "Spin the Bottle", desc: "The classic party game, online." },
+              { href: "/yes-no-wheel", label: "Yes or No Wheel", desc: "Quick yes/no decisions with a spin." },
+              { href: "/random-name-picker", label: "Random Name Picker", desc: "Select a random player or participant." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="party-link flex items-start gap-3 p-4">
+                  <span class="text-pink-400 font-bold text-sm mt-0.5">→</span>
+                  <span>
+                    <span class="font-semibold text-white">{label}</span>
+                    <span class="text-white/50 text-sm"> — {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+      </main>
+
+      <GlobalFooterIsland client:idle />
+    </div>
   </div>
 </Layout>

@@ -338,40 +338,68 @@ export function SpinningWheel({
     ctx.fillStyle = 'rgba(255,255,255,0.3)';
     ctx.fill();
 
-    // ── "Click to spin" — diagonal text like wheelofnames ──
+    // ── "Click to spin" — circular arc text around the hub ──
     if (clickToSpinLabel && !isAnimating) {
       ctx.save();
-      // Clip to wheel circle so text doesn't bleed outside
-      ctx.beginPath();
-      ctx.arc(center, center, radius - 4, 0, Math.PI * 2);
-      ctx.clip();
 
-      ctx.translate(center, center);
-      ctx.rotate(-Math.PI / 6); // -30 degrees diagonal
+      const arcR = radius * 0.52; // radius of the text arc path
+      const fs = Math.max(11, Math.round(sz * 0.038));
+      ctx.font = `bold ${fs}px 'Space Grotesk', sans-serif`;
+      ctx.fillStyle = 'rgba(255,255,255,0.72)';
+      ctx.shadowColor = 'rgba(0,0,0,0.8)';
+      ctx.shadowBlur = 6;
+
+      // Helper: draw text along an arc, centred at startAngle
+      const drawArcText = (text: string, startAngle: number, flip: boolean) => {
+        const totalWidth = text.split('').reduce((w, ch) => w + ctx.measureText(ch).width + 1, 0);
+        const angleSpan = totalWidth / arcR;
+        let angle = startAngle - angleSpan / 2;
+        for (const ch of text) {
+          const chW = ctx.measureText(ch).width + 1;
+          const midAngle = angle + chW / (2 * arcR);
+          ctx.save();
+          ctx.translate(center + Math.cos(midAngle) * arcR, center + Math.sin(midAngle) * arcR);
+          ctx.rotate(midAngle + (flip ? Math.PI : 0));
+          ctx.fillText(ch, 0, 0);
+          ctx.restore();
+          angle += chW / arcR;
+        }
+      };
+
+      // Draw curved arrow along arc
+      const drawArcArrow = (arcStartAngle: number, arcEndAngle: number, arrowAtEnd: boolean) => {
+        ctx.beginPath();
+        ctx.arc(center, center, arcR * 1.18, arcStartAngle, arcEndAngle, arcEndAngle < arcStartAngle);
+        ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        // Arrowhead
+        const aAngle = arrowAtEnd ? arcEndAngle : arcStartAngle;
+        const dir = arrowAtEnd ? 1 : -1;
+        const ax = center + Math.cos(aAngle) * arcR * 1.18;
+        const ay = center + Math.sin(aAngle) * arcR * 1.18;
+        const perpAngle = aAngle + dir * Math.PI / 2;
+        ctx.beginPath();
+        ctx.moveTo(ax, ay);
+        ctx.lineTo(ax + Math.cos(perpAngle - 0.4) * fs * 0.9, ay + Math.sin(perpAngle - 0.4) * fs * 0.9);
+        ctx.moveTo(ax, ay);
+        ctx.lineTo(ax + Math.cos(perpAngle + 0.4) * fs * 0.9, ay + Math.sin(perpAngle + 0.4) * fs * 0.9);
+        ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      };
+
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
-      const fs1 = Math.max(16, Math.round(sz * 0.09));
-      const fs2 = Math.max(10, Math.round(sz * 0.055));
+      // Top arc: text reads left-to-right along top half
+      drawArcText(clickToSpinLabel, -Math.PI / 2, false);
+      // Bottom arc: text reads left-to-right along bottom half (flipped)
+      drawArcText(clickToSpinLabel, Math.PI / 2, true);
 
-      ctx.shadowColor = 'rgba(0,0,0,0.75)';
-      ctx.shadowBlur = 8;
-      ctx.shadowOffsetX = 1;
-      ctx.shadowOffsetY = 2;
-
-      // Two lines: offset each by half the total height
-      const lineGap = fs1 * 0.35;
-      const y1 = clickToSpinSub ? -(fs1 * 0.5 + lineGap * 0.5) : 0;
-
-      ctx.font = `bold ${fs1}px 'Space Grotesk', sans-serif`;
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(clickToSpinLabel, 0, y1);
-
-      if (clickToSpinSub) {
-        ctx.font = `bold ${fs2}px 'Space Grotesk', sans-serif`;
-        ctx.fillStyle = 'rgba(255,255,255,0.82)';
-        ctx.fillText(clickToSpinSub, 0, y1 + fs1 + lineGap);
-      }
+      // Curved arrows on each side
+      drawArcArrow(-Math.PI * 0.85, -Math.PI * 0.15, true);
+      drawArcArrow(Math.PI * 0.15, Math.PI * 0.85, true);
 
       ctx.restore();
     }

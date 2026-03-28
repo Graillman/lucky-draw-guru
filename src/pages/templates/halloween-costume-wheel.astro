@@ -26,16 +26,16 @@ const faqItems = [
 ];
 
 const defaultParticipants = [
-  { pseudo: "Vampire", weight: 1 },
-  { pseudo: "Witch", weight: 1 },
-  { pseudo: "Zombie", weight: 1 },
-  { pseudo: "Ghost", weight: 1 },
-  { pseudo: "Werewolf", weight: 1 },
-  { pseudo: "Skeleton", weight: 1 },
-  { pseudo: "Frankenstein", weight: 1 },
-  { pseudo: "Mummy", weight: 1 },
-  { pseudo: "Devil", weight: 1 },
-  { pseudo: "Black cat", weight: 1 },
+  { pseudo: "🧛 Vampire",       weight: 1 },
+  { pseudo: "🧙 Witch",         weight: 1 },
+  { pseudo: "🧟 Zombie",        weight: 1 },
+  { pseudo: "👻 Ghost",         weight: 1 },
+  { pseudo: "🐺 Werewolf",      weight: 1 },
+  { pseudo: "💀 Skeleton",      weight: 1 },
+  { pseudo: "🟢 Frankenstein",  weight: 1 },
+  { pseudo: "🎃 Jack-o-lantern",weight: 1 },
+  { pseudo: "😈 Devil",         weight: 1 },
+  { pseudo: "🐱 Black Cat",     weight: 1 },
 ];
 
 const jsonLd = {
@@ -47,6 +47,152 @@ const jsonLd = {
 };
 ---
 
+<style>
+  /* ═══════════ FULL-PAGE HALLOWEEN THEME ═══════════ */
+  .hw-page {
+    background: #050005;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Night sky with pumpkin glow */
+  .hw-sky {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 30% 0%, rgba(255,80,0,0.22) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 75% 10%, rgba(150,0,150,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse 80% 30% at 50% 100%, rgba(180,40,0,0.25) 0%, transparent 60%),
+      linear-gradient(180deg, #050005 0%, #0d0508 40%, #050005 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Pumpkin glow orbs */
+  .pumpkin-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(70px);
+    pointer-events: none;
+    z-index: 0;
+    animation: pumpkinPulse ease-in-out infinite alternate;
+  }
+  @keyframes pumpkinPulse {
+    from { opacity: 0.4; transform: scale(1); }
+    to   { opacity: 0.85; transform: scale(1.15); }
+  }
+
+  /* Flying bats */
+  .bat {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    font-style: normal;
+    animation: batFly ease-in-out infinite;
+    opacity: 0.7;
+  }
+  @keyframes batFly {
+    0%   { transform: translate(0, 0) scaleX(1); }
+    25%  { transform: translate(80px, -40px) scaleX(1); }
+    50%  { transform: translate(160px, 10px) scaleX(-1); }
+    75%  { transform: translate(80px, -20px) scaleX(-1); }
+    100% { transform: translate(0, 0) scaleX(1); }
+  }
+
+  /* Fog wisps */
+  .fog {
+    position: fixed;
+    height: 60px;
+    border-radius: 50%;
+    filter: blur(30px);
+    pointer-events: none;
+    z-index: 1;
+    animation: fogDrift linear infinite;
+    opacity: 0;
+    background: rgba(200, 180, 255, 0.12);
+  }
+  @keyframes fogDrift {
+    0%   { transform: translateX(-200px); opacity: 0; }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateX(110vw); opacity: 0; }
+  }
+
+  /* Falling leaves */
+  .leaf {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    animation: leafFall linear infinite;
+    opacity: 0;
+    font-style: normal;
+  }
+  @keyframes leafFall {
+    0%   { transform: translateY(-30px) rotate(0deg); opacity: 0; }
+    8%   { opacity: 0.8; }
+    92%  { opacity: 0.5; }
+    100% { transform: translateY(110vh) rotate(540deg); opacity: 0; }
+  }
+
+  /* Sparkle eyes in darkness */
+  .evil-eye {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 50%;
+    animation: eyeGlow ease-in-out infinite alternate;
+  }
+  @keyframes eyeGlow {
+    from { opacity: 0.1; box-shadow: none; }
+    to   { opacity: 0.8; box-shadow: 0 0 12px currentColor; }
+  }
+
+  .hw-content { position: relative; z-index: 10; }
+
+  /* Title */
+  .hw-title {
+    background: linear-gradient(135deg, #ff6d00 0%, #ff3d00 35%, #dc2f02 65%, #ff6d00 100%);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: hwShimmer 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 25px rgba(255,80,0,0.5));
+  }
+  @keyframes hwShimmer {
+    0%,100% { background-position: 0% 50%; }
+    50%     { background-position: 100% 50%; }
+  }
+
+  .hw-tag {
+    background: rgba(255, 100, 0, 0.15);
+    border: 1px solid rgba(255, 100, 0, 0.35);
+    color: rgba(255, 140, 50, 0.9);
+    border-radius: 9999px;
+    padding: 4px 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .hw-card {
+    background: rgba(255, 70, 0, 0.07);
+    border: 1px solid rgba(255, 100, 0, 0.2);
+    border-radius: 0.75rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .hw-card:hover {
+    border-color: rgba(255, 100, 0, 0.5);
+    background: rgba(255, 70, 0, 0.13);
+  }
+  details.hw-faq {
+    background: rgba(255, 70, 0, 0.06);
+    border: 1px solid rgba(255, 100, 0, 0.2);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+</style>
+
 <Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
@@ -55,79 +201,122 @@ const jsonLd = {
     { name: "Halloween Costume Picker", url: "https://realwheelpicker.com/templates/halloween-costume-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+  <div class="hw-page">
+    <div class="hw-sky"></div>
 
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Halloween Costume Picker</span>
-      </nav>
+    <!-- Pumpkin glow pools -->
+    <div class="pumpkin-glow" style="width:500px;height:400px;background:radial-gradient(circle,rgba(255,80,0,0.3) 0%,transparent 70%);top:-100px;left:-80px;animation-duration:4s;"></div>
+    <div class="pumpkin-glow" style="width:400px;height:400px;background:radial-gradient(circle,rgba(150,0,150,0.2) 0%,transparent 70%);top:-80px;right:-60px;animation-duration:6s;animation-delay:1s;"></div>
+    <div class="pumpkin-glow" style="width:350px;height:300px;background:radial-gradient(circle,rgba(255,60,0,0.22) 0%,transparent 70%);bottom:15%;left:40%;transform:translateX(-50%);animation-duration:5s;animation-delay:2s;"></div>
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Halloween Costume Picker — Random Costume Ideas
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Stop scrolling Pinterest for hours. Spin the wheel, commit to the costume, start planning. Works for solo costumes, couples, and group themes.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Flying bats -->
+    <span class="bat" style="font-size:1.2rem;left:5%;top:15%;animation-duration:6s;animation-delay:0s;">🦇</span>
+    <span class="bat" style="font-size:0.9rem;left:70%;top:8%;animation-duration:8s;animation-delay:2s;">🦇</span>
+    <span class="bat" style="font-size:1.5rem;left:45%;top:25%;animation-duration:7s;animation-delay:1s;">🦇</span>
+    <span class="bat" style="font-size:0.8rem;left:85%;top:18%;animation-duration:5s;animation-delay:3s;">🦇</span>
+    <span class="bat" style="font-size:1.1rem;left:20%;top:40%;animation-duration:9s;animation-delay:0.5s;">🦇</span>
 
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <!-- Fog wisps -->
+    <div class="fog" style="width:300px;bottom:8%;left:-200px;animation-duration:18s;animation-delay:0s;"></div>
+    <div class="fog" style="width:400px;bottom:5%;left:-200px;animation-duration:22s;animation-delay:5s;"></div>
+    <div class="fog" style="width:250px;bottom:12%;left:-200px;animation-duration:15s;animation-delay:9s;"></div>
 
-      <section class="space-y-8">
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Halloween Costume Paralysis Problem</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            There are thousands of Halloween costume ideas online. That's the problem. Too many options trigger decision paralysis — you spend two weeks browsing ideas, narrowing it to five finalists, and then can't choose between them. The costume you wore last year was probably picked the same way: you eventually just grabbed something because time ran out.
+    <!-- Falling leaves -->
+    <span class="leaf" style="font-size:1rem;left:8%;animation-duration:6s;animation-delay:0s;">🍂</span>
+    <span class="leaf" style="font-size:0.8rem;left:22%;animation-duration:8s;animation-delay:1.5s;">🍁</span>
+    <span class="leaf" style="font-size:1.2rem;left:40%;animation-duration:5s;animation-delay:3s;">🍂</span>
+    <span class="leaf" style="font-size:0.9rem;left:60%;animation-duration:7s;animation-delay:0.8s;">🍁</span>
+    <span class="leaf" style="font-size:1.1rem;left:78%;animation-duration:9s;animation-delay:2s;">🍂</span>
+    <span class="leaf" style="font-size:0.7rem;left:92%;animation-duration:6.5s;animation-delay:4s;">🍁</span>
+
+    <!-- Evil glowing eyes in darkness -->
+    <div class="evil-eye" style="width:5px;height:5px;color:#ff6d00;background:#ff6d00;left:3%;top:55%;animation-duration:2s;"></div>
+    <div class="evil-eye" style="width:5px;height:5px;color:#ff6d00;background:#ff6d00;left:6%;top:55%;animation-duration:2s;animation-delay:0.1s;"></div>
+    <div class="evil-eye" style="width:4px;height:4px;color:#9900cc;background:#9900cc;left:88%;top:70%;animation-duration:3s;animation-delay:1s;"></div>
+    <div class="evil-eye" style="width:4px;height:4px;color:#9900cc;background:#9900cc;left:91%;top:70%;animation-duration:3s;animation-delay:1.1s;"></div>
+
+    <div class="hw-content">
+      <HeaderIsland client:load />
+
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+
+        <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/60 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/50">Halloween Costume Picker</span>
+        </nav>
+
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3">🎃</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight hw-title mb-3">
+            Halloween Costume Picker
+          </h1>
+          <p class="text-lg text-white/50 max-w-xl mx-auto mb-5">
+            Stop scrolling Pinterest for hours. Spin the wheel, commit to the costume, start planning.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="hw-tag">🧛 Classic Monsters</span>
+            <span class="hw-tag">👻 Spooky</span>
+            <span class="hw-tag">🎃 Halloween Party</span>
+            <span class="hw-tag">👥 Group Costumes</span>
+          </div>
+        </div>
+
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="hw-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">The Halloween Costume Paralysis Problem</h2>
+          <p class="text-white/55 leading-relaxed">
+            There are thousands of Halloween costume ideas online. That's the problem. Too many options trigger decision paralysis — you spend two weeks browsing ideas, narrowing it to five finalists, and then can't choose between them.
+          </p>
+          <p class="text-white/55 leading-relaxed">
             The wheel forces a decision. Load it with the costumes you're actually willing to wear — anything left on the wheel is acceptable — and spin. The randomness removes the pressure of "did I pick the best one?" You picked one. That's the win.
           </p>
         </div>
-      </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="hw-faq group">
+                <summary class="font-semibold text-white cursor-pointer list-none flex items-center justify-between gap-2">
+                  {question}
+                  <span class="text-white/40 shrink-0 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p class="text-white/55 text-sm leading-relaxed mt-3">{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/dare-wheel", label: "Dare Wheel", desc: "Halloween party dares for trick-or-treat games." },
-            { href: "/templates/never-have-i-ever-wheel", label: "Never Have I Ever Wheel", desc: "Halloween party game for any group size." },
-            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick who hosts the Halloween party or buys supplies." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Related Tools</h2>
+          <ul class="grid sm:grid-cols-2 gap-3">
+            {[
+              { href: "/templates/dare-wheel", label: "😈 Dare Wheel", desc: "Halloween party dares for game nights." },
+              { href: "/templates/never-have-i-ever-wheel", label: "🎃 Never Have I Ever", desc: "Halloween party game for any group." },
+              { href: "/random-name-picker", label: "🎲 Random Name Picker", desc: "Pick who hosts the Halloween party." },
+              { href: "/templates", label: "🔮 All Templates", desc: "Browse all pre-loaded wheel templates." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="hw-card flex items-start gap-3 p-4">
+                  <span>
+                    <span class="font-semibold text-white text-sm">{label}</span>
+                    <span class="text-white/50 text-sm block mt-0.5">{desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-    </main>
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

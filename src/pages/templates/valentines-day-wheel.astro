@@ -26,16 +26,16 @@ const faqItems = [
 ];
 
 const defaultParticipants = [
-  { pseudo: "Fancy dinner out", weight: 1 },
-  { pseudo: "Cook together", weight: 1 },
-  { pseudo: "Movie marathon", weight: 1 },
-  { pseudo: "Weekend getaway", weight: 1 },
-  { pseudo: "Spa day", weight: 1 },
-  { pseudo: "Picnic in the park", weight: 1 },
-  { pseudo: "Cooking class", weight: 1 },
-  { pseudo: "Sunset hike", weight: 1 },
-  { pseudo: "Board game night", weight: 1 },
-  { pseudo: "Surprise breakfast", weight: 1 },
+  { pseudo: "💑 Fancy dinner out",      weight: 1 },
+  { pseudo: "🍳 Cook together",         weight: 1 },
+  { pseudo: "🎬 Movie marathon",        weight: 1 },
+  { pseudo: "✈️ Weekend getaway",       weight: 1 },
+  { pseudo: "💆 Spa day",               weight: 1 },
+  { pseudo: "🧺 Picnic in the park",   weight: 1 },
+  { pseudo: "👨‍🍳 Cooking class",         weight: 1 },
+  { pseudo: "🌅 Sunset hike",           weight: 1 },
+  { pseudo: "🎲 Board game night",      weight: 1 },
+  { pseudo: "☕ Surprise breakfast",    weight: 1 },
 ];
 
 const jsonLd = {
@@ -47,6 +47,128 @@ const jsonLd = {
 };
 ---
 
+<style>
+  /* ═══════════ FULL-PAGE VALENTINE THEME ═══════════ */
+  .val-page {
+    background: #1a0010;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Rose gold gradient sky */
+  .val-sky {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% -10%, rgba(255,60,130,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 0%, rgba(200,80,200,0.22) 0%, transparent 55%),
+      radial-gradient(ellipse 100% 40% at 50% 100%, rgba(180,20,80,0.3) 0%, transparent 60%),
+      linear-gradient(180deg, #1a0010 0%, #2d0020 50%, #1a0010 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Floating hearts */
+  .heart {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    animation: heartFloat ease-in-out infinite;
+    opacity: 0;
+    font-style: normal;
+    line-height: 1;
+  }
+  @keyframes heartFloat {
+    0%   { transform: translateY(110vh) rotate(-15deg); opacity: 0; }
+    5%   { opacity: 0.8; }
+    90%  { opacity: 0.5; }
+    100% { transform: translateY(-10vh) rotate(15deg); opacity: 0; }
+  }
+
+  /* Rose petals */
+  .petal {
+    position: fixed;
+    width: 8px; height: 12px;
+    border-radius: 50% 50% 50% 0;
+    pointer-events: none;
+    z-index: 1;
+    animation: petalFall linear infinite;
+    opacity: 0;
+  }
+  @keyframes petalFall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+    8%   { opacity: 0.7; }
+    92%  { opacity: 0.4; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* Sparkle dots */
+  .sparkle {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    animation: sparklePulse ease-in-out infinite alternate;
+  }
+  @keyframes sparklePulse {
+    from { opacity: 0.1; transform: scale(0.5); }
+    to   { opacity: 0.9; transform: scale(1.3); }
+  }
+
+  /* Content above bg layers */
+  .val-content { position: relative; z-index: 10; }
+
+  /* Title */
+  .val-title {
+    background: linear-gradient(135deg, #ff85c1 0%, #ff006e 40%, #c77dff 80%, #ff85c1 100%);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: valShimmer 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(255,0,110,0.4));
+  }
+  @keyframes valShimmer {
+    0%,100% { background-position: 0% 50%; }
+    50%     { background-position: 100% 50%; }
+  }
+
+  .val-tag {
+    background: rgba(255, 100, 160, 0.15);
+    border: 1px solid rgba(255, 100, 160, 0.35);
+    color: rgba(255, 150, 190, 0.9);
+    border-radius: 9999px;
+    padding: 4px 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  /* Cards in content */
+  .val-card {
+    background: rgba(255, 50, 120, 0.07);
+    border: 1px solid rgba(255, 100, 160, 0.2);
+    border-radius: 1rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .val-card:hover {
+    border-color: rgba(255, 100, 160, 0.5);
+    background: rgba(255, 50, 120, 0.12);
+  }
+  .val-section {
+    background: rgba(255, 50, 120, 0.06);
+    border: 1px solid rgba(255, 100, 160, 0.18);
+    border-radius: 1rem;
+    backdrop-filter: blur(6px);
+  }
+  details.val-faq {
+    background: rgba(255, 50, 120, 0.06);
+    border: 1px solid rgba(255, 100, 160, 0.18);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+</style>
+
 <Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
@@ -55,79 +177,117 @@ const jsonLd = {
     { name: "Valentine's Day Idea Wheel", url: "https://realwheelpicker.com/templates/valentines-day-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+  <div class="val-page">
+    <div class="val-sky"></div>
 
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Valentine's Day Idea Wheel</span>
-      </nav>
+    <!-- Floating hearts -->
+    <span class="heart" style="font-size:1.4rem;left:5%;animation-duration:8s;animation-delay:0s;">❤️</span>
+    <span class="heart" style="font-size:0.9rem;left:15%;animation-duration:10s;animation-delay:2s;">🩷</span>
+    <span class="heart" style="font-size:1.8rem;left:25%;animation-duration:12s;animation-delay:1s;">💕</span>
+    <span class="heart" style="font-size:1.1rem;left:38%;animation-duration:9s;animation-delay:3s;">❤️</span>
+    <span class="heart" style="font-size:0.8rem;left:52%;animation-duration:11s;animation-delay:0.5s;">💗</span>
+    <span class="heart" style="font-size:1.5rem;left:65%;animation-duration:7s;animation-delay:4s;">💖</span>
+    <span class="heart" style="font-size:1rem;left:75%;animation-duration:13s;animation-delay:1.5s;">🩷</span>
+    <span class="heart" style="font-size:1.3rem;left:85%;animation-duration:8s;animation-delay:2.5s;">💝</span>
+    <span class="heart" style="font-size:0.7rem;left:92%;animation-duration:9s;animation-delay:5s;">❤️</span>
+    <span class="heart" style="font-size:1.6rem;left:45%;animation-duration:14s;animation-delay:3.5s;">💞</span>
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Valentine's Day Wheel — Random Date & Gift Ideas
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Add ideas you'd both actually enjoy, spin together, and commit to the plan. Takes the pressure off planning and makes deciding feel like part of the fun.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Rose petals -->
+    {Array.from({ length: 16 }, (_, i) => (
+      <div class="petal" style={`background:hsl(${340 + (i % 4) * 8},80%,${55 + (i % 3) * 10}%);left:${i * 6.25}%;animation-duration:${4 + (i % 5)}s;animation-delay:${i * 0.4}s;transform:rotate(${i * 22}deg);`}></div>
+    ))}
 
-      <section class="flex flex-col items-center">
+    <!-- Sparkles -->
+    <div class="sparkle" style="width:4px;height:4px;background:#ff85c1;left:10%;top:20%;animation-duration:2s;box-shadow:0 0 6px #ff85c1;"></div>
+    <div class="sparkle" style="width:3px;height:3px;background:#c77dff;left:80%;top:30%;animation-duration:3s;animation-delay:1s;box-shadow:0 0 5px #c77dff;"></div>
+    <div class="sparkle" style="width:5px;height:5px;background:#ff006e;left:50%;top:15%;animation-duration:2.5s;animation-delay:0.5s;box-shadow:0 0 8px #ff006e;"></div>
+    <div class="sparkle" style="width:3px;height:3px;background:#ff85c1;left:30%;top:70%;animation-duration:1.8s;animation-delay:2s;box-shadow:0 0 5px #ff85c1;"></div>
+    <div class="sparkle" style="width:4px;height:4px;background:#ffd6e7;left:70%;top:60%;animation-duration:2.2s;animation-delay:0.8s;box-shadow:0 0 6px #ffd6e7;"></div>
+    <div class="sparkle" style="width:6px;height:6px;background:#c77dff;left:20%;top:45%;animation-duration:3.5s;animation-delay:1.5s;box-shadow:0 0 10px #c77dff;"></div>
+
+    <div class="val-content">
+      <HeaderIsland client:load />
+
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+
+        <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/60 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/50">Valentine's Day Wheel</span>
+        </nav>
+
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3">💝</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight val-title mb-3">
+            Valentine's Day Wheel
+          </h1>
+          <p class="text-lg text-white/55 max-w-xl mx-auto mb-5">
+            Spin to discover your perfect date idea. Add your own, customize, let love decide.
+          </p>
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="val-tag">❤️ Date Night</span>
+            <span class="val-tag">🎁 Gift Ideas</span>
+            <span class="val-tag">💑 Couples</span>
+            <span class="val-tag">🌹 Romance</span>
+          </div>
+        </div>
+
         <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+      </div>
 
-      <section class="space-y-8">
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Make Planning Part of the Romance</h2>
-          <p class="text-muted-foreground leading-relaxed">
+      <!-- Content (same dark pink bg) -->
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <section class="val-section p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Make Planning Part of the Romance</h2>
+          <p class="text-white/60 leading-relaxed">
             The classic Valentine's Day planning dynamic: one person asks "what do you want to do?", the other says "I don't mind, anything is fine", and somehow nothing gets booked until February 13th. The wheel breaks this loop.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            Build the wheel together — each of you adds 3-4 ideas to the list. Everything on the wheel is something both of you would enjoy. Spin together. The result feels shared and spontaneous without the usual back-and-forth negotiation. You spend the time planning the date, not deciding whether to go on one.
+          <p class="text-white/60 leading-relaxed">
+            Build the wheel together — each of you adds 3-4 ideas to the list. Everything on the wheel is something both of you would enjoy. Spin together. The result feels shared and spontaneous without the usual back-and-forth negotiation.
           </p>
-        </div>
-      </section>
+        </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="val-faq group">
+                <summary class="font-semibold text-white cursor-pointer list-none flex items-center justify-between gap-2">
+                  {question}
+                  <span class="text-white/40 shrink-0 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p class="text-white/60 text-sm leading-relaxed mt-3">{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/gift-idea-wheel", label: "Gift Idea Wheel", desc: "Random gift ideas for any occasion." },
-            { href: "/templates/restaurant-picker", label: "Restaurant Picker", desc: "Spin to decide where to go for dinner." },
-            { href: "/yes-or-no-wheel", label: "Yes or No Wheel", desc: "Quick binary decisions for borderline plans." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Related Tools</h2>
+          <ul class="grid sm:grid-cols-2 gap-3">
+            {[
+              { href: "/templates/gift-idea-wheel", label: "🎁 Gift Idea Wheel", desc: "Random gift ideas for any occasion." },
+              { href: "/templates/restaurant-picker", label: "🍽️ Restaurant Picker", desc: "Spin to decide where to go for dinner." },
+              { href: "/templates/date-night-wheel", label: "🌙 Date Night Wheel", desc: "More date night inspiration." },
+              { href: "/yes-no-wheel", label: "✅ Yes or No Wheel", desc: "Quick binary decisions for borderline plans." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="val-card flex items-start gap-3 p-4">
+                  <span>
+                    <span class="font-semibold text-white text-sm">{label}</span>
+                    <span class="text-white/50 text-sm block mt-0.5">{desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-    </main>
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

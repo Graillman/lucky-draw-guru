@@ -8,65 +8,174 @@ const title = "Wheel Templates — 50 Pre-Made Spinner Wheels for Every Occasion
 const description = "Browse 50 ready-to-spin wheel templates. Food picker, Halloween costumes, team activities, gaming challenges, and more. Click and spin instantly.";
 const canonical = "/templates";
 
+// Color palettes per template (visually distinct)
+const PALETTES: Record<string, string[]> = {
+  // Party
+  "truth-or-dare-wheel":       ["#ff006e","#8338ec","#3a86ff","#ff6b9d","#c77dff"],
+  "drinking-game-wheel":       ["#e63946","#f4a261","#e76f51","#264653","#2a9d8f"],
+  "dare-wheel":                ["#ff006e","#ff4d6d","#ff758f","#ff8fa3","#ffb3c1"],
+  "never-have-i-ever-wheel":   ["#6a0572","#9b2226","#ae2012","#bb3e03","#ca6702"],
+  "would-you-rather-wheel":    ["#3a86ff","#8338ec","#06d6a0","#ffb703","#fb8500"],
+  "who-goes-first-wheel":      ["#00b4d8","#0077b6","#023e8a","#90e0ef","#ade8f4"],
+  // Food
+  "what-to-eat-wheel":         ["#f4a261","#e76f51","#e63946","#2a9d8f","#264653"],
+  "restaurant-picker":         ["#e63946","#457b9d","#1d3557","#f1faee","#a8dadc"],
+  "coffee-order-wheel":        ["#6f4e37","#c8a882","#e8d5b7","#3d2314","#a0522d"],
+  "cocktail-wheel":            ["#ff006e","#fb5607","#ffbe0b","#8338ec","#3a86ff"],
+  "lunch-spinner":             ["#f72585","#b5179e","#7209b7","#560bad","#480ca8"],
+  "dessert-picker":            ["#ff6b9d","#ff8fab","#ffb3c1","#ffc8dd","#ff85a1"],
+  // Gaming
+  "board-game-picker":         ["#3a86ff","#8338ec","#ff006e","#06d6a0","#ffbe0b"],
+  "video-game-picker":         ["#0d1b2a","#1b4332","#1d3557","#6d6875","#b5838d"],
+  "fortnite-drop-wheel":       ["#2dc7ff","#1a6dff","#c822ff","#ff3cac","#ffbe0b"],
+  "minecraft-challenge-wheel": ["#5d8a3c","#8b5a2b","#7eaedc","#1a1a1a","#e8e8e8"],
+  "roblox-wheel":              ["#e02020","#1652f0","#00b06f","#ff6600","#9900ef"],
+  // Education
+  "alphabet-wheel":            ["#3a86ff","#06d6a0","#ffbe0b","#ff006e","#8338ec"],
+  "color-wheel-picker":        ["#ff0000","#ff7700","#ffff00","#00aa00","#0000ff","#8800aa"],
+  "number-wheel-1-10":         ["#3a86ff","#8338ec","#ff006e","#06d6a0","#ffbe0b"],
+  "math-problem-wheel":        ["#0077b6","#00b4d8","#90e0ef","#caf0f8","#48cae4"],
+  "reading-genre-wheel":       ["#6d6875","#b5838d","#e5989b","#ffb4a2","#ffcdb2"],
+  "vocabulary-wheel":          ["#184e77","#1e6091","#1a759f","#168aad","#34a0a4"],
+  "writing-prompt-wheel":      ["#7400b8","#6930c3","#5e60ce","#5390d9","#4ea8de"],
+  "science-topic-wheel":       ["#007f5f","#2b9348","#55a630","#80b918","#aacc00"],
+  // Lifestyle
+  "date-night-wheel":          ["#ff006e","#ff4d6d","#c77dff","#9b5de5","#f15bb5"],
+  "baby-name-wheel":           ["#ffc8dd","#ffafcc","#bde0fe","#a2d2ff","#e0aaff"],
+  "workout-wheel":             ["#ef233c","#d90429","#8d99ae","#2b2d42","#edf2f4"],
+  "movie-picker-wheel":        ["#e63946","#457b9d","#1d3557","#f1faee","#a8dadc"],
+  "icebreaker-wheel":          ["#06d6a0","#1b9aaa","#ef476f","#ffd166","#118ab2"],
+  "chore-wheel":               ["#4cc9f0","#4361ee","#3a0ca3","#7209b7","#f72585"],
+  "travel-destination-wheel":  ["#0077b6","#00b4d8","#48cae4","#90e0ef","#ade8f4"],
+  "outfit-picker-wheel":       ["#f72585","#b5179e","#7209b7","#560bad","#480ca8"],
+  "hobby-wheel":               ["#06d6a0","#118ab2","#073b4c","#ffd166","#ef476f"],
+  "self-care-wheel":           ["#e9c46a","#f4a261","#e76f51","#264653","#2a9d8f"],
+  "new-years-resolution-wheel":["#ffd700","#c0c0c0","#1a1a2e","#16213e","#0f3460"],
+  "gift-idea-wheel":           ["#ff006e","#ffbe0b","#06d6a0","#3a86ff","#8338ec"],
+  "weekend-activity-wheel":    ["#06d6a0","#ffd166","#ef476f","#118ab2","#073b4c"],
+  // Work
+  "meeting-icebreaker-wheel":  ["#0077b6","#00b4d8","#48cae4","#90e0ef","#023e8a"],
+  "standup-order-wheel":       ["#2d6a4f","#40916c","#52b788","#74c69d","#95d5b2"],
+  "sprint-retrospective-wheel":["#0077b6","#4361ee","#7209b7","#3a86ff","#023e8a"],
+  "random-task-wheel":         ["#ef233c","#8d99ae","#2b2d42","#edf2f4","#d90429"],
+  "team-building-wheel":       ["#06d6a0","#118ab2","#073b4c","#ffd166","#ef476f"],
+  // Seasonal
+  "halloween-costume-wheel":   ["#ff6d00","#e85d04","#dc2f02","#9d0208","#6a040f"],
+  "christmas-gift-wheel":      ["#c1121f","#003049","#fcbf49","#eae2b7","#2d6a4f"],
+  "valentines-day-wheel":      ["#ff006e","#ff4d6d","#ff85a1","#ffb3c1","#c77dff"],
+  "back-to-school-wheel":      ["#e63946","#457b9d","#1d3557","#f1faee","#a8dadc"],
+  "new-year-party-wheel":      ["#ffd700","#c0c0c0","#ff006e","#3a86ff","#8338ec"],
+  // Other
+  "wheel-of-fortune":          ["#e63946","#f4a261","#2a9d8f","#457b9d","#8338ec"],
+  "coin-flip-wheel":           ["#ffd700","#c0c0c0","#b8860b","#a9a9a9","#daa520"],
+  "dice-roller-wheel":         ["#1a1a2e","#16213e","#0f3460","#533483","#e94560"],
+  "random-country-wheel":      ["#0077b6","#00b4d8","#48cae4","#90e0ef","#ade8f4"],
+};
+
+const DEFAULT_PALETTE = ["#3a86ff","#ff006e","#06d6a0","#ffbe0b","#8338ec","#ff4d6d"];
+
+// Generate mini SVG wheel
+function miniWheel(slug: string, count: number = 8): string {
+  const palette = PALETTES[slug] || DEFAULT_PALETTE;
+  const r = 32, cx = 40, cy = 40;
+  const step = (2 * Math.PI) / count;
+  let paths = '';
+  for (let i = 0; i < count; i++) {
+    const a1 = i * step - Math.PI / 2;
+    const a2 = a1 + step;
+    const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
+    const x2 = cx + r * Math.cos(a2), y2 = cy + r * Math.sin(a2);
+    const large = step > Math.PI ? 1 : 0;
+    const color = palette[i % palette.length];
+    paths += `<path d="M${cx},${cy} L${x1.toFixed(1)},${y1.toFixed(1)} A${r},${r} 0 ${large},1 ${x2.toFixed(1)},${y2.toFixed(1)} Z" fill="${color}" stroke="rgba(255,255,255,0.25)" stroke-width="0.8"/>`;
+  }
+  return `<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="${cx}" cy="${cy}" r="${r+3}" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    ${paths}
+    <circle cx="${cx}" cy="${cy}" r="9" fill="#0f172a"/>
+    <circle cx="${cx}" cy="${cy}" r="9" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+    <circle cx="${cx}" cy="${cy}" r="3.5" fill="rgba(255,255,255,0.6)"/>
+    <polygon points="${cx},${cy-r-7} ${cx-5},${cy-r+3} ${cx+5},${cy-r+3}" fill="rgba(255,255,255,0.9)"/>
+  </svg>`;
+}
+
+// Segment counts per template (approximation)
+const COUNTS: Record<string, number> = {
+  "alphabet-wheel": 26, "color-wheel-picker": 7, "number-wheel-1-10": 10,
+  "dice-roller-wheel": 6, "coin-flip-wheel": 2,
+};
+function getCount(slug: string) { return COUNTS[slug] || 8; }
+
 const templates = [
   // Classic
-  { name: "Truth or Dare Wheel", url: "/templates/truth-or-dare-wheel", desc: "Party prompts for any group", category: "Party" },
-  { name: "What to Eat Wheel", url: "/templates/what-to-eat-wheel", desc: "End the meal decision debate", category: "Food" },
-  { name: "Workout Wheel", url: "/templates/workout-wheel", desc: "Random exercise circuit generator", category: "Lifestyle" },
-  { name: "Movie Picker Wheel", url: "/templates/movie-picker-wheel", desc: "Stop scrolling, start watching", category: "Lifestyle" },
-  { name: "Drinking Game Wheel", url: "/templates/drinking-game-wheel", desc: "Classic party games for adults (21+)", category: "Party" },
-  { name: "Baby Name Wheel", url: "/templates/baby-name-wheel", desc: "Let fate pick the perfect name", category: "Lifestyle" },
-  { name: "Icebreaker Wheel", url: "/templates/icebreaker-wheel", desc: "Random questions for teams & meetings", category: "Work" },
-  { name: "Chore Wheel", url: "/templates/chore-wheel", desc: "Fair household chore assignment", category: "Lifestyle" },
-  { name: "Date Night Wheel", url: "/templates/date-night-wheel", desc: "Break the routine with random date ideas", category: "Lifestyle" },
-  { name: "Wheel of Fortune", url: "/templates/wheel-of-fortune", desc: "Prize wheel game for parties", category: "Party" },
-  { name: "Alphabet Wheel", url: "/templates/alphabet-wheel", desc: "Random letter A-Z for word games", category: "Education" },
-  { name: "Color Wheel Picker", url: "/templates/color-wheel-picker", desc: "Random color for art & design", category: "Education" },
-  { name: "Would You Rather Wheel", url: "/templates/would-you-rather-wheel", desc: "Dilemma questions for any group", category: "Party" },
-  { name: "Number Wheel 1-10", url: "/templates/number-wheel-1-10", desc: "Simple random number spinner", category: "Education" },
-  { name: "Random Country Wheel", url: "/templates/random-country-wheel", desc: "Geography games & travel planning", category: "Education" },
+  { name: "Truth or Dare Wheel", url: "/templates/truth-or-dare-wheel", slug: "truth-or-dare-wheel", desc: "Party prompts for any group", category: "Party" },
+  { name: "What to Eat Wheel", url: "/templates/what-to-eat-wheel", slug: "what-to-eat-wheel", desc: "End the meal decision debate", category: "Food" },
+  { name: "Workout Wheel", url: "/templates/workout-wheel", slug: "workout-wheel", desc: "Random exercise circuit generator", category: "Lifestyle" },
+  { name: "Movie Picker Wheel", url: "/templates/movie-picker-wheel", slug: "movie-picker-wheel", desc: "Stop scrolling, start watching", category: "Lifestyle" },
+  { name: "Drinking Game Wheel", url: "/templates/drinking-game-wheel", slug: "drinking-game-wheel", desc: "Classic party games for adults (21+)", category: "Party" },
+  { name: "Baby Name Wheel", url: "/templates/baby-name-wheel", slug: "baby-name-wheel", desc: "Let fate pick the perfect name", category: "Lifestyle" },
+  { name: "Icebreaker Wheel", url: "/templates/icebreaker-wheel", slug: "icebreaker-wheel", desc: "Random questions for teams & meetings", category: "Work" },
+  { name: "Chore Wheel", url: "/templates/chore-wheel", slug: "chore-wheel", desc: "Fair household chore assignment", category: "Lifestyle" },
+  { name: "Date Night Wheel", url: "/templates/date-night-wheel", slug: "date-night-wheel", desc: "Break the routine with random date ideas", category: "Lifestyle" },
+  { name: "Wheel of Fortune", url: "/templates/wheel-of-fortune", slug: "wheel-of-fortune", desc: "Prize wheel game for parties", category: "Party" },
+  { name: "Alphabet Wheel", url: "/templates/alphabet-wheel", slug: "alphabet-wheel", desc: "Random letter A-Z for word games", category: "Education" },
+  { name: "Color Wheel Picker", url: "/templates/color-wheel-picker", slug: "color-wheel-picker", desc: "Random color for art & design", category: "Education" },
+  { name: "Would You Rather Wheel", url: "/templates/would-you-rather-wheel", slug: "would-you-rather-wheel", desc: "Dilemma questions for any group", category: "Party" },
+  { name: "Number Wheel 1-10", url: "/templates/number-wheel-1-10", slug: "number-wheel-1-10", desc: "Simple random number spinner", category: "Education" },
+  { name: "Random Country Wheel", url: "/templates/random-country-wheel", slug: "random-country-wheel", desc: "Geography games & travel planning", category: "Education" },
   // Food
-  { name: "Restaurant Picker", url: "/templates/restaurant-picker", desc: "Spin to decide where to eat out", category: "Food" },
-  { name: "Coffee Order Wheel", url: "/templates/coffee-order-wheel", desc: "Random coffee drink for indecisive mornings", category: "Food" },
-  { name: "Cocktail Wheel", url: "/templates/cocktail-wheel", desc: "Random cocktail for your next drink", category: "Food" },
-  { name: "Lunch Spinner", url: "/templates/lunch-spinner", desc: "What to eat for lunch today", category: "Food" },
-  { name: "Dessert Picker", url: "/templates/dessert-picker", desc: "Random dessert when you can't choose", category: "Food" },
+  { name: "Restaurant Picker", url: "/templates/restaurant-picker", slug: "restaurant-picker", desc: "Spin to decide where to eat out", category: "Food" },
+  { name: "Coffee Order Wheel", url: "/templates/coffee-order-wheel", slug: "coffee-order-wheel", desc: "Random coffee drink for indecisive mornings", category: "Food" },
+  { name: "Cocktail Wheel", url: "/templates/cocktail-wheel", slug: "cocktail-wheel", desc: "Random cocktail for your next drink", category: "Food" },
+  { name: "Lunch Spinner", url: "/templates/lunch-spinner", slug: "lunch-spinner", desc: "What to eat for lunch today", category: "Food" },
+  { name: "Dessert Picker", url: "/templates/dessert-picker", slug: "dessert-picker", desc: "Random dessert when you can't choose", category: "Food" },
   // Gaming
-  { name: "Board Game Picker", url: "/templates/board-game-picker", desc: "Random board game from your shelf", category: "Gaming" },
-  { name: "Dare Wheel", url: "/templates/dare-wheel", desc: "Random dares for parties and game nights", category: "Gaming" },
-  { name: "Fortnite Drop Wheel", url: "/templates/fortnite-drop-wheel", desc: "Random Fortnite landing spot picker", category: "Gaming" },
-  { name: "Minecraft Challenge Wheel", url: "/templates/minecraft-challenge-wheel", desc: "Random Minecraft build and survival challenges", category: "Gaming" },
-  { name: "Never Have I Ever Wheel", url: "/templates/never-have-i-ever-wheel", desc: "Classic party game for any group size", category: "Gaming" },
-  { name: "Roblox Wheel", url: "/templates/roblox-wheel", desc: "Random Roblox game to play next", category: "Gaming" },
-  { name: "Video Game Picker", url: "/templates/video-game-picker", desc: "Random video game from your backlog", category: "Gaming" },
-  { name: "Who Goes First Wheel", url: "/templates/who-goes-first-wheel", desc: "Settle who starts any game fairly", category: "Gaming" },
+  { name: "Board Game Picker", url: "/templates/board-game-picker", slug: "board-game-picker", desc: "Random board game from your shelf", category: "Gaming" },
+  { name: "Dare Wheel", url: "/templates/dare-wheel", slug: "dare-wheel", desc: "Random dares for parties and game nights", category: "Gaming" },
+  { name: "Fortnite Drop Wheel", url: "/templates/fortnite-drop-wheel", slug: "fortnite-drop-wheel", desc: "Random Fortnite landing spot picker", category: "Gaming" },
+  { name: "Minecraft Challenge Wheel", url: "/templates/minecraft-challenge-wheel", slug: "minecraft-challenge-wheel", desc: "Random Minecraft build and survival challenges", category: "Gaming" },
+  { name: "Never Have I Ever Wheel", url: "/templates/never-have-i-ever-wheel", slug: "never-have-i-ever-wheel", desc: "Classic party game for any group size", category: "Gaming" },
+  { name: "Roblox Wheel", url: "/templates/roblox-wheel", slug: "roblox-wheel", desc: "Random Roblox game to play next", category: "Gaming" },
+  { name: "Video Game Picker", url: "/templates/video-game-picker", slug: "video-game-picker", desc: "Random video game from your backlog", category: "Gaming" },
+  { name: "Who Goes First Wheel", url: "/templates/who-goes-first-wheel", slug: "who-goes-first-wheel", desc: "Settle who starts any game fairly", category: "Gaming" },
   // Education
-  { name: "Math Problem Wheel", url: "/templates/math-problem-wheel", desc: "Random math topics for drills and practice", category: "Education" },
-  { name: "Reading Genre Wheel", url: "/templates/reading-genre-wheel", desc: "Random book genre to read next", category: "Education" },
-  { name: "Vocabulary Wheel", url: "/templates/vocabulary-wheel", desc: "Spin to practice random vocabulary words", category: "Education" },
-  { name: "Writing Prompt Wheel", url: "/templates/writing-prompt-wheel", desc: "Random creative writing prompts", category: "Education" },
-  { name: "Science Topic Wheel", url: "/templates/science-topic-wheel", desc: "Random science subject for study or projects", category: "Education" },
+  { name: "Math Problem Wheel", url: "/templates/math-problem-wheel", slug: "math-problem-wheel", desc: "Random math topics for drills and practice", category: "Education" },
+  { name: "Reading Genre Wheel", url: "/templates/reading-genre-wheel", slug: "reading-genre-wheel", desc: "Random book genre to read next", category: "Education" },
+  { name: "Vocabulary Wheel", url: "/templates/vocabulary-wheel", slug: "vocabulary-wheel", desc: "Spin to practice random vocabulary words", category: "Education" },
+  { name: "Writing Prompt Wheel", url: "/templates/writing-prompt-wheel", slug: "writing-prompt-wheel", desc: "Random creative writing prompts", category: "Education" },
+  { name: "Science Topic Wheel", url: "/templates/science-topic-wheel", slug: "science-topic-wheel", desc: "Random science subject for study or projects", category: "Education" },
   // Lifestyle
-  { name: "Travel Destination Wheel", url: "/templates/travel-destination-wheel", desc: "Spin to pick your next trip destination", category: "Lifestyle" },
-  { name: "Outfit Picker Wheel", url: "/templates/outfit-picker-wheel", desc: "Random outfit idea for any occasion", category: "Lifestyle" },
-  { name: "Hobby Wheel", url: "/templates/hobby-wheel", desc: "Random hobby to try or explore", category: "Lifestyle" },
-  { name: "Self-Care Wheel", url: "/templates/self-care-wheel", desc: "Random self-care activity for your day off", category: "Lifestyle" },
-  { name: "New Year's Resolution Wheel", url: "/templates/new-years-resolution-wheel", desc: "Spin for a random resolution to commit to", category: "Lifestyle" },
-  { name: "Gift Idea Wheel", url: "/templates/gift-idea-wheel", desc: "Random gift ideas for any occasion", category: "Lifestyle" },
-  { name: "Weekend Activity Wheel", url: "/templates/weekend-activity-wheel", desc: "Random weekend plan when you can't decide", category: "Lifestyle" },
+  { name: "Travel Destination Wheel", url: "/templates/travel-destination-wheel", slug: "travel-destination-wheel", desc: "Spin to pick your next trip destination", category: "Lifestyle" },
+  { name: "Outfit Picker Wheel", url: "/templates/outfit-picker-wheel", slug: "outfit-picker-wheel", desc: "Random outfit idea for any occasion", category: "Lifestyle" },
+  { name: "Hobby Wheel", url: "/templates/hobby-wheel", slug: "hobby-wheel", desc: "Random hobby to try or explore", category: "Lifestyle" },
+  { name: "Self-Care Wheel", url: "/templates/self-care-wheel", slug: "self-care-wheel", desc: "Random self-care activity for your day off", category: "Lifestyle" },
+  { name: "New Year's Resolution Wheel", url: "/templates/new-years-resolution-wheel", slug: "new-years-resolution-wheel", desc: "Spin for a random resolution to commit to", category: "Lifestyle" },
+  { name: "Gift Idea Wheel", url: "/templates/gift-idea-wheel", slug: "gift-idea-wheel", desc: "Random gift ideas for any occasion", category: "Lifestyle" },
+  { name: "Weekend Activity Wheel", url: "/templates/weekend-activity-wheel", slug: "weekend-activity-wheel", desc: "Random weekend plan when you can't decide", category: "Lifestyle" },
   // Work
-  { name: "Meeting Icebreaker Spinner", url: "/templates/meeting-icebreaker-wheel", desc: "Quick questions to warm up any meeting", category: "Work" },
-  { name: "Standup Order Picker", url: "/templates/standup-order-wheel", desc: "Random daily standup speaking order", category: "Work" },
-  { name: "Sprint Retro Wheel", url: "/templates/sprint-retrospective-wheel", desc: "Random retrospective discussion topics", category: "Work" },
-  { name: "Random Task Picker", url: "/templates/random-task-wheel", desc: "Beat decision paralysis — spin your to-do list", category: "Work" },
-  { name: "Team Building Wheel", url: "/templates/team-building-wheel", desc: "Random group activities for teams", category: "Work" },
+  { name: "Meeting Icebreaker Spinner", url: "/templates/meeting-icebreaker-wheel", slug: "meeting-icebreaker-wheel", desc: "Quick questions to warm up any meeting", category: "Work" },
+  { name: "Standup Order Picker", url: "/templates/standup-order-wheel", slug: "standup-order-wheel", desc: "Random daily standup speaking order", category: "Work" },
+  { name: "Sprint Retro Wheel", url: "/templates/sprint-retrospective-wheel", slug: "sprint-retrospective-wheel", desc: "Random retrospective discussion topics", category: "Work" },
+  { name: "Random Task Picker", url: "/templates/random-task-wheel", slug: "random-task-wheel", desc: "Beat decision paralysis — spin your to-do list", category: "Work" },
+  { name: "Team Building Wheel", url: "/templates/team-building-wheel", slug: "team-building-wheel", desc: "Random group activities for teams", category: "Work" },
   // Seasonal
-  { name: "Halloween Costume Picker", url: "/templates/halloween-costume-wheel", desc: "Random Halloween costume ideas", category: "Seasonal" },
-  { name: "Christmas Gift Wheel", url: "/templates/christmas-gift-wheel", desc: "Random Christmas present ideas", category: "Seasonal" },
-  { name: "Valentine's Day Wheel", url: "/templates/valentines-day-wheel", desc: "Random date and gift ideas for couples", category: "Seasonal" },
-  { name: "Back to School Wheel", url: "/templates/back-to-school-wheel", desc: "Random subject or study activity picker", category: "Seasonal" },
-  { name: "New Year Party Wheel", url: "/templates/new-year-party-wheel", desc: "Random NYE activities and party games", category: "Seasonal" },
+  { name: "Halloween Costume Picker", url: "/templates/halloween-costume-wheel", slug: "halloween-costume-wheel", desc: "Random Halloween costume ideas", category: "Seasonal" },
+  { name: "Christmas Gift Wheel", url: "/templates/christmas-gift-wheel", slug: "christmas-gift-wheel", desc: "Random Christmas present ideas", category: "Seasonal" },
+  { name: "Valentine's Day Wheel", url: "/templates/valentines-day-wheel", slug: "valentines-day-wheel", desc: "Random date and gift ideas for couples", category: "Seasonal" },
+  { name: "Back to School Wheel", url: "/templates/back-to-school-wheel", slug: "back-to-school-wheel", desc: "Random subject or study activity picker", category: "Seasonal" },
+  { name: "New Year Party Wheel", url: "/templates/new-year-party-wheel", slug: "new-year-party-wheel", desc: "Random NYE activities and party games", category: "Seasonal" },
 ];
+
+// Category accent colors
+const CAT_ACCENT: Record<string, string> = {
+  Party:     "#ff006e",
+  Food:      "#f4a261",
+  Gaming:    "#3a86ff",
+  Education: "#06d6a0",
+  Lifestyle: "#c77dff",
+  Work:      "#4cc9f0",
+  Seasonal:  "#ffd700",
+};
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -76,6 +185,36 @@ const jsonLd = {
   "url": "https://realwheelpicker.com/templates",
 };
 ---
+
+<style>
+  .tmpl-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 1rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+  }
+  .tmpl-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  .wheel-preview {
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+    transition: transform 0.3s;
+  }
+  .tmpl-card:hover .wheel-preview {
+    transform: rotate(30deg) scale(1.08);
+  }
+  .cat-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+</style>
 
 <Layout
   title={title}
@@ -91,7 +230,7 @@ const jsonLd = {
   <div class="min-h-screen" style="background: var(--gradient-bg)">
     <HeaderIsland client:load />
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <main class="max-w-6xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
 
       <!-- Breadcrumb -->
       <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
@@ -111,26 +250,41 @@ const jsonLd = {
         <p class="text-sm text-muted-foreground">50 templates • Free • No account required</p>
       </section>
 
-      <!-- Templates Grid -->
-      <section>
-        {["Party", "Food", "Gaming", "Education", "Lifestyle", "Work", "Seasonal"].map((cat) => (
+      <!-- Templates Grid by category -->
+      {["Party", "Food", "Gaming", "Education", "Lifestyle", "Work", "Seasonal"].map((cat) => {
+        const accent = CAT_ACCENT[cat] || "#3a86ff";
+        return (
           <div class="mb-10">
-            <h2 class="text-lg font-bold text-foreground mb-4">{cat}</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {templates.filter(t => t.category === cat).map(({ name, url, desc }) => (
+            <div class="flex items-center gap-3 mb-5">
+              <div class="w-3 h-3 rounded-full" style={`background:${accent};box-shadow:0 0 8px ${accent};`}></div>
+              <h2 class="text-lg font-bold text-foreground">{cat}</h2>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {templates.filter(t => t.category === cat).map(({ name, url, slug, desc }) => (
                 <a
                   href={url}
-                  class="flex flex-col gap-1.5 p-5 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all group"
+                  class="tmpl-card flex items-center gap-4 p-4 group"
+                  style={`--accent:${CAT_ACCENT[cat] || "#3a86ff"}`}
                 >
-                  <span class="font-semibold text-foreground group-hover:text-primary transition-colors">{name}</span>
-                  <span class="text-muted-foreground text-sm leading-relaxed">{desc}</span>
-                  <span class="text-primary text-xs font-medium mt-1">Spin now →</span>
+                  <!-- Mini wheel preview -->
+                  <div class="wheel-preview" set:html={miniWheel(slug, getCount(slug))} />
+
+                  <!-- Text -->
+                  <div class="min-w-0 flex-1">
+                    <span
+                      class="cat-badge"
+                      style={`background:${accent}22;color:${accent};border:1px solid ${accent}44;`}
+                    >{cat}</span>
+                    <p class="font-semibold text-foreground group-hover:text-primary transition-colors text-sm mt-1.5 leading-snug">{name}</p>
+                    <p class="text-muted-foreground text-xs leading-relaxed mt-1">{desc}</p>
+                    <span class="text-primary text-xs font-medium mt-2 inline-block">Spin now →</span>
+                  </div>
                 </a>
               ))}
             </div>
           </div>
-        ))}
-      </section>
+        );
+      })}
 
       <!-- Bottom CTA -->
       <section class="text-center space-y-4 py-4">

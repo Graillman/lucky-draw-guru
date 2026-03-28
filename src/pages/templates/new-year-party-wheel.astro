@@ -26,16 +26,16 @@ const faqItems = [
 ];
 
 const defaultParticipants = [
-  { pseudo: "Countdown trivia", weight: 1 },
-  { pseudo: "Resolution sharing", weight: 1 },
-  { pseudo: "Dance-off", weight: 1 },
-  { pseudo: "Year-in-review game", weight: 1 },
-  { pseudo: "Toast & champagne", weight: 1 },
-  { pseudo: "Karaoke round", weight: 1 },
-  { pseudo: "Party games", weight: 1 },
-  { pseudo: "Midnight wish ritual", weight: 1 },
-  { pseudo: "Photo booth session", weight: 1 },
-  { pseudo: "Predictions for next year", weight: 1 },
+  { pseudo: "🎯 Countdown trivia",       weight: 1 },
+  { pseudo: "🙏 Resolution sharing",     weight: 1 },
+  { pseudo: "💃 Dance-off",              weight: 1 },
+  { pseudo: "📅 Year-in-review game",    weight: 1 },
+  { pseudo: "🥂 Toast & champagne",      weight: 1 },
+  { pseudo: "🎤 Karaoke round",          weight: 1 },
+  { pseudo: "🎲 Party games",            weight: 1 },
+  { pseudo: "✨ Midnight wish ritual",   weight: 1 },
+  { pseudo: "📸 Photo booth session",    weight: 1 },
+  { pseudo: "🔮 Predictions for 2026",   weight: 1 },
 ];
 
 const jsonLd = {
@@ -47,6 +47,153 @@ const jsonLd = {
 };
 ---
 
+<style>
+  /* ═══════════ FULL-PAGE NEW YEAR THEME ═══════════ */
+  .nye-page {
+    background: #01010d;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Midnight sky */
+  .nye-sky {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 50% -10%, rgba(255,215,0,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 10% 30%, rgba(58,134,255,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 90% 30%, rgba(255,0,110,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 100% 40% at 50% 100%, rgba(131,56,236,0.15) 0%, transparent 60%),
+      linear-gradient(180deg, #01010d 0%, #02021a 50%, #01010d 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Firework bursts */
+  .firework {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    animation: fireworkBurst ease-out infinite;
+    opacity: 0;
+  }
+  @keyframes fireworkBurst {
+    0%   { transform: scale(0);   opacity: 0; }
+    15%  { transform: scale(1);   opacity: 0.9; box-shadow: 0 0 20px currentColor, 0 0 40px currentColor; }
+    40%  { transform: scale(1.4); opacity: 0.6; }
+    100% { transform: scale(2);   opacity: 0; }
+  }
+
+  /* Firework trails (lines radiating out) */
+  .fw-trail {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    animation: trailShoot ease-out infinite;
+    opacity: 0;
+  }
+  @keyframes trailShoot {
+    0%   { transform: scaleY(0); opacity: 0; }
+    20%  { transform: scaleY(1); opacity: 0.8; }
+    100% { transform: scaleY(1.5); opacity: 0; }
+  }
+
+  /* Stars */
+  .nye-star {
+    position: fixed;
+    border-radius: 50%;
+    background: white;
+    pointer-events: none;
+    z-index: 1;
+    animation: starTwinkle ease-in-out infinite alternate;
+  }
+  @keyframes starTwinkle {
+    from { opacity: 0.1; transform: scale(0.7); }
+    to   { opacity: 0.9; transform: scale(1.3); }
+  }
+
+  /* Gold ticker tape */
+  .ticker {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    width: 3px;
+    border-radius: 2px;
+    animation: tickerFall linear infinite;
+    opacity: 0;
+  }
+  @keyframes tickerFall {
+    0%   { transform: translateY(-30px) rotate(0deg); opacity: 0; }
+    8%   { opacity: 0.9; }
+    92%  { opacity: 0.5; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* Countdown clock glow at top center */
+  .midnight-glow {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(255,215,0,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+    animation: midnightPulse 3s ease-in-out infinite alternate;
+  }
+  @keyframes midnightPulse {
+    from { opacity: 0.5; transform: translateX(-50%) scaleY(0.8); }
+    to   { opacity: 1;   transform: translateX(-50%) scaleY(1.2); }
+  }
+
+  .nye-content { position: relative; z-index: 10; }
+
+  /* Title */
+  .nye-title {
+    background: linear-gradient(135deg, #ffd700 0%, #c0c0c0 30%, #ffd700 60%, #fff8dc 100%);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: goldShimmer 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(255,215,0,0.4));
+  }
+  @keyframes goldShimmer {
+    0%,100% { background-position: 0% 50%; }
+    50%     { background-position: 100% 50%; }
+  }
+
+  .nye-tag {
+    background: rgba(255, 215, 0, 0.12);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    color: rgba(255, 215, 0, 0.9);
+    border-radius: 9999px;
+    padding: 4px 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .nye-card {
+    background: rgba(255, 215, 0, 0.05);
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    border-radius: 0.75rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .nye-card:hover {
+    border-color: rgba(255, 215, 0, 0.4);
+    background: rgba(255, 215, 0, 0.1);
+  }
+  details.nye-faq {
+    background: rgba(255, 215, 0, 0.04);
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+</style>
+
 <Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
@@ -55,79 +202,126 @@ const jsonLd = {
     { name: "New Year Party Wheel", url: "https://realwheelpicker.com/templates/new-year-party-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+  <div class="nye-page">
+    <div class="nye-sky"></div>
+    <div class="midnight-glow"></div>
 
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">New Year Party Wheel</span>
-      </nav>
+    <!-- Stars -->
+    {Array.from({ length: 70 }, (_, i) => {
+      const s = 1 + (i % 3);
+      return (
+        <div
+          class="nye-star"
+          style={`width:${s}px;height:${s}px;left:${(i * 1.43) % 100}%;top:${(i * 2.17) % 60}%;animation-duration:${1.5 + (i % 4) * 0.8}s;animation-delay:${(i * 0.13) % 5}s;`}
+        ></div>
+      );
+    })}
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          New Year Party Wheel — Random NYE Activities
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Keep your New Year's Eve party moving with random activity picks. Customize the wheel for your group, then spin throughout the night for what's next.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Firework bursts -->
+    {[
+      { left:"15%",top:"20%",color:"#ffd700",size:"80px",dur:"4s",delay:"0s" },
+      { left:"75%",top:"15%",color:"#ff006e",size:"60px",dur:"5s",delay:"1.5s" },
+      { left:"50%",top:"10%",color:"#3a86ff",size:"100px",dur:"6s",delay:"0.8s" },
+      { left:"30%",top:"30%",color:"#c77dff",size:"50px",dur:"4.5s",delay:"2.5s" },
+      { left:"85%",top:"35%",color:"#06d6a0",size:"70px",dur:"5.5s",delay:"3s" },
+      { left:"60%",top:"25%",color:"#ffd700",size:"90px",dur:"7s",delay:"1s" },
+    ].map(f => (
+      <div class="firework" style={`width:${f.size};height:${f.size};left:${f.left};top:${f.top};color:${f.color};border:2px solid ${f.color};animation-duration:${f.dur};animation-delay:${f.delay};`}></div>
+    ))}
 
-      <section class="flex flex-col items-center">
+    <!-- Gold ticker tape -->
+    {Array.from({ length: 25 }, (_, i) => {
+      const colors = ["#ffd700","#c0c0c0","#ff006e","#3a86ff","#ffffff"];
+      return (
+        <div
+          class="ticker"
+          style={`height:${15 + (i % 20)}px;background:${colors[i % colors.length]};left:${i * 4}%;animation-duration:${3 + (i % 4)}s;animation-delay:${(i * 0.3) % 5}s;`}
+        ></div>
+      );
+    })}
+
+    <div class="nye-content">
+      <HeaderIsland client:load />
+
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+
+        <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/60 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/50">New Year Party Wheel</span>
+        </nav>
+
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3">🎆</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight nye-title mb-3">
+            New Year Party Wheel
+          </h1>
+          <p class="text-lg text-white/50 max-w-xl mx-auto mb-5">
+            Keep the NYE energy going all night. Spin for the next activity — no awkward silences, no dead moments.
+          </p>
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="nye-tag">🥂 Midnight Toast</span>
+            <span class="nye-tag">🎤 Karaoke</span>
+            <span class="nye-tag">🎯 Party Games</span>
+            <span class="nye-tag">🔮 Predictions</span>
+          </div>
+        </div>
+
         <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+      </div>
 
-      <section class="space-y-8">
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Keep the Party Moving All Night</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            NYE parties have a predictable problem: they start strong, hit a slow patch around 10pm, and either recover for midnight or don't. The slow patch happens when nobody wants to propose the next thing — suggesting an activity as the host feels forced, and guests don't want to seem demanding.
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="nye-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Keep the Party Moving All Night</h2>
+          <p class="text-white/55 leading-relaxed">
+            The NYE party energy problem: the midnight countdown is obvious, but the three hours before and after it need structure. Without a plan, parties stall into everyone just scrolling their phones waiting for 12:00. The wheel prevents this.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            The wheel solves this without anyone losing face. "Let's spin the wheel" is a neutral, fun way to transition between activities. Everyone agreed the options are on the wheel, so there's no pushback on whatever it lands on. Project it on a TV during the party and make spinning part of the event.
+          <p class="text-white/55 leading-relaxed">
+            Set a timer for every 30 minutes. When it goes off, spin the wheel for the next group activity. Nobody has to propose anything, nobody gets shot down — the wheel has spoken. Keep the wheel visible on a TV or big screen so everyone knows the format.
           </p>
         </div>
-      </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="nye-faq group">
+                <summary class="font-semibold text-white cursor-pointer list-none flex items-center justify-between gap-2">
+                  {question}
+                  <span class="text-white/40 shrink-0 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p class="text-white/55 text-sm leading-relaxed mt-3">{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/dare-wheel", label: "Dare Wheel", desc: "Party dares to keep things interesting after midnight." },
-            { href: "/templates/never-have-i-ever-wheel", label: "Never Have I Ever Wheel", desc: "Classic party game for any NYE gathering." },
-            { href: "/templates/new-years-resolution-wheel", label: "New Year's Resolution Wheel", desc: "Spin for a random resolution to commit to." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Related Tools</h2>
+          <ul class="grid sm:grid-cols-2 gap-3">
+            {[
+              { href: "/party-wheel", label: "🎉 Party Wheel", desc: "Truth, dare, challenges for any party." },
+              { href: "/templates/christmas-gift-wheel", label: "🎄 Christmas Gift Wheel", desc: "Random gift ideas for the holiday season." },
+              { href: "/random-name-picker", label: "🎲 Random Name Picker", desc: "Pick who does the countdown or toast." },
+              { href: "/templates", label: "✨ All Templates", desc: "Browse all pre-loaded wheel templates." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="nye-card flex items-start gap-3 p-4">
+                  <span>
+                    <span class="font-semibold text-white text-sm">{label}</span>
+                    <span class="text-white/50 text-sm block mt-0.5">{desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-    </main>
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>
