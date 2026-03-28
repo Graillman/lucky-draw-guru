@@ -1,5 +1,6 @@
 ---
 import '../index.css';
+import CookieConsentBanner from '@/components/CookieConsentBanner';
 
 interface HreflangLink {
   hreflang: string;
@@ -106,5 +107,6 @@ const resolvedHreflang: HreflangLink[] = hreflangLinks ?? [
   </head>
   <body>
     <slot />
+    <CookieConsentBanner client:idle />
   </body>
 </html>

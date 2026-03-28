@@ -6,29 +6,49 @@ import SEOPageIsland from '@/components/SEOPageIsland';
 import SchemaFAQ from '@/components/SchemaFAQ.astro';
 import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
 
-const title = "Random Name Picker — Free Online Name Selector";
-const description = "Pick a random name from your list in one click. Add names, spin the wheel, get a fair result instantly. Free, no signup, works on any device.";
+const title = "Random Name Picker — Free Online Name Selector Wheel";
+const description = "Pick a random name from any list — students, teams, giveaways, or events. Spin the wheel for a fair, cryptographically random result. Free, no signup, instant.";
 
 const faqItems = [
   {
     question: "How do I add names to the picker?",
-    answer: "Type names one per line in the text area, or paste a list directly from Google Sheets, Excel, or a Word document. The tool accepts any format — one name per line works best.",
+    answer: "Type names one per line in the text area, or paste a list directly from Google Sheets, Excel, or a Word document. The tool accepts any format — one name per line works best. You can also import from a CSV file.",
   },
   {
     question: "Is the selection truly random?",
-    answer: "Yes. We use crypto.getRandomValues(), a cryptographically secure random function built into every modern browser. Each pick is independent and cannot be predicted or manipulated.",
+    answer: "Yes. We use crypto.getRandomValues(), a cryptographically secure random function built into every modern browser. Each pick is independent and cannot be predicted or manipulated — unlike Math.random() used by most competitors.",
   },
   {
-    question: "Can I remove the winner and pick again?",
-    answer: "Yes. After each spin, click 'Remove winner' to exclude them from the next draw. This ensures no one gets picked twice in the same session.",
+    question: "Can I remove the winner and pick again without repeats?",
+    answer: "Yes. After each spin, click 'Remove winner' to exclude them from the next draw. This ensures no one gets picked twice in the same session — essential for classroom picks and multi-winner giveaways.",
   },
   {
     question: "How many names can I add?",
-    answer: "There is no hard limit. The wheel handles hundreds of names smoothly. For very large lists, names get smaller on the wheel but the draw remains fair.",
+    answer: "There is no hard limit. The wheel handles hundreds of names smoothly. For very large lists (500+ names), names get smaller on the wheel but the draw remains completely fair.",
   },
   {
     question: "Do you store my name list?",
-    answer: "Never. Your data stays in your browser's memory only. Nothing is sent to any server. The list disappears when you close the tab.",
+    answer: "Never. Your data stays in your browser's memory only. Nothing is sent to any server. The list disappears when you close the tab — your participants' privacy is fully protected.",
+  },
+  {
+    question: "Can I save my name list for next time?",
+    answer: "Yes. The tool can save your list to your browser's local storage, so it reloads automatically next time you visit. Nothing is stored on our servers — it's all local to your device.",
+  },
+  {
+    question: "What's the difference between this and Wheel of Names?",
+    answer: "The core difference is randomness quality: we use crypto.getRandomValues() (cryptographic hardware randomness), while many competitors use Math.random() (predictable pseudo-randomness). We also have no ads, no required account, and no limit on name counts.",
+  },
+  {
+    question: "Can I use this for a classroom with 30 students?",
+    answer: "Absolutely. 30 names is a typical classroom size — the wheel handles it perfectly. Many teachers use it for cold-calling, grouping, or assigning tasks. The 'remove winner' feature means every student gets called over a session without repeats.",
+  },
+  {
+    question: "Is this tool free forever?",
+    answer: "Yes. The random name picker is completely free with no hidden paid features, no trial period, and no account required. All core functionality is available immediately.",
+  },
+  {
+    question: "Can I pick multiple winners at once?",
+    answer: "Yes. Spin once, remove the winner, spin again. Repeat as many times as needed. Each draw is independent — the randomness is reset for every spin, so there's no pattern or favoritism.",
   },
 ];
 
@@ -75,44 +95,127 @@ const jsonLd = {
           Random Name Picker — Select Any Name Instantly
         </h1>
         <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Add your list of names, spin the wheel, and get a fair random result in seconds. Perfect for classrooms, teams, giveaways, and any situation where you need to pick fairly.
+          Add your list of names, spin the wheel, and get a fair cryptographically random result in seconds. Perfect for classrooms, teams, giveaways, and any situation where you need to pick fairly.
         </p>
-        <p class="text-sm text-muted-foreground">Free • No signup • Cryptographically fair</p>
+        <p class="text-sm text-muted-foreground">Free • No signup • Cryptographically fair • Unlimited names</p>
       </section>
 
       <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
         <h2 class="text-xl md:text-2xl font-bold text-foreground">How Does the Random Name Picker Work?</h2>
         <p class="text-muted-foreground leading-relaxed">
-          Type or paste your list of names into the box. Hit spin. The wheel turns and lands on a cryptographically random result — every name has exactly the same probability of being chosen. No bias, no manipulation possible.
+          Type or paste your list of names into the box — one name per line. Hit spin. The wheel turns and lands on a cryptographically random result — every name has exactly the same probability of being chosen. No bias, no manipulation possible.
         </p>
         <p class="text-muted-foreground leading-relaxed">
-          Everything runs entirely in your browser. No data is ever sent to a server. Your list is private and disappears when you close the tab.
+          Everything runs entirely in your browser. No data is ever sent to a server. Your list is private and disappears when you close the tab. For repeat use, save your list locally — it reloads automatically next session.
         </p>
       </section>
 
       <SEOPageIsland slug="random-name-picker" client:load />
 
       <section class="space-y-6">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">When to Use a Random Name Picker</h2>
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Who Uses a Random Name Picker?</h2>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
-          <h3 class="text-lg font-bold text-foreground">Teachers — Pick a Student Fairly</h3>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[
+            { icon: "🏫", title: "Teachers", desc: "Call on students fairly, assign group roles, or pick presenters — without any perception of favoritism." },
+            { icon: "🎁", title: "Giveaway Hosts", desc: "Pick a contest winner transparently. Record the spin as proof of fairness for your audience." },
+            { icon: "👥", title: "Team Leaders", desc: "Assign tasks, pick who leads the next sprint, or decide presentation order without arguments." },
+            { icon: "🎉", title: "Party Games", desc: "Spin to decide who goes first, who asks the question, or who picks tonight's movie." },
+            { icon: "🏆", title: "Sports Coaches", desc: "Randomize team assignments, training drill order, or decide who takes the first shot." },
+            { icon: "💼", title: "HR Managers", desc: "Fair random selection for pilot programs, event tickets, or employee recognition draws." },
+          ].map((item) => (
+            <div class="p-4 bg-card border border-border rounded-xl space-y-2">
+              <div class="text-2xl">{item.icon}</div>
+              <p class="font-semibold text-foreground text-sm">{item.title}</p>
+              <p class="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Random Name Picker for Teachers</h2>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h3 class="text-lg font-bold text-foreground">Cold Calling — Fair Student Selection</h3>
           <p class="text-sm text-muted-foreground leading-relaxed">
-            Add your class roster and spin to call on students for questions or activities. Remove each selected student to avoid repeats. It removes the perception of favoritism and keeps students engaged because anyone could be next.
+            Add your entire class roster and spin to call on a student for questions, reading, or activities. After selecting, click "Remove winner" — that student is excluded from the next spin. By the end of the lesson, every student has been selected at least once. No student can claim you have favorites.
           </p>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Research in educational psychology shows that random cold calling actually improves student engagement: students stay alert because anyone could be next. A visible wheel spin also reduces anxiety because students see the process is genuinely fair.
+          </p>
+          <div class="grid sm:grid-cols-2 gap-3 mt-2">
+            {[
+              { tip: "Reset the wheel", detail: "At the start of each new class or topic, restore all names for a fresh session." },
+              { tip: "Use for group work", detail: "Spin to assign students to project groups — eliminates clique formation and social pressure." },
+              { tip: "Homework checker", detail: "Spin to pick who shares their homework or reads their essay aloud." },
+              { tip: "Reward draws", detail: "Add students who completed extra credit — the wheel makes the reward draw exciting and transparent." },
+            ].map((t) => (
+              <div class="p-3 bg-primary/5 border border-primary/20 rounded-lg">
+                <p class="font-semibold text-foreground text-xs mb-1">{t.tip}</p>
+                <p class="text-xs text-muted-foreground">{t.detail}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div class="p-6 rounded-xl border bg-card border-border space-y-3">
-          <h3 class="text-lg font-bold text-foreground">Teams — Assign Tasks or Roles</h3>
+          <h3 class="text-lg font-bold text-foreground">Giveaway Winner Picker</h3>
           <p class="text-sm text-muted-foreground leading-relaxed">
-            Add team members and spin to decide who leads the next meeting, who takes on a task, or who presents first. The randomness removes any sense of favoritism or bias from the decision.
+            Paste all participant names from your Instagram comments, TikTok contest, or email list. Spin the wheel and record your screen — the video is public proof that the selection was fair. Share it with your community immediately after the draw.
           </p>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            For multi-winner draws, spin once, remove the winner, spin again. Each draw is completely independent — there's no way to predict or manipulate the result because we use cryptographic randomness from your device's hardware.
+          </p>
+          <a href="/giveaway-picker" class="inline-flex items-center gap-2 text-primary text-sm font-semibold hover:underline">
+            → Try the dedicated Giveaway Picker
+          </a>
         </div>
 
         <div class="p-6 rounded-xl border bg-card border-border space-y-3">
-          <h3 class="text-lg font-bold text-foreground">Giveaways — Pick a Winner</h3>
+          <h3 class="text-lg font-bold text-foreground">Team Assignment Wheel</h3>
           <p class="text-sm text-muted-foreground leading-relaxed">
-            Paste your participant list and spin to select a winner. Screen-record the spin for transparency. The visual wheel makes it obvious the result is fair.
+            Add all participant names and spin to divide into teams. Remove each person as they're assigned. For structured team creation, try our <a href="/team-generator" class="text-primary hover:underline">Team Generator</a> which splits a list into equal teams automatically.
+          </p>
+        </div>
+      </section>
+
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Use a Wheel Instead of Other Methods?</h2>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-primary/10">
+                <th class="text-left p-3 font-semibold text-foreground border border-border rounded-tl-lg">Method</th>
+                <th class="text-left p-3 font-semibold text-foreground border border-border">Randomness</th>
+                <th class="text-left p-3 font-semibold text-foreground border border-border">Transparency</th>
+                <th class="text-left p-3 font-semibold text-foreground border border-border rounded-tr-lg">Best For</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { method: "Spinning Wheel (this tool)", rand: "Cryptographic", trans: "Visual — everyone sees", best: "Classrooms, live giveaways" },
+                { method: "Drawing names from a hat", rand: "Physical bias possible", trans: "Limited visibility", best: "Small in-person groups" },
+                { method: "Excel =RAND()", rand: "Pseudo-random only", trans: "Hard to verify", best: "Technical users" },
+                { method: "Random.org", rand: "True random (internet)", trans: "Number, not visual", best: "Lotteries, developers" },
+                { method: "Wheel of Names", rand: "Pseudo-random (Math.random)", trans: "Visual", best: "General use" },
+              ].map((row, i) => (
+                <tr class={i % 2 === 0 ? "bg-card" : "bg-muted/30"}>
+                  <td class={`p-3 border border-border font-medium text-foreground${i === 0 ? " text-primary" : ""}`}>{row.method}</td>
+                  <td class={`p-3 border border-border text-muted-foreground${i === 0 ? " text-green-500 font-semibold" : ""}`}>{row.rand}</td>
+                  <td class="p-3 border border-border text-muted-foreground">{row.trans}</td>
+                  <td class="p-3 border border-border text-muted-foreground">{row.best}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+          <p class="font-semibold text-foreground text-sm">Why cryptographic randomness matters</p>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Most online name pickers use <code class="bg-muted px-1 rounded font-mono text-xs">Math.random()</code> — a pseudo-random algorithm that generates predictable sequences if you know the seed. Our tool uses <code class="bg-muted px-1 rounded font-mono text-xs">crypto.getRandomValues()</code>, which draws from your device's hardware entropy (thermal noise, timing jitter, etc.). The result is genuinely unpredictable — even we can't know what the next spin will produce.
           </p>
         </div>
       </section>
@@ -134,9 +237,11 @@ const jsonLd = {
         <ul class="space-y-3">
           {[
             { href: "/wheel-of-names", label: "Wheel of Names", desc: "The classic spinning wheel for picking random names." },
-            { href: "/team-generator", label: "Team Generator", desc: "Split a list of names into balanced random teams." },
+            { href: "/team-generator", label: "Team Generator", desc: "Split a list of names into balanced random teams automatically." },
             { href: "/classroom-picker", label: "Classroom Picker", desc: "Dedicated random picker for teachers and classrooms." },
             { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Run transparent prize draws for contests and promotions." },
+            { href: "/weighted-random-picker", label: "Weighted Random Picker", desc: "Give different odds to each entry — perfect for bonus entries and loyalty rewards." },
+            { href: "/random-picker-no-repeat", label: "Random Picker No Repeat", desc: "Pick each name exactly once — no duplicate selections." },
           ].map(({ href, label, desc }) => (
             <li>
               <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
