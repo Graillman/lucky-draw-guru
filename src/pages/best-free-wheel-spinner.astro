@@ -1,0 +1,371 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+import { CheckCircle, XCircle, ArrowRight } from 'lucide-react';
+
+const title = "Best Free Spinning Wheel Tools 2026 — Top 5 Compared";
+const description = "Comparing the 5 best free online spinning wheel tools: Real Wheel Picker, Wheel of Names, Picker Wheel, Wheel Decide, and Miniwebtool. Which is fairest for giveaways?";
+const canonical = "/best-free-wheel-spinner";
+
+const faqItems = [
+  {
+    question: "What is the most random spinning wheel tool?",
+    answer: "Real Wheel Picker uses crypto.getRandomValues() — cryptographic randomness sourced from hardware entropy. All other major tools (Wheel of Names, Picker Wheel, Wheel Decide) use Math.random(), which is deterministic and theoretically predictable. For giveaways where fairness is scrutinized, cryptographic randomness is the only defensible standard.",
+  },
+  {
+    question: "Which wheel spinner is best for classroom use?",
+    answer: "Real Wheel Picker's no-repeat mode ensures every student is called before anyone is called twice — ideal for teachers. Wheel of Names has a similar feature. Both are free and work on mobile. Real Wheel Picker has no ads on the main wheel area, which is better for classroom display.",
+  },
+  {
+    question: "Which spinning wheel is best for giveaways?",
+    answer: "Real Wheel Picker — for three reasons: (1) cryptographic randomness is harder to dispute, (2) platform-specific giveaway pickers for Instagram, TikTok, Discord, YouTube, Twitch, Reddit, and others, (3) weighted mode for bonus-entry giveaways. Wheel of Names is the second-best option for visual spinning wheels.",
+  },
+  {
+    question: "Do free spinning wheel tools store my data?",
+    answer: "Most do not, but policies vary. Real Wheel Picker runs 100% in your browser — no participant names or results are sent to any server, guaranteed. Wheel of Names and Picker Wheel offer cloud saving of wheels, which means data is stored on their servers if you use that feature.",
+  },
+  {
+    question: "Are any spinning wheel tools truly offline?",
+    answer: "Real Wheel Picker works offline after the initial page load (it's a Progressive Web App). The wheel itself runs in your browser without requiring an active connection. Most competitors require online access for every spin.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Best Free Spinning Wheel Tools 2026 — Top 5 Compared",
+      "description": description,
+      "author": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+      "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+      "datePublished": "2026-01-01",
+      "dateModified": "2026-03-28",
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/best-free-wheel-spinner" },
+      "image": "https://realwheelpicker.com/og-default.png",
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Best Free Wheel Spinner" },
+      ],
+    },
+  ],
+};
+
+const tools = [
+  {
+    rank: 1,
+    name: "Real Wheel Picker",
+    url: "https://realwheelpicker.com",
+    tagline: "Best for giveaways, classrooms, and high-stakes draws",
+    randomness: "crypto.getRandomValues() ★★★★★",
+    randomnessOk: true,
+    privacy: "100% browser — no data stored",
+    privacyOk: true,
+    weighted: true,
+    noRepeat: true,
+    giveawayTools: true,
+    mobile: true,
+    ads: "Ads outside wheel area",
+    signup: false,
+    pros: ["Cryptographic randomness (not Math.random)", "No ads on the wheel itself", "Dedicated giveaway pickers for 10 platforms", "Weighted entries for bonus-entry giveaways", "No signup required — ever", "Works offline"],
+    cons: ["Newer tool — smaller brand recognition than Wheel of Names"],
+    verdict: "Best overall. The only tool with cryptographic randomness by default. Built-in giveaway pickers for every major platform.",
+  },
+  {
+    rank: 2,
+    name: "Wheel of Names",
+    url: "https://wheelofnames.com",
+    tagline: "Most popular — best for simple name picks",
+    randomness: "Math.random() ★★★☆☆",
+    randomnessOk: false,
+    privacy: "Cloud save = data stored",
+    privacyOk: false,
+    weighted: false,
+    noRepeat: true,
+    giveawayTools: false,
+    mobile: true,
+    ads: "Ads visible around wheel",
+    signup: false,
+    pros: ["25M+ monthly users — trusted brand", "Simple interface", "Shareable URLs for saved wheels", "Good mobile experience"],
+    cons: ["Uses Math.random() — not cryptographic", "No weighted entries", "No platform-specific giveaway tools", "Saving wheels requires data to leave browser"],
+    verdict: "Best for casual use where fairness isn't scrutinized. Not recommended for giveaways where 'rigged' accusations are a concern.",
+  },
+  {
+    rank: 3,
+    name: "Picker Wheel",
+    url: "https://pickerwheel.com",
+    tagline: "Good visual design, decent features",
+    randomness: "Math.random() ★★★☆☆",
+    randomnessOk: false,
+    privacy: "Account required for saving",
+    privacyOk: false,
+    weighted: true,
+    noRepeat: true,
+    giveawayTools: false,
+    mobile: true,
+    ads: "Significant ad presence",
+    signup: false,
+    pros: ["Weighted entries supported", "Good visual design", "Several spin modes (elimination, no-repeat)"],
+    cons: ["Math.random() for randomness", "Heavy ad presence", "No giveaway platform tools", "Slower load time"],
+    verdict: "Decent for weighted draws if you don't need giveaway tools. Loses to Real Wheel Picker on randomness quality and platform-specific features.",
+  },
+  {
+    rank: 4,
+    name: "Wheel Decide",
+    url: "https://wheeldecide.com",
+    tagline: "Simple and fast — nothing more",
+    randomness: "Math.random() ★★☆☆☆",
+    randomnessOk: false,
+    privacy: "Basic — no server storage claimed",
+    privacyOk: true,
+    weighted: false,
+    noRepeat: false,
+    giveawayTools: false,
+    mobile: true,
+    ads: "Moderate",
+    signup: false,
+    pros: ["Extremely simple interface", "Fast load", "No signup"],
+    cons: ["No weighted entries", "No no-repeat mode", "No giveaway tools", "Older design", "Math.random()"],
+    verdict: "Fine for very simple decisions. Lacks the features needed for giveaways, classrooms, or anything requiring fairness proof.",
+  },
+  {
+    rank: 5,
+    name: "Miniwebtool Spinner",
+    url: "https://miniwebtool.com/spinner",
+    tagline: "Basic random spinner for simple use cases",
+    randomness: "Math.random() ★★☆☆☆",
+    randomnessOk: false,
+    privacy: "Minimal",
+    privacyOk: true,
+    weighted: false,
+    noRepeat: false,
+    giveawayTools: false,
+    mobile: false,
+    ads: "Heavy",
+    signup: false,
+    pros: ["Simple to use", "No account required"],
+    cons: ["No weighted entries", "No no-repeat mode", "No giveaway tools", "Poor mobile experience", "Heavy ads", "Math.random()"],
+    verdict: "Last resort for extremely simple decisions. Not suitable for giveaways, classrooms, or any situation requiring proven fairness.",
+  },
+];
+
+const features = [
+  { label: "Randomness", key: "randomness" },
+  { label: "Weighted entries", key: "weighted" },
+  { label: "No-repeat mode", key: "noRepeat" },
+  { label: "Giveaway tools", key: "giveawayTools" },
+  { label: "Mobile", key: "mobile" },
+  { label: "Signup required", key: "signup" },
+];
+---
+
+<Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Best Free Wheel Spinner" },
+  ]} />
+
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-4xl mx-auto px-4 py-8 space-y-10">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Best Free Wheel Spinner</span>
+      </nav>
+
+      <section class="space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xs px-2 py-0.5 rounded-full font-medium bg-blue-500/10 text-blue-400">Comparison</span>
+          <span class="text-xs text-muted-foreground">March 2026 • 6 min read</span>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold text-foreground leading-tight">
+          Best Free Spinning Wheel Tools 2026 — Top 5 Compared
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          Spinning wheel tools are not all equal. Most use Math.random() — a pseudorandom algorithm that's technically predictable. One uses cryptographic randomness. If you're picking winners for a giveaway, classroom, or raffle, the difference matters. Here's an honest comparison.
+        </p>
+      </section>
+
+      <!-- Quick verdict -->
+      <section class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-3">
+        <h2 class="font-bold text-foreground">Quick verdict</h2>
+        <ul class="space-y-2 text-sm text-muted-foreground">
+          <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" /> <span><strong class="text-foreground">Best overall:</strong> Real Wheel Picker — cryptographic randomness, giveaway tools, weighted draws, no ads on wheel</span></li>
+          <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> <span><strong class="text-foreground">Best for casual use:</strong> Wheel of Names — biggest brand, simple, shareable links</span></li>
+          <li class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" /> <span><strong class="text-foreground">Best for weighted draws (alternative):</strong> Picker Wheel — supports weighted entries</span></li>
+          <li class="flex items-start gap-2"><XCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" /> <span><strong class="text-foreground">Avoid for giveaways:</strong> Wheel Decide, Miniwebtool — no weighted mode, Math.random() only</span></li>
+        </ul>
+      </section>
+
+      <!-- Why randomness method matters -->
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Why the Randomness Method Matters</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Most spinning wheel tools use <code>Math.random()</code> — a browser API that generates numbers using a deterministic algorithm seeded by the system clock. The output looks random, but it's technically predictable given the seed value.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          <strong class="text-foreground">Real Wheel Picker uses <code>crypto.getRandomValues()</code></strong> — the Web Crypto API, which pulls entropy directly from hardware random number generators built into modern CPUs. The output is not predictable, not reproducible, and meets the same standard used in SSL encryption, password generation, and online banking.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          For casual use (deciding what to eat, classroom warm-ups), Math.random() is fine. For giveaways, raffles, and situations where "rigged" accusations are a real risk — cryptographic randomness is the only defensible standard.
+        </p>
+      </section>
+
+      <!-- Detailed tool reviews -->
+      <section class="space-y-8">
+        <h2 class="text-2xl font-bold text-foreground">The 5 Best Free Spinning Wheel Tools</h2>
+        {tools.map((tool) => (
+          <div class="bg-card border border-border rounded-xl p-6 space-y-4">
+            <div class="flex items-start justify-between gap-4 flex-wrap">
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-xs font-bold bg-primary/20 text-primary px-2 py-0.5 rounded-full">#{tool.rank}</span>
+                  <h3 class="text-xl font-bold text-foreground">{tool.name}</h3>
+                </div>
+                <p class="text-sm text-muted-foreground">{tool.tagline}</p>
+              </div>
+              {tool.rank === 1 && (
+                <span class="text-xs font-bold bg-green-500/20 text-green-400 px-3 py-1 rounded-full">Our Pick</span>
+              )}
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-3 text-sm">
+              <div class="space-y-1.5">
+                <p class="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Randomness</p>
+                <p class={`font-medium ${tool.randomnessOk ? 'text-green-400' : 'text-yellow-400'}`}>{tool.randomness}</p>
+              </div>
+              <div class="space-y-1.5">
+                <p class="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Privacy</p>
+                <p class={`text-sm ${tool.privacyOk ? 'text-green-400' : 'text-muted-foreground'}`}>{tool.privacy}</p>
+              </div>
+              <div class="space-y-1.5">
+                <p class="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Ads</p>
+                <p class="text-sm text-muted-foreground">{tool.ads}</p>
+              </div>
+              <div class="space-y-1.5">
+                <p class="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Account required</p>
+                <p class={`text-sm ${!tool.signup ? 'text-green-400' : 'text-yellow-400'}`}>{tool.signup ? "Required to save" : "Never"}</p>
+              </div>
+            </div>
+
+            <div class="grid sm:grid-cols-3 gap-2">
+              {[
+                { label: "Weighted draws", ok: tool.weighted },
+                { label: "No-repeat mode", ok: tool.noRepeat },
+                { label: "Giveaway tools", ok: tool.giveawayTools },
+              ].map((f) => (
+                <div class={`flex items-center gap-2 text-sm px-3 py-2 rounded-lg ${f.ok ? 'bg-green-500/5 border border-green-500/20' : 'bg-muted/30 border border-border'}`}>
+                  {f.ok
+                    ? <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
+                    : <XCircle className="w-4 h-4 text-muted-foreground/50 flex-shrink-0" />}
+                  <span class={f.ok ? 'text-foreground' : 'text-muted-foreground'}>{f.label}</span>
+                </div>
+              ))}
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-4 text-sm">
+              <div>
+                <p class="font-semibold text-green-400 mb-1.5">Pros</p>
+                <ul class="space-y-1">
+                  {tool.pros.map((p) => (
+                    <li class="text-muted-foreground flex items-start gap-1.5">
+                      <span class="text-green-400 mt-0.5">+</span> {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p class="font-semibold text-red-400 mb-1.5">Cons</p>
+                <ul class="space-y-1">
+                  {tool.cons.map((c) => (
+                    <li class="text-muted-foreground flex items-start gap-1.5">
+                      <span class="text-red-400 mt-0.5">−</span> {c}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div class="bg-muted/40 rounded-lg p-3 text-sm">
+              <span class="font-semibold text-foreground">Verdict: </span>
+              <span class="text-muted-foreground">{tool.verdict}</span>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <!-- Feature matrix -->
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Quick Comparison Table</h2>
+        <div class="overflow-x-auto rounded-xl border border-border">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-border bg-primary/5">
+                <th class="text-left p-3 font-semibold text-foreground">Tool</th>
+                <th class="text-center p-3 font-semibold text-foreground">Randomness</th>
+                <th class="text-center p-3 font-semibold text-foreground">Weighted</th>
+                <th class="text-center p-3 font-semibold text-foreground">No-repeat</th>
+                <th class="text-center p-3 font-semibold text-foreground">Giveaway tools</th>
+                <th class="text-center p-3 font-semibold text-foreground">Signup</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+              {tools.map((t) => (
+                <tr class={t.rank === 1 ? "bg-primary/5" : ""}>
+                  <td class="p-3 font-medium text-foreground">{t.rank === 1 ? "★ " : ""}{t.name}</td>
+                  <td class="p-3 text-center">
+                    <span class={t.randomnessOk ? "text-green-400 font-semibold" : "text-muted-foreground"}>
+                      {t.randomnessOk ? "Crypto" : "Math.random"}
+                    </span>
+                  </td>
+                  <td class="p-3 text-center">{t.weighted ? <CheckCircle className="w-4 h-4 text-green-400 mx-auto" /> : <XCircle className="w-4 h-4 text-muted-foreground/40 mx-auto" />}</td>
+                  <td class="p-3 text-center">{t.noRepeat ? <CheckCircle className="w-4 h-4 text-green-400 mx-auto" /> : <XCircle className="w-4 h-4 text-muted-foreground/40 mx-auto" />}</td>
+                  <td class="p-3 text-center">{t.giveawayTools ? <CheckCircle className="w-4 h-4 text-green-400 mx-auto" /> : <XCircle className="w-4 h-4 text-muted-foreground/40 mx-auto" />}</td>
+                  <td class="p-3 text-center">{t.signup ? <XCircle className="w-4 h-4 text-red-400 mx-auto" /> : <CheckCircle className="w-4 h-4 text-green-400 mx-auto" />}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="bg-primary/5 border border-primary/20 rounded-2xl p-6 md:p-8 space-y-4 text-center">
+        <h2 class="text-xl font-bold text-foreground">Try the best free spinning wheel</h2>
+        <p class="text-muted-foreground">Real Wheel Picker — cryptographic randomness, weighted draws, no ads on the wheel, no signup.</p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity">
+            Spin the Wheel <ArrowRight className="w-5 h-5" />
+          </a>
+          <a href="/wheel-of-names-alternative" class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:border-primary/50 transition-colors">
+            Wheel of Names vs RWP <ArrowRight className="w-5 h-5" />
+          </a>
+        </div>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

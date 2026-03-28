@@ -30,6 +30,26 @@ const faqItems = [
     question: "Do you store my participant list?",
     answer: "Never. Everything runs in your browser. Nothing is sent to any server.",
   },
+  {
+    question: "Can I use weighted selection for charity raffles?",
+    answer: "Yes. Weighted selection is the cleanest approach for raffles: assign each ticket buyer a weight equal to their ticket count. This is more transparent than entering a name multiple times — one line per person, visible wheel segment, verifiable odds.",
+  },
+  {
+    question: "Does weighted random work the same as drawing tickets from a drum?",
+    answer: "Mathematically identical. If Alice holds 3 tickets and Bob holds 1 out of 4 total, Alice has a 75% chance. Our weighted wheel assigns segments proportionally — then picks with crypto.getRandomValues(), the same randomness standard used in cryptography and online banking.",
+  },
+  {
+    question: "Can I use decimal weights like 0.5?",
+    answer: "Yes. Any positive number works — whole or decimal. A weight of 0.5 gives that entry half the odds of a weight-1 entry. Useful for downgraded bonus entries or partial-ticket holders.",
+  },
+  {
+    question: "Can someone cheat a weighted draw?",
+    answer: "No. The randomness comes from crypto.getRandomValues() — it's sourced from your device's hardware entropy and is not predictable, reproducible, or manipulable. Weights determine probability, but the actual selection is cryptographically secure.",
+  },
+  {
+    question: "Can I use this for fantasy sports draft order?",
+    answer: "Yes. Fantasy leagues often use weighted lottery for draft priority — last-place team gets the most weight. Set weights in reverse finish order (e.g., weight 10 for last place, weight 1 for first place) and spin to determine draft order.",
+  },
 ];
 
 const jsonLd = {
@@ -197,6 +217,38 @@ const jsonLd = {
         </p>
       </section>
 
+      <section class="p-6 rounded-xl border bg-card border-border space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Is Weighted Selection Fair?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Yes — if the weights are disclosed before the draw. Weighted selection is fair by design: the odds are visible, proportional, and agreed upon in advance. The transparency is what makes it fair, not the equality of odds.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Contrast with hidden manipulation: if you secretly entered someone's name 5 times without telling participants, that would be unfair. With a weighted wheel, segment sizes are shown publicly on screen. Anyone watching can see that Alice's segment is 3× larger than Bob's — and why.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The cryptographic randomness (<code>crypto.getRandomValues()</code>) ensures no one can predict or influence which segment the wheel lands on, even knowing the weights in advance.
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How Businesses Use Weighted Randomness</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          {[
+            { title: "E-commerce flash sales", desc: "VIP loyalty members get 3× the odds of standard customers. Weighted draws reward long-term buyers without excluding newcomers." },
+            { title: "Patreon & membership rewards", desc: "Tier 3 patrons get 3× the draw weight of Tier 1. Transparent, visible on screen, defensible if questioned." },
+            { title: "Gaming loot & battle pass", desc: "Weighted drops for rare items — visually show players the odds, matching stated drop rates." },
+            { title: "Corporate recognition programs", desc: "Weight nominations by peer votes or performance metrics. One random draw from a weighted pool, shown live at company meetings." },
+            { title: "Charity fundraising raffles", desc: "Each ticket purchase = 1 weight. The wheel instantly shows every donor their proportional chance — no duplicate name management." },
+            { title: "Fantasy sports draft order", desc: "Last-place team gets highest weight in draft lottery. Spin live in a group call — everyone sees it happen." },
+          ].map((c) => (
+            <div class="p-4 bg-card border border-border rounded-xl space-y-1">
+              <h3 class="font-semibold text-foreground text-sm">{c.title}</h3>
+              <p class="text-xs text-muted-foreground leading-relaxed">{c.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section class="space-y-4">
         <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
         <div class="space-y-3">
@@ -213,9 +265,11 @@ const jsonLd = {
         <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
         <ul class="space-y-3">
           {[
-            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Universal giveaway picker for any platform." },
-            { href: "/random-name-picker", label: "Random Name Picker", desc: "Equal-odds random name selection." },
-            { href: "/wheel-of-names", label: "Wheel of Names", desc: "The classic spinning wheel for random picks." },
+            { href: "/raffle-picker", label: "Raffle Picker", desc: "Physical raffle ticket draws — assign ticket counts as weights, spin to pick." },
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Universal giveaway winner picker for any platform." },
+            { href: "/random-picker-no-repeat", label: "No-Repeat Picker", desc: "Pick every name exactly once — equal odds, no repeats until all drawn." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Standard equal-odds random name picker." },
+            { href: "/wheel-of-names-alternative", label: "Wheel of Names Alternative", desc: "Why cryptographic randomness matters for fair draws." },
           ].map(({ href, label, desc }) => (
             <li>
               <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
