@@ -6,22 +6,38 @@ import SimpleWheelIsland from '@/components/SimpleWheelIsland';
 import SchemaFAQ from '@/components/SchemaFAQ.astro';
 import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
 
-const title = "Wheel of Fortune — Free Online Spinning Wheel Game";
-const description = "Play Wheel of Fortune online. Customize with your own prizes and spin. Free, no download, instant.";
+const title = "Wheel of Fortune Game Online — Free Spinning Prize Wheel";
+const description = "Play Wheel of Fortune online free — customize prizes, Bankrupt, Free Spin, and Jackpot. Perfect for classrooms, game nights, and office parties. No download, instant.";
 const canonical = "/templates/wheel-of-fortune";
 
 const faqItems = [
   {
     question: "Is this the real Wheel of Fortune game?",
-    answer: "No — this is a free spinner wheel inspired by the format. You provide the puzzle and the prizes. We spin the wheel.",
+    answer: "No — this is a free prize spinner inspired by the classic TV format. You provide the puzzle and the prizes. Our wheel handles the spin. It's perfect for classroom games, family nights, and custom prize drawings where you want the visual drama of a wheel.",
   },
   {
     question: "Can I add my own prize amounts?",
-    answer: "Yes — replace any value with your own prizes, amounts, or challenges.",
+    answer: "Yes. Click any segment label to rename it. Replace $100 with any prize, dare, activity, or challenge. The wheel adapts to whatever you put in it — office raffle prizes, birthday dares, or custom game show prizes.",
   },
   {
     question: "How do I play in teams?",
-    answer: "Split players into teams. Each team spins once per round. Track earnings on a whiteboard. Highest total at end wins.",
+    answer: "Split players into teams. Each team spins once per turn. If they land on a dollar amount, they guess a letter. Correct letter = earn the money. Bankrupt = lose all earnings. Highest total after all puzzles wins.",
+  },
+  {
+    question: "Can I use this for a school or classroom game?",
+    answer: "Absolutely. Replace the dollar amounts with vocabulary words, math problems, history questions, or bonus points. Teachers use it for review games, spelling bees, and reward drawings. The spinning animation builds genuine anticipation — better than any flashcard.",
+  },
+  {
+    question: "How many prize options can I add?",
+    answer: "Up to dozens of segments. The wheel scales automatically to fit your entries. For the classic Wheel of Fortune feel, 8 to 12 segments works best — enough variety without making the segments too small to read.",
+  },
+  {
+    question: "Can I save my custom wheel for next time?",
+    answer: "Yes. Your custom prize configuration can be saved to your browser's local storage. It will reload automatically the next time you visit. Nothing is sent to a server — all data stays on your device.",
+  },
+  {
+    question: "Is the spin result random?",
+    answer: "Yes. The wheel uses crypto.getRandomValues() — cryptographic hardware randomness, not Math.random(). Each spin is completely independent and impossible to predict or manipulate.",
   },
 ];
 
@@ -40,19 +56,31 @@ const defaultParticipants = [
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": title,
-  "description": description,
-  "url": "https://realwheelpicker.com/templates/wheel-of-fortune",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Wheel of Fortune Game — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/templates/wheel-of-fortune",
+      "description": description,
+      "applicationCategory": "GameApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Templates", "item": "https://realwheelpicker.com/templates" },
+        { "@type": "ListItem", "position": 3, "name": "Wheel of Fortune" },
+      ],
+    },
+  ],
 };
 ---
 
-<Layout
-  title={title}
-  description={description}
-  canonical={canonical}
-  jsonLd={jsonLd}
->
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
     { name: "Home", url: "https://realwheelpicker.com" },
@@ -65,7 +93,6 @@ const jsonLd = {
 
     <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
 
-      <!-- Breadcrumb -->
       <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
         <a href="/" class="hover:text-primary transition-colors">Home</a>
         <span>/</span>
@@ -74,65 +101,88 @@ const jsonLd = {
         <span class="text-foreground">Wheel of Fortune</span>
       </nav>
 
-      <!-- Hero -->
       <section class="text-center space-y-4 py-2 md:py-6">
         <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Wheel of Fortune — Free Online Spinning Wheel Game
+          Wheel of Fortune — Free Online Prize Spinner
         </h1>
         <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          The classic game show format, now available as a free online spinner. Set up your prize wheel, take turns spinning, and see what fate has in store.
+          The classic game show format as a free online spinner. Spin for prizes, earn money, land on Bankrupt — or set up your own custom prize wheel for any occasion.
         </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+        <p class="text-sm text-muted-foreground">Free • No account • Fully customizable prizes</p>
       </section>
 
-      <!-- Wheel -->
       <section class="flex flex-col items-center">
         <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
       </section>
 
-      <!-- Article Content -->
-      <section class="space-y-8">
+      <section class="space-y-6">
 
         <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Play Wheel of Fortune</h2>
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Play Wheel of Fortune Online</h2>
           <p class="text-muted-foreground leading-relaxed">
-            The classic game show format, now available as a free online spinner. Set up your prize wheel, take turns spinning, and see what fate has in store. Perfect for family game nights, classroom games, and custom prize drawings.
+            The classic TV format in your browser. The default wheel includes prize amounts ($100, $200, $500, $1000), Bankrupt, Lose a Turn, Free Spin, and Jackpot — exactly the structure of the original game show. Customize any segment by clicking it.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            Classic setup: Land on a dollar amount, guess a letter. If the letter is in the puzzle, earn the money. Land on Bankrupt and lose everything. Land on Free Spin and get another turn.
-          </p>
+          <ol class="space-y-3 text-sm text-muted-foreground">
+            {[
+              { step: "Set up your puzzle", desc: "Write a word, phrase, or category on paper or a whiteboard. Keep it hidden from other players." },
+              { step: "Take turns spinning", desc: "Each player spins and calls out a consonant if they land on money. Vowels cost $250." },
+              { step: "Guess correctly to earn", desc: "Every time the letter appears in the puzzle, add the spin amount to your total score." },
+              { step: "Bankrupt = lose everything", desc: "Landing on Bankrupt wipes your current round earnings. All previously banked amounts are safe." },
+              { step: "Solve to win the round", desc: "The first player to solve the puzzle wins all their accumulated earnings from that round." },
+            ].map((item, i) => (
+              <li class="flex gap-3">
+                <span class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 text-primary font-bold text-xs flex items-center justify-center mt-0.5">{i + 1}</span>
+                <div>
+                  <span class="font-semibold text-foreground">{item.step} — </span>
+                  {item.desc}
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
 
         <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Custom Prize Wheel</h2>
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Custom Prize Wheel Ideas</h2>
           <p class="text-muted-foreground leading-relaxed">
-            Replace the default values with your own prizes. Use it for office raffle prizes, birthday party prizes, or custom game shows. Replace dollar amounts with gift ideas, activities, or dares.
+            Replace the default dollar amounts with anything you want. Click any segment to rename it:
           </p>
-          <div class="space-y-3">
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Office raffle</p>
-              <p class="text-muted-foreground text-sm">Extra PTO day, Gift card, Coffee on the boss, Work from home week</p>
-            </div>
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Birthday party</p>
-              <p class="text-muted-foreground text-sm">Choose the movie, Pick the restaurant, Skip a chore, Double dessert</p>
-            </div>
+          <div class="grid sm:grid-cols-2 gap-3 text-sm">
+            {[
+              { title: "Office party", prizes: "Extra PTO, Gift card, Coffee on the boss, Work from home day, Bonus spin" },
+              { title: "Birthday party", prizes: "Pick the movie, Choose the restaurant, Skip a chore, Double dessert, Mystery prize" },
+              { title: "Classroom review", prizes: "5 bonus points, Extra time, Skip homework, Class choice, Brain teaser question" },
+              { title: "Family game night", prizes: "Pick the next game, Choose snacks, Skip a turn, Wild card, Double points" },
+            ].map((item) => (
+              <div class="p-3 bg-primary/5 border border-primary/20 rounded-lg">
+                <p class="font-semibold text-foreground text-sm mb-1">{item.title}</p>
+                <p class="text-xs text-muted-foreground">{item.prizes}</p>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Party Version</h2>
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Classroom Wheel of Fortune Game</h2>
           <p class="text-muted-foreground leading-relaxed">
-            For parties: Replace the prizes with dares, compliments, or tasks. Bankrupt becomes "tell an embarrassing story." Jackpot becomes "pick any prize." The spinner adds the excitement of a real game show to any gathering.
+            Teachers use this for vocabulary, spelling, history review, and math challenges. Instead of money, put point values or rewards on the wheel. A student spins, answers a question about the subject — correct answers earn points, wrong answers lose a turn.
+          </p>
+          <p class="text-muted-foreground text-sm leading-relaxed">
+            The wheel adds genuine excitement to review sessions. Students are more motivated to study when there's a random element — and the spinning animation creates the same anticipation as the real game show. No prep required: write your puzzle on the board, open the wheel, and start.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why the Wheel Format Works</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            The visual drama of a spinning wheel slowing down — the pointer clicking through each segment — creates anticipation that no app, card, or static random number can replicate. That uncertain moment before the wheel stops is why Wheel of Fortune has been the most-watched game show in US history for over 40 years.
           </p>
           <p class="text-muted-foreground leading-relaxed">
-            The visual drama of the wheel slowing down — pointer clicking through segments — builds anticipation that no app or card game can match. That moment of uncertainty before the wheel stops is what makes it memorable.
+            Our digital version uses <code class="bg-muted px-1 rounded font-mono text-xs">crypto.getRandomValues()</code> for the final landing, so results are cryptographically random — no bias, no patterns. The animation shows the full theatrical experience, but the result is decided by genuine hardware randomness.
           </p>
         </div>
 
       </section>
 
-      <!-- FAQ -->
       <section class="space-y-4">
         <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
         <div class="space-y-3">
@@ -145,21 +195,18 @@ const jsonLd = {
         </div>
       </section>
 
-      <!-- Related Tools -->
       <section class="space-y-4">
         <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
         <ul class="space-y-3">
           {[
             { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
-            { href: "/random-number-generator", label: "Random Number Generator", desc: "Pick a random number from any range instantly." },
-            { href: "/party-wheel", label: "Party Wheel", desc: "Pre-loaded with party games and activities." },
+            { href: "/weighted-random-picker", label: "Weighted Random Picker", desc: "Give different odds to each prize — like bigger prize amounts having lower probability." },
+            { href: "/templates/dice-roller-wheel", label: "Dice Roller Wheel", desc: "Virtual 6-sided die with equal 1-in-6 odds." },
+            { href: "/party-wheel", label: "Party Wheel", desc: "Pre-loaded with party games, dares, and activities." },
             { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
           ].map(({ href, label, desc }) => (
             <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
                 <span class="text-primary font-bold text-sm mt-0.5">→</span>
                 <span>
                   <span class="font-semibold text-foreground">{label}</span>
@@ -173,6 +220,6 @@ const jsonLd = {
 
     </main>
 
-    <GlobalFooterIsland client:load />
+    <GlobalFooterIsland client:idle />
   </div>
 </Layout>
