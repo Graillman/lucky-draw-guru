@@ -1,0 +1,181 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Coin Flip Wheel — Online Coin Toss Spinner | Heads or Tails";
+const description = "Flip a virtual coin online. Spin the wheel to get Heads or Tails — exactly 50/50 odds, cryptographically random, instant result. Free, no signup.";
+const canonical = "/templates/coin-flip-wheel";
+
+const faqItems = [
+  {
+    question: "Is this coin flip truly 50/50?",
+    answer: "Yes. The wheel has two equal segments (Heads and Tails), and the selection uses crypto.getRandomValues() — cryptographic randomness sourced from your device's hardware. Each spin is independent, unpredictable, and exactly 50/50.",
+  },
+  {
+    question: "Is a virtual coin flip more fair than a physical coin?",
+    answer: "Generally yes. Physical coins have slight weight asymmetries — some studies show a physical coin lands on the same side it started on about 51% of the time due to spin dynamics. A digital coin flip with hardware randomness has no such bias.",
+  },
+  {
+    question: "Can I use this for serious decisions?",
+    answer: "Yes. A coin flip is a legitimate decision-making tool — sports teams use it to decide kick-off, courts use it for tie-breakers, and scientists use coin-flip logic in randomized controlled trials. Our cryptographic implementation makes it defensible for any use.",
+  },
+  {
+    question: "What if I need more than heads/tails?",
+    answer: "Use our main wheel spinner to add as many options as you need — yes/no/maybe, multiple choices, or any custom list. The main wheel also uses crypto.getRandomValues() for the same level of fairness.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "Heads", weight: 1 },
+  { pseudo: "Tails", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Coin Flip Wheel — Online Coin Toss",
+      "url": "https://realwheelpicker.com/templates/coin-flip-wheel",
+      "description": description,
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Templates", "item": "https://realwheelpicker.com/templates" },
+        { "@type": "ListItem", "position": 3, "name": "Coin Flip Wheel" },
+      ],
+    },
+  ],
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Coin Flip Wheel", url: "https://realwheelpicker.com/templates/coin-flip-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Coin Flip Wheel</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Coin Flip Wheel — Heads or Tails Online
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Spin to flip a virtual coin. Exactly 50/50 odds — cryptographically random, no physical bias, instant result.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • True 50/50</p>
+      </section>
+
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <section class="space-y-6">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Is a Virtual Coin Flip More Fair Than a Physical Coin?</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Physical coin flips have a subtle bias. Research by Stanford mathematicians (Diaconis, Holmes, Montgomery) found that a coin tossed with a standard technique lands on the same face it started on about <strong class="text-foreground">51% of the time</strong> — a small but real deviation from 50/50, caused by imperfect precession of the spinning motion.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            This digital coin flip uses <code>crypto.getRandomValues()</code> — hardware-sourced randomness from your device's CSPRNG (Cryptographically Secure Pseudo-Random Number Generator). Each flip is truly independent with no physical bias. The result is exactly 50/50 over any number of flips.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">When to Use a Coin Flip</h2>
+          <div class="grid sm:grid-cols-2 gap-4 text-sm">
+            {[
+              { use: "Sports decisions", example: "Who kicks off, who serves first, or which team picks their side" },
+              { use: "Tie-breaking", example: "When votes are split 50/50 or two options are genuinely equal" },
+              { use: "Turn order in games", example: "Who goes first in board games, card games, or tabletop RPGs" },
+              { use: "Quick daily decisions", example: "Which movie to watch, who does the dishes, left or right" },
+              { use: "Randomized study design", example: "Assigning participants to group A or group B in research" },
+              { use: "Teaching probability", example: "Demonstrate the law of large numbers — spin 100 times and track the results" },
+            ].map((item) => (
+              <div class="p-3 bg-primary/5 border border-primary/20 rounded-lg">
+                <p class="font-semibold text-foreground text-sm mb-0.5">{item.use}</p>
+                <p class="text-xs text-muted-foreground">{item.example}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Customize Your Coin Flip</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Not every decision is binary. The coin flip wheel defaults to Heads and Tails — but you can edit the labels to anything you need:
+          </p>
+          <ul class="space-y-2 text-sm text-muted-foreground">
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span> "Yes / No" for simple decisions</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span> "Home / Away" for sports</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span> "Team A / Team B" for assignment</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span> Add a third option like "Best of 3" to the wheel</li>
+          </ul>
+          <p class="text-muted-foreground text-sm">Click any label in the wheel to edit it directly. Add or remove segments as needed.</p>
+        </div>
+
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/yes-no-wheel", label: "Yes or No Wheel", desc: "50/50 yes/no decision wheel with adjustable odds." },
+            { href: "/decision-wheel", label: "Decision Wheel", desc: "Add any options and spin to decide." },
+            { href: "/templates/dice-roller-wheel", label: "Dice Roller Wheel", desc: "Spin to roll a virtual 6-sided die." },
+            { href: "/random-number-picker", label: "Random Number Picker", desc: "Pick any random number from a custom range." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

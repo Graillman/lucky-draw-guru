@@ -1,0 +1,193 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Dice Roller Wheel — Virtual 6-Sided Die Spinner Online";
+const description = "Roll a virtual dice by spinning the wheel. 6-sided die with equal 1-in-6 odds, cryptographically random. Free online dice roller for board games, D&D, and classroom activities.";
+const canonical = "/templates/dice-roller-wheel";
+
+const faqItems = [
+  {
+    question: "Is this a fair dice roller?",
+    answer: "Yes. Each face (1–6) has exactly 1/6 probability on every roll. The selection uses crypto.getRandomValues() — hardware-sourced cryptographic randomness, not Math.random(). Each roll is completely independent.",
+  },
+  {
+    question: "Can I use this for D&D and tabletop RPGs?",
+    answer: "For a standard d6, yes. For other dice types (d4, d8, d10, d12, d20, d100), use our random number picker and set the range to match your die type. Both use the same cryptographic randomness.",
+  },
+  {
+    question: "How does this compare to a physical dice?",
+    answer: "A physical dice can have manufacturing imperfections that slightly favor certain faces. This digital roller uses hardware random number generation with no physical bias — each face has exactly equal probability.",
+  },
+  {
+    question: "Can I roll multiple dice at once?",
+    answer: "Spin multiple times in sequence. For board games requiring two dice, spin twice and add the results. For craps or other multi-dice games, set up two browser tabs each with a dice wheel.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "⚀ 1", weight: 1 },
+  { pseudo: "⚁ 2", weight: 1 },
+  { pseudo: "⚂ 3", weight: 1 },
+  { pseudo: "⚃ 4", weight: 1 },
+  { pseudo: "⚄ 5", weight: 1 },
+  { pseudo: "⚅ 6", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Dice Roller Wheel — Virtual 6-Sided Die",
+      "url": "https://realwheelpicker.com/templates/dice-roller-wheel",
+      "description": description,
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Templates", "item": "https://realwheelpicker.com/templates" },
+        { "@type": "ListItem", "position": 3, "name": "Dice Roller Wheel" },
+      ],
+    },
+  ],
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Templates", url: "https://realwheelpicker.com/templates" },
+    { name: "Dice Roller Wheel", url: "https://realwheelpicker.com/templates/dice-roller-wheel" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <span>/</span>
+        <span class="text-foreground">Dice Roller Wheel</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Dice Roller Wheel — Roll a Virtual 6-Sided Die
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Spin the wheel to roll a d6. Equal 1-in-6 odds, cryptographically random — no physical bias, instant result.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • Unbiased 1–6</p>
+      </section>
+
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <section class="space-y-6">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Uses for a Virtual Dice Roller</h2>
+          <div class="grid sm:grid-cols-2 gap-3 text-sm">
+            {[
+              { use: "Board games", example: "Monopoly, Snakes & Ladders, Catan — when you've lost the physical dice" },
+              { use: "D&D and tabletop RPGs", example: "Quick d6 rolls for damage, skill checks, or improvised tables" },
+              { use: "Classroom math", example: "Probability lessons — track 50 rolls and chart the distribution" },
+              { use: "Coding challenges", example: "Generate random numbers for testing when Math.random() isn't enough" },
+              { use: "Games with dice rules", example: "Yahtzee scoring practice, Farkle, or any dice-based game variant" },
+              { use: "Party games", example: "Replacement for physical dice in drinking games or activity spinners" },
+            ].map((item) => (
+              <div class="p-3 bg-primary/5 border border-primary/20 rounded-lg">
+                <p class="font-semibold text-foreground text-sm mb-0.5">{item.use}</p>
+                <p class="text-xs text-muted-foreground">{item.example}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Other Dice Types</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Need a different die type? Use our <a href="/random-number-picker" class="text-primary hover:underline">Random Number Picker</a> and set the range:
+          </p>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">
+            {[
+              { die: "d4 (1–4)", use: "Damage rolls, small checks" },
+              { die: "d8 (1–8)", use: "Weapon damage in D&D" },
+              { die: "d10 (1–10)", use: "Percentile rolls" },
+              { die: "d12 (1–12)", use: "Month picker, high damage" },
+              { die: "d20 (1–20)", use: "D&D attack and saving throws" },
+              { die: "d100 (1–100)", use: "Percentile chance events" },
+            ].map((d) => (
+              <a href="/random-number-picker" class="p-3 bg-card border border-border rounded-lg hover:border-primary/50 transition-colors">
+                <p class="font-bold text-foreground text-sm">{d.die}</p>
+                <p class="text-xs text-muted-foreground">{d.use}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Use a Digital Dice Roller?</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Physical dice get lost, roll off tables, and — while rarely exploited — can be weighted. Casino dice are manufactured to tight tolerances precisely because standard dice have measurable bias. Our digital dice roller uses <code>crypto.getRandomValues()</code> — the same cryptographic standard used in online banking — so every face has exactly 1/6 probability on every roll, guaranteed.
+          </p>
+          <p class="text-muted-foreground leading-relaxed">
+            The spinning wheel visualization also makes it more engaging than a static number display — the anticipation of where it lands is part of the experience.
+          </p>
+        </div>
+
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/random-number-picker", label: "Random Number Picker", desc: "Any range — d4, d8, d10, d12, d20, d100, or custom." },
+            { href: "/templates/coin-flip-wheel", label: "Coin Flip Wheel", desc: "Virtual heads or tails — exactly 50/50." },
+            { href: "/decision-wheel", label: "Decision Wheel", desc: "Add any options for custom multi-choice decisions." },
+            { href: "/templates/number-wheel-1-10", label: "Number Wheel 1–10", desc: "Spin to pick a random number from 1 to 10." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

@@ -1,0 +1,186 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Random Country Picker — Spin to Pick a Random Country";
+const description = "Spin the wheel to pick a random country from around the world. Customize the list — all 195 countries or a regional subset. Free, cryptographically random, instant.";
+const canonical = "/random-country-picker";
+
+const faqItems = [
+  {
+    question: "Does this include all countries in the world?",
+    answer: "The default wheel includes 30 of the most globally recognized countries. You can easily edit the wheel to add more — click any country label to edit or add additional countries. There are 195 UN-recognized countries you can include.",
+  },
+  {
+    question: "How is the country selected?",
+    answer: "The wheel uses crypto.getRandomValues() — cryptographic randomness sourced from your device's hardware. Each spin is independent and genuinely random. Every country on the wheel has equal probability.",
+  },
+  {
+    question: "Can I filter by continent or region?",
+    answer: "Remove countries you don't want by clicking the × next to them in the entry list, or click any label to rename it. You can set up a Europe-only wheel, an Asia-only wheel, or any regional subset you need.",
+  },
+  {
+    question: "What's a good use for a random country picker?",
+    answer: "Travel planning (spin to decide your next destination), geography education (learning capital cities and flags), world history research prompts, cultural exploration challenges, and international cooking nights where you cook a dish from the randomly picked country.",
+  },
+];
+
+const defaultParticipants = [
+  { pseudo: "🇺🇸 United States", weight: 1 },
+  { pseudo: "🇬🇧 United Kingdom", weight: 1 },
+  { pseudo: "🇫🇷 France", weight: 1 },
+  { pseudo: "🇩🇪 Germany", weight: 1 },
+  { pseudo: "🇯🇵 Japan", weight: 1 },
+  { pseudo: "🇨🇳 China", weight: 1 },
+  { pseudo: "🇮🇳 India", weight: 1 },
+  { pseudo: "🇧🇷 Brazil", weight: 1 },
+  { pseudo: "🇨🇦 Canada", weight: 1 },
+  { pseudo: "🇦🇺 Australia", weight: 1 },
+  { pseudo: "🇮🇹 Italy", weight: 1 },
+  { pseudo: "🇪🇸 Spain", weight: 1 },
+  { pseudo: "🇲🇽 Mexico", weight: 1 },
+  { pseudo: "🇰🇷 South Korea", weight: 1 },
+  { pseudo: "🇷🇺 Russia", weight: 1 },
+  { pseudo: "🇦🇷 Argentina", weight: 1 },
+  { pseudo: "🇳🇱 Netherlands", weight: 1 },
+  { pseudo: "🇸🇪 Sweden", weight: 1 },
+  { pseudo: "🇳🇴 Norway", weight: 1 },
+  { pseudo: "🇨🇭 Switzerland", weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Random Country Picker — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/random-country-picker",
+      "description": description,
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Random Country Picker" },
+      ],
+    },
+  ],
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Random Country Picker", url: "https://realwheelpicker.com/random-country-picker" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">Random Country Picker</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-6">
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Random Country Picker — Spin to Choose a Country
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Spin the wheel and land on a random country. Customize the list with any countries, regions, or continents. Cryptographically random — every country has equal odds.
+        </p>
+        <p class="text-sm text-muted-foreground">Free • No account • 195 countries supported</p>
+      </section>
+
+      <section class="flex flex-col items-center">
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+      </section>
+
+      <section class="space-y-6">
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">What to Do With a Random Country</h2>
+          <div class="grid sm:grid-cols-2 gap-3 text-sm">
+            {[
+              { use: "Next travel destination", example: "Spin to decide where to plan your next trip. Research flights, culture, and must-see cities." },
+              { use: "World cuisine night", example: "Cook a traditional dish from the random country. A fun way to explore world food at home." },
+              { use: "Geography education", example: "Spin and quiz yourself or students on the capital, flag, population, and neighboring countries." },
+              { use: "History research prompts", example: "Write a one-page summary of a historical event from the randomly selected country." },
+              { use: "Language learning", example: "Learn 10 words in the language of the spun country. Use the same wheel every week." },
+              { use: "Cultural challenge", example: "Watch a film from the picked country, listen to its national music, or read a local news story." },
+            ].map((item) => (
+              <div class="p-3 bg-primary/5 border border-primary/20 rounded-lg">
+                <p class="font-semibold text-foreground text-sm mb-0.5">{item.use}</p>
+                <p class="text-xs text-muted-foreground">{item.example}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Customize for Any Region</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            Edit the wheel to include only the countries you need. Click any entry to rename it, use the + button to add countries, or × to remove them. You can build:
+          </p>
+          <ul class="space-y-2 text-sm text-muted-foreground">
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span> A Europe-only wheel for travel within the EU</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span> An Asia wheel covering all 48 countries</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span> A G20 countries wheel for economics lessons</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span> A World Cup participants wheel for tournament draws</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span> A personal bucket list of countries you want to visit</li>
+          </ul>
+        </div>
+
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground mb-2">{question}</p>
+              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/decision-wheel", label: "Decision Wheel", desc: "Custom options for any decision — travel, food, activities." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random name from any list." },
+            { href: "/templates/dice-roller-wheel", label: "Dice Roller Wheel", desc: "Virtual 6-sided die — equal 1-in-6 odds." },
+            { href: "/", label: "Spin the Wheel", desc: "The main wheel — add any custom options and spin." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>
