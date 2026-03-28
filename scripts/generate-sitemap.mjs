@@ -34,7 +34,7 @@ function getPriority(urlPath) {
   if (urlPath === 'social-giveaway') return null; // redirect
   if (urlPath === 'probability-picker') return null; // redirect
   if (urlPath === 'teacher-picker') return null; // redirect
-  if (/^(wheel-of-names|random-name-picker|random-wheel|giveaway-picker|best-free-wheel-spinner|random-state-picker|random-country-picker|random-word-generator)$/.test(urlPath)) return '0.9';
+  if (/^(wheel-of-names|random-name-picker|random-wheel|giveaway-picker|best-free-wheel-spinner|random-state-picker|random-country-picker|random-word-generator|harry-potter-wheel|magical-creature-wheel)$/.test(urlPath)) return '0.9';
   if (/^(tiktok|youtube|discord|twitter|facebook|twitch|reddit|linkedin|snapchat)-giveaway-picker$/.test(urlPath)) return '0.8';
   if (urlPath === 'yes-or-no-wheel') return null; // duplicate of yes-no-wheel
   if (/^(yes-no-wheel|decision-wheel|truth-or-dare-wheel|random-number-picker|wheel-of-names-alternative|team-generator|random-number-generator|party-wheel|classroom-picker|weighted-random-picker|secret-santa-picker|raffle-picker|random-picker-no-repeat|snapchat-giveaway-picker|random-wheel|sweepstakes-picker)$/.test(urlPath)) return '0.8';

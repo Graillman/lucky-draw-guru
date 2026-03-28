@@ -1,0 +1,306 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Magical Creature Wheel — Which Fantasy Creature Are You?";
+const description = "Spin the magical creature wheel to discover your inner beast — Dragon, Unicorn, Phoenix, Mermaid and more. Free, instant, no signup.";
+
+const defaultParticipants = [
+  { pseudo: "🐉 Dragon",       weight: 1 },
+  { pseudo: "🦄 Unicorn",      weight: 1 },
+  { pseudo: "🦅 Phoenix",      weight: 1 },
+  { pseudo: "🧜 Mermaid",      weight: 1 },
+  { pseudo: "🦁 Griffin",      weight: 1 },
+  { pseudo: "🐴 Pegasus",      weight: 1 },
+  { pseudo: "🦊 Kitsune",      weight: 1 },
+  { pseudo: "🌿 Centaur",      weight: 1 },
+  { pseudo: "🦂 Chimera",      weight: 1 },
+  { pseudo: "🐺 Werewolf",     weight: 1 },
+  { pseudo: "🧚 Fairy",        weight: 1 },
+  { pseudo: "🌊 Kraken",       weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": "https://realwheelpicker.com/magical-creature-wheel#app",
+  "name": "Magical Creature Wheel",
+  "url": "https://realwheelpicker.com/magical-creature-wheel",
+  "description": description,
+  "applicationCategory": "EntertainmentApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "publisher": { "@type": "Organization", "@id": "https://realwheelpicker.com/#organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+};
+---
+
+<style>
+  /* ─── Enchanted Forest / Cosmic Fantasy ─── */
+  .magic-hero {
+    position: relative;
+    overflow: hidden;
+    background: #030d0a;
+    min-height: 100vh;
+  }
+
+  /* Aurora / nebula background layers */
+  .aurora {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+  }
+  .aurora-teal {
+    width: 600px; height: 500px;
+    top: -150px; left: -100px;
+    background: radial-gradient(circle, rgba(0,200,150,0.2) 0%, transparent 70%);
+    animation: auroraFlow1 8s ease-in-out infinite alternate;
+  }
+  .aurora-violet {
+    width: 550px; height: 550px;
+    top: -100px; right: -120px;
+    background: radial-gradient(circle, rgba(140,60,255,0.2) 0%, transparent 70%);
+    animation: auroraFlow2 10s ease-in-out infinite alternate;
+  }
+  .aurora-gold {
+    width: 400px; height: 400px;
+    bottom: -50px; left: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(255,210,0,0.12) 0%, transparent 70%);
+    animation: auroraFlow3 7s ease-in-out infinite alternate;
+  }
+  .aurora-blue {
+    width: 350px; height: 350px;
+    bottom: 10%; right: 5%;
+    background: radial-gradient(circle, rgba(0,120,255,0.15) 0%, transparent 70%);
+    animation: auroraFlow2 12s ease-in-out infinite alternate-reverse;
+  }
+
+  @keyframes auroraFlow1 {
+    from { transform: translate(0, 0) scale(1); opacity: 0.7; }
+    to   { transform: translate(40px, 30px) scale(1.1); opacity: 1; }
+  }
+  @keyframes auroraFlow2 {
+    from { transform: translate(0, 0) scale(1.05); opacity: 1; }
+    to   { transform: translate(-30px, 50px) scale(0.9); opacity: 0.6; }
+  }
+  @keyframes auroraFlow3 {
+    from { transform: translateX(-50%) scale(1); opacity: 0.5; }
+    to   { transform: translateX(-45%) scale(1.2); opacity: 0.85; }
+  }
+
+  /* Stars */
+  .mstar {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    pointer-events: none;
+    animation: mtwinkle ease-in-out infinite alternate;
+  }
+  @keyframes mtwinkle {
+    from { opacity: 0.1; transform: scale(0.7); }
+    to   { opacity: 0.9; transform: scale(1.3); }
+  }
+
+  /* Floating emoji creatures */
+  .float-creature {
+    position: absolute;
+    pointer-events: none;
+    animation: creatureFloat ease-in-out infinite;
+    opacity: 0.15;
+    font-size: 1.5rem;
+    filter: blur(1px);
+  }
+  @keyframes creatureFloat {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50%       { transform: translateY(-25px) rotate(5deg); }
+  }
+
+  /* Magical orbs (glowing dots) */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: orbPulse ease-in-out infinite alternate;
+  }
+  @keyframes orbPulse {
+    from { opacity: 0.2; transform: scale(0.8); }
+    to   { opacity: 0.7; transform: scale(1.2); }
+  }
+
+  /* Title */
+  .magic-title {
+    background: linear-gradient(135deg, #00e8b0 0%, #a78bfa 50%, #00e8b0 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: titleShimmer 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(0,200,150,0.3));
+  }
+  @keyframes titleShimmer {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .creature-tag {
+    background: rgba(0,200,150,0.1);
+    border: 1px solid rgba(0,200,150,0.25);
+    color: rgba(0,220,160,0.85);
+    border-radius: 9999px;
+    padding: 4px 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+</style>
+
+<Layout title={title} description={description} canonical="/magical-creature-wheel" jsonLd={jsonLd}>
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Magical Creature Wheel", url: "https://realwheelpicker.com/magical-creature-wheel" },
+  ]} />
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- ENCHANTED HERO                                             -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="magic-hero">
+
+    <!-- Auroras -->
+    <div class="aurora aurora-teal"></div>
+    <div class="aurora aurora-violet"></div>
+    <div class="aurora aurora-gold"></div>
+    <div class="aurora aurora-blue"></div>
+
+    <!-- Stars -->
+    {Array.from({ length: 60 }, (_, i) => {
+      const s = Math.random() * 2.5 + 0.5;
+      return (
+        <div
+          class="mstar"
+          style={`width:${s}px;height:${s}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${Math.random()*3+1.5}s;animation-delay:${Math.random()*6}s;`}
+        ></div>
+      );
+    })}
+
+    <!-- Floating background creatures (very faint) -->
+    <div class="float-creature" style="left:5%;top:20%;animation-duration:5s;animation-delay:0s;">🐉</div>
+    <div class="float-creature" style="left:88%;top:15%;animation-duration:6s;animation-delay:1s;">🦄</div>
+    <div class="float-creature" style="left:15%;top:70%;animation-duration:7s;animation-delay:2s;">🦅</div>
+    <div class="float-creature" style="left:80%;top:65%;animation-duration:5.5s;animation-delay:0.5s;">🧜</div>
+    <div class="float-creature" style="left:50%;top:85%;animation-duration:8s;animation-delay:3s;">✨</div>
+
+    <!-- Magical orbs -->
+    <div class="orb" style="width:8px;height:8px;background:#00e8b0;left:12%;top:35%;animation-duration:2s;box-shadow:0 0 8px #00e8b0;"></div>
+    <div class="orb" style="width:6px;height:6px;background:#a78bfa;left:80%;top:40%;animation-duration:3s;animation-delay:1s;box-shadow:0 0 6px #a78bfa;"></div>
+    <div class="orb" style="width:10px;height:10px;background:#ffd700;left:45%;top:20%;animation-duration:2.5s;animation-delay:0.5s;box-shadow:0 0 10px #ffd700;"></div>
+    <div class="orb" style="width:5px;height:5px;background:#00b4ff;left:30%;top:75%;animation-duration:1.8s;animation-delay:2s;box-shadow:0 0 5px #00b4ff;"></div>
+
+    <HeaderIsland client:load />
+
+    <div class="relative z-10 max-w-4xl mx-auto px-4 pt-4 pb-12">
+
+      <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+        <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-white/50">Magical Creature Wheel</span>
+      </nav>
+
+      <!-- Title -->
+      <div class="text-center mb-6">
+        <div class="text-5xl mb-3">🌌</div>
+        <h1 class="text-3xl md:text-5xl font-black leading-tight magic-title mb-3">
+          Which Magical Creature Are You?
+        </h1>
+        <p class="text-lg text-white/50 max-w-xl mx-auto mb-5">
+          The ancient spirits have summoned you. Spin the enchanted wheel and reveal your true nature.
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-2">
+          <span class="creature-tag">🐉 Dragon</span>
+          <span class="creature-tag">🦄 Unicorn</span>
+          <span class="creature-tag">🦅 Phoenix</span>
+          <span class="creature-tag">🧜 Mermaid</span>
+          <span class="creature-tag">🦊 Kitsune</span>
+        </div>
+      </div>
+
+      <!-- THE WHEEL -->
+      <SimpleWheelIsland
+        defaultParticipants={defaultParticipants}
+        client:load
+      />
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- CONTENT                                                    -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div style="background: var(--gradient-bg)">
+    <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+      <!-- Creature lore -->
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">The Creatures</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[
+            { name: "🐉 Dragon", desc: "Fierce, powerful, ancient. You command respect through strength and intelligence. Fire runs through your veins." },
+            { name: "🦄 Unicorn", desc: "Pure, rare, and magical. You bring light into darkness and inspire those around you." },
+            { name: "🦅 Phoenix", desc: "Reborn from ashes, unstoppable. Every ending is a new beginning. You rise stronger each time." },
+            { name: "🧜 Mermaid", desc: "Mysterious and enchanting. You draw others in with your depth and they never quite understand you." },
+            { name: "🦁 Griffin", desc: "Noble guardian of treasures. Half eagle, half lion — the perfect blend of sky and earth." },
+            { name: "🦊 Kitsune", desc: "The trickster fox spirit of Japanese legend. Clever, unpredictable, and far more powerful than you appear." },
+            { name: "🐴 Pegasus", desc: "Freedom above all else. The winged horse gallops through clouds, never bound by gravity or convention." },
+            { name: "🌿 Centaur", desc: "Wisdom of the ages, strength of nature. A bridge between the animal and the divine." },
+            { name: "🐺 Werewolf", desc: "Torn between two worlds. Wild and loyal, primal and human — you contain multitudes." },
+          ].map(({ name, desc }) => (
+            <div class="p-4 rounded-xl border bg-card border-border space-y-2 hover:border-primary/40 transition-colors">
+              <p class="font-bold text-foreground text-sm">{name}</p>
+              <p class="text-xs text-muted-foreground leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Use cases -->
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/20 space-y-3">
+        <h2 class="text-lg font-bold text-foreground">Perfect for</h2>
+        <ul class="grid sm:grid-cols-2 gap-3 text-sm text-muted-foreground">
+          <li class="flex items-center gap-2"><span class="text-primary">→</span> Fantasy game night character assignment</li>
+          <li class="flex items-center gap-2"><span class="text-primary">→</span> DnD / tabletop RPG session warm-ups</li>
+          <li class="flex items-center gap-2"><span class="text-primary">→</span> Creative writing character inspiration</li>
+          <li class="flex items-center gap-2"><span class="text-primary">→</span> Halloween costume ideas</li>
+          <li class="flex items-center gap-2"><span class="text-primary">→</span> Icebreaker for fantasy fans</li>
+          <li class="flex items-center gap-2"><span class="text-primary">→</span> Art challenge prompts</li>
+        </ul>
+      </section>
+
+      <!-- More wheels -->
+      <section class="space-y-4">
+        <h2 class="text-xl font-bold text-foreground">More Fun Wheels</h2>
+        <ul class="grid sm:grid-cols-2 gap-3">
+          {[
+            { href: "/harry-potter-wheel", label: "⚡ Harry Potter Wheel", desc: "Which HP character are you?" },
+            { href: "/party-wheel", label: "🎉 Party Wheel", desc: "Truth, dare, challenges — the party spinner." },
+            { href: "/yes-no-wheel", label: "✅ Yes or No Wheel", desc: "Let the wheel make decisions for you." },
+            { href: "/", label: "🎲 Spin the Wheel", desc: "The full random picker — add any list." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <div>
+                  <p class="font-semibold text-foreground text-sm">{label}</p>
+                  <p class="text-xs text-muted-foreground mt-0.5">{desc}</p>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

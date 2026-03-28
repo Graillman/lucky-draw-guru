@@ -1,0 +1,289 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Harry Potter Character Wheel — Which Character Are You?";
+const description = "Spin the Harry Potter wheel to discover which character you are. Harry, Hermione, Snape, Dumbledore — let the wheel sort you. Free, instant, no signup.";
+
+const defaultParticipants = [
+  { pseudo: "⚡ Harry Potter",       weight: 1 },
+  { pseudo: "📚 Hermione Granger",   weight: 1 },
+  { pseudo: "🧡 Ron Weasley",        weight: 1 },
+  { pseudo: "👴 Albus Dumbledore",   weight: 1 },
+  { pseudo: "🖤 Severus Snape",      weight: 1 },
+  { pseudo: "🌙 Luna Lovegood",      weight: 1 },
+  { pseudo: "🐍 Draco Malfoy",       weight: 1 },
+  { pseudo: "💀 Lord Voldemort",     weight: 1 },
+  { pseudo: "🦁 Neville Longbottom", weight: 1 },
+  { pseudo: "⭐ Sirius Black",       weight: 1 },
+  { pseudo: "🦊 Ginny Weasley",      weight: 1 },
+  { pseudo: "🐾 Rubeus Hagrid",      weight: 1 },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "@id": "https://realwheelpicker.com/harry-potter-wheel#app",
+  "name": "Harry Potter Character Wheel",
+  "url": "https://realwheelpicker.com/harry-potter-wheel",
+  "description": description,
+  "applicationCategory": "EntertainmentApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "publisher": { "@type": "Organization", "@id": "https://realwheelpicker.com/#organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+};
+---
+
+<style>
+  .hp-hero {
+    position: relative;
+    overflow: hidden;
+    background: #08060f;
+    min-height: 100vh;
+  }
+
+  /* Starfield background */
+  .stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle ease-in-out infinite alternate;
+  }
+  @keyframes twinkle {
+    from { opacity: 0.1; transform: scale(0.8); }
+    to   { opacity: 1;   transform: scale(1.2); }
+  }
+
+  /* Magical golden glow */
+  .hp-glow-gold {
+    position: absolute;
+    top: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(255,180,0,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hp-glow-purple {
+    position: absolute;
+    bottom: -100px;
+    left: -100px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(120,40,200,0.2) 0%, transparent 70%);
+    pointer-events: none;
+    animation: purplePulse 5s ease-in-out infinite alternate;
+  }
+  .hp-glow-purple2 {
+    position: absolute;
+    bottom: -100px;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(60,20,140,0.25) 0%, transparent 70%);
+    pointer-events: none;
+    animation: purplePulse 7s ease-in-out infinite alternate-reverse;
+  }
+  @keyframes purplePulse {
+    from { opacity: 0.6; transform: scale(1); }
+    to   { opacity: 1; transform: scale(1.15); }
+  }
+
+  /* Floating magical particles */
+  .magic-particle {
+    position: absolute;
+    pointer-events: none;
+    animation: floatUp linear infinite;
+    opacity: 0;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.9; }
+    90%  { opacity: 0.6; }
+    100% { transform: translateY(-80vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* Hogwarts-inspired title */
+  .hp-title {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 40%, #FFD700 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    filter: drop-shadow(0 0 30px rgba(255,180,0,0.4));
+  }
+  .hp-subtitle {
+    color: rgba(255,255,255,0.5);
+  }
+  .hp-accent {
+    color: #FFD700;
+    opacity: 0.8;
+  }
+
+  /* House colors badge */
+  .house-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border: 1px solid;
+  }
+  .house-gryffindor { background: rgba(174,0,1,0.2); border-color: rgba(174,0,1,0.5); color: #ff6b6b; }
+  .house-slytherin   { background: rgba(0,100,60,0.2); border-color: rgba(0,100,60,0.5); color: #4ece9e; }
+  .house-ravenclaw   { background: rgba(0,50,150,0.2); border-color: rgba(0,50,150,0.5); color: #74a0ff; }
+  .house-hufflepuff  { background: rgba(200,150,0,0.2); border-color: rgba(200,150,0,0.5); color: #FFD700; }
+</style>
+
+<Layout title={title} description={description} canonical="/harry-potter-wheel" jsonLd={jsonLd}>
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: "Harry Potter Wheel", url: "https://realwheelpicker.com/harry-potter-wheel" },
+  ]} />
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MAGICAL HERO — Hogwarts night sky atmosphere               -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="hp-hero">
+
+    <!-- Starfield -->
+    <div class="stars" aria-hidden="true">
+      {Array.from({ length: 80 }, (_, i) => {
+        const size = Math.random() * 3 + 1;
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        const dur = Math.random() * 3 + 2;
+        const delay = Math.random() * 5;
+        return (
+          <div
+            class="star"
+            style={`width:${size}px;height:${size}px;left:${x}%;top:${y}%;animation-duration:${dur}s;animation-delay:${delay}s;`}
+          ></div>
+        );
+      })}
+    </div>
+
+    <div class="hp-glow-gold"></div>
+    <div class="hp-glow-purple"></div>
+    <div class="hp-glow-purple2"></div>
+
+    <!-- Floating sparkles ✨ -->
+    {Array.from({ length: 12 }, (_, i) => (
+      <div
+        class="magic-particle"
+        style={`font-size:${Math.random()*12+8}px;left:${Math.random()*100}%;bottom:0;animation-duration:${Math.random()*6+4}s;animation-delay:${Math.random()*8}s;`}
+      >✨</div>
+    ))}
+
+    <HeaderIsland client:load />
+
+    <div class="relative z-10 max-w-4xl mx-auto px-4 pt-4 pb-12">
+
+      <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+        <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-white/50">Harry Potter Wheel</span>
+      </nav>
+
+      <!-- Title -->
+      <div class="text-center mb-6">
+        <div class="text-5xl mb-3">⚡</div>
+        <h1 class="text-3xl md:text-5xl font-black leading-tight hp-title mb-3">
+          Which Harry Potter<br/>Character Are You?
+        </h1>
+        <p class="text-lg hp-subtitle max-w-xl mx-auto mb-5">
+          The Sorting Hat has spoken. Spin the wheel and discover your Hogwarts destiny.
+        </p>
+        <!-- House badges -->
+        <div class="flex flex-wrap items-center justify-center gap-2">
+          <span class="house-badge house-gryffindor">🦁 Gryffindor</span>
+          <span class="house-badge house-slytherin">🐍 Slytherin</span>
+          <span class="house-badge house-ravenclaw">🦅 Ravenclaw</span>
+          <span class="house-badge house-hufflepuff">🦡 Hufflepuff</span>
+        </div>
+      </div>
+
+      <!-- THE WHEEL -->
+      <SimpleWheelIsland
+        defaultParticipants={defaultParticipants}
+        client:load
+      />
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- CONTENT                                                    -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div style="background: var(--gradient-bg)">
+    <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+      <!-- Character descriptions -->
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">The Characters</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[
+            { name: "⚡ Harry Potter", desc: "The Boy Who Lived. Brave, loyal, and always ready to sacrifice for others. Born to be a hero." },
+            { name: "📚 Hermione Granger", desc: "Brightest witch of her age. Meticulous, principled, and fiercely loyal to those she loves." },
+            { name: "🧡 Ron Weasley", desc: "The heart of the trio. Funny, genuine, and more courageous than he gives himself credit for." },
+            { name: "👴 Dumbledore", desc: "The greatest wizard of his time. Wise, cryptic, and carrying secrets that shape everything." },
+            { name: "🖤 Severus Snape", desc: "Enigmatic, complex, and misunderstood. A man of sacrifice hiding behind a cold exterior." },
+            { name: "🌙 Luna Lovegood", desc: "Dreamy, honest, and unafraid to be different. Sees the world in ways others can't imagine." },
+            { name: "🐍 Draco Malfoy", desc: "Ambitious, proud, and shaped by his upbringing — but not beyond redemption." },
+            { name: "💀 Voldemort", desc: "The Dark Lord himself. Power-obsessed, brilliant, and feared above all others." },
+            { name: "🦁 Neville Longbottom", desc: "The underdog who becomes a hero. Quiet bravery that grows into something extraordinary." },
+          ].map(({ name, desc }) => (
+            <div class="p-4 rounded-xl border bg-card border-border space-y-2 hover:border-primary/40 transition-colors">
+              <p class="font-bold text-foreground text-sm">{name}</p>
+              <p class="text-xs text-muted-foreground leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- How to use for groups -->
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/20 space-y-3">
+        <h2 class="text-lg font-bold text-foreground">How to use with friends</h2>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          Each person spins once — that's their character for the night. Use it for Harry Potter movie marathons, trivia nights, costume parties, or just settling the "who are you most like?" debate once and for all. Click <strong class="text-foreground">✏️ Customize entries</strong> to add other characters or remove ones you want to exclude.
+        </p>
+      </section>
+
+      <!-- Related -->
+      <section class="space-y-4">
+        <h2 class="text-xl font-bold text-foreground">More Fun Wheels</h2>
+        <ul class="grid sm:grid-cols-2 gap-3">
+          {[
+            { href: "/magical-creature-wheel", label: "🐉 Magical Creature Wheel", desc: "Dragon, Unicorn, Phoenix — which creature are you?" },
+            { href: "/party-wheel", label: "🎉 Party Wheel", desc: "Truth, dare, challenges — the ultimate party spinner." },
+            { href: "/yes-no-wheel", label: "✅ Yes or No Wheel", desc: "Can't decide? Let the wheel answer." },
+            { href: "/", label: "🎲 Spin the Wheel", desc: "The full random picker — add any list." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <div>
+                  <p class="font-semibold text-foreground text-sm">{label}</p>
+                  <p class="text-xs text-muted-foreground mt-0.5">{desc}</p>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

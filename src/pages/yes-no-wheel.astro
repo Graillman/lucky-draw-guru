@@ -2,25 +2,32 @@
 import Layout from '@/layouts/Layout.astro';
 import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
-import SEOPageIsland from '@/components/SEOPageIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
 import SchemaFAQ from '@/components/SchemaFAQ.astro';
 import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
 
 const title = "Yes or No Wheel — Spin for a Random Yes or No Decision";
 const description = "Can't decide? Spin the yes or no wheel. Add your own options, adjust the odds, or just flip between yes and no. Free, instant, no signup.";
 
+const defaultParticipants = [
+  { pseudo: "✅ Yes", weight: 1 },
+  { pseudo: "❌ No", weight: 1 },
+  { pseudo: "🤔 Maybe", weight: 1 },
+  { pseudo: "🔁 Ask Again", weight: 1 },
+];
+
 const faqItems = [
   {
     question: "How does the yes or no wheel work?",
-    answer: "The wheel has two segments — Yes and No — with equal 50/50 odds by default. Spin the wheel and it randomly lands on one. You can customize it to add more options like Maybe, or adjust the sizes of each segment to change the odds.",
+    answer: "The wheel has Yes, No, Maybe and Ask Again pre-loaded with equal odds. Spin and it randomly lands on one. You can customize — remove options, change the odds, or add your own.",
   },
   {
     question: "Can I change the odds — like 70% yes and 30% no?",
-    answer: "Yes. Use the weighted picker to set Yes to 7 and No to 3. The wheel segments will reflect that ratio, giving Yes a 70% chance of winning each spin.",
+    answer: "Click '✏️ Customize entries', remove the extras and keep only Yes and No. Then in the main spinner, use the weighted mode to set Yes to 7 and No to 3 for 70/30 odds.",
   },
   {
     question: "Can I add more than just yes and no?",
-    answer: "Yes. Add options like Maybe, Ask again later, Definitely not — or turn it into a full decision wheel with custom choices. Any list of options works.",
+    answer: "Yes. Click 'Customize entries' and type anything — Absolutely, Definitely not, Try tomorrow, Ask your gut — whatever fits your situation.",
   },
   {
     question: "Is the result truly random?",
@@ -28,7 +35,7 @@ const faqItems = [
   },
   {
     question: "Can I use this as a coin flip?",
-    answer: "Absolutely. A yes/no wheel with equal-sized segments is functionally equivalent to a coin flip — 50% chance of each result, each spin completely independent.",
+    answer: "Absolutely. Remove Maybe and Ask Again, keep only Yes and No — that's a perfect 50/50 coin flip. Cryptographically fair, no physical coin needed.",
   },
 ];
 
@@ -42,58 +49,162 @@ const jsonLd = {
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "All",
   "isAccessibleForFree": true,
-  "publisher": {
-    "@type": "Organization",
-    "@id": "https://realwheelpicker.com/#organization",
-    "name": "Real Wheel Picker",
-    "url": "https://realwheelpicker.com"
-  },
+  "publisher": { "@type": "Organization", "@id": "https://realwheelpicker.com/#organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
 };
 ---
 
-<Layout
-  title={title}
-  description={description}
-  canonical="/yes-no-wheel"
-  jsonLd={jsonLd}
->
+<style>
+  .yesno-hero {
+    position: relative;
+    overflow: hidden;
+    background: #030b14;
+  }
+  .yesno-glow-yes {
+    position: absolute;
+    top: -100px;
+    left: -150px;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(34,197,94,0.22) 0%, transparent 70%);
+    pointer-events: none;
+    animation: pulseGreen 4s ease-in-out infinite alternate;
+  }
+  .yesno-glow-no {
+    position: absolute;
+    top: -100px;
+    right: -150px;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(239,68,68,0.22) 0%, transparent 70%);
+    pointer-events: none;
+    animation: pulseRed 4s ease-in-out infinite alternate;
+  }
+  .yesno-glow-center {
+    position: absolute;
+    bottom: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,215,0,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  @keyframes pulseGreen {
+    from { opacity: 0.6; transform: scale(1); }
+    to   { opacity: 1;   transform: scale(1.1); }
+  }
+  @keyframes pulseRed {
+    from { opacity: 1;   transform: scale(1.1); }
+    to   { opacity: 0.6; transform: scale(1); }
+  }
+
+  .badge-yes {
+    background: rgba(34,197,94,0.15);
+    border: 1px solid rgba(34,197,94,0.4);
+    color: #4ade80;
+  }
+  .badge-no {
+    background: rgba(239,68,68,0.15);
+    border: 1px solid rgba(239,68,68,0.4);
+    color: #f87171;
+  }
+  .vs-divider {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.15);
+  }
+</style>
+
+<Layout title={title} description={description} canonical="/yes-no-wheel" jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
     { name: "Home", url: "https://realwheelpicker.com" },
     { name: "Yes or No Wheel", url: "https://realwheelpicker.com/yes-no-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- THEMED HERO — yes/no green & red atmosphere                -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="yesno-hero">
+    <div class="yesno-glow-yes"></div>
+    <div class="yesno-glow-no"></div>
+    <div class="yesno-glow-center"></div>
+
     <HeaderIsland client:load />
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <div class="relative z-10 max-w-4xl mx-auto px-4 pt-4 pb-10">
 
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
+      <nav aria-label="breadcrumb" class="text-xs text-white/40 flex gap-1 mb-6">
+        <a href="/" class="hover:text-white/70 transition-colors">Home</a>
         <span>/</span>
-        <span class="text-foreground">Yes or No Wheel</span>
+        <span class="text-white/60">Yes or No Wheel</span>
       </nav>
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Yes or No Wheel — Let the Wheel Decide
+      <!-- YES / NO visual header -->
+      <div class="flex items-center justify-center gap-4 mb-4">
+        <span class="badge-yes px-5 py-2 rounded-full text-xl font-black tracking-wide">✅ YES</span>
+        <span class="vs-divider">or</span>
+        <span class="badge-no px-5 py-2 rounded-full text-xl font-black tracking-wide">❌ NO</span>
+      </div>
+
+      <div class="text-center mb-6">
+        <h1 class="text-3xl md:text-5xl font-black text-white leading-tight mb-3">
+          Yes or No Wheel
         </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Stuck between yes and no? Spin the wheel and get a truly random answer. Adjust the odds, add more options, or keep it simple — 50/50.
+        <p class="text-lg text-white/60 max-w-xl mx-auto">
+          Can't decide? Stop overthinking — let the wheel answer.
         </p>
-        <p class="text-sm text-muted-foreground">Free • Instant • No signup required</p>
+        <p class="text-sm text-white/40 mt-2">Free · Instant · No signup</p>
+      </div>
+
+      <!-- THE WHEEL — front and center -->
+      <SimpleWheelIsland
+        defaultParticipants={defaultParticipants}
+        client:load
+      />
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- CONTENT BELOW THE FOLD                                     -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div style="background: var(--gradient-bg)">
+    <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+      <!-- When to use -->
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">When to use the Yes or No Wheel</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          {[
+            { icon: "⚖️", title: "Break a tie vote", desc: "Two people can't agree? Let the wheel cast the deciding vote. No debate, no bias — pure random." },
+            { icon: "🧠", title: "Overcome decision paralysis", desc: "Sometimes you know what you want — you just need permission. Spin and see how you feel about the result." },
+            { icon: "🪙", title: "Coin flip without a coin", desc: "Keep only Yes and No for a perfect 50/50. Cryptographically fair, verifiable, no coin needed." },
+            { icon: "🎮", title: "Add randomness to games", desc: "Should the player get a bonus turn? Does the dice roll count? Let the wheel decide mid-game." },
+            { icon: "🧹", title: "Kids' chores & activities", desc: "Who does the dishes? Does screen time get extended? The wheel settles it without negotiation." },
+            { icon: "💼", title: "Business decisions with a nudge", desc: "When two options are genuinely equal, random selection is a valid and defensible method." },
+          ].map(({ icon, title, desc }) => (
+            <div class="p-5 rounded-xl border bg-card border-border space-y-2 hover:border-primary/40 transition-colors">
+              <h3 class="font-bold text-foreground flex items-center gap-2"><span class="text-xl">{icon}</span>{title}</h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
-      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Use the Yes or No Wheel</h2>
+      <!-- How it works -->
+      <section class="p-6 rounded-xl border bg-card border-border space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How to use it</h2>
         <div class="grid sm:grid-cols-3 gap-4 pt-2">
           {[
-            { step: "1", title: "Open the wheel", desc: "Load the wheel with Yes and No already set up" },
-            { step: "2", title: "Spin", desc: "Click the wheel or the Spin button for a random result" },
-            { step: "3", title: "Customize (optional)", desc: "Adjust the odds or add more options like Maybe" },
+            { step: "1", title: "Spin immediately", desc: "Yes, No, Maybe and Ask Again are already loaded — just hit spin." },
+            { step: "2", title: "Customize if you want", desc: "Click ✏️ Customize entries to remove options or add your own." },
+            { step: "3", title: "Adjust odds (optional)", desc: "Use the main spinner for weighted mode — set Yes to 7 and No to 3 for 70/30 odds." },
           ].map(({ step, title, desc }) => (
-            <div class="p-4 rounded-xl bg-card border border-border text-center">
+            <div class="p-4 rounded-xl bg-secondary/40 border border-border text-center">
               <div class="w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm flex items-center justify-center mx-auto mb-2">{step}</div>
               <p class="font-semibold text-foreground text-sm">{title}</p>
               <p class="text-xs text-muted-foreground mt-1">{desc}</p>
@@ -102,59 +213,39 @@ const jsonLd = {
         </div>
       </section>
 
-      <SEOPageIsland slug="yes-no-wheel" client:load />
-
-      <section class="space-y-6">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">When to Use a Yes or No Wheel</h2>
-
-        <div class="grid md:grid-cols-2 gap-4">
-          {[
-            { title: "Break a tie vote", desc: "Two people can't agree? Let the wheel cast the deciding vote. No debate, no bias — pure random." },
-            { title: "Overcome decision paralysis", desc: "Sometimes you already know what you want, you just need permission. Spin the wheel and see how you feel about the result." },
-            { title: "Quick coin flip without a coin", desc: "A 50/50 yes/no wheel is exactly equivalent to a coin flip. Use it when you need a fast, verifiable random choice." },
-            { title: "Add randomness to games", desc: "Use it as a game mechanic — should the player get a bonus turn? Does the dice roll count? Let the wheel decide." },
-            { title: "Kids' activities and chores", desc: "Who does the dishes? Does screen time get extended? Let the wheel settle it without negotiation." },
-            { title: "Business decisions with a nudge", desc: "Not all decisions need a wheel — but when you're stuck between two genuinely equal options, random selection is a valid and defensible method." },
-          ].map(({ title, desc }) => (
-            <div class="p-5 rounded-xl border bg-card border-border space-y-2">
-              <h3 class="font-bold text-foreground">{title}</h3>
-              <p class="text-sm text-muted-foreground leading-relaxed">{desc}</p>
-            </div>
-          ))}
-        </div>
+      <!-- Beyond yes/no -->
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/20 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Beyond Yes and No</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          A yes/no wheel is the simplest form of a decision wheel. But the same concept scales — instead of "Yes" and "No," try "Option A," "Option B," and "Option C." Or add "Absolutely," "Definitely not," and "Ask me tomorrow" for a Magic 8-Ball experience. Click ✏️ Customize entries to make it yours.
+        </p>
+        <a href="/decision-wheel" class="inline-block mt-2 text-primary font-semibold hover:underline">See the full Decision Wheel →</a>
       </section>
 
-      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">The Decision Wheel: Beyond Yes and No</h2>
-        <p class="text-muted-foreground leading-relaxed">
-          A pure yes/no wheel is the simplest form of a decision wheel. But the same concept scales to any number of choices. Instead of "Yes" and "No," try "Option A," "Option B," and "Option C." Or add "Ask again later," "Definitely yes," and "Absolutely not" for a Magic 8-Ball style experience.
-        </p>
-        <p class="text-muted-foreground leading-relaxed">
-          Real Wheel Picker lets you add as many options as you want. The wheel automatically adjusts segment sizes to keep proportional odds. You can also weight segments differently — for example, if you want "Yes" to have 2× the odds of "No," set Yes to weight 2 and No to weight 1.
-        </p>
-        <a href="/decision-wheel" class="inline-block mt-2 text-primary font-semibold hover:underline">See the Decision Wheel →</a>
-      </section>
-
+      <!-- FAQs -->
       <section class="space-y-4">
         <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
         <div class="space-y-3">
           {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
+            <details class="bg-card border border-border rounded-xl p-5 group">
+              <summary class="font-semibold text-foreground cursor-pointer list-none flex items-center justify-between gap-2">
+                {question}
+                <span class="text-muted-foreground shrink-0 group-open:rotate-180 transition-transform">▾</span>
+              </summary>
+              <p class="text-muted-foreground text-sm leading-relaxed mt-3">{answer}</p>
+            </details>
           ))}
         </div>
       </section>
 
+      <!-- Related Tools -->
       <section class="space-y-4">
         <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
         <ul class="space-y-3">
           {[
             { href: "/decision-wheel", label: "Decision Wheel", desc: "Spin to choose between any list of options." },
-            { href: "/random-wheel", label: "Random Wheel", desc: "Fully customizable spinning wheel for any purpose." },
-            { href: "/wheel-of-names", label: "Wheel of Names", desc: "The classic spinning wheel for random name selection." },
-            { href: "/party-wheel", label: "Party Wheel", desc: "Fun party games and dares — spin the wheel at your next event." },
+            { href: "/party-wheel", label: "Party Wheel", desc: "Fun party games and dares." },
+            { href: "/", label: "Spin the Wheel", desc: "The full featured random picker." },
           ].map(({ href, label, desc }) => (
             <li>
               <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
@@ -170,7 +261,6 @@ const jsonLd = {
       </section>
 
     </main>
-
     <GlobalFooterIsland client:idle />
   </div>
 </Layout>
