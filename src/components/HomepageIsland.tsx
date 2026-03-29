@@ -103,7 +103,7 @@ interface ExtraWheel {
 const HomepageIslandInner = () => {
   const { participants, setParticipants, isLoaded } = useLocalStorageParticipants();
   const { t, language } = useLanguage();
-  const { increment, globalCount } = useSpinCounter();
+  const { increment, yearlyCount } = useSpinCounter();
 
   const { playTick, playFanfare } = useWheelSound();
   const [customizeConfig, setCustomizeConfig] = useCustomizeConfig();
@@ -116,6 +116,10 @@ const HomepageIslandInner = () => {
   const titleInputRef = useRef<HTMLInputElement>(null);
   const [hasInitialized, setHasInitialized] = useState(false);
   const [spinCount, setSpinCount] = useState(0);
+  const MULTIPLIERS = [1, 10, 100, 1_000, 10_000] as const;
+  const [multiplierIdx, setMultiplierIdx] = useState(0);
+  const multiplier = MULTIPLIERS[multiplierIdx];
+  const [multiResults, setMultiResults] = useState<{name: string; count: number; pct: number}[] | null>(null);
   const [activeTab, setActiveTab] = useState<number | 'results'>(0); // 0..N = wheel panel, 'results' = results tab
   const [showWinnerModal, setShowWinnerModal] = useState(false);
   const [wheelBgImage, setWheelBgImage] = useState<string | null>(null);
@@ -344,6 +348,30 @@ const HomepageIslandInner = () => {
       <Toaster position="top-center" richColors />
       <ConfettiEffect active={showConfetti} onComplete={() => setShowConfetti(false)} />
 
+      {/* Multi-spin results modal */}
+      {multiResults && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={() => setMultiResults(null)}>
+          <div className="bg-card rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
+            <div className="bg-primary px-6 py-3 flex items-center justify-between shrink-0">
+              <p className="text-primary-foreground font-bold text-base">
+                Résultats — {multiplier.toLocaleString()} tirages
+              </p>
+              <button onClick={() => setMultiResults(null)} className="text-primary-foreground/70 hover:text-primary-foreground text-xl font-bold">✕</button>
+            </div>
+            <div className="overflow-y-auto p-4 space-y-1.5">
+              {multiResults.map((r, i) => (
+                <div key={r.name} className={`flex items-center gap-3 px-3 py-2 rounded-lg ${i === 0 ? 'bg-primary/15 border border-primary/30' : i < 3 ? 'bg-muted/50' : 'bg-muted/20'}`}>
+                  <span className={`text-xs font-bold w-5 shrink-0 ${i === 0 ? 'text-primary' : 'text-muted-foreground'}`}>{i + 1}.</span>
+                  <span className={`flex-1 font-semibold truncate ${i === 0 ? 'text-foreground text-base' : i < 3 ? 'text-foreground text-sm' : 'text-muted-foreground text-xs'}`}>{r.name}</span>
+                  <span className={`font-mono font-bold shrink-0 ${i === 0 ? 'text-primary text-base' : 'text-muted-foreground text-xs'}`}>{r.count}×</span>
+                  <span className={`font-mono shrink-0 ${i === 0 ? 'text-primary text-sm' : 'text-muted-foreground text-xs'}`}>({r.pct.toFixed(1)}%)</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Winner modal */}
       {showWinnerModal && winners.length > 0 && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={handleCloseModal}>
@@ -408,7 +436,7 @@ const HomepageIslandInner = () => {
         <main className="max-w-7xl mx-auto px-4 pb-2 space-y-2">
 
           {/* MAIN AREA: 2-column on desktop */}
-          <div className="flex flex-col lg:flex-row gap-4 items-start">
+          <div className="flex flex-col lg:flex-row gap-2 items-start">
 
             {/* LEFT: Wheel zone */}
             <div className="flex-1 min-w-0 flex flex-col items-center space-y-2">
@@ -510,13 +538,13 @@ const HomepageIslandInner = () => {
                 )}
               </div>
 
-              {/* Spin counter — digital clock style */}
-              {(globalCount + spinCount) > 0 && (
+              {/* Spin counter — yearly count */}
+              {yearlyCount > 0 && (
                 <div className="flex flex-col items-center gap-0.5 py-1">
                   <div className="flex flex-col items-center gap-1 px-4 py-2 rounded-lg border-2 border-black dark:border-white bg-black/5 dark:bg-white/5">
                     <div className="flex items-center gap-2">
                       <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse shrink-0" />
-                      <OdometerNumber value={globalCount + spinCount} size="2.2rem" />
+                      <OdometerNumber value={yearlyCount} size="2.2rem" />
                     </div>
                     <span className="text-xs text-muted-foreground tracking-wide uppercase">{t.indexSpinsText}</span>
                   </div>
@@ -532,10 +560,37 @@ const HomepageIslandInner = () => {
                 <span><strong className="text-foreground">{t.indexTrustCrypto}</strong></span>
               </div>
 
-              {/* Spin button (single wheel only) */}
+              {/* Spin button + multiplier (single wheel only) */}
               {totalWheels === 1 && !wheelIsSpinning[0] && (
                 <div className="space-y-3">
-                  <DrawButton onDraw={handleDraw} isSpinning={false} disabled={displayParticipants.length < 2} participantCount={displayParticipants.length} mode="simple" />
+                  <div className="flex items-center gap-2 justify-center">
+                    <DrawButton onDraw={() => {
+                      if (multiplier === 1) { handleDraw(); return; }
+                      // Instant multi-spin: calculate results without animation
+                      const parts = displayParticipants;
+                      if (parts.length < 2) return;
+                      const counts: Record<string, number> = {};
+                      parts.forEach(p => { counts[p.pseudo] = 0; });
+                      for (let i = 0; i < multiplier; i++) {
+                        const idx = Math.floor(Math.random() * parts.length);
+                        counts[parts[idx].pseudo]++;
+                      }
+                      const results = Object.entries(counts)
+                        .map(([name, count]) => ({ name, count, pct: (count / multiplier) * 100 }))
+                        .sort((a, b) => b.count - a.count);
+                      setMultiResults(results);
+                      setSpinCount(prev => prev + multiplier);
+                      for (let i = 0; i < multiplier; i++) increment();
+                      if (customizeConfig.launchConfetti) setShowConfetti(true);
+                    }} isSpinning={false} disabled={displayParticipants.length < 2} participantCount={displayParticipants.length} mode="simple" />
+                    <button
+                      onClick={() => setMultiplierIdx(i => (i + 1) % MULTIPLIERS.length)}
+                      className="px-3 py-2 rounded-xl border-2 border-primary/40 bg-primary/10 text-primary font-bold text-sm hover:bg-primary/20 transition-all min-w-[56px] text-center"
+                      title="Change spin multiplier"
+                    >
+                      x{multiplier.toLocaleString()}
+                    </button>
+                  </div>
                   <MicroTrustIndicators mode="simple" />
                 </div>
               )}

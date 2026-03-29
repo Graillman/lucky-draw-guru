@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef, ChangeEvent } from "react";
+import { useState, useCallback, useEffect, useRef, ChangeEvent, KeyboardEvent } from "react";
 import { cryptoRandom } from "@/lib/cryptoRandom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -6,7 +6,7 @@ import { Slider } from "@/components/ui/slider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Settings, Trash2, Users, ChevronDown, ChevronUp, X,
-  ArrowUpAZ, ArrowDownAZ, Shuffle, List, Upload
+  ArrowUpAZ, ArrowDownAZ, Shuffle, List, Upload, Plus
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -24,6 +24,8 @@ interface ParticipantInputProps {
 const ParticipantInput = ({ mode, participants, onParticipantsChange }: ParticipantInputProps) => {
   const { t } = useLanguage();
   const [textareaValue, setTextareaValue] = useState("");
+  const [singleInput, setSingleInput] = useState("");
+  const singleInputRef = useRef<HTMLInputElement>(null);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -180,6 +182,29 @@ const ParticipantInput = ({ mode, participants, onParticipantsChange }: Particip
     e.target.value = '';
   }, [participants, onParticipantsChange]);
 
+  // Add a single participant by name
+  const addSingle = useCallback((name: string) => {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    // Handle paste of multiple names (newline or comma separated)
+    const names = trimmed.split(/[\n,]+/).map(n => n.trim()).filter(n => n.length > 0);
+    const newParticipants = [...participants];
+    names.forEach(n => {
+      if (!newParticipants.find(p => p.pseudo === n)) {
+        newParticipants.push({ pseudo: n, weight: 1 });
+      }
+    });
+    onParticipantsChange(newParticipants);
+    setTextareaValue(newParticipants.map(p => p.pseudo).join('\n'));
+  }, [participants, onParticipantsChange]);
+
+  const handleSingleKeyDown = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      addSingle(singleInput);
+      setSingleInput('');
+    }
+  }, [singleInput, addSingle]);
+
   const totalWeight = participants.reduce((sum, p) => sum + p.weight, 0);
 
   const getProbability = (weight: number) => {
@@ -188,57 +213,50 @@ const ParticipantInput = ({ mode, participants, onParticipantsChange }: Particip
   };
 
   if (!isAdvanced) {
-    // Simple mode — WoN-style single column layout
+    // Simple mode — single input + list with hover-to-delete
     return (
       <section className="space-y-2">
-        {/* Action row at top */}
+        {/* Single input: Enter to add */}
+        <div className="flex gap-2">
+          <input
+            ref={singleInputRef}
+            type="text"
+            value={singleInput}
+            onChange={e => setSingleInput(e.target.value)}
+            onKeyDown={handleSingleKeyDown}
+            placeholder={t.bulkAddPlaceholder}
+            className="flex-1 h-8 text-sm px-3 rounded-lg border border-border bg-card focus:border-primary outline-none placeholder:text-muted-foreground/50"
+          />
+          <button
+            onClick={() => { addSingle(singleInput); setSingleInput(''); }}
+            disabled={!singleInput.trim()}
+            className="h-8 w-8 flex items-center justify-center rounded-lg border border-border bg-card hover:bg-primary/10 hover:border-primary/40 transition-colors disabled:opacity-40"
+          >
+            <Plus className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        {/* Action row */}
         <div className="flex items-center justify-between gap-1 flex-wrap">
-          <div className="flex items-center gap-1 flex-wrap">
-            <Button variant="outline" size="sm" className="h-7 text-xs px-2 border-border hover:bg-primary/10" onClick={handleShuffle} disabled={participants.length < 2} title={t.shuffle}>
-              <Shuffle className="w-3.5 h-3.5" />
-            </Button>
-            <Button variant="outline" size="sm" className="h-7 text-xs px-2 border-border hover:bg-primary/10" onClick={handleSortAZ} disabled={participants.length < 2} title={t.sortAZ}>
-              <ArrowUpAZ className="w-3.5 h-3.5" />
-            </Button>
-            <Button variant="outline" size="sm" className="h-7 text-xs px-2 border-border hover:bg-primary/10" onClick={handleSortZA} disabled={participants.length < 2} title={t.sortZA}>
-              <ArrowDownAZ className="w-3.5 h-3.5" />
-            </Button>
-            <Button variant="outline" size="sm" className="h-7 text-xs px-2 border-border hover:bg-primary/10" onClick={handleOnePerLine} disabled={participants.length === 0} title={t.onePerLine}>
-              <List className="w-3.5 h-3.5" />
-            </Button>
-            <Button variant="outline" size="sm" className="h-7 text-xs px-2 border-border hover:bg-primary/10" onClick={handleRemoveDuplicates} disabled={participants.length < 2} title={t.removeDuplicates}>
-              <X className="w-3.5 h-3.5" />
-            </Button>
+          <div className="flex items-center gap-1">
+            <Button variant="outline" size="sm" className="h-6 text-xs px-2 border-border hover:bg-primary/10" onClick={handleShuffle} disabled={participants.length < 2} title={t.shuffle}><Shuffle className="w-3 h-3" /></Button>
+            <Button variant="outline" size="sm" className="h-6 text-xs px-2 border-border hover:bg-primary/10" onClick={handleSortAZ} disabled={participants.length < 2} title={t.sortAZ}><ArrowUpAZ className="w-3 h-3" /></Button>
+            <Button variant="outline" size="sm" className="h-6 text-xs px-2 border-border hover:bg-primary/10" onClick={handleSortZA} disabled={participants.length < 2} title={t.sortZA}><ArrowDownAZ className="w-3 h-3" /></Button>
             <input ref={fileInputRef} type="file" accept=".csv,.txt,.tsv" className="hidden" onChange={handleFileImport} />
-            <Button variant="outline" size="sm" className="h-7 text-xs px-2 border-border hover:bg-primary/10" onClick={() => fileInputRef.current?.click()} title="Import CSV or TXT file">
-              <Upload className="w-3.5 h-3.5" />
-            </Button>
+            <Button variant="outline" size="sm" className="h-6 text-xs px-2 border-border hover:bg-primary/10" onClick={() => fileInputRef.current?.click()} title="Import CSV/TXT"><Upload className="w-3 h-3" /></Button>
           </div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span>
-              {participants.length} {participants.length !== 1 ? t.participants : t.participant}
-              {participants.length >= 100 && (
-                <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-green-500/20 text-green-500">{t.largeList}</span>
-              )}
-            </span>
+            <span>{participants.length} {participants.length !== 1 ? t.participants : t.participant}</span>
             {participants.length > 0 && (
-              <Button variant="ghost" size="sm" onClick={handleClearAll} className="h-6 text-xs text-destructive hover:text-destructive px-1.5">
+              <Button variant="ghost" size="sm" onClick={handleClearAll} className="h-5 text-xs text-destructive hover:text-destructive px-1">
                 <Trash2 className="w-3 h-3 mr-1" />{t.clearAll}
               </Button>
             )}
           </div>
         </div>
 
-        {/* Textarea — full width, compact */}
-        <Textarea
-          placeholder={t.bulkAddPlaceholder}
-          value={textareaValue}
-          onChange={handleTextareaChange}
-          className="min-h-[90px] font-mono text-sm bg-card border-border resize-none focus:border-primary placeholder:text-muted-foreground/50"
-        />
-
-        {/* Entries as vertical list */}
-        <ScrollArea className="h-[260px] rounded-lg border border-border bg-card/50">
+        {/* Entries list with hover-to-delete X */}
+        <ScrollArea className="h-[300px] rounded-lg border border-border bg-card/50">
           {participants.length === 0 ? (
             <div className="h-full flex items-center justify-center text-sm text-muted-foreground text-center px-4 py-8">
               {t.addParticipantsLeft}

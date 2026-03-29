@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { X, Volume2, VolumeX, Sparkles, Palette } from "lucide-react";
 import { WHEEL_THEMES } from "@/components/WheelThemePicker";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useWheelSound } from "@/hooks/useWheelSound";
 
 export interface CustomizeConfig {
   // During spin
@@ -106,6 +107,7 @@ function Toggle({ label, desc, checked, onChange }: {
 export function CustomizePanel({ config, onChange, onClose }: Props) {
   const [tab, setTab] = useState<Tab>("appearance");
   const { t } = useLanguage();
+  const { playTick } = useWheelSound();
 
   const set = <K extends keyof CustomizeConfig>(key: K, value: CustomizeConfig[K]) => {
     onChange({ ...config, [key]: value });
@@ -266,7 +268,7 @@ export function CustomizePanel({ config, onChange, onClose }: Props) {
                   ].map(s => (
                     <button
                       key={s.key}
-                      onClick={() => set("tickSound", s.key)}
+                      onClick={() => { set("tickSound", s.key); playTick(s.key); }}
                       className={`p-2 rounded-xl border-2 transition-all text-center ${
                         config.tickSound === s.key
                           ? "border-primary shadow-md bg-primary/5"

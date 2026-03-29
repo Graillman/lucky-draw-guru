@@ -22,6 +22,7 @@ const WheelLogo = () => (
 
 const toolLinks = [
   { path: "/", label: "🎡 Spin the Wheel" },
+  { path: "/weighted-random-picker", label: "⚖️ Weighted Picker" },
   { path: "/random-wheel", label: "🎰 Random Wheel" },
   { path: "/yes-or-no-wheel", label: "✅ Yes or No Wheel" },
   { path: "/random-number-generator", label: "🔢 Number Picker" },
@@ -30,7 +31,6 @@ const toolLinks = [
   { path: "/party-wheel", label: "🎉 Party Wheel" },
   { path: "/spin-the-bottle", label: "🍾 Spin the Bottle" },
   { path: "/classroom-picker", label: "🎓 Classroom Picker" },
-  { path: "/weighted-random-picker", label: "⚖️ Weighted Picker" },
   { path: "/templates", label: "📋 Templates" },
 ];
 

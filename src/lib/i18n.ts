@@ -788,7 +788,7 @@ export const translations: Record<Language, Translations> = {
 
     // Homepage Island
     indexPageTitle: 'Spin the Wheel — Free Random Picker',
-    indexSpinsText: 'spins completed',
+    indexSpinsText: 'spins since the start of the year',
     tapToSpin: 'PRESS to spin the wheel!',
     indexEntriesTab: 'Entries',
     indexResultsTab: 'Results',
@@ -1209,7 +1209,7 @@ export const translations: Record<Language, Translations> = {
 
     // Homepage Island
     indexPageTitle: 'Ruleta Aleatoria — Sorteo Gratuito',
-    indexSpinsText: 'giros completados',
+    indexSpinsText: 'sorteos desde inicio de año',
     tapToSpin: '¡PULSA para girar la ruleta!',
     indexEntriesTab: 'Participantes',
     indexResultsTab: 'Resultados',
@@ -1629,7 +1629,7 @@ export const translations: Record<Language, Translations> = {
 
     // Homepage Island
     indexPageTitle: 'Roue aléatoire — Tirage au sort gratuit',
-    indexSpinsText: 'tirages effectués',
+    indexSpinsText: 'tirages effectués depuis le début de l\'année',
     tapToSpin: 'APPUYEZ pour faire tourner la roue !',
     indexEntriesTab: 'Participants',
     indexResultsTab: 'Résultats',
@@ -2049,7 +2049,7 @@ export const translations: Record<Language, Translations> = {
 
     // Homepage Island
     indexPageTitle: 'Glücksrad — Kostenloser Zufallsgenerator',
-    indexSpinsText: 'Drehungen abgeschlossen',
+    indexSpinsText: 'Drehungen seit Jahresbeginn',
     tapToSpin: 'DRÜCKEN zum Drehen des Rads!',
     indexEntriesTab: 'Teilnehmer',
     indexResultsTab: 'Ergebnisse',
@@ -2469,7 +2469,7 @@ export const translations: Record<Language, Translations> = {
 
     // Homepage Island
     indexPageTitle: 'Roleta Aleatória — Sorteio Gratuito',
-    indexSpinsText: 'sorteios concluídos',
+    indexSpinsText: 'sorteios desde o início do ano',
     tapToSpin: 'PRESSIONE para girar a roleta!',
     indexEntriesTab: 'Participantes',
     indexResultsTab: 'Resultados',
@@ -2889,7 +2889,7 @@ export const translations: Record<Language, Translations> = {
 
     // Homepage Island
     indexPageTitle: 'Ruota della Fortuna — Sorteggio Gratuito',
-    indexSpinsText: 'giri completati',
+    indexSpinsText: 'estrazioni dall\'inizio dell\'anno',
     tapToSpin: 'PREMI per girare la ruota!',
     indexEntriesTab: 'Partecipanti',
     indexResultsTab: 'Risultati',

@@ -225,21 +225,8 @@ export function SpinningWheel({
     ctx.fillStyle = gradient;
     ctx.fill();
 
-    // Background image
-    if (bgImgRef.current) {
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(center, center, radius, 0, Math.PI * 2);
-      ctx.clip();
-      ctx.globalAlpha = 0.22;
-      ctx.drawImage(bgImgRef.current, center - radius, center - radius, radius * 2, radius * 2);
-      ctx.globalAlpha = 1;
-      ctx.restore();
-    }
-
-    // Segments
+    // ── Segments — pass 1: fills + dividers ──
     segments.forEach((segment) => {
-      // Fill segment
       ctx.beginPath();
       ctx.moveTo(center, center);
       ctx.arc(center, center, radius, segment.startAngle - Math.PI / 2, segment.endAngle - Math.PI / 2);
@@ -268,40 +255,71 @@ export function SpinningWheel({
       ctx.strokeStyle = 'rgba(0,0,0,0.3)';
       ctx.lineWidth = 1;
       ctx.stroke();
+    });
 
-      // ── Horizontal text clipped to segment ──
+    // ── Background image — drawn on top of fills, under text ──
+    if (bgImgRef.current) {
       ctx.save();
-      // Clip to this segment's wedge
+      ctx.beginPath();
+      ctx.arc(center, center, radius, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.globalAlpha = 0.85;
+      ctx.drawImage(bgImgRef.current, center - radius, center - radius, radius * 2, radius * 2);
+      ctx.globalAlpha = 1;
+      ctx.restore();
+    }
+
+    // ── Segments — pass 2: radial text ──
+    segments.forEach((segment) => {
+      const segAngle = segment.endAngle - segment.startAngle;
+      const textMidAngle = (segment.startAngle + segment.endAngle) / 2 - Math.PI / 2;
+
+      // Font size: scales with segment arc width
+      const maxFontByAngle = Math.floor(segAngle * radius * 0.30);
+      const maxFontByWheel = Math.round(sz * 0.040);
+      const fontSize = Math.max(8, Math.min(maxFontByAngle, maxFontByWheel));
+
+      ctx.save();
       ctx.beginPath();
       ctx.moveTo(center, center);
       ctx.arc(center, center, radius - 2, segment.startAngle - Math.PI / 2, segment.endAngle - Math.PI / 2);
       ctx.closePath();
       ctx.clip();
 
-      const textMidAngle = (segment.startAngle + segment.endAngle) / 2 - Math.PI / 2;
-      const textRadius = radius * 0.62;
-      const tx = center + Math.cos(textMidAngle) * textRadius;
-      const ty = center + Math.sin(textMidAngle) * textRadius;
-
-      // Font size: proportional to wheel size, no fixed cap — scales naturally
-      const fontSize = Math.max(8, Math.round(sz * 0.044));
-      ctx.font = `bold ${fontSize}px 'Space Grotesk', sans-serif`;
+      ctx.font = `700 ${fontSize}px 'Space Grotesk', sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
-      const maxLength = 11;
-      const displayName = segment.pseudo.length > maxLength
-        ? segment.pseudo.substring(0, maxLength) + '…'
+      // Max chars based on available radial space
+      const radialSpace = radius * 0.62;
+      const avgCharW = ctx.measureText('W').width;
+      const maxChars = Math.max(3, Math.floor(radialSpace / avgCharW));
+      const displayName = segment.pseudo.length > maxChars
+        ? segment.pseudo.substring(0, maxChars - 1) + '…'
         : segment.pseudo;
 
-      ctx.shadowColor = 'rgba(0,0,0,0.75)';
-      ctx.shadowBlur = 4;
-      ctx.shadowOffsetX = 1;
-      ctx.shadowOffsetY = 1;
+      const textRadius = radius * 0.52;
+      const tx = center + Math.cos(textMidAngle) * textRadius;
+      const ty = center + Math.sin(textMidAngle) * textRadius;
+
+      ctx.save();
+      ctx.translate(tx, ty);
+      // Rotate radially — flip left-half segments so text always reads outward
+      const normA = ((textMidAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+      const textRot = (normA > Math.PI / 2 && normA < Math.PI * 3 / 2)
+        ? textMidAngle + Math.PI
+        : textMidAngle;
+      ctx.rotate(textRot);
+
+      ctx.shadowColor = 'rgba(0,0,0,0.9)';
+      ctx.shadowBlur = 5;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
       ctx.fillStyle = '#fff';
-      // Draw text HORIZONTALLY (no rotation) centered at (tx, ty)
-      ctx.fillText(displayName, tx, ty);
+      ctx.fillText(displayName, 0, 0);
       ctx.restore();
+
+      ctx.restore(); // end segment clip
     });
 
     // Outer border (circle only; shaped wheels get their border after clip release)
@@ -387,9 +405,10 @@ export function SpinningWheel({
       ctx.restore();
     }
 
-    // ── Pointer (fixed) ──
+    // ── Pointer — right side, pointing left into the wheel ──
     const rotMod = ((rotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-    const ptrInWheel = ((Math.PI * 2) - rotMod) % (Math.PI * 2);
+    // Right pointer at canvas angle 0 (3 o'clock): segment angle = π/2 - rotation
+    const ptrInWheel = ((Math.PI / 2 - rotMod) + Math.PI * 2) % (Math.PI * 2);
     let ptrSegIdx = segments.length - 1;
     for (let i = 0; i < segments.length; i++) {
       if (ptrInWheel >= segments[i].startAngle && ptrInWheel < segments[i].endAngle) {
@@ -405,22 +424,24 @@ export function SpinningWheel({
     const pointerHeight = 45;
     const pointerWidth  = 28;
 
+    // Shadow
     ctx.beginPath();
-    ctx.moveTo(center - pointerWidth/2 + 2, 8);
-    ctx.lineTo(center + pointerWidth/2 + 2, 8);
-    ctx.lineTo(center + 2, pointerHeight + 2);
+    ctx.moveTo(sz - 8 + 2, center - pointerWidth / 2 + 2);
+    ctx.lineTo(sz - 8 + 2, center + pointerWidth / 2 + 2);
+    ctx.lineTo(sz - pointerHeight + 2, center + 2);
     ctx.closePath();
     ctx.fillStyle = 'rgba(0,0,0,0.3)';
     ctx.fill();
 
-    const pointerGrad = ctx.createLinearGradient(center - pointerWidth/2, 0, center + pointerWidth/2, 0);
+    // Main pointer — vertical gradient (top dark → center light → bottom dark)
+    const pointerGrad = ctx.createLinearGradient(0, center - pointerWidth / 2, 0, center + pointerWidth / 2);
     pointerGrad.addColorStop(0, ptrDark);
     pointerGrad.addColorStop(0.5, ptrLight);
     pointerGrad.addColorStop(1, ptrDark);
     ctx.beginPath();
-    ctx.moveTo(center - pointerWidth/2, 5);
-    ctx.lineTo(center + pointerWidth/2, 5);
-    ctx.lineTo(center, pointerHeight);
+    ctx.moveTo(sz - 5, center - pointerWidth / 2);
+    ctx.lineTo(sz - 5, center + pointerWidth / 2);
+    ctx.lineTo(sz - pointerHeight, center);
     ctx.closePath();
     ctx.fillStyle = pointerGrad;
     ctx.fill();
@@ -428,10 +449,11 @@ export function SpinningWheel({
     ctx.lineWidth = 2;
     ctx.stroke();
 
+    // Highlight
     ctx.beginPath();
-    ctx.moveTo(center - pointerWidth/4, 10);
-    ctx.lineTo(center + pointerWidth/6, 10);
-    ctx.lineTo(center, pointerHeight - 15);
+    ctx.moveTo(sz - 10, center - pointerWidth / 4);
+    ctx.lineTo(sz - 10, center + pointerWidth / 6);
+    ctx.lineTo(sz - pointerHeight + 15, center);
     ctx.closePath();
     ctx.fillStyle = 'rgba(255,255,255,0.3)';
     ctx.fill();
@@ -441,17 +463,14 @@ export function SpinningWheel({
       ctx.save();
       ctx.translate(center, center);
 
-      const fs    = Math.max(20, Math.round(sz * 0.082));
-      const subFs = Math.max(12, Math.round(sz * 0.038));
-      const arcR  = radius * 0.70;
+      const fs    = Math.max(15, Math.round(sz * 0.058));
+      const subFs = Math.max(10, Math.round(sz * 0.030));
+      const arcR  = radius * 0.56;
 
-      const drawArcText = (text: string, fontSize: number, fontWeight: string, arcRadius: number, color: string, blur: number) => {
-        ctx.font = `${fontWeight} ${fontSize}px 'Space Grotesk', sans-serif`;
+      const drawArcText = (text: string, fontSize: number, fontWeight: string, arcRadius: number, color: string) => {
+        ctx.font = `${fontWeight} ${fontSize}px 'Impact', 'Arial Black', 'Space Grotesk', sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillStyle = color;
-        ctx.shadowColor = 'rgba(0,0,0,1)';
-        ctx.shadowBlur = blur;
 
         const charWidths: number[] = [];
         let totalWidth = 0;
@@ -470,16 +489,29 @@ export function SpinningWheel({
           ctx.save();
           ctx.translate(arcRadius * Math.cos(a), arcRadius * Math.sin(a));
           ctx.rotate(a + Math.PI / 2);
+          // Dark outline for 3D depth
+          ctx.lineWidth = fontSize * 0.18;
+          ctx.strokeStyle = 'rgba(0,0,0,0.95)';
+          ctx.lineJoin = 'round';
+          ctx.shadowColor = 'rgba(0,0,0,1)';
+          ctx.shadowBlur = 12;
+          ctx.shadowOffsetX = 2;
+          ctx.shadowOffsetY = 3;
+          ctx.strokeText(text[i], 0, 0);
+          ctx.shadowBlur = 0;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 0;
+          ctx.fillStyle = color;
           ctx.fillText(text[i], 0, 0);
           ctx.restore();
           angle += charAngle;
         }
       };
 
-      drawArcText(clickToSpinLabel, fs, '900', arcR, '#ffffff', 10);
+      drawArcText(clickToSpinLabel, fs, '900', arcR, '#ffffff');
 
       if (clickToSpinSub) {
-        drawArcText(clickToSpinSub, subFs, '600', arcR * 0.72, 'rgba(255,255,255,0.75)', 6);
+        drawArcText(clickToSpinSub, subFs, '600', arcR * 0.68, 'rgba(255,255,255,0.80)');
       }
 
       ctx.restore();
@@ -524,13 +556,14 @@ export function SpinningWheel({
     startTimeRef.current = Date.now();
 
     const currentRotation = rotationRef.current;
-    const spins = 5 + cryptoRandom() * 2;
+    const spins = 8 + cryptoRandom() * 4;
     const randomAngle = cryptoRandom() * Math.PI * 2;
     const totalRotation = spins * Math.PI * 2 + randomAngle;
     const finalRotation = currentRotation + totalRotation;
 
     const finalRotMod = ((finalRotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-    const pointerInWheelSpace = ((Math.PI * 2) - finalRotMod) % (Math.PI * 2);
+    // Right pointer: segment angle = π/2 - finalRotation
+    const pointerInWheelSpace = ((Math.PI / 2 - finalRotMod) + Math.PI * 2) % (Math.PI * 2);
 
     let winnerIndex = segments.length - 1;
     for (let i = 0; i < segments.length; i++) {
@@ -571,7 +604,7 @@ export function SpinningWheel({
       // 2-phase: gentle push (10%) + long exponential friction (90%)
       // — smoother, more realistic feel than pure ease-out
       const push = 0.10;
-      const k    = 4.5;
+      const k    = 2.8;
       const area1 = push / 2;
       const area2 = (1 - push) / k * (1 - Math.exp(-k));
       const totalArea = area1 + area2;
