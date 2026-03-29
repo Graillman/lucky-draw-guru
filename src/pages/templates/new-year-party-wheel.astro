@@ -26,16 +26,16 @@ const faqItems = [
 ];
 
 const defaultParticipants = [
-  { pseudo: "🎯 Countdown trivia",       weight: 1 },
-  { pseudo: "🙏 Resolution sharing",     weight: 1 },
-  { pseudo: "💃 Dance-off",              weight: 1 },
-  { pseudo: "📅 Year-in-review game",    weight: 1 },
-  { pseudo: "🥂 Toast & champagne",      weight: 1 },
-  { pseudo: "🎤 Karaoke round",          weight: 1 },
-  { pseudo: "🎲 Party games",            weight: 1 },
-  { pseudo: "✨ Midnight wish ritual",   weight: 1 },
-  { pseudo: "📸 Photo booth session",    weight: 1 },
-  { pseudo: "🔮 Predictions for 2026",   weight: 1 },
+  { pseudo: "Countdown trivia",       weight: 1 },
+  { pseudo: "Resolution sharing",     weight: 1 },
+  { pseudo: "Dance-off",              weight: 1 },
+  { pseudo: "Year-in-review game",    weight: 1 },
+  { pseudo: "Toast and champagne",    weight: 1 },
+  { pseudo: "Karaoke round",          weight: 1 },
+  { pseudo: "Party games",            weight: 1 },
+  { pseudo: "Midnight wish ritual",   weight: 1 },
+  { pseudo: "Photo booth session",    weight: 1 },
+  { pseudo: "Predictions for 2026",   weight: 1 },
 ];
 
 const jsonLd = {
@@ -48,149 +48,291 @@ const jsonLd = {
 ---
 
 <style>
-  /* ═══════════ FULL-PAGE NEW YEAR THEME ═══════════ */
-  .nye-page {
-    background: #01010d;
+  /* ═══ NOUVEL AN — FEUX D'ARTIFICE, CONFETTIS, CHAMPAGNE ═══ */
+  .ny-page {
+    background: #020205;
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
   }
 
-  /* Midnight sky */
-  .nye-sky {
+  /* Ciel de minuit */
+  .ny-sky {
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(ellipse 70% 60% at 50% -10%, rgba(255,215,0,0.15) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 40% at 10% 30%, rgba(58,134,255,0.12) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 40% at 90% 30%, rgba(255,0,110,0.12) 0%, transparent 55%),
-      radial-gradient(ellipse 100% 40% at 50% 100%, rgba(131,56,236,0.15) 0%, transparent 60%),
-      linear-gradient(180deg, #01010d 0%, #02021a 50%, #01010d 100%);
+      radial-gradient(ellipse 65% 55% at 50% -8%, rgba(255,215,0,0.16) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 8% 25%, rgba(58,134,255,0.14) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 92% 25%, rgba(255,0,110,0.13) 0%, transparent 55%),
+      radial-gradient(ellipse 100% 40% at 50% 100%, rgba(131,56,236,0.16) 0%, transparent 60%),
+      linear-gradient(180deg, #020205 0%, #03031a 50%, #020205 100%);
     pointer-events: none;
     z-index: 0;
   }
 
-  /* Firework bursts */
-  .firework {
+  /* Halos or/argent/bleu */
+  .ny-halo-gold {
     position: fixed;
-    border-radius: 50%;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(255,215,0,0.14) 0%, transparent 70%);
+    filter: blur(80px);
+    z-index: 0;
     pointer-events: none;
-    z-index: 1;
-    animation: fireworkBurst ease-out infinite;
-    opacity: 0;
+    animation: nyHaloPulse 6s ease-in-out infinite alternate;
   }
-  @keyframes fireworkBurst {
-    0%   { transform: scale(0);   opacity: 0; }
-    15%  { transform: scale(1);   opacity: 0.9; box-shadow: 0 0 20px currentColor, 0 0 40px currentColor; }
-    40%  { transform: scale(1.4); opacity: 0.6; }
-    100% { transform: scale(2);   opacity: 0; }
+  .ny-halo-silver {
+    position: fixed;
+    left: -100px;
+    top: 30%;
+    width: 500px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(192,192,192,0.12) 0%, transparent 70%);
+    filter: blur(90px);
+    z-index: 0;
+    pointer-events: none;
+    animation: nyHaloPulse 9s ease-in-out infinite alternate;
+    animation-delay: 3s;
+  }
+  .ny-halo-blue {
+    position: fixed;
+    right: -80px;
+    top: 25%;
+    width: 550px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(58,134,255,0.11) 0%, transparent 70%);
+    filter: blur(100px);
+    z-index: 0;
+    pointer-events: none;
+    animation: nyHaloPulse 11s ease-in-out infinite alternate;
+    animation-delay: 5s;
+  }
+  @keyframes nyHaloPulse {
+    from { opacity: 0.4; transform: scale(0.9) translateX(var(--hx, 0)); }
+    to   { opacity: 0.85; transform: scale(1.1) translateX(var(--hx, 0)); }
   }
 
-  /* Firework trails (lines radiating out) */
-  .fw-trail {
-    position: fixed;
-    pointer-events: none;
-    z-index: 1;
-    animation: trailShoot ease-out infinite;
-    opacity: 0;
-  }
-  @keyframes trailShoot {
-    0%   { transform: scaleY(0); opacity: 0; }
-    20%  { transform: scaleY(1); opacity: 0.8; }
-    100% { transform: scaleY(1.5); opacity: 0; }
-  }
-
-  /* Stars */
-  .nye-star {
+  /* Étoiles scintillantes */
+  .ny-star {
     position: fixed;
     border-radius: 50%;
     background: white;
     pointer-events: none;
     z-index: 1;
-    animation: starTwinkle ease-in-out infinite alternate;
+    animation: nyStarTwinkle var(--stdur, 2s) ease-in-out infinite alternate;
+    animation-delay: var(--stdelay, 0s);
+    left: var(--stleft, 50%);
+    top: var(--sttop, 20%);
+    width: var(--stw, 2px);
+    height: var(--stw, 2px);
   }
-  @keyframes starTwinkle {
-    from { opacity: 0.1; transform: scale(0.7); }
-    to   { opacity: 0.9; transform: scale(1.3); }
+  @keyframes nyStarTwinkle {
+    from { opacity: 0.08; transform: scale(0.6); }
+    to   { opacity: 0.95; transform: scale(1.4); }
   }
 
-  /* Gold ticker tape */
-  .ticker {
+  /* Feux d'artifice — cercles explosant */
+  .ny-firework {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+    border: 2px solid var(--fwcolor, #ffd700);
+    color: var(--fwcolor, #ffd700);
+    opacity: 0;
+    animation: nyFirework var(--fwdur, 5s) ease-out infinite;
+    animation-delay: var(--fwdelay, 0s);
+    left: var(--fwleft, 20%);
+    top: var(--fwtop, 15%);
+    width: var(--fwsize, 80px);
+    height: var(--fwsize, 80px);
+  }
+  @keyframes nyFirework {
+    0%   { transform: scale(0);   opacity: 0; }
+    12%  { transform: scale(1);   opacity: 0.95; box-shadow: 0 0 20px currentColor, 0 0 50px currentColor; }
+    35%  { transform: scale(1.5); opacity: 0.65; box-shadow: 0 0 30px currentColor; }
+    70%  { transform: scale(2.2); opacity: 0.2; }
+    100% { transform: scale(3);   opacity: 0; }
+  }
+
+  /* Rayons du feu d'artifice */
+  .ny-fw-ray {
     position: fixed;
     pointer-events: none;
-    z-index: 1;
-    width: 3px;
-    border-radius: 2px;
-    animation: tickerFall linear infinite;
+    z-index: 2;
+    background: var(--raycolor, #ffd700);
     opacity: 0;
+    transform-origin: center bottom;
+    animation: nyFwRay var(--raydur, 4s) ease-out infinite;
+    animation-delay: var(--raydelay, 0s);
+    left: var(--rayleft, 50%);
+    top: var(--raytop, 15%);
+    width: 2px;
+    height: var(--rayh, 40px);
+    border-radius: 1px;
   }
-  @keyframes tickerFall {
-    0%   { transform: translateY(-30px) rotate(0deg); opacity: 0; }
-    8%   { opacity: 0.9; }
-    92%  { opacity: 0.5; }
-    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  @keyframes nyFwRay {
+    0%   { transform: rotate(var(--rayrot, 0deg)) scaleY(0); opacity: 0; }
+    15%  { transform: rotate(var(--rayrot, 0deg)) scaleY(1); opacity: 0.85; }
+    60%  { transform: rotate(var(--rayrot, 0deg)) scaleY(1.3); opacity: 0.4; }
+    100% { transform: rotate(var(--rayrot, 0deg)) scaleY(1.8); opacity: 0; }
   }
 
-  /* Countdown clock glow at top center */
-  .midnight-glow {
+  /* 40 confettis or/argent */
+  .ny-confetti {
+    position: fixed;
+    top: -20px;
+    pointer-events: none;
+    z-index: 2;
+    width: var(--cfw, 8px);
+    height: var(--cfh, 8px);
+    border-radius: var(--cfr, 1px);
+    background: var(--cfcolor, #ffd700);
+    opacity: 0;
+    animation: nyConFall var(--cfdur, 5s) linear infinite;
+    animation-delay: var(--cfdelay, 0s);
+    left: var(--cfleft, 50%);
+  }
+  @keyframes nyConFall {
+    0%   { transform: translateY(-20px) rotate(0deg) translateX(0px); opacity: 0; }
+    6%   { opacity: 0.95; }
+    30%  { transform: translateY(28vh) rotate(180deg) translateX(15px); }
+    60%  { transform: translateY(62vh) rotate(360deg) translateX(-12px); }
+    93%  { opacity: 0.6; }
+    100% { transform: translateY(115vh) rotate(520deg) translateX(8px); opacity: 0; }
+  }
+
+  /* Bouteilles de champagne flottantes */
+  .ny-champagne {
+    position: fixed;
+    pointer-events: none;
+    z-index: 2;
+    font-size: var(--chsize, 24px);
+    opacity: 0;
+    animation: nyChampFloat var(--chdur, 10s) ease-in-out infinite;
+    animation-delay: var(--chdelay, 0s);
+    left: var(--chleft, 50%);
+    top: var(--chtop, 50%);
+    filter: drop-shadow(0 0 8px rgba(255,215,0,0.5));
+  }
+  @keyframes nyChampFloat {
+    0%,100% { transform: translateY(0) rotate(-5deg); opacity: 0; }
+    10%     { opacity: 0.75; }
+    50%     { transform: translateY(-20px) rotate(5deg); opacity: 0.65; }
+    90%     { opacity: 0.3; }
+  }
+
+  /* Étoiles filantes */
+  .ny-shooting-star {
+    position: fixed;
+    pointer-events: none;
+    z-index: 2;
+    width: var(--nyssl, 160px);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,220,80,0.95), rgba(255,255,255,0.8), transparent);
+    top: var(--nystop, 10%);
+    left: -20px;
+    opacity: 0;
+    transform: rotate(-20deg);
+    animation: nyShootingStar var(--nysdur, 8s) ease-in infinite;
+    animation-delay: var(--nysdelay, 0s);
+  }
+  @keyframes nyShootingStar {
+    0%   { transform: translateX(0) translateY(0) rotate(-20deg); opacity: 0; }
+    5%   { opacity: 1; }
+    50%  { opacity: 0.7; }
+    70%  { opacity: 0; transform: translateX(115vw) translateY(50vh) rotate(-20deg); }
+    100% { opacity: 0; }
+  }
+
+  /* Lueur centrale minuit */
+  .ny-midnight-glow {
     position: fixed;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 400px;
-    height: 300px;
-    background: radial-gradient(ellipse, rgba(255,215,0,0.12) 0%, transparent 70%);
+    width: 500px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(255,215,0,0.13) 0%, transparent 70%);
     pointer-events: none;
     z-index: 1;
-    animation: midnightPulse 3s ease-in-out infinite alternate;
+    animation: nyMidnightGlow 4s ease-in-out infinite alternate;
   }
-  @keyframes midnightPulse {
-    from { opacity: 0.5; transform: translateX(-50%) scaleY(0.8); }
-    to   { opacity: 1;   transform: translateX(-50%) scaleY(1.2); }
+  @keyframes nyMidnightGlow {
+    from { opacity: 0.5; transform: translateX(-50%) scaleY(0.85); }
+    to   { opacity: 1;   transform: translateX(-50%) scaleY(1.15); }
   }
 
-  .nye-content { position: relative; z-index: 10; }
+  /* Texte "2025" décoratif transparent */
+  .ny-year-bg {
+    position: fixed;
+    bottom: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(80px, 18vw, 200px);
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,215,0,0.08);
+    pointer-events: none;
+    z-index: 1;
+    white-space: nowrap;
+    letter-spacing: 0.05em;
+    animation: nyYearGlow 6s ease-in-out infinite alternate;
+  }
+  @keyframes nyYearGlow {
+    from { -webkit-text-stroke: 1px rgba(255,215,0,0.06); }
+    to   { -webkit-text-stroke: 1px rgba(255,215,0,0.14); }
+  }
 
-  /* Title */
-  .nye-title {
-    background: linear-gradient(135deg, #ffd700 0%, #c0c0c0 30%, #ffd700 60%, #fff8dc 100%);
-    background-size: 200%;
+  /* Contenu */
+  .ny-content { position: relative; z-index: 10; }
+
+  /* Titre or-argent */
+  .ny-title {
+    background: linear-gradient(135deg, #ffd700 0%, #c0c0c0 20%, #fffacd 40%, #ffd700 60%, #e8e8e8 80%, #ffd700 100%);
+    background-size: 250%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: goldShimmer 3s ease-in-out infinite;
-    filter: drop-shadow(0 0 30px rgba(255,215,0,0.4));
+    animation: nyShimmer 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(255,215,0,0.5));
   }
-  @keyframes goldShimmer {
+  @keyframes nyShimmer {
     0%,100% { background-position: 0% 50%; }
     50%     { background-position: 100% 50%; }
   }
 
-  .nye-tag {
-    background: rgba(255, 215, 0, 0.12);
-    border: 1px solid rgba(255, 215, 0, 0.3);
-    color: rgba(255, 215, 0, 0.9);
+  .ny-tag {
+    background: rgba(255,215,0,0.12);
+    border: 1px solid rgba(255,215,0,0.32);
+    color: rgba(255,220,80,0.95);
     border-radius: 9999px;
     padding: 4px 14px;
     font-size: 0.72rem;
     font-weight: 600;
   }
 
-  .nye-card {
-    background: rgba(255, 215, 0, 0.05);
-    border: 1px solid rgba(255, 215, 0, 0.15);
-    border-radius: 0.75rem;
+  .ny-card {
+    background: rgba(3,3,20,0.85);
+    border: 1px solid rgba(255,215,0,0.14);
+    border-radius: 1rem;
+    backdrop-filter: blur(12px);
     transition: border-color 0.2s, background 0.2s;
   }
-  .nye-card:hover {
-    border-color: rgba(255, 215, 0, 0.4);
-    background: rgba(255, 215, 0, 0.1);
+  .ny-card:hover {
+    border-color: rgba(255,215,0,0.40);
+    background: rgba(5,5,28,0.90);
   }
-  details.nye-faq {
-    background: rgba(255, 215, 0, 0.04);
-    border: 1px solid rgba(255, 215, 0, 0.15);
+
+  details.ny-faq {
+    background: rgba(2,2,14,0.85);
+    border: 1px solid rgba(255,215,0,0.13);
     border-radius: 0.75rem;
     padding: 1.25rem;
+    backdrop-filter: blur(8px);
   }
 </style>
 
@@ -202,49 +344,70 @@ const jsonLd = {
     { name: "New Year Party Wheel", url: "https://realwheelpicker.com/templates/new-year-party-wheel" },
   ]} />
 
-  <div class="nye-page">
-    <div class="nye-sky"></div>
-    <div class="midnight-glow"></div>
+  <div class="ny-page">
+    <div class="ny-sky"></div>
+    <div class="ny-halo-gold"></div>
+    <div class="ny-halo-silver"></div>
+    <div class="ny-halo-blue"></div>
+    <div class="ny-midnight-glow"></div>
+    <div class="ny-year-bg">2025</div>
 
-    <!-- Stars -->
-    {Array.from({ length: 70 }, (_, i) => {
+    <!-- 25 étoiles scintillantes -->
+    {Array.from({length: 25}).map((_, i) => {
       const s = 1 + (i % 3);
       return (
-        <div
-          class="nye-star"
-          style={`width:${s}px;height:${s}px;left:${(i * 1.43) % 100}%;top:${(i * 2.17) % 60}%;animation-duration:${1.5 + (i % 4) * 0.8}s;animation-delay:${(i * 0.13) % 5}s;`}
-        ></div>
+        <div class="ny-star" style={`--stw:${s}px;--stleft:${(i*4.1)%100}%;--sttop:${(i*2.3)%55}%;--stdur:${1.5+(i%4)*0.8}s;--stdelay:${(i*0.17)%5}s`}></div>
       );
     })}
 
-    <!-- Firework bursts -->
+    <!-- 8 feux d'artifice -->
     {[
-      { left:"15%",top:"20%",color:"#ffd700",size:"80px",dur:"4s",delay:"0s" },
-      { left:"75%",top:"15%",color:"#ff006e",size:"60px",dur:"5s",delay:"1.5s" },
-      { left:"50%",top:"10%",color:"#3a86ff",size:"100px",dur:"6s",delay:"0.8s" },
-      { left:"30%",top:"30%",color:"#c77dff",size:"50px",dur:"4.5s",delay:"2.5s" },
-      { left:"85%",top:"35%",color:"#06d6a0",size:"70px",dur:"5.5s",delay:"3s" },
-      { left:"60%",top:"25%",color:"#ffd700",size:"90px",dur:"7s",delay:"1s" },
+      { left:"10%", top:"22%", color:"#ffd700", size:"70px", dur:"4s", delay:"0s" },
+      { left:"75%", top:"14%", color:"#ff006e", size:"55px", dur:"5s", delay:"1.5s" },
+      { left:"45%", top:"8%",  color:"#3a86ff", size:"90px", dur:"6s", delay:"0.7s" },
+      { left:"28%", top:"32%", color:"#c77dff", size:"48px", dur:"4.5s", delay:"2.5s" },
+      { left:"88%", top:"30%", color:"#06d6a0", size:"65px", dur:"5.5s", delay:"3s" },
+      { left:"60%", top:"18%", color:"#ffd700", size:"80px", dur:"7s", delay:"1.2s" },
+      { left:"18%", top:"12%", color:"#ff80ab", size:"60px", dur:"4.8s", delay:"4s" },
+      { left:"55%", top:"35%", color:"#c0c0c0", size:"50px", dur:"6.5s", delay:"2s" },
     ].map(f => (
-      <div class="firework" style={`width:${f.size};height:${f.size};left:${f.left};top:${f.top};color:${f.color};border:2px solid ${f.color};animation-duration:${f.dur};animation-delay:${f.delay};`}></div>
+      <div class="ny-firework" style={`--fwleft:${f.left};--fwtop:${f.top};--fwcolor:${f.color};--fwsize:${f.size};--fwdur:${f.dur};--fwdelay:${f.delay}`}></div>
     ))}
 
-    <!-- Gold ticker tape -->
-    {Array.from({ length: 25 }, (_, i) => {
-      const colors = ["#ffd700","#c0c0c0","#ff006e","#3a86ff","#ffffff"];
+    <!-- Rayons de feux d'artifice (2 par feu) -->
+    {[
+      { left:"10.5%", top:"23.5%", color:"#ffd700", h:"35px", dur:"4s", delay:"0.1s", rot:"0deg" },
+      { left:"10.5%", top:"23.5%", color:"#ffd700", h:"30px", dur:"4s", delay:"0.1s", rot:"60deg" },
+      { left:"45.5%", top:"9.5%",  color:"#3a86ff", h:"45px", dur:"6s", delay:"0.8s", rot:"30deg" },
+      { left:"45.5%", top:"9.5%",  color:"#3a86ff", h:"40px", dur:"6s", delay:"0.8s", rot:"90deg" },
+      { left:"75.5%", top:"15.5%", color:"#ff006e", h:"28px", dur:"5s", delay:"1.6s", rot:"45deg" },
+      { left:"75.5%", top:"15.5%", color:"#ff006e", h:"32px", dur:"5s", delay:"1.6s", rot:"120deg" },
+    ].map(r => (
+      <div class="ny-fw-ray" style={`--rayleft:${r.left};--raytop:${r.top};--raycolor:${r.color};--rayh:${r.h};--raydur:${r.dur};--raydelay:${r.delay};--rayrot:${r.rot}`}></div>
+    ))}
+
+    <!-- 40 confettis -->
+    {Array.from({length: 40}).map((_, i) => {
+      const colors = ["#ffd700","#c0c0c0","#ff006e","#3a86ff","#ffffff","#ff80ab","#a0e0ff","#ffe066"];
       return (
-        <div
-          class="ticker"
-          style={`height:${15 + (i % 20)}px;background:${colors[i % colors.length]};left:${i * 4}%;animation-duration:${3 + (i % 4)}s;animation-delay:${(i * 0.3) % 5}s;`}
-        ></div>
+        <div class="ny-confetti" style={`--cfleft:${(i*2.5)%100}%;--cfdur:${3+((i*2)%5)}s;--cfdelay:-${(i*0.4)%7}s;--cfw:${4+((i*2)%7)}px;--cfh:${4+((i*3)%7)}px;--cfr:${i%3===0?'50%':i%3===1?'2px':'1px'};--cfcolor:${colors[i%colors.length]}`}></div>
       );
     })}
 
-    <div class="nye-content">
+    <!-- Bouteilles de champagne flottantes -->
+    {['🥂','🍾','🥂','🍾','🥂'].map((emoji, i) => (
+      <div class="ny-champagne" style={`--chleft:${(i*197+11)%90}%;--chtop:${(i*37+10)%60}%;--chdur:${8+((i*4)%7)}s;--chdelay:-${(i*2.5)%10}s;--chsize:${18+((i*4)%14)}px`}>{emoji}</div>
+    ))}
+
+    <!-- 3 étoiles filantes -->
+    <div class="ny-shooting-star" style="--nystop:6%;--nyssl:180px;--nysdur:7s;--nysdelay:0s;"></div>
+    <div class="ny-shooting-star" style="--nystop:18%;--nyssl:130px;--nysdur:10s;--nysdelay:3.5s;"></div>
+    <div class="ny-shooting-star" style="--nystop:10%;--nyssl:220px;--nysdur:13s;--nysdelay:7s;"></div>
+
+    <div class="ny-content">
       <HeaderIsland client:load />
 
       <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
-
         <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
           <a href="/" class="hover:text-white/60 transition-colors">Home</a>
           <span>/</span>
@@ -255,32 +418,70 @@ const jsonLd = {
 
         <div class="text-center mb-8">
           <div class="text-5xl mb-3">🎆</div>
-          <h1 class="text-3xl md:text-5xl font-black leading-tight nye-title mb-3">
+          <h1 class="text-3xl md:text-5xl font-black leading-tight ny-title mb-3">
             New Year Party Wheel
           </h1>
-          <p class="text-lg text-white/50 max-w-xl mx-auto mb-5">
+          <p class="text-lg text-white/55 max-w-xl mx-auto mb-5">
             Keep the NYE energy going all night. Spin for the next activity — no awkward silences, no dead moments.
           </p>
           <div class="flex flex-wrap items-center justify-center gap-2">
-            <span class="nye-tag">🥂 Midnight Toast</span>
-            <span class="nye-tag">🎤 Karaoke</span>
-            <span class="nye-tag">🎯 Party Games</span>
-            <span class="nye-tag">🔮 Predictions</span>
+            <span class="ny-tag">New Year</span>
+            <span class="ny-tag">Party</span>
+            <span class="ny-tag">Celebration</span>
+            <span class="ny-tag">Countdown</span>
           </div>
         </div>
 
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} colors={['#ffd700','#c0c0c0','#4169e1','#ffd700','#e8e8e8','#1e3a8a','#ffcc00','#9ca3af']} wheelShape="star6" hubTheme="gold" client:load />
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={['#ffd700','#c0c0c0','#4169e1','#ffd700','#e8e8e8','#1e3a8a','#ffcc00','#9ca3af']}
+          wheelShape="star6"
+          hubTheme="gold"
+          client:load
+        />
       </div>
 
       <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
 
-        <div class="nye-card p-6 space-y-4">
+        <div class="ny-card p-6 space-y-4">
           <h2 class="text-xl md:text-2xl font-bold text-white">Keep the Party Moving All Night</h2>
-          <p class="text-white/55 leading-relaxed">
-            The NYE party energy problem: the midnight countdown is obvious, but the three hours before and after it need structure. Without a plan, parties stall into everyone just scrolling their phones waiting for 12:00. The wheel prevents this.
+          <p class="text-white/60 leading-relaxed">
+            The NYE party energy problem: the midnight countdown is obvious, but the three hours before and after it need structure. Without a plan, parties stall into everyone scrolling their phones waiting for 12:00. The wheel prevents this.
           </p>
-          <p class="text-white/55 leading-relaxed">
+          <p class="text-white/60 leading-relaxed">
             Set a timer for every 30 minutes. When it goes off, spin the wheel for the next group activity. Nobody has to propose anything, nobody gets shot down — the wheel has spoken. Keep the wheel visible on a TV or big screen so everyone knows the format.
+          </p>
+        </div>
+
+        <div class="ny-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">NYE Activity Guide</h2>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div class="ny-card p-4">
+              <p class="text-yellow-300 font-semibold text-sm mb-1">Countdown Trivia</p>
+              <p class="text-white/55 text-sm">Questions about the year just ended — biggest news stories, pop culture moments, sports results.</p>
+            </div>
+            <div class="ny-card p-4">
+              <p class="text-blue-300 font-semibold text-sm mb-1">Resolution Sharing</p>
+              <p class="text-white/55 text-sm">Everyone shares one resolution. Write them down and revisit them at the next gathering.</p>
+            </div>
+            <div class="ny-card p-4">
+              <p class="text-pink-300 font-semibold text-sm mb-1">Year-in-Review Game</p>
+              <p class="text-white/55 text-sm">Each person names their personal highlight, lowlight, and surprise moment from the past year.</p>
+            </div>
+            <div class="ny-card p-4">
+              <p class="text-purple-300 font-semibold text-sm mb-1">Midnight Wish Ritual</p>
+              <p class="text-white/55 text-sm">Everyone writes a wish on paper, reads it aloud at midnight, then keeps it safe for the year.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ny-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Planning Your NYE Timeline</h2>
+          <p class="text-white/60 leading-relaxed">
+            A well-paced NYE keeps energy high from arrival to midnight and beyond. Load the wheel with 6-8 activities before the party. Spin every 25-30 minutes starting at 9pm. This gives you roughly 4-5 activities before midnight, plus the countdown itself. After midnight, spin 1-2 more for the post-countdown celebration.
+          </p>
+          <p class="text-white/60 leading-relaxed">
+            Keep the champagne toast, midnight wish ritual, and resolution sharing for the 11:30pm-12:30am window. These are too emotionally significant for earlier in the evening. Use high-energy activities like karaoke and dance-off earlier when the crowd is warm but not tired.
           </p>
         </div>
 
@@ -288,12 +489,12 @@ const jsonLd = {
           <h2 class="text-xl md:text-2xl font-bold text-white">Frequently Asked Questions</h2>
           <div class="space-y-3">
             {faqItems.map(({ question, answer }) => (
-              <details class="nye-faq group">
+              <details class="ny-faq group">
                 <summary class="font-semibold text-white cursor-pointer list-none flex items-center justify-between gap-2">
                   {question}
                   <span class="text-white/40 shrink-0 group-open:rotate-180 transition-transform">▾</span>
                 </summary>
-                <p class="text-white/55 text-sm leading-relaxed mt-3">{answer}</p>
+                <p class="text-white/60 text-sm leading-relaxed mt-3">{answer}</p>
               </details>
             ))}
           </div>
@@ -303,13 +504,13 @@ const jsonLd = {
           <h2 class="text-xl md:text-2xl font-bold text-white">Related Tools</h2>
           <ul class="grid sm:grid-cols-2 gap-3">
             {[
-              { href: "/party-wheel", label: "🎉 Party Wheel", desc: "Truth, dare, challenges for any party." },
-              { href: "/templates/christmas-gift-wheel", label: "🎄 Christmas Gift Wheel", desc: "Random gift ideas for the holiday season." },
-              { href: "/random-name-picker", label: "🎲 Random Name Picker", desc: "Pick who does the countdown or toast." },
-              { href: "/templates", label: "✨ All Templates", desc: "Browse all pre-loaded wheel templates." },
+              { href: "/party-wheel", label: "Party Wheel", desc: "Truth, dare, challenges for any party." },
+              { href: "/templates/christmas-gift-wheel", label: "Christmas Gift Wheel", desc: "Random gift ideas for the holiday season." },
+              { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick who does the countdown or toast." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
             ].map(({ href, label, desc }) => (
               <li>
-                <a href={href} class="nye-card flex items-start gap-3 p-4">
+                <a href={href} class="ny-card flex items-start gap-3 p-4">
                   <span>
                     <span class="font-semibold text-white text-sm">{label}</span>
                     <span class="text-white/50 text-sm block mt-0.5">{desc}</span>

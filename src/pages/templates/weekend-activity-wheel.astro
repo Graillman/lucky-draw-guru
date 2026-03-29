@@ -47,7 +47,243 @@ const jsonLd = {
   "description": description,
   "url": "https://realwheelpicker.com/templates/weekend-activity-wheel",
 };
+
+const themeColors = ['#3b82f6','#22c55e','#fbbf24','#f97316','#60a5fa','#4ade80','#fcd34d','#fb923c','#86efac','#7dd3fc'];
+
+const birds = Array.from({length: 12}, (_, i) => ({
+  top: `${8 + (i % 5) * 12}%`,
+  delay: `${(i * 0.7).toFixed(1)}s`,
+  duration: `${12 + (i % 4) * 3}s`,
+  size: `${1.1 + (i % 3) * 0.3}rem`,
+  direction: i % 2 === 0 ? 1 : -1,
+}));
+
+const clouds = Array.from({length: 8}, (_, i) => ({
+  top: `${5 + (i % 4) * 12}%`,
+  width: `${120 + (i % 4) * 40}px`,
+  height: `${50 + (i % 3) * 20}px`,
+  opacity: `${0.5 + (i % 3) * 0.15}`,
+  delay: `${(i * 1.5).toFixed(1)}s`,
+  duration: `${25 + (i % 4) * 8}s`,
+  startLeft: i % 2 === 0 ? '-15%' : '110%',
+}));
+
+const petals = Array.from({length: 20}, (_, i) => ({
+  left: `${(i * 5.2) % 100}%`,
+  delay: `${(i * 0.6).toFixed(1)}s`,
+  duration: `${6 + (i % 4) * 2}s`,
+  size: `${14 + (i % 4) * 5}px`,
+  rotation: `${(i * 47) % 360}deg`,
+  color: ['#fbbf24','#fb923c','#f97316','#4ade80','#60a5fa','#fcd34d','#86efac'][i % 7],
+}));
+
+const sunRays = Array.from({length: 12}, (_, i) => ({
+  rotation: `${i * 30}deg`,
+  length: `${120 + (i % 3) * 30}px`,
+}));
 ---
+
+<style>
+  .wa-page {
+    background: linear-gradient(180deg, #0e2a4a 0%, #163d2e 100%);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+  .wa-sky {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, #0a1a35 0%, #0d2a45 40%, #132d22 80%, #0f2318 100%);
+  }
+  .wa-sun-container {
+    position: fixed;
+    top: -60px;
+    right: 80px;
+    width: 160px;
+    height: 160px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .wa-sun {
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, #fef08a 0%, #fbbf24 40%, #f97316 70%, rgba(249,115,22,0) 100%);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: waSunPulse 5s ease-in-out infinite;
+    box-shadow: 0 0 60px rgba(251,191,36,0.5), 0 0 120px rgba(249,115,22,0.3);
+  }
+  .wa-sun-ray {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--ray-len);
+    height: 3px;
+    background: linear-gradient(90deg, rgba(251,191,36,0.6), transparent);
+    transform-origin: 0 50%;
+    transform: rotate(var(--ray-rot)) translateY(-50%);
+    border-radius: 2px;
+    animation: waSunRays 8s linear infinite;
+  }
+  @keyframes waSunPulse {
+    0%, 100% { box-shadow: 0 0 60px rgba(251,191,36,0.5), 0 0 120px rgba(249,115,22,0.3); transform: translate(-50%, -50%) scale(1); }
+    50% { box-shadow: 0 0 80px rgba(251,191,36,0.7), 0 0 160px rgba(249,115,22,0.4); transform: translate(-50%, -50%) scale(1.05); }
+  }
+  @keyframes waSunRays {
+    from { transform: rotate(var(--ray-rot)) translateY(-50%); }
+    to { transform: rotate(calc(var(--ray-rot) + 360deg)) translateY(-50%); }
+  }
+  .wa-cloud {
+    position: fixed;
+    background: rgba(255,255,255,0.12);
+    border-radius: 50px;
+    filter: blur(12px);
+    pointer-events: none;
+    z-index: 2;
+    animation: waCloudDrift var(--cdur) var(--cdelay) linear infinite;
+  }
+  @keyframes waCloudDrift {
+    0% { transform: translateX(var(--cstart)); opacity: 0; }
+    5% { opacity: var(--cop); }
+    90% { opacity: var(--cop); }
+    100% { transform: translateX(var(--cend)); opacity: 0; }
+  }
+  .wa-bird {
+    position: fixed;
+    font-size: var(--bsize);
+    pointer-events: none;
+    z-index: 3;
+    animation: waBirdFly var(--bdur) var(--bdelay) ease-in-out infinite;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  }
+  @keyframes waBirdFly {
+    0% { transform: translateX(-150px) translateY(0px) scaleX(1); opacity: 0; }
+    5% { opacity: 1; }
+    40% { transform: translateX(30vw) translateY(-20px) scaleX(1); }
+    60% { transform: translateX(60vw) translateY(10px) scaleX(1); }
+    90% { opacity: 1; }
+    100% { transform: translateX(110vw) translateY(-5px) scaleX(1); opacity: 0; }
+  }
+  .wa-petal {
+    position: fixed;
+    border-radius: 50% 0 50% 0;
+    pointer-events: none;
+    z-index: 3;
+    animation: waPetalFall var(--pdur) var(--pdelay) ease-in-out infinite;
+  }
+  @keyframes waPetalFall {
+    0% { transform: translateY(-5%) rotate(var(--prot)); opacity: 0; }
+    10% { opacity: 0.8; }
+    85% { opacity: 0.6; }
+    100% { transform: translateY(105vh) rotate(calc(var(--prot) + 720deg)); opacity: 0; }
+  }
+  .wa-grass {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(180deg, transparent 0%, rgba(34,197,94,0.15) 100%);
+    border-top: 2px solid rgba(74,222,128,0.2);
+    z-index: 2;
+    pointer-events: none;
+  }
+  .wa-halo-sun {
+    position: fixed;
+    top: -20%;
+    right: -5%;
+    width: 60vw;
+    height: 60vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(251,191,36,0.12) 0%, transparent 65%);
+    z-index: 1;
+    pointer-events: none;
+    animation: waHaloGlow 6s ease-in-out infinite;
+  }
+  @keyframes waHaloGlow {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+  }
+  .wa-content {
+    position: relative;
+    z-index: 10;
+  }
+  .wa-title {
+    background: linear-gradient(135deg, #fbbf24 0%, #60a5fa 40%, #4ade80 70%, #fcd34d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: waShimmer 6s ease-in-out infinite;
+    filter: drop-shadow(0 0 25px rgba(251,191,36,0.4));
+  }
+  @keyframes waShimmer {
+    0%, 100% { filter: drop-shadow(0 0 25px rgba(251,191,36,0.4)); }
+    50% { filter: drop-shadow(0 0 40px rgba(96,165,250,0.5)); }
+  }
+  .wa-card {
+    background: rgba(10,25,45,0.8);
+    border: 1px solid rgba(96,165,250,0.2);
+    border-radius: 1rem;
+    padding: 1.5rem;
+  }
+  .wa-card h2 { color: #f0f9ff; }
+  .wa-card p, .wa-card li { color: rgba(240,249,255,0.65); line-height: 1.7; }
+  .wa-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid rgba(96,165,250,0.3);
+    background: rgba(96,165,250,0.12);
+    color: #93c5fd;
+  }
+  details.wa-faq {
+    background: rgba(10,25,45,0.8);
+    border: 1px solid rgba(96,165,250,0.18);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+  details.wa-faq summary {
+    font-weight: 600;
+    color: #f0f9ff;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  details.wa-faq summary::before { content: '🌤️'; font-size: 0.9rem; }
+  details.wa-faq[open] summary::before { content: '☀️'; }
+  details.wa-faq p {
+    margin-top: 0.75rem;
+    color: rgba(240,249,255,0.65);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .wa-related-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(10,25,45,0.8);
+    border: 1px solid rgba(96,165,250,0.18);
+    border-radius: 0.75rem;
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .wa-related-link:hover {
+    border-color: rgba(96,165,250,0.45);
+    box-shadow: 0 0 20px rgba(96,165,250,0.12);
+  }
+</style>
 
 <Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
@@ -57,86 +293,123 @@ const jsonLd = {
     { name: "Weekend Activity Spinner", url: "https://realwheelpicker.com/templates/weekend-activity-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+  <div class="wa-page">
+    <div class="wa-sky"></div>
+    <div class="wa-halo-sun"></div>
 
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Weekend Activity Spinner</span>
-      </nav>
+    <div class="wa-sun-container">
+      <div class="wa-sun"></div>
+      {sunRays.map((r) => (
+        <div class="wa-sun-ray" style={`--ray-rot:${r.rotation}; --ray-len:${r.length};`}></div>
+      ))}
+    </div>
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Weekend Activity Spinner — What to Do This Weekend
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Stop wasting Saturday morning deciding what to do. Spin the wheel, get a plan, and actually enjoy your weekend.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    {clouds.map((c, i) => (
+      <div
+        class="wa-cloud"
+        style={`top:${c.top}; width:${c.width}; height:${c.height}; --cop:${c.opacity}; --cdur:${c.duration}; --cdelay:${c.delay}; --cstart:${c.startLeft === '-15%' ? '-200px' : '110vw'}; --cend:${c.startLeft === '-15%' ? '110vw' : '-200px'};`}
+      ></div>
+    ))}
 
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    {birds.map((b) => (
+      <div
+        class="wa-bird"
+        style={`top:${b.top}; --bdur:${b.duration}; --bdelay:${b.delay}; --bsize:${b.size};`}
+      >🐦</div>
+    ))}
 
-      <section class="space-y-8">
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Problem with Weekend Planning</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Most weekends don't fail because nothing was available — they fail because decision fatigue kicks in before anything gets decided. You talk about going hiking but never pick which trail. You say you want to try a new restaurant but can't agree on which one. By noon Saturday, the best options have passed.
+    {petals.map((p) => (
+      <div
+        class="wa-petal"
+        style={`left:${p.left}; width:${p.size}; height:${p.size}; background:${p.color}; --pdur:${p.duration}; --pdelay:${p.delay}; --prot:${p.rotation};`}
+      ></div>
+    ))}
+
+    <div class="wa-grass"></div>
+
+    <div class="wa-content">
+      <HeaderIsland client:load />
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/60 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/50">Weekend Activity Spinner</span>
+        </nav>
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3">🌞</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight wa-title mb-3">
+            Weekend Activity Spinner — What to Do This Weekend
+          </h1>
+          <p class="text-lg text-white/55 max-w-xl mx-auto mb-5">
+            Stop wasting Saturday morning deciding what to do. Spin the sunshine wheel, get a plan, and actually enjoy your weekend.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            The weekend activity wheel forces a decision in two seconds. You've already pre-loaded it with activities you'd enjoy. Whatever it picks, you start planning that activity instead of staying in the loop of "what do you want to do?"
-          </p>
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="wa-tag">☀️ 12 Activities</span>
+            <span class="wa-tag">🐦 Any Season</span>
+            <span class="wa-tag">🆓 Free</span>
+            <span class="wa-tag">👫 For Groups</span>
+          </div>
+        </div>
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} colors={themeColors} wheelShape="circle" hubTheme="forest" client:load />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="wa-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold">The Problem with Weekend Planning</h2>
+          <p>Most weekends don't fail because nothing was available — they fail because decision fatigue kicks in before anything gets decided. You talk about going hiking but never pick which trail. You say you want to try a new restaurant but can't agree on which one. By noon Saturday, the best options have passed.</p>
+          <p>The weekend activity wheel forces a decision in two seconds. You've already pre-loaded it with activities you'd enjoy. Whatever it picks, you start planning that activity instead of staying in the loop of "what do you want to do?"</p>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Make It Your Weekend Ritual</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Spin every Friday evening as a ritual with whoever you'll spend the weekend with. It sets a positive tone — you have a plan before the weekend starts. Customize the wheel seasonally: add outdoor options in summer, cozy indoor activities in winter.
-          </p>
+        <div class="wa-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold">Make It Your Weekend Ritual</h2>
+          <p>Spin every Friday evening as a ritual with whoever you'll spend the weekend with. It sets a positive tone — you have a plan before the weekend starts. Customize the wheel seasonally: add outdoor options in summer, cozy indoor activities in winter.</p>
+          <ul class="space-y-3 mt-2">
+            <li class="flex gap-3"><span style="color:#fbbf24" class="font-bold">→</span><span><strong style="color:#f0f9ff">Summer:</strong> Beaches, hikes, outdoor concerts, farmers markets</span></li>
+            <li class="flex gap-3"><span style="color:#60a5fa" class="font-bold">→</span><span><strong style="color:#f0f9ff">Winter:</strong> Museums, cozy cafes, movie marathons, baking projects</span></li>
+            <li class="flex gap-3"><span style="color:#4ade80" class="font-bold">→</span><span><strong style="color:#f0f9ff">Spring:</strong> Garden projects, cycling, picnics, day trips</span></li>
+            <li class="flex gap-3"><span style="color:#fb923c" class="font-bold">→</span><span><strong style="color:#f0f9ff">Autumn:</strong> Pumpkin patches, apple picking, trail walks, cozy cooking</span></li>
+          </ul>
         </div>
-      </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#f0f9ff">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="wa-faq">
+                <summary>{question}</summary>
+                <p>{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/hobby-wheel", label: "Hobby Wheel", desc: "Shorter activities — spin when you have an hour to fill." },
-            { href: "/templates/travel-destination-wheel", label: "Travel Destination Spinner", desc: "Ready for a bigger adventure? Spin for a travel destination." },
-            { href: "/templates/date-night-wheel", label: "Date Night Wheel", desc: "Spin for a random date night idea — dinner, activity, and more." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#f0f9ff">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/templates/hobby-wheel", label: "Hobby Wheel", desc: "Shorter activities — spin when you have an hour to fill." },
+              { href: "/templates/travel-destination-wheel", label: "Travel Destination Spinner", desc: "Ready for a bigger adventure? Spin for a travel destination." },
+              { href: "/templates/date-night-wheel", label: "Date Night Wheel", desc: "Spin for a random date night idea — dinner, activity, and more." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="wa-related-link">
+                  <span style="color:#60a5fa" class="font-bold text-sm mt-0.5">→</span>
+                  <span>
+                    <span class="font-semibold" style="color:#f0f9ff">{label}</span>
+                    <span style="color:rgba(240,249,255,0.55)" class="text-sm"> — {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-    </main>
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

@@ -43,14 +43,243 @@ const jsonLd = {
   "description": description,
   "url": "https://realwheelpicker.com/templates/who-goes-first-wheel",
 };
+
+const themeColors = ['#3b82f6','#f97316','#ef4444','#22c55e','#ffffff','#8b5cf6','#eab308','#06b6d4','#ec4899','#84cc16'];
+
+const lightnings = Array.from({length: 15}, (_, i) => ({
+  left: `${5 + i * 6}%`,
+  top: `${10 + (i % 5) * 18}%`,
+  height: `${60 + (i % 4) * 30}px`,
+  delay: `${(i * 0.3).toFixed(1)}s`,
+  duration: `${0.4 + (i % 3) * 0.2}s`,
+  rotation: `${-15 + (i % 7) * 5}deg`,
+}));
+
+const electricParticles = Array.from({length: 25}, (_, i) => ({
+  left: `${(i * 4.1) % 100}%`,
+  top: `${(i * 7.3) % 100}%`,
+  size: `${3 + (i % 4)}px`,
+  color: themeColors[i % themeColors.length],
+  delay: `${(i * 0.18).toFixed(2)}s`,
+  duration: `${1.2 + (i % 5) * 0.4}s`,
+}));
 ---
 
-<Layout
-  title={title}
-  description={description}
-  canonical={canonical}
-  jsonLd={jsonLd}
->
+<style>
+  .wgf-page {
+    background: #080818;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+  .wgf-sky {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .wgf-halo-blue {
+    position: fixed;
+    top: -10%;
+    left: -10%;
+    width: 55vw;
+    height: 55vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 70%);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .wgf-halo-orange {
+    position: fixed;
+    bottom: -10%;
+    right: -10%;
+    width: 55vw;
+    height: 55vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(249,115,22,0.18) 0%, transparent 70%);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .wgf-vs-bg {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(160px, 28vw, 340px);
+    font-weight: 900;
+    color: rgba(255,255,255,0.03);
+    letter-spacing: -0.05em;
+    z-index: 2;
+    pointer-events: none;
+    user-select: none;
+    font-family: 'Arial Black', sans-serif;
+    white-space: nowrap;
+    animation: wgfVsPulse 4s ease-in-out infinite;
+  }
+  @keyframes wgfVsPulse {
+    0%, 100% { color: rgba(255,255,255,0.03); text-shadow: none; }
+    50% { color: rgba(255,255,255,0.06); text-shadow: 0 0 80px rgba(59,130,246,0.15); }
+  }
+  .wgf-scanlines {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+  }
+  .wgf-lightning {
+    position: fixed;
+    width: 2px;
+    background: linear-gradient(180deg, rgba(147,197,253,0.9) 0%, rgba(59,130,246,0.5) 50%, transparent 100%);
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 3;
+    animation: wgfLightningFlash var(--dur) var(--delay) ease-in-out infinite;
+    transform-origin: top center;
+  }
+  @keyframes wgfLightningFlash {
+    0%, 85%, 100% { opacity: 0; transform: rotate(var(--rot)) scaleX(1); }
+    88% { opacity: 1; transform: rotate(var(--rot)) scaleX(2); }
+    90% { opacity: 0.4; transform: rotate(var(--rot)) scaleX(0.8); }
+    92% { opacity: 0.9; transform: rotate(var(--rot)) scaleX(1.5); }
+    95% { opacity: 0; transform: rotate(var(--rot)) scaleX(1); }
+  }
+  .wgf-particle {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 3;
+    animation: wgfElectricParticle var(--edur) var(--edelay) ease-in-out infinite;
+  }
+  @keyframes wgfElectricParticle {
+    0%, 100% { opacity: 0; transform: translate(0, 0) scale(0.5); }
+    20% { opacity: 1; transform: translate(var(--tx, 8px), var(--ty, -12px)) scale(1.2); }
+    50% { opacity: 0.7; transform: translate(var(--tx2, -6px), var(--ty2, -20px)) scale(0.8); }
+    80% { opacity: 0.3; transform: translate(var(--tx3, 12px), var(--ty3, -30px)) scale(0.4); }
+  }
+  .wgf-content {
+    position: relative;
+    z-index: 10;
+  }
+  .wgf-title {
+    background: linear-gradient(135deg, #3b82f6 0%, #ffffff 35%, #f97316 65%, #ef4444 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: wgfShimmer 5s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(59,130,246,0.4));
+  }
+  @keyframes wgfShimmer {
+    0%, 100% { filter: drop-shadow(0 0 30px rgba(59,130,246,0.4)); }
+    50% { filter: drop-shadow(0 0 50px rgba(249,115,22,0.5)); }
+  }
+  .wgf-card {
+    background: rgba(8, 8, 30, 0.75);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 1rem;
+    padding: 1.5rem;
+  }
+  .wgf-card h2 {
+    color: #e2e8f0;
+  }
+  .wgf-card p, .wgf-card li {
+    color: rgba(226,232,240,0.65);
+    line-height: 1.7;
+  }
+  .wgf-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid rgba(59,130,246,0.35);
+    background: rgba(59,130,246,0.12);
+    color: #93c5fd;
+  }
+  details.wgf-faq {
+    background: rgba(8,8,30,0.75);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+  details.wgf-faq summary {
+    font-weight: 600;
+    color: #e2e8f0;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  details.wgf-faq summary::before {
+    content: '⚡';
+    font-size: 0.9rem;
+  }
+  details.wgf-faq[open] summary::before {
+    content: '🔷';
+  }
+  details.wgf-faq p {
+    margin-top: 0.75rem;
+    color: rgba(226,232,240,0.65);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .wgf-related-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(8,8,30,0.75);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 0.75rem;
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .wgf-related-link:hover {
+    border-color: rgba(59,130,246,0.5);
+    box-shadow: 0 0 20px rgba(59,130,246,0.15);
+  }
+  .wgf-arena-border {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #3b82f6, #f97316, transparent);
+    z-index: 5;
+    animation: wgfBorderGlow 3s ease-in-out infinite;
+  }
+  @keyframes wgfBorderGlow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+  .wgf-corner-spark {
+    position: fixed;
+    width: 80px;
+    height: 80px;
+    pointer-events: none;
+    z-index: 4;
+    animation: wgfCornerSpark 2s ease-in-out infinite;
+  }
+  .wgf-corner-spark.top-left { top: 0; left: 0; background: radial-gradient(circle at top left, rgba(59,130,246,0.4), transparent 70%); }
+  .wgf-corner-spark.top-right { top: 0; right: 0; background: radial-gradient(circle at top right, rgba(249,115,22,0.4), transparent 70%); }
+  .wgf-corner-spark.bottom-left { bottom: 0; left: 0; background: radial-gradient(circle at bottom left, rgba(249,115,22,0.4), transparent 70%); }
+  .wgf-corner-spark.bottom-right { bottom: 0; right: 0; background: radial-gradient(circle at bottom right, rgba(59,130,246,0.4), transparent 70%); }
+  @keyframes wgfCornerSpark {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+</style>
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
     { name: "Home", url: "https://realwheelpicker.com" },
@@ -58,106 +287,116 @@ const jsonLd = {
     { name: "Who Goes First Wheel", url: "https://realwheelpicker.com/templates/who-goes-first-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  <div class="wgf-page">
+    <div class="wgf-sky"></div>
+    <div class="wgf-halo-blue"></div>
+    <div class="wgf-halo-orange"></div>
+    <div class="wgf-vs-bg">VS</div>
+    <div class="wgf-scanlines"></div>
+    <div class="wgf-arena-border"></div>
+    <div class="wgf-corner-spark top-left"></div>
+    <div class="wgf-corner-spark top-right"></div>
+    <div class="wgf-corner-spark bottom-left"></div>
+    <div class="wgf-corner-spark bottom-right"></div>
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    {lightnings.map((l) => (
+      <div
+        class="wgf-lightning"
+        style={`left:${l.left}; top:${l.top}; height:${l.height}; --dur:${l.duration}; --delay:${l.delay}; --rot:${l.rotation};`}
+      ></div>
+    ))}
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Who Goes First Wheel</span>
-      </nav>
+    {electricParticles.map((p, i) => (
+      <div
+        class="wgf-particle"
+        style={`left:${p.left}; top:${p.top}; width:${p.size}; height:${p.size}; background:${p.color}; --edur:${p.duration}; --edelay:${p.delay}; --tx:${(i%3)*8-8}px; --ty:${-(i%4)*8-6}px; --tx2:${(i%5-2)*6}px; --ty2:${-(i%5)*6-10}px; --tx3:${(i%4-1)*10}px; --ty3:${-(i%6)*8-20}px; box-shadow: 0 0 4px ${p.color};`}
+      ></div>
+    ))}
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Who Goes First? — Random Turn Order Spinner
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          No more rock-paper-scissors or "youngest goes first" arguments. Spin the wheel for a genuinely fair, random selection of who takes the first turn. Replace the names with your players.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
-
-      <!-- Wheel -->
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
-
-      <!-- Article Content -->
-      <section class="space-y-8">
-
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Fairest Way to Pick Who Goes First</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Every game with turn order has the same problem: how do you fairly pick who goes first without arguments? The traditional methods all have problems. Dice rolls require dice. Rock-paper-scissors leads to double-elimination disputes. "Youngest goes first" advantages younger players every game. "The host decides" creates favoritism accusations.
+    <div class="wgf-content">
+      <HeaderIsland client:load />
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/60 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/50">Who Goes First Wheel</span>
+        </nav>
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3">⚡</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight wgf-title mb-3">
+            Who Goes First? — Random Turn Order Spinner
+          </h1>
+          <p class="text-lg text-white/55 max-w-xl mx-auto mb-5">
+            No more arguments. Spin the arena wheel for a fair, instant, undisputable first-player selection. Replace the names with your players.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            The spin wheel is the most visually satisfying and demonstrably fair method. Everyone watches the same spin. The result is visible and indisputable. There's no hidden randomness, no mechanical failure, and no human bias. The wheel picked — that's final.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            For games where turn order matters significantly (Catan, Ticket to Ride, any strategy game), the who-goes-first wheel removes one more potential argument from the session so you can focus on actually playing.
-          </p>
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="wgf-tag">⚡ Instant</span>
+            <span class="wgf-tag">🎮 Any Game</span>
+            <span class="wgf-tag">🆓 Free</span>
+            <span class="wgf-tag">👥 Up to 20 players</span>
+          </div>
+        </div>
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} colors={themeColors} wheelShape="hexagon" hubTheme="neon" client:load />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="wgf-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold">The Fairest Way to Pick Who Goes First</h2>
+          <p>Every game with turn order has the same problem: how do you fairly pick who goes first without arguments? The traditional methods all have problems. Dice rolls require dice. Rock-paper-scissors leads to double-elimination disputes. "Youngest goes first" advantages younger players every game. "The host decides" creates favoritism accusations.</p>
+          <p>The spin wheel is the most visually satisfying and demonstrably fair method. Everyone watches the same spin. The result is visible and indisputable. There's no hidden randomness, no mechanical failure, and no human bias. The wheel picked — that's final.</p>
+          <p>For games where turn order matters significantly (Catan, Ticket to Ride, any strategy game), the who-goes-first wheel removes one more potential argument from the session so you can focus on actually playing.</p>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Uses Beyond Board Games</h2>
-          <ul class="space-y-2 text-muted-foreground">
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Classroom:</strong> Pick which student answers first, presents first, or reads first.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Meetings:</strong> Randomly select who gives their update first in standup or retrospectives.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Sports:</strong> Pick which team calls the coin toss, shoots first, or picks their side.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Chores:</strong> Spin to decide who does the least popular task in a household rotation.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Video games:</strong> Who picks the game, who hosts, who gets the controller first.</span></li>
+        <div class="wgf-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold">Uses Beyond Board Games</h2>
+          <ul class="space-y-3">
+            <li class="flex gap-3"><span style="color:#3b82f6" class="font-bold">→</span><span><strong style="color:#e2e8f0">Classroom:</strong> Pick which student answers first, presents first, or reads first.</span></li>
+            <li class="flex gap-3"><span style="color:#f97316" class="font-bold">→</span><span><strong style="color:#e2e8f0">Meetings:</strong> Randomly select who gives their update first in standup or retrospectives.</span></li>
+            <li class="flex gap-3"><span style="color:#22c55e" class="font-bold">→</span><span><strong style="color:#e2e8f0">Sports:</strong> Pick which team calls the coin toss, shoots first, or picks their side.</span></li>
+            <li class="flex gap-3"><span style="color:#8b5cf6" class="font-bold">→</span><span><strong style="color:#e2e8f0">Chores:</strong> Spin to decide who does the least popular task in a household rotation.</span></li>
+            <li class="flex gap-3"><span style="color:#06b6d4" class="font-bold">→</span><span><strong style="color:#e2e8f0">Video games:</strong> Who picks the game, who hosts, who gets the controller first.</span></li>
           </ul>
         </div>
 
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#e2e8f0">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="wgf-faq">
+                <summary>{question}</summary>
+                <p>{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
-      <!-- FAQ -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#e2e8f0">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/random-name-picker", label: "Random Name Picker", desc: "Full-featured name picker for larger groups and giveaways." },
+              { href: "/templates/board-game-picker", label: "Board Game Picker", desc: "After deciding who goes first, spin for which game to play." },
+              { href: "/templates/standup-order-wheel", label: "Standup Order Picker", desc: "Random dev team order for daily standups and meetings." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="wgf-related-link">
+                  <span style="color:#3b82f6" class="font-bold text-sm mt-0.5">→</span>
+                  <span>
+                    <span class="font-semibold" style="color:#e2e8f0">{label}</span>
+                    <span style="color:rgba(226,232,240,0.55)" class="text-sm"> — {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/random-name-picker", label: "Random Name Picker", desc: "Full-featured name picker for larger groups and giveaways." },
-            { href: "/templates/board-game-picker", label: "Board Game Picker", desc: "After deciding who goes first, spin for which game to play." },
-            { href: "/templates/standup-order-wheel", label: "Standup Order Picker", desc: "Random dev team order for daily standups and meetings." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-    </main>
-
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

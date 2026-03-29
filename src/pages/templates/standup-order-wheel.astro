@@ -21,7 +21,7 @@ const faqItems = [
   },
   {
     question: "Why randomize standup order at all?",
-    answer: "Predictable order causes people to 'mentally check out' until it's their turn. Random order keeps everyone engaged because they don't know when they'll be called. It also prevents the same person from always going first (which affects tone-setting) or last (rushing).",
+    answer: "Predictable order causes people to 'mentally check out' until it's their turn. Random order keeps everyone engaged because they don't know when they'll be called.",
   },
 ];
 
@@ -36,6 +36,8 @@ const defaultParticipants = [
   { pseudo: "Henry", weight: 1 },
 ];
 
+const standupColors = ['#f59e0b','#fb923c','#60a5fa','#1e3a5f','#fbbf24','#f97316','#3b82f6','#1e40af','#fdba74','#93c5fd'];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -45,6 +47,185 @@ const jsonLd = {
 };
 ---
 
+<style>
+  /* ═══════════ STANDUP — MORNING SUNRISE OFFICE ═══════════ */
+  .su-page {
+    background: #030810;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .su-sky {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 110%, rgba(245,158,11,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 20% 100%, rgba(251,146,60,0.22) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(249,115,22,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 30% at 50% 10%,  rgba(30,58,95,0.3) 0%, transparent 60%),
+      linear-gradient(180deg, #030810 0%, #050f1a 50%, #0a1220 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Sunrise arc at bottom */
+  .su-sunrise {
+    position: fixed;
+    bottom: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 350px;
+    border-radius: 700px 700px 0 0;
+    background: radial-gradient(ellipse at 50% 100%, rgba(251,191,36,0.4) 0%, rgba(249,115,22,0.2) 40%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+    animation: suSunriseGlow 8s ease-in-out infinite alternate;
+  }
+  @keyframes suSunriseGlow {
+    from { opacity: 0.6; transform: translateX(-50%) scaleY(0.95); }
+    to   { opacity: 1;   transform: translateX(-50%) scaleY(1.05); }
+  }
+
+  /* Coffee steam */
+  .su-steam {
+    position: fixed;
+    width: 3px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 2;
+    animation: suSteam ease-in-out infinite;
+    opacity: 0;
+    filter: blur(1px);
+  }
+  @keyframes suSteam {
+    0%   { transform: translateY(0) scaleX(1); opacity: 0; }
+    20%  { opacity: 0.6; }
+    60%  { transform: translateY(-40px) scaleX(1.5); opacity: 0.3; }
+    100% { transform: translateY(-70px) scaleX(0.5); opacity: 0; }
+  }
+
+  /* Coffee cups decorative */
+  .su-coffee {
+    position: fixed;
+    font-size: 1.8rem;
+    pointer-events: none;
+    z-index: 1;
+    animation: suCoffeeFloat ease-in-out infinite;
+    opacity: 0.35;
+  }
+  @keyframes suCoffeeFloat {
+    0%,100% { transform: translateY(0) rotate(-5deg); }
+    50%     { transform: translateY(-12px) rotate(5deg); }
+  }
+
+  /* Speech bubbles */
+  .su-bubble {
+    position: fixed;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 1rem;
+    padding: 5px 10px;
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.5);
+    pointer-events: none;
+    z-index: 1;
+    animation: suBubbleFloat ease-in-out infinite;
+    white-space: nowrap;
+  }
+  @keyframes suBubbleFloat {
+    0%,100% { transform: translateY(0); opacity: 0.4; }
+    50%     { transform: translateY(-15px); opacity: 0.75; }
+  }
+
+  /* Laptop icons */
+  .su-laptop {
+    position: fixed;
+    font-size: 1.4rem;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.2;
+    animation: suLaptop ease-in-out infinite alternate;
+  }
+  @keyframes suLaptop {
+    from { opacity: 0.15; }
+    to   { opacity: 0.3; }
+  }
+
+  /* Stars fading (night becoming day) */
+  .su-star {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    animation: suStarFade ease-in-out infinite alternate;
+  }
+  @keyframes suStarFade {
+    from { opacity: 0.6; }
+    to   { opacity: 0.08; }
+  }
+
+  /* Warm glow orbs */
+  .su-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+    animation: suGlow ease-in-out infinite alternate;
+  }
+  @keyframes suGlow {
+    from { opacity: 0.15; }
+    to   { opacity: 0.3; }
+  }
+
+  .su-content { position: relative; z-index: 10; }
+
+  .su-title {
+    background: linear-gradient(135deg, #f59e0b 0%, #fb923c 35%, #60a5fa 65%, #f59e0b 100%);
+    background-size: 250%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: suShimmer 6s ease-in-out infinite;
+    filter: drop-shadow(0 0 25px rgba(245,158,11,0.5));
+  }
+  @keyframes suShimmer {
+    0%,100% { background-position: 0% 50%; }
+    50%     { background-position: 100% 50%; }
+  }
+
+  .su-tag {
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.3);
+    color: rgba(253,186,116,0.95);
+    border-radius: 9999px;
+    padding: 4px 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .su-card {
+    background: rgba(245,158,11,0.05);
+    border: 1px solid rgba(245,158,11,0.18);
+    border-radius: 1rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .su-card:hover {
+    border-color: rgba(245,158,11,0.45);
+    background: rgba(245,158,11,0.1);
+  }
+
+  details.su-faq {
+    background: rgba(245,158,11,0.04);
+    border: 1px solid rgba(245,158,11,0.15);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+</style>
+
 <Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
@@ -53,79 +234,157 @@ const jsonLd = {
     { name: "Standup Order Picker", url: "https://realwheelpicker.com/templates/standup-order-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+  <div class="su-page">
+    <div class="su-sky"></div>
+    <div class="su-sunrise"></div>
 
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Standup Order Picker</span>
-      </nav>
+    <!-- Warm glow orbs -->
+    <div class="su-glow" style="width:500px;height:400px;background:radial-gradient(circle,rgba(245,158,11,0.25) 0%,transparent 70%);bottom:-50px;left:-80px;animation-duration:6s;"></div>
+    <div class="su-glow" style="width:400px;height:350px;background:radial-gradient(circle,rgba(249,115,22,0.2) 0%,transparent 70%);bottom:-30px;right:-60px;animation-duration:8s;animation-delay:2s;"></div>
+    <div class="su-glow" style="width:350px;height:300px;background:radial-gradient(circle,rgba(96,165,250,0.15) 0%,transparent 70%);top:10%;left:50%;transform:translateX(-50%);animation-duration:7s;animation-delay:1s;"></div>
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Standup Order Picker — Random Dev Team Sequence
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Replace the example names with your team, spin once per person, and run your most engaging standup yet. No more alphabetical order, no more going-around-the-table predictability.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Stars fading — 20 -->
+    {Array.from({ length: 20 }, (_, i) => (
+      <div class="su-star" style={`width:${2+i%3}px;height:${2+i%3}px;background:#93c5fd;left:${i*5+2}%;top:${5+i%25}%;animation-duration:${4+i%5}s;animation-delay:${i*0.3}s;`}></div>
+    ))}
 
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <!-- Coffee cups -->
+    <div class="su-coffee" style="left:4%;bottom:18%;animation-duration:7s;">☕</div>
+    <div class="su-coffee" style="right:5%;bottom:22%;animation-duration:9s;animation-delay:1.5s;">☕</div>
+    <div class="su-coffee" style="left:88%;top:35%;animation-duration:8s;animation-delay:3s;font-size:1.3rem;">🫖</div>
 
-      <section class="space-y-8">
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Problem with Fixed Standup Order</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            When standups always go in the same order — alphabetically, by Slack joining date, or just however it started — team members optimize for their slot. People who go first give brief updates because they haven't heard context yet. People who go last rush or get cut off. People in the middle mentally disengage.
+    <!-- Steam wisps for coffee -->
+    {Array.from({ length: 6 }, (_, i) => (
+      <div class="su-steam" style={`height:${20+i*8}px;left:${5+i*16}%;bottom:${22+i%3*2}%;animation-duration:${2.5+i*0.4}s;animation-delay:${i*0.5}s;`}></div>
+    ))}
+
+    <!-- Speech bubbles -->
+    {[
+      {l:"3%",t:"30%",txt:"Good morning!",dur:"6s",del:"0s"},
+      {l:"72%",t:"25%",txt:"Ready to ship!",dur:"8s",del:"1.5s"},
+      {l:"5%",t:"55%",txt:"On it today.",dur:"7s",del:"3s"},
+      {l:"78%",t:"55%",txt:"Let's go!",dur:"9s",del:"0.8s"},
+      {l:"40%",t:"15%",txt:"No blockers.",dur:"6s",del:"2s"},
+      {l:"60%",t:"70%",txt:"In progress...",dur:"10s",del:"4s"},
+    ].map(b => (
+      <div class="su-bubble" style={`left:${b.l};top:${b.t};animation-duration:${b.dur};animation-delay:${b.del};`}>{b.txt}</div>
+    ))}
+
+    <!-- Laptops -->
+    <div class="su-laptop" style="left:6%;top:40%;">💻</div>
+    <div class="su-laptop" style="right:7%;top:38%;animation-delay:1s;">💻</div>
+    <div class="su-laptop" style="left:15%;bottom:30%;animation-delay:2s;font-size:1.1rem;">🖥️</div>
+    <div class="su-laptop" style="right:15%;bottom:32%;animation-delay:0.5s;font-size:1.1rem;">⌨️</div>
+
+    <div class="su-content">
+      <HeaderIsland client:load />
+
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/60 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/50">Standup Order Picker</span>
+        </nav>
+
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3">☀️</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight su-title mb-3">
+            Standup Order Picker
+          </h1>
+          <p class="text-lg text-white/55 max-w-xl mx-auto mb-5">
+            Replace the names with your team, spin once per person, and run your most engaging standup yet.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            Random order keeps everyone present. You don't know when you'll be called, so you stay ready. The wheel also adds a tiny bit of ceremony to an otherwise routine meeting — watching the wheel spin and waiting for your name creates a small moment of attention before you speak.
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="su-tag">☕ Daily Standup</span>
+            <span class="su-tag">🔄 Random Order</span>
+            <span class="su-tag">👥 Team Sync</span>
+            <span class="su-tag">🚀 Agile</span>
+          </div>
+        </div>
+
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={standupColors}
+          wheelShape="circle"
+          hubTheme="amber"
+          client:load
+        />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="su-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">The Problem with Fixed Standup Order</h2>
+          <p class="text-white/60 leading-relaxed">
+            When standups always go in the same order, team members optimize for their slot. People who go first give brief updates. People who go last rush or get cut off. People in the middle mentally disengage.
+          </p>
+          <p class="text-white/60 leading-relaxed">
+            Random order keeps everyone present. You don't know when you'll be called, so you stay ready. The wheel also adds a tiny bit of ceremony to an otherwise routine meeting — watching the wheel spin creates a small moment of attention before you speak.
           </p>
         </div>
-      </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/meeting-icebreaker-wheel", label: "Meeting Icebreaker Spinner", desc: "Warm up your standup with a quick team question first." },
-            { href: "/templates/sprint-retrospective-wheel", label: "Sprint Retro Wheel", desc: "Random discussion prompts for your next retrospective." },
-            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick one random team member for task assignment." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
+        <div class="su-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">How to Set Up</h2>
+          <ul class="space-y-3">
+            <li class="flex gap-3">
+              <span class="text-amber-400 font-bold">1.</span>
+              <span class="text-white/60">Click "Customize entries" and replace the example names with your team members.</span>
             </li>
-          ))}
-        </ul>
-      </section>
+            <li class="flex gap-3">
+              <span class="text-amber-400 font-bold">2.</span>
+              <span class="text-white/60">Screen-share or open on a shared screen at standup time.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-amber-400 font-bold">3.</span>
+              <span class="text-white/60">Spin once. The person whose name comes up goes next.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-amber-400 font-bold">4.</span>
+              <span class="text-white/60">Click "Remove winner" after each update to prevent duplicates.</span>
+            </li>
+          </ul>
+        </div>
 
-    </main>
-    <GlobalFooterIsland client:load />
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="su-faq group">
+                <summary class="font-semibold text-white cursor-pointer list-none flex items-center justify-between gap-2">
+                  {question}
+                  <span class="text-white/40 shrink-0 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p class="text-white/60 text-sm leading-relaxed mt-3">{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Related Tools</h2>
+          <ul class="grid sm:grid-cols-2 gap-3">
+            {[
+              { href: "/templates/meeting-icebreaker-wheel", label: "💬 Meeting Icebreaker Spinner", desc: "Warm up your standup with a quick team question." },
+              { href: "/templates/sprint-retrospective-wheel", label: "⚙️ Sprint Retro Wheel", desc: "Random discussion prompts for retrospectives." },
+              { href: "/random-name-picker", label: "🎲 Random Name Picker", desc: "Pick one random team member for task assignment." },
+              { href: "/templates", label: "🎡 All Templates", desc: "Browse all pre-loaded wheel templates." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="su-card flex items-start gap-3 p-4">
+                  <span>
+                    <span class="font-semibold text-white text-sm">{label}</span>
+                    <span class="text-white/50 text-sm block mt-0.5">{desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

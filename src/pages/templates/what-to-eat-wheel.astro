@@ -47,14 +47,197 @@ const jsonLd = {
   "description": description,
   "url": "https://realwheelpicker.com/templates/what-to-eat-wheel",
 };
+
+const themeColors = ['#ef4444','#f59e0b','#22c55e','#3b82f6','#a855f7','#ec4899','#14b8a6','#f97316','#84cc16','#06b6d4'];
 ---
 
-<Layout
-  title={title}
-  description={description}
-  canonical={canonical}
-  jsonLd={jsonLd}
->
+<style>
+  /* ═══ STREET FOOD NIGHT MARKET ═══ */
+  .sf-page {
+    background: #050a0f;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .sf-page::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,0.08) 3px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .sf-sky {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 120% 60% at 20% 80%, rgba(239,68,68,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 100% 50% at 80% 70%, rgba(168,85,247,0.15) 0%, transparent 55%),
+                radial-gradient(ellipse 80% 40% at 50% 90%, rgba(245,158,11,0.12) 0%, transparent 50%),
+                linear-gradient(180deg, #020408 0%, #060d18 50%, #0a0610 100%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Emoji food falling */
+  .sf-food {
+    position: fixed;
+    font-size: 1.5rem;
+    pointer-events: none;
+    z-index: 2;
+    animation: sfFoodFall linear infinite;
+    opacity: 0;
+  }
+  @keyframes sfFoodFall {
+    0%   { transform: translateY(-80px) rotate(0deg); opacity: 0; }
+    5%   { opacity: 0.85; }
+    90%  { opacity: 0.7; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* Neon signs */
+  .sf-neon {
+    position: fixed;
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 2;
+    animation: sfNeonBlink ease-in-out infinite;
+  }
+  @keyframes sfNeonBlink {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px currentColor, 0 0 20px currentColor; }
+    45%      { opacity: 0.6; box-shadow: 0 0 3px currentColor; }
+    50%      { opacity: 1; box-shadow: 0 0 8px currentColor, 0 0 20px currentColor; }
+    55%      { opacity: 0.4; box-shadow: 0 0 2px currentColor; }
+    60%      { opacity: 1; box-shadow: 0 0 8px currentColor, 0 0 20px currentColor; }
+  }
+
+  /* Steam puffs */
+  .sf-steam {
+    position: fixed;
+    bottom: 15%;
+    width: 30px;
+    height: 50px;
+    border-radius: 50% 50% 40% 40%;
+    background: rgba(255, 255, 255, 0.06);
+    pointer-events: none;
+    z-index: 2;
+    animation: sfSteamRise ease-in-out infinite;
+    filter: blur(8px);
+  }
+  @keyframes sfSteamRise {
+    0%   { transform: translateY(0) scaleX(1); opacity: 0; }
+    20%  { opacity: 0.5; }
+    60%  { transform: translateY(-120px) scaleX(1.6); opacity: 0.3; }
+    100% { transform: translateY(-220px) scaleX(2.2); opacity: 0; }
+  }
+
+  /* Glow orbs */
+  .sf-glow {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(80px);
+    animation: sfGlowPulse ease-in-out infinite alternate;
+  }
+  @keyframes sfGlowPulse {
+    0%   { opacity: 0.35; transform: scale(1); }
+    100% { opacity: 0.55; transform: scale(1.15); }
+  }
+
+  /* Sparkles */
+  .sf-spark {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+    animation: sfSparkle ease-in-out infinite;
+  }
+  @keyframes sfSparkle {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50%      { opacity: 1; transform: scale(1.5); }
+  }
+
+  /* Lantern decorations */
+  .sf-lantern {
+    position: fixed;
+    width: 18px;
+    height: 22px;
+    border-radius: 50% 50% 40% 40%;
+    pointer-events: none;
+    z-index: 2;
+    animation: sfLanternSway ease-in-out infinite alternate;
+  }
+  @keyframes sfLanternSway {
+    0%   { transform: rotate(-8deg) translateY(0px); }
+    100% { transform: rotate(8deg) translateY(4px); }
+  }
+
+  /* Content layer */
+  .sf-content { position: relative; z-index: 10; }
+
+  /* Title */
+  .sf-title {
+    background: linear-gradient(90deg, #ef4444, #f97316, #f59e0b, #22c55e, #3b82f6, #a855f7, #ef4444);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: sfTitleShimmer 6s linear infinite;
+    filter: drop-shadow(0 0 30px rgba(239,68,68,0.5));
+  }
+  @keyframes sfTitleShimmer {
+    0%   { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+
+  /* Tag */
+  .sf-tag {
+    background: rgba(239,68,68,0.15);
+    border: 1px solid rgba(239,68,68,0.4);
+    color: rgba(255,180,100,0.9);
+    border-radius: 9999px;
+    padding: 4px 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  /* Card */
+  .sf-card {
+    background: rgba(10,5,20,0.75);
+    border: 1px solid rgba(239,68,68,0.25);
+    border-radius: 1rem;
+    transition: border-color 0.2s, background 0.2s;
+    backdrop-filter: blur(8px);
+  }
+  .sf-card:hover {
+    border-color: rgba(239,68,68,0.55);
+    background: rgba(15,8,30,0.85);
+  }
+
+  /* FAQ */
+  details.sf-faq {
+    background: rgba(10,5,20,0.75);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    backdrop-filter: blur(8px);
+  }
+  details.sf-faq[open] {
+    border-color: rgba(239,68,68,0.45);
+  }
+</style>
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
     { name: "Home", url: "https://realwheelpicker.com" },
@@ -62,154 +245,176 @@ const jsonLd = {
     { name: "What to Eat Wheel", url: "https://realwheelpicker.com/templates/what-to-eat-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  <div class="sf-page">
+    <div class="sf-sky"></div>
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <!-- Atmospheric glow orbs -->
+    <div class="sf-glow" style="width:500px;height:400px;background:rgba(239,68,68,0.12);top:10%;left:-10%;animation-duration:7s;"></div>
+    <div class="sf-glow" style="width:400px;height:350px;background:rgba(168,85,247,0.1);top:40%;right:-8%;animation-duration:9s;animation-delay:2s;"></div>
+    <div class="sf-glow" style="width:350px;height:300px;background:rgba(245,158,11,0.1);bottom:15%;left:30%;animation-duration:8s;animation-delay:4s;"></div>
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">What to Eat Wheel</span>
-      </nav>
+    <!-- 35 falling food emojis -->
+    {Array.from({ length: 35 }, (_, i) => {
+      const emojis = ['🍕','🌮','🍜','🍱','🥙','🌯','🍛','🍝','🍔','🥗','🍣','🌽','🥪','🫔','🥘','🍤','🥚','🍙','🍚','🥟'];
+      const e = emojis[i % emojis.length];
+      return (
+        <span class="sf-food" style={`left:${(i * 2.8 + 1) % 100}%;animation-duration:${6 + (i % 7)}s;animation-delay:${i * 0.4}s;font-size:${1.1 + (i % 4) * 0.3}rem;`}>{e}</span>
+      );
+    })}
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          What Should I Eat? — Food Spinner Wheel
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          End the meal debate in 3 seconds. Spin the food wheel and commit to the result. No more scrolling delivery apps.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- 10 neon sign decorations -->
+    <div class="sf-neon" style="width:80px;height:8px;background:#ef4444;color:#ef4444;top:12%;left:5%;animation-duration:3.1s;"></div>
+    <div class="sf-neon" style="width:60px;height:8px;background:#a855f7;color:#a855f7;top:20%;right:8%;animation-duration:2.7s;animation-delay:0.5s;"></div>
+    <div class="sf-neon" style="width:100px;height:6px;background:#f59e0b;color:#f59e0b;top:35%;left:3%;animation-duration:4s;animation-delay:1s;"></div>
+    <div class="sf-neon" style="width:70px;height:8px;background:#22c55e;color:#22c55e;top:50%;right:4%;animation-duration:3.5s;animation-delay:0.8s;"></div>
+    <div class="sf-neon" style="width:90px;height:6px;background:#06b6d4;color:#06b6d4;top:65%;left:6%;animation-duration:2.9s;animation-delay:1.5s;"></div>
+    <div class="sf-neon" style="width:55px;height:8px;background:#ec4899;color:#ec4899;top:75%;right:10%;animation-duration:3.8s;animation-delay:0.3s;"></div>
+    <div class="sf-neon" style="width:8px;height:60px;background:#f97316;color:#f97316;top:25%;left:15%;animation-duration:2.5s;animation-delay:2s;"></div>
+    <div class="sf-neon" style="width:8px;height:45px;background:#84cc16;color:#84cc16;top:55%;right:18%;animation-duration:3.3s;animation-delay:0.7s;"></div>
+    <div class="sf-neon" style="width:110px;height:6px;background:#3b82f6;color:#3b82f6;bottom:20%;left:8%;animation-duration:4.2s;animation-delay:1.2s;"></div>
+    <div class="sf-neon" style="width:65px;height:8px;background:#14b8a6;color:#14b8a6;bottom:30%;right:6%;animation-duration:3s;animation-delay:0.9s;"></div>
 
-      <!-- Wheel -->
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <!-- 5 steam puffs -->
+    <div class="sf-steam" style="left:10%;animation-duration:5s;animation-delay:0s;"></div>
+    <div class="sf-steam" style="left:25%;animation-duration:6s;animation-delay:1.2s;"></div>
+    <div class="sf-steam" style="left:50%;animation-duration:4.5s;animation-delay:0.7s;"></div>
+    <div class="sf-steam" style="left:70%;animation-duration:5.5s;animation-delay:2s;"></div>
+    <div class="sf-steam" style="left:88%;animation-duration:4.8s;animation-delay:1.5s;"></div>
 
-      <!-- Article Content -->
-      <section class="space-y-8">
+    <!-- 20 sparkles -->
+    {Array.from({ length: 20 }, (_, i) => {
+      const colors = ['#ef4444','#f59e0b','#22c55e','#3b82f6','#a855f7','#ec4899','#06b6d4','#f97316'];
+      return (
+        <div class="sf-spark" style={`left:${5 + i * 4.5}%;top:${10 + (i % 6) * 14}%;background:${colors[i % colors.length]};animation-duration:${2 + i * 0.3}s;animation-delay:${i * 0.2}s;`}></div>
+      );
+    })}
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Stop Scrolling Delivery Apps — Let the Wheel Decide</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            The average person spends 11 minutes deciding what to eat every single meal. That's over 200 hours per year staring at Uber Eats, DoorDash, or an open fridge. The food wheel ends the cycle in 3 seconds.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            The problem isn't indecision — it's the paradox of choice. When every option is equally available, the brain stalls. A spinning wheel short-circuits the comparison loop by making the decision external. You're not choosing; you're accepting the result of a fair random process. It's surprisingly satisfying.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            Spin the wheel, look at where it lands, and notice your gut reaction. If you feel relief, great — that's dinner. If you feel a flash of disappointment, that tells you something too: you already knew what you wanted. Either way, the wheel gets you to an answer faster than any app.
-          </p>
+    <!-- 8 lanterns top area -->
+    {Array.from({ length: 8 }, (_, i) => {
+      const colors = ['#ef4444','#f59e0b','#ec4899','#a855f7','#22c55e','#06b6d4','#f97316','#3b82f6'];
+      return (
+        <div class="sf-lantern" style={`background:${colors[i]};top:${2 + i * 1}%;left:${8 + i * 11}%;opacity:0.7;animation-duration:${3 + i * 0.4}s;box-shadow:0 0 12px ${colors[i]};`}></div>
+      );
+    })}
+
+    <div class="sf-content">
+      <HeaderIsland client:load />
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/60 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/50">What to Eat Wheel</span>
+        </nav>
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3">🍜</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight sf-title mb-3">What Should I Eat?</h1>
+          <p class="text-lg text-white/55 max-w-xl mx-auto mb-5">End the meal debate in 3 seconds. Spin the food wheel and commit to the result — no more scrolling delivery apps for 30 minutes.</p>
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="sf-tag">Street Food</span>
+            <span class="sf-tag">Meal Picker</span>
+            <span class="sf-tag">Instant Decision</span>
+          </div>
+        </div>
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} colors={themeColors} wheelShape="circle" hubTheme="orange" client:load />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="sf-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Stop Scrolling Delivery Apps — Let the Wheel Decide</h2>
+          <p class="text-white/60 leading-relaxed">The average person spends 11 minutes deciding what to eat every single meal. That's over 200 hours per year staring at Uber Eats, DoorDash, or an open fridge. The food wheel ends the cycle in 3 seconds.</p>
+          <p class="text-white/60 leading-relaxed">The problem isn't indecision — it's the paradox of choice. When every option is equally available, the brain stalls. A spinning wheel short-circuits the comparison loop by making the decision external. You're not choosing; you're accepting the result of a fair random process. It's surprisingly satisfying.</p>
+          <p class="text-white/60 leading-relaxed">Spin the wheel, look at where it lands, and notice your gut reaction. If you feel relief, great — that's dinner. If you feel a flash of disappointment, that tells you something too: you already knew what you wanted. Either way, the wheel gets you to an answer faster than any app.</p>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Use the Food Wheel</h2>
-          <div class="space-y-4">
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">For solo decisions</p>
-              <p class="text-muted-foreground text-sm">Spin and commit. No re-spins. Whatever it lands on, that's dinner. The re-spin loophole defeats the purpose — if you're going to re-spin until you get what you wanted, you already knew what you wanted.</p>
+        <div class="sf-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">How to Use the Food Wheel</h2>
+          <div class="space-y-3">
+            <div class="p-4 rounded-lg bg-red-500/10 border border-red-500/20">
+              <p class="font-semibold text-white text-sm mb-1">For solo decisions</p>
+              <p class="text-white/60 text-sm">Spin and commit. No re-spins. Whatever it lands on, that's dinner. The re-spin loophole defeats the purpose — if you're going to re-spin until you get what you wanted, you already knew what you wanted.</p>
             </div>
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">For couples</p>
-              <p class="text-muted-foreground text-sm">Each person gets one veto per week. Spin the wheel. If neither vetoes, that's the answer. This prevents the infinite "I don't know, what do you want?" loop that wastes more time than the meal itself takes to cook.</p>
+            <div class="p-4 rounded-lg bg-amber-500/10 border border-amber-500/20">
+              <p class="font-semibold text-white text-sm mb-1">For couples</p>
+              <p class="text-white/60 text-sm">Each person gets one veto per week. Spin the wheel. If neither vetoes, that's the answer. This prevents the infinite loop that wastes more time than the meal itself takes to cook.</p>
             </div>
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">For groups</p>
-              <p class="text-muted-foreground text-sm">Everyone adds one suggestion to the wheel. Spin to decide. No arguments — everyone had input, the wheel had the final say. This scales to any group size.</p>
+            <div class="p-4 rounded-lg bg-green-500/10 border border-green-500/20">
+              <p class="font-semibold text-white text-sm mb-1">For groups</p>
+              <p class="text-white/60 text-sm">Everyone adds one suggestion to the wheel. Spin to decide. No arguments — everyone had input, the wheel had the final say. This scales to any group size.</p>
             </div>
           </div>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Customize by Meal Type</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            The default wheel covers popular cuisines. Replace or supplement with options suited to your situation:
-          </p>
+        <div class="sf-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Customize by Meal Type</h2>
+          <p class="text-white/60 leading-relaxed">The default wheel covers popular cuisines. Replace or supplement with options suited to your situation:</p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="p-4 rounded-lg bg-card border border-border">
-              <p class="font-semibold text-foreground text-sm mb-2">Quick lunch</p>
-              <p class="text-muted-foreground text-sm">Sandwich, Leftover, Wrap, Soup, Grain Bowl, Smoothie</p>
+            <div class="p-4 rounded-lg bg-white/5 border border-white/10">
+              <p class="font-semibold text-white text-sm mb-2">Quick lunch</p>
+              <p class="text-white/50 text-sm">Sandwich, Leftover, Wrap, Soup, Grain Bowl, Smoothie</p>
             </div>
-            <div class="p-4 rounded-lg bg-card border border-border">
-              <p class="font-semibold text-foreground text-sm mb-2">Date night</p>
-              <p class="text-muted-foreground text-sm">Italian, Japanese, Steakhouse, French, Seafood, Tapas</p>
+            <div class="p-4 rounded-lg bg-white/5 border border-white/10">
+              <p class="font-semibold text-white text-sm mb-2">Date night</p>
+              <p class="text-white/50 text-sm">Italian, Japanese, Steakhouse, French, Seafood, Tapas</p>
             </div>
-            <div class="p-4 rounded-lg bg-card border border-border">
-              <p class="font-semibold text-foreground text-sm mb-2">Budget meals</p>
-              <p class="text-muted-foreground text-sm">Rice & Beans, Pasta, Stir-fry, Omelette, Quesadilla, Soup</p>
+            <div class="p-4 rounded-lg bg-white/5 border border-white/10">
+              <p class="font-semibold text-white text-sm mb-2">Budget meals</p>
+              <p class="text-white/50 text-sm">Rice &amp; Beans, Pasta, Stir-fry, Omelette, Quesadilla, Soup</p>
             </div>
-            <div class="p-4 rounded-lg bg-card border border-border">
-              <p class="font-semibold text-foreground text-sm mb-2">Healthy options</p>
-              <p class="text-muted-foreground text-sm">Poke Bowl, Salad, Grilled Chicken, Sushi, Buddha Bowl, Fish</p>
+            <div class="p-4 rounded-lg bg-white/5 border border-white/10">
+              <p class="font-semibold text-white text-sm mb-2">Healthy options</p>
+              <p class="text-white/50 text-sm">Poke Bowl, Salad, Grilled Chicken, Sushi, Buddha Bowl, Fish</p>
             </div>
           </div>
-          <p class="text-muted-foreground leading-relaxed">
-            Clear the default list and paste your own options. If you order from specific restaurants regularly, replace cuisine types with restaurant names. "Thai Food" becomes "Lotus Garden" or whatever your local spot is called.
-          </p>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Psychology of Food Decisions</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Decision fatigue is real. By the end of the day, your brain has made thousands of micro-decisions and it's exhausted. Outsourcing one decision to a random wheel isn't lazy — it's efficient.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            Research from Cornell University found that people make an average of 226 food-related decisions daily. Reducing even a few per meal creates measurable cognitive relief. The food wheel removes one decision from the stack entirely. What you eat tonight is no longer a question — it's a spin.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            There's also an element of novelty: when the wheel lands on something you wouldn't have chosen yourself, you often discover you enjoy it more than expected. Removing your own bias from the selection process occasionally leads you somewhere better.
-          </p>
+        <div class="sf-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">The Psychology of Food Decisions</h2>
+          <p class="text-white/60 leading-relaxed">Decision fatigue is real. By the end of the day, your brain has made thousands of micro-decisions and it's exhausted. Outsourcing one decision to a random wheel isn't lazy — it's efficient.</p>
+          <p class="text-white/60 leading-relaxed">Research from Cornell University found that people make an average of 226 food-related decisions daily. Reducing even a few per meal creates measurable cognitive relief. The food wheel removes one decision from the stack entirely.</p>
+          <p class="text-white/60 leading-relaxed">There's also an element of novelty: when the wheel lands on something you wouldn't have chosen yourself, you often discover you enjoy it more than expected. Removing your own bias from the selection process occasionally leads you somewhere better.</p>
         </div>
 
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="sf-faq group">
+                <summary class="font-semibold text-white cursor-pointer list-none flex items-center justify-between gap-2">
+                  {question}
+                  <span class="text-white/40 shrink-0 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p class="text-white/60 text-sm leading-relaxed mt-3">{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
-      <!-- FAQ -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Related Tools</h2>
+          <ul class="grid sm:grid-cols-2 gap-3">
+            {[
+              { href: "/random-wheel", label: "Random Wheel", desc: "Build a fully custom wheel with your own options — perfect for any decision." },
+              { href: "/yes-or-no-wheel", label: "Yes or No Wheel", desc: "Settle quick yes/no questions in a single spin." },
+              { href: "/party-wheel", label: "Party Wheel", desc: "Random challenges and party activities for game nights." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="sf-card flex items-start gap-3 p-4">
+                  <span>
+                    <span class="font-semibold text-white text-sm">{label}</span>
+                    <span class="text-white/50 text-sm block mt-0.5">{desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
 
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/random-wheel", label: "Random Wheel", desc: "Build a fully custom wheel with your own options — perfect for any decision." },
-            { href: "/yes-or-no-wheel", label: "Yes or No Wheel", desc: "Settle quick yes/no questions in a single spin." },
-            { href: "/party-wheel", label: "Party Wheel", desc: "Random challenges and party activities for game nights." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-    </main>
-
-    <GlobalFooterIsland client:load />
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

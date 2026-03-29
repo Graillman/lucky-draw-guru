@@ -47,14 +47,188 @@ const jsonLd = {
   "description": description,
   "url": "https://realwheelpicker.com/templates/video-game-picker",
 };
+
+const themeColors = ['#ef4444','#22c55e','#3b82f6','#a855f7','#06b6d4','#f59e0b','#ec4899','#84cc16','#f97316','#38bdf8'];
 ---
 
-<Layout
-  title={title}
-  description={description}
-  canonical={canonical}
-  jsonLd={jsonLd}
->
+<style>
+  /* ═══ GAMING RGB ═══ */
+  .vg-page {
+    background: #000000;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Scanlines overlay */
+  .vg-page::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.12) 2px,
+      rgba(0,0,0,0.12) 4px
+    );
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .vg-sky {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(168,85,247,0.05) 0%, transparent 60%),
+                linear-gradient(180deg, #000000 0%, #040010 100%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* RGB pulsing rings */
+  .vg-ring {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    border: 2px solid;
+    pointer-events: none;
+    z-index: 1;
+    animation: vgRgbPulse ease-in-out infinite;
+    transform: translate(-50%, -50%);
+  }
+  @keyframes vgRgbPulse {
+    0%, 100% { opacity: 0.1; transform: translate(-50%, -50%) scale(1); }
+    50%       { opacity: 0.45; transform: translate(-50%, -50%) scale(1.06); box-shadow: 0 0 20px currentColor; }
+  }
+
+  /* Floating controller emojis */
+  .vg-ctrl {
+    position: fixed;
+    pointer-events: none;
+    z-index: 3;
+    animation: vgCtrlFloat ease-in-out infinite;
+  }
+  @keyframes vgCtrlFloat {
+    0%, 100% { transform: translateY(0px) rotate(-5deg); opacity: 0.5; }
+    50%       { transform: translateY(-18px) rotate(5deg); opacity: 0.85; }
+  }
+
+  /* Glow orbs */
+  .vg-glow {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(70px);
+    animation: vgGlowPulse ease-in-out infinite alternate;
+  }
+  @keyframes vgGlowPulse {
+    0%   { opacity: 0.2; transform: scale(0.95); }
+    100% { opacity: 0.45; transform: scale(1.1); }
+  }
+
+  /* RGB sparks */
+  .vg-spark {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 3;
+    animation: vgSparkBlink ease-in-out infinite;
+  }
+  @keyframes vgSparkBlink {
+    0%, 100% { opacity: 0; transform: scale(0.3); }
+    45%, 55%  { opacity: 1; transform: scale(1.4); }
+  }
+
+  /* Horizontal RGB streak lines */
+  .vg-streak {
+    position: fixed;
+    height: 2px;
+    pointer-events: none;
+    z-index: 2;
+    border-radius: 1px;
+    animation: vgStreakSlide linear infinite;
+  }
+  @keyframes vgStreakSlide {
+    0%   { transform: translateX(-100vw); opacity: 0; }
+    10%  { opacity: 0.7; }
+    90%  { opacity: 0.5; }
+    100% { transform: translateX(100vw); opacity: 0; }
+  }
+
+  /* HUD fixed elements */
+  .vg-hud {
+    position: fixed;
+    pointer-events: none;
+    z-index: 4;
+    font-family: 'Courier New', monospace;
+    font-weight: 900;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    padding: 6px 12px;
+    border: 1px solid;
+    border-radius: 3px;
+    animation: vgHudBlink ease-in-out infinite;
+  }
+  @keyframes vgHudBlink {
+    0%, 80%, 100% { opacity: 0.7; }
+    85%, 95%      { opacity: 0.2; }
+    90%           { opacity: 0.7; }
+  }
+
+  /* Content */
+  .vg-content { position: relative; z-index: 10; }
+
+  .vg-title {
+    background: linear-gradient(90deg, #ef4444, #f97316, #22c55e, #3b82f6, #a855f7, #ec4899, #ef4444);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: vgTitleRgb 4s linear infinite;
+    filter: drop-shadow(0 0 30px rgba(168,85,247,0.7));
+  }
+  @keyframes vgTitleRgb {
+    0%   { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+
+  .vg-tag {
+    background: rgba(168,85,247,0.12);
+    border: 1px solid rgba(168,85,247,0.4);
+    color: rgba(200,160,255,0.9);
+    border-radius: 9999px;
+    padding: 4px 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .vg-card {
+    background: rgba(2,0,10,0.85);
+    border: 1px solid rgba(168,85,247,0.2);
+    border-radius: 1rem;
+    transition: border-color 0.2s, background 0.2s;
+    backdrop-filter: blur(8px);
+  }
+  .vg-card:hover {
+    border-color: rgba(168,85,247,0.5);
+    background: rgba(4,0,16,0.92);
+  }
+
+  details.vg-faq {
+    background: rgba(2,0,10,0.85);
+    border: 1px solid rgba(168,85,247,0.18);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    backdrop-filter: blur(8px);
+  }
+  details.vg-faq[open] {
+    border-color: rgba(168,85,247,0.5);
+  }
+</style>
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
     { name: "Home", url: "https://realwheelpicker.com" },
@@ -62,108 +236,157 @@ const jsonLd = {
     { name: "Video Game Picker Wheel", url: "https://realwheelpicker.com/templates/video-game-picker" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  <div class="vg-page">
+    <div class="vg-sky"></div>
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <!-- HUD decorative elements -->
+    <div class="vg-hud" style="top:15px;left:15px;color:#22c55e;border-color:#22c55e;">PLAYER 1</div>
+    <div class="vg-hud" style="top:15px;right:15px;color:#ef4444;border-color:#ef4444;">SCORE: ???</div>
+    <div class="vg-hud" style="bottom:80px;left:15px;color:#3b82f6;border-color:#3b82f6;">LEVEL: MAX</div>
+    <div class="vg-hud" style="bottom:80px;right:15px;color:#f59e0b;border-color:#f59e0b;">SPIN: GO!</div>
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Video Game Picker Wheel</span>
-      </nav>
+    <!-- Glow orbs -->
+    <div class="vg-glow" style="width:450px;height:400px;background:rgba(239,68,68,0.1);top:5%;left:-5%;animation-duration:6s;"></div>
+    <div class="vg-glow" style="width:400px;height:380px;background:rgba(59,130,246,0.1);top:40%;right:-5%;animation-duration:8s;animation-delay:2s;"></div>
+    <div class="vg-glow" style="width:350px;height:320px;background:rgba(168,85,247,0.1);bottom:15%;left:30%;animation-duration:7s;animation-delay:4s;"></div>
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Video Game Picker Wheel — What Should I Play?
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Too many games, not enough decisiveness. Spin the wheel and commit to whatever genre (or game) it picks. No more 30 minutes of browsing your library doing nothing.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- 6 RGB pulsing rings -->
+    {[
+      { size: 200, color: '#ef4444', dur: 3 },
+      { size: 350, color: '#22c55e', dur: 4 },
+      { size: 500, color: '#3b82f6', dur: 5 },
+      { size: 650, color: '#a855f7', dur: 3.5 },
+      { size: 800, color: '#06b6d4', dur: 6 },
+      { size: 950, color: '#f59e0b', dur: 4.5 },
+    ].map(({ size, color, dur }, i) => (
+      <div class="vg-ring" style={`width:${size}px;height:${size}px;border-color:${color};color:${color};animation-duration:${dur}s;animation-delay:${i * 0.5}s;`}></div>
+    ))}
 
-      <!-- Wheel -->
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <!-- 20 floating controller emojis -->
+    {Array.from({ length: 20 }, (_, i) => {
+      const icons = ['🎮','🕹️','👾','🎯','⚔️','🏆','💥','⚡'];
+      return (
+        <span class="vg-ctrl" style={`font-size:${1.2 + (i % 4) * 0.4}rem;left:${(i * 4.8 + 2) % 96}%;top:${(i * 7.3 + 3) % 88}%;animation-duration:${3 + i * 0.4}s;animation-delay:${i * 0.35}s;`}>{icons[i % icons.length]}</span>
+      );
+    })}
 
-      <!-- Article Content -->
-      <section class="space-y-8">
+    <!-- RGB sparks -->
+    {Array.from({ length: 25 }, (_, i) => {
+      const colors = ['#ef4444','#22c55e','#3b82f6','#a855f7','#06b6d4','#f59e0b','#ec4899','#84cc16','#f97316','#38bdf8'];
+      const size = 3 + (i % 5);
+      return (
+        <div class="vg-spark" style={`width:${size}px;height:${size}px;left:${(i * 3.9 + 1) % 98}%;top:${(i * 5.7 + 2) % 90}%;background:${colors[i % colors.length]};box-shadow:0 0 8px ${colors[i % colors.length]};animation-duration:${1.5 + i * 0.2}s;animation-delay:${i * 0.18}s;`}></div>
+      );
+    })}
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Backlog Problem</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Every gamer has the same problem: a massive backlog of unplayed games and a decision paralysis that kicks in every single session. You scroll your library for 20 minutes, click into a game, read the loading screen, and then back out to browse again. The playing never starts.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            The video game picker wheel fixes this by removing choice from the equation. Load it with your actual unplayed games, spin once, and that's your game for the session. The commitment is easier when it's "the wheel chose this" rather than "I chose this and gave up on everything else."
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            For genre-based spinning, use it as a discovery prompt. Landing on "Indie Game" when you usually play shooters might lead to the best gaming experience of the year — something you'd never have picked deliberately.
-          </p>
+    <!-- RGB streak lines -->
+    {Array.from({ length: 8 }, (_, i) => {
+      const colors = ['#ef4444','#22c55e','#3b82f6','#a855f7','#06b6d4','#f59e0b','#ec4899','#38bdf8'];
+      return (
+        <div class="vg-streak" style={`width:${80 + i * 30}px;background:${colors[i]};top:${10 + i * 11}%;animation-duration:${5 + i * 0.8}s;animation-delay:${i * 0.7}s;`}></div>
+      );
+    })}
+
+    <div class="vg-content">
+      <HeaderIsland client:load />
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/60 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/50">Video Game Picker</span>
+        </nav>
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3">🎮</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight vg-title mb-3">Video Game Picker Wheel</h1>
+          <p class="text-lg text-white/55 max-w-xl mx-auto mb-5">Too many games, not enough decisiveness. Spin the wheel and commit to whatever genre it picks. No more 30 minutes of browsing your library doing nothing.</p>
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="vg-tag">Gaming</span>
+            <span class="vg-tag">Backlog Buster</span>
+            <span class="vg-tag">Co-op Nights</span>
+          </div>
+        </div>
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} colors={themeColors} wheelShape="hexagon" hubTheme="neon" client:load />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="vg-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">The Backlog Problem</h2>
+          <p class="text-white/60 leading-relaxed">Every gamer has the same problem: a massive backlog of unplayed games and a decision paralysis that kicks in every single session. You scroll your library for 20 minutes, click into a game, read the loading screen, and then back out to browse again. The playing never starts.</p>
+          <p class="text-white/60 leading-relaxed">The video game picker wheel fixes this by removing choice from the equation. Load it with your actual unplayed games, spin once, and that's your game for the session. The commitment is easier when it's "the wheel chose this" rather than "I chose this and gave up on everything else."</p>
+          <p class="text-white/60 leading-relaxed">For genre-based spinning, use it as a discovery prompt. Landing on "Indie Game" when you usually play shooters might lead to the best gaming experience of the year — something you'd never have picked deliberately.</p>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Multiplayer Game Night Decisions</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Group gaming has the same debate problem as restaurant picking: everyone has a preference, nobody wants to be the one who "chose wrong." The wheel handles this for gaming nights too.
-          </p>
-          <ul class="space-y-2 text-muted-foreground">
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Add games everyone owns to the wheel, spin to pick the first game of the night.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Use it to pick whose turn it is to choose the game — spin player names, winner picks.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>For tournaments, spin to determine brackets, game order, or who faces who.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Add a "random indie" option to force the group into something unexpected at least once a month.</span></li>
+        <div class="vg-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Multiplayer Game Night Decisions</h2>
+          <p class="text-white/60 leading-relaxed">Group gaming has the same debate problem as restaurant picking: everyone has a preference, nobody wants to be the one who "chose wrong." The wheel handles this for gaming nights too.</p>
+          <ul class="space-y-2 text-white/60">
+            <li class="flex gap-3"><span class="text-purple-400 font-bold">→</span><span>Add games everyone owns to the wheel, spin to pick the first game of the night.</span></li>
+            <li class="flex gap-3"><span class="text-purple-400 font-bold">→</span><span>Use it to pick whose turn it is to choose the game — spin player names, winner picks.</span></li>
+            <li class="flex gap-3"><span class="text-purple-400 font-bold">→</span><span>For tournaments, spin to determine brackets, game order, or who faces who.</span></li>
+            <li class="flex gap-3"><span class="text-purple-400 font-bold">→</span><span>Add a "random indie" option to force the group into something unexpected at least once a month.</span></li>
           </ul>
         </div>
 
-      </section>
-
-      <!-- FAQ -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
+        <div class="vg-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Genre Guide</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {[
+              ["Action RPG", "Elden Ring, Dark Souls, Diablo IV"],
+              ["FPS Shooter", "Call of Duty, Valorant, Counter-Strike"],
+              ["Indie Game", "Hades, Celeste, Hollow Knight"],
+              ["Strategy", "Civilization, Starcraft, Age of Empires"],
+              ["Horror Game", "Resident Evil, Outlast, Alan Wake"],
+              ["Party Game", "Among Us, Fall Guys, Mario Party"],
+            ].map(([genre, examples]) => (
+              <div class="p-3 rounded-lg bg-purple-900/20 border border-purple-700/25">
+                <p class="font-semibold text-white text-sm">{genre}</p>
+                <p class="text-white/45 text-xs mt-1">{examples}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </section>
 
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/board-game-picker", label: "Board Game Picker", desc: "For offline gaming nights — random board game selector." },
-            { href: "/templates/roblox-wheel", label: "Roblox Game Picker", desc: "Spin for a random Roblox game to play next." },
-            { href: "/templates/who-goes-first-wheel", label: "Who Goes First Wheel", desc: "Randomly determine who goes first in any game." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="vg-faq group">
+                <summary class="font-semibold text-white cursor-pointer list-none flex items-center justify-between gap-2">
+                  {question}
+                  <span class="text-white/40 shrink-0 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p class="text-white/60 text-sm leading-relaxed mt-3">{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
-    </main>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Related Tools</h2>
+          <ul class="grid sm:grid-cols-2 gap-3">
+            {[
+              { href: "/templates/board-game-picker", label: "Board Game Picker", desc: "For offline gaming nights — random board game selector." },
+              { href: "/templates/roblox-wheel", label: "Roblox Game Picker", desc: "Spin for a random Roblox game to play next." },
+              { href: "/templates/who-goes-first-wheel", label: "Who Goes First Wheel", desc: "Randomly determine who goes first in any game." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="vg-card flex items-start gap-3 p-4">
+                  <span>
+                    <span class="font-semibold text-white text-sm">{label}</span>
+                    <span class="text-white/50 text-sm block mt-0.5">{desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
 
-    <GlobalFooterIsland client:load />
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

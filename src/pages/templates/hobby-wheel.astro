@@ -47,7 +47,192 @@ const jsonLd = {
   "description": description,
   "url": "https://realwheelpicker.com/templates/hobby-wheel",
 };
+
+const themeColors = ['#ef4444','#f59e0b','#22c55e','#3b82f6','#a855f7','#ec4899','#14b8a6','#f97316','#84cc16','#06b6d4'];
+
+const paintBlobs = [
+  { color: '#ef4444', left: '-8%', top: '-5%', size: '420px', blur: '90px', opacity: '0.22', delay: '0s' },
+  { color: '#f59e0b', right: '-5%', top: '10%', size: '380px', blur: '80px', opacity: '0.2', delay: '0.8s' },
+  { color: '#22c55e', left: '15%', bottom: '5%', size: '360px', blur: '85px', opacity: '0.18', delay: '1.6s' },
+  { color: '#3b82f6', right: '10%', bottom: '-8%', size: '400px', blur: '90px', opacity: '0.2', delay: '2.4s' },
+  { color: '#a855f7', left: '40%', top: '-10%', size: '300px', blur: '70px', opacity: '0.15', delay: '1.2s' },
+  { color: '#ec4899', left: '-5%', top: '50%', size: '350px', blur: '80px', opacity: '0.17', delay: '2s' },
+  { color: '#14b8a6', right: '30%', bottom: '-5%', size: '320px', blur: '75px', opacity: '0.15', delay: '0.4s' },
+  { color: '#f97316', right: '-8%', top: '60%', size: '380px', blur: '85px', opacity: '0.18', delay: '1s' },
+];
+
+const paintDrops = Array.from({length: 25}, (_, i) => ({
+  left: `${(i * 4.2) % 100}%`,
+  size: `${8 + (i % 5) * 4}px`,
+  color: themeColors[i % themeColors.length],
+  delay: `${(i * 0.55).toFixed(2)}s`,
+  duration: `${4 + (i % 5) * 1.2}s`,
+  startTop: `${-5 - (i % 4) * 3}%`,
+}));
+
+const brushes = Array.from({length: 15}, (_, i) => ({
+  left: `${(i * 7.1) % 95}%`,
+  top: `${(i * 13.7) % 80}%`,
+  rotation: `${-45 + (i % 9) * 10}deg`,
+  delay: `${(i * 0.4).toFixed(1)}s`,
+  duration: `${3 + (i % 4) * 0.8}s`,
+}));
+
+const splashes = [
+  { left: '-3%', top: '-3%', color: '#ef4444', size: '180px' },
+  { right: '-3%', top: '5%', color: '#3b82f6', size: '150px' },
+  { left: '5%', bottom: '-3%', color: '#22c55e', size: '160px' },
+  { right: '-2%', bottom: '10%', color: '#a855f7', size: '140px' },
+];
 ---
+
+<style>
+  .hb-page {
+    background: #000000;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+  .hb-sky {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .hb-blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(var(--bblur));
+    pointer-events: none;
+    z-index: 1;
+    animation: hbPaintPulse var(--bdur) var(--bdelay) ease-in-out infinite;
+  }
+  @keyframes hbPaintPulse {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: var(--bop); }
+    33% { transform: scale(1.08) rotate(5deg); opacity: calc(var(--bop) * 1.3); }
+    66% { transform: scale(0.94) rotate(-3deg); opacity: calc(var(--bop) * 0.8); }
+  }
+  .hb-splash {
+    position: fixed;
+    border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.12;
+    animation: hbSplashWobble 6s ease-in-out infinite;
+  }
+  @keyframes hbSplashWobble {
+    0%, 100% { border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%; }
+    50% { border-radius: 55% 45% 40% 60% / 45% 55% 50% 50%; }
+  }
+  .hb-drop {
+    position: fixed;
+    border-radius: 50% 50% 60% 60% / 50% 50% 70% 70%;
+    pointer-events: none;
+    z-index: 3;
+    animation: hbPaintDrop var(--ddur) var(--ddelay) linear infinite;
+  }
+  @keyframes hbPaintDrop {
+    0% { transform: translateY(var(--dstart)) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.9; }
+    85% { opacity: 0.7; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+  .hb-brush {
+    position: fixed;
+    font-size: 1.8rem;
+    pointer-events: none;
+    z-index: 3;
+    animation: hbBrushFloat var(--brdur) var(--brdelay) ease-in-out infinite;
+  }
+  @keyframes hbBrushFloat {
+    0%, 100% { transform: rotate(var(--brrot)) translateY(0px); opacity: 0.5; }
+    50% { transform: rotate(calc(var(--brrot) + 8deg)) translateY(-12px); opacity: 0.85; }
+  }
+  .hb-content {
+    position: relative;
+    z-index: 10;
+  }
+  .hb-title {
+    background: linear-gradient(135deg, #ef4444 0%, #f59e0b 20%, #22c55e 40%, #3b82f6 60%, #a855f7 80%, #ec4899 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: hbRainbowShift 6s linear infinite;
+    background-size: 200% auto;
+    filter: drop-shadow(0 0 20px rgba(239,68,68,0.3));
+  }
+  @keyframes hbRainbowShift {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+  .hb-card {
+    background: rgba(0,0,0,0.8);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 1rem;
+    padding: 1.5rem;
+  }
+  .hb-card h2 { color: #f1f5f9; }
+  .hb-card p, .hb-card li { color: rgba(241,245,249,0.65); line-height: 1.7; }
+  .hb-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid rgba(239,68,68,0.3);
+    background: rgba(239,68,68,0.1);
+    color: #fca5a5;
+  }
+  details.hb-faq {
+    background: rgba(0,0,0,0.8);
+    border: 1px solid rgba(239,68,68,0.18);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+  details.hb-faq summary {
+    font-weight: 600;
+    color: #f1f5f9;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  details.hb-faq summary::before { content: '🎨'; font-size: 0.9rem; }
+  details.hb-faq[open] summary::before { content: '🖌️'; }
+  details.hb-faq p {
+    margin-top: 0.75rem;
+    color: rgba(241,245,249,0.65);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .hb-related-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(0,0,0,0.8);
+    border: 1px solid rgba(239,68,68,0.18);
+    border-radius: 0.75rem;
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .hb-related-link:hover {
+    border-color: rgba(239,68,68,0.45);
+    box-shadow: 0 0 20px rgba(239,68,68,0.12);
+  }
+  @keyframes hbPaletteAppear {
+    0% { opacity: 0; transform: scale(0) rotate(-20deg); }
+    60% { opacity: 1; transform: scale(1.1) rotate(5deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+  .hb-palette-icon {
+    display: inline-block;
+    animation: hbPaletteAppear 1s ease-out forwards;
+  }
+</style>
 
 <Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
@@ -57,92 +242,120 @@ const jsonLd = {
     { name: "Random Hobby Spinner", url: "https://realwheelpicker.com/templates/hobby-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+  <div class="hb-page">
+    <div class="hb-sky"></div>
 
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Random Hobby Spinner</span>
-      </nav>
+    {paintBlobs.map((b) => (
+      <div
+        class="hb-blob"
+        style={`background:${b.color}; width:${b.size}; height:${b.size}; ${b.left ? `left:${b.left};` : ''} ${b.right ? `right:${b.right};` : ''} ${b.top ? `top:${b.top};` : ''} ${b.bottom ? `bottom:${b.bottom};` : ''} --bblur:${b.blur}; --bop:${b.opacity}; --bdelay:${b.delay}; --bdur:${4 + paintBlobs.indexOf(b) * 0.7}s;`}
+      ></div>
+    ))}
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Random Hobby Spinner — What to Do When Bored
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Can't decide what to do with your free time? Spin the hobby wheel and start something new. Every spin is a tiny adventure.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    {splashes.map((s) => (
+      <div
+        class="hb-splash"
+        style={`background:${s.color}; width:${s.size}; height:${s.size}; ${s.left ? `left:${s.left};` : ''} ${s.right ? `right:${s.right};` : ''} ${s.top ? `top:${s.top};` : ''} ${s.bottom ? `bottom:${s.bottom};` : ''}`}
+      ></div>
+    ))}
 
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    {paintDrops.map((d) => (
+      <div
+        class="hb-drop"
+        style={`left:${d.left}; top:${d.startTop}; width:${d.size}; height:${parseInt(d.size) * 1.4}px; background:${d.color}; --ddur:${d.duration}; --ddelay:${d.delay}; --dstart:-10%; box-shadow: 0 0 6px ${d.color}55;`}
+      ></div>
+    ))}
 
-      <section class="space-y-8">
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Boredom Needs a Wheel</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Boredom is rarely about having nothing to do — it's about having too many things to do and not being able to pick any of them. You scroll through options, nothing feels right, and you end up doing the default (usually your phone) instead of something you'd actually enjoy.
+    {brushes.map((b) => (
+      <div
+        class="hb-brush"
+        style={`left:${b.left}; top:${b.top}; --brrot:${b.rotation}; --brdur:${b.duration}; --brdelay:${b.delay};`}
+      >🖌️</div>
+    ))}
+
+    <div class="hb-content">
+      <HeaderIsland client:load />
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/60 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/50">Random Hobby Spinner</span>
+        </nav>
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3 hb-palette-icon">🎨</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight hb-title mb-3">
+            Random Hobby Spinner — What to Do When Bored
+          </h1>
+          <p class="text-lg text-white/55 max-w-xl mx-auto mb-5">
+            Can't decide what to do with your free time? Spin the creative wheel and dive into something new. Every spin is a tiny adventure.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            The hobby wheel removes the selection step entirely. Whatever it lands on, you do for at least 20 minutes without switching. The constraint of commitment is what makes it work — once you've started drawing, writing, or cooking, you often find the initial resistance disappears within a few minutes.
-          </p>
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="hb-tag">🎨 12 Activities</span>
+            <span class="hb-tag">🖌️ Customize</span>
+            <span class="hb-tag">🆓 Free</span>
+            <span class="hb-tag">✨ Instant</span>
+          </div>
+        </div>
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} colors={themeColors} wheelShape="hexagon" hubTheme="cosmic" client:load />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="hb-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold">Why Boredom Needs a Wheel</h2>
+          <p>Boredom is rarely about having nothing to do — it's about having too many things to do and not being able to pick any of them. You scroll through options, nothing feels right, and you end up doing the default (usually your phone) instead of something you'd actually enjoy.</p>
+          <p>The hobby wheel removes the selection step entirely. Whatever it lands on, you do for at least 20 minutes without switching. The constraint of commitment is what makes it work — once you've started drawing, writing, or cooking, you often find the initial resistance disappears within a few minutes.</p>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Build Your Personal Wheel</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            The best hobby wheel is personalized. Replace the defaults with activities that are actually interesting to you and accessible right now. Consider adding a mix of:
-          </p>
-          <ul class="space-y-2 text-muted-foreground">
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Creative:</strong> Drawing, writing, music, crafts, photography</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Physical:</strong> Walk, stretch, bike, yoga, quick workout</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Learning:</strong> Language lesson, reading, online course, coding</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Social:</strong> Call a friend, write a letter, plan a meetup</span></li>
+        <div class="hb-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold">Build Your Personal Creative Wheel</h2>
+          <p>The best hobby wheel is personalized. Replace the defaults with activities that are actually interesting to you and accessible right now. Consider adding a mix of:</p>
+          <ul class="space-y-3">
+            <li class="flex gap-3"><span style="color:#ef4444" class="font-bold">→</span><span><strong style="color:#f1f5f9">Creative:</strong> Drawing, writing, music, crafts, photography</span></li>
+            <li class="flex gap-3"><span style="color:#22c55e" class="font-bold">→</span><span><strong style="color:#f1f5f9">Physical:</strong> Walk, stretch, bike, yoga, quick workout</span></li>
+            <li class="flex gap-3"><span style="color:#3b82f6" class="font-bold">→</span><span><strong style="color:#f1f5f9">Learning:</strong> Language lesson, reading, online course, coding</span></li>
+            <li class="flex gap-3"><span style="color:#a855f7" class="font-bold">→</span><span><strong style="color:#f1f5f9">Social:</strong> Call a friend, write a letter, plan a meetup</span></li>
           </ul>
         </div>
-      </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#f1f5f9">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="hb-faq">
+                <summary>{question}</summary>
+                <p>{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/weekend-activity-wheel", label: "Weekend Activity Spinner", desc: "Bigger weekend plans — from hikes to game nights." },
-            { href: "/templates/self-care-wheel", label: "Self-Care Wheel", desc: "Spin for a random wellness activity." },
-            { href: "/random-wheel", label: "Random Wheel", desc: "Build a fully custom wheel with your own hobby list." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#f1f5f9">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/templates/weekend-activity-wheel", label: "Weekend Activity Spinner", desc: "Bigger weekend plans — from hikes to game nights." },
+              { href: "/templates/self-care-wheel", label: "Self-Care Wheel", desc: "Spin for a random wellness activity." },
+              { href: "/random-wheel", label: "Random Wheel", desc: "Build a fully custom wheel with your own hobby list." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="hb-related-link">
+                  <span style="color:#ef4444" class="font-bold text-sm mt-0.5">→</span>
+                  <span>
+                    <span class="font-semibold" style="color:#f1f5f9">{label}</span>
+                    <span style="color:rgba(241,245,249,0.55)" class="text-sm"> — {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-    </main>
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

@@ -57,7 +57,186 @@ const jsonLd = {
     },
   ],
 };
+
+const themeColors = ['#ffd700','#b8860b','#daa520','#cd853f','#c0a060','#ffa500','#d4af37','#f0c040','#ffb347','#e8c44a'];
 ---
+
+<style>
+  /* ═══ GOLDEN COIN FLIP ═══ */
+  .cf-page {
+    background: #000000;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .cf-sky {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(212,175,55,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 30% 30%, rgba(255,215,0,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 35% at 70% 70%, rgba(184,134,11,0.06) 0%, transparent 50%),
+                linear-gradient(180deg, #000000 0%, #050300 100%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Spinning coins */
+  .cf-coin {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+    animation: cfCoinSpin linear infinite, cfCoinFloat ease-in-out infinite alternate;
+    background: radial-gradient(circle at 35% 35%, #fff8c0, #ffd700 40%, #b8860b 80%, #8b6914);
+    box-shadow: 0 0 10px rgba(255,215,0,0.4), inset 0 2px 4px rgba(255,255,255,0.3);
+  }
+  @keyframes cfCoinSpin {
+    0%   { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
+  }
+  @keyframes cfCoinFloat {
+    0%   { margin-top: 0px; }
+    100% { margin-top: -18px; }
+  }
+
+  /* Gold light rays */
+  .cf-ray {
+    position: fixed;
+    width: 3px;
+    pointer-events: none;
+    z-index: 1;
+    transform-origin: bottom center;
+    background: linear-gradient(180deg, transparent, rgba(255,215,0,0.3), transparent);
+    animation: cfRayShine ease-in-out infinite alternate;
+  }
+  @keyframes cfRayShine {
+    0%   { opacity: 0.2; transform: scaleY(0.8) rotate(var(--angle)); }
+    100% { opacity: 0.7; transform: scaleY(1.2) rotate(var(--angle)); }
+  }
+
+  /* Rising gold particles */
+  .cf-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 2;
+    animation: cfParticleRise linear infinite;
+    background: #ffd700;
+  }
+  @keyframes cfParticleRise {
+    0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 0.8; }
+    100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* Central gold halo */
+  .cf-halo {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    border: 2px solid rgba(255,215,0,0.25);
+    animation: cfHaloPulse ease-in-out infinite;
+  }
+  @keyframes cfHaloPulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; box-shadow: 0 0 30px rgba(255,215,0,0.3); }
+    50%       { transform: scale(1.08); opacity: 0.9; box-shadow: 0 0 60px rgba(255,215,0,0.5); }
+  }
+
+  /* Gold sparkles */
+  .cf-spark {
+    position: fixed;
+    pointer-events: none;
+    z-index: 2;
+    animation: cfSparkTwinkle ease-in-out infinite;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    background: #ffd700;
+  }
+  @keyframes cfSparkTwinkle {
+    0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+    50%       { opacity: 1; transform: scale(1) rotate(72deg); }
+  }
+
+  /* Glow orbs */
+  .cf-glow {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(80px);
+    animation: cfGlowPulse ease-in-out infinite alternate;
+  }
+  @keyframes cfGlowPulse {
+    0%   { opacity: 0.25; transform: scale(1); }
+    100% { opacity: 0.45; transform: scale(1.15); }
+  }
+
+  /* Edge flares */
+  .cf-flare {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    background: radial-gradient(circle, rgba(255,215,0,0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(20px);
+    animation: cfFlareShimmer ease-in-out infinite alternate;
+  }
+  @keyframes cfFlareShimmer {
+    0%   { opacity: 0.3; }
+    100% { opacity: 0.6; }
+  }
+
+  /* Content */
+  .cf-content { position: relative; z-index: 10; }
+
+  .cf-title {
+    background: linear-gradient(90deg, #ffd700, #fff8c0, #daa520, #ffd700, #ffb347, #ffd700);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: cfTitleShimmer 4s linear infinite;
+    filter: drop-shadow(0 0 35px rgba(255,215,0,0.7));
+  }
+  @keyframes cfTitleShimmer {
+    0%   { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+
+  .cf-tag {
+    background: rgba(255,215,0,0.12);
+    border: 1px solid rgba(255,215,0,0.35);
+    color: rgba(255,215,0,0.9);
+    border-radius: 9999px;
+    padding: 4px 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .cf-card {
+    background: rgba(8,5,0,0.82);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 1rem;
+    transition: border-color 0.2s, background 0.2s;
+    backdrop-filter: blur(8px);
+  }
+  .cf-card:hover {
+    border-color: rgba(255,215,0,0.5);
+    background: rgba(12,8,0,0.9);
+  }
+
+  details.cf-faq {
+    background: rgba(8,5,0,0.82);
+    border: 1px solid rgba(255,215,0,0.18);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    backdrop-filter: blur(8px);
+  }
+  details.cf-faq[open] {
+    border-color: rgba(255,215,0,0.45);
+  }
+</style>
 
 <Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
@@ -67,47 +246,89 @@ const jsonLd = {
     { name: "Coin Flip Wheel", url: "https://realwheelpicker.com/templates/coin-flip-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  <div class="cf-page">
+    <div class="cf-sky"></div>
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <!-- Atmospheric glow orbs -->
+    <div class="cf-glow" style="width:500px;height:450px;background:rgba(255,215,0,0.08);top:20%;left:50%;transform:translateX(-50%);animation-duration:6s;"></div>
+    <div class="cf-glow" style="width:300px;height:280px;background:rgba(218,165,32,0.07);top:5%;left:10%;animation-duration:8s;animation-delay:2s;"></div>
+    <div class="cf-glow" style="width:280px;height:260px;background:rgba(255,180,55,0.07);bottom:15%;right:8%;animation-duration:9s;animation-delay:3s;"></div>
 
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Coin Flip Wheel</span>
-      </nav>
+    <!-- Central halo ring -->
+    <div class="cf-halo" style="width:350px;height:350px;top:50%;left:50%;transform:translate(-50%,-50%);animation-duration:4s;"></div>
+    <div class="cf-halo" style="width:500px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%);animation-duration:6s;animation-delay:1s;opacity:0.4;"></div>
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Coin Flip Wheel — Heads or Tails Online
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Spin to flip a virtual coin. Exactly 50/50 odds — cryptographically random, no physical bias, instant result.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • True 50/50</p>
-      </section>
+    <!-- Corner flares -->
+    <div class="cf-flare" style="width:200px;height:200px;top:-50px;left:-50px;animation-duration:5s;"></div>
+    <div class="cf-flare" style="width:180px;height:180px;top:-40px;right:-40px;animation-duration:7s;animation-delay:2s;"></div>
+    <div class="cf-flare" style="width:160px;height:160px;bottom:-40px;left:20%;animation-duration:6s;animation-delay:1s;"></div>
+    <div class="cf-flare" style="width:150px;height:150px;bottom:-30px;right:15%;animation-duration:8s;animation-delay:3s;"></div>
 
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <!-- 20 spinning coins -->
+    {Array.from({ length: 20 }, (_, i) => {
+      const size = 18 + (i % 8) * 4;
+      return (
+        <div class="cf-coin" style={`width:${size}px;height:${size}px;left:${(i * 4.8 + 2) % 95}%;top:${(i * 7 + 5) % 85}%;animation-duration:${2 + i * 0.3}s,${3 + i * 0.4}s;animation-delay:${i * 0.25}s,${i * 0.35}s;opacity:${0.5 + (i % 5) * 0.1};`}></div>
+      );
+    })}
 
-      <section class="space-y-6">
+    <!-- 8 gold light rays from center -->
+    {Array.from({ length: 8 }, (_, i) => {
+      const angle = i * 45;
+      return (
+        <div class="cf-ray" style={`height:45vh;width:2px;top:5%;left:50%;transform-origin:bottom center;--angle:${angle}deg;transform:rotate(${angle}deg);animation-duration:${3 + i * 0.5}s;animation-delay:${i * 0.3}s;`}></div>
+      );
+    })}
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Is a Virtual Coin Flip More Fair Than a Physical Coin?</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Physical coin flips have a subtle bias. Research by Stanford mathematicians (Diaconis, Holmes, Montgomery) found that a coin tossed with a standard technique lands on the same face it started on about <strong class="text-foreground">51% of the time</strong> — a small but real deviation from 50/50, caused by imperfect precession of the spinning motion.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            This digital coin flip uses <code>crypto.getRandomValues()</code> — hardware-sourced randomness from your device's CSPRNG (Cryptographically Secure Pseudo-Random Number Generator). Each flip is truly independent with no physical bias. The result is exactly 50/50 over any number of flips.
-          </p>
+    <!-- 25 rising gold particles -->
+    {Array.from({ length: 25 }, (_, i) => {
+      const size = 2 + (i % 4);
+      return (
+        <div class="cf-particle" style={`width:${size}px;height:${size}px;left:${(i * 3.9 + 1) % 98}%;animation-duration:${5 + i % 5}s;animation-delay:${i * 0.28}s;border-radius:${i % 2 === 0 ? '50%' : '2px'};`}></div>
+      );
+    })}
+
+    <!-- 12 gold sparkle stars -->
+    {Array.from({ length: 12 }, (_, i) => {
+      const size = 8 + (i % 6) * 3;
+      return (
+        <div class="cf-spark" style={`width:${size}px;height:${size}px;left:${(i * 8 + 3) % 94}%;top:${(i * 9 + 4) % 88}%;animation-duration:${2 + i * 0.4}s;animation-delay:${i * 0.3}s;`}></div>
+      );
+    })}
+
+    <div class="cf-content">
+      <HeaderIsland client:load />
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/60 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/50">Coin Flip Wheel</span>
+        </nav>
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3">🪙</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight cf-title mb-3">Coin Flip Wheel</h1>
+          <p class="text-lg text-white/55 max-w-xl mx-auto mb-5">Spin to flip a virtual coin. Exactly 50/50 odds — cryptographically random, no physical bias, instant result.</p>
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="cf-tag">Heads or Tails</span>
+            <span class="cf-tag">True 50/50</span>
+            <span class="cf-tag">Crypto Random</span>
+          </div>
+        </div>
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} colors={themeColors} wheelShape="circle" hubTheme="gold" client:load />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="cf-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Is a Virtual Coin Flip More Fair Than a Physical Coin?</h2>
+          <p class="text-white/60 leading-relaxed">Physical coin flips have a subtle bias. Research by Stanford mathematicians found that a coin tossed with a standard technique lands on the same face it started on about 51% of the time — a small but real deviation from 50/50, caused by imperfect precession of the spinning motion.</p>
+          <p class="text-white/60 leading-relaxed">This digital coin flip uses crypto.getRandomValues() — hardware-sourced randomness from your device's CSPRNG (Cryptographically Secure Pseudo-Random Number Generator). Each flip is truly independent with no physical bias. The result is exactly 50/50 over any number of flips.</p>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">When to Use a Coin Flip</h2>
+        <div class="cf-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">When to Use a Coin Flip</h2>
           <div class="grid sm:grid-cols-2 gap-4 text-sm">
             {[
               { use: "Sports decisions", example: "Who kicks off, who serves first, or which team picks their side" },
@@ -117,65 +338,64 @@ const jsonLd = {
               { use: "Randomized study design", example: "Assigning participants to group A or group B in research" },
               { use: "Teaching probability", example: "Demonstrate the law of large numbers — spin 100 times and track the results" },
             ].map((item) => (
-              <div class="p-3 bg-primary/5 border border-primary/20 rounded-lg">
-                <p class="font-semibold text-foreground text-sm mb-0.5">{item.use}</p>
-                <p class="text-xs text-muted-foreground">{item.example}</p>
+              <div class="p-3 bg-yellow-500/8 border border-yellow-500/20 rounded-lg">
+                <p class="font-semibold text-white text-sm mb-0.5">{item.use}</p>
+                <p class="text-xs text-white/50">{item.example}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Customize Your Coin Flip</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Not every decision is binary. The coin flip wheel defaults to Heads and Tails — but you can edit the labels to anything you need:
-          </p>
-          <ul class="space-y-2 text-sm text-muted-foreground">
-            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span> "Yes / No" for simple decisions</li>
-            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span> "Home / Away" for sports</li>
-            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span> "Team A / Team B" for assignment</li>
-            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span> Add a third option like "Best of 3" to the wheel</li>
+        <div class="cf-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Customize Your Coin Flip</h2>
+          <p class="text-white/60 leading-relaxed">Not every decision is binary. The coin flip wheel defaults to Heads and Tails — but you can edit the labels to anything you need:</p>
+          <ul class="space-y-2 text-sm text-white/60">
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-yellow-400 flex-shrink-0"></span> "Yes / No" for simple decisions</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-yellow-400 flex-shrink-0"></span> "Home / Away" for sports</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-yellow-400 flex-shrink-0"></span> "Team A / Team B" for assignment</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-yellow-400 flex-shrink-0"></span> Add a third option like "Best of 3" to the wheel</li>
           </ul>
-          <p class="text-muted-foreground text-sm">Click any label in the wheel to edit it directly. Add or remove segments as needed.</p>
+          <p class="text-white/50 text-sm">Click any label in the wheel to edit it directly. Add or remove segments as needed.</p>
         </div>
 
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="cf-faq group">
+                <summary class="font-semibold text-white cursor-pointer list-none flex items-center justify-between gap-2">
+                  {question}
+                  <span class="text-white/40 shrink-0 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p class="text-white/60 text-sm leading-relaxed mt-3">{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Related Tools</h2>
+          <ul class="grid sm:grid-cols-2 gap-3">
+            {[
+              { href: "/yes-no-wheel", label: "Yes or No Wheel", desc: "50/50 yes/no decision wheel with adjustable odds." },
+              { href: "/decision-wheel", label: "Decision Wheel", desc: "Add any options and spin to decide." },
+              { href: "/templates/dice-roller-wheel", label: "Dice Roller Wheel", desc: "Spin to roll a virtual 6-sided die." },
+              { href: "/random-number-picker", label: "Random Number Picker", desc: "Pick any random number from a custom range." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="cf-card flex items-start gap-3 p-4">
+                  <span>
+                    <span class="font-semibold text-white text-sm">{label}</span>
+                    <span class="text-white/50 text-sm block mt-0.5">{desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/yes-no-wheel", label: "Yes or No Wheel", desc: "50/50 yes/no decision wheel with adjustable odds." },
-            { href: "/decision-wheel", label: "Decision Wheel", desc: "Add any options and spin to decide." },
-            { href: "/templates/dice-roller-wheel", label: "Dice Roller Wheel", desc: "Spin to roll a virtual 6-sided die." },
-            { href: "/random-number-picker", label: "Random Number Picker", desc: "Pick any random number from a custom range." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-    </main>
-    <GlobalFooterIsland client:idle />
+      <GlobalFooterIsland client:idle />
+    </div>
   </div>
 </Layout>

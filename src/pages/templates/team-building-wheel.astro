@@ -45,7 +45,215 @@ const jsonLd = {
   "description": description,
   "url": "https://realwheelpicker.com/templates/team-building-wheel",
 };
+
+const themeColors = ['#ef4444','#f59e0b','#22c55e','#3b82f6','#a855f7','#ec4899','#14b8a6','#f97316','#84cc16','#06b6d4'];
+
+const confetti = Array.from({length: 45}, (_, i) => ({
+  left: `${(i * 2.3) % 100}%`,
+  delay: `${(i * 0.22).toFixed(2)}s`,
+  duration: `${3.5 + (i % 6) * 0.9}s`,
+  width: `${5 + (i % 4) * 3}px`,
+  height: `${8 + (i % 3) * 5}px`,
+  color: themeColors[i % themeColors.length],
+  rotation: `${(i * 31) % 360}deg`,
+  isCircle: i % 5 === 0,
+}));
+
+const festiveEmojis = Array.from({length: 15}, (_, i) => ({
+  left: `${(i * 6.9) % 95}%`,
+  delay: `${(i * 0.5).toFixed(1)}s`,
+  duration: `${5 + (i % 4) * 1.3}s`,
+  size: `${1.3 + (i % 3) * 0.35}rem`,
+  emoji: ['🎊','🎉','🏆','🌟','🤝','🎌','🥳','🎯','🎈','💪','🦾','🎗️','🌈','🎖️','🔥'][i],
+}));
+
+const stars = Array.from({length: 20}, (_, i) => ({
+  left: `${(i * 5.1) % 98}%`,
+  top: `${(i * 8.3) % 85}%`,
+  color: themeColors[i % themeColors.length],
+  delay: `${(i * 0.25).toFixed(2)}s`,
+  duration: `${1.8 + (i % 4) * 0.5}s`,
+  size: `${0.8 + (i % 3) * 0.4}rem`,
+}));
+
+const rainbowLayers = [
+  { color: '#ef4444', opacity: '0.08', width: '70vw', top: '15%' },
+  { color: '#f59e0b', opacity: '0.07', width: '75vw', top: '20%' },
+  { color: '#22c55e', opacity: '0.07', width: '80vw', top: '25%' },
+  { color: '#3b82f6', opacity: '0.07', width: '85vw', top: '30%' },
+  { color: '#a855f7', opacity: '0.06', width: '90vw', top: '35%' },
+];
 ---
+
+<style>
+  .tb-page {
+    background: #060210;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+  .tb-sky {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .tb-rainbow-layer {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 40px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    animation: tbRainbowPulse 5s ease-in-out infinite;
+    filter: blur(20px);
+  }
+  @keyframes tbRainbowPulse {
+    0%, 100% { opacity: var(--rop); }
+    50% { opacity: calc(var(--rop) * 2); }
+  }
+  .tb-halo-center {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70vw;
+    height: 70vh;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(239,68,68,0.08) 0%, rgba(34,197,94,0.06) 40%, transparent 70%);
+    z-index: 1;
+    pointer-events: none;
+    animation: tbCenterGlow 6s ease-in-out infinite;
+  }
+  @keyframes tbCenterGlow {
+    0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.04); }
+  }
+  .tb-confetti {
+    position: fixed;
+    pointer-events: none;
+    z-index: 3;
+    animation: tbConfettiRain var(--tdur) var(--tdelay) ease-in-out infinite;
+  }
+  @keyframes tbConfettiRain {
+    0% { transform: translateY(-5%) rotate(var(--trot)) scaleX(1); opacity: 0; }
+    8% { opacity: 0.9; }
+    48% { transform: translateY(48vh) rotate(calc(var(--trot) + 200deg)) scaleX(-1); }
+    90% { opacity: 0.7; }
+    100% { transform: translateY(108vh) rotate(calc(var(--trot) + 400deg)) scaleX(1); opacity: 0; }
+  }
+  .tb-festive {
+    position: fixed;
+    pointer-events: none;
+    z-index: 3;
+    font-size: var(--fsize);
+    animation: tbFestiveFall var(--fdur) var(--fdelay) ease-in-out infinite;
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.3));
+  }
+  @keyframes tbFestiveFall {
+    0% { transform: translateY(-8%) rotate(-10deg); opacity: 0; }
+    8% { opacity: 1; }
+    45% { transform: translateY(45vh) rotate(15deg); }
+    90% { opacity: 0.7; }
+    100% { transform: translateY(108vh) rotate(-10deg); opacity: 0; }
+  }
+  .tb-star {
+    position: fixed;
+    pointer-events: none;
+    z-index: 2;
+    font-size: var(--ssize);
+    animation: tbStarTwinkle var(--sdur) var(--sdelay) ease-in-out infinite;
+    text-shadow: 0 0 8px currentColor;
+  }
+  @keyframes tbStarTwinkle {
+    0%, 100% { opacity: 0.2; transform: scale(0.7) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.3) rotate(180deg); }
+  }
+  .tb-content {
+    position: relative;
+    z-index: 10;
+  }
+  .tb-title {
+    background: linear-gradient(135deg, #ef4444 0%, #f59e0b 18%, #22c55e 36%, #3b82f6 54%, #a855f7 72%, #ec4899 90%, #ef4444 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% auto;
+    animation: tbRainbowTitle 5s linear infinite;
+    filter: drop-shadow(0 0 25px rgba(239,68,68,0.35));
+  }
+  @keyframes tbRainbowTitle {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+  .tb-card {
+    background: rgba(6,2,16,0.85);
+    border: 1px solid rgba(239,68,68,0.22);
+    border-radius: 1rem;
+    padding: 1.5rem;
+  }
+  .tb-card h2 { color: #fdf4ff; }
+  .tb-card p, .tb-card li { color: rgba(253,244,255,0.65); line-height: 1.7; }
+  .tb-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid rgba(239,68,68,0.3);
+    background: rgba(239,68,68,0.1);
+    color: #fca5a5;
+  }
+  details.tb-faq {
+    background: rgba(6,2,16,0.85);
+    border: 1px solid rgba(239,68,68,0.18);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+  details.tb-faq summary {
+    font-weight: 600;
+    color: #fdf4ff;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  details.tb-faq summary::before { content: '🤝'; font-size: 0.9rem; }
+  details.tb-faq[open] summary::before { content: '🏆'; }
+  details.tb-faq p {
+    margin-top: 0.75rem;
+    color: rgba(253,244,255,0.65);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .tb-related-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(6,2,16,0.85);
+    border: 1px solid rgba(239,68,68,0.18);
+    border-radius: 0.75rem;
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .tb-related-link:hover {
+    border-color: rgba(239,68,68,0.45);
+    box-shadow: 0 0 20px rgba(239,68,68,0.12);
+  }
+  @keyframes tbHandshakeWave {
+    0%, 100% { transform: rotate(-5deg) scale(1); }
+    50% { transform: rotate(5deg) scale(1.1); }
+  }
+  .tb-banner-icon {
+    display: inline-block;
+    animation: tbHandshakeWave 2s ease-in-out infinite;
+  }
+</style>
 
 <Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
@@ -55,79 +263,120 @@ const jsonLd = {
     { name: "Team Building Activity Spinner", url: "https://realwheelpicker.com/templates/team-building-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+  <div class="tb-page">
+    <div class="tb-sky"></div>
+    <div class="tb-halo-center"></div>
 
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Team Building Activity Spinner</span>
-      </nav>
+    {rainbowLayers.map((r) => (
+      <div
+        class="tb-rainbow-layer"
+        style={`background:${r.color}; width:${r.width}; top:${r.top}; --rop:${r.opacity};`}
+      ></div>
+    ))}
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Team Building Activity Spinner — Random Group Activities
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Stop debating which team activity to do. Spin, then commit. Works for in-person retreats and remote events.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    {confetti.map((c) => (
+      <div
+        class="tb-confetti"
+        style={`left:${c.left}; width:${c.isCircle ? c.width : c.width}; height:${c.isCircle ? c.width : c.height}; background:${c.color}; border-radius:${c.isCircle ? '50%' : '2px'}; --tdur:${c.duration}; --tdelay:${c.delay}; --trot:${c.rotation}; box-shadow: 0 0 3px ${c.color}44;`}
+      ></div>
+    ))}
 
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    {festiveEmojis.map((e) => (
+      <div
+        class="tb-festive"
+        style={`left:${e.left}; --fdur:${e.duration}; --fdelay:${e.delay}; --fsize:${e.size};`}
+      >{e.emoji}</div>
+    ))}
 
-      <section class="space-y-8">
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Random Selection Works for Team Activities</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Choosing team activities by committee is famously slow. Some people want something active, others prefer low-key. Someone always vetoes the suggestion they personally find awkward. The negotiation takes longer than the activity would have.
+    {stars.map((s) => (
+      <div
+        class="tb-star"
+        style={`left:${s.left}; top:${s.top}; --ssize:${s.size}; --sdur:${s.duration}; --sdelay:${s.delay}; color:${s.color};`}
+      >★</div>
+    ))}
+
+    <div class="tb-content">
+      <HeaderIsland client:load />
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/60 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/50">Team Building Activity Spinner</span>
+        </nav>
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3 tb-banner-icon">🤝</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight tb-title mb-3">
+            Team Building Activity Spinner — Random Group Activities
+          </h1>
+          <p class="text-lg text-white/55 max-w-xl mx-auto mb-5">
+            Stop debating which team activity to do. Spin, then commit. Works for in-person retreats and remote events.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            Pre-loading the wheel with activities that have already been screened for your team's culture and logistics removes the debate. Everyone agreed to the list; the wheel just picks from it. The randomness also adds a bit of suspense that makes people more curious about what they'll be doing.
-          </p>
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="tb-tag">🎉 10 Activities</span>
+            <span class="tb-tag">💻 Remote-Ready</span>
+            <span class="tb-tag">🆓 Free</span>
+            <span class="tb-tag">🏆 Any Team Size</span>
+          </div>
         </div>
-      </section>
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} colors={themeColors} wheelShape="star6" hubTheme="gold" client:load />
+      </div>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="tb-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold">Why Random Selection Works for Team Activities</h2>
+          <p>Choosing team activities by committee is famously slow. Some people want something active, others prefer low-key. Someone always vetoes the suggestion they personally find awkward. The negotiation takes longer than the activity would have.</p>
+          <p>Pre-loading the wheel with activities that have already been screened for your team's culture and logistics removes the debate. Everyone agreed to the list; the wheel just picks from it. The randomness also adds a bit of suspense that makes people more curious about what they'll be doing.</p>
         </div>
-      </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/meeting-icebreaker-wheel", label: "Meeting Icebreaker Spinner", desc: "Quick questions to warm up any team gathering." },
-            { href: "/team-generator", label: "Team Generator", desc: "Randomly split your group into balanced teams for activities." },
-            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick who goes first, who leads, or who presents." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <div class="tb-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold">Best Practices for Team Activities</h2>
+          <ul class="space-y-3">
+            <li class="flex gap-3"><span style="color:#ef4444" class="font-bold">→</span><span><strong style="color:#fdf4ff">Screen your list first:</strong> Remove anything logistically impossible (escape room for remote teams).</span></li>
+            <li class="flex gap-3"><span style="color:#f59e0b" class="font-bold">→</span><span><strong style="color:#fdf4ff">Time-box it:</strong> Set a clear end time before you start the activity. Teams engage more when they know it's finite.</span></li>
+            <li class="flex gap-3"><span style="color:#22c55e" class="font-bold">→</span><span><strong style="color:#fdf4ff">Include the quiet ones:</strong> Pick activities with low performance anxiety for your first few spins.</span></li>
+            <li class="flex gap-3"><span style="color:#3b82f6" class="font-bold">→</span><span><strong style="color:#fdf4ff">Rotate ownership:</strong> Whoever the wheel selects as "winner" runs the next activity planning.</span></li>
+          </ul>
+        </div>
 
-    </main>
-    <GlobalFooterIsland client:load />
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#fdf4ff">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="tb-faq">
+                <summary>{question}</summary>
+                <p>{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#fdf4ff">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/templates/meeting-icebreaker-wheel", label: "Meeting Icebreaker Spinner", desc: "Quick questions to warm up any team gathering." },
+              { href: "/team-generator", label: "Team Generator", desc: "Randomly split your group into balanced teams for activities." },
+              { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick who goes first, who leads, or who presents." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="tb-related-link">
+                  <span style="color:#ef4444" class="font-bold text-sm mt-0.5">→</span>
+                  <span>
+                    <span class="font-semibold" style="color:#fdf4ff">{label}</span>
+                    <span style="color:rgba(253,244,255,0.55)" class="text-sm"> — {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

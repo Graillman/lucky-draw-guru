@@ -17,7 +17,7 @@ const faqItems = [
   },
   {
     question: "What about urgent tasks?",
-    answer: "Only add tasks that are genuinely interchangeable in priority. Keep urgent or deadline-driven tasks off the wheel and handle those directly. The wheel is for the mid-priority backlog that you keep deferring because you can't decide where to begin.",
+    answer: "Only add tasks that are genuinely interchangeable in priority. Keep urgent or deadline-driven tasks off the wheel and handle those directly. The wheel is for the mid-priority backlog that you keep deferring.",
   },
   {
     question: "How many tasks should I put on the wheel?",
@@ -36,6 +36,8 @@ const defaultParticipants = [
   { pseudo: "Review something", weight: 1 },
 ];
 
+const taskColors = ['#3b82f6','#06b6d4','#22d3ee','#38bdf8','#0ea5e9','#60a5fa','#7dd3fc','#bae6fd','#0284c7','#0369a1'];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -45,6 +47,176 @@ const jsonLd = {
 };
 ---
 
+<style>
+  /* ═══════════ RANDOM TASK — LASER PRODUCTIVITY ═══════════ */
+  .rt-page {
+    background: #020810;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .rt-sky {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% -10%,  rgba(59,130,246,0.2) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 10% 40%,   rgba(6,182,212,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 90% 40%,   rgba(14,165,233,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 30% at 50% 100%,  rgba(59,130,246,0.15) 0%, transparent 60%),
+      linear-gradient(180deg, #020810 0%, #030d1a 50%, #020810 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Laser grid */
+  .rt-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.06) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 0;
+    animation: rtGridPulse 8s ease-in-out infinite alternate;
+  }
+  @keyframes rtGridPulse {
+    from { opacity: 0.4; }
+    to   { opacity: 1; }
+  }
+
+  /* Blue particles rising */
+  .rt-particle {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    animation: rtParticleRise ease-in-out infinite;
+    opacity: 0;
+  }
+  @keyframes rtParticleRise {
+    0%   { transform: translateY(110vh) translateX(0); opacity: 0; }
+    10%  { opacity: 0.8; }
+    90%  { opacity: 0.3; }
+    100% { transform: translateY(-10vh) translateX(20px); opacity: 0; }
+  }
+
+  /* Check marks appearing */
+  .rt-check {
+    position: fixed;
+    font-size: 1.4rem;
+    pointer-events: none;
+    z-index: 1;
+    color: #22d3ee;
+    text-shadow: 0 0 12px #22d3ee, 0 0 24px #22d3ee;
+    animation: rtCheckPop ease-out infinite;
+    opacity: 0;
+  }
+  @keyframes rtCheckPop {
+    0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+    30%  { transform: scale(1.3) rotate(5deg); opacity: 1; }
+    60%  { transform: scale(1) rotate(0deg); opacity: 0.7; }
+    100% { transform: scale(0.8) rotate(0deg); opacity: 0; }
+  }
+
+  /* Progress bars decorative */
+  .rt-progress-wrap {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.2;
+  }
+  .rt-progress-bar {
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #22d3ee);
+    border-radius: 2px;
+    animation: rtProgressFill ease-in-out infinite;
+    box-shadow: 0 0 8px #22d3ee;
+  }
+  @keyframes rtProgressFill {
+    0%   { width: 0%; opacity: 0; }
+    20%  { opacity: 1; }
+    80%  { width: 85%; opacity: 0.8; }
+    100% { width: 90%; opacity: 0; }
+  }
+
+  /* Glow orbs */
+  .rt-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+    z-index: 0;
+    animation: rtGlowPulse ease-in-out infinite alternate;
+  }
+  @keyframes rtGlowPulse {
+    from { opacity: 0.08; }
+    to   { opacity: 0.2; }
+  }
+
+  /* Laser beams */
+  .rt-laser {
+    position: fixed;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(59,130,246,0.5), rgba(34,211,238,0.7), rgba(59,130,246,0.5), transparent);
+    pointer-events: none;
+    z-index: 1;
+    animation: rtLaserScan linear infinite;
+    opacity: 0;
+  }
+  @keyframes rtLaserScan {
+    0%   { transform: translateX(-100%); opacity: 0; }
+    10%  { opacity: 0.8; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateX(100vw); opacity: 0; }
+  }
+
+  .rt-content { position: relative; z-index: 10; }
+
+  .rt-title {
+    background: linear-gradient(135deg, #3b82f6 0%, #22d3ee 40%, #38bdf8 70%, #3b82f6 100%);
+    background-size: 250%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: rtShimmer 5s ease-in-out infinite;
+    filter: drop-shadow(0 0 28px rgba(34,211,238,0.6));
+  }
+  @keyframes rtShimmer {
+    0%,100% { background-position: 0% 50%; }
+    50%     { background-position: 100% 50%; }
+  }
+
+  .rt-tag {
+    background: rgba(34,211,238,0.08);
+    border: 1px solid rgba(34,211,238,0.28);
+    color: rgba(125,211,252,0.95);
+    border-radius: 9999px;
+    padding: 4px 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .rt-card {
+    background: rgba(59,130,246,0.05);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 1rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .rt-card:hover {
+    border-color: rgba(34,211,238,0.5);
+    background: rgba(59,130,246,0.1);
+  }
+
+  details.rt-faq {
+    background: rgba(59,130,246,0.04);
+    border: 1px solid rgba(59,130,246,0.18);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+</style>
+
 <Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
@@ -53,79 +225,153 @@ const jsonLd = {
     { name: "Random Task Picker", url: "https://realwheelpicker.com/templates/random-task-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+  <div class="rt-page">
+    <div class="rt-sky"></div>
+    <div class="rt-grid"></div>
 
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Random Task Picker</span>
-      </nav>
+    <!-- Glow orbs -->
+    <div class="rt-glow" style="width:600px;height:500px;background:radial-gradient(circle,rgba(59,130,246,0.2) 0%,transparent 70%);top:-150px;left:-100px;animation-duration:6s;"></div>
+    <div class="rt-glow" style="width:500px;height:400px;background:radial-gradient(circle,rgba(34,211,238,0.15) 0%,transparent 70%);bottom:5%;right:-80px;animation-duration:8s;animation-delay:2s;"></div>
+    <div class="rt-glow" style="width:400px;height:350px;background:radial-gradient(circle,rgba(14,165,233,0.12) 0%,transparent 70%);top:40%;left:50%;transform:translateX(-50%);animation-duration:7s;animation-delay:1s;"></div>
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Random Task Picker — What to Work on Next
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Replace the defaults with your actual to-do list. Spin. Start that task immediately. Decision made.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Blue particles rising — 30 -->
+    {Array.from({ length: 30 }, (_, i) => (
+      <div class="rt-particle" style={`width:${3+i%4}px;height:${3+i%4}px;background:hsl(${200+i*3},90%,${55+i%20}%);left:${i*3.4}%;animation-duration:${5+i%6}s;animation-delay:${i*0.35}s;`}></div>
+    ))}
 
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <!-- Check marks — 20 -->
+    {Array.from({ length: 20 }, (_, i) => (
+      <div class="rt-check" style={`left:${5+i*4.5}%;top:${10+i%60}%;animation-duration:${3+i%4}s;animation-delay:${i*0.7}s;`}>✓</div>
+    ))}
 
-      <section class="space-y-8">
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Hidden Cost of Task Selection</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Knowledge workers spend an estimated 20% of their time deciding what to work on — not working, just deciding. Every time you finish a task and open your to-do list, you face a mini-decision problem: evaluate all options, weigh priorities, consider effort vs. impact, then pick. Repeat 15 times a day.
+    <!-- Progress bars decorative -->
+    <div class="rt-progress-wrap" style="left:4%;top:25%;width:120px;">
+      <div style="font-size:0.6rem;color:rgba(34,211,238,0.5);margin-bottom:3px;">Task A</div>
+      <div class="rt-progress-bar" style="animation-duration:4s;"></div>
+    </div>
+    <div class="rt-progress-wrap" style="right:4%;top:35%;width:100px;">
+      <div style="font-size:0.6rem;color:rgba(34,211,238,0.5);margin-bottom:3px;">Task B</div>
+      <div class="rt-progress-bar" style="animation-duration:6s;animation-delay:1.5s;"></div>
+    </div>
+    <div class="rt-progress-wrap" style="left:5%;bottom:28%;width:90px;">
+      <div style="font-size:0.6rem;color:rgba(34,211,238,0.5);margin-bottom:3px;">Task C</div>
+      <div class="rt-progress-bar" style="animation-duration:5s;animation-delay:3s;"></div>
+    </div>
+
+    <!-- Laser beams -->
+    <div class="rt-laser" style="width:400px;top:20%;animation-duration:7s;animation-delay:0s;"></div>
+    <div class="rt-laser" style="width:300px;top:55%;animation-duration:9s;animation-delay:3s;"></div>
+    <div class="rt-laser" style="width:500px;top:80%;animation-duration:6s;animation-delay:5s;"></div>
+
+    <div class="rt-content">
+      <HeaderIsland client:load />
+
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/60 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/50">Random Task Picker</span>
+        </nav>
+
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3">⚡</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight rt-title mb-3">
+            Random Task Picker
+          </h1>
+          <p class="text-lg text-white/55 max-w-xl mx-auto mb-5">
+            Replace the defaults with your actual to-do list. Spin. Start that task immediately. Decision made.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            The random task wheel eliminates this overhead for the subset of tasks that are genuinely interchangeable. Load it with your medium-priority backlog — the tasks that aren't urgent but need to get done eventually — and let the wheel pick. You start faster, which means you finish more.
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="rt-tag">✓ Beat Paralysis</span>
+            <span class="rt-tag">⚡ Instant Start</span>
+            <span class="rt-tag">📋 To-Do List</span>
+            <span class="rt-tag">🎯 Productivity</span>
+          </div>
+        </div>
+
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={taskColors}
+          wheelShape="circle"
+          hubTheme="neon"
+          client:load
+        />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="rt-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">The Hidden Cost of Task Selection</h2>
+          <p class="text-white/60 leading-relaxed">
+            Knowledge workers spend an estimated 20% of their time deciding what to work on — not working, just deciding. Every time you finish a task and open your to-do list, you face a mini-decision problem: evaluate all options, weigh priorities, consider effort vs. impact, then pick.
+          </p>
+          <p class="text-white/60 leading-relaxed">
+            The random task wheel eliminates this overhead for the subset of tasks that are genuinely interchangeable. Load it with your medium-priority backlog and let the wheel pick. You start faster, which means you finish more.
           </p>
         </div>
-      </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/sprint-retrospective-wheel", label: "Sprint Retro Wheel", desc: "Randomize your retrospective discussion topics." },
-            { href: "/random-name-picker", label: "Random Name Picker", desc: "Assign tasks randomly to team members." },
-            { href: "/yes-or-no-wheel", label: "Yes or No Wheel", desc: "Quick binary decisions — should I work on this now?" },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
+        <div class="rt-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">The Spin-to-Start Method</h2>
+          <ul class="space-y-3">
+            <li class="flex gap-3">
+              <span class="text-cyan-400 font-bold">1.</span>
+              <span class="text-white/60">Every morning, add your 6-8 interchangeable tasks to the wheel.</span>
             </li>
-          ))}
-        </ul>
-      </section>
+            <li class="flex gap-3">
+              <span class="text-cyan-400 font-bold">2.</span>
+              <span class="text-white/60">Spin. Commit to starting that task within 60 seconds — no exceptions.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-cyan-400 font-bold">3.</span>
+              <span class="text-white/60">Remove completed tasks and spin again when you need a new one.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-cyan-400 font-bold">4.</span>
+              <span class="text-white/60">At the end of the day, everything that was on the wheel got done.</span>
+            </li>
+          </ul>
+        </div>
 
-    </main>
-    <GlobalFooterIsland client:load />
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="rt-faq group">
+                <summary class="font-semibold text-white cursor-pointer list-none flex items-center justify-between gap-2">
+                  {question}
+                  <span class="text-white/40 shrink-0 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p class="text-white/60 text-sm leading-relaxed mt-3">{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Related Tools</h2>
+          <ul class="grid sm:grid-cols-2 gap-3">
+            {[
+              { href: "/templates/sprint-retrospective-wheel", label: "⚙️ Sprint Retro Wheel", desc: "Randomize your retrospective discussion topics." },
+              { href: "/random-name-picker", label: "🎲 Random Name Picker", desc: "Assign tasks randomly to team members." },
+              { href: "/yes-no-wheel", label: "✅ Yes or No Wheel", desc: "Quick binary decisions — should I work on this now?" },
+              { href: "/templates", label: "🎡 All Templates", desc: "Browse all pre-loaded wheel templates." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="rt-card flex items-start gap-3 p-4">
+                  <span>
+                    <span class="font-semibold text-white text-sm">{label}</span>
+                    <span class="text-white/50 text-sm block mt-0.5">{desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

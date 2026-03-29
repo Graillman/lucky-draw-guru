@@ -47,7 +47,228 @@ const jsonLd = {
   "description": description,
   "url": "https://realwheelpicker.com/templates/gift-idea-wheel",
 };
+
+const themeColors = ['#ef4444','#ffd700','#22c55e','#3b82f6','#ec4899','#8b5cf6','#f97316','#14b8a6','#fbbf24','#84cc16'];
+
+const gifts = Array.from({length: 25}, (_, i) => ({
+  left: `${(i * 4.1) % 95}%`,
+  delay: `${(i * 0.45).toFixed(2)}s`,
+  duration: `${5 + (i % 5) * 1.2}s`,
+  size: `${1.2 + (i % 4) * 0.4}rem`,
+  rotation: `${(i * 37) % 60 - 30}deg`,
+}));
+
+const confetti = Array.from({length: 30}, (_, i) => ({
+  left: `${(i * 3.4) % 100}%`,
+  delay: `${(i * 0.35).toFixed(2)}s`,
+  duration: `${4 + (i % 6) * 1.1}s`,
+  width: `${6 + (i % 4) * 4}px`,
+  height: `${10 + (i % 3) * 6}px`,
+  color: themeColors[i % themeColors.length],
+  rotation: `${(i * 23) % 360}deg`,
+}));
+
+const stars = Array.from({length: 20}, (_, i) => ({
+  left: `${(i * 5.3) % 98}%`,
+  top: `${(i * 7.7) % 80}%`,
+  delay: `${(i * 0.28).toFixed(2)}s`,
+  duration: `${2 + (i % 4) * 0.6}s`,
+  size: `${0.9 + (i % 3) * 0.5}rem`,
+}));
+
+const ribbons = Array.from({length: 10}, (_, i) => ({
+  left: `${(i * 11) % 90}%`,
+  top: `${(i * 13) % 70}%`,
+  color: themeColors[i % themeColors.length],
+  rotation: `${-60 + (i % 7) * 20}deg`,
+  width: `${60 + (i % 3) * 30}px`,
+  delay: `${(i * 0.5).toFixed(1)}s`,
+  duration: `${3 + (i % 3) * 0.8}s`,
+}));
 ---
+
+<style>
+  .gi-page {
+    background: #0a0005;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+  .gi-sky {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center top, rgba(139,0,50,0.25) 0%, transparent 60%);
+  }
+  .gi-halo-center {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+    height: 80vh;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(255,215,0,0.08) 0%, rgba(239,68,68,0.05) 40%, transparent 70%);
+    z-index: 1;
+    pointer-events: none;
+    animation: giHaloPulse 5s ease-in-out infinite;
+  }
+  @keyframes giHaloPulse {
+    0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+  }
+  .gi-halo-red {
+    position: fixed;
+    top: -15%;
+    left: -10%;
+    width: 50vw;
+    height: 50vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(239,68,68,0.18) 0%, transparent 65%);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .gi-halo-green {
+    position: fixed;
+    bottom: -10%;
+    right: -10%;
+    width: 45vw;
+    height: 45vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(34,197,94,0.15) 0%, transparent 65%);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .gi-gift {
+    position: fixed;
+    pointer-events: none;
+    z-index: 3;
+    font-size: var(--gsize);
+    animation: giGiftFall var(--gdur) var(--gdelay) ease-in-out infinite;
+    filter: drop-shadow(0 2px 8px rgba(255,215,0,0.3));
+  }
+  @keyframes giGiftFall {
+    0% { transform: translateY(-8%) rotate(var(--grot)); opacity: 0; }
+    8% { opacity: 1; }
+    88% { opacity: 0.7; }
+    100% { transform: translateY(108vh) rotate(calc(var(--grot) + 180deg)); opacity: 0; }
+  }
+  .gi-confetti {
+    position: fixed;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 3;
+    animation: giConfettiFall var(--cfdur) var(--cfdelay) ease-in-out infinite;
+  }
+  @keyframes giConfettiFall {
+    0% { transform: translateY(-5%) rotate(var(--cfrot)) scaleX(1); opacity: 0; }
+    10% { opacity: 0.9; }
+    50% { transform: translateY(50vh) rotate(calc(var(--cfrot) + 180deg)) scaleX(-1); }
+    90% { opacity: 0.7; }
+    100% { transform: translateY(108vh) rotate(calc(var(--cfrot) + 360deg)) scaleX(1); opacity: 0; }
+  }
+  .gi-star {
+    position: fixed;
+    pointer-events: none;
+    z-index: 3;
+    font-size: var(--ssize);
+    animation: giStarTwinkle var(--sdur) var(--sdelay) ease-in-out infinite;
+    color: #ffd700;
+    text-shadow: 0 0 8px #ffd700, 0 0 20px rgba(255,215,0,0.5);
+  }
+  @keyframes giStarTwinkle {
+    0%, 100% { opacity: 0.2; transform: scale(0.7) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+  }
+  .gi-ribbon {
+    position: fixed;
+    height: 3px;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 3;
+    animation: giRibbonFloat var(--rdur) var(--rdelay) ease-in-out infinite;
+    opacity: 0.55;
+  }
+  @keyframes giRibbonFloat {
+    0%, 100% { transform: rotate(var(--rrot)) translateY(0px) scaleX(1); opacity: 0.4; }
+    50% { transform: rotate(calc(var(--rrot) + 10deg)) translateY(-8px) scaleX(1.1); opacity: 0.7; }
+  }
+  .gi-content {
+    position: relative;
+    z-index: 10;
+  }
+  .gi-title {
+    background: linear-gradient(135deg, #ffd700 0%, #ef4444 30%, #ec4899 60%, #fbbf24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: giShimmer 5s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(255,215,0,0.45));
+  }
+  @keyframes giShimmer {
+    0%, 100% { filter: drop-shadow(0 0 30px rgba(255,215,0,0.45)); }
+    50% { filter: drop-shadow(0 0 50px rgba(239,68,68,0.5)); }
+  }
+  .gi-card {
+    background: rgba(10,0,5,0.82);
+    border: 1px solid rgba(255,215,0,0.22);
+    border-radius: 1rem;
+    padding: 1.5rem;
+  }
+  .gi-card h2 { color: #fef9ee; }
+  .gi-card p, .gi-card li { color: rgba(254,249,238,0.65); line-height: 1.7; }
+  .gi-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid rgba(255,215,0,0.3);
+    background: rgba(255,215,0,0.1);
+    color: #fde68a;
+  }
+  details.gi-faq {
+    background: rgba(10,0,5,0.82);
+    border: 1px solid rgba(255,215,0,0.18);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+  details.gi-faq summary {
+    font-weight: 600;
+    color: #fef9ee;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  details.gi-faq summary::before { content: '🎁'; font-size: 0.9rem; }
+  details.gi-faq[open] summary::before { content: '⭐'; }
+  details.gi-faq p {
+    margin-top: 0.75rem;
+    color: rgba(254,249,238,0.65);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .gi-related-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(10,0,5,0.82);
+    border: 1px solid rgba(255,215,0,0.18);
+    border-radius: 0.75rem;
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .gi-related-link:hover {
+    border-color: rgba(255,215,0,0.45);
+    box-shadow: 0 0 20px rgba(255,215,0,0.12);
+  }
+</style>
 
 <Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
@@ -57,86 +278,123 @@ const jsonLd = {
     { name: "Gift Idea Spinner", url: "https://realwheelpicker.com/templates/gift-idea-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+  <div class="gi-page">
+    <div class="gi-sky"></div>
+    <div class="gi-halo-center"></div>
+    <div class="gi-halo-red"></div>
+    <div class="gi-halo-green"></div>
 
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Gift Idea Spinner</span>
-      </nav>
+    {gifts.map((g) => (
+      <div
+        class="gi-gift"
+        style={`left:${g.left}; --gdur:${g.duration}; --gdelay:${g.delay}; --gsize:${g.size}; --grot:${g.rotation};`}
+      >🎁</div>
+    ))}
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Gift Idea Spinner — Random Present Generator
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Stop staring at Amazon with no idea where to start. Spin for a gift category and narrow your search instantly.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    {confetti.map((c) => (
+      <div
+        class="gi-confetti"
+        style={`left:${c.left}; width:${c.width}; height:${c.height}; background:${c.color}; --cfdur:${c.duration}; --cfdelay:${c.delay}; --cfrot:${c.rotation}; box-shadow: 0 0 4px ${c.color}55;`}
+      ></div>
+    ))}
 
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    {stars.map((s) => (
+      <div
+        class="gi-star"
+        style={`left:${s.left}; top:${s.top}; --ssize:${s.size}; --sdur:${s.duration}; --sdelay:${s.delay};`}
+      >★</div>
+    ))}
 
-      <section class="space-y-8">
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">From Category to Perfect Gift</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Gift shopping is hard because every category of gift is valid for most people. The wheel picks a starting direction so you search "best experience gifts for hikers" instead of just scrolling endlessly. A random constraint makes you more creative, not less — you find gifts you'd never have thought of otherwise.
+    {ribbons.map((r) => (
+      <div
+        class="gi-ribbon"
+        style={`left:${r.left}; top:${r.top}; width:${r.width}; background:${r.color}; --rrot:${r.rotation}; --rdur:${r.duration}; --rdelay:${r.delay};`}
+      ></div>
+    ))}
+
+    <div class="gi-content">
+      <HeaderIsland client:load />
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/60 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/50">Gift Idea Spinner</span>
+        </nav>
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3">🎁</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight gi-title mb-3">
+            Gift Idea Spinner — Random Present Generator
+          </h1>
+          <p class="text-lg text-white/55 max-w-xl mx-auto mb-5">
+            Stop staring at Amazon with no idea where to start. Spin for a gift category and narrow your search instantly.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            Use the wheel as your first step, not your last. Once it picks "Experience gift," you do a 10-minute search within that category for the recipient. That focused search produces better results than open-ended browsing.
-          </p>
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="gi-tag">🎁 12 Categories</span>
+            <span class="gi-tag">🎄 Secret Santa</span>
+            <span class="gi-tag">🆓 Free</span>
+            <span class="gi-tag">⭐ Any Budget</span>
+          </div>
+        </div>
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} colors={themeColors} wheelShape="star6" hubTheme="gold" client:load />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="gi-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold">From Category to Perfect Gift</h2>
+          <p>Gift shopping is hard because every category of gift is valid for most people. The wheel picks a starting direction so you search "best experience gifts for hikers" instead of just scrolling endlessly. A random constraint makes you more creative, not less — you find gifts you'd never have thought of otherwise.</p>
+          <p>Use the wheel as your first step, not your last. Once it picks "Experience gift," you do a 10-minute search within that category for the recipient. That focused search produces better results than open-ended browsing.</p>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Secret Santa & Group Gift Ideas</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            For Secret Santa events, customize the wheel with your budget limit per category. Everyone in the group spins their own wheel, and you get a diverse range of gift types across the event. Alternatively, use the <a href="/secret-santa-picker" class="text-primary underline hover:no-underline">Secret Santa Picker</a> to assign who gives to whom, then use this wheel for inspiration on what to give.
-          </p>
+        <div class="gi-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold">Secret Santa and Group Gift Ideas</h2>
+          <p>For Secret Santa events, customize the wheel with your budget limit per category. Everyone in the group spins their own wheel, and you get a diverse range of gift types across the event. Alternatively, use the <a href="/secret-santa-picker" style="color:#fbbf24; text-decoration:underline;">Secret Santa Picker</a> to assign who gives to whom, then use this wheel for inspiration on what to give.</p>
+          <ul class="space-y-3 mt-2">
+            <li class="flex gap-3"><span style="color:#ffd700" class="font-bold">→</span><span><strong style="color:#fef9ee">Birthday:</strong> Spin for category, pick something personal within it</span></li>
+            <li class="flex gap-3"><span style="color:#ef4444" class="font-bold">→</span><span><strong style="color:#fef9ee">Holiday:</strong> Set budget ranges, spin to decide tier first</span></li>
+            <li class="flex gap-3"><span style="color:#22c55e" class="font-bold">→</span><span><strong style="color:#fef9ee">Secret Santa:</strong> Neutral categories work for people you don't know well</span></li>
+            <li class="flex gap-3"><span style="color:#ec4899" class="font-bold">→</span><span><strong style="color:#fef9ee">Last-minute:</strong> Keep only instantly-available options (digital gifts, experiences)</span></li>
+          </ul>
         </div>
-      </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#fef9ee">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="gi-faq">
+                <summary>{question}</summary>
+                <p>{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/secret-santa-picker", label: "Secret Santa Picker", desc: "Randomly assign who gives to whom in your group." },
-            { href: "/templates/christmas-gift-wheel", label: "Christmas Gift Spinner", desc: "Holiday-specific gift ideas by category and budget." },
-            { href: "/random-wheel", label: "Random Wheel", desc: "Build a custom wheel with specific gift ideas for one person." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#fef9ee">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/secret-santa-picker", label: "Secret Santa Picker", desc: "Randomly assign who gives to whom in your group." },
+              { href: "/templates/christmas-gift-wheel", label: "Christmas Gift Spinner", desc: "Holiday-specific gift ideas by category and budget." },
+              { href: "/random-wheel", label: "Random Wheel", desc: "Build a custom wheel with specific gift ideas for one person." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="gi-related-link">
+                  <span style="color:#ffd700" class="font-bold text-sm mt-0.5">→</span>
+                  <span>
+                    <span class="font-semibold" style="color:#fef9ee">{label}</span>
+                    <span style="color:rgba(254,249,238,0.55)" class="text-sm"> — {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-    </main>
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>
