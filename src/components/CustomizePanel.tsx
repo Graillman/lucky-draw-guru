@@ -18,6 +18,8 @@ export interface CustomizeConfig {
   // Appearance
   theme: string;
   borderStyle: string;        // 'default' | 'white' | 'rainbow' | 'none' | 'gold'
+  wheelShape: string;         // 'circle' | 'star6' | 'star8' | 'heart' | 'hexagon'
+  hubTheme: string;           // 'default' | 'gold' | 'fire' | 'ice' | 'cosmic' | 'rose' | 'orange' | 'forest' | 'neon' | 'purple' | 'crimson' | 'teal' | 'amber'
 }
 
 export const DEFAULT_CONFIG: CustomizeConfig = {
@@ -31,6 +33,8 @@ export const DEFAULT_CONFIG: CustomizeConfig = {
   showRemoveButton: true,
   theme: "classic",
   borderStyle: "default",
+  wheelShape: "circle",
+  hubTheme: "default",
 };
 
 const STORAGE_KEY = "wheelConfig";
@@ -221,17 +225,75 @@ export function CustomizePanel({ config, onChange, onClose }: Props) {
                           : "border-transparent hover:border-border bg-muted/40"
                       }`}
                     >
-                      <div
-                        className="w-8 h-8 mx-auto rounded-full mb-1 border border-muted"
-                        style={{ background: b.color }}
-                      />
-                      <span className={`text-[10px] font-medium ${config.borderStyle === b.key ? "text-primary" : "text-muted-foreground"}`}>
-                        {b.label}
-                      </span>
+                      <div className="w-8 h-8 mx-auto rounded-full mb-1 border border-muted" style={{ background: b.color }} />
+                      <span className={`text-[10px] font-medium ${config.borderStyle === b.key ? "text-primary" : "text-muted-foreground"}`}>{b.label}</span>
                     </button>
                   ))}
                 </div>
               </div>
+
+              {/* Wheel shape */}
+              <div>
+                <p className="text-sm font-medium text-foreground mb-3">Forme de la roue</p>
+                <div className="grid grid-cols-5 gap-2">
+                  {[
+                    { key: "circle",  label: "Cercle",   svg: <circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" strokeWidth="2"/> },
+                    { key: "star6",   label: "Étoile 6", svg: <polygon points="16,4 19,12 28,12 21,18 24,27 16,22 8,27 11,18 4,12 13,12" fill="none" stroke="currentColor" strokeWidth="2"/> },
+                    { key: "star8",   label: "Étoile 8", svg: <path d="M16,4 L18,11 L24,7 L21,13 L28,16 L21,19 L24,25 L18,21 L16,28 L14,21 L8,25 L11,19 L4,16 L11,13 L8,7 L14,11 Z" fill="none" stroke="currentColor" strokeWidth="1.5"/> },
+                    { key: "heart",   label: "Cœur",     svg: <path d="M16,26 C16,26 5,18 5,11 C5,7.5 8,5 11.5,5 C13.5,5 15,6 16,7.5 C17,6 18.5,5 20.5,5 C24,5 27,7.5 27,11 C27,18 16,26 16,26Z" fill="none" stroke="currentColor" strokeWidth="2"/> },
+                    { key: "hexagon", label: "Hexagone", svg: <polygon points="16,4 26,10 26,22 16,28 6,22 6,10" fill="none" stroke="currentColor" strokeWidth="2"/> },
+                  ].map(s => (
+                    <button
+                      key={s.key}
+                      onClick={() => set("wheelShape", s.key)}
+                      className={`p-2 rounded-xl border-2 transition-all text-center ${
+                        config.wheelShape === s.key
+                          ? "border-primary shadow-md bg-primary/5 text-primary"
+                          : "border-transparent hover:border-border bg-muted/40 text-muted-foreground"
+                      }`}
+                    >
+                      <svg viewBox="0 0 32 32" className="w-8 h-8 mx-auto mb-1">{s.svg}</svg>
+                      <span className="text-[10px] font-medium">{s.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Hub theme */}
+              <div>
+                <p className="text-sm font-medium text-foreground mb-3">Centre de la roue</p>
+                <div className="grid grid-cols-4 gap-2">
+                  {[
+                    { key: "default", label: "Défaut",   color: "#3b82f6" },
+                    { key: "gold",    label: "Or",       color: "#ffd700" },
+                    { key: "fire",    label: "Feu",      color: "#ff4500" },
+                    { key: "ice",     label: "Glace",    color: "#00c8ff" },
+                    { key: "cosmic",  label: "Cosmos",   color: "#c77dff" },
+                    { key: "rose",    label: "Rose",     color: "#ff85c1" },
+                    { key: "neon",    label: "Néon",     color: "#0af5ff" },
+                    { key: "forest",  label: "Forêt",    color: "#52b788" },
+                    { key: "purple",  label: "Violet",   color: "#9d4edd" },
+                    { key: "crimson", label: "Cramoisi", color: "#e53e3e" },
+                    { key: "teal",    label: "Teal",     color: "#14b8a6" },
+                    { key: "amber",   label: "Ambre",    color: "#f59e0b" },
+                    { key: "orange",  label: "Orange",   color: "#ff9e0d" },
+                  ].map(h => (
+                    <button
+                      key={h.key}
+                      onClick={() => set("hubTheme", h.key)}
+                      className={`p-2 rounded-xl border-2 transition-all text-center ${
+                        config.hubTheme === h.key
+                          ? "border-primary shadow-md bg-primary/5"
+                          : "border-transparent hover:border-border bg-muted/40"
+                      }`}
+                    >
+                      <div className="w-7 h-7 mx-auto rounded-full mb-1 border-2 border-black/20" style={{ background: `radial-gradient(circle at 35% 35%, ${h.color}cc, #000)` }} />
+                      <span className={`text-[9px] font-medium ${config.hubTheme === h.key ? "text-primary" : "text-muted-foreground"}`}>{h.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
             </div>
           )}
 

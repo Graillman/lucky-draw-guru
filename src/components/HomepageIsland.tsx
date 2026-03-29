@@ -435,11 +435,11 @@ const HomepageIslandInner = () => {
       <div className="relative z-10">
         <main className="max-w-7xl mx-auto px-4 pb-2 space-y-2">
 
-          {/* MAIN AREA: 2-column on desktop */}
-          <div className="flex flex-col lg:flex-row gap-2 items-start">
+          {/* MAIN AREA: 2-column on desktop — wheel right-aligned to minimize gap with panel */}
+          <div className="flex flex-col lg:flex-row gap-[8px] items-start">
 
-            {/* LEFT: Wheel zone */}
-            <div className="flex-1 min-w-0 flex flex-col items-center space-y-2">
+            {/* LEFT: Wheel zone — right-aligned on desktop so wheel hugs the panel */}
+            <div className="flex-1 min-w-0 flex flex-col items-center lg:items-end space-y-2">
 
               {/* Wheels row */}
               <div className="flex flex-row flex-nowrap gap-2 justify-center items-center overflow-x-auto max-w-full">
@@ -463,6 +463,8 @@ const HomepageIslandInner = () => {
                     clickToSpinLabel={t.clickToSpin}
                     clickToSpinSub={t.clickToSpinSub}
                     compact={totalWheels > 1}
+                    wheelShape={customizeConfig.wheelShape}
+                    hubTheme={customizeConfig.hubTheme}
                   />
                 ))}
               </div>

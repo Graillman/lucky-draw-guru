@@ -64,11 +64,11 @@ export const WHEEL_THEMES: Record<string, { label: string; preview: string; colo
   },
   gold: {
     label: "Gold",
-    preview: "#FFD700",
+    preview: "#c8960c",
     colors: [
-      "hsl(45,100%,50%)", "hsl(38,100%,45%)", "hsl(50,100%,55%)", "hsl(35,90%,42%)",
-      "hsl(48,100%,52%)", "hsl(40,95%,48%)", "hsl(55,100%,50%)", "hsl(32,100%,45%)",
-      "hsl(44,100%,54%)", "hsl(36,95%,44%)",
+      "hsl(43,100%,42%)", "hsl(30,60%,18%)", "hsl(46,100%,48%)", "hsl(28,55%,15%)",
+      "hsl(44,100%,44%)", "hsl(32,58%,20%)", "hsl(48,100%,46%)", "hsl(26,52%,17%)",
+      "hsl(42,100%,40%)", "hsl(34,60%,18%)",
     ],
   },
   pastel: {

@@ -257,18 +257,6 @@ export function SpinningWheel({
       ctx.stroke();
     });
 
-    // ── Background image — drawn on top of fills, under text ──
-    if (bgImgRef.current) {
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(center, center, radius, 0, Math.PI * 2);
-      ctx.clip();
-      ctx.globalAlpha = 0.85;
-      ctx.drawImage(bgImgRef.current, center - radius, center - radius, radius * 2, radius * 2);
-      ctx.globalAlpha = 1;
-      ctx.restore();
-    }
-
     // ── Segments — pass 2: radial text ──
     segments.forEach((segment) => {
       const segAngle = segment.endAngle - segment.startAngle;
@@ -389,6 +377,42 @@ export function SpinningWheel({
     ctx.fill();
 
     ctx.restore(); // end of rotated context
+
+    // ── Background image — FIXED (does not rotate with wheel) ──
+    // Drawn after rotated context so it overlays segments but stays static.
+    // Text + hub were already rendered inside the rotated ctx above.
+    // We redraw hub on top after the image so it stays crisp.
+    if (bgImgRef.current) {
+      ctx.save();
+      ctx.beginPath();
+      if (useShape) drawShapePath(ctx, center, center, radius, wheelShape);
+      else ctx.arc(center, center, radius, 0, Math.PI * 2);
+      ctx.clip();
+      // Blend image over segments while keeping segment lines/text visible
+      ctx.globalCompositeOperation = 'source-atop';
+      ctx.globalAlpha = 0.82;
+      ctx.drawImage(bgImgRef.current, center - radius, center - radius, radius * 2, radius * 2);
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.restore();
+      // Redraw hub on top so it's always visible over the image
+      ctx.save();
+      const hub2 = HUB_PRESETS[hubTheme];
+      const hb0 = hub2?.bg[0] ?? 'hsl(222,47%,15%)';
+      const hb1 = hub2?.bg[1] ?? 'hsl(222,47%,8%)';
+      const hb2 = hub2?.bg[2] ?? 'hsl(222,47%,4%)';
+      const hBorder = hub2?.border ?? themeColor;
+      const hInner  = hub2?.inner  ?? themeColorHalf;
+      const hDot    = hub2?.dot    ?? themeColor;
+      const cg2 = ctx.createRadialGradient(center - 5, center - 5, 0, center, center, 35);
+      cg2.addColorStop(0, hb0); cg2.addColorStop(0.5, hb1); cg2.addColorStop(1, hb2);
+      ctx.beginPath(); ctx.arc(center, center, 30, 0, Math.PI * 2); ctx.fillStyle = cg2; ctx.fill();
+      ctx.beginPath(); ctx.arc(center, center, 30, 0, Math.PI * 2);
+      ctx.strokeStyle = hBorder; ctx.lineWidth = 4; ctx.shadowColor = hBorder; ctx.shadowBlur = 15; ctx.stroke(); ctx.shadowBlur = 0;
+      ctx.beginPath(); ctx.arc(center, center, 18, 0, Math.PI * 2); ctx.strokeStyle = hInner; ctx.lineWidth = 2; ctx.stroke();
+      ctx.beginPath(); ctx.arc(center, center, 6, 0, Math.PI * 2); ctx.fillStyle = hDot; ctx.fill();
+      ctx.restore();
+    }
 
     // Release shape clip, then draw shape outline on top
     if (useShape) {
