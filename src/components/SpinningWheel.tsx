@@ -442,22 +442,22 @@ export function SpinningWheel({
       ctx.translate(center, center);
       ctx.rotate(-Math.PI / 7); // ~26° diagonal tilt
 
-      const fs    = Math.max(18, Math.round(sz * 0.075));
-      const subFs = Math.max(11, Math.round(sz * 0.033));
-      const gap   = fs * 1.6;
+      const fs    = Math.max(28, Math.round(sz * 0.115));
+      const subFs = Math.max(14, Math.round(sz * 0.042));
+      const gap   = fs * 1.5;
 
-      // Full-width semi-transparent band (like wheelofnames)
-      const pillW = radius * 2.1;
-      const pillH = clickToSpinSub ? fs + subFs + 28 : fs + 20;
+      // Full-width thick band (realwheelpicker style — very prominent)
+      const pillW = radius * 2.2;
+      const pillH = clickToSpinSub ? fs + subFs + 40 : fs + 34;
       ctx.beginPath();
-      drawRoundRect(ctx, -pillW / 2, -pillH / 2, pillW, pillH, pillH / 2);
-      ctx.fillStyle = 'rgba(0,0,0,0.52)';
+      drawRoundRect(ctx, -pillW / 2, -pillH / 2, pillW, pillH, 8);
+      ctx.fillStyle = 'rgba(0,0,0,0.68)';
       ctx.fill();
 
-      // Subtle inner highlight
+      // Top edge highlight
       ctx.beginPath();
-      drawRoundRect(ctx, -pillW / 2 + 2, -pillH / 2 + 2, pillW - 4, pillH / 2, (pillH / 2) - 1);
-      ctx.fillStyle = 'rgba(255,255,255,0.07)';
+      drawRoundRect(ctx, -pillW / 2 + 2, -pillH / 2 + 2, pillW - 4, 4, 4);
+      ctx.fillStyle = 'rgba(255,255,255,0.15)';
       ctx.fill();
 
       // Main label — big & bold
