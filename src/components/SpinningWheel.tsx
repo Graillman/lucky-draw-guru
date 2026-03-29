@@ -436,49 +436,50 @@ export function SpinningWheel({
     ctx.fillStyle = 'rgba(255,255,255,0.3)';
     ctx.fill();
 
-    // ── "Click to spin" — diagonal text in wheel center (wheelofnames style) ──
+    // ── "Click to spin" — arc text following the wheel curve (wheelofnames style) ──
     if (clickToSpinLabel && !isAnimating) {
       ctx.save();
       ctx.translate(center, center);
-      ctx.rotate(-Math.PI / 7); // ~26° diagonal tilt
 
-      const fs    = Math.max(28, Math.round(sz * 0.115));
-      const subFs = Math.max(14, Math.round(sz * 0.042));
-      const gap   = fs * 1.5;
+      const fs    = Math.max(20, Math.round(sz * 0.082));
+      const subFs = Math.max(12, Math.round(sz * 0.038));
+      const arcR  = radius * 0.70;
 
-      // Full-width thick band (realwheelpicker style — very prominent)
-      const pillW = radius * 2.2;
-      const pillH = clickToSpinSub ? fs + subFs + 40 : fs + 34;
-      ctx.beginPath();
-      drawRoundRect(ctx, -pillW / 2, -pillH / 2, pillW, pillH, 8);
-      ctx.fillStyle = 'rgba(0,0,0,0.68)';
-      ctx.fill();
+      const drawArcText = (text: string, fontSize: number, fontWeight: string, arcRadius: number, color: string, blur: number) => {
+        ctx.font = `${fontWeight} ${fontSize}px 'Space Grotesk', sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = color;
+        ctx.shadowColor = 'rgba(0,0,0,1)';
+        ctx.shadowBlur = blur;
 
-      // Top edge highlight
-      ctx.beginPath();
-      drawRoundRect(ctx, -pillW / 2 + 2, -pillH / 2 + 2, pillW - 4, 4, 4);
-      ctx.fillStyle = 'rgba(255,255,255,0.15)';
-      ctx.fill();
+        const charWidths: number[] = [];
+        let totalWidth = 0;
+        for (const ch of text) {
+          const w = ctx.measureText(ch).width;
+          charWidths.push(w);
+          totalWidth += w;
+        }
 
-      // Main label — big & bold
-      ctx.font = `900 ${fs}px 'Space Grotesk', sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = 'rgba(0,0,0,1)';
-      ctx.shadowBlur = 10;
-      ctx.shadowOffsetX = 2;
-      ctx.shadowOffsetY = 2;
-      ctx.fillText(clickToSpinLabel, 0, clickToSpinSub ? -gap * 0.25 : 0);
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
+        const totalAngle = totalWidth / arcRadius;
+        let angle = -Math.PI / 2 - totalAngle / 2;
 
-      // Sub-label
+        for (let i = 0; i < text.length; i++) {
+          const charAngle = charWidths[i] / arcRadius;
+          const a = angle + charAngle / 2;
+          ctx.save();
+          ctx.translate(arcRadius * Math.cos(a), arcRadius * Math.sin(a));
+          ctx.rotate(a + Math.PI / 2);
+          ctx.fillText(text[i], 0, 0);
+          ctx.restore();
+          angle += charAngle;
+        }
+      };
+
+      drawArcText(clickToSpinLabel, fs, '900', arcR, '#ffffff', 10);
+
       if (clickToSpinSub) {
-        ctx.font = `500 ${subFs}px 'Space Grotesk', sans-serif`;
-        ctx.fillStyle = 'rgba(255,255,255,0.62)';
-        ctx.shadowBlur = 4;
-        ctx.fillText(clickToSpinSub, 0, gap * 0.6);
+        drawArcText(clickToSpinSub, subFs, '600', arcR * 0.72, 'rgba(255,255,255,0.75)', 6);
       }
 
       ctx.restore();
