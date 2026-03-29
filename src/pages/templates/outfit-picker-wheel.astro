@@ -40,6 +40,8 @@ const defaultParticipants = [
   { pseudo: "Minimalist", weight: 1 },
 ];
 
+const myColors = ['#1a1a1a','#ffd700','#ffffff','#c0c0c0','#b8860b','#f5f5f5','#d4af37','#2d2d2d'];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -49,6 +51,203 @@ const jsonLd = {
 };
 ---
 
+<style>
+  /* ===== FASHION RUNWAY THEME ===== */
+  .fashion-page {
+    min-height: 100vh;
+    position: relative;
+    background: #050505;
+    color: #f0e8d0;
+  }
+
+  /* Fond scène de défilé */
+  .fashion-sky {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(ellipse at 50% 20%, #1a1000 0%, #0a0a0a 50%, #000000 100%);
+  }
+
+  /* Piste runway en perspective */
+  .fashion-runway {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+    border-left: 22vw solid transparent;
+    border-right: 22vw solid transparent;
+    border-bottom: 55vh solid rgba(255,215,0,0.04);
+    filter: blur(2px);
+    animation: runwayPulse 5s ease-in-out infinite;
+  }
+  @keyframes runwayPulse {
+    0%, 100% { opacity: 0.6; }
+    50%       { opacity: 1; }
+  }
+
+  /* Lignes runway lumineuses */
+  .fashion-runway-lines {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    pointer-events: none;
+    width: 2px;
+    height: 60vh;
+    background: linear-gradient(to top, rgba(255,215,0,0.7), transparent);
+    box-shadow: 0 0 18px rgba(255,200,0,0.5);
+    animation: linePulse 4s ease-in-out infinite;
+  }
+  @keyframes linePulse {
+    0%, 100% { opacity: 0.4; }
+    50%       { opacity: 1; }
+  }
+
+  /* Spotlights de scène */
+  .fashion-spot {
+    position: fixed;
+    z-index: 1;
+    pointer-events: none;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-left: var(--bw, 8vw) solid transparent;
+    border-right: var(--bw, 8vw) solid transparent;
+    border-top: 65vh solid var(--color, rgba(255,215,0,0.06));
+    filter: blur(4px);
+    left: var(--left, 50%);
+    transform: translateX(-50%);
+    animation: spotFlicker ease-in-out infinite;
+    animation-duration: var(--dur, 6s);
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes spotFlicker {
+    0%, 100% { opacity: 0.6; }
+    30%       { opacity: 1; }
+    60%       { opacity: 0.4; }
+  }
+
+  /* Paillettes tombantes */
+  .fashion-glitter { position: fixed; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; }
+  .fashion-sequin {
+    position: absolute;
+    top: -10px;
+    left: var(--left, 50%);
+    width: var(--s, 5px);
+    height: var(--s, 5px);
+    background: var(--color, #ffd700);
+    animation: sequinFall linear infinite;
+    animation-duration: var(--dur, 8s);
+    animation-delay: var(--delay, 0s);
+    opacity: 0;
+  }
+  @keyframes sequinFall {
+    0%   { transform: translateY(0) rotate(0deg);    opacity: 0; }
+    8%   { opacity: 1; }
+    90%  { opacity: 0.8; }
+    100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* Cintres tombants */
+  .fashion-hanger {
+    position: fixed;
+    z-index: 3;
+    pointer-events: none;
+    font-size: var(--fs, 1.4rem);
+    left: var(--left, 20%);
+    top: var(--top, -10%);
+    opacity: 0;
+    animation: hangerSlide linear infinite;
+    animation-duration: var(--dur, 18s);
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes hangerSlide {
+    0%   { transform: translateY(-60px) rotate(-8deg); opacity: 0; }
+    5%   { opacity: 0.6; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateY(110vh) rotate(8deg); opacity: 0; }
+  }
+
+  /* Titre haute couture */
+  @keyframes goldShimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50%       { background-position: 100% 50%; }
+  }
+  .fashion-title {
+    background: linear-gradient(90deg, #ffd700, #fff8dc, #d4af37, #ffd700, #f5f5f5, #b8860b, #ffd700);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: goldShimmer 5s ease-in-out infinite;
+    text-shadow: none;
+    letter-spacing: 0.02em;
+  }
+
+  .fashion-content { position: relative; z-index: 10; }
+
+  .fashion-card {
+    background: rgba(8, 6, 0, 0.85);
+    border: 1px solid rgba(212,175,55,0.28);
+    border-radius: 16px;
+    padding: 1.5rem;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 4px 32px rgba(180,140,0,0.08), inset 0 1px 0 rgba(255,220,100,0.06);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .fashion-card:hover {
+    border-color: rgba(255,215,0,0.45);
+    box-shadow: 0 4px 44px rgba(200,160,0,0.15);
+  }
+  .fashion-h2 { color: #e8c84a; letter-spacing: 0.02em; }
+  .fashion-text { color: rgba(220,205,165,0.88); line-height: 1.7; }
+  .fashion-muted { color: rgba(160,145,100,0.75); }
+  .fashion-accent { color: #ffd700; }
+  .fashion-breadcrumb a { color: rgba(150,130,80,0.70); transition: color 0.2s; text-decoration: none; }
+  .fashion-breadcrumb a:hover { color: #ffd700; }
+  .fashion-breadcrumb span { color: rgba(100,85,40,0.60); }
+  .fashion-faq {
+    background: rgba(5,4,0,0.88);
+    border: 1px solid rgba(180,140,40,0.28);
+    border-radius: 12px;
+    padding: 1.25rem;
+    backdrop-filter: blur(10px);
+  }
+  .fashion-faq-q { color: #e8c84a; font-weight: 600; margin-bottom: 0.5rem; }
+  .fashion-faq-a { color: rgba(165,148,100,0.82); font-size: 0.875rem; line-height: 1.65; }
+  .fashion-related-link {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(5,4,0,0.80);
+    border: 1px solid rgba(160,120,30,0.25);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    transition: all 0.25s;
+    text-decoration: none;
+  }
+  .fashion-related-link:hover {
+    border-color: rgba(255,215,0,0.50);
+    box-shadow: 0 0 22px rgba(200,160,0,0.12);
+  }
+  .fashion-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(255,215,0,0.12);
+    border: 1px solid rgba(255,215,0,0.38);
+    color: #ffd700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+</style>
+
 <Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
@@ -57,79 +256,132 @@ const jsonLd = {
     { name: "Outfit Picker Wheel", url: "https://realwheelpicker.com/templates/outfit-picker-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+  <div class="fashion-page">
+    <!-- Fond scène -->
+    <div class="fashion-sky" aria-hidden="true"></div>
+    <div class="fashion-runway" aria-hidden="true"></div>
+    <div class="fashion-runway-lines" aria-hidden="true"></div>
 
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Outfit Picker Wheel</span>
-      </nav>
+    <!-- Spotlights -->
+    <div class="fashion-spot" style="--left:20%;--bw:6vw;--color:rgba(255,215,0,0.05);--dur:7s;--delay:0s" aria-hidden="true"></div>
+    <div class="fashion-spot" style="--left:50%;--bw:9vw;--color:rgba(255,255,255,0.04);--dur:5s;--delay:2s" aria-hidden="true"></div>
+    <div class="fashion-spot" style="--left:80%;--bw:6vw;--color:rgba(255,215,0,0.05);--dur:8s;--delay:1s" aria-hidden="true"></div>
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Outfit Picker Wheel — What Should I Wear Today?
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          End the morning wardrobe paralysis. Spin for a style direction and get dressed in under 5 minutes.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Paillettes -->
+    <div class="fashion-glitter" aria-hidden="true">
+      <div class="fashion-sequin" style="--left:5%;--s:4px;--color:#ffd700;--dur:7s;--delay:-1s"></div>
+      <div class="fashion-sequin" style="--left:12%;--s:3px;--color:#c0c0c0;--dur:9s;--delay:-3s"></div>
+      <div class="fashion-sequin" style="--left:22%;--s:5px;--color:#ffd700;--dur:6s;--delay:-5s"></div>
+      <div class="fashion-sequin" style="--left:31%;--s:3px;--color:#fff8dc;--dur:11s;--delay:-2s"></div>
+      <div class="fashion-sequin" style="--left:40%;--s:4px;--color:#d4af37;--dur:8s;--delay:-7s"></div>
+      <div class="fashion-sequin" style="--left:50%;--s:6px;--color:#ffd700;--dur:10s;--delay:-4s"></div>
+      <div class="fashion-sequin" style="--left:59%;--s:3px;--color:#c0c0c0;--dur:7.5s;--delay:-6s"></div>
+      <div class="fashion-sequin" style="--left:68%;--s:4px;--color:#ffd700;--dur:9s;--delay:-1.5s"></div>
+      <div class="fashion-sequin" style="--left:76%;--s:5px;--color:#b8860b;--dur:8s;--delay:-8s"></div>
+      <div class="fashion-sequin" style="--left:83%;--s:3px;--color:#fff8dc;--dur:12s;--delay:-3.5s"></div>
+      <div class="fashion-sequin" style="--left:90%;--s:4px;--color:#ffd700;--dur:6.5s;--delay:-9s"></div>
+      <div class="fashion-sequin" style="--left:96%;--s:3px;--color:#c0c0c0;--dur:10s;--delay:-0.5s"></div>
+      <div class="fashion-sequin" style="--left:16%;--s:4px;--color:#d4af37;--dur:13s;--delay:-5.5s"></div>
+      <div class="fashion-sequin" style="--left:45%;--s:3px;--color:#ffd700;--dur:8.5s;--delay:-2.5s"></div>
+      <div class="fashion-sequin" style="--left:72%;--s:5px;--color:#c0c0c0;--dur:7s;--delay:-11s"></div>
+      <div class="fashion-sequin" style="--left:36%;--s:4px;--color:#fff8dc;--dur:11s;--delay:-7.5s"></div>
+      <div class="fashion-sequin" style="--left:55%;--s:3px;--color:#b8860b;--dur:9.5s;--delay:-4.5s"></div>
+      <div class="fashion-sequin" style="--left:86%;--s:5px;--color:#ffd700;--dur:6s;--delay:-10s"></div>
+      <div class="fashion-sequin" style="--left:8%;--s:4px;--color:#c0c0c0;--dur:14s;--delay:-6.5s"></div>
+      <div class="fashion-sequin" style="--left:64%;--s:3px;--color:#ffd700;--dur:8s;--delay:-0.8s"></div>
+    </div>
 
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <!-- Cintres -->
+    <div class="fashion-hanger" style="--left:8%;--dur:20s;--delay:-3s;--fs:1.5rem" aria-hidden="true">👗</div>
+    <div class="fashion-hanger" style="--left:25%;--dur:25s;--delay:-10s;--fs:1.2rem" aria-hidden="true">👔</div>
+    <div class="fashion-hanger" style="--left:60%;--dur:18s;--delay:-7s;--fs:1.4rem" aria-hidden="true">👗</div>
+    <div class="fashion-hanger" style="--left:80%;--dur:22s;--delay:-15s;--fs:1.3rem" aria-hidden="true">👒</div>
+    <div class="fashion-hanger" style="--left:92%;--dur:16s;--delay:-4s;--fs:1.2rem" aria-hidden="true">👗</div>
 
-      <section class="space-y-8">
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Getting Dressed Takes So Long</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            The problem with getting dressed isn't a lack of clothes — most people own more clothes than they regularly wear. The problem is the daily re-evaluation of every combination. A style wheel short-circuits this by giving you a constraint. Instead of "which of my 40 possible outfits should I wear," you're answering the much simpler "which Casual outfit works today?"
+    <div class="fashion-content">
+      <HeaderIsland client:load />
+
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="fashion-breadcrumb text-xs flex gap-1 mb-6">
+          <a href="/">Home</a><span>/</span>
+          <a href="/templates">Templates</a><span>/</span>
+          <span style="color:#c0a030">Outfit Picker Wheel</span>
+        </nav>
+
+        <section class="text-center space-y-4 py-2 md:py-6 mb-8">
+          <div class="flex justify-center gap-2 flex-wrap mb-2">
+            <span class="fashion-tag">Fashion</span>
+            <span class="fashion-tag">Style</span>
+            <span class="fashion-tag">Daily Pick</span>
+          </div>
+          <h1 class="text-3xl md:text-5xl font-bold leading-tight fashion-title">
+            Outfit Picker Wheel
+          </h1>
+          <p class="text-base md:text-lg" style="color:rgba(220,205,165,0.82);max-width:34rem;margin:0 auto;">
+            End the morning wardrobe paralysis. Spin for a style direction and get dressed in under 5 minutes.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            The random element also helps you rediscover clothes you own but rarely reach for. When the wheel lands on "Vintage" or "Colorful," you might pull out something that's been hanging untouched for months and remember why you liked it.
-          </p>
-        </div>
-      </section>
+          <p style="color:rgba(150,130,80,0.68);font-size:0.85rem;">Free &bull; No account &bull; Instant result</p>
+        </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={myColors}
+          wheelShape="circle"
+          hubTheme="gold"
+          client:load
+        />
+      </div>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/hobby-wheel", label: "Hobby Wheel", desc: "Spin for a random activity after you're dressed and ready." },
-            { href: "/yes-or-no-wheel", label: "Yes or No Wheel", desc: "Quick binary decisions — is this outfit good enough?" },
-            { href: "/random-wheel", label: "Random Wheel", desc: "Build a custom wheel with your specific outfit options." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
 
-    </main>
-    <GlobalFooterIsland client:load />
+        <section class="space-y-6">
+          <div class="fashion-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold fashion-h2">Why Getting Dressed Takes So Long</h2>
+            <p class="fashion-text">
+              The problem with getting dressed isn't a lack of clothes — most people own more clothes than they regularly wear. The problem is the daily re-evaluation of every combination. A style wheel short-circuits this by giving you a constraint. Instead of "which of my 40 possible outfits should I wear," you're answering the much simpler "which Casual outfit works today?"
+            </p>
+            <p class="fashion-text">
+              The random element also helps you rediscover clothes you own but rarely reach for. When the wheel lands on "Vintage" or "Colorful," you might pull out something that's been hanging untouched for months and remember why you liked it.
+            </p>
+          </div>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold fashion-h2">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <div class="fashion-faq">
+                <p class="fashion-faq-q">{question}</p>
+                <p class="fashion-faq-a">{answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold fashion-h2">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/templates/hobby-wheel", label: "Hobby Wheel", desc: "Spin for a random activity after you're dressed and ready." },
+              { href: "/yes-or-no-wheel", label: "Yes or No Wheel", desc: "Quick binary decisions — is this outfit good enough?" },
+              { href: "/random-wheel", label: "Random Wheel", desc: "Build a custom wheel with your specific outfit options." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="fashion-related-link">
+                  <span class="fashion-accent font-bold text-sm mt-0.5">→</span>
+                  <span>
+                    <span class="font-semibold fashion-h2">{label}</span>
+                    <span class="fashion-muted text-sm"> — {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

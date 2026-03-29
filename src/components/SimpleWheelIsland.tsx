@@ -12,9 +12,12 @@ interface Participant {
 
 interface SimpleWheelIslandProps {
   defaultParticipants: Participant[];
+  colors?: string[];
+  wheelShape?: string;
+  hubTheme?: string;
 }
 
-const SimpleWheelIslandInner = ({ defaultParticipants }: SimpleWheelIslandProps) => {
+const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTheme }: SimpleWheelIslandProps) => {
   const [participants, setParticipants] = useState<Participant[]>([...defaultParticipants]);
   const [winners, setWinners] = useState<string[]>([]);
   const [isSpinning, setIsSpinning] = useState(false);
@@ -83,6 +86,9 @@ const SimpleWheelIslandInner = ({ defaultParticipants }: SimpleWheelIslandProps)
           mode="simple"
           winnersCount={1}
           clickToSpinLabel="Click to spin"
+          colors={colors}
+          wheelShape={wheelShape}
+          hubTheme={hubTheme}
         />
         {!isSpinning && winners.length === 0 && (
           <DrawButton
@@ -138,9 +144,9 @@ const SimpleWheelIslandInner = ({ defaultParticipants }: SimpleWheelIslandProps)
   );
 };
 
-const SimpleWheelIsland = ({ defaultParticipants }: SimpleWheelIslandProps) => (
+const SimpleWheelIsland = ({ defaultParticipants, colors, wheelShape, hubTheme }: SimpleWheelIslandProps) => (
   <LanguageProvider>
-    <SimpleWheelIslandInner defaultParticipants={defaultParticipants} />
+    <SimpleWheelIslandInner defaultParticipants={defaultParticipants} colors={colors} wheelShape={wheelShape} hubTheme={hubTheme} />
   </LanguageProvider>
 );
 

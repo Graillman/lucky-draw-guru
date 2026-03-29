@@ -38,6 +38,8 @@ const defaultParticipants = [
   { pseudo: "Craggy Cliffs", weight: 1 },
 ];
 
+const myColors = ['#7c3aed','#3b82f6','#f97316','#f59e0b','#8b5cf6','#06b6d4','#a855f7','#fb923c'];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -47,12 +49,269 @@ const jsonLd = {
 };
 ---
 
-<Layout
-  title={title}
-  description={description}
-  canonical={canonical}
-  jsonLd={jsonLd}
->
+<style>
+  /* === FORTNITE STORM THEME === */
+  .fn-page {
+    min-height: 100vh;
+    background: #0a0015;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Storm sky gradient */
+  .fn-sky {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(ellipse at 50% 30%, #2d0060 0%, #1a0035 30%, #05001a 70%, #000008 100%);
+    pointer-events: none;
+  }
+
+  /* Storm circle pulse */
+  .storm-circle {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 900px;
+    height: 900px;
+    border-radius: 50%;
+    border: 3px solid rgba(139, 92, 246, 0.5);
+    box-shadow:
+      0 0 60px rgba(139, 92, 246, 0.3),
+      0 0 120px rgba(139, 92, 246, 0.15),
+      inset 0 0 80px rgba(59, 130, 246, 0.08);
+    z-index: 1;
+    pointer-events: none;
+    animation: stormPulse 4s ease-in-out infinite;
+  }
+  .storm-circle-inner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    border: 2px solid rgba(168, 85, 247, 0.3);
+    z-index: 1;
+    pointer-events: none;
+    animation: stormPulse 4s ease-in-out infinite reverse;
+  }
+
+  @keyframes stormPulse {
+    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+    50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.04); }
+  }
+
+  /* Lightning bolts */
+  .lightning-container {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .lightning {
+    position: absolute;
+    width: 2px;
+    background: linear-gradient(180deg, transparent 0%, #a855f7 20%, #06b6d4 60%, #3b82f6 80%, transparent 100%);
+    border-radius: 2px;
+    animation: lightningFlash linear infinite;
+    opacity: 0;
+  }
+  .lightning:nth-child(1)  { left: 5%;  top: 0; height: 200px; animation-duration: 6s;  animation-delay: 0s;   }
+  .lightning:nth-child(2)  { left: 12%; top: 0; height: 150px; animation-duration: 4s;  animation-delay: 1.2s; width: 1px; }
+  .lightning:nth-child(3)  { left: 22%; top: 0; height: 250px; animation-duration: 7s;  animation-delay: 2.5s; background: linear-gradient(180deg, transparent, #3b82f6, #a855f7, transparent); }
+  .lightning:nth-child(4)  { left: 35%; top: 0; height: 180px; animation-duration: 5s;  animation-delay: 0.8s; }
+  .lightning:nth-child(5)  { left: 48%; top: 0; height: 300px; animation-duration: 8s;  animation-delay: 3.5s; }
+  .lightning:nth-child(6)  { left: 60%; top: 0; height: 160px; animation-duration: 4.5s;animation-delay: 1.5s; }
+  .lightning:nth-child(7)  { left: 72%; top: 0; height: 220px; animation-duration: 6.5s;animation-delay: 0.5s; background: linear-gradient(180deg, transparent, #06b6d4, #7c3aed, transparent); }
+  .lightning:nth-child(8)  { left: 80%; top: 0; height: 140px; animation-duration: 3.5s;animation-delay: 4s;   width: 1px; }
+  .lightning:nth-child(9)  { left: 88%; top: 0; height: 260px; animation-duration: 7.5s;animation-delay: 2s;   }
+  .lightning:nth-child(10) { left: 95%; top: 0; height: 190px; animation-duration: 5.5s;animation-delay: 1s;   }
+  .lightning:nth-child(11) { left: 28%; top: 0; height: 120px; animation-duration: 9s;  animation-delay: 6s;   width: 1px; }
+  .lightning:nth-child(12) { left: 55%; top: 0; height: 280px; animation-duration: 5s;  animation-delay: 7s;   }
+  .lightning:nth-child(13) { left: 15%; top: 0; height: 170px; animation-duration: 4s;  animation-delay: 8.5s; }
+  .lightning:nth-child(14) { left: 42%; top: 0; height: 210px; animation-duration: 6s;  animation-delay: 3s;   }
+  .lightning:nth-child(15) { left: 78%; top: 0; height: 155px; animation-duration: 7s;  animation-delay: 5s;   width: 1px; }
+
+  @keyframes lightningFlash {
+    0%   { opacity: 0; }
+    2%   { opacity: 1; }
+    4%   { opacity: 0.2; }
+    6%   { opacity: 0.9; }
+    8%   { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  /* Parachutes falling */
+  .chute-container {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .chute {
+    position: absolute;
+    top: -60px;
+    font-size: 1.8rem;
+    animation: chuteFall linear infinite;
+    opacity: 0.7;
+  }
+  .chute:nth-child(1)  { left: 8%;  animation-duration: 12s; animation-delay: 0s;   }
+  .chute:nth-child(2)  { left: 18%; animation-duration: 15s; animation-delay: 2s;   font-size: 1.2rem; }
+  .chute:nth-child(3)  { left: 30%; animation-duration: 10s; animation-delay: 5s;   }
+  .chute:nth-child(4)  { left: 45%; animation-duration: 18s; animation-delay: 1s;   font-size: 2.2rem; }
+  .chute:nth-child(5)  { left: 58%; animation-duration: 13s; animation-delay: 7s;   font-size: 1.4rem; }
+  .chute:nth-child(6)  { left: 70%; animation-duration: 16s; animation-delay: 3s;   }
+  .chute:nth-child(7)  { left: 82%; animation-duration: 11s; animation-delay: 9s;   font-size: 1.6rem; }
+  .chute:nth-child(8)  { left: 92%; animation-duration: 14s; animation-delay: 4s;   }
+  .chute:nth-child(9)  { left: 25%; animation-duration: 20s; animation-delay: 11s;  font-size: 1rem; }
+  .chute:nth-child(10) { left: 65%; animation-duration: 17s; animation-delay: 6s;   font-size: 2rem; }
+
+  @keyframes chuteFall {
+    0%   { top: -60px; opacity: 0; transform: translateX(0) rotate(0deg); }
+    5%   { opacity: 0.8; }
+    95%  { opacity: 0.5; }
+    100% { top: 110vh; opacity: 0; transform: translateX(30px) rotate(5deg); }
+  }
+
+  /* Electric particles */
+  .elec-particles {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .elec-dot {
+    position: absolute;
+    border-radius: 50%;
+    animation: elecFloat ease-in-out infinite;
+  }
+  .elec-dot:nth-child(1)  { width: 4px;  height: 4px;  left: 10%; top: 20%; background: #a855f7; animation-duration: 3s;  animation-delay: 0s;   }
+  .elec-dot:nth-child(2)  { width: 3px;  height: 3px;  left: 25%; top: 60%; background: #3b82f6; animation-duration: 4s;  animation-delay: 1s;   }
+  .elec-dot:nth-child(3)  { width: 5px;  height: 5px;  left: 40%; top: 35%; background: #06b6d4; animation-duration: 2.5s;animation-delay: 0.5s; }
+  .elec-dot:nth-child(4)  { width: 3px;  height: 3px;  left: 55%; top: 75%; background: #8b5cf6; animation-duration: 5s;  animation-delay: 2s;   }
+  .elec-dot:nth-child(5)  { width: 4px;  height: 4px;  left: 70%; top: 25%; background: #7c3aed; animation-duration: 3.5s;animation-delay: 1.5s; }
+  .elec-dot:nth-child(6)  { width: 6px;  height: 6px;  left: 85%; top: 50%; background: #a855f7; animation-duration: 4.5s;animation-delay: 0.8s; }
+  .elec-dot:nth-child(7)  { width: 3px;  height: 3px;  left: 15%; top: 80%; background: #06b6d4; animation-duration: 6s;  animation-delay: 3s;   }
+  .elec-dot:nth-child(8)  { width: 5px;  height: 5px;  left: 60%; top: 10%; background: #3b82f6; animation-duration: 2s;  animation-delay: 0.3s; }
+  .elec-dot:nth-child(9)  { width: 4px;  height: 4px;  left: 90%; top: 70%; background: #8b5cf6; animation-duration: 5.5s;animation-delay: 2.5s; }
+  .elec-dot:nth-child(10) { width: 3px;  height: 3px;  left: 75%; top: 45%; background: #a855f7; animation-duration: 3.8s;animation-delay: 1.2s; }
+  .elec-dot:nth-child(11) { width: 7px;  height: 7px;  left: 35%; top: 88%; background: rgba(6,182,212,0.6); animation-duration: 7s;  animation-delay: 4s;   }
+  .elec-dot:nth-child(12) { width: 4px;  height: 4px;  left: 50%; top: 55%; background: rgba(139,92,246,0.8); animation-duration: 4.2s;animation-delay: 1.8s; }
+
+  @keyframes elecFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+    25%       { transform: translate(10px, -15px) scale(1.3); opacity: 1; }
+    50%       { transform: translate(-8px, -25px) scale(0.8); opacity: 0.4; }
+    75%       { transform: translate(15px, -10px) scale(1.1); opacity: 0.9; }
+  }
+
+  /* Ambient glow */
+  .fn-glow-top {
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1000px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(124,58,237,0.2) 0%, rgba(59,130,246,0.1) 40%, transparent 70%);
+    z-index: 1;
+    pointer-events: none;
+    animation: glowBreath 5s ease-in-out infinite;
+  }
+
+  @keyframes glowBreath {
+    0%, 100% { opacity: 0.6; }
+    50%       { opacity: 1; }
+  }
+
+  /* Content */
+  .fn-content {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Cards */
+  .fn-card {
+    background: rgba(10, 0, 30, 0.85);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 30px rgba(124,58,237,0.12), inset 0 1px 0 rgba(168,85,247,0.08);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .fn-card:hover {
+    border-color: rgba(168, 85, 247, 0.5);
+    box-shadow: 0 0 40px rgba(124,58,237,0.2);
+  }
+  .fn-card h2     { color: #c4b5fd; text-shadow: 0 0 20px rgba(139,92,246,0.5); }
+  .fn-card p      { color: rgba(196, 181, 253, 0.8); }
+  .fn-card strong { color: #a78bfa; }
+
+  .fn-faq {
+    background: rgba(8, 0, 22, 0.9);
+    border: 1px solid rgba(124,58,237,0.25);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    backdrop-filter: blur(8px);
+  }
+  .fn-faq .q { color: #a78bfa; font-weight: 600; margin-bottom: 0.5rem; }
+  .fn-faq .a { color: rgba(196,181,253,0.75); font-size: 0.875rem; line-height: 1.6; }
+
+  .fn-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(8, 0, 22, 0.85);
+    border: 1px solid rgba(124,58,237,0.22);
+    border-radius: 1rem;
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    backdrop-filter: blur(6px);
+  }
+  .fn-link:hover {
+    border-color: rgba(168, 85, 247, 0.55);
+    box-shadow: 0 0 20px rgba(124,58,237,0.2);
+  }
+  .fn-link .arrow      { color: #a855f7; font-weight: 700; font-size: 0.875rem; margin-top: 0.125rem; flex-shrink: 0; }
+  .fn-link .link-title { color: #c4b5fd; font-weight: 600; }
+  .fn-link .link-desc  { color: rgba(196,181,253,0.6); font-size: 0.875rem; }
+
+  .fn-list-item { color: rgba(196,181,253,0.8); }
+  .fn-list-item strong { color: #a78bfa; }
+
+  .breadcrumb-nav a { color: rgba(139,92,246,0.6); transition: color 0.2s; }
+  .breadcrumb-nav a:hover { color: #c4b5fd; }
+  .breadcrumb-nav .sep { color: rgba(124,58,237,0.4); }
+  .breadcrumb-nav .cur { color: rgba(196,181,253,0.9); }
+
+  .fn-hero-title {
+    color: #e0d5ff;
+    text-shadow: 0 0 40px rgba(139,92,246,0.6), 0 0 80px rgba(59,130,246,0.25);
+    letter-spacing: -0.02em;
+  }
+  .fn-hero-sub   { color: rgba(196,181,253,0.75); }
+  .fn-hero-badge { color: rgba(139,92,246,0.6); }
+  .fn-section-title { color: #c4b5fd; text-shadow: 0 0 20px rgba(139,92,246,0.4); }
+
+  .fn-tag {
+    background: rgba(124,58,237,0.12);
+    border: 1px solid rgba(139,92,246,0.3);
+    border-radius: 0.75rem;
+    padding: 1rem;
+  }
+  .fn-tag .label { color: #a78bfa; font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem; }
+  .fn-tag .desc  { color: rgba(196,181,253,0.7); font-size: 0.875rem; }
+</style>
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
     { name: "Home", url: "https://realwheelpicker.com" },
@@ -60,105 +319,158 @@ const jsonLd = {
     { name: "Fortnite Drop Location Wheel", url: "https://realwheelpicker.com/templates/fortnite-drop-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  <div class="fn-page">
+    <div class="fn-sky"></div>
+    <div class="fn-glow-top"></div>
+    <div class="storm-circle"></div>
+    <div class="storm-circle-inner"></div>
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <div class="lightning-container">
+      <div class="lightning"></div>
+      <div class="lightning"></div>
+      <div class="lightning"></div>
+      <div class="lightning"></div>
+      <div class="lightning"></div>
+      <div class="lightning"></div>
+      <div class="lightning"></div>
+      <div class="lightning"></div>
+      <div class="lightning"></div>
+      <div class="lightning"></div>
+      <div class="lightning"></div>
+      <div class="lightning"></div>
+      <div class="lightning"></div>
+      <div class="lightning"></div>
+      <div class="lightning"></div>
+    </div>
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Fortnite Drop Location Wheel</span>
-      </nav>
+    <div class="chute-container">
+      <div class="chute">🪂</div>
+      <div class="chute">🪂</div>
+      <div class="chute">🪂</div>
+      <div class="chute">🪂</div>
+      <div class="chute">🪂</div>
+      <div class="chute">🪂</div>
+      <div class="chute">🪂</div>
+      <div class="chute">🪂</div>
+      <div class="chute">🪂</div>
+      <div class="chute">🪂</div>
+    </div>
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Fortnite Drop Location Wheel — Where to Land
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Stop dropping the same spot every match. Spin the wheel for a random Fortnite landing location and force yourself into unfamiliar territory. Update locations each season.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <div class="elec-particles">
+      <div class="elec-dot"></div>
+      <div class="elec-dot"></div>
+      <div class="elec-dot"></div>
+      <div class="elec-dot"></div>
+      <div class="elec-dot"></div>
+      <div class="elec-dot"></div>
+      <div class="elec-dot"></div>
+      <div class="elec-dot"></div>
+      <div class="elec-dot"></div>
+      <div class="elec-dot"></div>
+      <div class="elec-dot"></div>
+      <div class="elec-dot"></div>
+    </div>
 
-      <!-- Wheel -->
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <div class="fn-content">
+      <HeaderIsland client:load />
 
-      <!-- Article Content -->
-      <section class="space-y-8">
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav text-xs flex gap-1 mb-8">
+          <a href="/">Home</a>
+          <span class="sep">/</span>
+          <a href="/templates">Templates</a>
+          <span class="sep">/</span>
+          <span class="cur">Fortnite Drop Location Wheel</span>
+        </nav>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Break Your Drop Spot Habit</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Every Fortnite player has a comfort drop. You know the loot route, the chests, the rotations. That familiarity makes you better at one location but worse at the overall map. The drop wheel forces you to learn every POI instead of one.
+        <div class="text-center space-y-4 py-2 md:py-6 mb-8">
+          <div class="flex flex-wrap justify-center gap-2 mb-3">
+            <span style="background:rgba(124,58,237,0.2);border:1px solid rgba(139,92,246,0.4);color:#a78bfa;padding:0.25rem 0.75rem;border-radius:9999px;font-size:0.75rem;">⚡ Storm Zone</span>
+            <span style="background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.35);color:#93c5fd;padding:0.25rem 0.75rem;border-radius:9999px;font-size:0.75rem;">🪂 Drop Wheel</span>
+            <span style="background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.3);color:#67e8f9;padding:0.25rem 0.75rem;border-radius:9999px;font-size:0.75rem;">Battle Royale</span>
+          </div>
+          <h1 class="fn-hero-title text-3xl md:text-5xl font-bold leading-tight">
+            Fortnite Drop Location Wheel — Where to Land
+          </h1>
+          <p class="fn-hero-sub text-lg md:text-xl max-w-2xl mx-auto">
+            Stop dropping the same spot every match. Spin the wheel for a random Fortnite landing location and force yourself into unfamiliar territory.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            Random drops improve your game in unexpected ways: you discover loot patterns you didn't know existed, you practice rotations from every corner of the map, and you stop being predictable to opponents who might recognize your playstyle. The discomfort of unfamiliar drops is exactly where improvement happens.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            For squads, the drop wheel is also a great team-building tool. Everyone commits before the match — no arguments mid-bus about where to go. The wheel decided, and you play it out together.
-          </p>
+          <p class="fn-hero-badge text-sm">Free • No account • Instant result</p>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Challenge Ideas with the Drop Wheel</h2>
-          <ul class="space-y-2 text-muted-foreground">
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Hot Drop Challenge:</strong> Add only hot-drop locations and survive as long as possible from pure combat.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Safe Drop Week:</strong> Add only quiet, low-traffic zones to practice late-game survival and circle rotations.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Location Bingo:</strong> Spin a new location each match and mark it off — first to complete the map wins the challenge.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Solo Grind:</strong> Commit to every spin result for 10 matches and track your placement average. Compare to your usual drop spot stats.</span></li>
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={myColors}
+          wheelShape="hexagon"
+          hubTheme="cosmic"
+          client:load
+        />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <section class="space-y-8">
+          <div class="fn-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">Break Your Drop Spot Habit</h2>
+            <p class="leading-relaxed">
+              Every Fortnite player has a comfort drop. You know the loot route, the chests, the rotations. That familiarity makes you better at one location but worse at the overall map. The drop wheel forces you to learn every POI instead of one.
+            </p>
+            <p class="leading-relaxed">
+              Random drops improve your game in unexpected ways: you discover loot patterns you didn't know existed, you practice rotations from every corner of the map, and you stop being predictable to opponents who might recognize your playstyle. The discomfort of unfamiliar drops is exactly where improvement happens.
+            </p>
+            <p class="leading-relaxed">
+              For squads, the drop wheel is also a great team-building tool. Everyone commits before the match — no arguments mid-bus about where to go. The wheel decided, and you play it out together.
+            </p>
+          </div>
+
+          <div class="fn-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">Challenge Ideas with the Drop Wheel</h2>
+            <ul class="space-y-2">
+              <li class="fn-list-item flex gap-3"><span style="color:#a855f7;font-weight:700;">→</span><span><strong>Hot Drop Challenge:</strong> Add only hot-drop locations and survive as long as possible from pure combat.</span></li>
+              <li class="fn-list-item flex gap-3"><span style="color:#a855f7;font-weight:700;">→</span><span><strong>Safe Drop Week:</strong> Add only quiet, low-traffic zones to practice late-game survival and circle rotations.</span></li>
+              <li class="fn-list-item flex gap-3"><span style="color:#a855f7;font-weight:700;">→</span><span><strong>Location Bingo:</strong> Spin a new location each match and mark it off — first to complete the map wins the challenge.</span></li>
+              <li class="fn-list-item flex gap-3"><span style="color:#a855f7;font-weight:700;">→</span><span><strong>Solo Grind:</strong> Commit to every spin result for 10 matches and track your placement average.</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="fn-section-title text-xl md:text-2xl font-bold">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <div class="fn-faq">
+                <p class="q">{question}</p>
+                <p class="a">{answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="fn-section-title text-xl md:text-2xl font-bold">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/templates/minecraft-challenge-wheel", label: "Minecraft Challenge Wheel", desc: "Random run ideas for Minecraft when Fortnite needs a break." },
+              { href: "/templates/video-game-picker", label: "Video Game Picker", desc: "Spin for a random game genre across all platforms." },
+              { href: "/templates/who-goes-first-wheel", label: "Who Goes First Wheel", desc: "Decide who picks the next game mode or leads the squad." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="fn-link">
+                  <span class="arrow">→</span>
+                  <span>
+                    <span class="link-title">{label}</span>
+                    <span class="link-desc"> — {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
           </ul>
-        </div>
+        </section>
 
-      </section>
+      </main>
 
-      <!-- FAQ -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/minecraft-challenge-wheel", label: "Minecraft Challenge Wheel", desc: "Random run ideas for Minecraft when Fortnite needs a break." },
-            { href: "/templates/video-game-picker", label: "Video Game Picker", desc: "Spin for a random game genre across all platforms." },
-            { href: "/templates/who-goes-first-wheel", label: "Who Goes First Wheel", desc: "Decide who picks the next game mode or leads the squad." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-    </main>
-
-    <GlobalFooterIsland client:load />
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

@@ -38,6 +38,8 @@ const defaultParticipants = [
   { pseudo: "☕ Surprise breakfast",    weight: 1 },
 ];
 
+const valColors = ['#ff006e','#ff85c1','#c77dff','#ff4d8e','#e040fb','#f48fb1','#ce93d8','#ff80ab','#ea80fc','#ff6090'];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -48,48 +50,64 @@ const jsonLd = {
 ---
 
 <style>
-  /* ═══════════ FULL-PAGE VALENTINE THEME ═══════════ */
+  /* ═══════════ VALENTINE'S DAY — FULL IMMERSIVE THEME ═══════════ */
   .val-page {
-    background: #1a0010;
+    background: #12000e;
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
   }
 
-  /* Rose gold gradient sky */
+  /* Deep rose sky */
   .val-sky {
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 60% at 20% -10%, rgba(255,60,130,0.35) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 50% at 80% 0%, rgba(200,80,200,0.22) 0%, transparent 55%),
-      radial-gradient(ellipse 100% 40% at 50% 100%, rgba(180,20,80,0.3) 0%, transparent 60%),
-      linear-gradient(180deg, #1a0010 0%, #2d0020 50%, #1a0010 100%);
+      radial-gradient(ellipse 90% 70% at 15% -10%, rgba(255,0,110,0.4) 0%, transparent 55%),
+      radial-gradient(ellipse 70% 60% at 85% -5%,  rgba(200,0,200,0.28) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 50% at 50% 105%, rgba(180,0,80,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 50% 50%,  rgba(255,0,110,0.08) 0%, transparent 60%),
+      linear-gradient(180deg, #12000e 0%, #22001a 50%, #12000e 100%);
     pointer-events: none;
     z-index: 0;
   }
 
-  /* Floating hearts */
+  /* Cupid glow orbs */
+  .cupid-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+    animation: cupidPulse ease-in-out infinite alternate;
+  }
+  @keyframes cupidPulse {
+    from { opacity: 0.3; transform: scale(0.9); }
+    to   { opacity: 0.7; transform: scale(1.1); }
+  }
+
+  /* Floating hearts — 30 of them */
   .heart {
     position: fixed;
     pointer-events: none;
     z-index: 1;
-    animation: heartFloat ease-in-out infinite;
+    animation: heartRise ease-in-out infinite;
     opacity: 0;
-    font-style: normal;
     line-height: 1;
+    user-select: none;
   }
-  @keyframes heartFloat {
-    0%   { transform: translateY(110vh) rotate(-15deg); opacity: 0; }
-    5%   { opacity: 0.8; }
-    90%  { opacity: 0.5; }
-    100% { transform: translateY(-10vh) rotate(15deg); opacity: 0; }
+  @keyframes heartRise {
+    0%   { transform: translateY(110vh) translateX(0) rotate(-10deg); opacity: 0; }
+    5%   { opacity: 0.9; }
+    50%  { transform: translateY(50vh) translateX(20px) rotate(10deg); opacity: 0.7; }
+    95%  { opacity: 0.4; }
+    100% { transform: translateY(-10vh) translateX(-10px) rotate(-5deg); opacity: 0; }
   }
 
   /* Rose petals */
   .petal {
     position: fixed;
-    width: 8px; height: 12px;
+    width: 9px; height: 13px;
     border-radius: 50% 50% 50% 0;
     pointer-events: none;
     z-index: 1;
@@ -98,36 +116,71 @@ const jsonLd = {
   }
   @keyframes petalFall {
     0%   { transform: translateY(-20px) rotate(0deg); opacity: 0; }
-    8%   { opacity: 0.7; }
-    92%  { opacity: 0.4; }
-    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    8%   { opacity: 0.8; }
+    92%  { opacity: 0.45; }
+    100% { transform: translateY(110vh) rotate(400deg); opacity: 0; }
   }
 
-  /* Sparkle dots */
-  .sparkle {
+  /* Sparkle stars */
+  .val-sparkle {
     position: fixed;
     border-radius: 50%;
     pointer-events: none;
     z-index: 1;
-    animation: sparklePulse ease-in-out infinite alternate;
+    animation: sparkleTwinkle ease-in-out infinite alternate;
   }
-  @keyframes sparklePulse {
-    from { opacity: 0.1; transform: scale(0.5); }
-    to   { opacity: 0.9; transform: scale(1.3); }
+  @keyframes sparkleTwinkle {
+    from { opacity: 0.05; transform: scale(0.4); box-shadow: none; }
+    to   { opacity: 1;    transform: scale(1.4); box-shadow: 0 0 12px currentColor, 0 0 24px currentColor; }
   }
 
-  /* Content above bg layers */
+  /* Shooting star */
+  .shooting-star {
+    position: fixed;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ff85c1, transparent);
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 2px;
+    animation: shootingStar linear infinite;
+    opacity: 0;
+  }
+  @keyframes shootingStar {
+    0%   { transform: translateX(-200px) translateY(0) rotate(-30deg); opacity: 0; }
+    5%   { opacity: 0.9; }
+    40%  { opacity: 0.6; }
+    100% { transform: translateX(110vw) translateY(-100px) rotate(-30deg); opacity: 0; }
+  }
+
+  /* Ribbon wave at bottom */
+  .val-ribbon {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(180deg, transparent 0%, rgba(255,0,110,0.12) 100%);
+    pointer-events: none;
+    z-index: 1;
+    animation: ribbonPulse 4s ease-in-out infinite alternate;
+  }
+  @keyframes ribbonPulse {
+    from { opacity: 0.5; }
+    to   { opacity: 1; }
+  }
+
+  /* Content layer */
   .val-content { position: relative; z-index: 10; }
 
   /* Title */
   .val-title {
-    background: linear-gradient(135deg, #ff85c1 0%, #ff006e 40%, #c77dff 80%, #ff85c1 100%);
-    background-size: 200%;
+    background: linear-gradient(135deg, #ff85c1 0%, #ff006e 35%, #e040fb 65%, #ff85c1 100%);
+    background-size: 250%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: valShimmer 4s ease-in-out infinite;
-    filter: drop-shadow(0 0 20px rgba(255,0,110,0.4));
+    animation: valShimmer 5s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(255,0,110,0.5));
   }
   @keyframes valShimmer {
     0%,100% { background-position: 0% 50%; }
@@ -135,35 +188,28 @@ const jsonLd = {
   }
 
   .val-tag {
-    background: rgba(255, 100, 160, 0.15);
-    border: 1px solid rgba(255, 100, 160, 0.35);
-    color: rgba(255, 150, 190, 0.9);
+    background: rgba(255,100,160,0.15);
+    border: 1px solid rgba(255,100,160,0.4);
+    color: rgba(255,160,200,0.95);
     border-radius: 9999px;
     padding: 4px 14px;
     font-size: 0.72rem;
     font-weight: 600;
   }
 
-  /* Cards in content */
   .val-card {
-    background: rgba(255, 50, 120, 0.07);
-    border: 1px solid rgba(255, 100, 160, 0.2);
+    background: rgba(255,0,110,0.06);
+    border: 1px solid rgba(255,100,160,0.2);
     border-radius: 1rem;
     transition: border-color 0.2s, background 0.2s;
   }
   .val-card:hover {
-    border-color: rgba(255, 100, 160, 0.5);
-    background: rgba(255, 50, 120, 0.12);
-  }
-  .val-section {
-    background: rgba(255, 50, 120, 0.06);
-    border: 1px solid rgba(255, 100, 160, 0.18);
-    border-radius: 1rem;
-    backdrop-filter: blur(6px);
+    border-color: rgba(255,100,160,0.55);
+    background: rgba(255,0,110,0.12);
   }
   details.val-faq {
-    background: rgba(255, 50, 120, 0.06);
-    border: 1px solid rgba(255, 100, 160, 0.18);
+    background: rgba(255,0,110,0.05);
+    border: 1px solid rgba(255,100,160,0.18);
     border-radius: 0.75rem;
     padding: 1.25rem;
   }
@@ -180,36 +226,64 @@ const jsonLd = {
   <div class="val-page">
     <div class="val-sky"></div>
 
-    <!-- Floating hearts -->
-    <span class="heart" style="font-size:1.4rem;left:5%;animation-duration:8s;animation-delay:0s;">❤️</span>
-    <span class="heart" style="font-size:0.9rem;left:15%;animation-duration:10s;animation-delay:2s;">🩷</span>
-    <span class="heart" style="font-size:1.8rem;left:25%;animation-duration:12s;animation-delay:1s;">💕</span>
-    <span class="heart" style="font-size:1.1rem;left:38%;animation-duration:9s;animation-delay:3s;">❤️</span>
-    <span class="heart" style="font-size:0.8rem;left:52%;animation-duration:11s;animation-delay:0.5s;">💗</span>
-    <span class="heart" style="font-size:1.5rem;left:65%;animation-duration:7s;animation-delay:4s;">💖</span>
-    <span class="heart" style="font-size:1rem;left:75%;animation-duration:13s;animation-delay:1.5s;">🩷</span>
-    <span class="heart" style="font-size:1.3rem;left:85%;animation-duration:8s;animation-delay:2.5s;">💝</span>
-    <span class="heart" style="font-size:0.7rem;left:92%;animation-duration:9s;animation-delay:5s;">❤️</span>
-    <span class="heart" style="font-size:1.6rem;left:45%;animation-duration:14s;animation-delay:3.5s;">💞</span>
+    <!-- Cupid glow pools -->
+    <div class="cupid-glow" style="width:600px;height:500px;background:radial-gradient(circle,rgba(255,0,110,0.35) 0%,transparent 70%);top:-150px;left:-100px;animation-duration:5s;"></div>
+    <div class="cupid-glow" style="width:500px;height:450px;background:radial-gradient(circle,rgba(200,0,200,0.25) 0%,transparent 70%);top:-100px;right:-80px;animation-duration:7s;animation-delay:1s;"></div>
+    <div class="cupid-glow" style="width:400px;height:350px;background:radial-gradient(circle,rgba(255,0,110,0.2) 0%,transparent 70%);bottom:10%;left:50%;transform:translateX(-50%);animation-duration:6s;animation-delay:2s;"></div>
 
-    <!-- Rose petals -->
-    {Array.from({ length: 16 }, (_, i) => (
-      <div class="petal" style={`background:hsl(${340 + (i % 4) * 8},80%,${55 + (i % 3) * 10}%);left:${i * 6.25}%;animation-duration:${4 + (i % 5)}s;animation-delay:${i * 0.4}s;transform:rotate(${i * 22}deg);`}></div>
+    <!-- Floating hearts — 30 -->
+    {[
+      {l:"3%",fs:"1.5rem",dur:"9s",del:"0s",e:"❤️"},{l:"8%",fs:"0.9rem",dur:"11s",del:"2s",e:"🩷"},
+      {l:"14%",fs:"2rem",dur:"13s",del:"1s",e:"💕"},{l:"20%",fs:"1.1rem",dur:"8s",del:"3s",e:"💗"},
+      {l:"27%",fs:"0.8rem",dur:"12s",del:"0.5s",e:"💖"},{l:"33%",fs:"1.6rem",dur:"10s",del:"4s",e:"💝"},
+      {l:"40%",fs:"1rem",dur:"9s",del:"1.5s",e:"❤️"},{l:"47%",fs:"1.3rem",dur:"14s",del:"5s",e:"💞"},
+      {l:"54%",fs:"0.7rem",dur:"11s",del:"2.5s",e:"🩷"},{l:"60%",fs:"1.8rem",dur:"8s",del:"0.8s",e:"💕"},
+      {l:"67%",fs:"1.2rem",dur:"10s",del:"3.5s",e:"💗"},{l:"73%",fs:"0.9rem",dur:"13s",del:"1.2s",e:"💖"},
+      {l:"79%",fs:"1.4rem",dur:"9s",del:"4.5s",e:"💝"},{l:"85%",fs:"0.8rem",dur:"11s",del:"2s",e:"❤️"},
+      {l:"91%",fs:"1.7rem",dur:"12s",del:"0.3s",e:"💞"},{l:"96%",fs:"1rem",dur:"8s",del:"6s",e:"🩷"},
+      {l:"11%",fs:"1.1rem",dur:"15s",del:"7s",e:"💗"},{l:"22%",fs:"0.7rem",dur:"10s",del:"3s",e:"💕"},
+      {l:"36%",fs:"1.3rem",dur:"9s",del:"5.5s",e:"❤️"},{l:"50%",fs:"0.9rem",dur:"13s",del:"1.8s",e:"💖"},
+      {l:"63%",fs:"1.5rem",dur:"11s",del:"4s",e:"💝"},{l:"76%",fs:"0.8rem",dur:"8s",del:"6.5s",e:"💞"},
+      {l:"88%",fs:"1.2rem",dur:"12s",del:"2.8s",e:"🩷"},{l:"5%",fs:"2.2rem",dur:"16s",del:"8s",e:"💕"},
+      {l:"30%",fs:"0.6rem",dur:"10s",del:"1s",e:"💗"},{l:"44%",fs:"1.4rem",dur:"9s",del:"7.5s",e:"❤️"},
+      {l:"57%",fs:"0.8rem",dur:"11s",del:"3.8s",e:"💖"},{l:"70%",fs:"1rem",dur:"14s",del:"5s",e:"💝"},
+      {l:"82%",fs:"1.6rem",dur:"8s",del:"0.6s",e:"💞"},{l:"94%",fs:"0.9rem",dur:"10s",del:"9s",e:"🩷"},
+    ].map(h => (
+      <span class="heart" style={`font-size:${h.fs};left:${h.l};animation-duration:${h.dur};animation-delay:${h.del};`}>{h.e}</span>
     ))}
 
-    <!-- Sparkles -->
-    <div class="sparkle" style="width:4px;height:4px;background:#ff85c1;left:10%;top:20%;animation-duration:2s;box-shadow:0 0 6px #ff85c1;"></div>
-    <div class="sparkle" style="width:3px;height:3px;background:#c77dff;left:80%;top:30%;animation-duration:3s;animation-delay:1s;box-shadow:0 0 5px #c77dff;"></div>
-    <div class="sparkle" style="width:5px;height:5px;background:#ff006e;left:50%;top:15%;animation-duration:2.5s;animation-delay:0.5s;box-shadow:0 0 8px #ff006e;"></div>
-    <div class="sparkle" style="width:3px;height:3px;background:#ff85c1;left:30%;top:70%;animation-duration:1.8s;animation-delay:2s;box-shadow:0 0 5px #ff85c1;"></div>
-    <div class="sparkle" style="width:4px;height:4px;background:#ffd6e7;left:70%;top:60%;animation-duration:2.2s;animation-delay:0.8s;box-shadow:0 0 6px #ffd6e7;"></div>
-    <div class="sparkle" style="width:6px;height:6px;background:#c77dff;left:20%;top:45%;animation-duration:3.5s;animation-delay:1.5s;box-shadow:0 0 10px #c77dff;"></div>
+    <!-- Rose petals — 24 -->
+    {Array.from({ length: 24 }, (_, i) => (
+      <div class="petal" style={`background:hsl(${335 + (i % 5) * 6},85%,${50 + (i % 4) * 10}%);left:${i * 4.2}%;animation-duration:${3.5 + (i % 6)}s;animation-delay:${i * 0.35}s;transform:rotate(${i * 15}deg);`}></div>
+    ))}
+
+    <!-- Sparkles — 20 -->
+    {[
+      {l:"7%",t:"15%",s:5,c:"#ff85c1",dur:"1.8s",del:"0s"},{l:"18%",t:"35%",s:3,c:"#c77dff",dur:"2.5s",del:"0.7s"},
+      {l:"28%",t:"20%",s:6,c:"#ff006e",dur:"2s",del:"1.2s"},{l:"38%",t:"55%",s:4,c:"#ff85c1",dur:"3s",del:"0.4s"},
+      {l:"48%",t:"12%",s:5,c:"#e040fb",dur:"2.2s",del:"1.8s"},{l:"58%",t:"42%",s:3,c:"#ff006e",dur:"1.6s",del:"0.9s"},
+      {l:"68%",t:"25%",s:6,c:"#ff85c1",dur:"2.8s",del:"0.2s"},{l:"78%",t:"60%",s:4,c:"#c77dff",dur:"2.3s",del:"1.5s"},
+      {l:"88%",t:"18%",s:5,c:"#e040fb",dur:"1.9s",del:"0.6s"},{l:"94%",t:"48%",s:3,c:"#ff85c1",dur:"2.6s",del:"2s"},
+      {l:"13%",t:"70%",s:4,c:"#ff006e",dur:"2.1s",del:"1s"},{l:"23%",t:"80%",s:6,c:"#c77dff",dur:"3.2s",del:"0.3s"},
+      {l:"43%",t:"75%",s:3,c:"#ff85c1",dur:"1.7s",del:"1.4s"},{l:"53%",t:"65%",s:5,c:"#e040fb",dur:"2.4s",del:"0.8s"},
+      {l:"63%",t:"78%",s:4,c:"#ff006e",dur:"2.9s",del:"1.7s"},{l:"73%",t:"85%",s:3,c:"#ff85c1",dur:"1.5s",del:"0.1s"},
+      {l:"83%",t:"72%",s:6,c:"#c77dff",dur:"2.7s",del:"2.2s"},{l:"33%",t:"90%",s:4,c:"#e040fb",dur:"2s",del:"1.1s"},
+      {l:"3%",t:"82%",s:5,c:"#ff006e",dur:"3.1s",del:"0.5s"},{l:"97%",t:"30%",s:3,c:"#ff85c1",dur:"2.3s",del:"1.9s"},
+    ].map(sp => (
+      <div class="val-sparkle" style={`width:${sp.s}px;height:${sp.s}px;background:${sp.c};color:${sp.c};left:${sp.l};top:${sp.t};animation-duration:${sp.dur};animation-delay:${sp.del};`}></div>
+    ))}
+
+    <!-- Shooting stars -->
+    <div class="shooting-star" style="width:200px;top:18%;left:0%;animation-duration:5s;animation-delay:0s;"></div>
+    <div class="shooting-star" style="width:150px;top:35%;left:20%;animation-duration:7s;animation-delay:2.5s;"></div>
+    <div class="shooting-star" style="width:300px;top:8%;left:40%;animation-duration:6s;animation-delay:4s;"></div>
+
+    <div class="val-ribbon"></div>
 
     <div class="val-content">
       <HeaderIsland client:load />
 
       <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
-
         <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
           <a href="/" class="hover:text-white/60 transition-colors">Home</a>
           <span>/</span>
@@ -234,13 +308,18 @@ const jsonLd = {
           </div>
         </div>
 
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={valColors}
+          wheelShape="heart"
+          hubTheme="rose"
+          client:load
+        />
       </div>
 
-      <!-- Content (same dark pink bg) -->
       <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
 
-        <section class="val-section p-6 space-y-4">
+        <div class="val-card p-6 space-y-4">
           <h2 class="text-xl md:text-2xl font-bold text-white">Make Planning Part of the Romance</h2>
           <p class="text-white/60 leading-relaxed">
             The classic Valentine's Day planning dynamic: one person asks "what do you want to do?", the other says "I don't mind, anything is fine", and somehow nothing gets booked until February 13th. The wheel breaks this loop.
@@ -248,7 +327,7 @@ const jsonLd = {
           <p class="text-white/60 leading-relaxed">
             Build the wheel together — each of you adds 3-4 ideas to the list. Everything on the wheel is something both of you would enjoy. Spin together. The result feels shared and spontaneous without the usual back-and-forth negotiation.
           </p>
-        </section>
+        </div>
 
         <section class="space-y-4">
           <h2 class="text-xl md:text-2xl font-bold text-white">Frequently Asked Questions</h2>

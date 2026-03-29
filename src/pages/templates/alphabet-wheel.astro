@@ -61,14 +61,183 @@ const jsonLd = {
   "description": description,
   "url": "https://realwheelpicker.com/templates/alphabet-wheel",
 };
+
+const myColors = ['#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#8b5cf6','#ec4899','#14b8a6','#f59e0b','#84cc16'];
+
+const letters = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 ---
 
-<Layout
-  title={title}
-  description={description}
-  canonical={canonical}
-  jsonLd={jsonLd}
->
+<style>
+  /* ═══════════ ALPHABET — RAINBOW SCHOOL FUN THEME ═══════════ */
+
+  .alpha-page {
+    background: #0d0d1a;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Dark educational background with subtle texture */
+  .alpha-sky {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 20%, rgba(239,68,68,0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 40% at 80% 30%, rgba(59,130,246,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse 80% 50% at 50% 80%, rgba(139,92,246,0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 60% at 10% 70%, rgba(34,197,94,0.07) 0%, transparent 55%),
+      linear-gradient(180deg, #0d0d1a 0%, #0a0a18 50%, #0d0d1a 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Rainbow top bar */
+  .alpha-rainbow-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg,
+      #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #8b5cf6, #ec4899
+    );
+    z-index: 100;
+    pointer-events: none;
+    box-shadow: 0 2px 12px rgba(139,92,246,0.4);
+  }
+
+  /* Rainbow bottom bar */
+  .alpha-rainbow-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg,
+      #ec4899, #8b5cf6, #3b82f6, #22c55e, #eab308, #f97316, #ef4444
+    );
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  /* Falling 3D letters */
+  .falling-letter {
+    position: fixed;
+    font-family: 'Arial Black', 'Impact', sans-serif;
+    font-weight: 900;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    text-shadow: 3px 3px 0px rgba(0,0,0,0.4), 1px 1px 0px rgba(255,255,255,0.1);
+    animation: letterFall linear infinite;
+    user-select: none;
+  }
+
+  @keyframes letterFall {
+    0%   { transform: translateY(-60px) rotate(-15deg) scale(0.8); opacity: 0; }
+    8%   { opacity: 0.55; transform: translateY(0) rotate(-10deg) scale(1); }
+    88%  { opacity: 0.45; }
+    100% { transform: translateY(110vh) rotate(20deg) scale(0.7); opacity: 0; }
+  }
+
+  /* Colored sparkle dots */
+  .alpha-sparkle {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+    animation: sparklePop ease-in-out infinite;
+  }
+
+  @keyframes sparklePop {
+    0%, 100% { transform: scale(0.5); opacity: 0.3; }
+    50%      { transform: scale(1.8); opacity: 1; }
+  }
+
+  /* Corner glow orbs */
+  .alpha-orb {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(60px);
+    animation: orbPulse ease-in-out infinite alternate;
+  }
+
+  @keyframes orbPulse {
+    0%   { transform: scale(1); opacity: 0.6; }
+    100% { transform: scale(1.3); opacity: 0.9; }
+  }
+
+  /* Star bursts */
+  .alpha-starburst {
+    position: fixed;
+    pointer-events: none;
+    z-index: 2;
+    font-size: 1rem;
+    animation: starSpin ease-in-out infinite;
+  }
+
+  @keyframes starSpin {
+    0%   { transform: scale(0.6) rotate(0deg);   opacity: 0.3; }
+    50%  { transform: scale(1.3) rotate(180deg); opacity: 0.9; }
+    100% { transform: scale(0.6) rotate(360deg); opacity: 0.3; }
+  }
+
+  /* Content layer */
+  .alpha-content {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Title with rainbow letters effect */
+  .alpha-title span {
+    display: inline-block;
+    animation: titleBounce ease-in-out infinite alternate;
+  }
+
+  @keyframes titleBounce {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(-4px); }
+  }
+
+  .alpha-tag {
+    border-radius: 9999px;
+    padding: 4px 14px;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .alpha-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    transition: border-color 0.2s;
+  }
+
+  .alpha-card:hover {
+    border-color: rgba(139,92,246,0.4);
+  }
+
+  .alpha-inner-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0.5rem;
+    padding: 0.875rem;
+  }
+
+  details.alpha-faq {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    backdrop-filter: blur(6px);
+  }
+</style>
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
     { name: "Home", url: "https://realwheelpicker.com" },
@@ -76,116 +245,161 @@ const jsonLd = {
     { name: "Alphabet Wheel", url: "https://realwheelpicker.com/templates/alphabet-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  <div class="alpha-page">
+    <div class="alpha-sky"></div>
+    <div class="alpha-rainbow-bar"></div>
+    <div class="alpha-rainbow-bottom"></div>
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <!-- Corner glow orbs -->
+    <div class="alpha-orb" style="top:-80px;left:-80px;width:300px;height:300px;background:rgba(239,68,68,0.2);animation-duration:6s;"></div>
+    <div class="alpha-orb" style="top:-60px;right:-60px;width:260px;height:260px;background:rgba(59,130,246,0.2);animation-duration:8s;animation-delay:1s;"></div>
+    <div class="alpha-orb" style="bottom:-80px;left:30%;width:350px;height:250px;background:rgba(139,92,246,0.18);animation-duration:7s;animation-delay:2s;"></div>
+    <div class="alpha-orb" style="bottom:-60px;right:-60px;width:280px;height:280px;background:rgba(34,197,94,0.15);animation-duration:9s;animation-delay:0.5s;"></div>
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Alphabet Wheel</span>
-      </nav>
+    <!-- Falling 3D letters -->
+    {letters.map((letter, i) => {
+      const hue = i * 14;
+      const size = 1.8 + (i % 4) * 0.6;
+      return (
+        <div
+          class="falling-letter"
+          style={`left:${(i * 3.85) % 100}%;font-size:${size}rem;color:hsl(${hue},85%,60%);animation-duration:${14+(i%7)*2.5}s;animation-delay:-${(i*1.6)%18}s;`}
+        >{letter}</div>
+      );
+    })}
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Random Letter Wheel — Alphabet Spinner A to Z
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Spin to pick a random letter from A to Z. Perfect for Scattergories, word games, name games, and classroom activities.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Sparkle dots -->
+    {[
+      {l:"8%", t:"22%", bg:"#ef4444", d:"1.8s"},
+      {l:"92%",t:"18%", bg:"#3b82f6", d:"2.5s"},
+      {l:"45%",t:"6%",  bg:"#eab308", d:"2s"},
+      {l:"70%",t:"55%", bg:"#22c55e", d:"3s"},
+      {l:"20%",t:"78%", bg:"#8b5cf6", d:"1.5s"},
+      {l:"80%",t:"80%", bg:"#ec4899", d:"2.2s"},
+      {l:"55%",t:"85%", bg:"#f97316", d:"1.7s"},
+      {l:"35%",t:"45%", bg:"#14b8a6", d:"2.8s"},
+    ].map(({l,t,bg,d}) => (
+      <div class="alpha-sparkle" style={`left:${l};top:${t};width:8px;height:8px;background:${bg};box-shadow:0 0 6px ${bg};animation-duration:${d};`}></div>
+    ))}
 
-      <!-- Wheel -->
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <!-- Star bursts -->
+    {[
+      {l:"5%", t:"40%", d:"3s", delay:"0s"},
+      {l:"94%",t:"50%", d:"4s", delay:"1s"},
+      {l:"50%",t:"3%",  d:"2.5s",delay:"0.5s"},
+      {l:"28%",t:"92%", d:"3.5s",delay:"1.5s"},
+      {l:"72%",t:"90%", d:"4.5s",delay:"2s"},
+    ].map(({l,t,d,delay}) => (
+      <div class="alpha-starburst" style={`left:${l};top:${t};animation-duration:${d};animation-delay:${delay};`}>&#10022;</div>
+    ))}
 
-      <!-- Article Content -->
-      <section class="space-y-8">
+    <div class="alpha-content">
+      <HeaderIsland client:load />
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Games That Use Random Letters</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            <span class="font-semibold text-foreground">Scattergories:</span> Spin for the letter, then race to fill categories (animal, city, food, etc.) starting with that letter. First person to complete all categories with that letter wins the round.
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+
+        <nav aria-label="breadcrumb" class="text-xs text-white/25 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/55 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/55 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/45">Alphabet Wheel</span>
+        </nav>
+
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3">🔤</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight mb-3 alpha-title" style="letter-spacing:-0.02em;">
+            <span style="color:#ef4444;">R</span><span style="color:#f97316;">a</span><span style="color:#eab308;">n</span><span style="color:#22c55e;">d</span><span style="color:#3b82f6;">o</span><span style="color:#8b5cf6;">m</span>
+            {" "}
+            <span style="color:#ec4899;">L</span><span style="color:#14b8a6;">e</span><span style="color:#f59e0b;">t</span><span style="color:#84cc16;">t</span><span style="color:#ef4444;">e</span><span style="color:#3b82f6;">r</span>
+            {" "}
+            <span style="color:#eab308;">W</span><span style="color:#22c55e;">h</span><span style="color:#8b5cf6;">e</span><span style="color:#f97316;">e</span><span style="color:#ec4899;">l</span>
+          </h1>
+          <p class="text-lg text-white/50 max-w-xl mx-auto mb-5">
+            Spin to pick a random letter from A to Z. Perfect for Scattergories, word games, name games, and classroom activities.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            <span class="font-semibold text-foreground">Name Game:</span> Spin for a letter. Everyone must say a name (person, place, or thing) starting with that letter within 5 seconds. Miss it and you're out.
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="alpha-tag" style="background:rgba(239,68,68,0.2);color:#f87171;">🎲 Games</span>
+            <span class="alpha-tag" style="background:rgba(59,130,246,0.2);color:#60a5fa;">🏫 Classroom</span>
+            <span class="alpha-tag" style="background:rgba(34,197,94,0.2);color:#4ade80;">✏️ Free</span>
+            <span class="alpha-tag" style="background:rgba(139,92,246,0.2);color:#a78bfa;">⚡ Instant</span>
+          </div>
+        </div>
+
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} colors={myColors} wheelShape="circle" hubTheme="neon" client:load />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="alpha-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Games That Use Random Letters</h2>
+          <p class="text-white/55 leading-relaxed">
+            <span class="font-semibold text-red-400">Scattergories:</span> Spin for the letter, then race to fill categories starting with that letter. First person to complete all categories wins the round.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            <span class="font-semibold text-foreground">Word Builder:</span> Each player spins 5 times. Use the letters you land on to build the longest possible word. Letters can be rearranged freely.
+          <p class="text-white/55 leading-relaxed">
+            <span class="font-semibold text-blue-400">Name Game:</span> Spin for a letter. Everyone must say a name starting with that letter within 5 seconds. Miss it and you're out.
+          </p>
+          <p class="text-white/55 leading-relaxed">
+            <span class="font-semibold text-green-400">Word Builder:</span> Each player spins 5 times. Use the letters you land on to build the longest possible word.
           </p>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">For Teachers</h2>
+        <div class="alpha-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">For Teachers</h2>
           <div class="space-y-3">
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Vocabulary practice</p>
-              <p class="text-muted-foreground text-sm">Spin for a letter, students must write 5 words starting with that letter in 60 seconds.</p>
+            <div class="alpha-inner-card">
+              <p class="font-semibold text-white/80 text-sm mb-1">📚 Vocabulary practice</p>
+              <p class="text-white/50 text-sm">Spin for a letter, students must write 5 words starting with that letter in 60 seconds.</p>
             </div>
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Phonics (kids)</p>
-              <p class="text-muted-foreground text-sm">Spin for a letter, students say a word and the sound the letter makes.</p>
+            <div class="alpha-inner-card">
+              <p class="font-semibold text-white/80 text-sm mb-1">🔊 Phonics (kids)</p>
+              <p class="text-white/50 text-sm">Spin for a letter, students say a word and the sound the letter makes.</p>
             </div>
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Spelling bee</p>
-              <p class="text-muted-foreground text-sm">Spin to pick the starting letter, then give a word starting with that letter.</p>
+            <div class="alpha-inner-card">
+              <p class="font-semibold text-white/80 text-sm mb-1">🏆 Spelling bee</p>
+              <p class="text-white/50 text-sm">Spin to pick the starting letter, then give a word starting with that letter.</p>
             </div>
           </div>
-          <p class="text-muted-foreground leading-relaxed">
-            The visual format of a spinning wheel keeps student attention far better than a random number generator or simply calling out letters. The anticipation of where it lands creates natural engagement without additional effort from the teacher.
-          </p>
         </div>
 
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="alpha-faq group">
+                <summary class="font-semibold text-white cursor-pointer list-none flex items-center justify-between gap-2">
+                  {question}
+                  <span class="text-white/40 shrink-0 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p class="text-white/55 text-sm leading-relaxed mt-3">{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
-      <!-- FAQ -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Related Tools</h2>
+          <ul class="grid sm:grid-cols-2 gap-3">
+            {[
+              { href: "/classroom-picker", label: "🏫 Classroom Picker", desc: "Pick a random student for classroom activities." },
+              { href: "/", label: "🎡 Spin the Wheel", desc: "The main wheel picker — add any names and spin." },
+              { href: "/templates/number-wheel-1-10", label: "🔢 Number Wheel 1-10", desc: "Spin to pick a random number from 1 to 10." },
+              { href: "/templates", label: "📚 All Templates", desc: "Browse all pre-loaded wheel templates." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="alpha-card flex items-start gap-3 p-4">
+                  <span>
+                    <span class="font-semibold text-white text-sm">{label}</span>
+                    <span class="text-white/50 text-sm block mt-0.5">{desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/classroom-picker", label: "Classroom Picker", desc: "Pick a random student or group for classroom activities." },
-            { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
-            { href: "/templates/number-wheel-1-10", label: "Number Wheel 1-10", desc: "Spin to pick a random number from 1 to 10." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-    </main>
-
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

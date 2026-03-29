@@ -38,6 +38,8 @@ const defaultParticipants = [
   { pseudo: "Dream dinner guest?", weight: 1 },
 ];
 
+const myColors = ['#14b8a6','#f97316','#ec4899','#eab308','#8b5cf6','#3b82f6','#22c55e','#f43f5e'];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -46,6 +48,166 @@ const jsonLd = {
   "url": "https://realwheelpicker.com/templates/icebreaker-wheel",
 };
 ---
+
+<style>
+/* ===== BULLES DE DIALOGUE SOCIALES ===== */
+.ice-page {
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background: #0d1117;
+}
+
+.ice-sky {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(ellipse at 30% 20%, #1a0a3d 0%, #0d1117 50%),
+              radial-gradient(ellipse at 80% 80%, #0f2744 0%, transparent 60%);
+}
+
+/* Éclats de couleur en arrière-plan */
+.ice-blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(60px);
+  z-index: 0;
+  animation: blobPulse 8s ease-in-out infinite;
+}
+
+/* Bulles de dialogue */
+.speech-bubble {
+  position: fixed;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  z-index: 3;
+  animation: bubbleFloat ease-in-out infinite;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  width: 50px;
+  height: 44px;
+}
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 14px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 10px solid;
+  border-top-color: inherit;
+}
+
+/* Confettis tombants */
+.ice-confetti {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  z-index: 3;
+  animation: confettiDrop linear infinite;
+  border-radius: 2px;
+}
+
+/* Émojis sociaux flottants */
+.social-emoji {
+  position: fixed;
+  font-size: 1.8rem;
+  z-index: 3;
+  animation: emojiFloat ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+}
+
+/* Lignes de connexion (simulations) */
+.connect-line {
+  position: fixed;
+  height: 1px;
+  z-index: 2;
+  animation: connectPulse 4s ease-in-out infinite;
+}
+
+/* ===== KEYFRAMES ===== */
+@keyframes blobPulse {
+  0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.15; }
+  33% { transform: scale(1.1) translate(20px, -15px); opacity: 0.25; }
+  66% { transform: scale(0.9) translate(-15px, 10px); opacity: 0.2; }
+}
+
+@keyframes bubbleFloat {
+  0%, 100% { transform: translateY(0) rotate(-3deg); opacity: 0.85; }
+  50% { transform: translateY(-22px) rotate(3deg); opacity: 1; }
+}
+
+@keyframes confettiDrop {
+  0% { top: -20px; opacity: 1; transform: rotate(0deg) translateX(0); }
+  100% { top: 110%; opacity: 0; transform: rotate(720deg) translateX(40px); }
+}
+
+@keyframes emojiFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.7; }
+  50% { transform: translateY(-20px) scale(1.1); opacity: 1; }
+}
+
+@keyframes connectPulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.5; }
+}
+
+/* ===== CONTENU ===== */
+.ice-content {
+  position: relative;
+  z-index: 10;
+}
+
+.ice-title {
+  background: linear-gradient(135deg, #14b8a6 0%, #f97316 30%, #ec4899 60%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px rgba(20,184,166,0.4));
+}
+
+.ice-card {
+  background: rgba(13, 17, 23, 0.8);
+  border: 1px solid rgba(139,92,246,0.25);
+  backdrop-filter: blur(12px);
+}
+
+.ice-card:hover {
+  border-color: rgba(236,72,153,0.4);
+}
+
+.ice-tag {
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.ice-link {
+  background: rgba(13, 17, 23, 0.8);
+  border: 1px solid rgba(139,92,246,0.2);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s;
+}
+.ice-link:hover {
+  border-color: rgba(236,72,153,0.4);
+  box-shadow: 0 4px 20px rgba(139,92,246,0.15);
+}
+
+.ice-highlight {
+  backdrop-filter: blur(8px);
+}
+
+.ice-faq {
+  background: rgba(13, 17, 23, 0.75);
+  border: 1px solid rgba(139,92,246,0.15);
+  backdrop-filter: blur(8px);
+}
+</style>
 
 <Layout
   title={title}
@@ -60,132 +222,166 @@ const jsonLd = {
     { name: "Icebreaker Wheel", url: "https://realwheelpicker.com/templates/icebreaker-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  <div class="ice-page">
+    <div class="ice-sky"></div>
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <!-- Éclats de couleur -->
+    <div class="ice-blob" style="width:400px;height:400px;background:#14b8a6;top:-100px;left:-100px;animation-delay:0s;"></div>
+    <div class="ice-blob" style="width:350px;height:350px;background:#ec4899;top:30%;right:-80px;animation-delay:2.5s;animation-duration:10s;"></div>
+    <div class="ice-blob" style="width:300px;height:300px;background:#8b5cf6;bottom:10%;left:10%;animation-delay:5s;animation-duration:12s;"></div>
+    <div class="ice-blob" style="width:250px;height:250px;background:#f97316;bottom:20%;right:5%;animation-delay:1.5s;animation-duration:9s;"></div>
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Icebreaker Wheel</span>
-      </nav>
+    <!-- Bulles de dialogue -->
+    <div class="speech-bubble" style="background:#14b8a6;border-top-color:#14b8a6;top:12%;left:5%;animation-duration:6s;animation-delay:0s;">&#128172;</div>
+    <div class="speech-bubble" style="background:#f97316;border-top-color:#f97316;top:20%;left:85%;animation-duration:7s;animation-delay:1s;">&#128173;</div>
+    <div class="speech-bubble" style="background:#ec4899;border-top-color:#ec4899;top:35%;left:3%;animation-duration:5.5s;animation-delay:2s;">&#128172;</div>
+    <div class="speech-bubble" style="background:#8b5cf6;border-top-color:#8b5cf6;top:50%;left:90%;animation-duration:8s;animation-delay:0.5s;">&#128173;</div>
+    <div class="speech-bubble" style="background:#eab308;border-top-color:#eab308;top:65%;left:6%;animation-duration:6.5s;animation-delay:3s;">&#128172;</div>
+    <div class="speech-bubble" style="background:#3b82f6;border-top-color:#3b82f6;top:75%;left:88%;animation-duration:7.5s;animation-delay:1.5s;">&#128173;</div>
+    <div class="speech-bubble" style="background:#22c55e;border-top-color:#22c55e;top:82%;left:4%;animation-duration:6s;animation-delay:4s;">&#128172;</div>
+    <div class="speech-bubble" style="background:#f43f5e;border-top-color:#f43f5e;top:28%;left:92%;animation-duration:5s;animation-delay:2.5s;">&#128173;</div>
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Icebreaker Wheel — Random Questions for Teams &amp; Groups
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Spin for a random icebreaker question. Perfect for meetings, team retreats, and classrooms. Pre-loaded with 10 conversation starters.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Confettis -->
+    <div class="ice-confetti" style="left:10%;background:#14b8a6;animation-duration:6s;animation-delay:0s;"></div>
+    <div class="ice-confetti" style="left:20%;background:#f97316;animation-duration:8s;animation-delay:1s;border-radius:50%;"></div>
+    <div class="ice-confetti" style="left:35%;background:#ec4899;animation-duration:7s;animation-delay:2s;"></div>
+    <div class="ice-confetti" style="left:50%;background:#eab308;animation-duration:9s;animation-delay:0.5s;border-radius:50%;"></div>
+    <div class="ice-confetti" style="left:65%;background:#8b5cf6;animation-duration:6.5s;animation-delay:3s;"></div>
+    <div class="ice-confetti" style="left:75%;background:#3b82f6;animation-duration:7.5s;animation-delay:1.5s;border-radius:50%;"></div>
+    <div class="ice-confetti" style="left:85%;background:#22c55e;animation-duration:8.5s;animation-delay:4s;"></div>
+    <div class="ice-confetti" style="left:92%;background:#f43f5e;animation-duration:6s;animation-delay:2.5s;border-radius:50%;"></div>
+    <div class="ice-confetti" style="left:5%;background:#ec4899;animation-duration:9s;animation-delay:3.5s;"></div>
+    <div class="ice-confetti" style="left:45%;background:#14b8a6;animation-duration:7s;animation-delay:5s;border-radius:50%;"></div>
+    <div class="ice-confetti" style="left:58%;background:#f97316;animation-duration:8s;animation-delay:1.8s;"></div>
+    <div class="ice-confetti" style="left:30%;background:#eab308;animation-duration:6.5s;animation-delay:0.8s;border-radius:50%;"></div>
 
-      <!-- Wheel -->
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <!-- Émojis sociaux -->
+    <div class="social-emoji" style="top:8%;left:45%;animation-duration:5s;animation-delay:0s;">&#128522;</div>
+    <div class="social-emoji" style="top:45%;left:2%;animation-duration:7s;animation-delay:2s;">&#129309;</div>
+    <div class="social-emoji" style="top:55%;left:95%;animation-duration:6s;animation-delay:1s;">&#128075;</div>
+    <div class="social-emoji" style="top:80%;left:50%;animation-duration:8s;animation-delay:3s;">&#128512;</div>
 
-      <!-- Article Content -->
-      <section class="space-y-8">
+    <div class="ice-content">
+      <HeaderIsland client:load />
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Icebreakers Fail (And How the Wheel Fixes It)</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Traditional icebreakers fail because they're predictable and awkward. "Tell us your name and one interesting fact" produces boring answers because people freeze under pressure. A random wheel removes the paralysis — there's no decision to make, just a question to answer.
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="text-xs flex gap-1 mb-6" style="color:rgba(20,184,166,0.6)">
+          <a href="/" class="hover:text-teal-300 transition-colors" style="color:rgba(20,184,166,0.6)">Home</a>
+          <span style="color:rgba(20,184,166,0.3)">/</span>
+          <a href="/templates" class="hover:text-teal-300 transition-colors" style="color:rgba(20,184,166,0.6)">Templates</a>
+          <span style="color:rgba(20,184,166,0.3)">/</span>
+          <span style="color:#5eead4">Icebreaker Wheel</span>
+        </nav>
+
+        <!-- Hero -->
+        <section class="text-center space-y-4 py-4 mb-8">
+          <div class="flex justify-center gap-2 flex-wrap mb-3">
+            <span class="ice-tag" style="background:rgba(20,184,166,0.15);border:1px solid rgba(20,184,166,0.35);color:#5eead4;">&#128172; Social</span>
+            <span class="ice-tag" style="background:rgba(236,72,153,0.15);border:1px solid rgba(236,72,153,0.35);color:#f9a8d4;">&#128293; Vibrant</span>
+            <span class="ice-tag" style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.35);color:#c4b5fd;">&#129309; Team</span>
+          </div>
+          <h1 class="text-3xl md:text-5xl font-bold leading-tight ice-title">
+            Icebreaker Wheel
+          </h1>
+          <p class="text-lg md:text-xl max-w-2xl mx-auto" style="color:rgba(167,243,208,0.85)">
+            Spin for a random icebreaker question. Perfect for meetings, team retreats, and classrooms. Pre-loaded with 10 conversation starters.
           </p>
-        </div>
+          <p class="text-sm" style="color:rgba(20,184,166,0.5)">Free &bull; No account &bull; Instant result</p>
+        </section>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Perfect for Remote Teams</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Start every Zoom meeting with one wheel spin. Whoever answers goes next. 3 minutes of random conversation before the agenda starts makes the whole meeting more human and productive. Teams that know each other have better collaborative outcomes.
-          </p>
-        </div>
+        <!-- Wheel -->
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} colors={myColors} wheelShape="hexagon" hubTheme="teal" client:load />
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">For Classroom Settings</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Spin at the start of class to warm up discussions. Students who might never volunteer suddenly participate because the question is clearly random, not a test. Great for the first week of school or whenever a class needs energy.
-          </p>
-        </div>
+      </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Customize by Context</h2>
-          <div class="space-y-3">
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Professional setting</p>
-              <p class="text-muted-foreground text-sm">Keep it work-appropriate — favorite project, dream collaboration, best career lesson.</p>
-            </div>
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Social setting</p>
-              <p class="text-muted-foreground text-sm">Get personal — embarrassing story, bucket list item, irrational fear.</p>
-            </div>
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Kids / students</p>
-              <p class="text-muted-foreground text-sm">Keep it fun — favorite superhero, best school memory, dream job.</p>
-            </div>
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Creative teams</p>
-              <p class="text-muted-foreground text-sm">Add creative prompts — if you were a color, if your life was a movie genre, dream project you'd work on.</p>
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <section class="space-y-6">
+          <div class="ice-card p-6 rounded-xl space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold" style="color:#5eead4">Why Icebreakers Fail (And How the Wheel Fixes It)</h2>
+            <p class="leading-relaxed" style="color:rgba(167,243,208,0.75)">
+              Traditional icebreakers fail because they're predictable and awkward. "Tell us your name and one interesting fact" produces boring answers because people freeze under pressure. A random wheel removes the paralysis — there's no decision to make, just a question to answer.
+            </p>
+          </div>
+
+          <div class="ice-card p-6 rounded-xl space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold" style="color:#5eead4">Perfect for Remote Teams</h2>
+            <p class="leading-relaxed" style="color:rgba(167,243,208,0.75)">
+              Start every Zoom meeting with one wheel spin. Whoever answers goes next. 3 minutes of random conversation before the agenda starts makes the whole meeting more human and productive.
+            </p>
+          </div>
+
+          <div class="ice-card p-6 rounded-xl space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold" style="color:#5eead4">For Classroom Settings</h2>
+            <p class="leading-relaxed" style="color:rgba(167,243,208,0.75)">
+              Spin at the start of class to warm up discussions. Students who might never volunteer suddenly participate because the question is clearly random, not a test. Great for the first week of school or whenever a class needs energy.
+            </p>
+          </div>
+
+          <div class="ice-card p-6 rounded-xl space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold" style="color:#5eead4">Customize by Context</h2>
+            <div class="space-y-3">
+              {[
+                { label: "Professional setting", color: "#14b8a6", text: "Keep it work-appropriate — favorite project, dream collaboration, best career lesson." },
+                { label: "Social setting", color: "#f97316", text: "Get personal — embarrassing story, bucket list item, irrational fear." },
+                { label: "Kids / students", color: "#ec4899", text: "Keep it fun — favorite superhero, best school memory, dream job." },
+                { label: "Creative teams", color: "#8b5cf6", text: "Add creative prompts — if you were a color, if your life was a movie genre." },
+              ].map(({ label, color, text }) => (
+                <div class="ice-highlight p-4 rounded-lg" style={`background:${color}18;border:1px solid ${color}30;`}>
+                  <p class="font-semibold text-sm mb-1" style={`color:${color}`}>{label}</p>
+                  <p class="text-sm" style="color:rgba(167,243,208,0.7)">{text}</p>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Follow-Up Rule</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            The best icebreakers lead to conversations, not monologues. After each answer, allow one follow-up question from the group. This turns a 30-second answer into a 2-minute connection.
-          </p>
-        </div>
+          <div class="ice-card p-6 rounded-xl space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold" style="color:#5eead4">The Follow-Up Rule</h2>
+            <p class="leading-relaxed" style="color:rgba(167,243,208,0.75)">
+              The best icebreakers lead to conversations, not monologues. After each answer, allow one follow-up question from the group. This turns a 30-second answer into a 2-minute connection.
+            </p>
+          </div>
+        </section>
 
-      </section>
+        <!-- FAQ -->
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#5eead4">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <div class="ice-faq rounded-xl p-5">
+                <p class="font-semibold mb-2" style="color:#a7f3d0">{question}</p>
+                <p class="text-sm leading-relaxed" style="color:rgba(167,243,208,0.65)">{answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-      <!-- FAQ -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <!-- Related Tools -->
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#5eead4">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
+              { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random name from your list without the wheel animation." },
+              { href: "/party-wheel", label: "Party Wheel", desc: "Pre-loaded with party game ideas for your next gathering." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="ice-link flex items-start gap-3 p-4 rounded-xl">
+                  <span class="font-bold text-sm mt-0.5" style="color:#14b8a6">&#8594;</span>
+                  <span>
+                    <span class="font-semibold" style="color:#a7f3d0">{label}</span>
+                    <span class="text-sm" style="color:rgba(167,243,208,0.6)"> &mdash; {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
-            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random name from your list without the wheel animation." },
-            { href: "/party-wheel", label: "Party Wheel", desc: "Pre-loaded with party game ideas for your next gathering." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-    </main>
-
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

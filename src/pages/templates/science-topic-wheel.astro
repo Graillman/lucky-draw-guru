@@ -49,6 +49,212 @@ const jsonLd = {
 };
 ---
 
+<style>
+    /* ===== SCIENCE LAB THEME ===== */
+    .lab-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: radial-gradient(ellipse at 20% 50%, #001a00 0%, #000d1a 40%, #0a000f 100%);
+      overflow: hidden;
+    }
+
+    /* Green neon lab grid floor */
+    .lab-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background-image:
+        linear-gradient(rgba(0, 255, 65, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 65, 0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridPulse 4s ease-in-out infinite;
+    }
+
+    @keyframes gridPulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    /* DNA helix strands */
+    .dna-helix {
+      position: fixed;
+      left: -60px;
+      top: 0;
+      bottom: 0;
+      width: 120px;
+      z-index: 2;
+      animation: dnaFloat 8s linear infinite;
+    }
+    .dna-helix::before,
+    .dna-helix::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: -20px;
+      width: 3px;
+      height: 200%;
+      background: repeating-linear-gradient(
+        180deg,
+        #00ff41 0px, #00ff41 6px,
+        transparent 6px, transparent 18px,
+        #7b00ff 18px, #7b00ff 24px,
+        transparent 24px, transparent 36px
+      );
+      animation: dnaRotate 3s linear infinite;
+    }
+    .dna-helix::after {
+      left: calc(50% + 20px);
+      animation-delay: -1.5s;
+    }
+
+    @keyframes dnaFloat {
+      0% { transform: translateY(-5%); }
+      50% { transform: translateY(5%); }
+      100% { transform: translateY(-5%); }
+    }
+
+    @keyframes dnaRotate {
+      0% { transform: scaleX(1); }
+      50% { transform: scaleX(-1); }
+      100% { transform: scaleX(1); }
+    }
+
+    /* Chemistry bubbles */
+    .bubble {
+      position: fixed;
+      border-radius: 50%;
+      z-index: 3;
+      animation: bubbleRise linear infinite;
+      border: 1px solid rgba(0, 255, 65, 0.4);
+      background: radial-gradient(circle at 30% 30%, rgba(0, 255, 65, 0.15), rgba(0, 200, 255, 0.05));
+    }
+    .bubble:nth-child(1)  { width: 18px; height: 18px; left: 10%; bottom: -20px; animation-duration: 7s; animation-delay: 0s; }
+    .bubble:nth-child(2)  { width: 28px; height: 28px; left: 20%; bottom: -30px; animation-duration: 9s; animation-delay: 1.5s; border-color: rgba(123,0,255,0.5); }
+    .bubble:nth-child(3)  { width: 12px; height: 12px; left: 35%; bottom: -15px; animation-duration: 6s; animation-delay: 0.8s; }
+    .bubble:nth-child(4)  { width: 22px; height: 22px; left: 55%; bottom: -25px; animation-duration: 8s; animation-delay: 2s; border-color: rgba(0,200,255,0.5); }
+    .bubble:nth-child(5)  { width: 16px; height: 16px; left: 70%; bottom: -18px; animation-duration: 7.5s; animation-delay: 3s; }
+    .bubble:nth-child(6)  { width: 30px; height: 30px; left: 85%; bottom: -35px; animation-duration: 10s; animation-delay: 0.5s; border-color: rgba(200,0,255,0.4); }
+
+    @keyframes bubbleRise {
+      0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+      10% { opacity: 1; }
+      80% { opacity: 0.7; }
+      100% { transform: translateY(-110vh) translateX(20px) scale(0.5); opacity: 0; }
+    }
+
+    /* Electric sparks */
+    .spark {
+      position: fixed;
+      z-index: 4;
+      width: 2px;
+      height: 40px;
+      background: linear-gradient(180deg, transparent, #00ff41, #00ccff, transparent);
+      animation: sparkFlash 3s ease-in-out infinite;
+      border-radius: 2px;
+    }
+    .spark:nth-child(1) { top: 15%; right: 8%; animation-delay: 0s; transform: rotate(25deg); }
+    .spark:nth-child(2) { top: 40%; right: 12%; animation-delay: 1.2s; transform: rotate(-15deg); }
+    .spark:nth-child(3) { top: 65%; right: 6%; animation-delay: 0.6s; transform: rotate(40deg); }
+    .spark:nth-child(4) { top: 25%; left: 92%; animation-delay: 1.8s; transform: rotate(-30deg); }
+
+    @keyframes sparkFlash {
+      0%, 100% { opacity: 0; transform: scaleY(0.2) rotate(25deg); }
+      15% { opacity: 1; transform: scaleY(1.5) rotate(25deg); }
+      30% { opacity: 0; }
+      45% { opacity: 0.7; transform: scaleY(0.8) rotate(25deg); }
+      60% { opacity: 0; }
+    }
+
+    /* Neon green ambient glow blobs */
+    .lab-glow {
+      position: fixed;
+      border-radius: 50%;
+      z-index: 1;
+      filter: blur(80px);
+      animation: labGlowPulse 5s ease-in-out infinite;
+    }
+    .lab-glow-1 {
+      width: 400px; height: 300px;
+      top: -100px; left: -100px;
+      background: rgba(0, 255, 65, 0.07);
+    }
+    .lab-glow-2 {
+      width: 350px; height: 350px;
+      bottom: -50px; right: -80px;
+      background: rgba(123, 0, 255, 0.08);
+      animation-delay: 2.5s;
+    }
+    .lab-glow-3 {
+      width: 250px; height: 250px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 200, 255, 0.05);
+      animation-delay: 1.2s;
+    }
+
+    @keyframes labGlowPulse {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+
+    /* Content wrapper */
+    .lab-content {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Lab cards */
+    .lab-card {
+      background: rgba(0, 8, 0, 0.75);
+      border: 1px solid rgba(0, 255, 65, 0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.05), inset 0 0 30px rgba(0, 255, 65, 0.02);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .lab-card:hover {
+      border-color: rgba(0, 255, 65, 0.4);
+      box-shadow: 0 0 30px rgba(0, 255, 65, 0.1), inset 0 0 30px rgba(0, 255, 65, 0.04);
+    }
+
+    .lab-heading { color: #00ff41; text-shadow: 0 0 10px rgba(0,255,65,0.5); }
+    .lab-text { color: rgba(180, 220, 190, 0.85); }
+    .lab-muted { color: rgba(120, 180, 130, 0.7); }
+    .lab-accent { color: #00ccff; }
+    .lab-link {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 1rem;
+      background: rgba(0, 8, 0, 0.7);
+      border: 1px solid rgba(0, 255, 65, 0.15);
+      border-radius: 12px;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+    .lab-link:hover {
+      border-color: rgba(0, 255, 65, 0.4);
+      box-shadow: 0 0 15px rgba(0, 255, 65, 0.08);
+    }
+
+    /* Scanline overlay */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.08) 2px,
+        rgba(0, 0, 0, 0.08) 4px
+      );
+      pointer-events: none;
+    }
+  </style>
+
 <Layout
   title={title}
   description={description}
@@ -62,77 +268,95 @@ const jsonLd = {
     { name: "Science Topic Spinner", url: "https://realwheelpicker.com/templates/science-topic-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
+  
+  <!-- Background layers -->
+  <div class="lab-bg" aria-hidden="true"></div>
+  <div class="lab-grid" aria-hidden="true"></div>
+  <div class="lab-glow lab-glow-1" aria-hidden="true"></div>
+  <div class="lab-glow lab-glow-2" aria-hidden="true"></div>
+  <div class="lab-glow lab-glow-3" aria-hidden="true"></div>
+  <div class="dna-helix" aria-hidden="true"></div>
+  <div class="bubble" aria-hidden="true"></div>
+  <div class="bubble" aria-hidden="true"></div>
+  <div class="bubble" aria-hidden="true"></div>
+  <div class="bubble" aria-hidden="true"></div>
+  <div class="bubble" aria-hidden="true"></div>
+  <div class="bubble" aria-hidden="true"></div>
+  <div class="spark" aria-hidden="true"></div>
+  <div class="spark" aria-hidden="true"></div>
+  <div class="spark" aria-hidden="true"></div>
+  <div class="spark" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <div class="lab-content min-h-screen">
     <HeaderIsland client:load />
 
     <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
+      <nav aria-label="breadcrumb" class="text-xs lab-muted flex gap-1">
+        <a href="/" class="hover:text-green-400 transition-colors">Home</a>
         <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
+        <a href="/templates" class="hover:text-green-400 transition-colors">Templates</a>
         <span>/</span>
-        <span class="text-foreground">Science Topic Spinner</span>
+        <span class="lab-text">Science Topic Spinner</span>
       </nav>
 
-      <!-- Hero -->
       <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+        <h1 class="text-3xl md:text-5xl font-bold lab-heading leading-tight">
           Science Topic Spinner — Random Subject Picker
         </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+        <p class="text-lg md:text-xl lab-text max-w-2xl mx-auto">
           Assign random science topics for presentations, projects, and study activities. Replace the defaults with your curriculum topics.
         </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+        <p class="text-sm lab-muted">Free • No account • Instant result</p>
       </section>
 
-      <!-- Wheel -->
       <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={["#00ff41","#0066ff","#7b00ff","#ffffff","#00ff88","#00ccff","#33ff00","#8800ff","#00ffcc","#4400ff","#66ff33","#0099ff"]}
+          wheelShape="hexagon"
+          hubTheme="neon"
+          client:load
+        />
       </section>
 
-      <!-- Article Content -->
       <section class="space-y-8">
-
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Random Science Topic Assignment — Fair and Fast</h2>
-          <p class="text-muted-foreground leading-relaxed">
+        <div class="lab-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold lab-heading">Random Science Topic Assignment — Fair and Fast</h2>
+          <p class="lab-text leading-relaxed">
             Assigning science topics manually is tedious. Students always have opinions about what's "easier" or "better," and manual assignment feels arbitrary to them even when it isn't. A spinning wheel removes the perception of bias entirely — the result is obviously random, and every student can see the process was fair.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
+          <p class="lab-text leading-relaxed">
             The default topics cover the core areas of a standard science curriculum: physics (gravity, electricity, sound), biology (photosynthesis, DNA, ecosystems, evolution), earth science (volcanoes, weather, the water cycle), chemistry (chemical reactions), and space science (the solar system). Replace any of them with your exact unit topics.
           </p>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Use This in Your Classroom</h2>
-          <ul class="space-y-2 text-muted-foreground">
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Group projects:</strong> Each group spins once. No topic repeats until all groups have a unique assignment.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Class warm-up:</strong> Spin at the start of class to pick the first discussion topic or review question area.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Study sessions:</strong> Students spin to pick which topic they review next, adding unpredictability to solo study.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Science fair:</strong> Use the wheel to randomly assign research categories, ensuring variety across projects.</span></li>
+        <div class="lab-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold lab-heading">How to Use This in Your Classroom</h2>
+          <ul class="space-y-2 lab-text">
+            <li class="flex gap-3"><span class="lab-accent font-bold">→</span><span><strong class="lab-heading">Group projects:</strong> Each group spins once. No topic repeats until all groups have a unique assignment.</span></li>
+            <li class="flex gap-3"><span class="lab-accent font-bold">→</span><span><strong class="lab-heading">Class warm-up:</strong> Spin at the start of class to pick the first discussion topic or review question area.</span></li>
+            <li class="flex gap-3"><span class="lab-accent font-bold">→</span><span><strong class="lab-heading">Study sessions:</strong> Students spin to pick which topic they review next, adding unpredictability to solo study.</span></li>
+            <li class="flex gap-3"><span class="lab-accent font-bold">→</span><span><strong class="lab-heading">Science fair:</strong> Use the wheel to randomly assign research categories, ensuring variety across projects.</span></li>
           </ul>
         </div>
-
       </section>
 
-      <!-- FAQ -->
       <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <h2 class="text-xl md:text-2xl font-bold lab-heading">Frequently Asked Questions</h2>
         <div class="space-y-3">
           {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+            <div class="lab-card">
+              <p class="font-semibold lab-heading mb-2">{question}</p>
+              <p class="lab-muted text-sm leading-relaxed">{answer}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <!-- Related Tools -->
       <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <h2 class="text-xl md:text-2xl font-bold lab-heading">Related Tools</h2>
         <ul class="space-y-3">
           {[
             { href: "/classroom-picker", label: "Classroom Picker", desc: "Pick a random student for questions, presentations, or activities." },
@@ -141,14 +365,11 @@ const jsonLd = {
             { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
           ].map(({ href, label, desc }) => (
             <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+              <a href={href} class="lab-link">
+                <span class="lab-accent font-bold text-sm mt-0.5">→</span>
                 <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                  <span class="font-semibold lab-heading">{label}</span>
+                  <span class="lab-muted text-sm"> — {desc}</span>
                 </span>
               </a>
             </li>

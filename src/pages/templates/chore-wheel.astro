@@ -45,12 +45,208 @@ const jsonLd = {
 };
 ---
 
-<Layout
-  title={title}
-  description={description}
-  canonical={canonical}
-  jsonLd={jsonLd}
->
+<style>
+  /* ===== HOUSEHOLD CLEANING THEME — bubbles, soap suds, sparkles ===== */
+
+  .chore-page {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #e0f7fa 0%, #f0f9ff 50%, #e8f5e9 100%);
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Water ripple background */
+  .chore-ripple {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 120% 60% at 50% -10%, rgba(0, 188, 212, 0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 50% at 100% 80%, rgba(129, 212, 250, 0.2) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 0% 60%, rgba(178, 235, 242, 0.25) 0%, transparent 60%);
+    z-index: 0;
+    pointer-events: none;
+    animation: rippleDrift 10s ease-in-out infinite alternate;
+  }
+
+  @keyframes rippleDrift {
+    0%   { opacity: 0.8; transform: scale(1); }
+    100% { opacity: 1;   transform: scale(1.04); }
+  }
+
+  /* Soap bubbles */
+  .chore-bubble {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), rgba(0, 188, 212, 0.1) 60%, transparent);
+    box-shadow: inset -4px -4px 8px rgba(0, 188, 212, 0.15), 2px 2px 6px rgba(0,0,0,0.05);
+    opacity: 0;
+    animation: bubbleRise linear infinite;
+  }
+
+  @keyframes bubbleRise {
+    0%   { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10%  { opacity: 0.8; }
+    50%  { transform: translateY(50vh) translateX(20px); opacity: 0.8; }
+    80%  { opacity: 0.8; }
+    100% { transform: translateY(-10vh) translateX(-10px); opacity: 0; }
+  }
+
+  /* Sparkle/clean shine effects */
+  .chore-shine {
+    position: fixed;
+    pointer-events: none;
+    z-index: 3;
+    font-size: 1.2rem;
+    animation: shineFlash ease-in-out infinite;
+    opacity: 0;
+  }
+
+  @keyframes shineFlash {
+    0%, 100% { opacity: 0;   transform: scale(0.5) rotate(0deg); }
+    50%       { opacity: 0.7; transform: scale(1.4) rotate(30deg); }
+  }
+
+  /* Soap suds cluster top */
+  .chore-suds {
+    position: fixed;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 200px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .suds-blob {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.55);
+    animation: sudsBob ease-in-out infinite alternate;
+  }
+
+  @keyframes sudsBob {
+    0%   { transform: translateY(0) scale(1); opacity: 0.5; }
+    100% { transform: translateY(10px) scale(1.08); opacity: 0.8; }
+  }
+
+  /* Waving water stripe at bottom */
+  .chore-wave {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: linear-gradient(90deg, #00bcd4, #4dd0e1, #80deea, #4dd0e1, #00bcd4);
+    background-size: 200% 100%;
+    animation: waveScroll 3s linear infinite;
+    box-shadow: 0 -2px 12px rgba(0, 188, 212, 0.4);
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  @keyframes waveScroll {
+    0%   { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+  }
+
+  /* Top clean stripe */
+  .chore-top-stripe {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #00bcd4, #4caf50, #00bcd4, #80cbc4, #00bcd4);
+    background-size: 200% 100%;
+    animation: waveScroll 4s linear infinite reverse;
+    box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3);
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  /* Ambient glow spots */
+  .chore-glow {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(50px);
+    animation: glowShift ease-in-out infinite alternate;
+  }
+
+  @keyframes glowShift {
+    0%   { transform: scale(1) translateY(0);  opacity: 0.7; }
+    100% { transform: scale(1.2) translateY(-20px); opacity: 1; }
+  }
+
+  /* Content */
+  .chore-content {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Cards — clean glass */
+  .chore-card {
+    background: rgba(255, 255, 255, 0.72);
+    border: 1.5px solid rgba(0, 188, 212, 0.3);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 188, 212, 0.1), 0 2px 8px rgba(255,255,255,0.5);
+    backdrop-filter: blur(12px);
+  }
+
+  .chore-inner-card {
+    background: rgba(224, 247, 250, 0.6);
+    border: 1px solid rgba(0, 188, 212, 0.2);
+    border-radius: 0.75rem;
+    padding: 0.875rem;
+  }
+
+  .chore-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .faq-card {
+    background: rgba(255, 255, 255, 0.68);
+    border: 1.5px solid rgba(76, 175, 80, 0.25);
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .related-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.68);
+    border: 1.5px solid rgba(0, 188, 212, 0.25);
+    border-radius: 1.25rem;
+    text-decoration: none;
+    transition: all 0.25s;
+    backdrop-filter: blur(8px);
+  }
+
+  .related-card:hover {
+    border-color: rgba(0, 188, 212, 0.6);
+    box-shadow: 0 6px 24px rgba(0, 188, 212, 0.15);
+    transform: translateY(-2px);
+  }
+
+  h1, h2 { color: #006064; }
+  .body-text { color: #00363a; }
+  .muted-text { color: #00838f; }
+</style>
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
     { name: "Home", url: "https://realwheelpicker.com" },
@@ -58,134 +254,189 @@ const jsonLd = {
     { name: "Chore Wheel", url: "https://realwheelpicker.com/templates/chore-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  <div class="chore-page">
+    <!-- Fixed atmosphere -->
+    <div class="chore-top-stripe"></div>
+    <div class="chore-wave"></div>
+    <div class="chore-ripple"></div>
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <!-- Ambient glow -->
+    {[
+      {top:"-80px", left:"-60px",  w:"320px", h:"320px", bg:"rgba(0,188,212,0.25)", dur:"7s"},
+      {top:"30%",   right:"-80px", w:"280px", h:"280px", bg:"rgba(129,212,250,0.2)", dur:"9s"},
+      {bottom:"-60px", left:"40%", w:"360px", h:"250px", bg:"rgba(178,235,242,0.3)", dur:"6s"},
+    ].map(({top,left,right,bottom,w,h,bg,dur}) => (
+      <div class="chore-glow" style={`${top?`top:${top};`:''}${left?`left:${left};`:''}${right?`right:${right};`:''}${bottom?`bottom:${bottom};`:''} width:${w}; height:${h}; background:${bg}; animation-duration:${dur};`}></div>
+    ))}
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Chore Wheel</span>
-      </nav>
+    <!-- Soap bubbles -->
+    {[10,22,35,48,60,72,83,95,15,45,68,88].map((left, i) => {
+      const size = 20 + (i % 5) * 18;
+      return (
+        <div class="chore-bubble" style={`left:${left}%; width:${size}px; height:${size}px; animation-duration:${8 + i * 1.5}s; animation-delay:-${i * 1.2}s;`}></div>
+      );
+    })}
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Chore Wheel — Fair Household Chore Assignment Spinner
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Assign household chores randomly and fairly. Spin the wheel weekly — no arguments, no favoritism. Pre-loaded with 8 common chores.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Soap suds top decoration -->
+    <div class="chore-suds">
+      {[
+        {l:"5%",  t:"60px", w:"120px", h:"90px",  d:"3s"},
+        {l:"15%", t:"40px", w:"90px",  h:"70px",  d:"4s"},
+        {l:"25%", t:"70px", w:"140px", h:"100px", d:"2.5s"},
+        {l:"40%", t:"30px", w:"100px", h:"80px",  d:"5s"},
+        {l:"55%", t:"55px", w:"130px", h:"95px",  d:"3.5s"},
+        {l:"70%", t:"45px", w:"85px",  h:"65px",  d:"4.5s"},
+        {l:"82%", t:"65px", w:"110px", h:"85px",  d:"2.8s"},
+      ].map(({l,t,w,h,d}) => (
+        <div class="suds-blob" style={`left:${l}; top:${t}; width:${w}; height:${h}; animation-duration:${d};`}></div>
+      ))}
+    </div>
 
-      <!-- Wheel -->
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <!-- Shine sparkles -->
+    {[
+      {l:"10%", t:"25%", d:"2.2s", delay:"0s"},
+      {l:"85%", t:"20%", d:"3.1s", delay:"-1s"},
+      {l:"50%", t:"12%", d:"1.8s", delay:"-0.5s"},
+      {l:"70%", t:"60%", d:"2.7s", delay:"-2s"},
+      {l:"25%", t:"75%", d:"2s",   delay:"-1.5s"},
+      {l:"92%", t:"80%", d:"3.4s", delay:"-0.8s"},
+    ].map(({l,t,d,delay}) => (
+      <div class="chore-shine" style={`left:${l}; top:${t}; animation-duration:${d}; animation-delay:${delay};`}>✨</div>
+    ))}
 
-      <!-- Article Content -->
-      <section class="space-y-8">
+    <div class="chore-content">
+      <HeaderIsland client:load />
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Chore Argument Problem</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Every shared household has chore arguments. The same people always do the same tasks. Someone always feels like they're doing more. The chore wheel makes assignment random, fair, and inarguable.
+      <div class="max-w-4xl mx-auto px-4 pt-6 pb-12">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="text-xs muted-text flex gap-1 mb-6">
+          <a href="/" class="hover:underline body-text transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:underline body-text transition-colors">Templates</a>
+          <span>/</span>
+          <span class="body-text font-medium">Chore Wheel</span>
+        </nav>
+
+        <!-- Hero -->
+        <section class="text-center space-y-4 py-4 mb-6">
+          <div class="text-5xl mb-2">🧹</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight">
+            Chore Wheel — Fair Household Chore Assignment Spinner
+          </h1>
+          <p class="text-lg md:text-xl body-text max-w-2xl mx-auto">
+            Assign household chores randomly and fairly. Spin the wheel weekly — no arguments, no favoritism. Pre-loaded with 8 common chores.
           </p>
-        </div>
+          <div class="flex flex-wrap justify-center gap-2 mt-3">
+            <span class="chore-tag" style="background:rgba(0,188,212,0.2); color:#006064;">🫧 Clean</span>
+            <span class="chore-tag" style="background:rgba(76,175,80,0.2); color:#1b5e20;">🏠 Fair</span>
+            <span class="chore-tag" style="background:rgba(129,212,250,0.3); color:#01579b;">⚡ Free</span>
+          </div>
+        </section>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Weekly Chore Wheel System</h2>
-          <ol class="space-y-2 text-muted-foreground">
-            <li class="flex gap-3"><span class="text-primary font-bold">1.</span><span>Every Monday: each household member spins the wheel once.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">2.</span><span>Write down their chore assignment.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">3.</span><span>Complete it before next Monday.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">4.</span><span>If someone spins a chore they can't do (e.g., allergic to cleaning products), spin again.</span></li>
-          </ol>
-        </div>
+        <!-- Wheel -->
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={["#00bcd4","#4dd0e1","#80deea","#b2ebf2","#26c6da","#00acc1","#4db6ac","#80cbc4"]}
+          wheelShape="circle"
+          hubTheme="ice"
+          client:load
+        />
+      </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">For Families with Kids</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Create an age-appropriate chore wheel for kids. The wheel makes chore assignment feel fair rather than arbitrary.
-          </p>
-          <div class="space-y-3">
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Younger children</p>
-              <p class="text-muted-foreground text-sm">Set the table, feed pets, put away toys.</p>
-            </div>
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Older kids</p>
-              <p class="text-muted-foreground text-sm">Vacuum, load dishwasher, take out trash.</p>
-            </div>
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Teens</p>
-              <p class="text-muted-foreground text-sm">Cooking, grocery pickup, yard work.</p>
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-10">
+
+        <section class="space-y-6">
+          <div class="chore-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">The Chore Argument Problem</h2>
+            <p class="body-text leading-relaxed">
+              Every shared household has chore arguments. The same people always do the same tasks. Someone always feels like they're doing more. The chore wheel makes assignment random, fair, and inarguable.
+            </p>
+          </div>
+
+          <div class="chore-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">Weekly Chore Wheel System</h2>
+            <ol class="space-y-2 body-text">
+              <li class="flex gap-3"><span style="color:#00bcd4; font-weight:700;">1.</span><span>Every Monday: each household member spins the wheel once.</span></li>
+              <li class="flex gap-3"><span style="color:#00bcd4; font-weight:700;">2.</span><span>Write down their chore assignment.</span></li>
+              <li class="flex gap-3"><span style="color:#00bcd4; font-weight:700;">3.</span><span>Complete it before next Monday.</span></li>
+              <li class="flex gap-3"><span style="color:#00bcd4; font-weight:700;">4.</span><span>If someone spins a chore they can't do (e.g., allergic to cleaning products), spin again.</span></li>
+            </ol>
+          </div>
+
+          <div class="chore-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">For Families with Kids</h2>
+            <p class="body-text leading-relaxed">
+              Create an age-appropriate chore wheel for kids. The wheel makes chore assignment feel fair rather than arbitrary.
+            </p>
+            <div class="space-y-3">
+              <div class="chore-inner-card">
+                <p class="font-semibold body-text text-sm mb-1">🧒 Younger children</p>
+                <p class="muted-text text-sm">Set the table, feed pets, put away toys.</p>
+              </div>
+              <div class="chore-inner-card" style="background:rgba(178,235,242,0.5);">
+                <p class="font-semibold body-text text-sm mb-1">👦 Older kids</p>
+                <p class="muted-text text-sm">Vacuum, load dishwasher, take out trash.</p>
+              </div>
+              <div class="chore-inner-card" style="background:rgba(200,230,201,0.5);">
+                <p class="font-semibold body-text text-sm mb-1">🧑 Teens</p>
+                <p class="muted-text text-sm">Cooking, grocery pickup, yard work.</p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Flat / Roommate Setup</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            For shared apartments: put all chores on the wheel. Each roommate spins for their weekly responsibilities. Track completions on a shared notes app or whiteboard. The randomness removes the feeling that anyone is targeting anyone.
-          </p>
-        </div>
+          <div class="chore-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">Flat / Roommate Setup</h2>
+            <p class="body-text leading-relaxed">
+              For shared apartments: put all chores on the wheel. Each roommate spins for their weekly responsibilities. Track completions on a shared notes app or whiteboard. The randomness removes the feeling that anyone is targeting anyone.
+            </p>
+          </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Seasonal Chores</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Add seasonal tasks when relevant: window cleaning (spring), gutter clearing (fall), deep-clean refrigerator (monthly). Remove them when done. The wheel adapts to what needs doing right now.
-          </p>
-        </div>
+          <div class="chore-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">Seasonal Chores</h2>
+            <p class="body-text leading-relaxed">
+              Add seasonal tasks when relevant: window cleaning (spring), gutter clearing (fall), deep-clean refrigerator (monthly). Remove them when done. The wheel adapts to what needs doing right now.
+            </p>
+          </div>
+        </section>
 
-      </section>
+        <!-- FAQ -->
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <div class="faq-card">
+                <p class="font-semibold body-text mb-2">{question}</p>
+                <p class="muted-text text-sm leading-relaxed">{answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-      <!-- FAQ -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <!-- Related Tools -->
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
+              { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random name from your list without the wheel animation." },
+              { href: "/party-wheel", label: "Party Wheel", desc: "Pre-loaded with party game ideas for your next gathering." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="related-card">
+                  <span style="color:#00bcd4; font-weight:700; font-size:0.875rem; margin-top:2px;">→</span>
+                  <span>
+                    <span class="font-semibold body-text">{label}</span>
+                    <span class="muted-text text-sm"> — {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
-            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random name from your list without the wheel animation." },
-            { href: "/party-wheel", label: "Party Wheel", desc: "Pre-loaded with party game ideas for your next gathering." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-    </main>
-
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

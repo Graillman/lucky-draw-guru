@@ -40,6 +40,8 @@ const defaultParticipants = [
   { pseudo: "Deep breathing", weight: 1 },
 ];
 
+const myColors = ['#c084fc','#86efac','#fda4af','#7dd3fc','#f0abfc','#a7f3d0','#fbcfe8','#bae6fd'];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -49,6 +51,204 @@ const jsonLd = {
 };
 ---
 
+<style>
+  /* ===== SPA / ZEN THEME ===== */
+  .spa-page {
+    min-height: 100vh;
+    position: relative;
+    background: #120820;
+    color: #e8d8f5;
+  }
+
+  /* Fond lavande très sombre */
+  .spa-sky {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(ellipse at 25% 35%, #1e0d38 0%, #0e1520 45%, #1a0d2c 100%);
+  }
+
+  /* Brume lavande flottante */
+  .spa-mist-1 {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(ellipse 80% 60% at 20% 30%, rgba(180,130,240,0.10) 0%, transparent 70%);
+    animation: mistDrift1 14s ease-in-out infinite;
+  }
+  .spa-mist-2 {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(ellipse 70% 70% at 75% 60%, rgba(100,200,180,0.08) 0%, transparent 70%);
+    animation: mistDrift2 17s ease-in-out infinite;
+  }
+  .spa-mist-3 {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(ellipse 60% 50% at 50% 80%, rgba(255,170,200,0.07) 0%, transparent 70%);
+    animation: mistDrift3 11s ease-in-out infinite;
+  }
+
+  @keyframes mistDrift1 {
+    0%, 100% { transform: translate(0,0) scale(1); opacity: 0.8; }
+    50% { transform: translate(3%,4%) scale(1.06); opacity: 1; }
+  }
+  @keyframes mistDrift2 {
+    0%, 100% { transform: translate(0,0) scale(1); opacity: 0.7; }
+    50% { transform: translate(-4%,-3%) scale(0.96); opacity: 1; }
+  }
+  @keyframes mistDrift3 {
+    0%, 100% { transform: translate(0,0); opacity: 0.6; }
+    50% { transform: translate(2%,-5%); opacity: 0.9; }
+  }
+
+  /* Flammes de bougies — lueurs douces */
+  .spa-candle {
+    position: fixed;
+    z-index: 2;
+    border-radius: 50%;
+    filter: blur(28px);
+    pointer-events: none;
+    animation: candleGlow ease-in-out infinite;
+  }
+  .spa-candle-1 { width: 90px; height: 130px; bottom: 8%; left: 4%;  background: radial-gradient(ellipse, rgba(255,200,80,0.20) 0%, transparent 70%); animation-duration: 3.2s; }
+  .spa-candle-2 { width: 70px; height: 100px; bottom: 12%; right: 6%; background: radial-gradient(ellipse, rgba(255,180,60,0.16) 0%, transparent 70%); animation-duration: 2.7s; animation-delay: 0.9s; }
+  .spa-candle-3 { width: 55px; height: 85px;  bottom: 6%;  left: 48%; background: radial-gradient(ellipse, rgba(255,210,100,0.14) 0%, transparent 70%); animation-duration: 3.8s; animation-delay: 1.7s; }
+  .spa-candle-4 { width: 50px; height: 75px;  bottom: 18%; left: 22%; background: radial-gradient(ellipse, rgba(255,190,70,0.12) 0%, transparent 70%); animation-duration: 2.4s; animation-delay: 2.1s; }
+  .spa-candle-5 { width: 60px; height: 90px;  bottom: 15%; right: 25%; background: radial-gradient(ellipse, rgba(255,200,90,0.14) 0%, transparent 70%); animation-duration: 4.1s; animation-delay: 0.5s; }
+
+  @keyframes candleGlow {
+    0%, 100% { opacity: 0.65; transform: scale(1) translateY(0); }
+    25%       { opacity: 1;    transform: scale(1.12) translateY(-4px); }
+    50%       { opacity: 0.55; transform: scale(0.90) translateY(3px); }
+    75%       { opacity: 0.90; transform: scale(1.06) translateY(-2px); }
+  }
+
+  /* Pétales tombants */
+  .spa-petals { position: fixed; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; }
+  .spa-petal {
+    position: absolute;
+    top: -30px;
+    border-radius: 50% 0 50% 0;
+    opacity: 0;
+    animation: petalDrift linear infinite;
+    left: var(--left, 50%);
+    width: var(--w, 10px);
+    height: var(--h, 15px);
+    background: var(--color, rgba(200,160,240,0.35));
+    animation-duration: var(--dur, 15s);
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes petalDrift {
+    0%   { transform: translateY(0) rotate(0deg) translateX(0);   opacity: 0; }
+    5%   { opacity: 0.85; }
+    90%  { opacity: 0.40; }
+    100% { transform: translateY(110vh) rotate(540deg) translateX(55px); opacity: 0; }
+  }
+
+  /* Fleurs de lotus flottantes */
+  .spa-lotus { position: fixed; z-index: 3; pointer-events: none; font-size: var(--fs, 1.4rem); animation: lotusFloat ease-in-out infinite; left: var(--left, 20%); top: var(--top, 30%); opacity: 0.5; animation-duration: var(--dur, 8s); animation-delay: var(--delay, 0s); }
+  @keyframes lotusFloat {
+    0%, 100% { transform: translateY(0) rotate(-4deg); opacity: 0.45; }
+    50%       { transform: translateY(-18px) rotate(4deg); opacity: 0.70; }
+  }
+
+  /* Ondulations */
+  .spa-ripple {
+    position: fixed;
+    z-index: 2;
+    border-radius: 50%;
+    border: 1px solid rgba(140,200,190,0.18);
+    animation: rippleOut ease-out infinite;
+    pointer-events: none;
+  }
+  .spa-ripple-1 { width: 80px; height: 80px; bottom: 22%; right: 14%; animation-duration: 5s; animation-delay: 0s; }
+  .spa-ripple-2 { width: 80px; height: 80px; bottom: 22%; right: 14%; animation-duration: 5s; animation-delay: 1.7s; }
+  .spa-ripple-3 { width: 80px; height: 80px; bottom: 22%; right: 14%; animation-duration: 5s; animation-delay: 3.4s; }
+
+  @keyframes rippleOut {
+    0%   { transform: scale(0.6); opacity: 0.7; }
+    100% { transform: scale(4.5); opacity: 0; }
+  }
+
+  /* Titre animé doux */
+  @keyframes titleLavender {
+    0%, 100% { background-position: 0% 50%; }
+    50%       { background-position: 100% 50%; }
+  }
+  .spa-title {
+    background: linear-gradient(90deg, #d8b4fe, #fbcfe8, #a5f3fc, #c084fc, #d8b4fe);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: titleLavender 6s ease-in-out infinite;
+  }
+
+  /* Contenu */
+  .spa-content { position: relative; z-index: 10; }
+
+  /* Cards */
+  .spa-card {
+    background: rgba(14, 8, 28, 0.75);
+    border: 1px solid rgba(180,140,230,0.22);
+    border-radius: 16px;
+    padding: 1.5rem;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 4px 32px rgba(160,120,220,0.07), inset 0 1px 0 rgba(255,255,255,0.04);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .spa-card:hover {
+    border-color: rgba(200,160,255,0.42);
+    box-shadow: 0 4px 44px rgba(180,140,240,0.13);
+  }
+  .spa-h2 { color: #c8a8f0; }
+  .spa-text { color: rgba(215,200,235,0.88); line-height: 1.7; }
+  .spa-muted { color: rgba(170,155,200,0.72); }
+  .spa-accent { color: #80d8c8; }
+  .spa-breadcrumb a { color: rgba(160,140,200,0.65); transition: color 0.2s; text-decoration: none; }
+  .spa-breadcrumb a:hover { color: #c084fc; }
+  .spa-breadcrumb span { color: rgba(120,100,160,0.6); }
+  .spa-faq {
+    background: rgba(10,5,22,0.82);
+    border: 1px solid rgba(160,120,210,0.25);
+    border-radius: 12px;
+    padding: 1.25rem;
+    backdrop-filter: blur(10px);
+  }
+  .spa-faq-q { color: #c8a8f0; font-weight: 600; margin-bottom: 0.5rem; }
+  .spa-faq-a { color: rgba(165,150,195,0.80); font-size: 0.875rem; line-height: 1.65; }
+  .spa-related-link {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(10,5,22,0.72);
+    border: 1px solid rgba(155,115,205,0.22);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    transition: all 0.25s;
+    text-decoration: none;
+  }
+  .spa-related-link:hover {
+    border-color: rgba(200,160,255,0.48);
+    box-shadow: 0 0 22px rgba(180,140,240,0.10);
+  }
+  .spa-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(192,132,252,0.15);
+    border: 1px solid rgba(192,132,252,0.35);
+    color: #d8b4fe;
+  }
+</style>
+
 <Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
@@ -57,86 +257,143 @@ const jsonLd = {
     { name: "Self-Care Wheel", url: "https://realwheelpicker.com/templates/self-care-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+  <div class="spa-page">
+    <!-- Fond + ambiance -->
+    <div class="spa-sky" aria-hidden="true"></div>
+    <div class="spa-mist-1" aria-hidden="true"></div>
+    <div class="spa-mist-2" aria-hidden="true"></div>
+    <div class="spa-mist-3" aria-hidden="true"></div>
+    <div class="spa-candle spa-candle-1" aria-hidden="true"></div>
+    <div class="spa-candle spa-candle-2" aria-hidden="true"></div>
+    <div class="spa-candle spa-candle-3" aria-hidden="true"></div>
+    <div class="spa-candle spa-candle-4" aria-hidden="true"></div>
+    <div class="spa-candle spa-candle-5" aria-hidden="true"></div>
+    <div class="spa-ripple spa-ripple-1" aria-hidden="true"></div>
+    <div class="spa-ripple spa-ripple-2" aria-hidden="true"></div>
+    <div class="spa-ripple spa-ripple-3" aria-hidden="true"></div>
 
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Self-Care Wheel</span>
-      </nav>
+    <!-- Lotus flottants -->
+    <div class="spa-lotus" style="--left:6%;--top:18%;--dur:9s;--delay:0s;--fs:1.6rem" aria-hidden="true">🪷</div>
+    <div class="spa-lotus" style="--left:18%;--top:45%;--dur:11s;--delay:1.5s;--fs:1.2rem" aria-hidden="true">🪷</div>
+    <div class="spa-lotus" style="--left:78%;--top:12%;--dur:8s;--delay:3s;--fs:1.8rem" aria-hidden="true">🪷</div>
+    <div class="spa-lotus" style="--left:88%;--top:55%;--dur:13s;--delay:0.8s;--fs:1.3rem" aria-hidden="true">🪷</div>
+    <div class="spa-lotus" style="--left:42%;--top:75%;--dur:10s;--delay:4s;--fs:1.5rem" aria-hidden="true">🪷</div>
+    <div class="spa-lotus" style="--left:60%;--top:28%;--dur:7s;--delay:2s;--fs:1.0rem" aria-hidden="true">🪷</div>
+    <div class="spa-lotus" style="--left:92%;--top:80%;--dur:12s;--delay:5.5s;--fs:1.4rem" aria-hidden="true">🪷</div>
+    <div class="spa-lotus" style="--left:3%;--top:70%;--dur:9.5s;--delay:1s;--fs:1.1rem" aria-hidden="true">🪷</div>
+    <div class="spa-lotus" style="--left:34%;--top:8%;--dur:14s;--delay:6s;--fs:1.7rem" aria-hidden="true">🪷</div>
+    <div class="spa-lotus" style="--left:55%;--top:60%;--dur:8.5s;--delay:3.5s;--fs:1.0rem" aria-hidden="true">🪷</div>
+    <div class="spa-lotus" style="--left:70%;--top:42%;--dur:11s;--delay:7s;--fs:1.3rem" aria-hidden="true">🪷</div>
+    <div class="spa-lotus" style="--left:25%;--top:85%;--dur:10s;--delay:0.3s;--fs:1.5rem" aria-hidden="true">🪷</div>
+    <div class="spa-lotus" style="--left:82%;--top:35%;--dur:6.5s;--delay:4.5s;--fs:1.1rem" aria-hidden="true">🪷</div>
+    <div class="spa-lotus" style="--left:47%;--top:50%;--dur:15s;--delay:2.7s;--fs:0.9rem" aria-hidden="true">🪷</div>
+    <div class="spa-lotus" style="--left:12%;--top:30%;--dur:9s;--delay:8s;--fs:1.4rem" aria-hidden="true">🪷</div>
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Self-Care Wheel — Random Wellness Activity Spinner
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Stop planning self-care and start doing it. Spin the wheel, get a random wellness activity, and actually follow through today.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Pétales tombants -->
+    <div class="spa-petals" aria-hidden="true">
+      <div class="spa-petal" style="--left:7%;--dur:14s;--delay:-2s;--w:12px;--h:18px;--color:rgba(200,160,240,0.4)"></div>
+      <div class="spa-petal" style="--left:20%;--dur:18s;--delay:-5s;--w:8px;--h:13px;--color:rgba(160,220,200,0.35)"></div>
+      <div class="spa-petal" style="--left:36%;--dur:12s;--delay:-8s;--w:14px;--h:20px;--color:rgba(255,190,210,0.38)"></div>
+      <div class="spa-petal" style="--left:52%;--dur:16s;--delay:-1s;--w:10px;--h:16px;--color:rgba(200,160,240,0.30)"></div>
+      <div class="spa-petal" style="--left:67%;--dur:20s;--delay:-10s;--w:9px;--h:14px;--color:rgba(180,230,220,0.35)"></div>
+      <div class="spa-petal" style="--left:80%;--dur:15s;--delay:-4s;--w:13px;--h:19px;--color:rgba(255,200,215,0.32)"></div>
+      <div class="spa-petal" style="--left:92%;--dur:13s;--delay:-7s;--w:7px;--h:12px;--color:rgba(190,150,230,0.38)"></div>
+      <div class="spa-petal" style="--left:44%;--dur:17s;--delay:-12s;--w:11px;--h:17px;--color:rgba(200,160,240,0.28)"></div>
+      <div class="spa-petal" style="--left:14%;--dur:19s;--delay:-3s;--w:9px;--h:14px;--color:rgba(255,185,210,0.35)"></div>
+      <div class="spa-petal" style="--left:61%;--dur:11s;--delay:-9s;--w:15px;--h:21px;--color:rgba(170,230,215,0.32)"></div>
+    </div>
 
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <div class="spa-content">
+      <HeaderIsland client:load />
 
-      <section class="space-y-8">
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Self-Care Paradox</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Most people who struggle with self-care don't lack motivation — they lack decision clarity. You finish a long day and know you should do something for yourself, but then spend 20 minutes deciding what. By then, you're too tired to do anything.
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="spa-breadcrumb text-xs flex gap-1 mb-6">
+          <a href="/">Home</a><span>/</span>
+          <a href="/templates">Templates</a><span>/</span>
+          <span style="color:#b090d0">Self-Care Wheel</span>
+        </nav>
+
+        <section class="text-center space-y-4 py-2 md:py-6 mb-8">
+          <div class="flex justify-center gap-2 flex-wrap mb-2">
+            <span class="spa-tag">Wellness</span>
+            <span class="spa-tag">Zen</span>
+            <span class="spa-tag">Daily Ritual</span>
+          </div>
+          <h1 class="text-3xl md:text-5xl font-bold leading-tight spa-title">
+            Self-Care Wheel
+          </h1>
+          <p class="text-base md:text-lg" style="color:rgba(215,200,240,0.80);max-width:34rem;margin:0 auto;">
+            Stop planning self-care and start doing it. Spin the wheel, get a random wellness activity, and actually follow through today.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            The self-care wheel solves this by making the decision instant and random. You've already pre-loaded the wheel with activities that are good for you. Whatever it lands on, you do — no second-guessing, no comparison. The randomness also keeps the practice fresh so you're not stuck in the same routine.
-          </p>
-        </div>
+          <p style="color:rgba(160,145,195,0.65);font-size:0.85rem;">Free &bull; No account &bull; Instant result</p>
+        </section>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Customize Your Wellness Wheel</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            The default activities cover the main pillars of wellness: movement (stretch, go outside), mental health (meditate, journal, deep breathing), social connection (call a friend), nutrition (cook healthy meal), rest (early bedtime), and digital wellbeing (detox). Adjust based on what you actually need more of in your life.
-          </p>
-        </div>
-      </section>
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={myColors}
+          wheelShape="heart"
+          hubTheme="cosmic"
+          client:load
+        />
+      </div>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/hobby-wheel", label: "Hobby Wheel", desc: "Spin for a random activity when you have free time." },
-            { href: "/templates/weekend-activity-wheel", label: "Weekend Activity Spinner", desc: "Plan your weekend with a random activity pick." },
-            { href: "/yes-or-no-wheel", label: "Yes or No Wheel", desc: "Simple go/no-go decisions — should you take a break right now?" },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <section class="space-y-6">
+          <div class="spa-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold spa-h2">The Self-Care Paradox</h2>
+            <p class="spa-text">
+              Most people who struggle with self-care don't lack motivation — they lack decision clarity. You finish a long day and know you should do something for yourself, but then spend 20 minutes deciding what. By then, you're too tired to do anything.
+            </p>
+            <p class="spa-text">
+              The self-care wheel solves this by making the decision instant and random. You've already pre-loaded the wheel with activities that are good for you. Whatever it lands on, you do — no second-guessing, no comparison. The randomness also keeps the practice fresh so you're not stuck in the same routine.
+            </p>
+          </div>
 
-    </main>
-    <GlobalFooterIsland client:load />
+          <div class="spa-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold spa-h2">Customize Your Wellness Wheel</h2>
+            <p class="spa-text">
+              The default activities cover the main pillars of wellness: movement (stretch, go outside), mental health (meditate, journal, deep breathing), social connection (call a friend), nutrition (cook healthy meal), rest (early bedtime), and digital wellbeing (detox). Adjust based on what you actually need more of in your life.
+            </p>
+          </div>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold spa-h2">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <div class="spa-faq">
+                <p class="spa-faq-q">{question}</p>
+                <p class="spa-faq-a">{answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold spa-h2">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/templates/hobby-wheel", label: "Hobby Wheel", desc: "Spin for a random activity when you have free time." },
+              { href: "/templates/weekend-activity-wheel", label: "Weekend Activity Spinner", desc: "Plan your weekend with a random activity pick." },
+              { href: "/yes-or-no-wheel", label: "Yes or No Wheel", desc: "Simple go/no-go decisions — should you take a break right now?" },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="spa-related-link">
+                  <span class="spa-accent font-bold text-sm mt-0.5">→</span>
+                  <span>
+                    <span class="font-semibold spa-h2">{label}</span>
+                    <span class="spa-muted text-sm"> — {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

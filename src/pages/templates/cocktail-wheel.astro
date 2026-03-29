@@ -40,6 +40,8 @@ const defaultParticipants = [
   { pseudo: "Manhattan", weight: 1 },
 ];
 
+const myColors = ['#7c3aed','#14b8a6','#84cc16','#ec4899','#f59e0b','#6366f1','#06b6d4','#a855f7','#10b981','#f97316'];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -49,12 +51,203 @@ const jsonLd = {
 };
 ---
 
-<Layout
-  title={title}
-  description={description}
-  canonical={canonical}
-  jsonLd={jsonLd}
->
+<style>
+  /* ═══════════ COCKTAIL — BAR NÉON SOMBRE ═══════════ */
+  .cktl-page {
+    background: #04000f;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Fond noir profond avec lueurs néon */
+  .cktl-sky {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 10% -5%, rgba(124,58,237,0.45) 0%, transparent 55%),
+      radial-gradient(ellipse 70% 45% at 90% 5%,  rgba(20,184,166,0.35) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 50% 100%, rgba(99,102,241,0.2) 0%, transparent 60%),
+      linear-gradient(180deg, #04000f 0%, #080018 45%, #040010 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Halos néon colorés sur les bords */
+  .cktl-neon-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: 0;
+    animation: neonPulse ease-in-out infinite alternate;
+  }
+  @keyframes neonPulse {
+    from { opacity: 0.2; transform: scale(0.85); }
+    to   { opacity: 0.55; transform: scale(1.15); }
+  }
+
+  /* Lignes néon horizontales */
+  .cktl-neon-line {
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 1px;
+    pointer-events: none;
+    z-index: 1;
+    animation: lineScan 8s ease-in-out infinite;
+    opacity: 0;
+  }
+  @keyframes lineScan {
+    0%   { opacity: 0; top: -5%; }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.3; }
+    100% { opacity: 0; top: 105%; }
+  }
+
+  /* Bulles montantes — 25 */
+  .cktl-bubble {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    animation: bubbleRise ease-in-out infinite;
+    opacity: 0;
+  }
+  @keyframes bubbleRise {
+    0%   { transform: translateY(110vh) translateX(0px); opacity: 0; }
+    8%   { opacity: 0.7; }
+    50%  { transform: translateY(50vh) translateX(15px); opacity: 0.5; }
+    92%  { opacity: 0.2; }
+    100% { transform: translateY(-10vh) translateX(-8px); opacity: 0; }
+  }
+
+  /* Emoji cocktails flottants */
+  .cktl-glass {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    animation: glassFloat ease-in-out infinite;
+    opacity: 0;
+    line-height: 1;
+    user-select: none;
+  }
+  @keyframes glassFloat {
+    0%   { transform: translateY(105vh) rotate(-15deg); opacity: 0; }
+    6%   { opacity: 0.8; }
+    50%  { transform: translateY(48vh) rotate(10deg); opacity: 0.6; }
+    94%  { opacity: 0.2; }
+    100% { transform: translateY(-5vh) rotate(-5deg); opacity: 0; }
+  }
+
+  /* Eclats de lumière colorée — reflets de verre */
+  .cktl-glint {
+    position: fixed;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+    animation: glintFlash ease-in-out infinite alternate;
+  }
+  @keyframes glintFlash {
+    from { opacity: 0.05; transform: scale(0.5); box-shadow: none; }
+    to   { opacity: 1; transform: scale(2.5); box-shadow: 0 0 8px currentColor, 0 0 20px currentColor, 0 0 40px currentColor; }
+  }
+
+  /* Reflet de comptoir en bas */
+  .cktl-bar-glow {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(0deg, rgba(124,58,237,0.18) 0%, rgba(20,184,166,0.08) 50%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+    animation: barGlowPulse 5s ease-in-out infinite alternate;
+  }
+  @keyframes barGlowPulse {
+    from { opacity: 0.6; }
+    to   { opacity: 1; }
+  }
+
+  /* Contenu */
+  .cktl-content { position: relative; z-index: 10; }
+
+  /* Titre gradient néon */
+  .cktl-title {
+    background: linear-gradient(135deg, #a855f7 0%, #14b8a6 30%, #84cc16 60%, #a855f7 100%);
+    background-size: 250%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: neonShimmer 6s ease-in-out infinite;
+    filter: drop-shadow(0 0 25px rgba(124,58,237,0.6));
+  }
+  @keyframes neonShimmer {
+    0%,100% { background-position: 0% 50%; }
+    50%     { background-position: 100% 50%; }
+  }
+
+  .cktl-tag {
+    background: rgba(124,58,237,0.12);
+    border: 1px solid rgba(124,58,237,0.4);
+    color: rgba(196,160,255,0.95);
+    border-radius: 9999px;
+    padding: 4px 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .cktl-card {
+    background: rgba(8,0,25,0.75);
+    border: 1px solid rgba(124,58,237,0.25);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 30px rgba(124,58,237,0.08), inset 0 1px 0 rgba(196,160,255,0.06);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .cktl-card:hover {
+    border-color: rgba(124,58,237,0.5);
+    box-shadow: 0 0 40px rgba(124,58,237,0.18);
+  }
+  .cktl-card h2 { color: #c4a0ff; text-shadow: 0 0 12px rgba(168,85,247,0.5); margin-bottom: 1rem; }
+  .cktl-card p, .cktl-card li { color: #8878b0; line-height: 1.75; }
+
+  details.cktl-faq {
+    background: rgba(4,0,15,0.85);
+    border: 1px solid rgba(124,58,237,0.2);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    backdrop-filter: blur(8px);
+  }
+  details.cktl-faq summary { color: #c4a0ff; font-weight: 600; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  details.cktl-faq p { color: #8878b0; font-size: 0.875rem; line-height: 1.65; margin-top: 0.75rem; }
+
+  .cktl-related a {
+    display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem;
+    background: rgba(4,0,15,0.7);
+    border: 1px solid rgba(124,58,237,0.22);
+    border-radius: 0.75rem;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s; text-decoration: none;
+  }
+  .cktl-related a:hover { border-color: rgba(168,85,247,0.55); box-shadow: 0 0 20px rgba(124,58,237,0.2); }
+
+  .cktl-drink-card {
+    background: rgba(8,0,25,0.65);
+    border: 1px solid rgba(20,184,166,0.2);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    backdrop-filter: blur(8px);
+  }
+  .cktl-drink-card strong { color: #5eead4; display: block; margin-bottom: 4px; font-size: 0.9rem; }
+  .cktl-drink-card span { color: #7878a8; font-size: 0.78rem; }
+</style>
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
     { name: "Home", url: "https://realwheelpicker.com" },
@@ -62,116 +255,183 @@ const jsonLd = {
     { name: "Cocktail Spinner Wheel", url: "https://realwheelpicker.com/templates/cocktail-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  <div class="cktl-page">
+    <div class="cktl-sky"></div>
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <!-- Halos néon -->
+    <div class="cktl-neon-orb" style="width:700px;height:600px;background:radial-gradient(circle,rgba(124,58,237,0.4) 0%,transparent 70%);top:-200px;left:-150px;animation-duration:6s;"></div>
+    <div class="cktl-neon-orb" style="width:600px;height:500px;background:radial-gradient(circle,rgba(20,184,166,0.3) 0%,transparent 70%);top:-100px;right:-120px;animation-duration:8s;animation-delay:1.5s;"></div>
+    <div class="cktl-neon-orb" style="width:500px;height:400px;background:radial-gradient(circle,rgba(99,102,241,0.25) 0%,transparent 70%);bottom:5%;left:50%;transform:translateX(-50%);animation-duration:7s;animation-delay:3s;"></div>
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Cocktail Spinner Wheel</span>
-      </nav>
+    <!-- Lignes scan néon -->
+    <div class="cktl-neon-line" style="background:linear-gradient(90deg,transparent,rgba(168,85,247,0.7),transparent);animation-duration:9s;animation-delay:0s;"></div>
+    <div class="cktl-neon-line" style="background:linear-gradient(90deg,transparent,rgba(20,184,166,0.6),transparent);animation-duration:12s;animation-delay:4s;"></div>
+    <div class="cktl-neon-line" style="background:linear-gradient(90deg,transparent,rgba(132,204,22,0.5),transparent);animation-duration:10s;animation-delay:7s;"></div>
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Cocktail Spinner Wheel — Random Drink Picker (21+)
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Can't decide what to drink? Spin the cocktail wheel for your next order. 12 classics ready to go. Customize with your favorites or seasonal specials.
-        </p>
-        <p class="text-sm text-muted-foreground">For adults 21+ • Free • No account required</p>
-      </section>
+    <!-- Bulles montantes — 25 -->
+    {[
+      {l:"5%",s:4,c:"rgba(168,85,247,0.6)",dur:"8s",del:"0s"},{l:"12%",s:3,c:"rgba(20,184,166,0.5)",dur:"11s",del:"1.5s"},
+      {l:"18%",s:5,c:"rgba(99,102,241,0.55)",dur:"9s",del:"3s"},{l:"25%",s:2,c:"rgba(132,204,22,0.5)",dur:"13s",del:"0.7s"},
+      {l:"31%",s:4,c:"rgba(168,85,247,0.4)",dur:"10s",del:"5s"},{l:"38%",s:3,c:"rgba(20,184,166,0.6)",dur:"8s",del:"2s"},
+      {l:"44%",s:6,c:"rgba(236,72,153,0.45)",dur:"12s",del:"4s"},{l:"50%",s:3,c:"rgba(168,85,247,0.5)",dur:"9s",del:"1s"},
+      {l:"56%",s:4,c:"rgba(6,182,212,0.55)",dur:"11s",del:"6s"},{l:"63%",s:2,c:"rgba(132,204,22,0.4)",dur:"10s",del:"3.5s"},
+      {l:"70%",s:5,c:"rgba(168,85,247,0.6)",dur:"8s",del:"0.5s"},{l:"76%",s:3,c:"rgba(20,184,166,0.5)",dur:"13s",del:"2.5s"},
+      {l:"82%",s:4,c:"rgba(245,158,11,0.45)",dur:"9s",del:"7s"},{l:"88%",s:2,c:"rgba(99,102,241,0.55)",dur:"11s",del:"1.8s"},
+      {l:"94%",s:6,c:"rgba(168,85,247,0.4)",dur:"10s",del:"4.5s"},{l:"9%",s:3,c:"rgba(236,72,153,0.5)",dur:"12s",del:"8s"},
+      {l:"22%",s:4,c:"rgba(20,184,166,0.45)",dur:"9s",del:"2.2s"},{l:"35%",s:2,c:"rgba(132,204,22,0.55)",dur:"14s",del:"5.5s"},
+      {l:"47%",s:5,c:"rgba(168,85,247,0.5)",dur:"8s",del:"0.3s"},{l:"59%",s:3,c:"rgba(6,182,212,0.6)",dur:"11s",del:"3.8s"},
+      {l:"71%",s:4,c:"rgba(245,158,11,0.4)",dur:"9s",del:"6.5s"},{l:"84%",s:2,c:"rgba(168,85,247,0.55)",dur:"10s",del:"1.2s"},
+      {l:"15%",s:5,c:"rgba(20,184,166,0.5)",dur:"13s",del:"9s"},{l:"42%",s:3,c:"rgba(99,102,241,0.45)",dur:"8s",del:"4.2s"},
+      {l:"67%",s:4,c:"rgba(132,204,22,0.5)",dur:"11s",del:"7.5s"},
+    ].map(b => (
+      <div class="cktl-bubble" style={`width:${b.s}px;height:${b.s}px;background:${b.c};box-shadow:0 0 ${b.s*3}px ${b.c};left:${b.l};animation-duration:${b.dur};animation-delay:${b.del};`}></div>
+    ))}
 
-      <!-- Wheel -->
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <!-- Emoji cocktails flottants — 30 -->
+    {[
+      {l:"4%",fs:"1.4rem",dur:"10s",del:"0s",e:"🍸"},{l:"9%",fs:"0.9rem",dur:"13s",del:"2s",e:"🍹"},
+      {l:"15%",fs:"1.8rem",dur:"11s",del:"1s",e:"🥂"},{l:"21%",fs:"1.1rem",dur:"9s",del:"3.5s",e:"🍷"},
+      {l:"27%",fs:"0.8rem",dur:"12s",del:"0.5s",e:"🍺"},{l:"33%",fs:"1.5rem",dur:"10s",del:"5s",e:"🍸"},
+      {l:"39%",fs:"1rem",dur:"8s",del:"1.8s",e:"🍹"},{l:"45%",fs:"1.3rem",dur:"14s",del:"4s",e:"🥂"},
+      {l:"51%",fs:"0.75rem",dur:"11s",del:"2.5s",e:"🍷"},{l:"57%",fs:"1.7rem",dur:"9s",del:"0.8s",e:"🍸"},
+      {l:"63%",fs:"1.1rem",dur:"12s",del:"3s",e:"🍺"},{l:"69%",fs:"0.9rem",dur:"10s",del:"6s",e:"🍹"},
+      {l:"75%",fs:"1.4rem",dur:"13s",del:"1.5s",e:"🥂"},{l:"81%",fs:"0.8rem",dur:"8s",del:"4.5s",e:"🍷"},
+      {l:"87%",fs:"1.6rem",dur:"11s",del:"2.2s",e:"🍸"},{l:"93%",fs:"1rem",dur:"9s",del:"7s",e:"🍹"},
+      {l:"7%",fs:"1.2rem",dur:"14s",del:"8s",e:"🥂"},{l:"18%",fs:"0.7rem",dur:"10s",del:"3.2s",e:"🍷"},
+      {l:"30%",fs:"1.5rem",dur:"11s",del:"5.5s",e:"🍸"},{l:"42%",fs:"0.9rem",dur:"8s",del:"1.2s",e:"🍺"},
+      {l:"54%",fs:"1.3rem",dur:"13s",del:"6.5s",e:"🍹"},{l:"66%",fs:"0.8rem",dur:"9s",del:"0.4s",e:"🥂"},
+      {l:"78%",fs:"1.6rem",dur:"12s",del:"4.8s",e:"🍷"},{l:"90%",fs:"1rem",dur:"10s",del:"2.8s",e:"🍸"},
+      {l:"3%",fs:"2rem",dur:"15s",del:"9s",e:"🍹"},{l:"25%",fs:"0.7rem",dur:"11s",del:"1.7s",e:"🥂"},
+      {l:"48%",fs:"1.4rem",dur:"8s",del:"7.5s",e:"🍺"},{l:"62%",fs:"1rem",dur:"12s",del:"3.7s",e:"🍸"},
+      {l:"76%",fs:"0.85rem",dur:"10s",del:"5.2s",e:"🍹"},{l:"96%",fs:"1.2rem",dur:"9s",del:"0.9s",e:"🥂"},
+    ].map(g => (
+      <span class="cktl-glass" style={`font-size:${g.fs};left:${g.l};animation-duration:${g.dur};animation-delay:${g.del};`}>{g.e}</span>
+    ))}
 
-      <!-- Article Content -->
-      <section class="space-y-8">
+    <!-- Eclats lumineux (glints) -->
+    {[
+      {l:"8%",t:"20%",c:"#a855f7",dur:"1.7s",del:"0s"},{l:"19%",t:"55%",c:"#14b8a6",dur:"2.3s",del:"0.8s"},
+      {l:"31%",t:"30%",c:"#84cc16",dur:"1.9s",del:"1.5s"},{l:"43%",t:"70%",c:"#a855f7",dur:"2.8s",del:"0.3s"},
+      {l:"55%",t:"15%",c:"#06b6d4",dur:"1.6s",del:"2s"},{l:"67%",t:"45%",c:"#ec4899",dur:"2.1s",del:"1s"},
+      {l:"79%",t:"65%",c:"#a855f7",dur:"2.5s",del:"0.5s"},{l:"91%",t:"25%",c:"#14b8a6",dur:"1.8s",del:"1.8s"},
+      {l:"12%",t:"80%",c:"#84cc16",dur:"3s",del:"0.2s"},{l:"36%",t:"10%",c:"#ec4899",dur:"2.2s",del:"1.3s"},
+      {l:"60%",t:"85%",c:"#a855f7",dur:"1.7s",del:"0.7s"},{l:"84%",t:"40%",c:"#06b6d4",dur:"2.6s",del:"2.2s"},
+    ].map(g => (
+      <div class="cktl-glint" style={`left:${g.l};top:${g.t};color:${g.c};background:${g.c};animation-duration:${g.dur};animation-delay:${g.del};`}></div>
+    ))}
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Random Cocktail Picking for Parties and Bars</h2>
-          <p class="text-muted-foreground leading-relaxed">
+    <div class="cktl-bar-glow"></div>
+
+    <div class="cktl-content">
+      <HeaderIsland client:load />
+
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="text-xs text-white/25 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/55 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/55 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/40">Cocktail Spinner Wheel</span>
+        </nav>
+
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3">🍸</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight cktl-title mb-3">
+            Cocktail Spinner Wheel
+          </h1>
+          <p class="text-lg text-white/45 max-w-xl mx-auto mb-5">
+            Can't decide what to drink? Spin the neon bar wheel. 12 classics pre-loaded. 21+ only.
+          </p>
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="cktl-tag">🍹 Bar Night</span>
+            <span class="cktl-tag">🥂 Party</span>
+            <span class="cktl-tag">🍷 Cocktails</span>
+            <span class="cktl-tag">21+</span>
+          </div>
+        </div>
+
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={myColors}
+          wheelShape="circle"
+          hubTheme="purple"
+          client:load
+        />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="cktl-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold">Random Cocktail Picking for Parties and Bars</h2>
+          <p>
             The cocktail wheel works for two situations: when you genuinely can't choose, and when you want to be adventurous. In the first case, the wheel eliminates choice paralysis at the bar. In the second, it forces you outside the same order you always make.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
+          <p>
             For home bar nights, load the wheel with cocktails you have ingredients for. Spin at the start of each round. The host makes whatever the wheel picks, and everyone tries something they might not have chosen themselves. It turns a regular night in into a mini cocktail menu experience.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
+          <p>
             For bar crawls or group outings, use the wheel to pick the first round for everyone. When the group commits to one spin result, it speeds up ordering and creates a shared experience from drink one.
           </p>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Quick Cocktail Guide</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            If you land on something unfamiliar, here's a quick reference:
-          </p>
-          <div class="space-y-2 text-muted-foreground">
-            <div class="p-3 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm">Negroni</p>
-              <p class="text-xs">Gin, Campari, sweet vermouth — equal parts. Stirred, served on ice with orange peel. Bitter, complex, acquired taste that most people come to love.</p>
+        <div class="cktl-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold">Quick Cocktail Guide</h2>
+          <p>If you land on something unfamiliar, here's a quick reference:</p>
+          <div class="space-y-2">
+            <div class="cktl-drink-card">
+              <strong>Negroni</strong>
+              <span>Gin, Campari, sweet vermouth — equal parts. Stirred, served on ice with orange peel. Bitter, complex, acquired taste that most people come to love.</span>
             </div>
-            <div class="p-3 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm">Old Fashioned</p>
-              <p class="text-xs">Whiskey (bourbon or rye), sugar, Angostura bitters, orange peel. The original cocktail. Simple, strong, timeless.</p>
+            <div class="cktl-drink-card">
+              <strong>Old Fashioned</strong>
+              <span>Whiskey (bourbon or rye), sugar, Angostura bitters, orange peel. The original cocktail. Simple, strong, timeless.</span>
             </div>
-            <div class="p-3 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm">Espresso Martini</p>
-              <p class="text-xs">Vodka, espresso, coffee liqueur. Shaken hard for the foam on top. The modern crowd-pleaser — energizing and dessert-like.</p>
+            <div class="cktl-drink-card">
+              <strong>Espresso Martini</strong>
+              <span>Vodka, espresso, coffee liqueur. Shaken hard for the foam on top. The modern crowd-pleaser — energizing and dessert-like.</span>
             </div>
           </div>
         </div>
 
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#c4a0ff">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="cktl-faq group">
+                <summary>
+                  {question}
+                  <span style="color:rgba(196,160,255,0.4)" class="shrink-0 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p>{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
-      <!-- FAQ -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section class="cktl-related space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#c4a0ff">Related Tools</h2>
+          <ul class="grid sm:grid-cols-2 gap-3">
+            {[
+              { href: "/templates/drinking-game-wheel", label: "🎲 Drinking Game Wheel", desc: "Party drinking games — spin for your next challenge." },
+              { href: "/templates/restaurant-picker", label: "🍽️ Restaurant Picker", desc: "Decide where to go for drinks and dinner tonight." },
+              { href: "/templates/dare-wheel", label: "😈 Dare Wheel", desc: "Party challenges for game nights and social gatherings." },
+              { href: "/templates", label: "🎡 All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href}>
+                  <span style="color:#7c3aed;font-weight:bold;font-size:0.875rem;margin-top:2px;">→</span>
+                  <span>
+                    <span style="color:#c4a0ff;font-weight:600;">{label}</span>
+                    <span style="color:#7878a8;font-size:0.875rem;display:block;margin-top:2px;">{desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/drinking-game-wheel", label: "Drinking Game Wheel", desc: "Party drinking games — spin for your next challenge." },
-            { href: "/templates/restaurant-picker", label: "Restaurant Picker", desc: "Decide where to go for drinks and dinner tonight." },
-            { href: "/templates/dare-wheel", label: "Dare Wheel", desc: "Party challenges for game nights and social gatherings." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-    </main>
-
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

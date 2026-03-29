@@ -40,6 +40,8 @@ const defaultParticipants = [
   { pseudo: "Jump Squats", weight: 1 },
 ];
 
+const myColors = ['#ef4444','#f97316','#eab308','#ffffff','#dc2626','#fb923c','#fbbf24','#fca5a5'];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -49,12 +51,227 @@ const jsonLd = {
 };
 ---
 
-<Layout
-  title={title}
-  description={description}
-  canonical={canonical}
-  jsonLd={jsonLd}
->
+<style>
+  /* ===== GYM / WORKOUT THEME ===== */
+  .gym-page {
+    min-height: 100vh;
+    position: relative;
+    background: #0a0000;
+    color: #ffe8d8;
+  }
+
+  /* Fond salle de sport sombre */
+  .gym-sky {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(ellipse at 50% 20%, #200800 0%, #0d0200 55%, #080000 100%);
+  }
+
+  /* Néons rouges/oranges sur les bords */
+  .gym-neon-left {
+    position: fixed;
+    top: 10%;
+    left: 0;
+    width: 6px;
+    height: 75%;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to bottom, transparent, #ef4444, #f97316, transparent);
+    filter: blur(6px);
+    box-shadow: 0 0 24px rgba(239,68,68,0.8), 0 0 48px rgba(239,68,68,0.4);
+    animation: neonPulse 2.5s ease-in-out infinite;
+  }
+  .gym-neon-right {
+    position: fixed;
+    top: 10%;
+    right: 0;
+    width: 6px;
+    height: 75%;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to bottom, transparent, #f97316, #ef4444, transparent);
+    filter: blur(6px);
+    box-shadow: 0 0 24px rgba(249,115,22,0.8), 0 0 48px rgba(249,115,22,0.4);
+    animation: neonPulse 2.5s ease-in-out infinite;
+    animation-delay: 1.2s;
+  }
+  @keyframes neonPulse {
+    0%, 100% { opacity: 0.7; }
+    50%       { opacity: 1; }
+  }
+
+  /* Ligne de battement cardiaque SVG */
+  .gym-heartbeat {
+    position: fixed;
+    top: 50%;
+    left: -10%;
+    width: 120%;
+    height: 80px;
+    z-index: 2;
+    pointer-events: none;
+    transform: translateY(-50%);
+    opacity: 0.18;
+    animation: heartbeatSlide 6s linear infinite;
+  }
+  @keyframes heartbeatSlide {
+    0%   { transform: translateY(-50%) translateX(0); opacity: 0.12; }
+    10%  { opacity: 0.22; }
+    50%  { opacity: 0.18; }
+    90%  { opacity: 0.22; }
+    100% { transform: translateY(-50%) translateX(8%); opacity: 0.12; }
+  }
+
+  /* Glow d'ambiance rouge/orange */
+  .gym-glow-1 {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(ellipse 60% 45% at 15% 50%, rgba(239,68,68,0.10) 0%, transparent 70%);
+    animation: glowBeat 2s ease-in-out infinite;
+  }
+  .gym-glow-2 {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(ellipse 60% 45% at 85% 50%, rgba(249,115,22,0.10) 0%, transparent 70%);
+    animation: glowBeat 2s ease-in-out infinite;
+    animation-delay: 1s;
+  }
+  @keyframes glowBeat {
+    0%, 100% { opacity: 0.6; }
+    50%       { opacity: 1; }
+  }
+
+  /* Étincelles / sparks */
+  .gym-sparks { position: fixed; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; }
+  .gym-spark {
+    position: absolute;
+    left: var(--left, 50%);
+    top: var(--top, 50%);
+    width: var(--s, 3px);
+    height: var(--s, 3px);
+    background: var(--color, #ffffff);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--color, #ffffff);
+    animation: sparkFlash ease-in-out infinite;
+    animation-duration: var(--dur, 2s);
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes sparkFlash {
+    0%, 100% { opacity: 0; transform: scale(1); }
+    50%       { opacity: 1; transform: scale(2.5); }
+  }
+
+  /* Emojis fitness flottants */
+  .gym-icon {
+    position: fixed;
+    z-index: 3;
+    pointer-events: none;
+    font-size: var(--fs, 1.4rem);
+    left: var(--left, 20%);
+    top: var(--top, 30%);
+    opacity: 0.25;
+    animation: iconFloat ease-in-out infinite;
+    animation-duration: var(--dur, 8s);
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes iconFloat {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.22; }
+    50%       { transform: translateY(-14px) scale(1.1); opacity: 0.40; }
+  }
+
+  /* Titre explosif */
+  @keyframes fireTitle {
+    0%, 100% { background-position: 0% 50%; text-shadow: 0 0 20px rgba(239,68,68,0.8), 0 0 40px rgba(249,115,22,0.5); }
+    50%       { background-position: 100% 50%; text-shadow: 0 0 30px rgba(239,68,68,1), 0 0 60px rgba(249,115,22,0.8), 0 0 80px rgba(234,179,8,0.4); }
+  }
+  .gym-title {
+    background: linear-gradient(90deg, #ef4444, #f97316, #fbbf24, #ef4444, #dc2626);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fireTitle 3s ease-in-out infinite;
+  }
+
+  .gym-content { position: relative; z-index: 10; }
+
+  .gym-card {
+    background: rgba(12, 4, 0, 0.88);
+    border: 1px solid rgba(239,68,68,0.28);
+    border-radius: 16px;
+    padding: 1.5rem;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 4px 32px rgba(220,40,0,0.08), inset 0 1px 0 rgba(255,100,50,0.06);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .gym-card:hover {
+    border-color: rgba(249,115,22,0.50);
+    box-shadow: 0 4px 44px rgba(239,68,68,0.16);
+  }
+  .gym-h2 { color: #fb923c; }
+  .gym-text { color: rgba(255,225,200,0.88); line-height: 1.7; }
+  .gym-muted { color: rgba(180,140,100,0.75); }
+  .gym-accent { color: #ef4444; }
+  .gym-breadcrumb a { color: rgba(160,100,70,0.70); transition: color 0.2s; text-decoration: none; }
+  .gym-breadcrumb a:hover { color: #f97316; }
+  .gym-breadcrumb span { color: rgba(110,60,40,0.60); }
+  .gym-faq {
+    background: rgba(8,2,0,0.90);
+    border: 1px solid rgba(200,60,20,0.30);
+    border-radius: 12px;
+    padding: 1.25rem;
+    backdrop-filter: blur(10px);
+  }
+  .gym-faq-q { color: #fb923c; font-weight: 600; margin-bottom: 0.5rem; }
+  .gym-faq-a { color: rgba(175,135,100,0.82); font-size: 0.875rem; line-height: 1.65; }
+  .gym-related-link {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(8,2,0,0.82);
+    border: 1px solid rgba(180,60,20,0.28);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    transition: all 0.25s;
+    text-decoration: none;
+  }
+  .gym-related-link:hover {
+    border-color: rgba(249,115,22,0.52);
+    box-shadow: 0 0 22px rgba(220,60,0,0.14);
+  }
+  .gym-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(239,68,68,0.18);
+    border: 1px solid rgba(239,68,68,0.45);
+    color: #fca5a5;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .gym-amrap {
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.30);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+  .gym-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 768px) { .gym-grid { grid-template-columns: 1fr 1fr; } }
+  .gym-grid-card {
+    background: rgba(12,4,0,0.70);
+    border: 1px solid rgba(200,60,20,0.22);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+  .gym-grid-title { color: #f97316; font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; }
+</style>
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
     { name: "Home", url: "https://realwheelpicker.com" },
@@ -62,131 +279,166 @@ const jsonLd = {
     { name: "Workout Wheel", url: "https://realwheelpicker.com/templates/workout-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  <div class="gym-page">
+    <!-- Fond -->
+    <div class="gym-sky" aria-hidden="true"></div>
+    <div class="gym-neon-left" aria-hidden="true"></div>
+    <div class="gym-neon-right" aria-hidden="true"></div>
+    <div class="gym-glow-1" aria-hidden="true"></div>
+    <div class="gym-glow-2" aria-hidden="true"></div>
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <!-- Ligne cardiaque SVG -->
+    <svg class="gym-heartbeat" viewBox="0 0 1200 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <polyline points="0,40 100,40 140,10 160,70 200,5 220,75 260,40 320,40 370,40 400,15 420,65 460,40 520,40 560,8 580,72 620,40 700,40 750,40 780,18 800,62 840,40 920,40 960,12 980,68 1020,40 1100,40 1200,40"
+        stroke="#ef4444" stroke-width="2.5" fill="none" opacity="0.9"/>
+    </svg>
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Workout Wheel</span>
-      </nav>
+    <!-- Étincelles -->
+    <div class="gym-sparks" aria-hidden="true">
+      <div class="gym-spark" style="--left:8%;--top:25%;--s:3px;--color:#ef4444;--dur:1.8s;--delay:0s"></div>
+      <div class="gym-spark" style="--left:18%;--top:60%;--s:2px;--color:#ffffff;--dur:2.2s;--delay:0.3s"></div>
+      <div class="gym-spark" style="--left:30%;--top:35%;--s:4px;--color:#f97316;--dur:1.5s;--delay:0.7s"></div>
+      <div class="gym-spark" style="--left:44%;--top:70%;--s:2px;--color:#fbbf24;--dur:2.8s;--delay:1.1s"></div>
+      <div class="gym-spark" style="--left:55%;--top:20%;--s:3px;--color:#ef4444;--dur:2s;--delay:0.5s"></div>
+      <div class="gym-spark" style="--left:66%;--top:55%;--s:2px;--color:#ffffff;--dur:1.7s;--delay:1.4s"></div>
+      <div class="gym-spark" style="--left:78%;--top:30%;--s:4px;--color:#f97316;--dur:2.4s;--delay:0.2s"></div>
+      <div class="gym-spark" style="--left:88%;--top:65%;--s:3px;--color:#fca5a5;--dur:1.9s;--delay:0.9s"></div>
+      <div class="gym-spark" style="--left:92%;--top:45%;--s:2px;--color:#ef4444;--dur:2.1s;--delay:1.6s"></div>
+      <div class="gym-spark" style="--left:14%;--top:80%;--s:3px;--color:#fbbf24;--dur:2.6s;--delay:0.4s"></div>
+      <div class="gym-spark" style="--left:38%;--top:15%;--s:2px;--color:#ffffff;--dur:1.6s;--delay:1.2s"></div>
+      <div class="gym-spark" style="--left:62%;--top:82%;--s:4px;--color:#f97316;--dur:2.3s;--delay:0.8s"></div>
+      <div class="gym-spark" style="--left:73%;--top:12%;--s:3px;--color:#ef4444;--dur:1.9s;--delay:1.8s"></div>
+      <div class="gym-spark" style="--left:84%;--top:78%;--s:2px;--color:#fca5a5;--dur:2.7s;--delay:0.6s"></div>
+      <div class="gym-spark" style="--left:26%;--top:88%;--s:3px;--color:#fbbf24;--dur:2s;--delay:1.5s"></div>
+    </div>
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Workout Spinner Wheel — Random Exercise Generator
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Spin for your next exercise. Build unpredictable circuits that challenge your body every session. No planning required.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Icônes fitness -->
+    <div class="gym-icon" style="--left:4%;--top:15%;--dur:7s;--delay:0s;--fs:1.6rem" aria-hidden="true">💪</div>
+    <div class="gym-icon" style="--left:88%;--top:12%;--dur:9s;--delay:2s;--fs:1.8rem" aria-hidden="true">🔥</div>
+    <div class="gym-icon" style="--left:6%;--top:70%;--dur:11s;--delay:4s;--fs:1.4rem" aria-hidden="true">🏋️</div>
+    <div class="gym-icon" style="--left:92%;--top:65%;--dur:8s;--delay:1s;--fs:1.5rem" aria-hidden="true">💪</div>
+    <div class="gym-icon" style="--left:50%;--top:5%;--dur:10s;--delay:3s;--fs:1.3rem" aria-hidden="true">🔥</div>
+    <div class="gym-icon" style="--left:20%;--top:88%;--dur:6.5s;--delay:5s;--fs:1.6rem" aria-hidden="true">🏃</div>
+    <div class="gym-icon" style="--left:75%;--top:85%;--dur:12s;--delay:0.5s;--fs:1.2rem" aria-hidden="true">💥</div>
 
-      <!-- Wheel -->
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <div class="gym-content">
+      <HeaderIsland client:load />
 
-      <!-- Article Content -->
-      <section class="space-y-8">
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="gym-breadcrumb text-xs flex gap-1 mb-6">
+          <a href="/">Home</a><span>/</span>
+          <a href="/templates">Templates</a><span>/</span>
+          <span style="color:#c05020">Workout Wheel</span>
+        </nav>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Random Workouts Work Better</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Your body adapts to predictable exercise routines within 4-6 weeks. Adaptation is the enemy of progress. A random workout wheel breaks adaptation cycles by ensuring your muscles never know what's coming next.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            The unpredictability also fights workout boredom — one of the top reasons people quit exercise programs. When each circuit is different, you stay engaged. You can't go on autopilot if you don't know what exercise is next.
-          </p>
-        </div>
-
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Build a Random Circuit</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Spin for an exercise, do 10-15 reps (or 30 seconds for timed exercises), rest 30 seconds, then spin again. Five to eight spins equals one complete circuit. Complete three circuits for a full workout. No planning required, no repeating the same sequence every session.
-          </p>
-          <div class="p-4 rounded-lg bg-primary/5 border border-primary/20 space-y-2">
-            <p class="font-semibold text-foreground text-sm">AMRAP Mode</p>
-            <p class="text-muted-foreground text-sm">Set a 20-minute timer. Spin. Do the exercise for 30 seconds. Spin again immediately. Keep going until the timer ends. Count your total rounds. Try to beat your score next session.</p>
+        <section class="text-center space-y-4 py-2 md:py-6 mb-8">
+          <div class="flex justify-center gap-2 flex-wrap mb-2">
+            <span class="gym-tag">Fitness</span>
+            <span class="gym-tag">Bodyweight</span>
+            <span class="gym-tag">No Equipment</span>
           </div>
-        </div>
-
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Customize Your Wheel</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Replace the default exercises with options matched to your fitness level and goals:
+          <h1 class="text-3xl md:text-5xl font-bold leading-tight gym-title">
+            Workout Spinner Wheel
+          </h1>
+          <p class="text-base md:text-lg" style="color:rgba(255,220,195,0.82);max-width:34rem;margin:0 auto;">
+            Spin for your next exercise. Build unpredictable circuits that challenge your body every session. No planning required.
           </p>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="p-4 rounded-lg bg-card border border-border">
-              <p class="font-semibold text-foreground text-sm mb-2">Beginner</p>
-              <p class="text-muted-foreground text-sm">Remove burpees and jump squats, add walk-in-place and knee push-ups.</p>
-            </div>
-            <div class="p-4 rounded-lg bg-card border border-border">
-              <p class="font-semibold text-foreground text-sm mb-2">Advanced</p>
-              <p class="text-muted-foreground text-sm">Add pull-ups, pike push-ups, pistol squats, plyometric lunges.</p>
-            </div>
-            <div class="p-4 rounded-lg bg-card border border-border">
-              <p class="font-semibold text-foreground text-sm mb-2">Upper body focus</p>
-              <p class="text-muted-foreground text-sm">Push-ups, tricep dips, shoulder taps, arm circles, commando planks.</p>
-            </div>
-            <div class="p-4 rounded-lg bg-card border border-border">
-              <p class="font-semibold text-foreground text-sm mb-2">Core focus</p>
-              <p class="text-muted-foreground text-sm">Crunches, planks, bicycle kicks, leg raises, Russian twists.</p>
+          <p style="color:rgba(165,110,80,0.68);font-size:0.85rem;">Free &bull; No account &bull; Instant result</p>
+        </section>
+
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={myColors}
+          wheelShape="circle"
+          hubTheme="fire"
+          client:load
+        />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <section class="space-y-6">
+          <div class="gym-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold gym-h2">Why Random Workouts Work Better</h2>
+            <p class="gym-text">
+              Your body adapts to predictable exercise routines within 4-6 weeks. Adaptation is the enemy of progress. A random workout wheel breaks adaptation cycles by ensuring your muscles never know what's coming next.
+            </p>
+            <p class="gym-text">
+              The unpredictability also fights workout boredom — one of the top reasons people quit exercise programs. When each circuit is different, you stay engaged. You can't go on autopilot if you don't know what exercise is next.
+            </p>
+          </div>
+
+          <div class="gym-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold gym-h2">How to Build a Random Circuit</h2>
+            <p class="gym-text">
+              Spin for an exercise, do 10-15 reps (or 30 seconds for timed exercises), rest 30 seconds, then spin again. Five to eight spins equals one complete circuit. Complete three circuits for a full workout. No planning required, no repeating the same sequence every session.
+            </p>
+            <div class="gym-amrap space-y-2">
+              <p class="font-semibold gym-h2 text-sm">AMRAP Mode</p>
+              <p class="gym-muted text-sm">Set a 20-minute timer. Spin. Do the exercise for 30 seconds. Spin again immediately. Keep going until the timer ends. Count your total rounds. Try to beat your score next session.</p>
             </div>
           </div>
-          <p class="text-muted-foreground leading-relaxed">
-            You can also create theme-based wheels: a "hotel room workout" with no-equipment moves, or a "5-minute break" wheel with light stretches you can do at your desk. The wheel works for any category of movement you put in it.
-          </p>
-        </div>
 
-      </section>
-
-      <!-- FAQ -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+          <div class="gym-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold gym-h2">Customize Your Wheel</h2>
+            <p class="gym-text">Replace the default exercises with options matched to your fitness level and goals:</p>
+            <div class="gym-grid">
+              <div class="gym-grid-card">
+                <p class="gym-grid-title">Beginner</p>
+                <p class="gym-muted text-sm">Remove burpees and jump squats, add walk-in-place and knee push-ups.</p>
+              </div>
+              <div class="gym-grid-card">
+                <p class="gym-grid-title">Advanced</p>
+                <p class="gym-muted text-sm">Add pull-ups, pike push-ups, pistol squats, plyometric lunges.</p>
+              </div>
+              <div class="gym-grid-card">
+                <p class="gym-grid-title">Upper body focus</p>
+                <p class="gym-muted text-sm">Push-ups, tricep dips, shoulder taps, arm circles, commando planks.</p>
+              </div>
+              <div class="gym-grid-card">
+                <p class="gym-grid-title">Core focus</p>
+                <p class="gym-muted text-sm">Crunches, planks, bicycle kicks, leg raises, Russian twists.</p>
+              </div>
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+        </section>
 
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/random-number-generator", label: "Random Number Generator", desc: "Generate a random number for reps, sets, or time intervals." },
-            { href: "/random-wheel", label: "Random Wheel", desc: "Build a fully custom wheel with your own exercises or activities." },
-            { href: "/yes-or-no-wheel", label: "Yes or No Wheel", desc: "Decide workout/rest days or whether to add a bonus round." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold gym-h2">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <div class="gym-faq">
+                <p class="gym-faq-q">{question}</p>
+                <p class="gym-faq-a">{answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-    </main>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold gym-h2">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/random-number-generator", label: "Random Number Generator", desc: "Generate a random number for reps, sets, or time intervals." },
+              { href: "/random-wheel", label: "Random Wheel", desc: "Build a fully custom wheel with your own exercises or activities." },
+              { href: "/yes-or-no-wheel", label: "Yes or No Wheel", desc: "Decide workout/rest days or whether to add a bonus round." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="gym-related-link">
+                  <span class="gym-accent font-bold text-sm mt-0.5">→</span>
+                  <span>
+                    <span class="font-semibold gym-h2">{label}</span>
+                    <span class="gym-muted text-sm"> — {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

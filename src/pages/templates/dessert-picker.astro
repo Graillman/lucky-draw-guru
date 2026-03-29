@@ -49,6 +49,143 @@ const jsonLd = {
 };
 ---
 
+<style>
+    /* ── CANDY SHOP THEME ── */
+    .candy-page { min-height: 100vh; position: relative; background: #1a0520; color: #fff0f8; }
+
+    .candy-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse at 50% 0%, #2d0535 0%, #1a0520 50%, #0d0215 100%);
+    }
+    .candy-glow-pink {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 40% at 10% 30%, rgba(255,100,180,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 35% at 90% 70%, rgba(100,220,200,0.1) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 50% at 50% 90%, rgba(255,180,100,0.1) 0%, transparent 60%);
+      animation: candyPulse 5s ease-in-out infinite;
+    }
+    .candy-stripes {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; opacity: 0.03;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 30px,
+        rgba(255,100,180,0.5) 30px,
+        rgba(255,100,180,0.5) 32px
+      );
+      animation: stripeDrift 20s linear infinite;
+    }
+    .candy-sprinkles {
+      position: fixed; inset: 0; z-index: 2; pointer-events: none; overflow: hidden;
+    }
+    .candy-sprinkle {
+      position: absolute;
+      top: -20px;
+      width: var(--w, 4px);
+      height: var(--h, 12px);
+      border-radius: 3px;
+      background: var(--color, #ff88cc);
+      opacity: 0.8;
+      animation: sprinkleFall var(--dur, 6s) linear infinite;
+      animation-delay: var(--delay, 0s);
+      left: var(--left, 50%);
+      transform: rotate(var(--rot, 30deg));
+    }
+    .candy-sparkles {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    }
+    .candy-sparkle {
+      position: absolute;
+      font-size: var(--size, 14px);
+      animation: sugarShine var(--dur, 3s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+      left: var(--left, 50%);
+      top: var(--top, 50%);
+      color: var(--color, #ffddee);
+    }
+    .candy-icecream-glow {
+      position: fixed; bottom: -5%; left: 50%; transform: translateX(-50%); z-index: 1; pointer-events: none;
+      width: 80%;
+      height: 300px;
+      background: radial-gradient(ellipse at 50% 100%, rgba(255,150,200,0.15) 0%, transparent 70%);
+      animation: iceCreamGlow 6s ease-in-out infinite;
+    }
+
+    @keyframes candyPulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1.2; }
+    }
+    @keyframes stripeDrift {
+      0% { background-position: 0 0; }
+      100% { background-position: 60px 60px; }
+    }
+    @keyframes sprinkleFall {
+      0% { transform: translateY(-20px) rotate(var(--rot, 30deg)); opacity: 0; }
+      5% { opacity: 0.8; }
+      95% { opacity: 0.6; }
+      100% { transform: translateY(110vh) rotate(calc(var(--rot, 30deg) + 360deg)); opacity: 0; }
+    }
+    @keyframes sugarShine {
+      0%, 100% { opacity: 0.2; transform: scale(1) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1.4) rotate(15deg); }
+    }
+    @keyframes iceCreamGlow {
+      0%, 100% { opacity: 0.6; transform: translateX(-50%) scaleX(1); }
+      50% { opacity: 1; transform: translateX(-50%) scaleX(1.1); }
+    }
+    @keyframes candyTitle {
+      0% { text-shadow: 0 0 20px rgba(255,120,180,0.8); }
+      33% { text-shadow: 0 0 20px rgba(100,220,200,0.8); }
+      66% { text-shadow: 0 0 20px rgba(255,200,100,0.8); }
+      100% { text-shadow: 0 0 20px rgba(255,120,180,0.8); }
+    }
+
+    .candy-content { position: relative; z-index: 10; }
+    .candy-card {
+      background: rgba(30, 5, 25, 0.8);
+      border: 1px solid rgba(255, 120, 180, 0.3);
+      border-radius: 16px; padding: 1.5rem;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 0 30px rgba(255,80,160,0.1), inset 0 1px 0 rgba(255,200,230,0.08);
+    }
+    .candy-card h2 { color: #ff88cc; text-shadow: 0 0 12px rgba(255,80,180,0.5); }
+    .candy-card p, .candy-card li { color: #d4a0c0; }
+    .candy-tag {
+      background: rgba(60,5,40,0.5);
+      border: 1px solid rgba(200,80,160,0.4);
+      border-radius: 8px; padding: 1rem;
+    }
+    .candy-tag strong { color: #ffaadd; }
+    .candy-tag span { color: #b088a0; font-size: 0.875rem; }
+    .candy-title { color: #ff99cc; animation: candyTitle 4s linear infinite; }
+    .candy-subtitle { color: #c088a8; }
+    .candy-free { color: #906070; font-size: 0.875rem; }
+    .candy-breadcrumb a { color: #906070; transition: color 0.2s; }
+    .candy-breadcrumb a:hover { color: #ff88cc; }
+    .candy-breadcrumb span { color: #604050; }
+    .candy-faq {
+      background: rgba(20,3,15,0.85);
+      border: 1px solid rgba(200,80,150,0.3);
+      border-radius: 12px; padding: 1.25rem;
+      backdrop-filter: blur(8px);
+    }
+    .candy-faq p:first-child { color: #ff99cc; font-weight: 600; margin-bottom: 8px; }
+    .candy-faq p:last-child { color: #a07090; font-size: 0.875rem; line-height: 1.6; }
+    .candy-related a {
+      display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem;
+      background: rgba(15,2,12,0.75);
+      border: 1px solid rgba(180,60,130,0.3);
+      border-radius: 12px; backdrop-filter: blur(8px);
+      transition: all 0.2s; text-decoration: none;
+    }
+    .candy-related a:hover { border-color: rgba(255,120,180,0.5); box-shadow: 0 0 20px rgba(255,80,160,0.2); }
+    .candy-related .arrow { color: #cc4499; font-weight: bold; font-size: 0.875rem; margin-top: 2px; }
+    .candy-related .label { color: #ff88cc; font-weight: 600; }
+    .candy-related .desc { color: #906070; font-size: 0.875rem; }
+    .candy-bullet { color: #cc4499; font-weight: bold; }
+  </style>
+
 <Layout
   title={title}
   description={description}
@@ -62,108 +199,125 @@ const jsonLd = {
     { name: "Dessert Picker Wheel", url: "https://realwheelpicker.com/templates/dessert-picker" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  
+  <div class="candy-page">
+    <div class="candy-bg"></div>
+    <div class="candy-glow-pink"></div>
+    <div class="candy-stripes"></div>
+    <div class="candy-icecream-glow"></div>
+    <div class="candy-sparkles">
+      {Array.from({length: 20}).map((_, i) => (
+        <div class="candy-sparkle" style={`--left:${(i*41+9)%100}%;--top:${(i*23+7)%85}%;--dur:${2+((i*3)%3)}s;--delay:-${(i*1.7)%4}s;--size:${10+((i*4)%12)}px;--color:${['#ffddee','#ccffee','#ffeedd','#ddccff'][i%4]}`}>★</div>
+      ))}
+    </div>
+    <div class="candy-sprinkles">
+      {Array.from({length: 30}).map((_, i) => (
+        <div class="candy-sprinkle" style={`--left:${(i*33+5)%100}%;--dur:${5+((i*2)%5)}s;--delay:-${(i*1.3)%8}s;--w:${3+((i*2)%4)}px;--h:${8+((i*3)%8)}px;--rot:${(i*37)%180}deg;--color:${['#ff88cc','#88ddcc','#ffcc88','#cc88ff','#88ccff'][i%5]}`}></div>
+      ))}
+    </div>
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <div class="candy-content">
+      <HeaderIsland client:load />
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Dessert Picker Wheel</span>
-      </nav>
+      <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Dessert Picker Wheel — Random Sweet Treat Spinner
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Can't choose between cheesecake and tiramisu? Let the dessert wheel decide. Spin for your sweet fate — no guilt, just randomness.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+        <nav aria-label="breadcrumb" class="candy-breadcrumb text-xs flex gap-1">
+          <a href="/">Home</a><span>/</span>
+          <a href="/templates">Templates</a><span>/</span>
+          <span style="color:#c080a0">Dessert Picker Wheel</span>
+        </nav>
 
-      <!-- Wheel -->
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
-
-      <!-- Article Content -->
-      <section class="space-y-8">
-
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Case for Random Dessert Selection</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Dessert decisions have a unique psychological trap: you want to try something new, but you keep ordering the same thing because it's safe. The dessert wheel breaks that cycle by removing the safety option from your hands. Whatever the wheel picks, that's what you're having.
+        <section class="text-center space-y-4 py-2 md:py-6">
+          <h1 class="text-3xl md:text-5xl font-bold leading-tight candy-title">
+            Dessert Picker Wheel — Random Sweet Treat Spinner
+          </h1>
+          <p class="text-lg md:text-xl max-w-2xl mx-auto candy-subtitle">
+            Can't choose between cheesecake and tiramisu? Let the dessert wheel decide. Spin for your sweet fate — no guilt, just randomness.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            This is especially powerful when baking at home. Instead of defaulting to brownies every weekend, spin for your next baking project. You might discover that making a fruit tart from scratch is both easier and more impressive than expected. The wheel builds your dessert repertoire one spin at a time.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            For families with kids, the dessert wheel becomes a ritual. Friday night dessert is whatever the wheel picks. Kids love the anticipation of the spin, and parents enjoy not being asked "can we have ice cream?" for the thousandth time — the wheel handles the decision democratically.
-          </p>
-        </div>
+          <p class="candy-free">Free • No account • Instant result</p>
+        </section>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Dessert Night Ideas</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Use the dessert wheel to run a themed dessert night with friends or family:
-          </p>
-          <ul class="space-y-2 text-muted-foreground">
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Bake-off:</strong> Everyone spins, each person makes their result. Compare and taste-test at the end of the night.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Restaurant roulette:</strong> Research which local spot does each dessert best, then visit based on your spin.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">International dessert tour:</strong> Load the wheel with desserts from different countries and make one per week.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Dessert exchange:</strong> Each person spins and brings that dessert to a group gathering.</span></li>
+        <section class="flex flex-col items-center">
+          <SimpleWheelIsland
+            defaultParticipants={defaultParticipants}
+            colors={["#E8829A","#7EC8C0","#D4A870","#C8A0D0","#E898B0","#A0C878","#D4C060","#B8B0E0"]}
+            wheelShape="circle"
+            hubTheme="rose"
+            client:load
+          />
+        </section>
+
+        <section class="space-y-8">
+          <div class="candy-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">The Case for Random Dessert Selection</h2>
+            <p class="leading-relaxed">
+              Dessert decisions have a unique psychological trap: you want to try something new, but you keep ordering the same thing because it's safe. The dessert wheel breaks that cycle by removing the safety option from your hands. Whatever the wheel picks, that's what you're having.
+            </p>
+            <p class="leading-relaxed">
+              This is especially powerful when baking at home. Instead of defaulting to brownies every weekend, spin for your next baking project. You might discover that making a fruit tart from scratch is both easier and more impressive than expected.
+            </p>
+            <p class="leading-relaxed">
+              For families with kids, the dessert wheel becomes a ritual. Friday night dessert is whatever the wheel picks. Kids love the anticipation of the spin, and parents enjoy not being asked "can we have ice cream?" for the thousandth time.
+            </p>
+          </div>
+
+          <div class="candy-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">Dessert Night Ideas</h2>
+            <p class="leading-relaxed">Use the dessert wheel to run a themed dessert night with friends or family:</p>
+            <ul class="space-y-2">
+              <li class="flex gap-3">
+                <span class="candy-bullet">→</span>
+                <span><strong style="color:#ffaadd">Bake-off:</strong> <span>Everyone spins, each person makes their result. Compare and taste-test at the end of the night.</span></span>
+              </li>
+              <li class="flex gap-3">
+                <span class="candy-bullet">→</span>
+                <span><strong style="color:#ffaadd">Restaurant roulette:</strong> <span>Research which local spot does each dessert best, then visit based on your spin.</span></span>
+              </li>
+              <li class="flex gap-3">
+                <span class="candy-bullet">→</span>
+                <span><strong style="color:#ffaadd">International dessert tour:</strong> <span>Load the wheel with desserts from different countries and make one per week.</span></span>
+              </li>
+              <li class="flex gap-3">
+                <span class="candy-bullet">→</span>
+                <span><strong style="color:#ffaadd">Dessert exchange:</strong> <span>Each person spins and brings that dessert to a group gathering.</span></span>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#ff88cc">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <div class="candy-faq">
+                <p>{question}</p>
+                <p>{answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="candy-related space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#ff88cc">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/templates/lunch-spinner", label: "Lunch Spinner", desc: "Decide what to eat for lunch before worrying about dessert." },
+              { href: "/templates/restaurant-picker", label: "Restaurant Picker", desc: "Pick where to go for your full meal, dessert included." },
+              { href: "/templates/what-to-eat-wheel", label: "What to Eat Wheel", desc: "General meal idea spinner for any time of day." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href}>
+                  <span class="arrow">→</span>
+                  <span><span class="label">{label}</span><span class="desc"> — {desc}</span></span>
+                </a>
+              </li>
+            ))}
           </ul>
-        </div>
+        </section>
 
-      </section>
-
-      <!-- FAQ -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/lunch-spinner", label: "Lunch Spinner", desc: "Decide what to eat for lunch before worrying about dessert." },
-            { href: "/templates/restaurant-picker", label: "Restaurant Picker", desc: "Pick where to go for your full meal, dessert included." },
-            { href: "/templates/what-to-eat-wheel", label: "What to Eat Wheel", desc: "General meal idea spinner for any time of day." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-    </main>
-
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

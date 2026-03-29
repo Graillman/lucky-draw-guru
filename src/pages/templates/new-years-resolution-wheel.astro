@@ -45,7 +45,219 @@ const jsonLd = {
   "description": description,
   "url": "https://realwheelpicker.com/templates/new-years-resolution-wheel",
 };
+
+const myColors = ['#ffd700','#ffffff','#c0c0c0','#f0c040','#fffacd','#d4af37','#e8d5b7','#b8860b'];
 ---
+
+<style>
+  /* ═══════════ NEW YEAR RESOLUTION — GOLDEN DAWN THEME ═══════════ */
+
+  .resolution-page {
+    background: #030310;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Midnight sky deepening to dawn */
+  .resolution-sky {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 100% 50% at 50% 100%, rgba(255,180,30,0.22) 0%, rgba(255,100,10,0.12) 30%, transparent 65%),
+      radial-gradient(ellipse 70% 40% at 50% 100%, rgba(255,215,0,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse 80% 60% at 20% 0%, rgba(10,5,50,0.9) 0%, transparent 70%),
+      radial-gradient(ellipse 80% 60% at 80% 0%, rgba(5,5,40,0.9) 0%, transparent 70%),
+      linear-gradient(180deg, #030310 0%, #080520 40%, #150a05 80%, #0a0305 100%);
+    pointer-events: none;
+    z-index: 0;
+    animation: dawnBreathe 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes dawnBreathe {
+    0%   { opacity: 0.85; }
+    100% { opacity: 1; }
+  }
+
+  /* Shooting stars */
+  .shooting-star {
+    position: fixed;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255,215,0,0.9), transparent);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    animation: shootStar linear infinite;
+  }
+
+  @keyframes shootStar {
+    0%   { transform: translateX(0) translateY(0); opacity: 0; width: 0px; }
+    5%   { opacity: 1; width: 120px; }
+    30%  { opacity: 0.6; width: 80px; }
+    100% { transform: translateX(400px) translateY(200px); opacity: 0; width: 20px; }
+  }
+
+  /* Twinkling background stars */
+  .res-star {
+    position: fixed;
+    border-radius: 50%;
+    background: white;
+    pointer-events: none;
+    z-index: 1;
+    animation: resTwinkle ease-in-out infinite alternate;
+  }
+
+  @keyframes resTwinkle {
+    0%   { opacity: 0.05; transform: scale(0.6); }
+    100% { opacity: 0.9; transform: scale(1.4); }
+  }
+
+  /* Firework burst circles */
+  .firework-burst {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    animation: fireworkPop ease-out infinite;
+  }
+
+  @keyframes fireworkPop {
+    0%   { transform: scale(0);   opacity: 0; box-shadow: none; }
+    10%  { transform: scale(0.3); opacity: 1; }
+    25%  { transform: scale(1);   opacity: 0.9; }
+    60%  { transform: scale(1.6); opacity: 0.4; }
+    100% { transform: scale(2.2); opacity: 0; }
+  }
+
+  /* Firework sparks (small dots radiating out) */
+  .fw-spark {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    animation: sparkFly ease-out infinite;
+  }
+
+  @keyframes sparkFly {
+    0%   { transform: translate(0,0) scale(1); opacity: 0; }
+    15%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* Golden countdown decoration */
+  .countdown-ring {
+    position: fixed;
+    border-radius: 50%;
+    border: 2px solid rgba(255,215,0,0.15);
+    pointer-events: none;
+    z-index: 1;
+    animation: ringPulse ease-in-out infinite;
+  }
+
+  @keyframes ringPulse {
+    0%   { transform: translate(-50%,-50%) scale(0.8); opacity: 0.4; }
+    50%  { transform: translate(-50%,-50%) scale(1.1); opacity: 0.8; }
+    100% { transform: translate(-50%,-50%) scale(1.4); opacity: 0; }
+  }
+
+  /* Gold shimmer particles falling */
+  .gold-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    border-radius: 50%;
+    animation: goldFall linear infinite;
+  }
+
+  @keyframes goldFall {
+    0%   { transform: translateY(-20px) rotate(0deg);   opacity: 0; }
+    8%   { opacity: 0.9; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* Golden horizon glow at bottom */
+  .dawn-horizon {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 35vh;
+    background: linear-gradient(0deg,
+      rgba(255,160,20,0.18) 0%,
+      rgba(255,200,50,0.1) 20%,
+      rgba(255,215,0,0.05) 50%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+    animation: horizonGlow 5s ease-in-out infinite alternate;
+  }
+
+  @keyframes horizonGlow {
+    0%   { opacity: 0.6; }
+    100% { opacity: 1; }
+  }
+
+  /* Content layer */
+  .resolution-content {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Title — gold brilliant */
+  .res-title {
+    background: linear-gradient(135deg, #ffd700 0%, #fffacd 25%, #d4af37 50%, #ffd700 75%, #fff8dc 100%);
+    background-size: 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: goldShine 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(255,215,0,0.5)) drop-shadow(0 0 60px rgba(255,180,0,0.25));
+  }
+
+  @keyframes goldShine {
+    0%,100% { background-position: 0% 50%; }
+    50%     { background-position: 100% 50%; }
+  }
+
+  .res-tag {
+    background: rgba(255,215,0,0.12);
+    border: 1px solid rgba(255,215,0,0.35);
+    color: rgba(255,215,0,0.95);
+    border-radius: 9999px;
+    padding: 4px 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .res-card {
+    background: rgba(5,4,20,0.82);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 40px rgba(200,150,20,0.08), inset 0 1px 0 rgba(255,215,0,0.06);
+    transition: border-color 0.2s;
+  }
+
+  .res-card:hover {
+    border-color: rgba(255,215,0,0.4);
+  }
+
+  details.res-faq {
+    background: rgba(5,4,20,0.8);
+    border: 1px solid rgba(255,215,0,0.18);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    backdrop-filter: blur(8px);
+  }
+</style>
 
 <Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
@@ -55,79 +267,150 @@ const jsonLd = {
     { name: "New Year Resolution Wheel", url: "https://realwheelpicker.com/templates/new-years-resolution-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+  <div class="resolution-page">
+    <div class="resolution-sky"></div>
+    <div class="dawn-horizon"></div>
 
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">New Year Resolution Wheel</span>
-      </nav>
+    <!-- Background stars -->
+    {Array.from({ length: 80 }, (_, i) => {
+      const s = 1 + (i % 3);
+      return (
+        <div
+          class="res-star"
+          style={`width:${s}px;height:${s}px;left:${(i * 1.27) % 100}%;top:${(i * 1.83) % 65}%;animation-duration:${1.5+(i%5)*0.7}s;animation-delay:${(i*0.17)%6}s;`}
+        ></div>
+      );
+    })}
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          New Year Resolution Wheel — Random Goals Spinner
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Stop making 10 resolutions and keeping none. Spin for one goal. Commit to just that. One focused resolution beats ten abandoned ones.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Shooting stars -->
+    {[
+      {top:"15%",left:"10%",dur:"6s",delay:"0s",rot:"-20deg"},
+      {top:"8%", left:"55%",dur:"9s",delay:"2.5s",rot:"-15deg"},
+      {top:"25%",left:"70%",dur:"7s",delay:"4s",rot:"-25deg"},
+      {top:"5%", left:"30%",dur:"11s",delay:"1s",rot:"-18deg"},
+    ].map(f => (
+      <div class="shooting-star" style={`top:${f.top};left:${f.left};animation-duration:${f.dur};animation-delay:${f.delay};transform:rotate(${f.rot});`}></div>
+    ))}
 
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <!-- Firework bursts -->
+    {[
+      {left:"12%",top:"18%",color:"#ffd700",size:"90px",dur:"5s",delay:"0s"},
+      {left:"78%",top:"12%",color:"#fff8dc",size:"70px",dur:"6.5s",delay:"1.8s"},
+      {left:"45%",top:"8%", color:"#d4af37",size:"110px",dur:"7s",delay:"0.6s"},
+      {left:"25%",top:"32%",color:"#fffacd",size:"60px",dur:"4.5s",delay:"3s"},
+      {left:"88%",top:"28%",color:"#ffd700",size:"80px",dur:"8s",delay:"2s"},
+      {left:"60%",top:"22%",color:"#b8860b",size:"95px",dur:"5.5s",delay:"4.5s"},
+    ].map(f => (
+      <div
+        class="firework-burst"
+        style={`width:${f.size};height:${f.size};left:${f.left};top:${f.top};border:2px solid ${f.color};box-shadow:0 0 15px ${f.color};animation-duration:${f.dur};animation-delay:${f.delay};`}
+      ></div>
+    ))}
 
-      <section class="space-y-8">
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why One Resolution Beats Ten</h2>
-          <p class="text-muted-foreground leading-relaxed">
+    <!-- Gold shimmer particles falling -->
+    {Array.from({ length: 30 }, (_, i) => {
+      const size = 2 + (i % 3);
+      const colors = ["#ffd700","#d4af37","#fffacd","#b8860b","#fff8dc"];
+      return (
+        <div
+          class="gold-particle"
+          style={`width:${size}px;height:${size}px;background:${colors[i%colors.length]};left:${i*3.4}%;animation-duration:${6+(i%5)}s;animation-delay:${(i*0.45)%8}s;`}
+        ></div>
+      );
+    })}
+
+    <!-- Countdown rings decoratifs -->
+    {[
+      {left:"20%",top:"50%",size:"200px",dur:"4s",delay:"0s"},
+      {left:"75%",top:"40%",size:"160px",dur:"5s",delay:"1.5s"},
+      {left:"50%",top:"60%",size:"240px",dur:"6s",delay:"0.8s"},
+    ].map(r => (
+      <div class="countdown-ring" style={`width:${r.size};height:${r.size};left:${r.left};top:${r.top};animation-duration:${r.dur};animation-delay:${r.delay};`}></div>
+    ))}
+
+    <div class="resolution-content">
+      <HeaderIsland client:load />
+
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+
+        <nav aria-label="breadcrumb" class="text-xs text-white/25 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/55 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/55 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/45">New Year Resolution Wheel</span>
+        </nav>
+
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3">🌅</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight res-title mb-3">
+            New Year — New You
+          </h1>
+          <p class="text-lg text-white/50 max-w-xl mx-auto mb-5">
+            Stop making 10 resolutions and keeping none. Spin for one goal. Commit to just that. One focused resolution beats ten abandoned ones.
+          </p>
+          <div class="flex flex-wrap items-center justify-center gap-2 mb-2">
+            <span class="res-tag">🌟 Fresh Start</span>
+            <span class="res-tag">🎯 One Goal</span>
+            <span class="res-tag">✨ New Year</span>
+            <span class="res-tag">🔥 Commit</span>
+          </div>
+          <p class="text-xs text-white/25 mt-2">Free — No account — Instant result</p>
+        </div>
+
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} colors={myColors} wheelShape="star8" hubTheme="gold" client:load />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="res-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Why One Resolution Beats Ten</h2>
+          <p class="text-white/55 leading-relaxed">
             The average person makes 3-5 New Year's resolutions. Studies show fewer than 10% stick to all of them past February. The problem isn't willpower — it's spreading limited attention across too many habit changes at once.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
+          <p class="text-white/55 leading-relaxed">
             Pick one. Do it properly. The wheel helps you commit to one thing instead of listing everything you've been meaning to change. Once you've spun, add only that resolution to your calendar, set a system for tracking it, and ignore the rest until next year.
           </p>
         </div>
-      </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="res-faq group">
+                <summary class="font-semibold text-white cursor-pointer list-none flex items-center justify-between gap-2">
+                  {question}
+                  <span class="text-white/40 shrink-0 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p class="text-white/55 text-sm leading-relaxed mt-3">{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/new-year-party-wheel", label: "New Year's Eve Party Wheel", desc: "Spin for party activities and countdown challenges." },
-            { href: "/templates/self-care-wheel", label: "Self-Care Wheel", desc: "Daily wellness activities to support your resolution." },
-            { href: "/yes-or-no-wheel", label: "Yes or No Wheel", desc: "Simple commitment tool — should I start this resolution today?" },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Related Tools</h2>
+          <ul class="grid sm:grid-cols-2 gap-3">
+            {[
+              { href: "/templates/new-year-party-wheel", label: "🎆 New Year Party Wheel", desc: "NYE activities and party games." },
+              { href: "/templates/self-care-wheel", label: "🌿 Self-Care Wheel", desc: "Daily wellness activities to support your resolution." },
+              { href: "/yes-or-no-wheel", label: "✅ Yes or No Wheel", desc: "Simple commitment tool for tough decisions." },
+              { href: "/templates", label: "✨ All Templates", desc: "Browse all pre-loaded wheel templates." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="res-card flex items-start gap-3 p-4">
+                  <span>
+                    <span class="font-semibold text-white text-sm">{label}</span>
+                    <span class="text-white/50 text-sm block mt-0.5">{desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-    </main>
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

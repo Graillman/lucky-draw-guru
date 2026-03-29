@@ -38,6 +38,8 @@ const defaultParticipants = [
   { pseudo: "Dare: Talk in an accent for 3 rounds", weight: 1 },
 ];
 
+const myColors = ['#dc2626','#2563eb','#ffd700','#ffffff','#991b1b','#1d4ed8','#f59e0b','#eff6ff'];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -47,12 +49,189 @@ const jsonLd = {
 };
 ---
 
-<Layout
-  title={title}
-  description={description}
-  canonical={canonical}
-  jsonLd={jsonLd}
->
+<style>
+  /* ══════════ VÉRITÉ OU DÉFI — CINEMATIC SPLIT THEME ══════════ */
+  .tod-page {
+    min-height: 100vh;
+    position: relative;
+    background: #050008;
+    color: #f0eeff;
+    overflow-x: hidden;
+  }
+
+  /* Fond moitié rouge (gauche) moitié bleu (droite) avec gradient au centre */
+  .tod-sky {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 100% at 0%   50%, rgba(180,0,20,0.55)  0%, transparent 60%),
+      radial-gradient(ellipse 60% 100% at 100% 50%, rgba(0,50,200,0.45)  0%, transparent 60%),
+      radial-gradient(ellipse 30% 80% at 50%   50%, rgba(0,0,10,0.7)     0%, transparent 50%),
+      radial-gradient(ellipse 50% 40% at 50%   0%,  rgba(80,0,100,0.3)   0%, transparent 55%),
+      linear-gradient(180deg, #050008 0%, #0a0012 50%, #050008 100%);
+    animation: todSkyBreath 10s ease-in-out infinite alternate;
+  }
+  @keyframes todSkyBreath {
+    0%   { opacity: 0.85; }
+    100% { opacity: 1; }
+  }
+
+  /* Feu rouge côté gauche */
+  .tod-fire-left {
+    position: fixed; left: 0; top: 0; bottom: 0; width: 50%; z-index: 1; pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 50% at 0% 80%, rgba(220,38,38,0.35) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 40% at 0% 20%, rgba(250,100,0,0.2)  0%, transparent 55%);
+    animation: firePulse 5s ease-in-out infinite;
+  }
+  /* Lueur bleue côté droit */
+  .tod-glow-right {
+    position: fixed; right: 0; top: 0; bottom: 0; width: 50%; z-index: 1; pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 50% at 100% 80%, rgba(37,99,235,0.35) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 40% at 100% 20%, rgba(0,100,255,0.2)  0%, transparent 55%);
+    animation: firePulse 5s ease-in-out infinite 2.5s;
+  }
+  @keyframes firePulse {
+    0%, 100% { opacity: 0.6; transform: scaleX(1); }
+    50%       { opacity: 1;   transform: scaleX(1.05); }
+  }
+
+  /* Éclair blanc divisant les deux moitiés */
+  .tod-divider {
+    position: fixed; top: 0; left: 50%; width: 2px; height: 100vh;
+    transform: translateX(-50%);
+    background: linear-gradient(180deg,
+      transparent 0%,
+      rgba(255,255,255,0.05) 10%,
+      rgba(255,255,255,0.8) 30%,
+      rgba(255,255,255,0.9) 50%,
+      rgba(255,255,255,0.8) 70%,
+      rgba(255,255,255,0.05) 90%,
+      transparent 100%
+    );
+    z-index: 2; pointer-events: none;
+    box-shadow: 0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(200,150,255,0.3);
+    animation: dividerFlash 8s ease-in-out infinite;
+  }
+  @keyframes dividerFlash {
+    0%, 100% { opacity: 0.6; box-shadow: 0 0 10px rgba(255,255,255,0.4); }
+    30%       { opacity: 1;   box-shadow: 0 0 30px rgba(255,255,255,0.9), 0 0 60px rgba(200,150,255,0.5); }
+    60%       { opacity: 0.7; box-shadow: 0 0 15px rgba(255,255,255,0.5); }
+  }
+
+  /* Étoiles rouges côté gauche */
+  .tod-stars-red {
+    position: fixed; left: 0; top: 0; bottom: 0; width: 48%; z-index: 2; pointer-events: none; overflow: hidden;
+  }
+  /* Étoiles bleues côté droit */
+  .tod-stars-blue {
+    position: fixed; right: 0; top: 0; bottom: 0; width: 48%; z-index: 2; pointer-events: none; overflow: hidden;
+  }
+  .tod-star {
+    position: absolute;
+    width: var(--ss, 3px); height: var(--ss, 3px);
+    border-radius: 50%;
+    background: var(--sc, #ff4444);
+    box-shadow: 0 0 6px var(--sc, #ff4444);
+    left: var(--sx, 50%); top: var(--sy, 50%);
+    opacity: 0;
+    animation: starTwinkle var(--sdur, 3s) ease-in-out infinite;
+    animation-delay: var(--sdelay, 0s);
+  }
+  @keyframes starTwinkle {
+    0%, 100% { opacity: 0;   transform: scale(0.5); }
+    50%       { opacity: 0.9; transform: scale(1.5); }
+  }
+
+  /* Spotlight cinématique */
+  .tod-spotlight {
+    position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 700px;
+    background: radial-gradient(ellipse at top, rgba(150,80,220,0.15) 0%, transparent 65%);
+    z-index: 1; pointer-events: none;
+    animation: todSpot 6s ease-in-out infinite;
+  }
+  @keyframes todSpot {
+    0%, 100% { opacity: 0.5; transform: translateX(-50%) scaleX(1); }
+    50%       { opacity: 1;   transform: translateX(-50%) scaleX(1.08); }
+  }
+
+  /* Contenu */
+  .tod-content { position: relative; z-index: 10; }
+
+  /* Titre bicolore ROUGE/BLEU avec tiret blanc */
+  .tod-title-red  { color: #ff3333; text-shadow: 0 0 20px rgba(255,0,30,0.8), 0 0 40px rgba(200,0,20,0.5); }
+  .tod-title-sep  { color: #ffffff; text-shadow: 0 0 15px rgba(255,255,255,0.9); }
+  .tod-title-blue { color: #4488ff; text-shadow: 0 0 20px rgba(30,100,255,0.8), 0 0 40px rgba(0,50,200,0.5); }
+
+  .tod-subtitle { color: #b0b0d0; }
+  .tod-badge    { color: #706080; font-size: 0.875rem; }
+
+  /* Breadcrumb */
+  .tod-breadcrumb a         { color: rgba(180,160,220,0.7); text-decoration: none; transition: color 0.2s; }
+  .tod-breadcrumb a:hover   { color: #cc88ff; }
+  .tod-breadcrumb .sep      { color: rgba(120,100,160,0.5); }
+  .tod-breadcrumb .cur      { color: rgba(220,210,240,0.9); }
+
+  /* Cards */
+  .tod-card {
+    background: rgba(10, 5, 20, 0.88);
+    border: 1px solid rgba(140, 80, 200, 0.35);
+    border-radius: 16px;
+    padding: 1.5rem;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 30px rgba(100,50,180,0.15), inset 0 1px 0 rgba(180,120,255,0.06);
+  }
+  .tod-card h2 { color: #cc88ff; text-shadow: 0 0 12px rgba(180,100,255,0.4); margin-bottom: 0.5rem; }
+  .tod-card p, .tod-card li { color: #b0a8d0; line-height: 1.65; }
+  .tod-card strong { color: #e0d8f8; }
+
+  .tod-tier {
+    background: rgba(15, 8, 30, 0.85);
+    border: 1px solid rgba(120, 60, 180, 0.3);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+  .tod-tier .tier-label { font-weight: 600; font-size: 0.875rem; margin-bottom: 0.2rem; }
+  .tod-tier .tier-desc  { color: #908898; font-size: 0.875rem; }
+  .tod-tier-red  .tier-label { color: #ff6677; }
+  .tod-tier-mid  .tier-label { color: #cc88ff; }
+  .tod-tier-blue .tier-label { color: #6699ff; }
+
+  /* FAQ */
+  .tod-faq {
+    background: rgba(8, 4, 18, 0.9);
+    border: 1px solid rgba(120, 60, 180, 0.28);
+    border-radius: 12px;
+    padding: 1.25rem;
+    backdrop-filter: blur(8px);
+  }
+  .tod-faq .faq-q { color: #cc88ff; font-weight: 600; margin-bottom: 0.5rem; }
+  .tod-faq .faq-a { color: #9088a8; font-size: 0.875rem; line-height: 1.6; }
+
+  /* Related links */
+  .tod-link {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(8, 4, 18, 0.85);
+    border: 1px solid rgba(120, 60, 180, 0.28);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    backdrop-filter: blur(8px);
+  }
+  .tod-link:hover {
+    border-color: rgba(180, 100, 255, 0.6);
+    box-shadow: 0 0 20px rgba(140, 60, 220, 0.25);
+  }
+  .tod-link .arrow      { color: #9933ff; font-weight: 700; font-size: 0.875rem; margin-top: 2px; flex-shrink: 0; }
+  .tod-link .link-title { color: #cc88ff; font-weight: 600; }
+  .tod-link .link-desc  { color: #807090; font-size: 0.875rem; }
+
+  .section-title { color: #cc88ff; text-shadow: 0 0 12px rgba(180,100,255,0.4); }
+</style>
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
     { name: "Home", url: "https://realwheelpicker.com" },
@@ -60,156 +239,163 @@ const jsonLd = {
     { name: "Truth or Dare Wheel", url: "https://realwheelpicker.com/templates/truth-or-dare-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  <div class="tod-page">
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <!-- Fond atmosphérique cinématique (position: fixed) -->
+    <div class="tod-sky"></div>
+    <div class="tod-fire-left"></div>
+    <div class="tod-glow-right"></div>
+    <div class="tod-divider"></div>
+    <div class="tod-spotlight"></div>
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Truth or Dare Wheel</span>
-      </nav>
+    <!-- 10 étoiles rouges côté gauche -->
+    <div class="tod-stars-red">
+      {Array.from({length: 10}).map((_, i) => (
+        <div class="tod-star" style={`--sx:${(i*19+8)%88}%;--sy:${(i*17+5)%90}%;--ss:${2+(i%3)}px;--sc:#ff${i%2===0?'4444':'6622'};--sdur:${2+(i*0.5)%3}s;--sdelay:-${(i*0.8)%4}s`}></div>
+      ))}
+    </div>
+    <!-- 10 étoiles bleues côté droit -->
+    <div class="tod-stars-blue">
+      {Array.from({length: 10}).map((_, i) => (
+        <div class="tod-star" style={`--sx:${(i*23+5)%88}%;--sy:${(i*11+10)%90}%;--ss:${2+(i%3)}px;--sc:#${i%2===0?'4488ff':'2266dd'};--sdur:${2.5+(i*0.4)%3}s;--sdelay:-${(i*1.1)%5}s`}></div>
+      ))}
+    </div>
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Truth or Dare Wheel — Free Spinner for Parties
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Spin the wheel and let fate pick your truth or dare. Pre-loaded with prompts for any group. Customize for your crew.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <div class="tod-content">
+      <HeaderIsland client:load />
 
-      <!-- Wheel -->
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="tod-breadcrumb text-xs flex gap-1 mb-8">
+          <a href="/">Home</a>
+          <span class="sep">/</span>
+          <a href="/templates">Templates</a>
+          <span class="sep">/</span>
+          <span class="cur">Truth or Dare Wheel</span>
+        </nav>
 
-      <!-- Article Content -->
-      <section class="space-y-8">
-
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Play Truth or Dare with a Spinner Wheel</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Truth or dare is simple but the decision of who goes and what they get is where arguments start. The wheel eliminates both problems: spin once for who, spin again for truth or dare.
+        <section class="text-center space-y-4 py-2 md:py-6 mb-8">
+          <h1 class="text-3xl md:text-5xl font-bold leading-tight">
+            <span class="tod-title-red">Truth</span>
+            <span class="tod-title-sep"> or </span>
+            <span class="tod-title-blue">Dare</span>
+            <span class="tod-title-sep"> &mdash; Free Spinner for Parties</span>
+          </h1>
+          <p class="text-lg md:text-xl max-w-2xl mx-auto tod-subtitle">
+            Spin the wheel and let fate pick your truth or dare. Pre-loaded with prompts for any group. Customize for your crew.
           </p>
-          <p class="text-muted-foreground leading-relaxed font-semibold">Classic Rules:</p>
-          <ol class="space-y-2 text-muted-foreground">
-            <li class="flex gap-3"><span class="text-primary font-bold">1.</span><span>Everyone sits in a circle (or joins a video call).</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">2.</span><span>Spin the wheel to get a truth or dare prompt.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">3.</span><span>The player must complete it or face a double dare penalty.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">4.</span><span>Play continues until someone quits or everyone's had enough.</span></li>
-          </ol>
-          <p class="text-muted-foreground leading-relaxed">
-            The wheel removes the social awkwardness of choosing: nobody picks on anyone, the spinner decides. This matters especially in mixed groups where some players are bolder than others. The random selection keeps the game balanced and keeps the energy moving.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            You can run two wheels simultaneously — one with player names, one with truth or dare prompts — for fully randomized rounds. Spin the name wheel to pick who goes next, then spin this wheel for the prompt. No arguments, no targeting, no hesitation.
-          </p>
-        </div>
+          <p class="tod-badge">Free &bull; No account &bull; Instant result</p>
+        </section>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Making It Better</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            The pre-loaded prompts above are starting points. The best truth or dare games use custom prompts tailored to your group. Add inside jokes, group-specific challenges, and escalating difficulty. A wheel with generic prompts gets stale. A wheel built around your friend group gets legendary.
-          </p>
-          <p class="text-muted-foreground leading-relaxed font-semibold">Suggested prompt difficulty tiers:</p>
-          <div class="space-y-3">
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Mild (early game)</p>
-              <p class="text-muted-foreground text-sm">"What's your most-used emoji?" / "Do a silly dance for 10 seconds"</p>
-            </div>
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Medium (warmed up)</p>
-              <p class="text-muted-foreground text-sm">"Read your last sent text aloud" / "Let the group pick your profile picture for 24 hours"</p>
-            </div>
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Spicy (late game)</p>
-              <p class="text-muted-foreground text-sm">"Confess something nobody here knows" / "Call your mom and tell her you love her right now"</p>
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={myColors}
+          wheelShape="circle"
+          hubTheme="crimson"
+          client:load
+        />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <section class="space-y-6">
+          <div class="tod-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">How to Play Truth or Dare with a Spinner Wheel</h2>
+            <p>
+              Truth or dare is simple but the decision of who goes and what they get is where arguments start. The wheel eliminates both problems: spin once for who, spin again for truth or dare.
+            </p>
+            <p><strong>Classic Rules:</strong></p>
+            <ol class="space-y-2">
+              <li class="flex gap-3"><span style="color:#9933ff;font-weight:700">1.</span><span>Everyone sits in a circle (or joins a video call).</span></li>
+              <li class="flex gap-3"><span style="color:#9933ff;font-weight:700">2.</span><span>Spin the wheel to get a truth or dare prompt.</span></li>
+              <li class="flex gap-3"><span style="color:#9933ff;font-weight:700">3.</span><span>The player must complete it or face a double dare penalty.</span></li>
+              <li class="flex gap-3"><span style="color:#9933ff;font-weight:700">4.</span><span>Play continues until someone quits or everyone's had enough.</span></li>
+            </ol>
+            <p>
+              The wheel removes the social awkwardness of choosing: nobody picks on anyone, the spinner decides. This matters especially in mixed groups where some players are bolder than others.
+            </p>
+          </div>
+
+          <div class="tod-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">Making It Better</h2>
+            <p>
+              The pre-loaded prompts are starting points. The best truth or dare games use custom prompts tailored to your group. A wheel with generic prompts gets stale. A wheel built around your friend group gets legendary.
+            </p>
+            <p><strong>Suggested prompt difficulty tiers:</strong></p>
+            <div class="space-y-3">
+              <div class="tod-tier tod-tier-red">
+                <p class="tier-label">Mild (early game)</p>
+                <p class="tier-desc">"What's your most-used emoji?" / "Do a silly dance for 10 seconds"</p>
+              </div>
+              <div class="tod-tier tod-tier-mid">
+                <p class="tier-label">Medium (warmed up)</p>
+                <p class="tier-desc">"Read your last sent text aloud" / "Let the group pick your profile picture for 24 hours"</p>
+              </div>
+              <div class="tod-tier tod-tier-blue">
+                <p class="tier-label">Spicy (late game)</p>
+                <p class="tier-desc">"Confess something nobody here knows" / "Call your mom and tell her you love her right now"</p>
+              </div>
             </div>
           </div>
-          <p class="text-muted-foreground leading-relaxed">
-            Start mild and escalate as the game progresses. This pacing keeps the energy building instead of peaking early. The wheel handles prompt selection automatically — your only job is writing good prompts up front.
-          </p>
-        </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Digital Truth or Dare</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Playing over Discord, Zoom, or FaceTime? The wheel works perfectly on screen share. One person controls the spinner while everyone watches. The visual anticipation — the wheel slowing down, the pointer clicking through segments — makes it more engaging than just texting "truth or dare?"
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            For remote groups, assign one person as the "host" who manages the wheel and keeps the game moving. The host spins for each round and the selected player completes the prompt on camera. Discord video calls work especially well because reactions are visible in real time.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            You can also share the link directly in chat — everyone has access to the same wheel. On mobile, the wheel is touch-optimized. Swipe or tap to spin on any smartphone.
-          </p>
-        </div>
+          <div class="tod-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">Digital Truth or Dare</h2>
+            <p>
+              Playing over Discord, Zoom, or FaceTime? The wheel works perfectly on screen share. One person controls the spinner while everyone watches. The visual anticipation &mdash; the wheel slowing down, the pointer clicking through segments &mdash; makes it more engaging than just texting "truth or dare?"
+            </p>
+            <p>
+              For remote groups, assign one person as the "host" who manages the wheel and keeps the game moving. Share the link directly in chat &mdash; everyone has access to the same wheel. On mobile, the wheel is touch-optimized.
+            </p>
+          </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Party Host Tips</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Start mild and escalate — don't open with the embarrassing stuff. The best party games warm up slowly, build trust, and then go somewhere memorable. Opening with "confess your deepest secret" kills the energy before it starts.
-          </p>
-          <ul class="space-y-2 text-muted-foreground">
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Always allow a "pass" option with a penalty (like doing 20 jumping jacks). Forced participation ruins the fun.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Have a backup list of prompts ready for when creativity runs dry. The wheel removes the feeling of being "targeted" — it's random, not personal.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>For mixed-comfort groups, create two wheels: one safe, one spicy. Players declare their tier before spinning.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Time-limit dares. "Talk in an accent for 3 rounds" is fun. Indefinite tasks drag the game down.</span></li>
+          <div class="tod-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">Party Host Tips</h2>
+            <p>Start mild and escalate &mdash; don't open with the embarrassing stuff. The best party games warm up slowly, build trust, and then go somewhere memorable.</p>
+            <ul class="space-y-2">
+              <li class="flex gap-3"><span style="color:#9933ff;font-weight:700">&#8594;</span><span>Always allow a "pass" option with a penalty (like doing 20 jumping jacks). Forced participation ruins the fun.</span></li>
+              <li class="flex gap-3"><span style="color:#9933ff;font-weight:700">&#8594;</span><span>Have a backup list of prompts ready for when creativity runs dry.</span></li>
+              <li class="flex gap-3"><span style="color:#9933ff;font-weight:700">&#8594;</span><span>For mixed-comfort groups, create two wheels: one safe, one spicy. Players declare their tier before spinning.</span></li>
+              <li class="flex gap-3"><span style="color:#9933ff;font-weight:700">&#8594;</span><span>Time-limit dares. Indefinite tasks drag the game down.</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold section-title">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <div class="tod-faq">
+                <p class="faq-q">{question}</p>
+                <p class="faq-a">{answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold section-title">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/party-wheel", label: "Party Wheel", desc: "More party challenges and game night fun — spin for random dares and tasks." },
+              { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random player name from your group to decide who goes next." },
+              { href: "/yes-or-no-wheel", label: "Yes or No Wheel", desc: "Settle quick arguments with a yes/no spin." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="tod-link">
+                  <span class="arrow">&#8594;</span>
+                  <span>
+                    <span class="link-title">{label}</span>
+                    <span class="link-desc"> &mdash; {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
           </ul>
-          <p class="text-muted-foreground leading-relaxed">
-            The wheel handles the selection. You handle the vibe. Keep it moving, keep it fun, and don't let any single player stall the game indefinitely.
-          </p>
-        </div>
+        </section>
 
-      </section>
+      </main>
 
-      <!-- FAQ -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/party-wheel", label: "Party Wheel", desc: "More party challenges and game night fun — spin for random dares and tasks." },
-            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random player name from your group to decide who goes next." },
-            { href: "/yes-or-no-wheel", label: "Yes or No Wheel", desc: "Settle quick arguments with a yes/no spin." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-    </main>
-
-    <GlobalFooterIsland client:load />
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

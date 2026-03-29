@@ -40,6 +40,8 @@ const defaultParticipants = [
   { pseudo: "Work at Pizza Place", weight: 1 },
 ];
 
+const myColors = ['#e50000','#0000ff','#00aa00','#ffff00','#ffffff','#ff7700','#00ffff','#ff00ff'];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -49,12 +51,245 @@ const jsonLd = {
 };
 ---
 
-<Layout
-  title={title}
-  description={description}
-  canonical={canonical}
-  jsonLd={jsonLd}
->
+<style>
+  /* === ROBLOX UI GAMING THEME === */
+  .rb-page {
+    min-height: 100vh;
+    background: #1a1c2e;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Roblox UI background */
+  .rb-sky {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(135deg, #0f1020 0%, #1a1c35 35%, #12102a 65%, #0a0a1a 100%);
+    pointer-events: none;
+  }
+
+  /* Grid overlay */
+  .rb-grid {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background-image:
+      linear-gradient(rgba(229,0,0,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(229,0,0,0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    animation: rbGridPulse 5s ease-in-out infinite;
+  }
+
+  @keyframes rbGridPulse {
+    0%, 100% { opacity: 0.5; }
+    50%       { opacity: 1; }
+  }
+
+  /* Corner UI decorations */
+  .rb-corner-tl {
+    position: fixed;
+    top: 0; left: 0;
+    width: 200px; height: 200px;
+    border-right: none; border-bottom: none;
+    border-top: 4px solid rgba(229,0,0,0.6);
+    border-left: 4px solid rgba(229,0,0,0.6);
+    z-index: 3; pointer-events: none;
+  }
+  .rb-corner-tr {
+    position: fixed;
+    top: 0; right: 0;
+    width: 200px; height: 200px;
+    border-left: none; border-bottom: none;
+    border-top: 4px solid rgba(0,0,255,0.5);
+    border-right: 4px solid rgba(0,0,255,0.5);
+    z-index: 3; pointer-events: none;
+  }
+  .rb-corner-bl {
+    position: fixed;
+    bottom: 0; left: 0;
+    width: 150px; height: 150px;
+    border-right: none; border-top: none;
+    border-bottom: 3px solid rgba(229,0,0,0.4);
+    border-left: 3px solid rgba(229,0,0,0.4);
+    z-index: 3; pointer-events: none;
+  }
+  .rb-corner-br {
+    position: fixed;
+    bottom: 0; right: 0;
+    width: 150px; height: 150px;
+    border-left: none; border-top: none;
+    border-bottom: 3px solid rgba(0,0,255,0.35);
+    border-right: 3px solid rgba(0,0,255,0.35);
+    z-index: 3; pointer-events: none;
+  }
+
+  /* Falling Roblox characters / bricks */
+  .rb-chars {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .rb-char {
+    position: absolute;
+    top: -50px;
+    font-size: 2rem;
+    animation: rbCharFall linear infinite;
+    opacity: 0.6;
+  }
+  .rb-char:nth-child(1)  { left: 6%;  animation-duration: 10s; animation-delay: 0s;   }
+  .rb-char:nth-child(2)  { left: 15%; animation-duration: 13s; animation-delay: 2s;   font-size: 1.5rem; }
+  .rb-char:nth-child(3)  { left: 26%; animation-duration: 9s;  animation-delay: 4.5s; }
+  .rb-char:nth-child(4)  { left: 38%; animation-duration: 16s; animation-delay: 1s;   font-size: 2.4rem; }
+  .rb-char:nth-child(5)  { left: 52%; animation-duration: 11s; animation-delay: 7s;   font-size: 1.8rem; }
+  .rb-char:nth-child(6)  { left: 63%; animation-duration: 14s; animation-delay: 3s;   }
+  .rb-char:nth-child(7)  { left: 74%; animation-duration: 10s; animation-delay: 9s;   font-size: 1.4rem; }
+  .rb-char:nth-child(8)  { left: 86%; animation-duration: 12s; animation-delay: 5s;   }
+  .rb-char:nth-child(9)  { left: 93%; animation-duration: 8s;  animation-delay: 11s;  font-size: 1.6rem; }
+
+  @keyframes rbCharFall {
+    0%   { top: -50px; opacity: 0; transform: rotate(-10deg); }
+    5%   { opacity: 0.7; }
+    95%  { opacity: 0.4; }
+    100% { top: 110vh; opacity: 0; transform: rotate(10deg); }
+  }
+
+  /* Roblox-style ambient glows */
+  .rb-glow-red {
+    position: fixed;
+    top: 20%;
+    left: -150px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(229,0,0,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 1; pointer-events: none;
+    animation: rbGlowPulse 4s ease-in-out infinite;
+  }
+  .rb-glow-blue {
+    position: fixed;
+    bottom: 20%;
+    right: -150px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,0,255,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 1; pointer-events: none;
+    animation: rbGlowPulse 4s ease-in-out infinite reverse;
+  }
+  .rb-glow-center {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, rgba(229,0,0,0.05) 0%, rgba(0,0,200,0.04) 50%, transparent 70%);
+    z-index: 1; pointer-events: none;
+  }
+
+  @keyframes rbGlowPulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50%       { opacity: 1;   transform: scale(1.1); }
+  }
+
+  /* HUD bar top */
+  .rb-hud-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #e50000 0%, #ff7700 30%, #e50000 60%, #0000ff 100%);
+    z-index: 4;
+    pointer-events: none;
+    animation: rbHudScan 3s linear infinite;
+  }
+
+  @keyframes rbHudScan {
+    0%   { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+  }
+
+  /* Content */
+  .rb-content {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Cards */
+  .rb-card {
+    background: rgba(15, 12, 30, 0.88);
+    border: 2px solid rgba(229, 0, 0, 0.35);
+    border-radius: 12px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 30px rgba(229,0,0,0.1), inset 0 1px 0 rgba(255,119,0,0.06);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .rb-card:hover {
+    border-color: rgba(229, 0, 0, 0.6);
+    box-shadow: 0 0 40px rgba(229,0,0,0.18);
+  }
+  .rb-card h2     { color: #ff4444; text-shadow: 0 0 20px rgba(229,0,0,0.5); }
+  .rb-card p      { color: rgba(255, 200, 200, 0.85); }
+  .rb-card strong { color: #ff7777; }
+
+  .rb-game-box {
+    background: rgba(229,0,0,0.08);
+    border: 1px solid rgba(229,0,0,0.3);
+    border-radius: 8px;
+    padding: 0.75rem;
+  }
+  .rb-game-box .gname { color: #ff6666; font-weight: 600; font-size: 0.875rem; }
+  .rb-game-box .gdesc { color: rgba(255,200,200,0.7); font-size: 0.75rem; margin-top: 0.25rem; }
+
+  .rb-faq {
+    background: rgba(10, 8, 25, 0.92);
+    border: 2px solid rgba(229,0,0,0.22);
+    border-radius: 10px;
+    padding: 1.25rem;
+    backdrop-filter: blur(8px);
+  }
+  .rb-faq .q { color: #ff6666; font-weight: 600; margin-bottom: 0.5rem; }
+  .rb-faq .a { color: rgba(255,200,200,0.75); font-size: 0.875rem; line-height: 1.6; }
+
+  .rb-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(10, 8, 25, 0.88);
+    border: 2px solid rgba(229,0,0,0.2);
+    border-radius: 10px;
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    backdrop-filter: blur(6px);
+  }
+  .rb-link:hover {
+    border-color: rgba(229,0,0,0.55);
+    box-shadow: 0 0 20px rgba(229,0,0,0.18);
+  }
+  .rb-link .arrow      { color: #e50000; font-weight: 700; font-size: 0.875rem; margin-top: 0.125rem; flex-shrink: 0; }
+  .rb-link .link-title { color: #ff8888; font-weight: 600; }
+  .rb-link .link-desc  { color: rgba(255,200,200,0.6); font-size: 0.875rem; }
+
+  .rb-list-item { color: rgba(255,200,200,0.85); }
+  .rb-list-item strong { color: #ff7777; }
+
+  .breadcrumb-nav a { color: rgba(229,0,0,0.55); transition: color 0.2s; }
+  .breadcrumb-nav a:hover { color: #ff8888; }
+  .breadcrumb-nav .sep { color: rgba(229,0,0,0.35); }
+  .breadcrumb-nav .cur { color: rgba(255,200,200,0.9); }
+
+  .rb-hero-title {
+    color: #ffe0e0;
+    text-shadow: 3px 3px 0 #8b0000, 0 0 40px rgba(229,0,0,0.5), 0 0 80px rgba(0,0,200,0.2);
+    letter-spacing: -0.01em;
+  }
+  .rb-hero-sub   { color: rgba(255,200,200,0.8); }
+  .rb-hero-badge { color: rgba(229,0,0,0.6); }
+  .rb-section-title { color: #ff6666; text-shadow: 0 0 20px rgba(229,0,0,0.4); }
+</style>
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
     { name: "Home", url: "https://realwheelpicker.com" },
@@ -62,117 +297,142 @@ const jsonLd = {
     { name: "Roblox Game Picker Wheel", url: "https://realwheelpicker.com/templates/roblox-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  <div class="rb-page">
+    <div class="rb-sky"></div>
+    <div class="rb-grid"></div>
+    <div class="rb-hud-bar"></div>
+    <div class="rb-glow-red"></div>
+    <div class="rb-glow-blue"></div>
+    <div class="rb-glow-center"></div>
+    <div class="rb-corner-tl"></div>
+    <div class="rb-corner-tr"></div>
+    <div class="rb-corner-bl"></div>
+    <div class="rb-corner-br"></div>
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <div class="rb-chars">
+      <div class="rb-char">🧱</div>
+      <div class="rb-char">🧱</div>
+      <div class="rb-char">🧱</div>
+      <div class="rb-char">🧱</div>
+      <div class="rb-char">🧱</div>
+      <div class="rb-char">🧱</div>
+      <div class="rb-char">🧱</div>
+      <div class="rb-char">🧱</div>
+      <div class="rb-char">🧱</div>
+    </div>
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Roblox Game Picker</span>
-      </nav>
+    <div class="rb-content">
+      <HeaderIsland client:load />
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Roblox Game Picker — Random Roblox Spinner Wheel
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Too many Roblox games to choose from? Spin the wheel and jump straight in. 12 popular games pre-loaded — customize with your personal favorites.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav text-xs flex gap-1 mb-8">
+          <a href="/">Home</a>
+          <span class="sep">/</span>
+          <a href="/templates">Templates</a>
+          <span class="sep">/</span>
+          <span class="cur">Roblox Game Picker</span>
+        </nav>
 
-      <!-- Wheel -->
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
-
-      <!-- Article Content -->
-      <section class="space-y-8">
-
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Roblox Players Need a Game Picker</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Roblox has over 40 million games. Even narrowing it down to your favorites list, choosing what to play can take longer than an actual game session. The Roblox wheel solves this by making the choice instant and random — which often leads to the most fun sessions because you're playing something unexpected.
+        <div class="text-center space-y-4 py-2 md:py-6 mb-8">
+          <div class="flex flex-wrap justify-center gap-2 mb-3">
+            <span style="background:rgba(229,0,0,0.2);border:2px solid rgba(229,0,0,0.5);color:#ff6666;padding:0.25rem 0.75rem;border-radius:8px;font-size:0.75rem;font-weight:700;">ROBLOX</span>
+            <span style="background:rgba(0,0,200,0.15);border:2px solid rgba(0,0,200,0.4);color:#8888ff;padding:0.25rem 0.75rem;border-radius:8px;font-size:0.75rem;">Game Picker</span>
+            <span style="background:rgba(255,119,0,0.12);border:1px solid rgba(255,119,0,0.35);color:#ffaa55;padding:0.25rem 0.75rem;border-radius:8px;font-size:0.75rem;">12 Games</span>
+          </div>
+          <h1 class="rb-hero-title text-3xl md:text-5xl font-bold leading-tight">
+            Roblox Game Picker — Random Roblox Spinner Wheel
+          </h1>
+          <p class="rb-hero-sub text-lg md:text-xl max-w-2xl mx-auto">
+            Too many Roblox games to choose from? Spin the wheel and jump straight in. 12 popular games pre-loaded — customize with your personal favorites.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            The wheel is especially useful for group sessions. When you're in a voice call with friends and everyone's asking "what should we play?", spinning the wheel ends the conversation in one click. The result is binding — whoever spun the wheel has to stick with the pick.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            Customize the wheel to include only games you and your friends actively play. Remove anything nobody's touched in months, and add newly released games you want to try. The wheel becomes a shortlist of actually good options, not a full catalogue of everything.
-          </p>
+          <p class="rb-hero-badge text-sm">Free • No account • Instant result</p>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">About the Pre-Loaded Games</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            The 12 games pre-loaded on this wheel are among the most popular on Roblox as of 2024-2025, spanning different genres so there's variety in whatever you land on:
-          </p>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {[
-              ["Adopt Me", "Pet adoption and trading simulation"],
-              ["Blox Fruits", "Action RPG with devil fruits and combat"],
-              ["Tower of Hell", "Obby parkour challenge tower"],
-              ["Jailbreak", "Open-world cops and robbers"],
-              ["Doors", "Horror exploration with monsters"],
-              ["Arsenal", "FPS shooter with weapon progression"],
-            ].map(([name, desc]) => (
-              <div class="p-3 rounded-lg bg-primary/5 border border-primary/20">
-                <p class="font-semibold text-foreground text-sm">{name}</p>
-                <p class="text-muted-foreground text-xs mt-1">{desc}</p>
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={myColors}
+          wheelShape="hexagon"
+          hubTheme="crimson"
+          client:load
+        />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <section class="space-y-8">
+          <div class="rb-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">Why Roblox Players Need a Game Picker</h2>
+            <p class="leading-relaxed">
+              Roblox has over 40 million games. Even narrowing it down to your favorites list, choosing what to play can take longer than an actual game session. The Roblox wheel solves this by making the choice instant and random — which often leads to the most fun sessions because you're playing something unexpected.
+            </p>
+            <p class="leading-relaxed">
+              The wheel is especially useful for group sessions. When you're in a voice call with friends and everyone's asking "what should we play?", spinning the wheel ends the conversation in one click. The result is binding — whoever spun the wheel has to stick with the pick.
+            </p>
+            <p class="leading-relaxed">
+              Customize the wheel to include only games you and your friends actively play. Remove anything nobody's touched in months, and add newly released games you want to try.
+            </p>
+          </div>
+
+          <div class="rb-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">About the Pre-Loaded Games</h2>
+            <p class="leading-relaxed">
+              The 12 games pre-loaded on this wheel are among the most popular on Roblox as of 2024-2025, spanning different genres:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {[
+                ["Adopt Me", "Pet adoption and trading simulation"],
+                ["Blox Fruits", "Action RPG with devil fruits and combat"],
+                ["Tower of Hell", "Obby parkour challenge tower"],
+                ["Jailbreak", "Open-world cops and robbers"],
+                ["Doors", "Horror exploration with monsters"],
+                ["Arsenal", "FPS shooter with weapon progression"],
+              ].map(([name, desc]) => (
+                <div class="rb-game-box">
+                  <p class="gname">{name}</p>
+                  <p class="gdesc">{desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="rb-section-title text-xl md:text-2xl font-bold">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <div class="rb-faq">
+                <p class="q">{question}</p>
+                <p class="a">{answer}</p>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-      </section>
+        <section class="space-y-4">
+          <h2 class="rb-section-title text-xl md:text-2xl font-bold">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/templates/video-game-picker", label: "Video Game Picker", desc: "For non-Roblox gaming — spin for a random game genre or title." },
+              { href: "/templates/minecraft-challenge-wheel", label: "Minecraft Challenge Wheel", desc: "Random Minecraft run ideas and challenge modes." },
+              { href: "/templates/who-goes-first-wheel", label: "Who Goes First Wheel", desc: "Randomly pick who starts or hosts the next game session." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="rb-link">
+                  <span class="arrow">→</span>
+                  <span>
+                    <span class="link-title">{label}</span>
+                    <span class="link-desc"> — {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      <!-- FAQ -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      </main>
 
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/video-game-picker", label: "Video Game Picker", desc: "For non-Roblox gaming — spin for a random game genre or title." },
-            { href: "/templates/minecraft-challenge-wheel", label: "Minecraft Challenge Wheel", desc: "Random Minecraft run ideas and challenge modes." },
-            { href: "/templates/who-goes-first-wheel", label: "Who Goes First Wheel", desc: "Randomly pick who starts or hosts the next game session." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-    </main>
-
-    <GlobalFooterIsland client:load />
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

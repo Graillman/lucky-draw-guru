@@ -36,6 +36,8 @@ const defaultParticipants = [
   { pseudo: "Do an impression", weight: 1 },
 ];
 
+const myColors = ['#dc2626','#7c3aed','#f97316','#1d1d1d','#ef4444','#9333ea','#ff6b35','#c026d3'];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -45,12 +47,223 @@ const jsonLd = {
 };
 ---
 
-<Layout
-  title={title}
-  description={description}
-  canonical={canonical}
-  jsonLd={jsonLd}
->
+<style>
+  /* ══════════ NUIT DES DÉFIS — DARE WHEEL THEME ══════════ */
+  .dare-page {
+    min-height: 100vh;
+    position: relative;
+    background: #050005;
+    color: #f0d0e0;
+    overflow-x: hidden;
+  }
+
+  /* Fond noir absolu avec fumée rouge/violette */
+  .dare-sky {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 30%, rgba(180,0,40,0.45) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 55% at 80% 20%, rgba(100,0,140,0.38) 0%, transparent 55%),
+      radial-gradient(ellipse 90% 40% at 50% 100%, rgba(220,0,60,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 10% 70%, rgba(140,0,60,0.32) 0%, transparent 55%),
+      linear-gradient(180deg, #050005 0%, #100008 50%, #050005 100%);
+    animation: dareSkySwell 12s ease-in-out infinite alternate;
+  }
+  @keyframes dareSkySwell {
+    0%   { opacity: 0.85; transform: scale(1); }
+    100% { opacity: 1;    transform: scale(1.04); }
+  }
+
+  /* Fumée rouge/violette supplémentaire */
+  .dare-smoke-a {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      radial-gradient(ellipse 65% 45% at 35% 80%, rgba(160,0,40,0.3) 0%, transparent 65%),
+      radial-gradient(ellipse 55% 60% at 75% 55%, rgba(80,0,100,0.25) 0%, transparent 65%);
+    animation: smokeDrift1 18s ease-in-out infinite alternate;
+  }
+  .dare-smoke-b {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      radial-gradient(ellipse 50% 40% at 65% 85%, rgba(200,30,30,0.22) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 55% at 12% 35%, rgba(90,0,120,0.18) 0%, transparent 60%);
+    animation: smokeDrift2 24s ease-in-out infinite alternate;
+  }
+  @keyframes smokeDrift1 {
+    0%   { transform: translate(0,0) scale(1);      opacity: 0.7; }
+    100% { transform: translate(3%,-6%) scale(1.12); opacity: 1; }
+  }
+  @keyframes smokeDrift2 {
+    0%   { transform: translate(0,0) scale(1);       opacity: 0.6; }
+    100% { transform: translate(-4%,4%) scale(1.09); opacity: 0.95; }
+  }
+
+  /* Halo rouge pulsant central */
+  .dare-halo {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70vmin; height: 70vmin;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(220,38,38,0.18) 0%, transparent 70%);
+    pointer-events: none; z-index: 1;
+    animation: haloBreath 4s ease-in-out infinite;
+  }
+  @keyframes haloBreath {
+    0%, 100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); }
+    50%       { opacity: 1;   transform: translate(-50%,-50%) scale(1.3); }
+  }
+
+  /* 20 éclairs électriques */
+  .dare-bolts {
+    position: fixed; inset: 0; z-index: 2; pointer-events: none; overflow: hidden;
+  }
+  .dare-bolt {
+    position: absolute;
+    width: 1px;
+    background: linear-gradient(180deg, rgba(200,80,255,0) 0%, rgba(220,50,200,0.9) 50%, rgba(255,100,120,0) 100%);
+    transform-origin: top center;
+    opacity: 0;
+    animation: boltFlash var(--bdur, 7s) steps(1) infinite;
+    animation-delay: var(--bdelay, 0s);
+    top: var(--btop, 0%);
+    left: var(--bleft, 50%);
+    height: var(--bh, 200px);
+    transform: rotate(var(--brot, 0deg));
+  }
+  @keyframes boltFlash {
+    0%, 88%, 92%, 96%, 100% { opacity: 0; }
+    89%  { opacity: 1; }
+    90%  { opacity: 0.3; }
+    91%  { opacity: 0.9; }
+    93%  { opacity: 0.6; }
+    94%  { opacity: 0; }
+    95%  { opacity: 0.8; }
+    97%  { opacity: 0; }
+  }
+
+  /* Braises montantes */
+  .dare-embers {
+    position: fixed; inset: 0; z-index: 2; pointer-events: none; overflow: hidden;
+  }
+  .dare-ember {
+    position: absolute;
+    bottom: -10px;
+    width: var(--ew, 3px); height: var(--ew, 3px);
+    border-radius: 50%;
+    background: var(--ec, #ff4400);
+    box-shadow: 0 0 6px var(--ec, #ff4400), 0 0 12px rgba(255,100,0,0.5);
+    opacity: 0;
+    left: var(--el, 50%);
+    animation: emberRise var(--edur, 8s) ease-in infinite;
+    animation-delay: var(--edelay, 0s);
+  }
+  @keyframes emberRise {
+    0%   { transform: translateY(0)   translateX(0)   scale(0); opacity: 0; }
+    8%   { opacity: 1; }
+    50%  { transform: translateY(-45vh) translateX(var(--edx, 20px)) scale(1.2); opacity: 0.8; }
+    90%  { opacity: 0.3; }
+    100% { transform: translateY(-100vh) translateX(var(--edx, 30px)) scale(0.2); opacity: 0; }
+  }
+
+  /* Scan line électrique */
+  .dare-scan {
+    position: fixed; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(220,38,38,0.8) 50%, transparent 100%);
+    z-index: 2; pointer-events: none;
+    animation: scanLine 10s linear infinite;
+  }
+  @keyframes scanLine {
+    0%   { top: -2px; opacity: 0; }
+    3%   { opacity: 1; }
+    97%  { opacity: 0.4; }
+    100% { top: 100vh; opacity: 0; }
+  }
+
+  /* Contenu */
+  .dare-content { position: relative; z-index: 10; }
+
+  /* Titre */
+  .dare-title {
+    background: linear-gradient(135deg, #ff3355 0%, #f97316 40%, #c026d3 80%, #ff3355 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: dareTitleShift 5s linear infinite, dareGlow 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(220,38,38,0.8));
+  }
+  @keyframes dareTitleShift {
+    0%   { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+  @keyframes dareGlow {
+    0%, 100% { filter: drop-shadow(0 0 15px rgba(220,38,38,0.7)); }
+    50%       { filter: drop-shadow(0 0 35px rgba(255,50,100,1)) drop-shadow(0 0 60px rgba(150,0,80,0.6)); }
+  }
+
+  .dare-subtitle { color: #c08090; }
+  .dare-badge    { color: #806070; font-size: 0.875rem; }
+
+  /* Breadcrumb */
+  .dare-breadcrumb a         { color: rgba(200,120,140,0.7); transition: color 0.2s; text-decoration: none; }
+  .dare-breadcrumb a:hover   { color: #ff6688; }
+  .dare-breadcrumb .sep      { color: rgba(160,80,100,0.5); }
+  .dare-breadcrumb .cur      { color: rgba(240,200,210,0.9); }
+
+  /* Cards */
+  .dare-card {
+    background: rgba(25, 0, 12, 0.82);
+    border: 1px solid rgba(180, 0, 60, 0.45);
+    border-radius: 16px;
+    padding: 1.5rem;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 40px rgba(150,0,40,0.25), inset 0 1px 0 rgba(255,100,100,0.08);
+  }
+  .dare-card h2 { color: #ff6688; text-shadow: 0 0 15px rgba(255,50,80,0.5); margin-bottom: 0.5rem; }
+  .dare-card p, .dare-card li { color: #c0a0b0; line-height: 1.65; }
+
+  .dare-tag {
+    background: rgba(120, 0, 30, 0.3);
+    border: 1px solid rgba(200, 0, 50, 0.45);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+  .dare-tag .tag-label { color: #ff8899; font-weight: 600; font-size: 0.875rem; margin-bottom: 0.25rem; }
+  .dare-tag .tag-desc  { color: #b09098; font-size: 0.875rem; }
+
+  /* FAQ */
+  .dare-faq {
+    background: rgba(20, 0, 10, 0.85);
+    border: 1px solid rgba(160, 0, 50, 0.35);
+    border-radius: 12px;
+    padding: 1.25rem;
+    backdrop-filter: blur(8px);
+  }
+  .dare-faq .faq-q { color: #ff7799; font-weight: 600; margin-bottom: 0.5rem; }
+  .dare-faq .faq-a { color: #b09098; font-size: 0.875rem; line-height: 1.6; }
+
+  /* Related links */
+  .dare-link {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(20, 0, 10, 0.75);
+    border: 1px solid rgba(150, 0, 40, 0.35);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .dare-link:hover {
+    border-color: rgba(255, 50, 80, 0.65);
+    box-shadow: 0 0 25px rgba(200, 0, 40, 0.3);
+  }
+  .dare-link .arrow      { color: #cc0033; font-weight: 700; font-size: 0.875rem; margin-top: 2px; flex-shrink: 0; }
+  .dare-link .link-title { color: #ff8899; font-weight: 600; }
+  .dare-link .link-desc  { color: #907080; font-size: 0.875rem; }
+
+  .section-title { color: #ff6688; text-shadow: 0 0 12px rgba(255,50,80,0.4); }
+</style>
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
     { name: "Home", url: "https://realwheelpicker.com" },
@@ -58,116 +271,133 @@ const jsonLd = {
     { name: "Dare Wheel", url: "https://realwheelpicker.com/templates/dare-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  <div class="dare-page">
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <!-- Fond atmosphérique (position: fixed) -->
+    <div class="dare-sky"></div>
+    <div class="dare-smoke-a"></div>
+    <div class="dare-smoke-b"></div>
+    <div class="dare-halo"></div>
+    <div class="dare-scan"></div>
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Dare Wheel</span>
-      </nav>
+    <!-- 20 éclairs électriques -->
+    <div class="dare-bolts">
+      {Array.from({length: 20}).map((_, i) => (
+        <div class="dare-bolt" style={`--bleft:${(i*17+5)%98}%;--btop:${(i*11)%30}%;--bh:${120+(i*30)%200}px;--brot:${-15+(i*7)%30}deg;--bdur:${5+(i*3)%7}s;--bdelay:-${(i*2.3)%9}s`}></div>
+      ))}
+    </div>
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Dare Wheel — Spin for Random Party Challenges
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Pure dares, no truths. Spin the wheel and accept whatever challenge fate assigns. Customize the dare list for your group's energy level.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Braises montantes -->
+    <div class="dare-embers">
+      {Array.from({length: 30}).map((_, i) => (
+        <div class="dare-ember" style={`--el:${(i*13+7)%98}%;--ew:${2+(i%3)}px;--ec:${i%3===0?'#ff4400':i%3===1?'#ff0055':'#cc3300'};--edur:${6+(i*2.7)%8}s;--edelay:-${(i*1.9)%10}s;--edx:${-30+(i*7)%60}px`}></div>
+      ))}
+    </div>
 
-      <!-- Wheel -->
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <div class="dare-content">
+      <HeaderIsland client:load />
 
-      <!-- Article Content -->
-      <section class="space-y-8">
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="dare-breadcrumb text-xs flex gap-1 mb-8">
+          <a href="/">Home</a>
+          <span class="sep">/</span>
+          <a href="/templates">Templates</a>
+          <span class="sep">/</span>
+          <span class="cur">Dare Wheel</span>
+        </nav>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why a Dare-Only Wheel Works</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Truth or dare is a classic, but sometimes you want the energy of dares without the vulnerability of personal questions. The dare wheel keeps the game active and physical — great for groups that are already comfortable with each other and want pure challenge-based fun.
+        <section class="text-center space-y-4 py-2 md:py-6 mb-8">
+          <h1 class="text-3xl md:text-5xl font-bold leading-tight dare-title">
+            Dare Wheel — Spin for Random Party Challenges
+          </h1>
+          <p class="text-lg md:text-xl max-w-2xl mx-auto dare-subtitle">
+            Pure dares, no truths. Spin the wheel and accept whatever challenge fate assigns. Customize the dare list for your group's energy level.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            It also works better for mixed-age groups or professional settings (team building, office parties) where truth questions might cross comfort boundaries. Everyone knows what they're signing up for: a challenge, not a confession.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            Pair this with a player name wheel: spin names to pick who goes, then spin this wheel for their dare. Two spins, one complete round. No targeting, no favoritism, pure randomness.
-          </p>
-        </div>
+          <p class="dare-badge">Free &bull; No account &bull; Instant result</p>
+        </section>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Dare Categories to Try</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Build your dare wheel around a theme for a more cohesive party experience:
-          </p>
-          <div class="space-y-3">
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Physical Dares</p>
-              <p class="text-muted-foreground text-sm">Push-ups, planks, silly walks, dance challenges, voice impressions</p>
-            </div>
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Social Dares</p>
-              <p class="text-muted-foreground text-sm">Text someone, post to social media, call a contact, compliment a stranger</p>
-            </div>
-            <div class="p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <p class="font-semibold text-foreground text-sm mb-1">Creative Dares</p>
-              <p class="text-muted-foreground text-sm">Draw something in 60 seconds, improvise a song, act out a movie scene</p>
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={myColors}
+          wheelShape="circle"
+          hubTheme="crimson"
+          client:load
+        />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <section class="space-y-6">
+          <div class="dare-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">Why a Dare-Only Wheel Works</h2>
+            <p>
+              Truth or dare is a classic, but sometimes you want the energy of dares without the vulnerability of personal questions. The dare wheel keeps the game active and physical — great for groups that are already comfortable with each other and want pure challenge-based fun.
+            </p>
+            <p>
+              It also works better for mixed-age groups or professional settings where truth questions might cross comfort boundaries. Everyone knows what they're signing up for: a challenge, not a confession.
+            </p>
+            <p>
+              Pair this with a player name wheel: spin names to pick who goes, then spin this wheel for their dare. Two spins, one complete round. No targeting, no favoritism, pure randomness.
+            </p>
+          </div>
+
+          <div class="dare-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">Dare Categories to Try</h2>
+            <p>Build your dare wheel around a theme for a more cohesive party experience:</p>
+            <div class="space-y-3">
+              <div class="dare-tag">
+                <p class="tag-label">Physical Dares</p>
+                <p class="tag-desc">Push-ups, planks, silly walks, dance challenges, voice impressions</p>
+              </div>
+              <div class="dare-tag">
+                <p class="tag-label">Social Dares</p>
+                <p class="tag-desc">Text someone, post to social media, call a contact, compliment a stranger</p>
+              </div>
+              <div class="dare-tag">
+                <p class="tag-label">Creative Dares</p>
+                <p class="tag-desc">Draw something in 60 seconds, improvise a song, act out a movie scene</p>
+              </div>
             </div>
           </div>
-        </div>
+        </section>
 
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold section-title">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <div class="dare-faq">
+                <p class="faq-q">{question}</p>
+                <p class="faq-a">{answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-      <!-- FAQ -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold section-title">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/templates/truth-or-dare-wheel", label: "Truth or Dare Wheel", desc: "The full truth or dare experience — questions and challenges combined." },
+              { href: "/templates/never-have-i-ever-wheel", label: "Never Have I Ever Wheel", desc: "Classic party game questions — perfect follow-up to dares." },
+              { href: "/party-wheel", label: "Party Wheel", desc: "More party challenges and game night options." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="dare-link">
+                  <span class="arrow">&#8594;</span>
+                  <span>
+                    <span class="link-title">{label}</span>
+                    <span class="link-desc"> &mdash; {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/truth-or-dare-wheel", label: "Truth or Dare Wheel", desc: "The full truth or dare experience — questions and challenges combined." },
-            { href: "/templates/never-have-i-ever-wheel", label: "Never Have I Ever Wheel", desc: "Classic party game questions — perfect follow-up to dares." },
-            { href: "/party-wheel", label: "Party Wheel", desc: "More party challenges and game night options." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+      </main>
 
-    </main>
-
-    <GlobalFooterIsland client:load />
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

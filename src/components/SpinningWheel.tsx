@@ -22,6 +22,8 @@ interface SpinningWheelProps {
   clickToSpinLabel?: string;
   clickToSpinSub?: string;
   compact?: boolean; // true = reduced padding for multi-wheel mode
+  wheelShape?: string; // 'circle' | 'star6' | 'star8' | 'heart' | 'hexagon'
+  hubTheme?: string;   // 'default' | 'gold' | 'fire' | 'ice' | 'cosmic' | 'rose' | 'orange' | 'forest' | 'neon' | 'purple' | 'crimson' | 'teal' | 'amber'
 }
 
 const DEFAULT_COLORS = [
@@ -39,6 +41,70 @@ const DEFAULT_COLORS = [
   'hsl(0, 75%, 55%)',    // Crimson
 ];
 
+// ── Hub theme presets ───────────────────────────────────────────────────────
+const HUB_PRESETS: Record<string, { bg: [string, string, string]; border: string; inner: string; dot: string }> = {
+  gold:    { bg: ['#4a3800', '#2e2200', '#1a1200'], border: '#ffd700', inner: 'rgba(255,215,0,0.5)',    dot: '#ffd700' },
+  fire:    { bg: ['#4a0800', '#2e0400', '#1a0000'], border: '#ff4500', inner: 'rgba(255,69,0,0.5)',     dot: '#ff6d00' },
+  ice:     { bg: ['#00203a', '#001020', '#00080f'], border: '#00c8ff', inner: 'rgba(0,200,255,0.5)',    dot: '#7ae7ff' },
+  cosmic:  { bg: ['#1a0038', '#0d001f', '#06000f'], border: '#c77dff', inner: 'rgba(199,125,255,0.5)', dot: '#e0aaff' },
+  rose:    { bg: ['#2d0015', '#180008', '#0a0003'], border: '#ff85c1', inner: 'rgba(255,133,193,0.5)', dot: '#ff85c1' },
+  orange:  { bg: ['#3d1800', '#200d00', '#0f0600'], border: '#ff9e0d', inner: 'rgba(255,158,13,0.5)',  dot: '#ffba08' },
+  forest:  { bg: ['#001f08', '#001004', '#000802'], border: '#52b788', inner: 'rgba(82,183,136,0.5)',  dot: '#74c69d' },
+  neon:    { bg: ['#00101a', '#000810', '#000408'], border: '#0af5ff', inner: 'rgba(10,245,255,0.5)',   dot: '#0af5ff' },
+  purple:  { bg: ['#150030', '#0a0018', '#04000a'], border: '#9d4edd', inner: 'rgba(157,78,221,0.5)',  dot: '#c77dff' },
+  crimson: { bg: ['#300000', '#180000', '#080000'], border: '#e53e3e', inner: 'rgba(229,62,62,0.5)',   dot: '#fc8181' },
+  teal:    { bg: ['#001820', '#000c10', '#000608'], border: '#14b8a6', inner: 'rgba(20,184,166,0.5)',  dot: '#2dd4bf' },
+  amber:   { bg: ['#2e1a00', '#180e00', '#080500'], border: '#f59e0b', inner: 'rgba(245,158,11,0.5)',  dot: '#fbbf24' },
+};
+
+// ── Wheel shape path helpers ─────────────────────────────────────────────────
+function pathStar(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number, points: number) {
+  const innerR = r * 0.44;
+  const step = Math.PI / points;
+  ctx.beginPath();
+  for (let i = 0; i < 2 * points; i++) {
+    const ri = i % 2 === 0 ? r : innerR;
+    const angle = i * step - Math.PI / 2;
+    const x = cx + ri * Math.cos(angle);
+    const y = cy + ri * Math.sin(angle);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+}
+
+function pathHeart(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number) {
+  const s = r / 130;
+  const ox = cx, oy = cy + r * 0.08;
+  ctx.beginPath();
+  ctx.moveTo(ox, oy + 70 * s);
+  ctx.bezierCurveTo(ox - 20 * s, oy + 40 * s, ox - 130 * s, oy + 20 * s, ox - 130 * s, oy - 35 * s);
+  ctx.bezierCurveTo(ox - 130 * s, oy - 90 * s, ox - 65 * s, oy - 110 * s, ox, oy - 65 * s);
+  ctx.bezierCurveTo(ox + 65 * s, oy - 110 * s, ox + 130 * s, oy - 90 * s, ox + 130 * s, oy - 35 * s);
+  ctx.bezierCurveTo(ox + 130 * s, oy + 20 * s, ox + 20 * s, oy + 40 * s, ox, oy + 70 * s);
+  ctx.closePath();
+}
+
+function pathHexagon(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number) {
+  ctx.beginPath();
+  for (let i = 0; i < 6; i++) {
+    const angle = (i / 6) * Math.PI * 2 - Math.PI / 6;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+}
+
+function drawShapePath(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number, shape: string) {
+  switch (shape) {
+    case 'star6':   pathStar(ctx, cx, cy, r, 6); break;
+    case 'star8':   pathStar(ctx, cx, cy, r, 8); break;
+    case 'heart':   pathHeart(ctx, cx, cy, r); break;
+    case 'hexagon': pathHexagon(ctx, cx, cy, r); break;
+    default: ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); break;
+  }
+}
+
 // Draw a rounded rectangle using arcTo (compatible with all browsers)
 function drawRoundRect(
   ctx: CanvasRenderingContext2D,
@@ -55,7 +121,8 @@ function drawRoundRect(
 export function SpinningWheel({
   participants, isSpinning, onComplete, mode, winnersCount,
   onSpin, onTick, colors, borderStyle = 'default', backgroundImage,
-  size = 480, spinDuration = 8, clickToSpinLabel, clickToSpinSub, compact = false
+  size = 480, spinDuration = 8, clickToSpinLabel, clickToSpinSub, compact = false,
+  wheelShape = 'circle', hubTheme = 'default'
 }: SpinningWheelProps) {
   const COLORS = colors && colors.length > 0 ? colors : DEFAULT_COLORS;
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -133,6 +200,14 @@ export function SpinningWheel({
     const radius = sz / 2 - 20;
 
     ctx.clearRect(0, 0, sz, sz);
+
+    // ── Shape clip (wraps wheel body; pointer + click text stay outside) ──
+    const useShape = wheelShape !== 'circle';
+    if (useShape) {
+      ctx.save();
+      drawShapePath(ctx, center, center, radius, wheelShape);
+      ctx.clip();
+    }
 
     // ── Rotated context (wheel body) ──
     ctx.save();
@@ -229,8 +304,8 @@ export function SpinningWheel({
       ctx.restore();
     });
 
-    // Outer border
-    if (borderStyle !== 'none') {
+    // Outer border (circle only; shaped wheels get their border after clip release)
+    if (borderStyle !== 'none' && !useShape) {
       if (borderStyle === 'rainbow') {
         const steps = 12;
         const hueStep = 360 / steps;
@@ -257,11 +332,19 @@ export function SpinningWheel({
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    // Center circle
+    // Center circle (hub) — themed
+    const hub = HUB_PRESETS[hubTheme];
+    const hubBg0   = hub?.bg[0]  ?? 'hsl(222, 47%, 15%)';
+    const hubBg1   = hub?.bg[1]  ?? 'hsl(222, 47%, 8%)';
+    const hubBg2   = hub?.bg[2]  ?? 'hsl(222, 47%, 4%)';
+    const hubBorder = hub?.border ?? themeColor;
+    const hubInner  = hub?.inner  ?? themeColorHalf;
+    const hubDot    = hub?.dot    ?? themeColor;
+
     const centerGrad = ctx.createRadialGradient(center - 5, center - 5, 0, center, center, 35);
-    centerGrad.addColorStop(0, 'hsl(222, 47%, 15%)');
-    centerGrad.addColorStop(0.5, 'hsl(222, 47%, 8%)');
-    centerGrad.addColorStop(1, 'hsl(222, 47%, 4%)');
+    centerGrad.addColorStop(0,   hubBg0);
+    centerGrad.addColorStop(0.5, hubBg1);
+    centerGrad.addColorStop(1,   hubBg2);
     ctx.beginPath();
     ctx.arc(center, center, 30, 0, Math.PI * 2);
     ctx.fillStyle = centerGrad;
@@ -269,25 +352,40 @@ export function SpinningWheel({
 
     ctx.beginPath();
     ctx.arc(center, center, 30, 0, Math.PI * 2);
-    ctx.strokeStyle = themeColor;
+    ctx.strokeStyle = hubBorder;
     ctx.lineWidth = 4;
-    ctx.shadowColor = themeColor;
+    ctx.shadowColor = hubBorder;
     ctx.shadowBlur = 15;
     ctx.stroke();
     ctx.shadowBlur = 0;
 
     ctx.beginPath();
     ctx.arc(center, center, 18, 0, Math.PI * 2);
-    ctx.strokeStyle = themeColorHalf;
+    ctx.strokeStyle = hubInner;
     ctx.lineWidth = 2;
     ctx.stroke();
 
     ctx.beginPath();
     ctx.arc(center, center, 6, 0, Math.PI * 2);
-    ctx.fillStyle = themeColor;
+    ctx.fillStyle = hubDot;
     ctx.fill();
 
     ctx.restore(); // end of rotated context
+
+    // Release shape clip, then draw shape outline on top
+    if (useShape) {
+      ctx.restore(); // end shape clip
+      ctx.save();
+      drawShapePath(ctx, center, center, radius, wheelShape);
+      const shapeStroke = borderStyle === 'gold' ? '#FFD700' : borderStyle === 'white' ? '#ffffff' : themeColor;
+      ctx.strokeStyle = shapeStroke;
+      ctx.lineWidth = 5;
+      ctx.shadowColor = shapeStroke;
+      ctx.shadowBlur = 18;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+      ctx.restore();
+    }
 
     // ── Pointer (fixed) ──
     const rotMod = ((rotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
@@ -338,73 +436,55 @@ export function SpinningWheel({
     ctx.fillStyle = 'rgba(255,255,255,0.3)';
     ctx.fill();
 
-    // ── "Click to spin" — circular arc text around the hub ──
+    // ── "Click to spin" — diagonal text in wheel center (wheelofnames style) ──
     if (clickToSpinLabel && !isAnimating) {
       ctx.save();
+      ctx.translate(center, center);
+      ctx.rotate(-Math.PI / 7); // ~26° diagonal tilt
 
-      const arcR = radius * 0.52; // radius of the text arc path
-      const fs = Math.max(11, Math.round(sz * 0.038));
-      ctx.font = `bold ${fs}px 'Space Grotesk', sans-serif`;
-      ctx.fillStyle = 'rgba(255,255,255,0.72)';
-      ctx.shadowColor = 'rgba(0,0,0,0.8)';
-      ctx.shadowBlur = 6;
+      const fs    = Math.max(18, Math.round(sz * 0.075));
+      const subFs = Math.max(11, Math.round(sz * 0.033));
+      const gap   = fs * 1.6;
 
-      // Helper: draw text along an arc, centred at startAngle
-      const drawArcText = (text: string, startAngle: number, flip: boolean) => {
-        const totalWidth = text.split('').reduce((w, ch) => w + ctx.measureText(ch).width + 1, 0);
-        const angleSpan = totalWidth / arcR;
-        let angle = startAngle - angleSpan / 2;
-        for (const ch of text) {
-          const chW = ctx.measureText(ch).width + 1;
-          const midAngle = angle + chW / (2 * arcR);
-          ctx.save();
-          ctx.translate(center + Math.cos(midAngle) * arcR, center + Math.sin(midAngle) * arcR);
-          ctx.rotate(midAngle + (flip ? Math.PI : 0));
-          ctx.fillText(ch, 0, 0);
-          ctx.restore();
-          angle += chW / arcR;
-        }
-      };
+      // Full-width semi-transparent band (like wheelofnames)
+      const pillW = radius * 2.1;
+      const pillH = clickToSpinSub ? fs + subFs + 28 : fs + 20;
+      ctx.beginPath();
+      drawRoundRect(ctx, -pillW / 2, -pillH / 2, pillW, pillH, pillH / 2);
+      ctx.fillStyle = 'rgba(0,0,0,0.52)';
+      ctx.fill();
 
-      // Draw curved arrow along arc
-      const drawArcArrow = (arcStartAngle: number, arcEndAngle: number, arrowAtEnd: boolean) => {
-        ctx.beginPath();
-        ctx.arc(center, center, arcR * 1.18, arcStartAngle, arcEndAngle, arcEndAngle < arcStartAngle);
-        ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-        // Arrowhead
-        const aAngle = arrowAtEnd ? arcEndAngle : arcStartAngle;
-        const dir = arrowAtEnd ? 1 : -1;
-        const ax = center + Math.cos(aAngle) * arcR * 1.18;
-        const ay = center + Math.sin(aAngle) * arcR * 1.18;
-        const perpAngle = aAngle + dir * Math.PI / 2;
-        ctx.beginPath();
-        ctx.moveTo(ax, ay);
-        ctx.lineTo(ax + Math.cos(perpAngle - 0.4) * fs * 0.9, ay + Math.sin(perpAngle - 0.4) * fs * 0.9);
-        ctx.moveTo(ax, ay);
-        ctx.lineTo(ax + Math.cos(perpAngle + 0.4) * fs * 0.9, ay + Math.sin(perpAngle + 0.4) * fs * 0.9);
-        ctx.strokeStyle = 'rgba(255,255,255,0.6)';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-      };
+      // Subtle inner highlight
+      ctx.beginPath();
+      drawRoundRect(ctx, -pillW / 2 + 2, -pillH / 2 + 2, pillW - 4, pillH / 2, (pillH / 2) - 1);
+      ctx.fillStyle = 'rgba(255,255,255,0.07)';
+      ctx.fill();
 
+      // Main label — big & bold
+      ctx.font = `900 ${fs}px 'Space Grotesk', sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = 'rgba(0,0,0,1)';
+      ctx.shadowBlur = 10;
+      ctx.shadowOffsetX = 2;
+      ctx.shadowOffsetY = 2;
+      ctx.fillText(clickToSpinLabel, 0, clickToSpinSub ? -gap * 0.25 : 0);
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
 
-      // Top arc: text reads left-to-right along top half
-      drawArcText(clickToSpinLabel, -Math.PI / 2, false);
-      // Bottom arc: text reads left-to-right along bottom half (flipped)
-      drawArcText(clickToSpinLabel, Math.PI / 2, true);
-
-      // Curved arrows on each side
-      drawArcArrow(-Math.PI * 0.85, -Math.PI * 0.15, true);
-      drawArcArrow(Math.PI * 0.15, Math.PI * 0.85, true);
+      // Sub-label
+      if (clickToSpinSub) {
+        ctx.font = `500 ${subFs}px 'Space Grotesk', sans-serif`;
+        ctx.fillStyle = 'rgba(255,255,255,0.62)';
+        ctx.shadowBlur = 4;
+        ctx.fillText(clickToSpinSub, 0, gap * 0.6);
+      }
 
       ctx.restore();
     }
 
-  }, [rotation, segments, participants.length, mode, themeColor, themeColorDark, themeColorGlow, themeColorHalf, themeColorLight, themeStroke, borderStyle, bgImgVersion, isAnimating, clickToSpinLabel, clickToSpinSub]);
+  }, [rotation, segments, participants.length, mode, themeColor, themeColorDark, themeColorGlow, themeColorHalf, themeColorLight, themeStroke, borderStyle, bgImgVersion, isAnimating, clickToSpinLabel, clickToSpinSub, wheelShape, hubTheme]);
   // ─────────────────────────────────────────────────────────────────────────
 
   // Idle rotation — 1 revolution per ~20s, stops on first spin

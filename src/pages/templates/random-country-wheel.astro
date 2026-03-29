@@ -40,6 +40,8 @@ const defaultParticipants = [
   { pseudo: "Peru", weight: 1 },
 ];
 
+const myColors = ['#1e40af','#15803d','#d97706','#dc2626','#0891b2','#2563eb','#16a34a','#b45309'];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -48,6 +50,205 @@ const jsonLd = {
   "url": "https://realwheelpicker.com/templates/random-country-wheel",
 };
 ---
+
+<style>
+/* ===== GLOBE TERRESTRE — NUIT VUE DE L'ESPACE ===== */
+.globe-page {
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background: #020b18;
+}
+
+.globe-sky {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(ellipse at 50% 40%, #0a1f3d 0%, #041426 40%, #020b18 100%);
+}
+
+/* Grille globe — latitude/longitude */
+.globe-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(30,120,200,0.07) 0px, rgba(30,120,200,0.07) 1px, transparent 1px, transparent 60px),
+    repeating-linear-gradient(90deg, rgba(30,120,200,0.07) 0px, rgba(30,120,200,0.07) 1px, transparent 1px, transparent 60px);
+  border-radius: 50%;
+  width: 120vmax;
+  height: 120vmax;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: globeRotate 80s linear infinite;
+}
+
+/* Points lumineux — villes */
+.city-dot {
+  position: fixed;
+  border-radius: 50%;
+  background: #60a5fa;
+  box-shadow: 0 0 6px 2px #3b82f6, 0 0 12px 4px rgba(59,130,246,0.4);
+  animation: cityPulse 3s ease-in-out infinite;
+}
+
+/* Avion traversant l'écran */
+.plane {
+  position: fixed;
+  font-size: 1.8rem;
+  z-index: 4;
+  animation: planeFly 14s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(96,165,250,0.8));
+}
+.plane:nth-child(2) { animation-delay: -6s; font-size: 1.3rem; top: 30%; animation-duration: 18s; }
+.plane:nth-child(3) { animation-delay: -11s; font-size: 1rem; top: 65%; animation-duration: 22s; }
+
+/* Traînée avion */
+.plane-trail {
+  position: fixed;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(96,165,250,0.5), rgba(255,255,255,0.3), transparent);
+  z-index: 3;
+  animation: trailFly 14s linear infinite;
+  top: 18%;
+  width: 120px;
+}
+.plane-trail:nth-child(2) { animation-delay: -6s; top: 31%; width: 80px; animation-duration: 18s; }
+
+/* Drapeaux flottants */
+.flag-float {
+  position: fixed;
+  font-size: 1.6rem;
+  z-index: 3;
+  animation: flagFloat 7s ease-in-out infinite;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+}
+
+/* Étoiles spatiales */
+.star-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: starTwinkle 4s ease-in-out infinite;
+}
+
+/* Halo globe central */
+.globe-glow {
+  position: fixed;
+  width: 60vmin;
+  height: 60vmin;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(30,64,175,0.12) 0%, rgba(8,145,178,0.08) 50%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  animation: globeGlow 6s ease-in-out infinite;
+  border: 1px solid rgba(30,120,200,0.1);
+}
+
+/* ===== KEYFRAMES ===== */
+@keyframes globeRotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes planeFly {
+  0% { transform: translateX(-120px) translateY(0); left: -5%; top: 18%; opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% { transform: translateX(0) translateY(-30px); left: 105%; top: 18%; opacity: 0; }
+}
+
+@keyframes trailFly {
+  0% { left: -130px; opacity: 0; }
+  5% { opacity: 0.7; }
+  95% { opacity: 0.3; }
+  100% { left: 105%; opacity: 0; }
+}
+
+@keyframes flagFloat {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-18px) rotate(5deg); }
+}
+
+@keyframes cityPulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.6); }
+}
+
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+@keyframes globeGlow {
+  0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+}
+
+/* ===== CONTENU ===== */
+.globe-content {
+  position: relative;
+  z-index: 10;
+}
+
+.globe-title {
+  background: linear-gradient(135deg, #60a5fa 0%, #0891b2 40%, #3b82f6 80%, #93c5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px rgba(96,165,250,0.4));
+}
+
+.globe-card {
+  background: rgba(4, 20, 38, 0.8);
+  border: 1px solid rgba(30, 64, 175, 0.3);
+  backdrop-filter: blur(12px);
+}
+
+.globe-card:hover {
+  border-color: rgba(96, 165, 250, 0.5);
+}
+
+.globe-tag {
+  background: rgba(30, 64, 175, 0.2);
+  border: 1px solid rgba(30, 64, 175, 0.4);
+  color: #93c5fd;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+}
+
+.globe-link {
+  background: rgba(4, 20, 38, 0.8);
+  border: 1px solid rgba(30, 64, 175, 0.25);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s;
+}
+.globe-link:hover {
+  border-color: rgba(96, 165, 250, 0.5);
+  box-shadow: 0 4px 20px rgba(30,64,175,0.2);
+}
+
+.globe-highlight {
+  background: rgba(30, 64, 175, 0.12);
+  border: 1px solid rgba(30, 64, 175, 0.25);
+}
+
+.globe-faq {
+  background: rgba(4, 20, 38, 0.7);
+  border: 1px solid rgba(30, 64, 175, 0.2);
+  backdrop-filter: blur(8px);
+}
+</style>
 
 <Layout
   title={title}
@@ -62,139 +263,178 @@ const jsonLd = {
     { name: "Random Country Wheel", url: "https://realwheelpicker.com/templates/random-country-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  <div class="globe-page">
+    <div class="globe-sky"></div>
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <!-- Étoiles spatiales -->
+    <div class="star-field">
+      <div class="star" style="width:2px;height:2px;top:5%;left:10%;animation-delay:0s;"></div>
+      <div class="star" style="width:1px;height:1px;top:8%;left:25%;animation-delay:0.5s;"></div>
+      <div class="star" style="width:3px;height:3px;top:3%;left:45%;animation-delay:1s;"></div>
+      <div class="star" style="width:1px;height:1px;top:12%;left:70%;animation-delay:1.5s;"></div>
+      <div class="star" style="width:2px;height:2px;top:7%;left:85%;animation-delay:0.8s;"></div>
+      <div class="star" style="width:1px;height:1px;top:20%;left:5%;animation-delay:2s;"></div>
+      <div class="star" style="width:2px;height:2px;top:25%;left:92%;animation-delay:2.5s;"></div>
+      <div class="star" style="width:1px;height:1px;top:40%;left:3%;animation-delay:1.2s;"></div>
+      <div class="star" style="width:3px;height:3px;top:55%;left:97%;animation-delay:0.3s;"></div>
+      <div class="star" style="width:1px;height:1px;top:70%;left:8%;animation-delay:1.8s;"></div>
+      <div class="star" style="width:2px;height:2px;top:80%;left:90%;animation-delay:0.7s;"></div>
+      <div class="star" style="width:1px;height:1px;top:90%;left:30%;animation-delay:2.2s;"></div>
+    </div>
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Random Country Wheel</span>
-      </nav>
+    <!-- Grille de globe -->
+    <div class="globe-grid"></div>
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Random Country Generator — Spin the World Wheel
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Spin to pick a random country. Great for geography games, travel planning, cooking challenges, and classroom activities.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Halo globe -->
+    <div class="globe-glow"></div>
 
-      <!-- Wheel -->
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <!-- Points lumineux — villes -->
+    <div class="city-dot" style="width:6px;height:6px;top:28%;left:48%;animation-delay:0s;"></div>
+    <div class="city-dot" style="width:4px;height:4px;top:35%;left:30%;animation-delay:0.8s;"></div>
+    <div class="city-dot" style="width:5px;height:5px;top:55%;left:60%;animation-delay:1.5s;"></div>
+    <div class="city-dot" style="width:4px;height:4px;top:40%;left:75%;animation-delay:0.4s;"></div>
+    <div class="city-dot" style="width:6px;height:6px;top:62%;left:20%;animation-delay:2s;"></div>
+    <div class="city-dot" style="width:3px;height:3px;top:22%;left:62%;animation-delay:1s;"></div>
+    <div class="city-dot" style="width:5px;height:5px;top:48%;left:42%;animation-delay:1.8s;"></div>
+    <div class="city-dot" style="width:4px;height:4px;top:70%;left:55%;animation-delay:0.6s;"></div>
 
-      <!-- Article Content -->
-      <section class="space-y-8">
+    <!-- Avions -->
+    <div class="plane" style="top:18%;">&#9992;</div>
+    <div class="plane" style="top:30%;">&#9992;</div>
+    <div class="plane" style="top:65%;">&#9992;</div>
+    <div class="plane-trail"></div>
+    <div class="plane-trail"></div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Uses for the Random Country Wheel</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Geography quiz host? Use the wheel to pick the next country to identify. Homeschool teacher? Spin to choose which country your students research this week. Adventurous cook? Spin the wheel and cook a dish from whatever country it lands on — a fun way to explore world cuisines every week without having to make the choice yourself.
+    <!-- Drapeaux flottants -->
+    <div class="flag-float" style="top:15%;left:8%;animation-delay:0s;">&#127988;</div>
+    <div class="flag-float" style="top:35%;left:88%;animation-delay:1.5s;">&#127987;</div>
+    <div class="flag-float" style="top:60%;left:5%;animation-delay:3s;">&#127988;</div>
+    <div class="flag-float" style="top:72%;left:92%;animation-delay:0.8s;">&#127987;</div>
+
+    <div class="globe-content">
+      <HeaderIsland client:load />
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="text-xs flex gap-1 mb-6" style="color:rgba(147,197,253,0.7)">
+          <a href="/" class="hover:text-blue-300 transition-colors" style="color:rgba(147,197,253,0.7)">Home</a>
+          <span style="color:rgba(147,197,253,0.4)">/</span>
+          <a href="/templates" class="hover:text-blue-300 transition-colors" style="color:rgba(147,197,253,0.7)">Templates</a>
+          <span style="color:rgba(147,197,253,0.4)">/</span>
+          <span style="color:#93c5fd">Random Country Wheel</span>
+        </nav>
+
+        <!-- Hero -->
+        <section class="text-center space-y-4 py-4 mb-8">
+          <div class="flex justify-center gap-2 flex-wrap mb-3">
+            <span class="globe-tag">&#127760; World</span>
+            <span class="globe-tag">&#127758; Geography</span>
+            <span class="globe-tag">&#9992; Explore</span>
+          </div>
+          <h1 class="text-3xl md:text-5xl font-bold leading-tight globe-title">
+            Random Country Generator
+          </h1>
+          <p class="text-lg md:text-xl max-w-2xl mx-auto" style="color:rgba(147,197,253,0.85)">
+            Spin the world wheel and discover your next destination, quiz country, or culinary adventure. 195 countries await.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            The randomness is the feature: when the wheel picks for you, you're pushed toward countries you wouldn't have chosen on your own. That's the point. Every spin is a small adventure.
-          </p>
-        </div>
+          <p class="text-sm" style="color:rgba(96,165,250,0.6)">Free &bull; No account &bull; Instant result</p>
+        </section>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Country Cuisine Challenge</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Pick a country each week and cook one dish from that country. Japan means sushi or ramen. Brazil means feijoada. Egypt means koshari or ful medames. India means dahl or biryani. This challenge has become popular on food blogs and family YouTube channels as a way to explore global cooking without leaving home.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            The wheel removes the selection paralysis. Instead of debating which cuisine to try this week, you spin. Whatever lands, you research one dish from that country and cook it before the next spin. Over a year, you'll have explored 52 countries through their food.
-          </p>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {[
-              { country: "Japan", dish: "Ramen or sushi" },
-              { country: "Mexico", dish: "Enchiladas" },
-              { country: "India", dish: "Biryani" },
-              { country: "France", dish: "Ratatouille" },
-              { country: "Peru", dish: "Ceviche" },
-              { country: "South Korea", dish: "Bibimbap" },
-              { country: "Egypt", dish: "Koshari" },
-              { country: "Norway", dish: "Gravlax" },
-            ].map(({ country, dish }) => (
-              <div class="p-3 rounded-lg bg-primary/5 border border-primary/20 text-center">
-                <p class="font-semibold text-foreground text-sm">{country}</p>
-                <p class="text-muted-foreground text-xs mt-1">{dish}</p>
+        <!-- Wheel -->
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} colors={myColors} wheelShape="circle" hubTheme="teal" client:load />
+
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <section class="space-y-6">
+          <div class="globe-card p-6 rounded-xl space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold" style="color:#93c5fd">Uses for the Random Country Wheel</h2>
+            <p class="leading-relaxed" style="color:rgba(147,197,253,0.75)">
+              Geography quiz host? Use the wheel to pick the next country to identify. Homeschool teacher? Spin to choose which country your students research this week. Adventurous cook? Spin the wheel and cook a dish from whatever country it lands on — a fun way to explore world cuisines every week without having to make the choice yourself.
+            </p>
+            <p class="leading-relaxed" style="color:rgba(147,197,253,0.75)">
+              The randomness is the feature: when the wheel picks for you, you're pushed toward countries you wouldn't have chosen on your own. That's the point. Every spin is a small adventure.
+            </p>
+          </div>
+
+          <div class="globe-card p-6 rounded-xl space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold" style="color:#93c5fd">The Country Cuisine Challenge</h2>
+            <p class="leading-relaxed" style="color:rgba(147,197,253,0.75)">
+              Pick a country each week and cook one dish from that country. Japan means sushi or ramen. Brazil means feijoada. Egypt means koshari. Over a year, you'll have explored 52 countries through their food.
+            </p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+              {[
+                { country: "Japan", dish: "Ramen or sushi" },
+                { country: "Mexico", dish: "Enchiladas" },
+                { country: "India", dish: "Biryani" },
+                { country: "France", dish: "Ratatouille" },
+                { country: "Peru", dish: "Ceviche" },
+                { country: "South Korea", dish: "Bibimbap" },
+                { country: "Egypt", dish: "Koshari" },
+                { country: "Norway", dish: "Gravlax" },
+              ].map(({ country, dish }) => (
+                <div class="globe-highlight p-3 rounded-lg text-center">
+                  <p class="font-semibold text-sm" style="color:#93c5fd">{country}</p>
+                  <p class="text-xs mt-1" style="color:rgba(147,197,253,0.6)">{dish}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div class="globe-card p-6 rounded-xl space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold" style="color:#93c5fd">For Travelers and Bucket List Builders</h2>
+            <p class="leading-relaxed" style="color:rgba(147,197,253,0.75)">
+              Can't decide where to travel next? Put your shortlist on the wheel and spin. No more analysis paralysis. The wheel commits. You book. Many travelers report this method being surprisingly satisfying — the anticipation of the spin builds excitement for whatever destination wins.
+            </p>
+          </div>
+
+          <div class="globe-card p-6 rounded-xl space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold" style="color:#93c5fd">In the Classroom</h2>
+            <p class="leading-relaxed" style="color:rgba(147,197,253,0.75)">
+              Geography teachers use random country wheels to keep lessons unpredictable. Spin for the country you'll study today. The random selection removes any perception of favoritism and naturally distributes attention across the world.
+            </p>
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#93c5fd">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <div class="globe-faq rounded-xl p-5">
+                <p class="font-semibold mb-2" style="color:#bfdbfe">{question}</p>
+                <p class="text-sm leading-relaxed" style="color:rgba(147,197,253,0.7)">{answer}</p>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">For Travelers and Bucket List Builders</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Can't decide where to travel next? Put your shortlist on the wheel and spin. No more analysis paralysis between five equally appealing destinations. The wheel commits. You book. Many travelers report this method being surprisingly satisfying — the anticipation of the spin builds excitement for whatever destination wins.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            For bucket list builders, spin the full world wheel and add wherever it lands to your list. Replace the default countries with all 195 to get a truly global random destination generator. You might discover a country you'd never have considered that ends up being the best trip you ever take.
-          </p>
-        </div>
+        <!-- Related Tools -->
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#93c5fd">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
+              { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random name from your list without the wheel animation." },
+              { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Run transparent prize draws for contests and promotions." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="globe-link flex items-start gap-3 p-4 rounded-xl">
+                  <span class="font-bold text-sm mt-0.5" style="color:#3b82f6">&#8594;</span>
+                  <span>
+                    <span class="font-semibold" style="color:#bfdbfe">{label}</span>
+                    <span class="text-sm" style="color:rgba(147,197,253,0.6)"> &mdash; {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">In the Classroom</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Geography teachers use random country wheels to keep lessons unpredictable. Spin for the country you'll study today. Spin for the country students present their research on. Spin to choose which team gets which country in a global competition simulation.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            The random selection removes any perception of favoritism in assignment — nobody chose the difficult country deliberately. It also naturally distributes attention across the world rather than gravitating toward the same well-known nations. Students who research less-covered countries often produce more original and interesting work.
-          </p>
-        </div>
-
-      </section>
-
-      <!-- FAQ -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/", label: "Spin the Wheel", desc: "The main wheel picker — add any names or options and spin." },
-            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick a random name from your list without the wheel animation." },
-            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Run transparent prize draws for contests and promotions." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-    </main>
-
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

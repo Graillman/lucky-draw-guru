@@ -38,6 +38,8 @@ const defaultParticipants = [
   { pseudo: "🐱 Black Cat",     weight: 1 },
 ];
 
+const hwColors = ['#ff6d00','#cc3300','#7c1aff','#ff8c00','#550088','#ff4500','#8800cc','#ff5500','#6600aa','#ff3300'];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -48,94 +50,146 @@ const jsonLd = {
 ---
 
 <style>
-  /* ═══════════ FULL-PAGE HALLOWEEN THEME ═══════════ */
+  /* ═══════════ HALLOWEEN — FULL IMMERSIVE DARK THEME ═══════════ */
   .hw-page {
-    background: #050005;
+    background: #030005;
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
   }
 
-  /* Night sky with pumpkin glow */
+  /* Night horror sky */
   .hw-sky {
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(ellipse 70% 50% at 30% 0%, rgba(255,80,0,0.22) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 40% at 75% 10%, rgba(150,0,150,0.18) 0%, transparent 55%),
-      radial-gradient(ellipse 80% 30% at 50% 100%, rgba(180,40,0,0.25) 0%, transparent 60%),
-      linear-gradient(180deg, #050005 0%, #0d0508 40%, #050005 100%);
+      radial-gradient(ellipse 80% 60% at 25% -5%,  rgba(255,70,0,0.30) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 50% at 80% 5%,   rgba(120,0,160,0.25) 0%, transparent 55%),
+      radial-gradient(ellipse 90% 40% at 50% 100%, rgba(200,40,0,0.28) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 10% 60%,  rgba(80,0,80,0.2) 0%, transparent 50%),
+      linear-gradient(180deg, #030005 0%, #0a0310 40%, #030005 100%);
     pointer-events: none;
     z-index: 0;
   }
 
-  /* Pumpkin glow orbs */
+  /* Full moon */
+  .full-moon {
+    position: fixed;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 35%, #fff8d6 0%, #ffd86e 30%, #e8b800 60%, #b88a00 100%);
+    top: 6%;
+    right: 8%;
+    pointer-events: none;
+    z-index: 1;
+    box-shadow: 0 0 40px rgba(255,200,0,0.4), 0 0 80px rgba(255,180,0,0.2);
+    animation: moonGlow 6s ease-in-out infinite alternate;
+  }
+  @keyframes moonGlow {
+    from { box-shadow: 0 0 40px rgba(255,200,0,0.35), 0 0 80px rgba(255,180,0,0.15); }
+    to   { box-shadow: 0 0 60px rgba(255,200,0,0.55), 0 0 120px rgba(255,180,0,0.3); }
+  }
+  .moon-crater {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.12);
+  }
+
+  /* Pumpkin glow pools */
   .pumpkin-glow {
     position: fixed;
     border-radius: 50%;
-    filter: blur(70px);
+    filter: blur(90px);
     pointer-events: none;
     z-index: 0;
     animation: pumpkinPulse ease-in-out infinite alternate;
   }
   @keyframes pumpkinPulse {
-    from { opacity: 0.4; transform: scale(1); }
-    to   { opacity: 0.85; transform: scale(1.15); }
+    from { opacity: 0.35; transform: scale(0.95); }
+    to   { opacity: 0.75; transform: scale(1.08); }
   }
 
-  /* Flying bats */
+  /* Flying bats — 12 */
   .bat {
     position: fixed;
     pointer-events: none;
-    z-index: 1;
-    font-style: normal;
+    z-index: 2;
     animation: batFly ease-in-out infinite;
-    opacity: 0.7;
+    opacity: 0.75;
+    user-select: none;
   }
   @keyframes batFly {
     0%   { transform: translate(0, 0) scaleX(1); }
-    25%  { transform: translate(80px, -40px) scaleX(1); }
-    50%  { transform: translate(160px, 10px) scaleX(-1); }
-    75%  { transform: translate(80px, -20px) scaleX(-1); }
+    20%  { transform: translate(60px, -50px) scaleX(1); }
+    50%  { transform: translate(140px, 15px) scaleX(-1); }
+    80%  { transform: translate(60px, -30px) scaleX(-1); }
     100% { transform: translate(0, 0) scaleX(1); }
   }
 
-  /* Fog wisps */
+  /* Ghost floaters */
+  .ghost {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    animation: ghostDrift ease-in-out infinite;
+    opacity: 0;
+    font-size: 2rem;
+    user-select: none;
+  }
+  @keyframes ghostDrift {
+    0%   { transform: translateY(0) translateX(0); opacity: 0; }
+    10%  { opacity: 0.4; }
+    50%  { transform: translateY(-30px) translateX(15px); opacity: 0.3; }
+    90%  { opacity: 0.2; }
+    100% { transform: translateY(0) translateX(0); opacity: 0; }
+  }
+
+  /* Fog wisps — ground level */
   .fog {
     position: fixed;
-    height: 60px;
+    height: 80px;
     border-radius: 50%;
-    filter: blur(30px);
+    filter: blur(40px);
     pointer-events: none;
     z-index: 1;
     animation: fogDrift linear infinite;
     opacity: 0;
-    background: rgba(200, 180, 255, 0.12);
+    background: rgba(180, 150, 255, 0.10);
   }
   @keyframes fogDrift {
-    0%   { transform: translateX(-200px); opacity: 0; }
-    10%  { opacity: 0.6; }
-    90%  { opacity: 0.4; }
+    0%   { transform: translateX(-300px); opacity: 0; }
+    8%   { opacity: 0.7; }
+    92%  { opacity: 0.5; }
     100% { transform: translateX(110vw); opacity: 0; }
   }
 
-  /* Falling leaves */
+  /* Falling autumn leaves */
   .leaf {
     position: fixed;
     pointer-events: none;
     z-index: 1;
     animation: leafFall linear infinite;
     opacity: 0;
-    font-style: normal;
+    user-select: none;
   }
   @keyframes leafFall {
     0%   { transform: translateY(-30px) rotate(0deg); opacity: 0; }
-    8%   { opacity: 0.8; }
+    8%   { opacity: 0.9; }
     92%  { opacity: 0.5; }
-    100% { transform: translateY(110vh) rotate(540deg); opacity: 0; }
+    100% { transform: translateY(110vh) rotate(600deg); opacity: 0; }
   }
 
-  /* Sparkle eyes in darkness */
+  /* Spiderweb corners */
+  .spiderweb {
+    position: fixed;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.25;
+    filter: drop-shadow(0 0 4px rgba(255,150,0,0.4));
+  }
+
+  /* Evil eyes */
   .evil-eye {
     position: fixed;
     pointer-events: none;
@@ -144,21 +198,51 @@ const jsonLd = {
     animation: eyeGlow ease-in-out infinite alternate;
   }
   @keyframes eyeGlow {
-    from { opacity: 0.1; box-shadow: none; }
-    to   { opacity: 0.8; box-shadow: 0 0 12px currentColor; }
+    from { opacity: 0.08; box-shadow: none; }
+    to   { opacity: 0.9; box-shadow: 0 0 18px currentColor, 0 0 36px currentColor; }
+  }
+
+  /* Gravestones silhouette at bottom */
+  .graves {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    pointer-events: none;
+    z-index: 2;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100'%3E%3Crect fill='%23030005' x='0' y='60' width='1200' height='40'/%3E%3Crect fill='%23030005' x='50' y='30' width='40' height='35' rx='20' ry='20'/%3E%3Crect fill='%23030005' x='180' y='20' width='50' height='45' rx='25' ry='25'/%3E%3Crect fill='%23030005' x='320' y='35' width='35' height='30' rx='17' ry='17'/%3E%3Crect fill='%23030005' x='480' y='15' width='55' height='50' rx='27' ry='27'/%3E%3Crect fill='%23030005' x='650' y='28' width='42' height='37' rx='21' ry='21'/%3E%3Crect fill='%23030005' x='800' y='18' width='48' height='46' rx='24' ry='24'/%3E%3Crect fill='%23030005' x='950' y='32' width='38' height='33' rx='19' ry='19'/%3E%3Crect fill='%23030005' x='1100' y='22' width='45' height='42' rx='22' ry='22'/%3E%3C/svg%3E") bottom/cover no-repeat;
+  }
+
+  /* Strobe flicker */
+  .hw-strobe {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,100,0,0.03);
+    pointer-events: none;
+    z-index: 3;
+    animation: hwStrobe 10s ease-in-out infinite;
+  }
+  @keyframes hwStrobe {
+    0%,100% { opacity: 0; }
+    45%     { opacity: 0; }
+    47%     { opacity: 1; }
+    49%     { opacity: 0; }
+    51%     { opacity: 0.5; }
+    53%     { opacity: 0; }
   }
 
   .hw-content { position: relative; z-index: 10; }
 
   /* Title */
   .hw-title {
-    background: linear-gradient(135deg, #ff6d00 0%, #ff3d00 35%, #dc2f02 65%, #ff6d00 100%);
+    background: linear-gradient(135deg, #ff6d00 0%, #ff3d00 30%, #cc2200 60%, #ff8c00 100%);
     background-size: 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: hwShimmer 4s ease-in-out infinite;
-    filter: drop-shadow(0 0 25px rgba(255,80,0,0.5));
+    filter: drop-shadow(0 0 30px rgba(255,80,0,0.6));
   }
   @keyframes hwShimmer {
     0%,100% { background-position: 0% 50%; }
@@ -166,9 +250,9 @@ const jsonLd = {
   }
 
   .hw-tag {
-    background: rgba(255, 100, 0, 0.15);
-    border: 1px solid rgba(255, 100, 0, 0.35);
-    color: rgba(255, 140, 50, 0.9);
+    background: rgba(255,100,0,0.15);
+    border: 1px solid rgba(255,100,0,0.38);
+    color: rgba(255,150,60,0.95);
     border-radius: 9999px;
     padding: 4px 14px;
     font-size: 0.72rem;
@@ -176,18 +260,18 @@ const jsonLd = {
   }
 
   .hw-card {
-    background: rgba(255, 70, 0, 0.07);
-    border: 1px solid rgba(255, 100, 0, 0.2);
+    background: rgba(255,60,0,0.07);
+    border: 1px solid rgba(255,100,0,0.22);
     border-radius: 0.75rem;
     transition: border-color 0.2s, background 0.2s;
   }
   .hw-card:hover {
-    border-color: rgba(255, 100, 0, 0.5);
-    background: rgba(255, 70, 0, 0.13);
+    border-color: rgba(255,100,0,0.55);
+    background: rgba(255,60,0,0.13);
   }
   details.hw-faq {
-    background: rgba(255, 70, 0, 0.06);
-    border: 1px solid rgba(255, 100, 0, 0.2);
+    background: rgba(255,60,0,0.06);
+    border: 1px solid rgba(255,100,0,0.2);
     border-radius: 0.75rem;
     padding: 1.25rem;
   }
@@ -203,43 +287,82 @@ const jsonLd = {
 
   <div class="hw-page">
     <div class="hw-sky"></div>
+    <div class="hw-strobe"></div>
+
+    <!-- Full moon -->
+    <div class="full-moon">
+      <div class="moon-crater" style="width:18px;height:18px;top:22px;left:30px;"></div>
+      <div class="moon-crater" style="width:10px;height:10px;top:55px;left:65px;"></div>
+      <div class="moon-crater" style="width:14px;height:14px;top:40px;left:18px;"></div>
+    </div>
 
     <!-- Pumpkin glow pools -->
-    <div class="pumpkin-glow" style="width:500px;height:400px;background:radial-gradient(circle,rgba(255,80,0,0.3) 0%,transparent 70%);top:-100px;left:-80px;animation-duration:4s;"></div>
-    <div class="pumpkin-glow" style="width:400px;height:400px;background:radial-gradient(circle,rgba(150,0,150,0.2) 0%,transparent 70%);top:-80px;right:-60px;animation-duration:6s;animation-delay:1s;"></div>
-    <div class="pumpkin-glow" style="width:350px;height:300px;background:radial-gradient(circle,rgba(255,60,0,0.22) 0%,transparent 70%);bottom:15%;left:40%;transform:translateX(-50%);animation-duration:5s;animation-delay:2s;"></div>
+    <div class="pumpkin-glow" style="width:600px;height:500px;background:radial-gradient(circle,rgba(255,70,0,0.32) 0%,transparent 70%);top:-150px;left:-100px;animation-duration:5s;"></div>
+    <div class="pumpkin-glow" style="width:500px;height:450px;background:radial-gradient(circle,rgba(120,0,160,0.22) 0%,transparent 70%);top:-100px;right:-80px;animation-duration:7s;animation-delay:1s;"></div>
+    <div class="pumpkin-glow" style="width:380px;height:320px;background:radial-gradient(circle,rgba(200,40,0,0.22) 0%,transparent 70%);bottom:12%;left:42%;transform:translateX(-50%);animation-duration:6s;animation-delay:2s;"></div>
 
-    <!-- Flying bats -->
-    <span class="bat" style="font-size:1.2rem;left:5%;top:15%;animation-duration:6s;animation-delay:0s;">🦇</span>
-    <span class="bat" style="font-size:0.9rem;left:70%;top:8%;animation-duration:8s;animation-delay:2s;">🦇</span>
-    <span class="bat" style="font-size:1.5rem;left:45%;top:25%;animation-duration:7s;animation-delay:1s;">🦇</span>
-    <span class="bat" style="font-size:0.8rem;left:85%;top:18%;animation-duration:5s;animation-delay:3s;">🦇</span>
-    <span class="bat" style="font-size:1.1rem;left:20%;top:40%;animation-duration:9s;animation-delay:0.5s;">🦇</span>
+    <!-- Flying bats — 12 -->
+    {[
+      {l:"4%",t:"12%",fs:"1.4rem",dur:"7s",del:"0s"},{l:"15%",t:"22%",fs:"0.9rem",dur:"9s",del:"1.5s"},
+      {l:"30%",t:"8%",fs:"1.8rem",dur:"6s",del:"0.8s"},{l:"50%",t:"18%",fs:"1.1rem",dur:"8s",del:"2.5s"},
+      {l:"65%",t:"6%",fs:"0.8rem",dur:"7s",del:"3s"},{l:"78%",t:"15%",fs:"1.5rem",dur:"10s",del:"1s"},
+      {l:"88%",t:"25%",fs:"1.2rem",dur:"6s",del:"0.3s"},{l:"20%",t:"35%",fs:"0.7rem",dur:"11s",del:"4s"},
+      {l:"42%",t:"28%",fs:"1.3rem",dur:"8s",del:"2s"},{l:"60%",t:"32%",fs:"0.9rem",dur:"9s",del:"1.2s"},
+      {l:"72%",t:"38%",fs:"1.6rem",dur:"7s",del:"3.5s"},{l:"93%",t:"20%",fs:"1.0rem",dur:"5s",del:"0.6s"},
+    ].map(b => (
+      <span class="bat" style={`font-size:${b.fs};left:${b.l};top:${b.t};animation-duration:${b.dur};animation-delay:${b.del};`}>🦇</span>
+    ))}
+
+    <!-- Ghosts -->
+    <span class="ghost" style="left:5%;top:50%;animation-duration:8s;animation-delay:0s;">👻</span>
+    <span class="ghost" style="left:85%;top:40%;animation-duration:11s;animation-delay:3s;">👻</span>
+    <span class="ghost" style="left:45%;top:65%;animation-duration:9s;animation-delay:1.5s;font-size:1.4rem;">👻</span>
 
     <!-- Fog wisps -->
-    <div class="fog" style="width:300px;bottom:8%;left:-200px;animation-duration:18s;animation-delay:0s;"></div>
-    <div class="fog" style="width:400px;bottom:5%;left:-200px;animation-duration:22s;animation-delay:5s;"></div>
-    <div class="fog" style="width:250px;bottom:12%;left:-200px;animation-duration:15s;animation-delay:9s;"></div>
+    <div class="fog" style="width:400px;bottom:7%;left:-300px;animation-duration:20s;animation-delay:0s;"></div>
+    <div class="fog" style="width:500px;bottom:4%;left:-300px;animation-duration:25s;animation-delay:6s;"></div>
+    <div class="fog" style="width:300px;bottom:10%;left:-300px;animation-duration:17s;animation-delay:12s;"></div>
 
-    <!-- Falling leaves -->
-    <span class="leaf" style="font-size:1rem;left:8%;animation-duration:6s;animation-delay:0s;">🍂</span>
-    <span class="leaf" style="font-size:0.8rem;left:22%;animation-duration:8s;animation-delay:1.5s;">🍁</span>
-    <span class="leaf" style="font-size:1.2rem;left:40%;animation-duration:5s;animation-delay:3s;">🍂</span>
-    <span class="leaf" style="font-size:0.9rem;left:60%;animation-duration:7s;animation-delay:0.8s;">🍁</span>
-    <span class="leaf" style="font-size:1.1rem;left:78%;animation-duration:9s;animation-delay:2s;">🍂</span>
-    <span class="leaf" style="font-size:0.7rem;left:92%;animation-duration:6.5s;animation-delay:4s;">🍁</span>
+    <!-- Falling leaves — 10 -->
+    {[
+      {l:"5%",fs:"1.1rem",dur:"6s",del:"0s",e:"🍂"},{l:"14%",fs:"0.8rem",dur:"8s",del:"1.5s",e:"🍁"},
+      {l:"25%",fs:"1.3rem",dur:"5s",del:"3s",e:"🍂"},{l:"38%",fs:"0.9rem",dur:"7s",del:"0.8s",e:"🍁"},
+      {l:"52%",fs:"1.2rem",dur:"9s",del:"2s",e:"🍂"},{l:"65%",fs:"0.7rem",dur:"6s",del:"4s",e:"🍁"},
+      {l:"76%",fs:"1.4rem",dur:"8s",del:"1s",e:"🍂"},{l:"85%",fs:"0.9rem",dur:"5.5s",del:"2.5s",e:"🍁"},
+      {l:"93%",fs:"1.1rem",dur:"7s",del:"0.3s",e:"🍂"},{l:"44%",fs:"0.8rem",dur:"9.5s",del:"5s",e:"🍁"},
+    ].map(lf => (
+      <span class="leaf" style={`font-size:${lf.fs};left:${lf.l};animation-duration:${lf.dur};animation-delay:${lf.del};`}>{lf.e}</span>
+    ))}
 
-    <!-- Evil glowing eyes in darkness -->
-    <div class="evil-eye" style="width:5px;height:5px;color:#ff6d00;background:#ff6d00;left:3%;top:55%;animation-duration:2s;"></div>
-    <div class="evil-eye" style="width:5px;height:5px;color:#ff6d00;background:#ff6d00;left:6%;top:55%;animation-duration:2s;animation-delay:0.1s;"></div>
-    <div class="evil-eye" style="width:4px;height:4px;color:#9900cc;background:#9900cc;left:88%;top:70%;animation-duration:3s;animation-delay:1s;"></div>
-    <div class="evil-eye" style="width:4px;height:4px;color:#9900cc;background:#9900cc;left:91%;top:70%;animation-duration:3s;animation-delay:1.1s;"></div>
+    <!-- Spiderweb SVG corners -->
+    <svg class="spiderweb" style="top:0;left:0;width:120px;height:120px;" viewBox="0 0 120 120">
+      <g stroke="rgba(200,150,255,0.6)" stroke-width="1" fill="none">
+        {[20,40,60,80,100].map(r => <ellipse cx="0" cy="0" rx={r} ry={r*0.5} />)}
+        {[0,30,60,90,120,150].map(a => <line x1="0" y1="0" x2={120*Math.cos(a*Math.PI/180)} y2={60*Math.sin(a*Math.PI/180)} />)}
+      </g>
+    </svg>
+    <svg class="spiderweb" style="top:0;right:0;width:120px;height:120px;transform:scaleX(-1);" viewBox="0 0 120 120">
+      <g stroke="rgba(200,150,255,0.6)" stroke-width="1" fill="none">
+        {[20,40,60,80,100].map(r => <ellipse cx="0" cy="0" rx={r} ry={r*0.5} />)}
+        {[0,30,60,90,120,150].map(a => <line x1="0" y1="0" x2={120*Math.cos(a*Math.PI/180)} y2={60*Math.sin(a*Math.PI/180)} />)}
+      </g>
+    </svg>
+
+    <!-- Evil eyes -->
+    <div class="evil-eye" style="width:6px;height:6px;color:#ff6d00;background:#ff6d00;left:2%;top:58%;animation-duration:2.2s;"></div>
+    <div class="evil-eye" style="width:6px;height:6px;color:#ff6d00;background:#ff6d00;left:5%;top:58%;animation-duration:2.2s;animation-delay:0.1s;"></div>
+    <div class="evil-eye" style="width:5px;height:5px;color:#aa00ff;background:#aa00ff;left:87%;top:72%;animation-duration:3s;animation-delay:1s;"></div>
+    <div class="evil-eye" style="width:5px;height:5px;color:#aa00ff;background:#aa00ff;left:90%;top:72%;animation-duration:3s;animation-delay:1.1s;"></div>
+    <div class="evil-eye" style="width:4px;height:4px;color:#ff4500;background:#ff4500;left:50%;top:85%;animation-duration:2.8s;animation-delay:0.5s;"></div>
+    <div class="evil-eye" style="width:4px;height:4px;color:#ff4500;background:#ff4500;left:53%;top:85%;animation-duration:2.8s;animation-delay:0.6s;"></div>
+
+    <!-- Gravestones silhouette -->
+    <div class="graves"></div>
 
     <div class="hw-content">
       <HeaderIsland client:load />
 
       <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
-
         <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
           <a href="/" class="hover:text-white/60 transition-colors">Home</a>
           <span>/</span>
@@ -264,7 +387,13 @@ const jsonLd = {
           </div>
         </div>
 
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={hwColors}
+          wheelShape="circle"
+          hubTheme="fire"
+          client:load
+        />
       </div>
 
       <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">

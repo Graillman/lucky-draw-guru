@@ -40,6 +40,8 @@ const defaultParticipants = [
   { pseudo: "Non-Fiction", weight: 1 },
 ];
 
+const myColors = ['#8b4513','#d4a853','#f5f5dc','#8b0000','#4a4a8a','#d2691e','#800000','#5c4033'];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -49,12 +51,228 @@ const jsonLd = {
 };
 ---
 
-<Layout
-  title={title}
-  description={description}
-  canonical={canonical}
-  jsonLd={jsonLd}
->
+<style>
+  /* ===== BIBLIOTHÈQUE NOCTURNE — SÉPIA ===== */
+
+  .library-page {
+    min-height: 100vh;
+    background: #0d0800;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Fond bibliothèque sombre brun sépia */
+  .library-bg {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 20%, #1a0e04 0%, #0d0800 50%, #060400 100%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Texture bois sépia */
+  .library-wood {
+    position: fixed;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        88deg,
+        rgba(139,69,19,0.08) 0px,
+        rgba(100,50,10,0.04) 6px,
+        transparent 12px,
+        rgba(180,100,30,0.06) 20px
+      ),
+      repeating-linear-gradient(
+        178deg,
+        rgba(80,40,5,0.04) 0px,
+        transparent 40px
+      );
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Étagères de livres en bas */
+  .library-shelf {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(180deg, #1a0e04 0%, #0d0800 100%);
+    border-top: 3px solid #5c3010;
+    z-index: 100;
+    pointer-events: none;
+    display: flex;
+    align-items: flex-start;
+    gap: 3px;
+    padding: 6px 10px 0;
+    overflow: hidden;
+  }
+  .library-book-spine {
+    flex-shrink: 0;
+    height: 48px;
+    border-radius: 2px 2px 0 0;
+    animation: bookBreath ease-in-out infinite alternate;
+  }
+  @keyframes bookBreath {
+    0%   { opacity: 0.5; }
+    100% { opacity: 0.9; }
+  }
+
+  /* Pages de livre flottantes */
+  .library-page-float {
+    position: fixed;
+    width: 28px;
+    height: 38px;
+    background: rgba(245,245,220,0.12);
+    border: 1px solid rgba(212,168,83,0.15);
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    animation: pageFloat ease-in-out infinite;
+  }
+  @keyframes pageFloat {
+    0%   { transform: translateY(0) rotate(-8deg);   opacity: 0; }
+    15%  { opacity: 0.4; }
+    50%  { transform: translateY(-40px) rotate(5deg);  opacity: 0.3; }
+    85%  { opacity: 0.2; }
+    100% { transform: translateY(-90px) rotate(-12deg); opacity: 0; }
+  }
+
+  /* Flammes de bougie */
+  .library-candle-wrap {
+    position: fixed;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .library-candle-body {
+    width: 10px;
+    height: 32px;
+    background: linear-gradient(180deg, #f5f5dc, #e8e0c0, #d4c090);
+    border-radius: 2px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .library-candle-flame {
+    width: 12px;
+    height: 20px;
+    background: radial-gradient(ellipse at 50% 70%, #fff7c0 0%, #ffd700 30%, #ff8c00 65%, transparent 100%);
+    border-radius: 50% 50% 35% 35%;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: candleFlicker ease-in-out infinite alternate;
+    box-shadow: 0 0 12px rgba(255,200,0,0.6), 0 0 24px rgba(255,150,0,0.3);
+  }
+  @keyframes candleFlicker {
+    0%   { transform: translateX(-50%) scaleX(1)   scaleY(1);    opacity: 0.95; }
+    33%  { transform: translateX(-48%) scaleX(0.9) scaleY(1.05); opacity: 1; }
+    66%  { transform: translateX(-52%) scaleX(1.1) scaleY(0.95); opacity: 0.9; }
+    100% { transform: translateX(-50%) scaleX(0.95) scaleY(1.1); opacity: 1; }
+  }
+
+  /* Poussière de livre */
+  .library-dust {
+    position: fixed;
+    width: 3px;
+    height: 3px;
+    background: rgba(212,168,83,0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+    animation: dustFloat ease-in-out infinite;
+  }
+  @keyframes dustFloat {
+    0%, 100% { transform: translateY(0) translateX(0);     opacity: 0.1; }
+    50%       { transform: translateY(-20px) translateX(8px); opacity: 0.5; }
+  }
+
+  /* Lueurs ambiantes sépia/or */
+  .library-glow {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    filter: blur(70px);
+    animation: libraryGlow ease-in-out infinite alternate;
+  }
+  @keyframes libraryGlow {
+    0%   { opacity: 0.25; transform: scale(1); }
+    100% { opacity: 0.5;  transform: scale(1.15); }
+  }
+
+  /* Contenu */
+  .library-content { position: relative; z-index: 10; }
+
+  /* Cards */
+  .library-card {
+    background: rgba(10,6,2,0.85);
+    border: 1px solid rgba(212,168,83,0.25);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 0 30px rgba(139,69,19,0.12), inset 0 1px 0 rgba(245,245,220,0.04);
+    backdrop-filter: blur(12px);
+  }
+  .library-inner-card {
+    background: rgba(245,245,220,0.03);
+    border: 1px solid rgba(212,168,83,0.18);
+    border-radius: 0.75rem;
+    padding: 0.875rem;
+  }
+  .library-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 1px solid;
+  }
+  .faq-card {
+    background: rgba(10,6,2,0.82);
+    border: 1px solid rgba(139,69,19,0.3);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    backdrop-filter: blur(8px);
+  }
+  .related-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(10,6,2,0.8);
+    border: 1px solid rgba(212,168,83,0.2);
+    border-radius: 1rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    backdrop-filter: blur(8px);
+  }
+  .related-card:hover {
+    border-color: rgba(212,168,83,0.6);
+    box-shadow: 0 0 20px rgba(139,69,19,0.2);
+    transform: translateY(-2px);
+  }
+
+  h1 {
+    color: #d4a853;
+    text-shadow:
+      0 0 20px rgba(212,168,83,0.5),
+      0 0 40px rgba(139,69,19,0.3),
+      1px 1px 3px rgba(0,0,0,0.9);
+    font-style: italic;
+  }
+  h2 { color: #e8d4a0; }
+  .body-text  { color: #c4a87a; }
+  .muted-text { color: #8a6a40; }
+  .bc-link { color: #8a6a40; text-decoration: none; transition: color 0.2s; }
+  .bc-link:hover { color: #d4a853; }
+</style>
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
     { name: "Home", url: "https://realwheelpicker.com" },
@@ -62,105 +280,155 @@ const jsonLd = {
     { name: "Book Genre Spinner", url: "https://realwheelpicker.com/templates/reading-genre-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  <div class="library-page">
+    <div class="library-bg"></div>
+    <div class="library-wood"></div>
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <!-- Lueurs sépia -->
+    <div class="library-glow" style="top:-80px; left:-60px; width:380px; height:380px; background:rgba(139,69,19,0.3); animation-duration:8s;"></div>
+    <div class="library-glow" style="top:30%; right:-80px; width:320px; height:320px; background:rgba(212,168,83,0.15); animation-duration:6s;"></div>
+    <div class="library-glow" style="bottom:80px; left:25%; width:450px; height:250px; background:rgba(100,50,10,0.2); animation-duration:9s;"></div>
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Book Genre Spinner</span>
-      </nav>
+    <!-- Bougies décoratives -->
+    {[
+      {l:"4%",b:"62px"},{l:"10%",b:"65px"},{l:"82%",b:"62px"},{l:"88%",b:"66px"},{l:"95%",b:"63px"},
+    ].map(({l,b}) => (
+      <div class="library-candle-wrap" style={`left:${l}; bottom:${b};`}>
+        <div class="library-candle-flame"></div>
+        <div class="library-candle-body"></div>
+      </div>
+    ))}
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Book Genre Spinner — What Should I Read Next?
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Stuck in a reading rut? Spin the genre wheel and commit to something new. Let randomness expand your literary world — one spin, one genre, one great book.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Pages flottantes -->
+    {[
+      {l:"8%",t:"20%",d:"5s",del:"0s"},{l:"18%",t:"35%",d:"7s",del:"-2s"},{l:"30%",t:"15%",d:"6s",del:"-4s"},
+      {l:"42%",t:"28%",d:"8s",del:"-1s"},{l:"55%",t:"18%",d:"5.5s",del:"-3s"},{l:"67%",t:"32%",d:"7s",del:"-5s"},
+      {l:"78%",t:"22%",d:"6.5s",del:"-2s"},{l:"88%",t:"38%",d:"8.5s",del:"-6s"},
+    ].map(({l,t,d,del}) => (
+      <div class="library-page-float" style={`left:${l}; top:${t}; animation-duration:${d}; animation-delay:${del};`}></div>
+    ))}
 
-      <!-- Wheel -->
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <!-- Poussière -->
+    {[
+      {l:"15%",t:"40%",d:"4s"},{l:"28%",t:"55%",d:"6s"},{l:"45%",t:"45%",d:"5s"},
+      {l:"60%",t:"60%",d:"7s"},{l:"72%",t:"42%",d:"4.5s"},{l:"85%",t:"50%",d:"5.5s"},
+    ].map(({l,t,d}) => (
+      <div class="library-dust" style={`left:${l}; top:${t}; animation-duration:${d};`}></div>
+    ))}
 
-      <!-- Article Content -->
-      <section class="space-y-8">
+    <!-- Étagère de livres en bas -->
+    <div class="library-shelf">
+      {[
+        "#8b4513","#d4a853","#5c4033","#8b0000","#4a4a8a","#d2691e","#800000","#8b4513",
+        "#d4a853","#5c4033","#4a3728","#8b0000","#d2691e","#8b4513","#4a4a8a","#d4a853",
+        "#5c4033","#8b0000","#d2691e","#8b4513","#4a3728","#d4a853","#800000","#4a4a8a",
+        "#d2691e","#8b4513","#5c4033","#d4a853","#8b0000","#4a3728",
+      ].map((c, i) => (
+        <div class="library-book-spine" style={`width:${14 + (i%5)*4}px; background:${c}; animation-delay:${i*0.2}s;`}></div>
+      ))}
+    </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Break Out of Your Reading Comfort Zone</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Most readers have a home genre — the section they instinctively gravitate toward in any bookstore. That loyalty is fine, but it leaves entire shelves unexplored. Readers who stay in one genre miss the empathy-building of literary fiction, the mind-expansion of science fiction, and the pure entertainment of a well-crafted mystery.
+    <div class="library-content">
+      <HeaderIsland client:load />
+
+      <div class="max-w-4xl mx-auto px-4 pt-6 pb-20">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="text-xs flex gap-1 mb-6 muted-text">
+          <a href="/" class="bc-link">Home</a>
+          <span>/</span>
+          <a href="/templates" class="bc-link">Templates</a>
+          <span>/</span>
+          <span style="color:#e8d4a0;">Book Genre Spinner</span>
+        </nav>
+
+        <!-- Hero -->
+        <section class="text-center space-y-4 py-4 mb-6">
+          <div class="text-5xl mb-2">📚</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight">
+            Book Genre Spinner — What Should I Read Next?
+          </h1>
+          <p class="text-lg md:text-xl body-text max-w-2xl mx-auto">
+            Stuck in a reading rut? Spin the genre wheel and commit to something new. Let randomness expand your literary world — one spin, one genre, one great book.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            The genre wheel is a commitment device. When the wheel picks Historical Fiction and you've never read it before, the social contract of the wheel makes it easier to try. You didn't choose it in a moment of personal risk — the wheel chose it. That small psychological shift removes the "what if I don't like it?" hesitation.
-          </p>
-          <p class="text-muted-foreground leading-relaxed">
-            Set a reading challenge: try one book from every genre on the wheel this year. 12 genres, 12 books, 12 new perspectives. The wheel tracks which categories remain and keeps the challenge moving forward.
-          </p>
-        </div>
+          <div class="flex flex-wrap justify-center gap-2 mt-3">
+            <span class="library-tag" style="border-color:#8b4513; color:#d4a853; background:rgba(139,69,19,0.15);">📚 Livres</span>
+            <span class="library-tag" style="border-color:#d4a853; color:#f5f5dc; background:rgba(212,168,83,0.1);">🕯️ Nocturne</span>
+            <span class="library-tag" style="border-color:#5c4033; color:#c4a87a; background:rgba(92,64,51,0.15);">🆓 Free</span>
+          </div>
+        </section>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Genre Reading Challenge Ideas</h2>
-          <ul class="space-y-2 text-muted-foreground">
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Genre-a-Month:</strong> Read one book per genre per month. Spin at the start of each month to determine the genre.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Book Club Roulette:</strong> Each member nominates one book, add all nominations to the wheel, spin for the club's next pick.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Library Adventure:</strong> Spin the genre, go to a library or bookstore, and pick the first interesting book you find in that section.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span><strong class="text-foreground">Reading Bingo:</strong> Create a bingo card with all 12 genres and cross them off as you finish books. The wheel ensures you don't repeat genres.</span></li>
+        <!-- Wheel -->
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={myColors}
+          wheelShape="hexagon"
+          hubTheme="amber"
+          client:load
+        />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <section class="space-y-6">
+          <div class="library-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">Break Out of Your Reading Comfort Zone</h2>
+            <p class="body-text leading-relaxed">
+              Most readers have a home genre — the section they instinctively gravitate toward in any bookstore. That loyalty is fine, but it leaves entire shelves unexplored. Readers who stay in one genre miss the empathy-building of literary fiction, the mind-expansion of science fiction, and the pure entertainment of a well-crafted mystery.
+            </p>
+            <p class="body-text leading-relaxed">
+              The genre wheel is a commitment device. When the wheel picks Historical Fiction and you have never read it before, the social contract of the wheel makes it easier to try. You did not choose it in a moment of personal risk — the wheel chose it. That small psychological shift removes the hesitation.
+            </p>
+          </div>
+
+          <div class="library-card space-y-4">
+            <h2 class="text-xl md:text-2xl font-bold">Genre Reading Challenge Ideas</h2>
+            <ul class="space-y-2 body-text">
+              <li class="flex gap-3"><span style="color:#d4a853; font-weight:700;">→</span><span><strong style="color:#e8d4a0;">Genre-a-Month:</strong> Read one book per genre per month. Spin at the start of each month to determine the genre.</span></li>
+              <li class="flex gap-3"><span style="color:#d4a853; font-weight:700;">→</span><span><strong style="color:#e8d4a0;">Book Club Roulette:</strong> Each member nominates one book, add all nominations to the wheel, spin for the club's next pick.</span></li>
+              <li class="flex gap-3"><span style="color:#d4a853; font-weight:700;">→</span><span><strong style="color:#e8d4a0;">Library Adventure:</strong> Spin the genre, go to a library or bookstore, and pick the first interesting book you find in that section.</span></li>
+              <li class="flex gap-3"><span style="color:#d4a853; font-weight:700;">→</span><span><strong style="color:#e8d4a0;">Reading Bingo:</strong> Create a bingo card with all 12 genres and cross them off as you finish books.</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#e8d4a0;">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <div class="faq-card">
+                <p class="font-semibold mb-2" style="color:#d4a853;">{question}</p>
+                <p class="muted-text text-sm leading-relaxed">{answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <!-- Related Tools -->
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#e8d4a0;">Related Tools</h2>
+          <ul class="space-y-3">
+            {[
+              { href: "/templates/writing-prompt-wheel", label: "Writing Prompt Spinner", desc: "After reading, get inspired to write — random story starters." },
+              { href: "/templates/movie-picker-wheel", label: "Movie Picker Wheel", desc: "When you'd rather watch than read — random movie picker." },
+              { href: "/templates/hobby-wheel", label: "Random Hobby Spinner", desc: "Other creative activities beyond reading to explore." },
+              { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="related-card">
+                  <span style="color:#d4a853; font-weight:700; font-size:0.875rem; margin-top:2px;">→</span>
+                  <span>
+                    <span class="font-semibold" style="color:#e8d4a0;">{label}</span>
+                    <span class="muted-text text-sm"> — {desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
           </ul>
-        </div>
+        </section>
 
-      </section>
-
-      <!-- FAQ -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/writing-prompt-wheel", label: "Writing Prompt Spinner", desc: "After reading, get inspired to write — random story starters." },
-            { href: "/templates/movie-picker-wheel", label: "Movie Picker Wheel", desc: "When you'd rather watch than read — random movie picker." },
-            { href: "/templates/hobby-wheel", label: "Random Hobby Spinner", desc: "Other creative activities beyond reading to explore." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-    </main>
-
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

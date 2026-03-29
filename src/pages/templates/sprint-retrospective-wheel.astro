@@ -26,15 +26,17 @@ const faqItems = [
 ];
 
 const defaultParticipants = [
-  { pseudo: "What went well?", weight: 1 },
-  { pseudo: "What to improve?", weight: 1 },
-  { pseudo: "Biggest blocker?", weight: 1 },
-  { pseudo: "Team highlight?", weight: 1 },
-  { pseudo: "Process to change?", weight: 1 },
-  { pseudo: "Communication check", weight: 1 },
-  { pseudo: "Tool feedback?", weight: 1 },
-  { pseudo: "Workload balance?", weight: 1 },
+  { pseudo: "What went well?",      weight: 1 },
+  { pseudo: "What to improve?",     weight: 1 },
+  { pseudo: "Biggest blocker?",     weight: 1 },
+  { pseudo: "Team highlight?",      weight: 1 },
+  { pseudo: "Process to change?",   weight: 1 },
+  { pseudo: "Communication check",  weight: 1 },
+  { pseudo: "Tool feedback?",       weight: 1 },
+  { pseudo: "Workload balance?",    weight: 1 },
 ];
+
+const retroColors = ['#7c3aed','#06b6d4','#22c55e','#f97316','#a78bfa','#2dd4bf','#4ade80','#fb923c'];
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -45,6 +47,148 @@ const jsonLd = {
 };
 ---
 
+<style>
+.retro-page {
+  background: #0d0d1a;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+.retro-sky {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 0%, rgba(124,58,237,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 45% at 85% 5%, rgba(6,182,212,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(249,115,22,0.12) 0%, transparent 55%),
+    linear-gradient(180deg, #0d0d1a 0%, #12102a 50%, #0d0d1a 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.retro-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(124,58,237,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+  z-index: 1;
+}
+.retro-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+  animation: orbPulse ease-in-out infinite alternate;
+}
+@keyframes orbPulse {
+  from { opacity: 0.35; transform: scale(0.92); }
+  to   { opacity: 0.7;  transform: scale(1.08); }
+}
+.code-stream {
+  position: fixed;
+  top: -100%;
+  width: 14px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  line-height: 1.4;
+  animation: codeDown linear infinite;
+  white-space: pre;
+  opacity: 0.12;
+  pointer-events: none;
+  z-index: 1;
+}
+@keyframes codeDown {
+  0%   { transform: translateY(0);     opacity: 0; }
+  5%   { opacity: 0.12; }
+  90%  { opacity: 0.08; }
+  100% { transform: translateY(220vh); opacity: 0; }
+}
+.cursor-blink {
+  position: fixed;
+  z-index: 3;
+  width: 8px;
+  height: 16px;
+  background: #06b6d4;
+  opacity: 0.6;
+  pointer-events: none;
+  animation: cursorBlink 1.2s step-end infinite;
+}
+@keyframes cursorBlink {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 0; }
+}
+.ticket-float {
+  position: fixed;
+  pointer-events: none;
+  z-index: 2;
+  border-radius: 4px;
+  border: 1px solid;
+  font-family: 'Courier New', monospace;
+  font-size: 8px;
+  padding: 3px 6px;
+  white-space: nowrap;
+  opacity: 0;
+  animation: ticketDrift ease-in-out infinite;
+}
+@keyframes ticketDrift {
+  0%   { transform: translateY(0) rotate(-2deg);  opacity: 0; }
+  10%  { opacity: 0.45; }
+  90%  { opacity: 0.25; }
+  100% { transform: translateY(-60px) rotate(2deg); opacity: 0; }
+}
+.retro-scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px);
+  pointer-events: none;
+}
+.retro-content { position: relative; z-index: 10; }
+.retro-title {
+  background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 30%, #06b6d4 65%, #a78bfa 100%);
+  background-size: 250%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: retroShimmer 5s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(124,58,237,0.5));
+}
+@keyframes retroShimmer {
+  0%,100% { background-position: 0% 50%; }
+  50%     { background-position: 100% 50%; }
+}
+.retro-tag {
+  background: rgba(124,58,237,0.15);
+  border: 1px solid rgba(124,58,237,0.35);
+  color: rgba(167,139,250,0.95);
+  border-radius: 9999px;
+  padding: 4px 14px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+.retro-card {
+  background: rgba(13,13,26,0.82);
+  border: 1px solid rgba(124,58,237,0.22);
+  border-radius: 0.75rem;
+  backdrop-filter: blur(10px);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.retro-card:hover {
+  border-color: rgba(6,182,212,0.4);
+  box-shadow: 0 0 20px rgba(6,182,212,0.08);
+}
+details.retro-faq {
+  background: rgba(13,13,26,0.7);
+  border: 1px solid rgba(124,58,237,0.2);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+}
+</style>
+
 <Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
@@ -53,79 +197,125 @@ const jsonLd = {
     { name: "Sprint Retro Wheel", url: "https://realwheelpicker.com/templates/sprint-retrospective-wheel" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+  <div class="retro-page">
+    <div class="retro-sky"></div>
+    <div class="retro-grid"></div>
+    <div class="retro-scanlines"></div>
 
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Sprint Retro Wheel</span>
-      </nav>
+    <!-- Glow orbs -->
+    <div class="retro-orb" style="width:500px;height:400px;background:radial-gradient(circle,rgba(124,58,237,0.18) 0%,transparent 70%);top:-100px;left:-80px;animation-duration:7s;"></div>
+    <div class="retro-orb" style="width:400px;height:350px;background:radial-gradient(circle,rgba(6,182,212,0.14) 0%,transparent 70%);bottom:-60px;right:-60px;animation-duration:9s;animation-delay:2s;"></div>
+    <div class="retro-orb" style="width:250px;height:250px;background:radial-gradient(circle,rgba(249,115,22,0.1) 0%,transparent 70%);top:40%;left:45%;animation-duration:6s;animation-delay:1.5s;"></div>
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Sprint Retro Wheel — Random Discussion Topics
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Break the "Start, Stop, Continue" rut. Spin for fresh retrospective prompts that actually spark discussion.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Code streams -->
+    <div class="code-stream" style="left:3%;animation-duration:12s;animation-delay:0s;color:#7c3aed;">sprint.run(); done!</div>
+    <div class="code-stream" style="left:12%;animation-duration:15s;animation-delay:2s;color:#06b6d4;">async retro: team.sync</div>
+    <div class="code-stream" style="left:22%;animation-duration:11s;animation-delay:4s;color:#22c55e;">git commit -m fix; push</div>
+    <div class="code-stream" style="left:35%;animation-duration:14s;animation-delay:1s;color:#7c3aed;">sprint=8; velocity++</div>
+    <div class="code-stream" style="left:50%;animation-duration:16s;animation-delay:6s;color:#06b6d4;">deploy.then(prod).catch</div>
+    <div class="code-stream" style="left:62%;animation-duration:13s;animation-delay:3s;color:#f97316;">TODO FIXME HACK NOTE</div>
+    <div class="code-stream" style="left:75%;animation-duration:17s;animation-delay:5s;color:#22c55e;">npm test passed all green</div>
+    <div class="code-stream" style="left:85%;animation-duration:12s;animation-delay:7s;color:#7c3aed;">review approved merged</div>
+    <div class="code-stream" style="left:93%;animation-duration:15s;animation-delay:1.5s;color:#06b6d4;">CI/CD build OK deploy</div>
 
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <!-- Cursor blinks -->
+    <div class="cursor-blink" style="top:18%;left:8%;"></div>
+    <div class="cursor-blink" style="top:55%;right:10%;animation-delay:0.4s;background:#7c3aed;"></div>
+    <div class="cursor-blink" style="top:75%;left:15%;animation-delay:0.8s;background:#22c55e;"></div>
 
-      <section class="space-y-8">
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Most Retros Feel Stale</h2>
-          <p class="text-muted-foreground leading-relaxed">
-            Teams that run the same retro format every sprint get diminishing returns. After a few months, answers get shorter, participation drops, and the retro becomes a ritual instead of a tool. The wheel injects variety without requiring the facilitator to redesign the session from scratch.
+    <!-- Ticket floaters -->
+    <div class="ticket-float" style="left:5%;top:40%;border-color:rgba(124,58,237,0.4);color:rgba(167,139,250,0.7);animation-duration:8s;animation-delay:0s;">SCRUM-42</div>
+    <div class="ticket-float" style="left:78%;top:55%;border-color:rgba(6,182,212,0.4);color:rgba(45,212,191,0.7);animation-duration:11s;animation-delay:3s;">BUG-117</div>
+    <div class="ticket-float" style="left:60%;top:30%;border-color:rgba(249,115,22,0.4);color:rgba(251,146,60,0.7);animation-duration:9s;animation-delay:6s;">FEAT-88</div>
+    <div class="ticket-float" style="left:25%;top:70%;border-color:rgba(34,197,94,0.4);color:rgba(74,222,128,0.7);animation-duration:7s;animation-delay:1.5s;">DONE ✓</div>
+
+    <div class="retro-content">
+      <HeaderIsland client:load />
+
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/60 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/60 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/50">Sprint Retro Wheel</span>
+        </nav>
+
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3">⚙️</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight retro-title mb-3">
+            Sprint Retro Wheel
+          </h1>
+          <p class="text-lg text-white/50 max-w-xl mx-auto mb-5">
+            Keep retrospectives fresh. Spin to pick the discussion topic — no more stale formats.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
-            Spin 3-4 topics at the start of the session and post them visibly. Teams know what's being discussed and can mentally prepare while previous topics wrap up. The randomness also prevents the same vocal members from steering the agenda toward their preferred topics every sprint.
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="retro-tag">🔄 Agile</span>
+            <span class="retro-tag">💡 Scrum</span>
+            <span class="retro-tag">👥 Teams</span>
+            <span class="retro-tag">🚀 Sprint</span>
+          </div>
+        </div>
+
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={retroColors}
+          wheelShape="hexagon"
+          hubTheme="purple"
+          client:load
+        />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="retro-card p-6 space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Fix Stale Retrospectives</h2>
+          <p class="text-white/55 leading-relaxed">
+            The most common retro problem: teams fall into the same format every sprint. "What went well, what didn't, what to improve" — repeated verbatim for months. Engagement drops, answers get shorter, and the retro becomes a box-ticking exercise.
+          </p>
+          <p class="text-white/55 leading-relaxed">
+            Adding randomness to the format breaks this pattern. Spin 3-4 topics from the wheel. The uncertainty of what comes next keeps the team engaged. Add prompts specific to your current sprint challenges to keep it relevant.
           </p>
         </div>
-      </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="retro-faq group">
+                <summary class="font-semibold text-white cursor-pointer list-none flex items-center justify-between gap-2">
+                  {question}
+                  <span class="text-white/40 shrink-0 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p class="text-white/55 text-sm leading-relaxed mt-3">{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/standup-order-wheel", label: "Standup Order Picker", desc: "Randomize your daily standup speaking order." },
-            { href: "/templates/meeting-icebreaker-wheel", label: "Meeting Icebreaker Spinner", desc: "Warm up any team meeting with a quick question." },
-            { href: "/random-name-picker", label: "Random Name Picker", desc: "Pick who facilitates the next retro." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold text-white">Related Tools</h2>
+          <ul class="grid sm:grid-cols-2 gap-3">
+            {[
+              { href: "/templates/standup-order-wheel", label: "☕ Standup Order Wheel", desc: "Who speaks first at standup?" },
+              { href: "/templates/team-building-wheel", label: "🤝 Team Building Wheel", desc: "Random team activities." },
+              { href: "/templates/meeting-icebreaker-wheel", label: "🧊 Meeting Icebreaker", desc: "Warm up any team meeting." },
+              { href: "/random-name-picker", label: "🎲 Name Picker", desc: "Pick a random team member." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href} class="retro-card flex items-start gap-3 p-4">
+                  <span>
+                    <span class="font-semibold text-white text-sm">{label}</span>
+                    <span class="text-white/50 text-sm block mt-0.5">{desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-    </main>
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>

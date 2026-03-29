@@ -40,6 +40,8 @@ const defaultParticipants = [
   { pseudo: "Stir Fry", weight: 1 },
 ];
 
+const myColors = ['#ef4444','#f59e0b','#84cc16','#06b6d4','#8b5cf6','#ec4899','#f97316','#10b981'];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -49,12 +51,173 @@ const jsonLd = {
 };
 ---
 
-<Layout
-  title={title}
-  description={description}
-  canonical={canonical}
-  jsonLd={jsonLd}
->
+<style>
+  /* ═══════════ LUNCH SPINNER — FOOD TRUCK ANIMÉ ═══════════ */
+  .lunch-page {
+    background: #080208;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Fond nuit de rue */
+  .lunch-sky {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 75% 50% at 15% -8%, rgba(239,68,68,0.38) 0%, transparent 55%),
+      radial-gradient(ellipse 65% 45% at 85% 0%, rgba(245,158,11,0.3) 0%, transparent 55%),
+      radial-gradient(ellipse 55% 45% at 50% 100%, rgba(139,92,246,0.22) 0%, transparent 60%),
+      linear-gradient(180deg, #080208 0%, #0f060f 50%, #080208 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Enseignes néon food truck */
+  .lunch-sign {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    border-radius: 8px;
+    animation: signBlink ease-in-out infinite;
+  }
+  @keyframes signBlink {
+    0%,100% { opacity: 0.4; }
+    25% { opacity: 1; }
+    50% { opacity: 0.6; }
+    75% { opacity: 0.9; }
+  }
+
+  /* Halos colorés */
+  .lunch-halo {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: 0;
+    animation: haloPulse ease-in-out infinite alternate;
+  }
+  @keyframes haloPulse {
+    from { opacity: 0.2; transform: scale(0.85); }
+    to   { opacity: 0.55; transform: scale(1.1); }
+  }
+
+  /* Emoji food tombants — 30 */
+  .lunch-food {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    animation: foodFall linear infinite;
+    opacity: 0;
+    user-select: none;
+    line-height: 1;
+  }
+  @keyframes foodFall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+    8%   { opacity: 0.85; }
+    92%  { opacity: 0.4; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* Vapeur montant */
+  .lunch-vapor {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(14px);
+    pointer-events: none;
+    z-index: 1;
+    animation: vaporUp ease-out infinite;
+    opacity: 0;
+    background: rgba(255,255,240,0.12);
+  }
+  @keyframes vaporUp {
+    0%   { transform: translateY(0) scale(0.5); opacity: 0; }
+    20%  { opacity: 0.3; }
+    100% { transform: translateY(-160px) scale(2); opacity: 0; }
+  }
+
+  /* Spots lumineux chauds */
+  .lunch-spot {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: 0;
+    animation: spotPulse ease-in-out infinite alternate;
+  }
+  @keyframes spotPulse {
+    from { opacity: 0.15; }
+    to   { opacity: 0.45; }
+  }
+
+  /* Contenu */
+  .lunch-content { position: relative; z-index: 10; }
+
+  /* Titre multicolore vibrant */
+  .lunch-title {
+    background: linear-gradient(135deg, #ef4444 0%, #f59e0b 25%, #84cc16 50%, #06b6d4 75%, #ec4899 100%);
+    background-size: 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: lunchRainbow 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(245,158,11,0.5));
+  }
+  @keyframes lunchRainbow {
+    0%,100% { background-position: 0% 50%; }
+    50%     { background-position: 100% 50%; }
+  }
+
+  .lunch-tag {
+    background: rgba(239,68,68,0.12);
+    border: 1px solid rgba(245,158,11,0.4);
+    color: rgba(255,190,80,0.95);
+    border-radius: 9999px;
+    padding: 4px 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .lunch-card {
+    background: rgba(8,2,8,0.78);
+    border: 1px solid rgba(245,158,11,0.22);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 30px rgba(239,68,68,0.07), inset 0 1px 0 rgba(255,200,80,0.05);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .lunch-card:hover {
+    border-color: rgba(245,158,11,0.45);
+    box-shadow: 0 0 40px rgba(239,68,68,0.15);
+  }
+  .lunch-card h2 { color: #fbbf24; text-shadow: 0 0 12px rgba(245,158,11,0.45); margin-bottom: 1rem; }
+  .lunch-card p { color: #9a8060; line-height: 1.75; }
+
+  details.lunch-faq {
+    background: rgba(4,1,4,0.85);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    backdrop-filter: blur(8px);
+  }
+  details.lunch-faq summary { color: #fbbf24; font-weight: 600; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  details.lunch-faq p { color: #9a8060; font-size: 0.875rem; line-height: 1.65; margin-top: 0.75rem; }
+
+  .lunch-bullet { color: #ef4444; font-weight: bold; }
+
+  .lunch-related a {
+    display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem;
+    background: rgba(4,1,4,0.75);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 0.75rem;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s; text-decoration: none;
+  }
+  .lunch-related a:hover { border-color: rgba(245,158,11,0.5); box-shadow: 0 0 20px rgba(239,68,68,0.18); }
+</style>
+
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
     { name: "Home", url: "https://realwheelpicker.com" },
@@ -62,107 +225,152 @@ const jsonLd = {
     { name: "Lunch Spinner Wheel", url: "https://realwheelpicker.com/templates/lunch-spinner" },
   ]} />
 
-  <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+  <div class="lunch-page">
+    <div class="lunch-sky"></div>
 
-    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+    <!-- Halos colorés -->
+    <div class="lunch-halo" style="width:600px;height:500px;background:radial-gradient(circle,rgba(239,68,68,0.35) 0%,transparent 70%);top:-180px;left:-120px;animation-duration:5s;"></div>
+    <div class="lunch-halo" style="width:550px;height:450px;background:radial-gradient(circle,rgba(245,158,11,0.28) 0%,transparent 70%);top:-80px;right:-100px;animation-duration:7s;animation-delay:1.5s;"></div>
+    <div class="lunch-halo" style="width:500px;height:400px;background:radial-gradient(circle,rgba(139,92,246,0.22) 0%,transparent 70%);bottom:5%;left:50%;transform:translateX(-50%);animation-duration:6s;animation-delay:3s;"></div>
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span>/</span>
-        <a href="/templates" class="hover:text-primary transition-colors">Templates</a>
-        <span>/</span>
-        <span class="text-foreground">Lunch Spinner Wheel</span>
-      </nav>
+    <!-- Spots lumineux -->
+    <div class="lunch-spot" style="width:300px;height:200px;background:rgba(239,68,68,0.3);bottom:20%;left:10%;animation-duration:4s;"></div>
+    <div class="lunch-spot" style="width:250px;height:180px;background:rgba(245,158,11,0.28);bottom:30%;right:8%;animation-duration:6s;animation-delay:2s;"></div>
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Lunch Spinner Wheel — What to Eat for Lunch?
-        </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          It's noon. You're hungry but indecisive. One spin decides your lunch. No more wasted break time staring at delivery apps.
-        </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
-      </section>
+    <!-- Enseignes néon simulées -->
+    <div class="lunch-sign" style="width:120px;height:6px;background:linear-gradient(90deg,#ef4444,#f97316);top:12%;left:5%;filter:blur(2px);animation-duration:3s;box-shadow:0 0 15px #ef4444;"></div>
+    <div class="lunch-sign" style="width:80px;height:5px;background:linear-gradient(90deg,#84cc16,#06b6d4);top:18%;right:8%;filter:blur(2px);animation-duration:4s;animation-delay:1s;box-shadow:0 0 12px #84cc16;"></div>
+    <div class="lunch-sign" style="width:100px;height:5px;background:linear-gradient(90deg,#ec4899,#8b5cf6);top:25%;left:80%;filter:blur(2px);animation-duration:5s;animation-delay:2s;box-shadow:0 0 12px #ec4899;"></div>
 
-      <!-- Wheel -->
-      <section class="flex flex-col items-center">
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
-      </section>
+    <!-- Vapeurs montantes -->
+    {Array.from({ length: 12 }, (_, i) => (
+      <div class="lunch-vapor" style={`width:${25+((i*8)%25)}px;height:${25+((i*8)%25)}px;left:${(i*9+4)%95}%;bottom:${3+((i*13)%25)}%;animation-duration:${2.5+((i*1.3)%3)}s;animation-delay:-${(i*0.9)%4}s;`}></div>
+    ))}
 
-      <!-- Article Content -->
-      <section class="space-y-8">
+    <!-- Emoji food tombants — 30 -->
+    {[
+      {l:"3%",fs:"1.4rem",dur:"9s",del:"0s",e:"🍕"},{l:"8%",fs:"0.9rem",dur:"12s",del:"2s",e:"🌮"},
+      {l:"14%",fs:"1.8rem",dur:"10s",del:"1s",e:"🍜"},{l:"20%",fs:"1.1rem",dur:"8s",del:"3.5s",e:"🍱"},
+      {l:"26%",fs:"0.8rem",dur:"13s",del:"0.5s",e:"🥙"},{l:"32%",fs:"1.5rem",dur:"11s",del:"5s",e:"🌯"},
+      {l:"38%",fs:"1rem",dur:"9s",del:"1.8s",e:"🍛"},{l:"44%",fs:"1.3rem",dur:"14s",del:"4s",e:"🍝"},
+      {l:"50%",fs:"0.75rem",dur:"10s",del:"2.5s",e:"🍔"},{l:"56%",fs:"1.7rem",dur:"8s",del:"0.8s",e:"🥗"},
+      {l:"62%",fs:"1.1rem",dur:"12s",del:"3s",e:"🍕"},{l:"68%",fs:"0.9rem",dur:"9s",del:"6s",e:"🌮"},
+      {l:"74%",fs:"1.4rem",dur:"11s",del:"1.5s",e:"🍜"},{l:"80%",fs:"0.8rem",dur:"8s",del:"4.5s",e:"🍱"},
+      {l:"86%",fs:"1.6rem",dur:"10s",del:"2.2s",e:"🥙"},{l:"92%",fs:"1rem",dur:"13s",del:"7s",e:"🌯"},
+      {l:"7%",fs:"1.2rem",dur:"11s",del:"8s",e:"🍛"},{l:"18%",fs:"0.7rem",dur:"9s",del:"3.2s",e:"🍝"},
+      {l:"29%",fs:"1.5rem",dur:"10s",del:"5.5s",e:"🍔"},{l:"41%",fs:"0.9rem",dur:"8s",del:"1.2s",e:"🥗"},
+      {l:"53%",fs:"1.3rem",dur:"12s",del:"6.5s",e:"🍕"},{l:"65%",fs:"0.8rem",dur:"9s",del:"0.4s",e:"🌮"},
+      {l:"77%",fs:"1.6rem",dur:"11s",del:"4.8s",e:"🍜"},{l:"89%",fs:"1rem",dur:"10s",del:"2.8s",e:"🍱"},
+      {l:"4%",fs:"2rem",dur:"14s",del:"9s",e:"🥙"},{l:"24%",fs:"0.7rem",dur:"10s",del:"1.7s",e:"🌯"},
+      {l:"47%",fs:"1.4rem",dur:"8s",del:"7.5s",e:"🍛"},{l:"61%",fs:"1rem",dur:"11s",del:"3.7s",e:"🍝"},
+      {l:"75%",fs:"0.85rem",dur:"9s",del:"5.2s",e:"🍔"},{l:"96%",fs:"1.2rem",dur:"12s",del:"0.9s",e:"🥗"},
+    ].map(f => (
+      <span class="lunch-food" style={`font-size:${f.fs};left:${f.l};animation-duration:${f.dur};animation-delay:${f.del};`}>{f.e}</span>
+    ))}
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">The Daily Lunch Problem</h2>
-          <p class="text-muted-foreground leading-relaxed">
+    <div class="lunch-content">
+      <HeaderIsland client:load />
+
+      <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
+        <nav aria-label="breadcrumb" class="text-xs text-white/25 flex gap-1 mb-6">
+          <a href="/" class="hover:text-white/55 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/templates" class="hover:text-white/55 transition-colors">Templates</a>
+          <span>/</span>
+          <span class="text-white/40">Lunch Spinner Wheel</span>
+        </nav>
+
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-3">🍱</div>
+          <h1 class="text-3xl md:text-5xl font-black leading-tight lunch-title mb-3">
+            Lunch Spinner Wheel
+          </h1>
+          <p class="text-lg text-white/40 max-w-xl mx-auto mb-5">
+            It's noon. You're hungry but indecisive. One spin decides your lunch. No more wasted break time staring at delivery apps.
+          </p>
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="lunch-tag">🍕 Quick Lunch</span>
+            <span class="lunch-tag">🥗 Office Friendly</span>
+            <span class="lunch-tag">🌮 Food Variety</span>
+            <span class="lunch-tag">Free</span>
+          </div>
+        </div>
+
+        <SimpleWheelIsland
+          defaultParticipants={defaultParticipants}
+          colors={myColors}
+          wheelShape="circle"
+          hubTheme="orange"
+          client:load
+        />
+      </div>
+
+      <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <div class="lunch-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold">The Daily Lunch Problem</h2>
+          <p>
             Lunch decision fatigue is real. By midday you've already made hundreds of small decisions, and "what should I eat?" is the last thing your brain wants to handle. Studies on decision fatigue show that the quality of decisions degrades throughout the day — which is why lunch is where most people give up and get the same thing again.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
+          <p>
             The lunch spinner offloads that decision entirely. Spin once, commit, eat. You get variety without the mental effort. And if you make the wheel with options you're always happy to eat, any result is a good result.
           </p>
-          <p class="text-muted-foreground leading-relaxed">
+          <p>
             For home workers, add your staple ingredients as options. For office workers, add the nearby places you'd happily walk to. The wheel works for both "what should I cook" and "where should I order."
           </p>
         </div>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Group Lunch Decisions Made Easy</h2>
-          <p class="text-muted-foreground leading-relaxed">
+        <div class="lunch-card space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold">Group Lunch Decisions Made Easy</h2>
+          <p>
             Team lunch is the hardest version of this problem. Five people, five opinions, one budget. The wheel removes the politics. Everyone nominates one option, you add all of them to the wheel, and one spin settles it. The key rule: whoever spins doesn't get to spin again if they don't like the result.
           </p>
-          <ul class="space-y-2 text-muted-foreground">
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Let the newest team member spin — a nice ritual for onboarding.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Set a "no repeats this week" rule to enforce variety.</span></li>
-            <li class="flex gap-3"><span class="text-primary font-bold">→</span><span>Include a "fend for yourself" option to respect solo lunch preferences.</span></li>
+          <ul class="space-y-2" style="color:#9a8060">
+            <li class="flex gap-3"><span class="lunch-bullet">→</span><span>Let the newest team member spin — a nice ritual for onboarding.</span></li>
+            <li class="flex gap-3"><span class="lunch-bullet">→</span><span>Set a "no repeats this week" rule to enforce variety.</span></li>
+            <li class="flex gap-3"><span class="lunch-bullet">→</span><span>Include a "fend for yourself" option to respect solo lunch preferences.</span></li>
           </ul>
         </div>
 
-      </section>
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#fbbf24">Frequently Asked Questions</h2>
+          <div class="space-y-3">
+            {faqItems.map(({ question, answer }) => (
+              <details class="lunch-faq group">
+                <summary>
+                  {question}
+                  <span style="color:rgba(251,191,36,0.4)" class="shrink-0 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p>{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
-      <!-- FAQ -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section class="lunch-related space-y-4">
+          <h2 class="text-xl md:text-2xl font-bold" style="color:#fbbf24">Related Tools</h2>
+          <ul class="grid sm:grid-cols-2 gap-3">
+            {[
+              { href: "/templates/what-to-eat-wheel", label: "🍽️ What to Eat Wheel", desc: "For any meal, not just lunch — spin for a random meal idea." },
+              { href: "/templates/restaurant-picker", label: "🏮 Restaurant Picker", desc: "Going out? Pick a cuisine type or restaurant to visit." },
+              { href: "/templates/dessert-picker", label: "🍰 Dessert Picker Wheel", desc: "Follow up a great lunch with a randomly selected dessert." },
+              { href: "/templates", label: "🎡 All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
+            ].map(({ href, label, desc }) => (
+              <li>
+                <a href={href}>
+                  <span style="color:#ef4444;font-weight:bold;font-size:0.875rem;margin-top:2px;">→</span>
+                  <span>
+                    <span style="color:#fbbf24;font-weight:600;">{label}</span>
+                    <span style="color:#9a8060;font-size:0.875rem;display:block;margin-top:2px;">{desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      <!-- Related Tools -->
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
-        <ul class="space-y-3">
-          {[
-            { href: "/templates/what-to-eat-wheel", label: "What to Eat Wheel", desc: "For any meal, not just lunch — spin for a random meal idea." },
-            { href: "/templates/restaurant-picker", label: "Restaurant Picker", desc: "Going out? Pick a cuisine type or restaurant to visit." },
-            { href: "/templates/dessert-picker", label: "Dessert Picker Wheel", desc: "Follow up a great lunch with a randomly selected dessert." },
-            { href: "/templates", label: "All Templates", desc: "Browse all pre-loaded wheel templates for every occasion." },
-          ].map(({ href, label, desc }) => (
-            <li>
-              <a
-                href={href}
-                class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all"
-              >
-                <span class="text-primary font-bold text-sm mt-0.5">→</span>
-                <span>
-                  <span class="font-semibold text-foreground">{label}</span>
-                  <span class="text-muted-foreground text-sm"> — {desc}</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-    </main>
-
-    <GlobalFooterIsland client:load />
+      </main>
+      <GlobalFooterIsland client:load />
+    </div>
   </div>
 </Layout>
