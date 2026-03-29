@@ -219,7 +219,7 @@ const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, ho
       {/* Interactive wheel */}
       <div className={`flex flex-col lg:flex-row gap-6 items-start transition-all duration-500 ${isAdvanced ? "p-6 rounded-xl bg-accent/5 border border-accent/20" : ""}`}>
         {/* LEFT: Wheel */}
-        <div ref={wheelSectionRef} className="flex-shrink-0 w-full lg:w-auto space-y-3 relative">
+        <div ref={wheelSectionRef} className="flex-shrink-0 w-full lg:w-[500px] space-y-3 relative">
           {/* Countdown overlay */}
           {countdown !== null && (
             <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 rounded-xl">
