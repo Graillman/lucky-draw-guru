@@ -11,3 +11,8 @@ src/_pages_old/
 index.html
 # Generated at build time — never commit
 public/sitemap.xml
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
