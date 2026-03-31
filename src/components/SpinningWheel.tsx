@@ -770,7 +770,7 @@ export function SpinningWheel({
   };
 
   return (
-    <div className={`flex flex-col items-center w-fit ${compact ? 'gap-1 py-2' : 'gap-4 py-8'}`}>
+    <div className={`flex flex-col items-center w-fit ${compact ? 'gap-1 py-2' : 'gap-4 pt-0 pb-4'}`}>
 
       <div className="relative">
         {/* Glow */}
@@ -791,7 +791,7 @@ export function SpinningWheel({
             width:  `${canvasDisplaySize}px`,
             height: `${canvasDisplaySize}px`,
             maxWidth: '90vw',
-            maxHeight: '90vw',
+            maxHeight: '90vh',
             cursor: onSpin && !isSpinning && !isAnimating ? 'pointer' : 'default',
           }}
           onClick={handleCanvasClick}
