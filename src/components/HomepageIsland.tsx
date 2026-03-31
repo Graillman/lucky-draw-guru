@@ -231,7 +231,7 @@ const HomepageIslandInner = () => {
   }, [displayParticipants, extraWheels]);
 
   // Responsive wheel size — single wheel fills viewport height below nav (64px) with small margin
-  const singleWheelSize = Math.min(Math.max(480, viewportH - 80), 960);
+  const singleWheelSize = Math.min(Math.max(480, viewportH - 61), 960);
   const wheelSize = totalWheels === 1 ? singleWheelSize : totalWheels === 2 ? 300 : totalWheels === 3 ? 220 : totalWheels === 4 ? 180 : 155;
 
   // Spin a specific wheel
