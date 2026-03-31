@@ -12,7 +12,7 @@ import { useLocalStorageParticipants } from "@/hooks/useLocalStorageParticipants
 import { ConfettiEffect } from "@/components/ConfettiEffect";
 import { WHEEL_THEMES } from "@/components/WheelThemePicker";
 import { CustomizePanel, useCustomizeConfig } from "@/components/CustomizePanel";
-import { Edit3, Share2, Settings2, Maximize2, Minimize2, BookMarked, ImagePlus, Plus, X } from "lucide-react";
+import { Edit3, Share2, Settings2, Maximize2, Minimize2, BookMarked, ImagePlus, Plus, X, ChevronDown, Pencil } from "lucide-react";
 import { buildShareURL, readShareURLConfig } from "@/hooks/useShareableURL";
 import { saveWheel, getWheelById } from "@/lib/wheelGallery";
 import { toast } from "sonner";
@@ -103,7 +103,7 @@ interface ExtraWheel {
 const HomepageIslandInner = () => {
   const { participants, setParticipants, isLoaded } = useLocalStorageParticipants();
   const { t, language } = useLanguage();
-  const { increment, yearlyCount } = useSpinCounter();
+  const { increment, yearlyCount, globalCount } = useSpinCounter();
 
   const { playTick, playFanfare } = useWheelSound();
   const [customizeConfig, setCustomizeConfig] = useCustomizeConfig();
@@ -119,11 +119,23 @@ const HomepageIslandInner = () => {
   const MULTIPLIERS = [1, 10, 100, 1_000, 10_000] as const;
   const [multiplierIdx, setMultiplierIdx] = useState(0);
   const multiplier = MULTIPLIERS[multiplierIdx];
+  const [showMultiplierDropdown, setShowMultiplierDropdown] = useState(false);
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [calcProgress, setCalcProgress] = useState(0);
   const [multiResults, setMultiResults] = useState<{name: string; count: number; pct: number}[] | null>(null);
   const [activeTab, setActiveTab] = useState<number | 'results'>(0); // 0..N = wheel panel, 'results' = results tab
   const [showWinnerModal, setShowWinnerModal] = useState(false);
   const [wheelBgImage, setWheelBgImage] = useState<string | null>(null);
   const imgInputRef = useRef<HTMLInputElement>(null);
+
+  // Responsive wheel size — fills available height below nav
+  const [viewportH, setViewportH] = useState(800);
+  useEffect(() => {
+    const update = () => setViewportH(window.innerHeight);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
   // Multi-wheel state
   const [extraWheels, setExtraWheels] = useState<ExtraWheel[]>([]);
@@ -218,8 +230,9 @@ const HomepageIslandInner = () => {
     return extra && extra.participants.length >= 2 ? extra.participants : DEFAULT_NAMES;
   }, [displayParticipants, extraWheels]);
 
-  // Responsive wheel size — shrinks so all wheels fit side by side
-  const wheelSize = totalWheels === 1 ? 600 : totalWheels === 2 ? 360 : totalWheels === 3 ? 250 : totalWheels === 4 ? 200 : 170;
+  // Responsive wheel size — single wheel fills viewport height below nav (64px) with small margin
+  const singleWheelSize = Math.min(Math.max(480, viewportH - 80), 960);
+  const wheelSize = totalWheels === 1 ? singleWheelSize : totalWheels === 2 ? 300 : totalWheels === 3 ? 220 : totalWheels === 4 ? 180 : 155;
 
   // Spin a specific wheel
   const handleWheelSpin = useCallback((idx: number) => {
@@ -425,6 +438,48 @@ const HomepageIslandInner = () => {
         />
       )}
 
+      {/* Calculating overlay for multi-spin */}
+      {isCalculating && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+          <div className="bg-card rounded-2xl shadow-2xl p-8 text-center space-y-5 max-w-sm w-full mx-4">
+            <div className="text-6xl animate-bounce">🎰</div>
+            <div>
+              <p className="text-xl font-bold text-foreground">{multiplier.toLocaleString()} tirages...</p>
+              <p className="text-sm text-muted-foreground mt-1">Calcul en cours</p>
+            </div>
+            <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
+              <div
+                className="h-full bg-primary rounded-full transition-all duration-100"
+                style={{ width: `${calcProgress}%` }}
+              />
+            </div>
+            <div className="flex justify-center gap-1">
+              {[0,1,2,3,4].map(i => (
+                <span key={i} className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Fixed pencil buttons — top-left corner under nav */}
+      <div className="fixed top-[72px] left-3 z-40 flex flex-col gap-1.5">
+        <button
+          onClick={() => setEditingTitle(true)}
+          title="Modifier le titre de la roue"
+          className="w-9 h-9 flex items-center justify-center rounded-xl bg-card/85 border border-border shadow-lg hover:bg-primary/10 hover:border-primary/40 transition-all backdrop-blur-sm"
+        >
+          <Pencil className="w-4 h-4 text-muted-foreground" />
+        </button>
+        <button
+          onClick={() => setShowCustomize(true)}
+          title="Personnaliser la roue"
+          className="w-9 h-9 flex items-center justify-center rounded-xl bg-card/85 border border-border shadow-lg hover:bg-primary/10 hover:border-primary/40 transition-all backdrop-blur-sm"
+        >
+          <Settings2 className="w-4 h-4 text-muted-foreground" />
+        </button>
+      </div>
+
       {/* Aurora background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <div className="aurora-orb aurora-orb-gold" />
@@ -469,15 +524,8 @@ const HomepageIslandInner = () => {
                 ))}
               </div>
 
-              {/* Toolbar: Customize | Save | Share | Add Image | Fullscreen */}
+              {/* Toolbar: Save | Share | Add Image | Fullscreen */}
               <div className="flex items-center justify-center gap-1.5 px-1 flex-wrap">
-                <button
-                  onClick={() => setShowCustomize(true)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card/60 hover:border-primary/40 hover:shadow-sm transition-all text-xs font-medium text-muted-foreground hover:text-foreground"
-                >
-                  <Settings2 className="w-3.5 h-3.5" />
-                  <span>{t.toolbarCustomize}</span>
-                </button>
                 <button
                   onClick={handleSaveWheel}
                   disabled={isSaving}
@@ -540,19 +588,6 @@ const HomepageIslandInner = () => {
                 )}
               </div>
 
-              {/* Spin counter — yearly count */}
-              {yearlyCount > 0 && (
-                <div className="flex flex-col items-center gap-0.5 py-1">
-                  <div className="flex flex-col items-center gap-1 px-4 py-2 rounded-lg border-2 border-black dark:border-white bg-black/5 dark:bg-white/5">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse shrink-0" />
-                      <OdometerNumber value={yearlyCount} size="2.2rem" />
-                    </div>
-                    <span className="text-xs text-muted-foreground tracking-wide uppercase">{t.indexSpinsText}</span>
-                  </div>
-                </div>
-              )}
-
               {/* Trust signals */}
               <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground pb-1">
                 <span><strong className="text-foreground">{t.indexTrustFree}</strong></span>
@@ -562,38 +597,91 @@ const HomepageIslandInner = () => {
                 <span><strong className="text-foreground">{t.indexTrustCrypto}</strong></span>
               </div>
 
-              {/* Spin button + multiplier (single wheel only) */}
+              {/* Spin button + multiplier dropdown (single wheel only) */}
               {totalWheels === 1 && !wheelIsSpinning[0] && (
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 justify-center">
                     <DrawButton onDraw={() => {
                       if (multiplier === 1) { handleDraw(); return; }
-                      // Instant multi-spin: calculate results without animation
+                      // Multi-spin: show calculating animation then results
                       const parts = displayParticipants;
                       if (parts.length < 2) return;
+                      setIsCalculating(true);
+                      setCalcProgress(0);
+                      // Animate progress bar
+                      const startTime = Date.now();
+                      const duration = Math.min(1200 + multiplier * 0.02, 3000);
+                      const tick = () => {
+                        const p = Math.min((Date.now() - startTime) / duration * 100, 99);
+                        setCalcProgress(p);
+                        if (p < 99) requestAnimationFrame(tick);
+                      };
+                      requestAnimationFrame(tick);
+                      // Calculate results
                       const counts: Record<string, number> = {};
                       parts.forEach(p => { counts[p.pseudo] = 0; });
                       for (let i = 0; i < multiplier; i++) {
-                        const idx = Math.floor(Math.random() * parts.length);
-                        counts[parts[idx].pseudo]++;
+                        const ri = Math.floor(Math.random() * parts.length);
+                        counts[parts[ri].pseudo]++;
                       }
                       const results = Object.entries(counts)
                         .map(([name, count]) => ({ name, count, pct: (count / multiplier) * 100 }))
                         .sort((a, b) => b.count - a.count);
-                      setMultiResults(results);
-                      setSpinCount(prev => prev + multiplier);
-                      for (let i = 0; i < multiplier; i++) increment();
-                      if (customizeConfig.launchConfetti) setShowConfetti(true);
+                      setTimeout(() => {
+                        setCalcProgress(100);
+                        setTimeout(() => {
+                          setIsCalculating(false);
+                          setMultiResults(results);
+                          setSpinCount(prev => prev + multiplier);
+                          for (let i = 0; i < multiplier; i++) increment();
+                          if (customizeConfig.launchConfetti) setShowConfetti(true);
+                        }, 200);
+                      }, duration);
                     }} isSpinning={false} disabled={displayParticipants.length < 2} participantCount={displayParticipants.length} mode="simple" />
-                    <button
-                      onClick={() => setMultiplierIdx(i => (i + 1) % MULTIPLIERS.length)}
-                      className="px-3 py-2 rounded-xl border-2 border-primary/40 bg-primary/10 text-primary font-bold text-sm hover:bg-primary/20 transition-all min-w-[56px] text-center"
-                      title="Change spin multiplier"
-                    >
-                      x{multiplier.toLocaleString()}
-                    </button>
+                    {/* Multiplier dropdown */}
+                    <div className="relative">
+                      <button
+                        onClick={() => setShowMultiplierDropdown(v => !v)}
+                        className="flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 border-primary/40 bg-primary/10 text-primary font-bold text-sm hover:bg-primary/20 transition-all min-w-[64px]"
+                        title="Nombre de tirages"
+                      >
+                        x{multiplier.toLocaleString()}
+                        <ChevronDown className="w-3.5 h-3.5 opacity-70" />
+                      </button>
+                      {showMultiplierDropdown && (
+                        <div className="absolute bottom-full mb-1 left-0 bg-card border border-border rounded-xl shadow-2xl overflow-hidden z-30 min-w-[96px]" onClick={e => e.stopPropagation()}>
+                          {MULTIPLIERS.map((m, i) => (
+                            <button
+                              key={m}
+                              onClick={() => { setMultiplierIdx(i); setShowMultiplierDropdown(false); }}
+                              className={`w-full px-4 py-2 text-sm font-bold text-left transition-colors ${multiplierIdx === i ? 'bg-primary/15 text-primary' : 'hover:bg-muted/60 text-muted-foreground'}`}
+                            >
+                              x{m.toLocaleString()}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <MicroTrustIndicators mode="simple" />
+                </div>
+              )}
+
+              {/* Spin counter — yearly count + spinning hours — BELOW the spin button */}
+              {yearlyCount > 0 && (
+                <div className="flex flex-col items-center gap-1 py-1">
+                  <div className="flex flex-col items-center gap-1 px-4 py-2 rounded-lg border-2 border-black dark:border-white bg-black/5 dark:bg-white/5">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse shrink-0" />
+                      <OdometerNumber value={yearlyCount} size="2.2rem" />
+                    </div>
+                    <span className="text-xs text-muted-foreground tracking-wide uppercase">{t.indexSpinsText}</span>
+                  </div>
+                  {globalCount > 0 && (
+                    <p className="text-xs text-muted-foreground/60">
+                      ≈ {Math.max(1, Math.floor(globalCount * (customizeConfig.spinDuration || 8) / 3600)).toLocaleString()} h de rotation au total
+                    </p>
+                  )}
                 </div>
               )}
             </div>
