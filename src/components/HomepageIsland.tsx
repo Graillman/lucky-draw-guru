@@ -230,16 +230,8 @@ const HomepageIslandInner = () => {
     return extra && extra.participants.length >= 2 ? extra.participants : DEFAULT_NAMES;
   }, [displayParticipants, extraWheels]);
 
-  // ── WHEEL SIZE TUNER (temporary dev tool) ───────────────────────────────
-  const [wheelSizeOverride, setWheelSizeOverride] = useState<number>(() => {
-    try { const v = localStorage.getItem('__wheelSizeTuner'); return v ? parseInt(v) : 0; } catch { return 0; }
-  });
-  const [wheelOffsetY, setWheelOffsetY] = useState<number>(() => {
-    try { const v = localStorage.getItem('__wheelOffsetY'); return v ? parseInt(v) : 0; } catch { return 0; }
-  });
-  const autoSize = Math.min(Math.max(480, viewportH - 61), 960);
-  const singleWheelSize = wheelSizeOverride > 0 ? wheelSizeOverride : autoSize;
-  // ────────────────────────────────────────────────────────────────────────
+  const singleWheelSize = 7495;
+  const wheelOffsetY = 25;
 
   const wheelSize = totalWheels === 1 ? singleWheelSize : totalWheels === 2 ? 300 : totalWheels === 3 ? 220 : totalWheels === 4 ? 180 : 155;
 
@@ -471,47 +463,7 @@ const HomepageIslandInner = () => {
         </div>
       )}
 
-      {/* ── WHEEL SIZE TUNER (temporary) ── */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-card border border-primary rounded-2xl shadow-2xl px-5 py-4 flex flex-col gap-3 backdrop-blur-sm min-w-[320px]">
-        <div className="flex items-center gap-3">
-          <span className="text-xs font-bold text-primary w-16 shrink-0">↕ Taille</span>
-          <input
-            type="range" min={400} max={10000} step={5}
-            value={singleWheelSize}
-            onChange={e => {
-              const v = parseInt(e.target.value);
-              setWheelSizeOverride(v);
-              try { localStorage.setItem('__wheelSizeTuner', String(v)); } catch {}
-            }}
-            className="flex-1 accent-primary"
-          />
-          <span className="text-sm font-mono font-bold text-foreground w-16 text-right">{singleWheelSize}px</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="text-xs font-bold text-primary w-16 shrink-0">⬆⬇ Pos Y</span>
-          <input
-            type="range" min={-300} max={300} step={5}
-            value={wheelOffsetY}
-            onChange={e => {
-              const v = parseInt(e.target.value);
-              setWheelOffsetY(v);
-              try { localStorage.setItem('__wheelOffsetY', String(v)); } catch {}
-            }}
-            className="flex-1 accent-primary"
-          />
-          <span className="text-sm font-mono font-bold text-foreground w-16 text-right">{wheelOffsetY > 0 ? '+' : ''}{wheelOffsetY}px</span>
-        </div>
-        <button
-          onClick={() => {
-            setWheelSizeOverride(0); setWheelOffsetY(0);
-            try { localStorage.removeItem('__wheelSizeTuner'); localStorage.removeItem('__wheelOffsetY'); } catch {}
-          }}
-          className="text-xs text-muted-foreground hover:text-foreground text-center"
-        >↺ Réinitialiser</button>
-      </div>
-      {/* ── END TUNER ── */}
-
-      {/* Fixed pencil buttons — top-left corner under nav */}
+{/* Fixed pencil buttons — top-left corner under nav */}
       <div className="fixed top-[72px] left-3 z-40 flex flex-col gap-1.5">
         <button
           onClick={() => setEditingTitle(true)}
