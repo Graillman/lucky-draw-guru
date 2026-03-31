@@ -562,14 +562,15 @@ export function SpinningWheel({
       const arcR  = radius * 0.42;
 
       const drawArcText = (text: string, fontSize: number, fontWeight: string, arcRadius: number, color: string) => {
-        ctx.font = `${fontWeight} ${fontSize}px 'Impact', 'Arial Black', 'Space Grotesk', sans-serif`;
+        ctx.font = `${fontWeight} ${fontSize}px 'Space Grotesk', 'Inter', 'Arial', sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
+        const gap = fontSize * 0.22; // spacing between characters
         const charWidths: number[] = [];
         let totalWidth = 0;
         for (const ch of text) {
-          const w = ctx.measureText(ch).width;
+          const w = ctx.measureText(ch).width + gap;
           charWidths.push(w);
           totalWidth += w;
         }
@@ -583,29 +584,21 @@ export function SpinningWheel({
           ctx.save();
           ctx.translate(arcRadius * Math.cos(a), arcRadius * Math.sin(a));
           ctx.rotate(a + Math.PI / 2);
-          // Dark outline for 3D depth
-          ctx.lineWidth = fontSize * 0.18;
-          ctx.strokeStyle = 'rgba(0,0,0,0.95)';
-          ctx.lineJoin = 'round';
-          ctx.shadowColor = 'rgba(0,0,0,1)';
-          ctx.shadowBlur = 12;
-          ctx.shadowOffsetX = 2;
-          ctx.shadowOffsetY = 3;
-          ctx.strokeText(text[i], 0, 0);
-          ctx.shadowBlur = 0;
-          ctx.shadowOffsetX = 0;
-          ctx.shadowOffsetY = 0;
+          // Subtle shadow only
+          ctx.shadowColor = 'rgba(0,0,0,0.55)';
+          ctx.shadowBlur = 4;
           ctx.fillStyle = color;
           ctx.fillText(text[i], 0, 0);
+          ctx.shadowBlur = 0;
           ctx.restore();
           angle += charAngle;
         }
       };
 
-      drawArcText(clickToSpinLabel, fs, '900', arcR, '#ffffff');
+      drawArcText(clickToSpinLabel, fs, '600', arcR, '#ffffff');
 
       if (clickToSpinSub) {
-        drawArcText(clickToSpinSub, subFs, '600', arcR * 0.68, 'rgba(255,255,255,0.80)');
+        drawArcText(clickToSpinSub, subFs, '500', arcR * 0.68, 'rgba(255,255,255,0.75)');
       }
 
       ctx.restore();
