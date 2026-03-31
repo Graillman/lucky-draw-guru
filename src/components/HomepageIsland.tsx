@@ -476,7 +476,7 @@ const HomepageIslandInner = () => {
         <div className="flex items-center gap-3">
           <span className="text-xs font-bold text-primary w-16 shrink-0">↕ Taille</span>
           <input
-            type="range" min={400} max={2000} step={5}
+            type="range" min={400} max={10000} step={5}
             value={singleWheelSize}
             onChange={e => {
               const v = parseInt(e.target.value);
