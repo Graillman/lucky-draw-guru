@@ -4,6 +4,7 @@ import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
 import AdPlaceholder from '@/components/AdPlaceholder';
 import FaqAccordionIsland from '@/components/FaqAccordionIsland';
+import FaqPageHeaderIsland from '@/components/FaqPageHeaderIsland';
 
 const title = "Random Picker FAQ — Common Questions Answered | Real Wheel Picker";
 const description = "Answers to the most common questions about Real Wheel Picker: randomness, fairness, privacy, giveaway rules, classroom use, and more. Free, no signup required.";
@@ -60,11 +61,7 @@ const jsonLd = {
     <HeaderIsland client:load />
     <main class="max-w-4xl mx-auto px-4 py-8 space-y-8">
 
-      <section class="text-center space-y-4 py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground">Frequently Asked Questions</h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">Everything you need to know about our random picker tool</p>
-        <p class="text-sm text-muted-foreground">Fairness &bull; Privacy &bull; Transparency</p>
-      </section>
+      <FaqPageHeaderIsland client:load />
 
       <FaqAccordionIsland client:load />
 

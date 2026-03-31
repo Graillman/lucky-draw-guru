@@ -453,6 +453,18 @@ export interface Translations {
   // Tool page section labels
   faqsTitle: string;
   relatedBlogPostLabel: string;
+
+  // Blog page
+  blogSubtitle: string;
+  blogFeatured: string;
+  blogReadGuide: string;
+  blogRead: string;
+  blogTryTools: string;
+  blogTagGiveaways: string;
+  blogTagEducation: string;
+  blogTagTeams: string;
+  blogTagTools: string;
+  blogTagIdeas: string;
 }
 
 export const translations: Record<Language, Translations> = {
@@ -880,6 +892,16 @@ export const translations: Record<Language, Translations> = {
     indexTrustCrypto: 'Crypto fair',
     faqsTitle: 'Frequently Asked Questions',
     relatedBlogPostLabel: 'Want a step-by-step guide?',
+    blogSubtitle: 'Guides on running giveaways, using random pickers in classrooms, splitting teams fairly, and more.',
+    blogFeatured: 'Featured',
+    blogReadGuide: 'Read guide',
+    blogRead: 'Read',
+    blogTryTools: 'Try the tools for free',
+    blogTagGiveaways: 'Giveaways',
+    blogTagEducation: 'Education',
+    blogTagTeams: 'Teams',
+    blogTagTools: 'Tools',
+    blogTagIdeas: 'Ideas',
   },
 
   es: {
@@ -1301,6 +1323,16 @@ export const translations: Record<Language, Translations> = {
     indexTrustCrypto: 'Cripto justo',
     faqsTitle: 'Preguntas frecuentes',
     relatedBlogPostLabel: '¿Quieres una guía paso a paso?',
+    blogSubtitle: 'Guías sobre sorteos, selección aleatoria en clases, división de equipos y más.',
+    blogFeatured: 'Destacado',
+    blogReadGuide: 'Leer guía',
+    blogRead: 'Leer',
+    blogTryTools: 'Prueba las herramientas gratis',
+    blogTagGiveaways: 'Sorteos',
+    blogTagEducation: 'Educación',
+    blogTagTeams: 'Equipos',
+    blogTagTools: 'Herramientas',
+    blogTagIdeas: 'Ideas',
   },
   fr: {
     heroTitle: "Tirage au sort",
@@ -1721,6 +1753,16 @@ export const translations: Record<Language, Translations> = {
     indexTrustCrypto: 'Crypto équitable',
     faqsTitle: 'Questions fréquentes',
     relatedBlogPostLabel: 'Vous voulez un guide étape par étape ?',
+    blogSubtitle: 'Guides sur les tirages au sort, les sélections aléatoires en classe, la formation d\'équipes et plus encore.',
+    blogFeatured: 'À la une',
+    blogReadGuide: 'Lire le guide',
+    blogRead: 'Lire',
+    blogTryTools: 'Essayez les outils gratuitement',
+    blogTagGiveaways: 'Concours',
+    blogTagEducation: 'Éducation',
+    blogTagTeams: 'Équipes',
+    blogTagTools: 'Outils',
+    blogTagIdeas: 'Idées',
   },
   de: {
     heroTitle: 'Zufallsauslosung',
@@ -2141,6 +2183,16 @@ export const translations: Record<Language, Translations> = {
     indexTrustCrypto: 'Krypto-fair',
     faqsTitle: 'Häufig gestellte Fragen',
     relatedBlogPostLabel: 'Schritt-für-Schritt-Anleitung gewünscht?',
+    blogSubtitle: 'Anleitungen zu Gewinnspielen, zufälliger Auswahl im Unterricht, fairer Teamaufteilung und mehr.',
+    blogFeatured: 'Empfohlen',
+    blogReadGuide: 'Anleitung lesen',
+    blogRead: 'Lesen',
+    blogTryTools: 'Tools kostenlos ausprobieren',
+    blogTagGiveaways: 'Gewinnspiele',
+    blogTagEducation: 'Bildung',
+    blogTagTeams: 'Teams',
+    blogTagTools: 'Tools',
+    blogTagIdeas: 'Ideen',
   },
   pt: {
     heroTitle: 'Sorteio Aleatório',
@@ -2561,6 +2613,16 @@ export const translations: Record<Language, Translations> = {
     indexTrustCrypto: 'Cripto justo',
     faqsTitle: 'Perguntas frequentes',
     relatedBlogPostLabel: 'Quer um guia passo a passo?',
+    blogSubtitle: 'Guias sobre sorteios, seleção aleatória em salas de aula, divisão justa de equipes e mais.',
+    blogFeatured: 'Destaque',
+    blogReadGuide: 'Ler guia',
+    blogRead: 'Ler',
+    blogTryTools: 'Experimente as ferramentas gratuitamente',
+    blogTagGiveaways: 'Sorteios',
+    blogTagEducation: 'Educação',
+    blogTagTeams: 'Equipes',
+    blogTagTools: 'Ferramentas',
+    blogTagIdeas: 'Ideias',
   },
   it: {
     heroTitle: 'Estrazione Casuale',
@@ -2981,6 +3043,16 @@ export const translations: Record<Language, Translations> = {
     indexTrustCrypto: 'Cripto equo',
     faqsTitle: 'Domande frequenti',
     relatedBlogPostLabel: 'Vuoi una guida passo passo?',
+    blogSubtitle: 'Guide su sorteggi, selezione casuale in classe, divisione equa dei team e altro.',
+    blogFeatured: 'In evidenza',
+    blogReadGuide: 'Leggi guida',
+    blogRead: 'Leggi',
+    blogTryTools: 'Prova gli strumenti gratuitamente',
+    blogTagGiveaways: 'Sorteggi',
+    blogTagEducation: 'Educazione',
+    blogTagTeams: 'Team',
+    blogTagTools: 'Strumenti',
+    blogTagIdeas: 'Idee',
   },
 };
 

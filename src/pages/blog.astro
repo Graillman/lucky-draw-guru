@@ -3,7 +3,7 @@ import Layout from '@/layouts/Layout.astro';
 import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
 import AdPlaceholder from '@/components/AdPlaceholder';
-import { ArrowRight, Clock } from 'lucide-react';
+import BlogHeaderIsland from '@/components/BlogHeaderIsland';
 
 const title = "Blog — Spin the Wheel Guides, Giveaway Tips & Random Picker Tutorials";
 const description = "In-depth guides on running giveaways, using random pickers in classrooms, splitting teams fairly, and getting the most from every spin wheel tool.";
@@ -38,14 +38,6 @@ const posts = [
   { slug: "/blog/best-random-picker-tools", title: "Best Free Random Picker Tools in 2026: Full Comparison", excerpt: "Unbiased comparison of the top spinning wheel tools: Real Wheel Picker vs Wheel of Names vs Picker Wheel vs Random.org. Features, randomness, and verdict.", tag: "Tools", readTime: "9 min", date: "Mar 2, 2026" },
 ];
 
-const tagColors: Record<string, string> = {
-  Giveaways: "bg-purple-500/10 text-purple-400",
-  Education: "bg-blue-500/10 text-blue-400",
-  Teams: "bg-green-500/10 text-green-400",
-  Tools: "bg-yellow-500/10 text-yellow-400",
-  Ideas: "bg-pink-500/10 text-pink-400",
-};
-
 const featured = posts[0];
 const rest = posts.slice(1);
 ---
@@ -55,80 +47,9 @@ const rest = posts.slice(1);
     <HeaderIsland client:load />
     <main class="max-w-4xl mx-auto px-4 py-10 space-y-10">
 
-      <section class="text-center space-y-3">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground">Blog</h1>
-        <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Guides on running giveaways, using random pickers in classrooms, splitting teams fairly, and more.
-        </p>
-      </section>
-
-      <AdPlaceholder position="after-use-cases" client:visible />
-
-      <!-- Featured post -->
-      <section>
-        <a href={featured.slug} class="block bg-card border border-border rounded-2xl p-6 md:p-8 hover:border-primary transition-colors space-y-4 group">
-          <div class="flex items-center gap-2">
-            <span class={`text-xs px-2 py-1 rounded-full font-medium ${tagColors[featured.tag]}`}>{featured.tag}</span>
-            <span class="text-xs text-muted-foreground">Featured</span>
-          </div>
-          <h2 class="text-xl md:text-2xl font-bold text-foreground group-hover:text-primary transition-colors">{featured.title}</h2>
-          <p class="text-muted-foreground leading-relaxed">{featured.excerpt}</p>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3 text-xs text-muted-foreground">
-              <span class="flex items-center gap-1"><Clock className="w-3 h-3" />{featured.readTime}</span>
-              <span>{featured.date}</span>
-            </div>
-            <span class="text-primary text-sm flex items-center gap-1">
-              Read guide <ArrowRight className="w-4 h-4" />
-            </span>
-          </div>
-        </a>
-      </section>
-
-      <!-- Post grid -->
-      <section class="grid sm:grid-cols-2 gap-5">
-        {rest.map((post) => (
-          <a
-            href={post.slug}
-            class="bg-card border border-border rounded-xl p-5 hover:border-primary transition-colors space-y-3 group flex flex-col"
-          >
-            <span class={`text-xs px-2 py-1 rounded-full font-medium w-fit ${tagColors[post.tag]}`}>{post.tag}</span>
-            <h2 class="font-bold text-foreground group-hover:text-primary transition-colors leading-snug">{post.title}</h2>
-            <p class="text-sm text-muted-foreground leading-relaxed flex-1">{post.excerpt}</p>
-            <div class="flex items-center justify-between pt-1">
-              <div class="flex items-center gap-3 text-xs text-muted-foreground">
-                <span class="flex items-center gap-1"><Clock className="w-3 h-3" />{post.readTime}</span>
-                <span>{post.date}</span>
-              </div>
-              <span class="text-xs text-primary flex items-center gap-1">Read <ArrowRight className="w-3 h-3" /></span>
-            </div>
-          </a>
-        ))}
-      </section>
+      <BlogHeaderIsland featured={featured} rest={rest} client:load />
 
       <AdPlaceholder position="after-winners" client:visible />
-
-      <section class="bg-primary/5 border border-primary/20 rounded-2xl p-6 md:p-8 space-y-4">
-        <h2 class="text-xl font-bold text-foreground text-center">Try the tools for free</h2>
-        <div class="grid sm:grid-cols-3 gap-3">
-          {[
-            { href: "/", label: "Spin the Wheel" },
-            { href: "/giveaway-picker", label: "Giveaway Picker" },
-            { href: "/classroom-picker", label: "Classroom Picker" },
-            { href: "/team-generator", label: "Team Generator" },
-            { href: "/instagram-giveaway-picker", label: "Instagram Picker" },
-            { href: "/weighted-random-picker", label: "Weighted Picker" },
-          ].map((tool) => (
-            <a
-              href={tool.href}
-              class="bg-card border border-border rounded-xl px-4 py-3 text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors text-center flex items-center justify-center gap-1"
-            >
-              {tool.label} <ArrowRight className="w-3 h-3" />
-            </a>
-          ))}
-        </div>
-      </section>
-
       <AdPlaceholder position="bottom" client:visible />
     </main>
     <GlobalFooterIsland client:idle />
