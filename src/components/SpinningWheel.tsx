@@ -790,8 +790,9 @@ export function SpinningWheel({
           style={{
             width:  `${canvasDisplaySize}px`,
             height: `${canvasDisplaySize}px`,
-            maxWidth: '90vw',
-            maxHeight: '90vh',
+            maxWidth: 'min(90vw, 90vh)',
+            maxHeight: 'min(90vw, 90vh)',
+            aspectRatio: '1 / 1',
             cursor: onSpin && !isSpinning && !isAnimating ? 'pointer' : 'default',
           }}
           onClick={handleCanvasClick}
