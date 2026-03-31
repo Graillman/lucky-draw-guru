@@ -44,7 +44,7 @@ export function useCustomizeConfig(): [CustomizeConfig, (c: CustomizeConfig) => 
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       // Always reset theme to default on each page load — user can change it in session
-      if (saved) return { ...DEFAULT_CONFIG, ...JSON.parse(saved), theme: DEFAULT_CONFIG.theme };
+      if (saved) return { ...DEFAULT_CONFIG, ...JSON.parse(saved), theme: DEFAULT_CONFIG.theme, wheelShape: DEFAULT_CONFIG.wheelShape, hubTheme: DEFAULT_CONFIG.hubTheme };
     } catch {}
     return DEFAULT_CONFIG;
   });
@@ -330,7 +330,11 @@ export function CustomizePanel({ config, onChange, onClose }: Props) {
                   ].map(s => (
                     <button
                       key={s.key}
-                      onClick={() => { set("tickSound", s.key); playTick(s.key); }}
+                      onClick={() => {
+                        set("tickSound", s.key);
+                        // Play 5 preview ticks simulating a decelerating wheel
+                        [0, 110, 210, 300, 380].forEach(delay => setTimeout(() => playTick(s.key), delay));
+                      }}
                       className={`p-2 rounded-xl border-2 transition-all text-center ${
                         config.tickSound === s.key
                           ? "border-primary shadow-md bg-primary/5"
@@ -348,9 +352,9 @@ export function CustomizePanel({ config, onChange, onClose }: Props) {
               <Slider
                 label={t.customizeSpinDuration}
                 value={config.spinDuration}
-                min={3} max={15}
+                min={3} max={30}
                 onChange={v => set("spinDuration", v)}
-                left="3s" right="15s"
+                left="3s" right="30s"
               />
             </div>
           )}
