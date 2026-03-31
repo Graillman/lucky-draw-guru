@@ -230,8 +230,14 @@ const HomepageIslandInner = () => {
     return extra && extra.participants.length >= 2 ? extra.participants : DEFAULT_NAMES;
   }, [displayParticipants, extraWheels]);
 
-  // Responsive wheel size — single wheel fills viewport height below nav (64px) with small margin
-  const singleWheelSize = Math.min(Math.max(480, viewportH - 61), 960);
+  // ── WHEEL SIZE TUNER (temporary dev tool) ───────────────────────────────
+  const [wheelSizeOverride, setWheelSizeOverride] = useState<number>(() => {
+    try { const v = localStorage.getItem('__wheelSizeTuner'); return v ? parseInt(v) : 0; } catch { return 0; }
+  });
+  const autoSize = Math.min(Math.max(480, viewportH - 61), 960);
+  const singleWheelSize = wheelSizeOverride > 0 ? wheelSizeOverride : autoSize;
+  // ────────────────────────────────────────────────────────────────────────
+
   const wheelSize = totalWheels === 1 ? singleWheelSize : totalWheels === 2 ? 300 : totalWheels === 3 ? 220 : totalWheels === 4 ? 180 : 155;
 
   // Spin a specific wheel
@@ -461,6 +467,28 @@ const HomepageIslandInner = () => {
           </div>
         </div>
       )}
+
+      {/* ── WHEEL SIZE TUNER (temporary) ── */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-card border border-primary rounded-2xl shadow-2xl px-5 py-3 flex items-center gap-4 backdrop-blur-sm">
+        <span className="text-xs font-bold text-primary whitespace-nowrap">🎡 Taille roue</span>
+        <input
+          type="range" min={400} max={1100} step={5}
+          value={singleWheelSize}
+          onChange={e => {
+            const v = parseInt(e.target.value);
+            setWheelSizeOverride(v);
+            try { localStorage.setItem('__wheelSizeTuner', String(v)); } catch {}
+          }}
+          className="w-40 accent-primary"
+        />
+        <span className="text-sm font-mono font-bold text-foreground w-12 text-right">{singleWheelSize}px</span>
+        <button
+          onClick={() => { setWheelSizeOverride(0); try { localStorage.removeItem('__wheelSizeTuner'); } catch {} }}
+          className="text-xs text-muted-foreground hover:text-foreground"
+          title="Réinitialiser"
+        >↺</button>
+      </div>
+      {/* ── END TUNER ── */}
 
       {/* Fixed pencil buttons — top-left corner under nav */}
       <div className="fixed top-[72px] left-3 z-40 flex flex-col gap-1.5">
