@@ -249,6 +249,14 @@ export interface Translations {
   navAbout: string;
   navBlog: string;
   navGallery: string;
+  navTemplates: string;
+  navImport: string;
+  navSave: string;
+  navCustomize: string;
+  navImportCsv: string;
+  navImportTxt: string;
+  drawTitleDefault: string;
+  navGiveawaySubtitle: string;
   navFullscreen: string;
 
   // Instagram Giveaway Page
@@ -687,6 +695,14 @@ export const translations: Record<Language, Translations> = {
     navAbout: 'About Us',
     navBlog: 'Blog',
     navGallery: 'Gallery',
+    navTemplates: 'Templates',
+    navImport: 'Import',
+    navSave: 'Save',
+    navCustomize: 'Customize wheel',
+    navImportCsv: 'Import CSV',
+    navImportTxt: 'Import TXT',
+    drawTitleDefault: 'Wheel of Choices',
+    navGiveawaySubtitle: 'For influencers & content creators',
     navFullscreen: 'Fullscreen',
 
     // Instagram Giveaway Page
@@ -1118,6 +1134,14 @@ export const translations: Record<Language, Translations> = {
     navAbout: 'Sobre Nosotros',
     navBlog: 'Blog',
     navGallery: 'Galería',
+    navTemplates: 'Plantillas',
+    navImport: 'Importar',
+    navSave: 'Guardar',
+    navCustomize: 'Personalizar rueda',
+    navImportCsv: 'Importar CSV',
+    navImportTxt: 'Importar TXT',
+    drawTitleDefault: 'Rueda de Opciones',
+    navGiveawaySubtitle: 'Para influencers y creadores de contenido',
     navFullscreen: 'Pantalla completa',
 
     // Instagram Giveaway Page
@@ -1548,6 +1572,14 @@ export const translations: Record<Language, Translations> = {
     navAbout: 'À Propos de Nous',
     navBlog: 'Blog',
     navGallery: 'Galerie',
+    navTemplates: 'Modèles',
+    navImport: 'Importer',
+    navSave: 'Sauvegarder',
+    navCustomize: 'Personnaliser la roue',
+    navImportCsv: 'Importer CSV',
+    navImportTxt: 'Importer TXT',
+    drawTitleDefault: 'Roue des Choix',
+    navGiveawaySubtitle: 'Pour les influenceurs et créateurs de contenu',
     navFullscreen: 'Plein écran',
 
     // Instagram Giveaway Page
@@ -1979,6 +2011,14 @@ export const translations: Record<Language, Translations> = {
     navBlog: 'Blog',
     navGallery: 'Galerie',
     navFullscreen: 'Vollbild',
+    navTemplates: 'Vorlagen',
+    navImport: 'Importieren',
+    navSave: 'Speichern',
+    navCustomize: 'Anpassen',
+    navImportCsv: 'CSV importieren',
+    navImportTxt: 'TXT importieren',
+    drawTitleDefault: 'Glücksrad',
+    navGiveawaySubtitle: 'für Influencer & Creator',
 
     // Instagram Giveaway Page
     igTitle: 'Instagram Gewinnspiel-Picker',
@@ -2409,6 +2449,14 @@ export const translations: Record<Language, Translations> = {
     navBlog: 'Blog',
     navGallery: 'Galeria',
     navFullscreen: 'Tela cheia',
+    navTemplates: 'Modelos',
+    navImport: 'Importar',
+    navSave: 'Salvar',
+    navCustomize: 'Personalizar',
+    navImportCsv: 'Importar CSV',
+    navImportTxt: 'Importar TXT',
+    drawTitleDefault: 'Roda da Sorte',
+    navGiveawaySubtitle: 'para influenciadores e criadores',
 
     // Instagram Giveaway Page
     igTitle: 'Seletor de Sorteios do Instagram',
@@ -2839,6 +2887,14 @@ export const translations: Record<Language, Translations> = {
     navBlog: 'Blog',
     navGallery: 'Galleria',
     navFullscreen: 'Schermo intero',
+    navTemplates: 'Modelli',
+    navImport: 'Importa',
+    navSave: 'Salva',
+    navCustomize: 'Personalizza',
+    navImportCsv: 'Importa CSV',
+    navImportTxt: 'Importa TXT',
+    drawTitleDefault: 'Ruota della Fortuna',
+    navGiveawaySubtitle: 'per influencer e creator',
 
     // Instagram Giveaway Page
     igTitle: 'Selettore di Giveaway Instagram',

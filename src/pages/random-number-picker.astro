@@ -104,7 +104,22 @@ const jsonLd = {
         </div>
       </section>
 
-      <SEOPageIsland slug="random-number-picker" client:load />
+      <SEOPageIsland
+        slug="random-number-picker"
+        defaultParticipants={[
+          { pseudo: "1", weight: 1 },
+          { pseudo: "2", weight: 1 },
+          { pseudo: "3", weight: 1 },
+          { pseudo: "4", weight: 1 },
+          { pseudo: "5", weight: 1 },
+          { pseudo: "6", weight: 1 },
+          { pseudo: "7", weight: 1 },
+          { pseudo: "8", weight: 1 },
+          { pseudo: "9", weight: 1 },
+          { pseudo: "10", weight: 1 },
+        ]}
+        client:load
+      />
 
       <section class="space-y-6">
         <h2 class="text-xl md:text-2xl font-bold text-foreground">When to Use a Random Number Wheel</h2>

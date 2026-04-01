@@ -53,6 +53,7 @@ interface SEOPageIslandProps {
   seoText?: string;
   faqs?: Array<{ question: string; answer: string }>;
   relatedBlogPost?: { slug: string; title: string };
+  defaultParticipants?: ParticipantEntry[];
 }
 
 // Pages where the "Tirage Personnalisé" (advanced/weighted) mode is relevant
@@ -70,7 +71,7 @@ const ADVANCED_ALLOWED_SLUGS = new Set([
   'discord-giveaway-picker',
 ]);
 
-const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, howItWorksText, whenToUseTitle, useCases, seoTitle, seoText, faqs, relatedBlogPost }: SEOPageIslandProps) => {
+const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, howItWorksText, whenToUseTitle, useCases, seoTitle, seoText, faqs, relatedBlogPost, defaultParticipants: propDefaults }: SEOPageIslandProps) => {
   const { participants, setParticipants, isLoaded } = useLocalStorageParticipants();
   const { t } = useLanguage();
   const allowAdvanced = ADVANCED_ALLOWED_SLUGS.has(slug);
@@ -84,7 +85,8 @@ const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, ho
   const wheelSectionRef = useRef<HTMLDivElement>(null);
 
   const isAdvanced = mode === "advanced";
-  const displayParticipants = participants.length >= 2 ? participants : DEFAULT_NAMES;
+  const pageDefaults = propDefaults ?? DEFAULT_NAMES;
+  const displayParticipants = participants.length >= 2 ? participants : pageDefaults;
 
   // Social proof counter
   const { globalCount, increment } = useSpinCounter();

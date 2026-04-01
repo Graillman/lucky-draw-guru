@@ -557,7 +557,7 @@ export function SpinningWheel({
       ctx.save();
       ctx.translate(center, center);
 
-      const fs    = Math.max(10, Math.round(sz * 0.028));
+      const fs    = Math.max(12, Math.round(sz * 0.036));
       const subFs = Math.max(7,  Math.round(sz * 0.019));
       const arcR  = radius * 0.42;
 
@@ -790,8 +790,8 @@ export function SpinningWheel({
           style={{
             width:  `${canvasDisplaySize}px`,
             height: `${canvasDisplaySize}px`,
-            maxWidth: 'min(90vw, 90vh)',
-            maxHeight: 'min(90vw, 90vh)',
+            maxWidth: 'min(90vw, calc(90vh - 80px))',
+            maxHeight: 'min(90vw, calc(90vh - 80px))',
             aspectRatio: '1 / 1',
             cursor: onSpin && !isSpinning && !isAnimating ? 'pointer' : 'default',
           }}

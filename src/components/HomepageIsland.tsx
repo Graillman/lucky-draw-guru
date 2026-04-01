@@ -12,7 +12,7 @@ import { useLocalStorageParticipants } from "@/hooks/useLocalStorageParticipants
 import { ConfettiEffect } from "@/components/ConfettiEffect";
 import { WHEEL_THEMES } from "@/components/WheelThemePicker";
 import { CustomizePanel, useCustomizeConfig } from "@/components/CustomizePanel";
-import { Edit3, Share2, Settings2, Maximize2, Minimize2, BookMarked, ImagePlus, Plus, X, ChevronDown, Pencil } from "lucide-react";
+import { Share2, Settings2, Maximize2, Minimize2, BookMarked, ImagePlus, Plus, X, ChevronDown, Pencil } from "lucide-react";
 import { buildShareURL, readShareURLConfig } from "@/hooks/useShareableURL";
 import { saveWheel, getWheelById } from "@/lib/wheelGallery";
 import { toast } from "sonner";
@@ -136,6 +136,18 @@ const HomepageIslandInner = () => {
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
   }, []);
+
+  // Listen for import events from HeaderIsland
+  useEffect(() => {
+    const handleImport = (e: CustomEvent) => {
+      const imported: ParticipantEntry[] = e.detail;
+      if (Array.isArray(imported) && imported.length > 0) {
+        setParticipants(imported);
+      }
+    };
+    window.addEventListener('rwp:importParticipants', handleImport as EventListener);
+    return () => window.removeEventListener('rwp:importParticipants', handleImport as EventListener);
+  }, [setParticipants]);
 
   // Multi-wheel state
   const [extraWheels, setExtraWheels] = useState<ExtraWheel[]>([]);
@@ -463,24 +475,6 @@ const HomepageIslandInner = () => {
         </div>
       )}
 
-{/* Fixed pencil buttons — top-left corner under nav */}
-      <div className="fixed top-[72px] left-3 z-40 flex flex-col gap-1.5">
-        <button
-          onClick={() => setEditingTitle(true)}
-          title="Modifier le titre de la roue"
-          className="w-9 h-9 flex items-center justify-center rounded-xl bg-card/85 border border-border shadow-lg hover:bg-primary/10 hover:border-primary/40 transition-all backdrop-blur-sm"
-        >
-          <Pencil className="w-4 h-4 text-muted-foreground" />
-        </button>
-        <button
-          onClick={() => setShowCustomize(true)}
-          title="Personnaliser la roue"
-          className="w-9 h-9 flex items-center justify-center rounded-xl bg-card/85 border border-border shadow-lg hover:bg-primary/10 hover:border-primary/40 transition-all backdrop-blur-sm"
-        >
-          <Settings2 className="w-4 h-4 text-muted-foreground" />
-        </button>
-      </div>
-
       {/* Aurora background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <div className="aurora-orb aurora-orb-gold" />
@@ -497,8 +491,32 @@ const HomepageIslandInner = () => {
             {/* LEFT: Wheel zone — right-aligned on desktop so wheel hugs the panel */}
             <div className="flex-1 min-w-0 flex flex-col items-center lg:items-end space-y-2">
 
+              {/* Draw title — above wheel */}
+              <div className="flex items-center justify-center gap-2 min-h-[2.5rem]" style={wheelOffsetY !== 0 ? { marginTop: wheelOffsetY } : undefined}>
+                {editingTitle ? (
+                  <input
+                    ref={titleInputRef}
+                    autoFocus
+                    value={drawTitle}
+                    onChange={e => setDrawTitle(e.target.value)}
+                    onBlur={() => setEditingTitle(false)}
+                    onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') setEditingTitle(false); }}
+                    placeholder={t.drawTitleDefault || "Roue des Choix"}
+                    className="text-center text-lg md:text-xl font-bold bg-transparent border-b-2 outline-none w-full max-w-sm text-primary border-primary"
+                  />
+                ) : (
+                  <button
+                    onClick={() => setEditingTitle(true)}
+                    className="group flex items-center gap-2 text-lg md:text-xl font-bold transition-colors text-foreground/80 hover:text-primary"
+                  >
+                    <span>{drawTitle || t.drawTitleDefault || "Roue des Choix"}</span>
+                    <Pencil className="w-4 h-4 opacity-0 group-hover:opacity-60 transition-opacity shrink-0" />
+                  </button>
+                )}
+              </div>
+
               {/* Wheels row */}
-              <div className="flex flex-row flex-nowrap gap-2 justify-center items-center overflow-x-auto max-w-full" style={wheelOffsetY !== 0 ? { marginTop: wheelOffsetY } : undefined}>
+              <div className="flex flex-row flex-nowrap gap-2 justify-center items-center overflow-x-auto max-w-full">
                 {Array.from({ length: totalWheels }, (_, idx) => (
                   <SpinningWheel
                     key={idx}
@@ -563,31 +581,6 @@ const HomepageIslandInner = () => {
                 <FullscreenButton />
               </div>
 
-              {/* Draw title — editable */}
-              <div className="flex items-center justify-center min-h-[2rem]">
-                {editingTitle ? (
-                  <input
-                    ref={titleInputRef}
-                    autoFocus
-                    value={drawTitle}
-                    onChange={e => setDrawTitle(e.target.value)}
-                    onBlur={() => setEditingTitle(false)}
-                    onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') setEditingTitle(false); }}
-                    placeholder={t.drawTitlePlaceholder}
-                    className="text-center text-lg md:text-xl font-bold bg-transparent border-b-2 outline-none w-full max-w-sm text-primary border-primary"
-                  />
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => setEditingTitle(true)}
-                      className={`group flex items-center gap-2 text-lg md:text-xl font-bold transition-colors ${drawTitle ? "text-primary" : "text-muted-foreground/40 hover:text-muted-foreground"}`}
-                    >
-                      <span>{drawTitle || t.drawTitlePlaceholder}</span>
-                      <Edit3 className="w-4 h-4 opacity-0 group-hover:opacity-60 transition-opacity" />
-                    </button>
-                  </div>
-                )}
-              </div>
 
               {/* Trust signals */}
               <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground pb-1">

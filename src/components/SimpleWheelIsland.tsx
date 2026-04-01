@@ -15,9 +15,10 @@ interface SimpleWheelIslandProps {
   colors?: string[];
   wheelShape?: string;
   hubTheme?: string;
+  locked?: boolean; // hide the customize entries panel
 }
 
-const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTheme }: SimpleWheelIslandProps) => {
+const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTheme, locked }: SimpleWheelIslandProps) => {
   const [participants, setParticipants] = useState<Participant[]>([...defaultParticipants]);
   const [winners, setWinners] = useState<string[]>([]);
   const [isSpinning, setIsSpinning] = useState(false);
@@ -111,7 +112,7 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
       </div>
 
       {/* Editable entries toggle */}
-      <div className="w-full max-w-md mx-auto">
+      {!locked && <div className="w-full max-w-md mx-auto">
         <button
           onClick={() => setShowEdit(!showEdit)}
           className="w-full flex items-center justify-between px-4 py-2 rounded-lg border border-border bg-card/50 hover:bg-card transition-colors text-sm text-muted-foreground hover:text-foreground"
@@ -139,14 +140,14 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
             </div>
           </div>
         )}
-      </div>
+      </div>}
     </div>
   );
 };
 
-const SimpleWheelIsland = ({ defaultParticipants, colors, wheelShape, hubTheme }: SimpleWheelIslandProps) => (
+const SimpleWheelIsland = ({ defaultParticipants, colors, wheelShape, hubTheme, locked }: SimpleWheelIslandProps) => (
   <LanguageProvider>
-    <SimpleWheelIslandInner defaultParticipants={defaultParticipants} colors={colors} wheelShape={wheelShape} hubTheme={hubTheme} />
+    <SimpleWheelIslandInner defaultParticipants={defaultParticipants} colors={colors} wheelShape={wheelShape} hubTheme={hubTheme} locked={locked} />
   </LanguageProvider>
 );
 

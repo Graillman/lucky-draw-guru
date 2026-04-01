@@ -12,8 +12,6 @@ const description = "Can't decide? Spin the yes or no wheel. Add your own option
 const defaultParticipants = [
   { pseudo: "✅ Yes", weight: 1 },
   { pseudo: "❌ No", weight: 1 },
-  { pseudo: "🤔 Maybe", weight: 1 },
-  { pseudo: "🔁 Ask Again", weight: 1 },
 ];
 
 const faqItems = [
@@ -136,34 +134,11 @@ const jsonLd = {
 
     <HeaderIsland client:load />
 
-    <div class="relative z-10 max-w-4xl mx-auto px-4 pt-4 pb-10">
-
-      <nav aria-label="breadcrumb" class="text-xs text-white/40 flex gap-1 mb-6">
-        <a href="/" class="hover:text-white/70 transition-colors">Home</a>
-        <span>/</span>
-        <span class="text-white/60">Yes or No Wheel</span>
-      </nav>
-
-      <!-- YES / NO visual header -->
-      <div class="flex items-center justify-center gap-4 mb-4">
-        <span class="badge-yes px-5 py-2 rounded-full text-xl font-black tracking-wide">✅ YES</span>
-        <span class="vs-divider">or</span>
-        <span class="badge-no px-5 py-2 rounded-full text-xl font-black tracking-wide">❌ NO</span>
-      </div>
-
-      <div class="text-center mb-6">
-        <h1 class="text-3xl md:text-5xl font-black text-white leading-tight mb-3">
-          Yes or No Wheel
-        </h1>
-        <p class="text-lg text-white/60 max-w-xl mx-auto">
-          Can't decide? Stop overthinking — let the wheel answer.
-        </p>
-        <p class="text-sm text-white/40 mt-2">Free · Instant · No signup</p>
-      </div>
-
-      <!-- THE WHEEL — front and center -->
+    <div class="relative z-10 max-w-4xl mx-auto px-4 pt-2 pb-10">
+      <!-- THE WHEEL — front and center, no text above -->
       <SimpleWheelIsland
         defaultParticipants={defaultParticipants}
+        locked={true}
         client:load
       />
     </div>

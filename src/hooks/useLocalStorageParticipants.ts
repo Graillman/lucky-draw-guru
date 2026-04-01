@@ -13,7 +13,7 @@ export const useLocalStorageParticipants = () => {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
+        if (Array.isArray(parsed) && parsed.length > 0) {
           setParticipants(parsed);
         }
       }
@@ -27,7 +27,11 @@ export const useLocalStorageParticipants = () => {
   useEffect(() => {
     if (isLoaded) {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(participants));
+        if (participants.length > 0) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(participants));
+        } else {
+          localStorage.removeItem(STORAGE_KEY);
+        }
       } catch (error) {
         console.error("Error saving participants to localStorage:", error);
       }
