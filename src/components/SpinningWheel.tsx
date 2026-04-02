@@ -280,9 +280,10 @@ export function SpinningWheel({
         const textMidAngle = (segment.startAngle + segment.endAngle) / 2 - Math.PI / 2;
 
         // Font size: uniform based on participant count (all items same size)
+        // baseFont values designed for 480px canvas — scale proportionally
         const n = segments.length;
-        const baseFont = n <= 5 ? 20 : n <= 8 ? 17 : n <= 12 ? 14 : n <= 18 ? 12 : n <= 28 ? 10 : 8;
-        const fontSize = Math.min(baseFont, Math.round(sz * 0.038));
+        const baseFont = (n <= 5 ? 20 : n <= 8 ? 17 : n <= 12 ? 14 : n <= 18 ? 12 : n <= 28 ? 10 : 8) * (sz / 480);
+        const fontSize = Math.min(Math.round(baseFont), Math.round(sz * 0.038));
 
         // Truncate at exactly 13 characters
         const displayName = segment.pseudo.length > 13
@@ -433,8 +434,8 @@ export function SpinningWheel({
         // Text
         const textMidAngle2 = (seg.startAngle + seg.endAngle) / 2 - Math.PI / 2;
         const n2 = segments.length;
-        const baseFont2 = n2 <= 5 ? 20 : n2 <= 8 ? 17 : n2 <= 12 ? 14 : n2 <= 18 ? 12 : n2 <= 28 ? 10 : 8;
-        const fontSize2 = Math.min(baseFont2, Math.round(sz * 0.038));
+        const baseFont2 = (n2 <= 5 ? 20 : n2 <= 8 ? 17 : n2 <= 12 ? 14 : n2 <= 18 ? 12 : n2 <= 28 ? 10 : 8) * (sz / 480);
+        const fontSize2 = Math.min(Math.round(baseFont2), Math.round(sz * 0.038));
         const displayName2 = seg.pseudo.length > 13 ? seg.pseudo.substring(0, 12) + '…' : seg.pseudo;
         const tLen2 = displayName2.length;
         const scaledFs2 = tLen2 <= 4 ? fontSize2 : tLen2 <= 8 ? Math.round(fontSize2 * 0.88) : Math.round(fontSize2 * 0.75);
@@ -557,8 +558,8 @@ export function SpinningWheel({
       ctx.save();
       ctx.translate(center, center);
 
-      const fs    = Math.max(12, Math.round(sz * 0.036));
-      const subFs = Math.max(7,  Math.round(sz * 0.019));
+      const fs    = Math.max(12, Math.round(sz * 0.044));
+      const subFs = Math.max(7,  Math.round(sz * 0.022));
       const arcR  = radius * 0.42;
 
       const drawArcText = (text: string, fontSize: number, fontWeight: string, arcRadius: number, color: string) => {
@@ -770,7 +771,7 @@ export function SpinningWheel({
   };
 
   return (
-    <div className={`flex flex-col items-center w-fit ${compact ? 'gap-1 py-2' : 'gap-4 pt-0 pb-4'}`}>
+    <div className={`flex flex-col items-center ${compact ? 'gap-1 py-2' : 'gap-4 pt-0 pb-4'}`}>
 
       <div className="relative">
         {/* Glow */}
@@ -786,14 +787,13 @@ export function SpinningWheel({
           ref={canvasRef}
           width={canvasPixelSize}
           height={canvasPixelSize}
-          className="relative z-10 drop-shadow-2xl block"
+          className="relative z-10 block"
           style={{
-            width:  `${canvasDisplaySize}px`,
-            height: `${canvasDisplaySize}px`,
-            maxWidth: 'min(90vw, calc(90vh - 80px))',
-            maxHeight: 'min(90vw, calc(90vh - 80px))',
+            width: compact ? `${canvasDisplaySize}px` : 'min(90vw, calc(90vh - 80px))',
+            height: compact ? `${canvasDisplaySize}px` : 'min(90vw, calc(90vh - 80px))',
             aspectRatio: '1 / 1',
             cursor: onSpin && !isSpinning && !isAnimating ? 'pointer' : 'default',
+            filter: compact ? undefined : 'drop-shadow(0 16px 48px rgba(0,0,0,0.55)) drop-shadow(0 4px 12px rgba(0,0,0,0.35))',
           }}
           onClick={handleCanvasClick}
           onTouchStart={handleTouchStart}

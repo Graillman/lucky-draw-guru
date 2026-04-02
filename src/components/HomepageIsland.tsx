@@ -492,7 +492,7 @@ const HomepageIslandInner = () => {
             <div className="flex-1 min-w-0 flex flex-col items-center lg:items-end space-y-2">
 
               {/* Draw title — above wheel */}
-              <div className="flex items-center justify-center gap-2 min-h-[2.5rem]" style={wheelOffsetY !== 0 ? { marginTop: wheelOffsetY } : undefined}>
+              <div className="flex items-center justify-center gap-2 min-h-[2.5rem] w-full" style={wheelOffsetY !== 0 ? { marginTop: wheelOffsetY } : undefined}>
                 {editingTitle ? (
                   <input
                     ref={titleInputRef}
@@ -501,16 +501,16 @@ const HomepageIslandInner = () => {
                     onChange={e => setDrawTitle(e.target.value)}
                     onBlur={() => setEditingTitle(false)}
                     onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') setEditingTitle(false); }}
-                    placeholder={t.drawTitleDefault || "Roue des Choix"}
-                    className="text-center text-lg md:text-xl font-bold bg-transparent border-b-2 outline-none w-full max-w-sm text-primary border-primary"
+                    placeholder="Real Wheel Picker"
+                    className="text-center text-xl md:text-2xl font-bold bg-transparent border-b-2 outline-none w-full max-w-sm text-primary border-primary"
                   />
                 ) : (
                   <button
                     onClick={() => setEditingTitle(true)}
-                    className="group flex items-center gap-2 text-lg md:text-xl font-bold transition-colors text-foreground/80 hover:text-primary"
+                    className="group flex items-center gap-2 text-xl md:text-2xl font-bold transition-colors text-foreground hover:text-primary"
                   >
-                    <span>{drawTitle || t.drawTitleDefault || "Roue des Choix"}</span>
-                    <Pencil className="w-4 h-4 opacity-0 group-hover:opacity-60 transition-opacity shrink-0" />
+                    <span>{drawTitle || "Real Wheel Picker"}</span>
+                    <Pencil className="w-4 h-4 opacity-0 group-hover:opacity-50 transition-opacity shrink-0" />
                   </button>
                 )}
               </div>
