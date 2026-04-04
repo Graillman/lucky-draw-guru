@@ -223,18 +223,7 @@ export function SpinningWheel({
     ctx.rotate(rotation);
     ctx.translate(-center, -center);
 
-    // Outer glow — only for gold/rainbow borders, neutral for default
-    const glowColor = (borderStyle === 'gold') ? themeColorGlow
-      : (borderStyle === 'rainbow') ? 'rgba(255,255,255,0.12)'
-      : 'rgba(0,0,0,0.06)';
-    const gradient = ctx.createRadialGradient(center, center, radius - 10, center, center, radius + 10);
-    gradient.addColorStop(0, 'transparent');
-    gradient.addColorStop(0.5, glowColor);
-    gradient.addColorStop(1, 'transparent');
-    ctx.beginPath();
-    ctx.arc(center, center, radius + 5, 0, Math.PI * 2);
-    ctx.fillStyle = gradient;
-    ctx.fill();
+    // (outer glow removed — clip handled by CSS border-radius on wrapper)
 
     // ── Segments — pass 1: fills + dividers ──
     segments.forEach((segment) => {
@@ -778,25 +767,42 @@ export function SpinningWheel({
   return (
     <div className={`flex flex-col items-center ${compact ? 'gap-1 py-2' : 'gap-4 pt-0 pb-4'}`}>
 
-      <div className="relative">
-        <canvas
-          ref={canvasRef}
-          width={canvasPixelSize}
-          height={canvasPixelSize}
-          className="relative z-10 block"
+      {/* Outer wrapper for sparkles (not clipped) */}
+      <div
+        className="relative"
+        style={{
+          width: compact ? `${canvasDisplaySize}px` : 'min(90vw, calc(90vh - 80px))',
+          height: compact ? `${canvasDisplaySize}px` : 'min(90vw, calc(90vh - 80px))',
+          aspectRatio: '1 / 1',
+        }}
+      >
+        {/* Circular clip + shadow — guarantees a perfect circle, no square leak */}
+        <div
           style={{
-            width: compact ? `${canvasDisplaySize}px` : 'min(90vw, calc(90vh - 80px))',
-            height: compact ? `${canvasDisplaySize}px` : 'min(90vw, calc(90vh - 80px))',
-            aspectRatio: '1 / 1',
-            cursor: onSpin && !isSpinning && !isAnimating ? 'pointer' : 'default',
-            filter: compact ? undefined : 'drop-shadow(0 16px 48px rgba(0,0,0,0.55)) drop-shadow(0 4px 12px rgba(0,0,0,0.35))',
+            position: 'absolute',
+            inset: 0,
+            borderRadius: '50%',
+            overflow: 'hidden',
+            boxShadow: compact ? undefined : '0 16px 48px rgba(0,0,0,0.55), 0 4px 12px rgba(0,0,0,0.35)',
           }}
-          onClick={handleCanvasClick}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        />
+        >
+          <canvas
+            ref={canvasRef}
+            width={canvasPixelSize}
+            height={canvasPixelSize}
+            style={{
+              display: 'block',
+              width: '100%',
+              height: '100%',
+              cursor: onSpin && !isSpinning && !isAnimating ? 'pointer' : 'default',
+            }}
+            onClick={handleCanvasClick}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          />
+        </div>
 
-        {/* Sparkles when spinning */}
+        {/* Sparkles (outside clip so they appear beyond the circle) */}
         {isSpinning && (
           <>
             <div className={`absolute top-4 left-4 w-2 h-2 bg-${colorClass} rounded-full animate-ping`} />

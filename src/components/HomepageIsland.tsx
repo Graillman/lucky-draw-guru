@@ -495,56 +495,55 @@ const HomepageIslandInner = () => {
               <div className="flex flex-col items-center gap-2" style={wheelOffsetY !== 0 ? { marginTop: wheelOffsetY } : undefined}>
 
                 {/* Draw title — centered above wheel */}
-                <div className="flex items-center justify-center gap-2">
-                  {editingTitle ? (
-                    <input
-                      ref={titleInputRef}
-                      autoFocus
-                      value={drawTitle}
-                      onChange={e => setDrawTitle(e.target.value)}
-                      onBlur={() => setEditingTitle(false)}
-                      onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') setEditingTitle(false); }}
-                      placeholder="Real Wheel Picker"
-                      className="text-center text-xl md:text-2xl font-bold bg-transparent border-b-2 outline-none w-72 text-primary border-primary"
+                {editingTitle ? (
+                  <input
+                    ref={titleInputRef}
+                    autoFocus
+                    value={drawTitle}
+                    onChange={e => setDrawTitle(e.target.value)}
+                    onBlur={() => setEditingTitle(false)}
+                    onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') setEditingTitle(false); }}
+                    placeholder="Real Wheel Picker"
+                    className="text-center text-xl md:text-2xl font-bold bg-transparent border-b-2 outline-none w-72 text-primary border-primary"
+                  />
+                ) : (
+                  <button
+                    onClick={() => setEditingTitle(true)}
+                    className="group flex items-center gap-2 text-xl md:text-2xl font-bold transition-colors text-foreground hover:text-primary"
+                  >
+                    <span>{drawTitle || "Real Wheel Picker"}</span>
+                    <Pencil className="w-4 h-4 opacity-0 group-hover:opacity-50 transition-opacity shrink-0" />
+                  </button>
+                )}
+
+                {/* Wheels row */}
+                <div className="flex flex-row flex-nowrap gap-2 justify-center items-center overflow-x-auto max-w-full">
+                  {Array.from({ length: totalWheels }, (_, idx) => (
+                    <SpinningWheel
+                      key={idx}
+                      participants={getWheelParticipants(idx)}
+                      isSpinning={wheelIsSpinning[idx] ?? false}
+                      onComplete={handleWheelComplete(idx)}
+                      mode="simple"
+                      winnersCount={1}
+                      onSpin={() => handleWheelSpin(idx)}
+                      onTick={customizeConfig.spinSoundEnabled
+                        ? () => playTick(customizeConfig.tickSound)
+                        : undefined}
+                      colors={WHEEL_THEMES[customizeConfig.theme]?.colors}
+                      borderStyle={customizeConfig.borderStyle}
+                      backgroundImage={idx === 0 ? (wheelBgImage ?? undefined) : undefined}
+                      size={wheelSize}
+                      spinDuration={customizeConfig.spinDuration}
+                      clickToSpinLabel={t.clickToSpin}
+                      clickToSpinSub={t.clickToSpinSub}
+                      compact={totalWheels > 1}
+                      wheelShape={customizeConfig.wheelShape}
+                      hubTheme={customizeConfig.hubTheme}
                     />
-                  ) : (
-                    <button
-                      onClick={() => setEditingTitle(true)}
-                      className="group flex items-center gap-2 text-xl md:text-2xl font-bold transition-colors text-foreground hover:text-primary"
-                    >
-                      <span>{drawTitle || "Real Wheel Picker"}</span>
-                      <Pencil className="w-4 h-4 opacity-0 group-hover:opacity-50 transition-opacity shrink-0" />
-                    </button>
-                  )}
+                  ))}
                 </div>
 
-              {/* Wheels row */}
-              <div className="flex flex-row flex-nowrap gap-2 justify-center items-center overflow-x-auto max-w-full">
-                {Array.from({ length: totalWheels }, (_, idx) => (
-                  <SpinningWheel
-                    key={idx}
-                    participants={getWheelParticipants(idx)}
-                    isSpinning={wheelIsSpinning[idx] ?? false}
-                    onComplete={handleWheelComplete(idx)}
-                    mode="simple"
-                    winnersCount={1}
-                    onSpin={() => handleWheelSpin(idx)}
-                    onTick={customizeConfig.spinSoundEnabled
-                      ? () => playTick(customizeConfig.tickSound)
-                      : undefined}
-                    colors={WHEEL_THEMES[customizeConfig.theme]?.colors}
-                    borderStyle={customizeConfig.borderStyle}
-                    backgroundImage={idx === 0 ? (wheelBgImage ?? undefined) : undefined}
-                    size={wheelSize}
-                    spinDuration={customizeConfig.spinDuration}
-                    clickToSpinLabel={t.clickToSpin}
-                    clickToSpinSub={t.clickToSpinSub}
-                    compact={totalWheels > 1}
-                    wheelShape={customizeConfig.wheelShape}
-                    hubTheme={customizeConfig.hubTheme}
-                  />
-                ))}
-              </div>
               </div>{/* end title+wheel centering wrapper */}
 
               {/* Toolbar: Save | Share | Add Image | Fullscreen */}
