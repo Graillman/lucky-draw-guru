@@ -213,28 +213,16 @@ const ParticipantInput = ({ mode, participants, onParticipantsChange }: Particip
   };
 
   if (!isAdvanced) {
-    // Simple mode — single input + list with hover-to-delete
+    // Simple mode — single textarea block (write directly, one name per line)
     return (
       <section className="space-y-2">
-        {/* Single input: Enter to add */}
-        <div className="flex gap-2">
-          <input
-            ref={singleInputRef}
-            type="text"
-            value={singleInput}
-            onChange={e => setSingleInput(e.target.value)}
-            onKeyDown={handleSingleKeyDown}
-            placeholder={t.bulkAddPlaceholder}
-            className="flex-1 h-8 text-sm px-3 rounded-lg border border-border bg-card focus:border-primary outline-none placeholder:text-muted-foreground/50"
-          />
-          <button
-            onClick={() => { addSingle(singleInput); setSingleInput(''); }}
-            disabled={!singleInput.trim()}
-            className="h-8 w-8 flex items-center justify-center rounded-lg border border-border bg-card hover:bg-primary/10 hover:border-primary/40 transition-colors disabled:opacity-40"
-          >
-            <Plus className="w-3.5 h-3.5" />
-          </button>
-        </div>
+        {/* Main editable textarea — one name per line */}
+        <Textarea
+          placeholder={"Alice\nBruno\nClara\n..."}
+          value={textareaValue}
+          onChange={handleTextareaChange}
+          className="min-h-[240px] font-mono text-sm bg-card border-border resize-none focus:border-primary placeholder:text-muted-foreground/30"
+        />
 
         {/* Action row */}
         <div className="flex items-center justify-between gap-1 flex-wrap">
@@ -254,38 +242,6 @@ const ParticipantInput = ({ mode, participants, onParticipantsChange }: Particip
             )}
           </div>
         </div>
-
-        {/* Entries list with hover-to-delete X */}
-        <ScrollArea className="h-[300px] rounded-lg border border-border bg-card/50">
-          {participants.length === 0 ? (
-            <div className="h-full flex items-center justify-center text-sm text-muted-foreground text-center px-4 py-8">
-              {t.addParticipantsLeft}
-            </div>
-          ) : (
-            <div className="p-1">
-              {participants.slice(0, 300).map((participant, index) => (
-                <div
-                  key={`${participant.pseudo}-${index}`}
-                  className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-muted/50 group"
-                >
-                  <span className="text-sm text-foreground truncate flex-1">{participant.pseudo}</span>
-                  <button
-                    onClick={() => handleRemove(index)}
-                    className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-all flex-shrink-0 ml-2"
-                    aria-label={`Remove ${participant.pseudo}`}
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
-              {participants.length > 300 && (
-                <div className="text-center text-xs text-muted-foreground py-2">
-                  +{participants.length - 300} {t.moreParticipants}
-                </div>
-              )}
-            </div>
-          )}
-        </ScrollArea>
       </section>
     );
   }

@@ -488,32 +488,35 @@ const HomepageIslandInner = () => {
           {/* MAIN AREA: 2-column on desktop — wheel right-aligned to minimize gap with panel */}
           <div className="flex flex-col lg:flex-row gap-[8px] items-start">
 
-            {/* LEFT: Wheel zone — right-aligned on desktop so wheel hugs the panel */}
+            {/* LEFT: Wheel zone */}
             <div className="flex-1 min-w-0 flex flex-col items-center lg:items-end space-y-2">
 
-              {/* Draw title — above wheel */}
-              <div className="flex items-center justify-center gap-2 min-h-[2.5rem] w-full" style={wheelOffsetY !== 0 ? { marginTop: wheelOffsetY } : undefined}>
-                {editingTitle ? (
-                  <input
-                    ref={titleInputRef}
-                    autoFocus
-                    value={drawTitle}
-                    onChange={e => setDrawTitle(e.target.value)}
-                    onBlur={() => setEditingTitle(false)}
-                    onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') setEditingTitle(false); }}
-                    placeholder="Real Wheel Picker"
-                    className="text-center text-xl md:text-2xl font-bold bg-transparent border-b-2 outline-none w-full max-w-sm text-primary border-primary"
-                  />
-                ) : (
-                  <button
-                    onClick={() => setEditingTitle(true)}
-                    className="group flex items-center gap-2 text-xl md:text-2xl font-bold transition-colors text-foreground hover:text-primary"
-                  >
-                    <span>{drawTitle || "Real Wheel Picker"}</span>
-                    <Pencil className="w-4 h-4 opacity-0 group-hover:opacity-50 transition-opacity shrink-0" />
-                  </button>
-                )}
-              </div>
+              {/* Title + wheel wrapped together so title centers over the wheel */}
+              <div className="flex flex-col items-center gap-2" style={wheelOffsetY !== 0 ? { marginTop: wheelOffsetY } : undefined}>
+
+                {/* Draw title — centered above wheel */}
+                <div className="flex items-center justify-center gap-2">
+                  {editingTitle ? (
+                    <input
+                      ref={titleInputRef}
+                      autoFocus
+                      value={drawTitle}
+                      onChange={e => setDrawTitle(e.target.value)}
+                      onBlur={() => setEditingTitle(false)}
+                      onKeyDown={e => { if (e.key === 'Enter' || e.key === 'Escape') setEditingTitle(false); }}
+                      placeholder="Real Wheel Picker"
+                      className="text-center text-xl md:text-2xl font-bold bg-transparent border-b-2 outline-none w-72 text-primary border-primary"
+                    />
+                  ) : (
+                    <button
+                      onClick={() => setEditingTitle(true)}
+                      className="group flex items-center gap-2 text-xl md:text-2xl font-bold transition-colors text-foreground hover:text-primary"
+                    >
+                      <span>{drawTitle || "Real Wheel Picker"}</span>
+                      <Pencil className="w-4 h-4 opacity-0 group-hover:opacity-50 transition-opacity shrink-0" />
+                    </button>
+                  )}
+                </div>
 
               {/* Wheels row */}
               <div className="flex flex-row flex-nowrap gap-2 justify-center items-center overflow-x-auto max-w-full">
@@ -542,6 +545,7 @@ const HomepageIslandInner = () => {
                   />
                 ))}
               </div>
+              </div>{/* end title+wheel centering wrapper */}
 
               {/* Toolbar: Save | Share | Add Image | Fullscreen */}
               <div className="flex items-center justify-center gap-1.5 px-1 flex-wrap">

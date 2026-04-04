@@ -196,6 +196,7 @@ export function SpinningWheel({
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     const sz = canvasDisplaySize;
+    const scale = sz / 480; // all fixed pixel values were designed for 480px canvas
     const center = sz / 2;
     const radius = sz / 2 - 20;
 
@@ -259,7 +260,7 @@ export function SpinningWheel({
 
       if (!bgImgRef.current) {
         ctx.strokeStyle = 'rgba(255,255,255,0.4)';
-        ctx.lineWidth = 2;
+        ctx.lineWidth = Math.max(1, Math.round(scale));
         ctx.stroke();
 
         ctx.beginPath();
@@ -269,7 +270,7 @@ export function SpinningWheel({
           center + Math.sin(segment.startAngle - Math.PI / 2) * radius
         );
         ctx.strokeStyle = 'rgba(0,0,0,0.3)';
-        ctx.lineWidth = 1;
+        ctx.lineWidth = Math.max(1, Math.round(scale * 0.5));
         ctx.stroke();
       }
     });
@@ -279,19 +280,20 @@ export function SpinningWheel({
       segments.forEach((segment) => {
         const textMidAngle = (segment.startAngle + segment.endAngle) / 2 - Math.PI / 2;
 
-        // Font size: uniform based on participant count (all items same size)
-        // baseFont values designed for 480px canvas — scale proportionally
-        const n = segments.length;
-        const baseFont = (n <= 5 ? 20 : n <= 8 ? 17 : n <= 12 ? 14 : n <= 18 ? 12 : n <= 28 ? 10 : 8) * (sz / 480);
-        const fontSize = Math.min(Math.round(baseFont), Math.round(sz * 0.038));
+        // Font size: fill available arc space
+        const segAngle = segment.endAngle - segment.startAngle;
+        const textR = radius * 0.6;
+        const arcChord = 2 * textR * Math.sin(segAngle / 2) * 0.82;
 
-        // Truncate at exactly 13 characters
-        const displayName = segment.pseudo.length > 13
-          ? segment.pseudo.substring(0, 12) + '…'
+        // Truncate at 15 characters
+        const displayName = segment.pseudo.length > 15
+          ? segment.pseudo.substring(0, 14) + '…'
           : segment.pseudo;
-        // Progressive font scaling: longer text = slightly smaller font
-        const tLen = displayName.length;
-        const scaledFs = tLen <= 4 ? fontSize : tLen <= 8 ? Math.round(fontSize * 0.88) : Math.round(fontSize * 0.75);
+
+        const fontSize = Math.max(8, Math.round(Math.min(
+          arcChord / (displayName.length * 0.52),
+          radius * 0.22
+        )));
 
         ctx.save();
         ctx.beginPath();
@@ -300,25 +302,25 @@ export function SpinningWheel({
         ctx.closePath();
         ctx.clip();
 
-        ctx.font = `700 ${scaledFs}px 'Space Grotesk', sans-serif`;
+        ctx.font = `700 ${fontSize}px 'Space Grotesk', sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
-        const textRadius = radius * 0.52;
+        const textRadius = textR;
         const tx = center + Math.cos(textMidAngle) * textRadius;
         const ty = center + Math.sin(textMidAngle) * textRadius;
 
         ctx.save();
         ctx.translate(tx, ty);
-        // Rotate radially — flip left-half segments so text always reads outward
-        const normA = ((textMidAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-        const textRot = (normA > Math.PI / 2 && normA < Math.PI * 3 / 2)
+        // Flip text on left half of wheel (using visual angle including rotation)
+        const visualAngle = ((textMidAngle + rotation) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+        const textRot = (visualAngle > Math.PI / 2 && visualAngle < Math.PI * 3 / 2)
           ? textMidAngle + Math.PI
           : textMidAngle;
         ctx.rotate(textRot);
 
-        ctx.shadowColor = 'rgba(0,0,0,0.9)';
-        ctx.shadowBlur = 5;
+        ctx.shadowColor = 'rgba(0,0,0,0.85)';
+        ctx.shadowBlur = Math.round(3 * scale);
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
         ctx.fillStyle = '#fff';
@@ -338,23 +340,23 @@ export function SpinningWheel({
           ctx.beginPath();
           ctx.arc(center, center, radius, (ri / steps) * Math.PI * 2 - Math.PI / 2, ((ri + 1) / steps) * Math.PI * 2 - Math.PI / 2);
           ctx.strokeStyle = `hsl(${ri * hueStep}, 100%, 55%)`;
-          ctx.lineWidth = 6;
+          ctx.lineWidth = Math.round(6 * scale);
           ctx.stroke();
         }
       } else {
         ctx.beginPath();
         ctx.arc(center, center, radius, 0, Math.PI * 2);
         ctx.strokeStyle = borderStyle === 'white' ? 'rgba(255,255,255,0.85)' : borderStyle === 'gold' ? '#FFD700' : 'rgba(0,0,0,0.18)';
-        ctx.lineWidth = 4;
+        ctx.lineWidth = Math.round(4 * scale);
         ctx.stroke();
       }
     }
 
     // Inner decorative ring
     ctx.beginPath();
-    ctx.arc(center, center, radius - 8, 0, Math.PI * 2);
+    ctx.arc(center, center, radius - Math.round(8 * scale), 0, Math.PI * 2);
     ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-    ctx.lineWidth = 1;
+    ctx.lineWidth = Math.max(1, Math.round(scale));
     ctx.stroke();
 
     // Center circle (hub) — themed
@@ -366,32 +368,35 @@ export function SpinningWheel({
     const hubInner  = hub?.inner  ?? themeColorHalf;
     const hubDot    = hub?.dot    ?? themeColor;
 
-    const centerGrad = ctx.createRadialGradient(center - 5, center - 5, 0, center, center, 35);
+    const hubR = Math.round(30 * scale);
+    const hubInnerR = Math.round(18 * scale);
+    const hubDotR = Math.round(6 * scale);
+    const centerGrad = ctx.createRadialGradient(center - Math.round(5 * scale), center - Math.round(5 * scale), 0, center, center, Math.round(35 * scale));
     centerGrad.addColorStop(0,   hubBg0);
     centerGrad.addColorStop(0.5, hubBg1);
     centerGrad.addColorStop(1,   hubBg2);
     ctx.beginPath();
-    ctx.arc(center, center, 30, 0, Math.PI * 2);
+    ctx.arc(center, center, hubR, 0, Math.PI * 2);
     ctx.fillStyle = centerGrad;
     ctx.fill();
 
     ctx.beginPath();
-    ctx.arc(center, center, 30, 0, Math.PI * 2);
+    ctx.arc(center, center, hubR, 0, Math.PI * 2);
     ctx.strokeStyle = hubBorder;
-    ctx.lineWidth = 4;
+    ctx.lineWidth = Math.round(4 * scale);
     ctx.shadowColor = hubBorder;
-    ctx.shadowBlur = 15;
+    ctx.shadowBlur = Math.round(15 * scale);
     ctx.stroke();
     ctx.shadowBlur = 0;
 
     ctx.beginPath();
-    ctx.arc(center, center, 18, 0, Math.PI * 2);
+    ctx.arc(center, center, hubInnerR, 0, Math.PI * 2);
     ctx.strokeStyle = hubInner;
-    ctx.lineWidth = 2;
+    ctx.lineWidth = Math.round(2 * scale);
     ctx.stroke();
 
     ctx.beginPath();
-    ctx.arc(center, center, 6, 0, Math.PI * 2);
+    ctx.arc(center, center, hubDotR, 0, Math.PI * 2);
     ctx.fillStyle = hubDot;
     ctx.fill();
 
@@ -429,36 +434,34 @@ export function SpinningWheel({
           center + Math.sin(seg.startAngle - Math.PI / 2) * radius
         );
         ctx.strokeStyle = 'rgba(255,255,255,0.85)';
-        ctx.lineWidth = 2;
+        ctx.lineWidth = Math.max(1, Math.round(scale));
         ctx.stroke();
         // Text
         const textMidAngle2 = (seg.startAngle + seg.endAngle) / 2 - Math.PI / 2;
-        const n2 = segments.length;
-        const baseFont2 = (n2 <= 5 ? 20 : n2 <= 8 ? 17 : n2 <= 12 ? 14 : n2 <= 18 ? 12 : n2 <= 28 ? 10 : 8) * (sz / 480);
-        const fontSize2 = Math.min(Math.round(baseFont2), Math.round(sz * 0.038));
-        const displayName2 = seg.pseudo.length > 13 ? seg.pseudo.substring(0, 12) + '…' : seg.pseudo;
-        const tLen2 = displayName2.length;
-        const scaledFs2 = tLen2 <= 4 ? fontSize2 : tLen2 <= 8 ? Math.round(fontSize2 * 0.88) : Math.round(fontSize2 * 0.75);
+        const segAngle2 = seg.endAngle - seg.startAngle;
+        const textR2 = radius * 0.6;
+        const arcChord2 = 2 * textR2 * Math.sin(segAngle2 / 2) * 0.82;
+        const displayName2 = seg.pseudo.length > 15 ? seg.pseudo.substring(0, 14) + '…' : seg.pseudo;
+        const fontSize2 = Math.max(8, Math.round(Math.min(arcChord2 / (displayName2.length * 0.52), radius * 0.22)));
         ctx.save();
         ctx.beginPath();
         ctx.moveTo(center, center);
         ctx.arc(center, center, radius - 2, seg.startAngle - Math.PI / 2, seg.endAngle - Math.PI / 2);
         ctx.closePath();
         ctx.clip();
-        ctx.font = `700 ${scaledFs2}px 'Space Grotesk', sans-serif`;
+        ctx.font = `700 ${fontSize2}px 'Space Grotesk', sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        const textRadius2 = radius * 0.52;
-        const tx2 = center + Math.cos(textMidAngle2) * textRadius2;
-        const ty2 = center + Math.sin(textMidAngle2) * textRadius2;
+        const tx2 = center + Math.cos(textMidAngle2) * textR2;
+        const ty2 = center + Math.sin(textMidAngle2) * textR2;
         ctx.save();
         ctx.translate(tx2, ty2);
-        const normA2 = ((textMidAngle2 % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-        const textRot2 = (normA2 > Math.PI / 2 && normA2 < Math.PI * 3 / 2)
+        const visualAngle2 = ((textMidAngle2 + rotation) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+        const textRot2 = (visualAngle2 > Math.PI / 2 && visualAngle2 < Math.PI * 3 / 2)
           ? textMidAngle2 + Math.PI : textMidAngle2;
         ctx.rotate(textRot2);
-        ctx.shadowColor = 'rgba(0,0,0,0.95)';
-        ctx.shadowBlur = 6;
+        ctx.shadowColor = 'rgba(0,0,0,0.85)';
+        ctx.shadowBlur = Math.round(3 * scale);
         ctx.fillStyle = '#fff';
         ctx.fillText(displayName2, 0, 0);
         ctx.restore();
@@ -475,13 +478,13 @@ export function SpinningWheel({
       const hBorder = hub2?.border ?? themeColor;
       const hInner  = hub2?.inner  ?? themeColorHalf;
       const hDot    = hub2?.dot    ?? themeColor;
-      const cg2 = ctx.createRadialGradient(center - 5, center - 5, 0, center, center, 35);
+      const cg2 = ctx.createRadialGradient(center - Math.round(5*scale), center - Math.round(5*scale), 0, center, center, Math.round(35*scale));
       cg2.addColorStop(0, hb0); cg2.addColorStop(0.5, hb1); cg2.addColorStop(1, hb2);
-      ctx.beginPath(); ctx.arc(center, center, 30, 0, Math.PI * 2); ctx.fillStyle = cg2; ctx.fill();
-      ctx.beginPath(); ctx.arc(center, center, 30, 0, Math.PI * 2);
-      ctx.strokeStyle = hBorder; ctx.lineWidth = 4; ctx.shadowColor = hBorder; ctx.shadowBlur = 15; ctx.stroke(); ctx.shadowBlur = 0;
-      ctx.beginPath(); ctx.arc(center, center, 18, 0, Math.PI * 2); ctx.strokeStyle = hInner; ctx.lineWidth = 2; ctx.stroke();
-      ctx.beginPath(); ctx.arc(center, center, 6, 0, Math.PI * 2); ctx.fillStyle = hDot; ctx.fill();
+      ctx.beginPath(); ctx.arc(center, center, Math.round(30*scale), 0, Math.PI * 2); ctx.fillStyle = cg2; ctx.fill();
+      ctx.beginPath(); ctx.arc(center, center, Math.round(30*scale), 0, Math.PI * 2);
+      ctx.strokeStyle = hBorder; ctx.lineWidth = Math.round(4*scale); ctx.shadowColor = hBorder; ctx.shadowBlur = Math.round(15*scale); ctx.stroke(); ctx.shadowBlur = 0;
+      ctx.beginPath(); ctx.arc(center, center, Math.round(18*scale), 0, Math.PI * 2); ctx.strokeStyle = hInner; ctx.lineWidth = Math.round(2*scale); ctx.stroke();
+      ctx.beginPath(); ctx.arc(center, center, Math.round(6*scale), 0, Math.PI * 2); ctx.fillStyle = hDot; ctx.fill();
       ctx.restore();
     }
 
@@ -492,9 +495,9 @@ export function SpinningWheel({
       drawShapePath(ctx, center, center, radius, wheelShape);
       const shapeStroke = borderStyle === 'gold' ? '#FFD700' : borderStyle === 'white' ? 'rgba(255,255,255,0.85)' : 'rgba(0,0,0,0.18)';
       ctx.strokeStyle = shapeStroke;
-      ctx.lineWidth = 5;
+      ctx.lineWidth = Math.round(5 * scale);
       ctx.shadowColor = shapeStroke;
-      ctx.shadowBlur = 18;
+      ctx.shadowBlur = Math.round(18 * scale);
       ctx.stroke();
       ctx.shadowBlur = 0;
       ctx.restore();
@@ -516,39 +519,41 @@ export function SpinningWheel({
     const ptrDark   = hslM ? `hsl(${hslM[1]}, ${hslM[2]}%, ${Math.max(15, parseInt(hslM[3]) - 15)}%)` : segColor;
     const ptrStroke = hslM ? `hsl(${hslM[1]}, ${hslM[2]}%, ${Math.max(10, parseInt(hslM[3]) - 22)}%)` : segColor;
 
-    const pointerHeight = 45;
-    const pointerWidth  = 28;
+    const pH = Math.round(45 * scale);
+    const pW = Math.round(28 * scale);
+    const pBase = sz - Math.round(5 * scale);
+    const pShadow = Math.round(2 * scale);
 
     // Shadow
     ctx.beginPath();
-    ctx.moveTo(sz - 8 + 2, center - pointerWidth / 2 + 2);
-    ctx.lineTo(sz - 8 + 2, center + pointerWidth / 2 + 2);
-    ctx.lineTo(sz - pointerHeight + 2, center + 2);
+    ctx.moveTo(pBase + pShadow, center - pW / 2 + pShadow);
+    ctx.lineTo(pBase + pShadow, center + pW / 2 + pShadow);
+    ctx.lineTo(pBase - pH + pShadow, center + pShadow);
     ctx.closePath();
     ctx.fillStyle = 'rgba(0,0,0,0.3)';
     ctx.fill();
 
     // Main pointer — vertical gradient (top dark → center light → bottom dark)
-    const pointerGrad = ctx.createLinearGradient(0, center - pointerWidth / 2, 0, center + pointerWidth / 2);
+    const pointerGrad = ctx.createLinearGradient(0, center - pW / 2, 0, center + pW / 2);
     pointerGrad.addColorStop(0, ptrDark);
     pointerGrad.addColorStop(0.5, ptrLight);
     pointerGrad.addColorStop(1, ptrDark);
     ctx.beginPath();
-    ctx.moveTo(sz - 5, center - pointerWidth / 2);
-    ctx.lineTo(sz - 5, center + pointerWidth / 2);
-    ctx.lineTo(sz - pointerHeight, center);
+    ctx.moveTo(pBase, center - pW / 2);
+    ctx.lineTo(pBase, center + pW / 2);
+    ctx.lineTo(pBase - pH, center);
     ctx.closePath();
     ctx.fillStyle = pointerGrad;
     ctx.fill();
     ctx.strokeStyle = ptrStroke;
-    ctx.lineWidth = 2;
+    ctx.lineWidth = Math.round(2 * scale);
     ctx.stroke();
 
     // Highlight
     ctx.beginPath();
-    ctx.moveTo(sz - 10, center - pointerWidth / 4);
-    ctx.lineTo(sz - 10, center + pointerWidth / 6);
-    ctx.lineTo(sz - pointerHeight + 15, center);
+    ctx.moveTo(pBase - Math.round(5 * scale), center - pW / 4);
+    ctx.lineTo(pBase - Math.round(5 * scale), center + pW / 6);
+    ctx.lineTo(pBase - pH + Math.round(15 * scale), center);
     ctx.closePath();
     ctx.fillStyle = 'rgba(255,255,255,0.3)';
     ctx.fill();
@@ -774,15 +779,6 @@ export function SpinningWheel({
     <div className={`flex flex-col items-center ${compact ? 'gap-1 py-2' : 'gap-4 pt-0 pb-4'}`}>
 
       <div className="relative">
-        {/* Glow */}
-        <div
-          className={`absolute inset-0 rounded-full transition-all duration-500 ${
-            isSpinning
-              ? `bg-${colorClass}/30 blur-3xl scale-110 animate-pulse`
-              : `bg-${colorClass}/15 blur-2xl`
-          }`}
-        />
-
         <canvas
           ref={canvasRef}
           width={canvasPixelSize}
