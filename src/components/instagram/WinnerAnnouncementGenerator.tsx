@@ -24,7 +24,7 @@ Félicitations à ${winnersForCaption} ! 🏆
 
 Merci à tous les ${language === 'fr' ? 'participants' : 'participants'} pour votre participation ! 
 
-Le tirage a été effectué de manière transparente via RealWheelPicker.com 🎡
+Le tirage a été effectué de manière transparente via Real Wheel Picker.com 🎡
 
 Restez connectés pour le prochain giveaway ! 🚀
 
@@ -36,7 +36,7 @@ Restez connectés pour le prochain giveaway ! 🚀
 
 ¡Gracias a todos los participantes!
 
-El sorteo fue realizado de forma transparente en RealWheelPicker.com 🎡
+El sorteo fue realizado de forma transparente en Real Wheel Picker.com 🎡
 
 ¡Estén atentos al próximo sorteo! 🚀
 
@@ -47,7 +47,7 @@ Congratulations to ${winnersForCaption}! 🏆
 
 Thank you to everyone who participated!
 
-Winner was picked transparently using RealWheelPicker.com 🎡
+Winner was picked transparently using Real Wheel Picker.com 🎡
 
 Stay tuned for our next giveaway! 🚀
 

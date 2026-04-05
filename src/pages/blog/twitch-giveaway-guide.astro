@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
 import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
 import AdPlaceholder from '@/components/AdPlaceholder';
@@ -87,6 +88,7 @@ const twitchRules = [
 ---
 
 <Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<SchemaBreadcrumb items={[{ name: "Home", url: "https://realwheelpicker.com/" }, { name: "Blog", url: "https://realwheelpicker.com/blog" }, { name: title, url: `https://realwheelpicker.com${canonical}` }]} />
   <div style="background: var(--gradient-bg)">
     <HeaderIsland client:load />
     <main class="max-w-4xl mx-auto px-4 py-8 space-y-10">
@@ -212,7 +214,7 @@ const twitchRules = [
       {/* CTA */}
       <section class="bg-primary/5 border border-primary/20 rounded-2xl p-6 md:p-8 space-y-4 text-center">
         <h2 class="text-xl font-bold text-foreground">Ready to run your Twitch giveaway?</h2>
-        <p class="text-muted-foreground">Screen-share RealWheelPicker live on stream for a transparent, exciting draw your chat will love.</p>
+        <p class="text-muted-foreground">Screen-share Real Wheel Picker live on stream for a transparent, exciting draw your chat will love.</p>
         <div class="flex flex-wrap justify-center gap-3">
           <a
             href="/twitch-giveaway-picker"

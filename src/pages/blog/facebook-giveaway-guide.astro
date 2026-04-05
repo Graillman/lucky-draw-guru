@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
 import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
 import AdPlaceholder from '@/components/AdPlaceholder';
@@ -58,7 +59,7 @@ const steps = [
   },
   {
     n: 4,
-    title: "Pick the Winner with RealWheelPicker",
+    title: "Pick the Winner with Real Wheel Picker",
     body: "Paste your verified list into realwheelpicker.com. Screen-record the spin — or better, go live on Facebook and run the wheel in real time so your audience watches it happen. This is the most trusted method for Facebook giveaways.",
     tip: "Going Facebook Live for the draw significantly increases transparency and can generate additional engagement.",
   },
@@ -80,6 +81,7 @@ const mistakes = [
 ---
 
 <Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<SchemaBreadcrumb items={[{ name: "Home", url: "https://realwheelpicker.com/" }, { name: "Blog", url: "https://realwheelpicker.com/blog" }, { name: title, url: `https://realwheelpicker.com${canonical}` }]} />
   <div style="background: var(--gradient-bg)">
     <HeaderIsland client:load />
     <main class="max-w-4xl mx-auto px-4 py-8 space-y-10">

@@ -18,10 +18,10 @@ const InstagramNextActions = ({ winners, onDrawBackup, canDrawBackup, mode = "si
 
   const copyAnnouncement = async () => {
     const text = language === 'fr'
-      ? `🎉 Félicitations à ${winnersList} ! Gagnant tiré via RealWheelPicker.com 🎡`
+      ? `🎉 Félicitations à ${winnersList} ! Gagnant tiré via Real Wheel Picker.com 🎡`
       : language === 'es'
-      ? `🎉 ¡Felicidades a ${winnersList}! Ganador elegido via RealWheelPicker.com 🎡`
-      : `🎉 Congratulations to ${winnersList}! Winner picked via RealWheelPicker.com 🎡`;
+      ? `🎉 ¡Felicidades a ${winnersList}! Ganador elegido via Real Wheel Picker.com 🎡`
+      : `🎉 Congratulations to ${winnersList}! Winner picked via Real Wheel Picker.com 🎡`;
     
     try {
       await navigator.clipboard.writeText(text);

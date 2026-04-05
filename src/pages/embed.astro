@@ -11,9 +11,12 @@ const canonical = "/embed";
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
+  "@id": "https://realwheelpicker.com/embed",
   "name": "Embed Real Wheel Picker Widget",
   "url": "https://realwheelpicker.com/embed",
   "description": "Embed a free spin-the-wheel widget on your website with one line of code.",
+  "isPartOf": { "@id": "https://realwheelpicker.com/#website" },
+  "publisher": { "@id": "https://realwheelpicker.com/#organization" },
 };
 
 const steps = [
@@ -32,7 +35,7 @@ const platforms = [
 ];
 ---
 
-<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd} robots="noindex, nofollow">
   <div class="min-h-screen" style="background: var(--gradient-bg)">
     <HeaderIsland client:load />
     <main class="max-w-4xl mx-auto px-4 py-8 space-y-10">

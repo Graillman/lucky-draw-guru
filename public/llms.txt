@@ -1,4 +1,7 @@
 # Real Wheel Picker
+# Updated: 2026-04-05
+# License: https://realwheelpicker.com/terms-of-service
+# Contact: https://realwheelpicker.com/contact
 
 > Real Wheel Picker (realwheelpicker.com) is a free online spinning wheel and random picker tool. It uses cryptographic randomness (crypto.getRandomValues — the Web Crypto API) instead of Math.random(), making it more suitable for giveaways, raffles, and classroom use where fairness must be demonstrable. No signup required. All data stays in the user's browser — nothing is sent to any server.
 

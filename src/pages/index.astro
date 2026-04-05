@@ -18,23 +18,19 @@ const jsonLd = {
       "url": "https://realwheelpicker.com",
       "name": "Real Wheel Picker",
       "description": "Free online spin the wheel and random picker.",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "https://realwheelpicker.com/?q={search_term_string}"
-        },
-        "query-input": "required name=search_term_string"
-      }
+      "publisher": { "@id": "https://realwheelpicker.com/#organization" }
     },
     {
       "@type": "Organization",
       "@id": "https://realwheelpicker.com/#organization",
       "name": "Real Wheel Picker",
       "url": "https://realwheelpicker.com",
+      "email": "contact@realwheelpicker.com",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://realwheelpicker.com/og-default.png"
+        "url": "https://realwheelpicker.com/og-default.png",
+        "width": 1200,
+        "height": 630
       },
       "sameAs": [
         "https://twitter.com/realwheelpicker"

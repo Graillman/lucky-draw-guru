@@ -33,7 +33,7 @@ const PublicResultProofModule = ({
     participantCount,
     timestamp,
     method: "Cryptographic random (Web Crypto API)",
-    tool: "RealWheelPicker.com"
+    tool: "Real Wheel Picker.com"
   };
 
   const proofText = language === 'fr' 
@@ -45,7 +45,7 @@ const PublicResultProofModule = ({
 🥇 Gagnant(s): ${winners.join(", ")}
 ${backupWinners.length > 0 ? `🔄 Suppléants: ${backupWinners.join(", ")}` : ""}
 
-✅ Tirage effectué via RealWheelPicker.com
+✅ Tirage effectué via Real Wheel Picker.com
 🔒 Méthode: Aléatoire cryptographique (100% équitable)
 💾 Aucune donnée stockée sur serveur`
     : language === 'es'
@@ -57,7 +57,7 @@ ${backupWinners.length > 0 ? `🔄 Suppléants: ${backupWinners.join(", ")}` : "
 🥇 Ganador(es): ${winners.join(", ")}
 ${backupWinners.length > 0 ? `🔄 Suplentes: ${backupWinners.join(", ")}` : ""}
 
-✅ Sorteo realizado via RealWheelPicker.com
+✅ Sorteo realizado via Real Wheel Picker.com
 🔒 Método: Aleatorio criptográfico (100% justo)
 💾 Sin datos almacenados en servidor`
     : `🏆 OFFICIAL RESULTS - ${drawTitle}
@@ -68,7 +68,7 @@ ${backupWinners.length > 0 ? `🔄 Suplentes: ${backupWinners.join(", ")}` : ""}
 🥇 Winner(s): ${winners.join(", ")}
 ${backupWinners.length > 0 ? `🔄 Backups: ${backupWinners.join(", ")}` : ""}
 
-✅ Draw conducted via RealWheelPicker.com
+✅ Draw conducted via Real Wheel Picker.com
 🔒 Method: Cryptographic random (100% fair)
 💾 No data stored on servers`;
 

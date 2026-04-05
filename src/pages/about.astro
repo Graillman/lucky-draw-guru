@@ -11,9 +11,13 @@ const canonical = "/about";
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "AboutPage",
-  name: "About Real Wheel Picker",
-  description: "The most trusted random picker for fair, transparent draws worldwide",
-  url: "https://realwheelpicker.com/about",
+  "@id": "https://realwheelpicker.com/about",
+  "name": "About Real Wheel Picker",
+  "description": "The most trusted random picker for fair, transparent draws worldwide",
+  "url": "https://realwheelpicker.com/about",
+  "isPartOf": { "@id": "https://realwheelpicker.com/#website" },
+  "about": { "@id": "https://realwheelpicker.com/#organization" },
+  "publisher": { "@id": "https://realwheelpicker.com/#organization" },
 };
 
 const values = [

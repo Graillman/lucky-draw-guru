@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
 import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
 import AdPlaceholder from '@/components/AdPlaceholder';
@@ -118,6 +119,7 @@ const mistakes = [
 ---
 
 <Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<SchemaBreadcrumb items={[{ name: "Home", url: "https://realwheelpicker.com/" }, { name: "Blog", url: "https://realwheelpicker.com/blog" }, { name: title, url: `https://realwheelpicker.com${canonical}` }]} />
   <div style="background: var(--gradient-bg)">
     <HeaderIsland client:load />
     <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">

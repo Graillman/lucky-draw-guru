@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
+import sitemap from '@astrojs/sitemap';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -12,12 +13,19 @@ export default defineConfig({
   trailingSlash: 'never',
   redirects: {
     '/random-team-selector': '/team-generator',
+    '/yes-or-no-wheel': '/yes-no-wheel',
+    '/random-number-generator': '/random-number-picker',
   },
   integrations: [
     react(),
     tailwind({
       configFile: './tailwind.config.ts',
       applyBaseStyles: false,
+    }),
+    sitemap({
+      filter: (page) =>
+        !page.includes('/404') &&
+        !page.includes('/embed'),
     }),
   ],
   vite: {

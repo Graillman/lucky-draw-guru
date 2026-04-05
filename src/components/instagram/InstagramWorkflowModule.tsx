@@ -21,7 +21,7 @@ Pour participer :
 4️⃣ Partager en story pour +1 chance (optionnel)
 
 ⏰ Fin du concours : [DATE]
-🏆 Tirage au sort transparent via RealWheelPicker.com
+🏆 Tirage au sort transparent via Real Wheel Picker.com
 
 Bonne chance à tous ! 🍀`
       : language === 'es'
@@ -34,7 +34,7 @@ Para participar:
 4️⃣ Compartir en stories para +1 oportunidad (opcional)
 
 ⏰ Fin del sorteo: [FECHA]
-🏆 Selección transparente en RealWheelPicker.com
+🏆 Selección transparente en Real Wheel Picker.com
 
 ¡Buena suerte! 🍀`
       : `🎁 GIVEAWAY TIME! 🎁
@@ -46,7 +46,7 @@ To enter:
 4️⃣ Share to story for +1 entry (optional)
 
 ⏰ Ends: [DATE]
-🏆 Winner picked live via RealWheelPicker.com
+🏆 Winner picked live via Real Wheel Picker.com
 
 Good luck! 🍀`;
   });

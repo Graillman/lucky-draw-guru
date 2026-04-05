@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
 import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
 import AdPlaceholder from '@/components/AdPlaceholder';
@@ -41,7 +42,7 @@ const steps = [
   {
     step: "Step 4",
     title: "Collect All Entries",
-    content: "When the giveaway closes, copy all commenter usernames. Remove duplicates if someone commented multiple times (unless multiple entries are allowed). Paste the list into RealWheelPicker.",
+    content: "When the giveaway closes, copy all commenter usernames. Remove duplicates if someone commented multiple times (unless multiple entries are allowed). Paste the list into Real Wheel Picker.",
   },
   {
     step: "Step 5",
@@ -74,6 +75,7 @@ const subreddits = [
 ---
 
 <Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<SchemaBreadcrumb items={[{ name: "Home", url: "https://realwheelpicker.com/" }, { name: "Blog", url: "https://realwheelpicker.com/blog" }, { name: title, url: `https://realwheelpicker.com${canonical}` }]} />
   <div style="background: var(--gradient-bg)">
     <HeaderIsland client:load />
     <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">

@@ -21,6 +21,8 @@ export function getStaticPaths() {
     'twitch-giveaway-picker',
     'reddit-giveaway-picker',
     'linkedin-giveaway-picker',
+    'yes-or-no-wheel',
+    'random-number-generator',
   ]);
   return Object.values(seoPages)
     .filter((config: SEOPageConfig) => !dedicatedPageSlugs.has(config.slug))
@@ -39,12 +41,15 @@ const { config } = Astro.props;
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
+  "@id": `https://realwheelpicker.com/${config.slug}#app`,
   name: config.h1,
   url: `https://realwheelpicker.com/${config.slug}`,
   description: config.metaDescription,
   applicationCategory: "UtilitiesApplication",
   operatingSystem: "All",
-  offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+  isAccessibleForFree: true,
+  publisher: { "@id": "https://realwheelpicker.com/#organization" },
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
 };
 
 const BASE = 'https://realwheelpicker.com';

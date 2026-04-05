@@ -4,12 +4,23 @@ import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
 import ContactFormIsland from '@/components/ContactFormIsland';
 
-const title = "Contact Us — RealWheelPicker";
+const title = "Contact Us — Real Wheel Picker";
 const description = "Have feedback, a bug report, or a feature request? Get in touch with the Real Wheel Picker team. We read every message and respond to bugs within 24 hours.";
 const canonical = "/contact";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "@id": "https://realwheelpicker.com/contact",
+  "name": "Contact Real Wheel Picker",
+  "url": "https://realwheelpicker.com/contact",
+  "description": "Contact the Real Wheel Picker team for feedback, bug reports, or feature requests.",
+  "isPartOf": { "@id": "https://realwheelpicker.com/#website" },
+  "publisher": { "@id": "https://realwheelpicker.com/#organization" },
+};
 ---
 
-<Layout title={title} description={description} canonical={canonical}>
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <div class="min-h-screen" style="background: var(--gradient-bg)">
     <HeaderIsland client:load />
     <main class="max-w-2xl mx-auto px-4 py-12 space-y-8">

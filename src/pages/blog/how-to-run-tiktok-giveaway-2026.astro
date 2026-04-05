@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
 import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
 import AdPlaceholder from '@/components/AdPlaceholder';
@@ -58,6 +59,7 @@ const afterSteps = [
 ---
 
 <Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<SchemaBreadcrumb items={[{ name: "Home", url: "https://realwheelpicker.com/" }, { name: "Blog", url: "https://realwheelpicker.com/blog" }, { name: title, url: `https://realwheelpicker.com${canonical}` }]} />
   <div style="background: var(--gradient-bg)">
     <HeaderIsland client:load />
     <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
@@ -184,7 +186,7 @@ const afterSteps = [
           <Trophy className="w-5 h-5 text-primary" /> Drawing the Winner
         </h2>
         <p class="text-muted-foreground leading-relaxed">
-          Use RealWheelPicker's <a href="/tiktok-giveaway-picker" class="text-primary hover:underline">TikTok Giveaway Picker</a>:
+          Use Real Wheel Picker's <a href="/tiktok-giveaway-picker" class="text-primary hover:underline">TikTok Giveaway Picker</a>:
         </p>
         <ol class="space-y-3">
           {[

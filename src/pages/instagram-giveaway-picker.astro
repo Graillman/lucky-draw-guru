@@ -12,7 +12,7 @@ const description = "Pick a random winner from Instagram comments fairly and tra
 const faqItems = [
   {
     question: "How do I get a list of Instagram comment usernames?",
-    answer: "Instagram doesn't have a native export. For small giveaways (under 200 comments): open the post on desktop, scroll through all comments and copy each username manually. For large giveaways: tools like Phantombuster or Instaloader can export comments. Paste the list of usernames into RealWheelPicker — one username per line.",
+    answer: "Instagram doesn't have a native export. For small giveaways (under 200 comments): open the post on desktop, scroll through all comments and copy each username manually. For large giveaways: tools like Phantombuster or Instaloader can export comments. Paste the list of usernames into Real Wheel Picker — one username per line.",
   },
   {
     question: "Can I verify that entrants actually follow my account?",
@@ -38,27 +38,16 @@ const faqItems = [
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebApplication",
-      "@id": "https://realwheelpicker.com/instagram-giveaway-picker#app",
-      "name": "Instagram Giveaway Picker — Real Wheel Picker",
-      "url": "https://realwheelpicker.com/instagram-giveaway-picker",
-      "description": description,
-      "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "All",
-      "isAccessibleForFree": true,
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
-    },
-    {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://realwheelpicker.com/" },
-        { "@type": "ListItem", "position": 2, "name": "Instagram Giveaway Picker" },
-      ],
-    },
-  ],
+  "@type": "WebApplication",
+  "@id": "https://realwheelpicker.com/instagram-giveaway-picker#app",
+  "name": "Instagram Giveaway Picker — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/instagram-giveaway-picker",
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "publisher": { "@id": "https://realwheelpicker.com/#organization" },
 };
 ---
 
@@ -108,7 +97,7 @@ const jsonLd = {
           Collect the usernames of everyone who entered your giveaway — from comments, DMs, or a separate entry form. Paste them into the wheel (one per line), then hit Spin. The winner is selected using <code>crypto.getRandomValues()</code> — cryptographic randomness, not <code>Math.random()</code>. Record the spin as proof and post it to your Story.
         </p>
         <p class="text-muted-foreground leading-relaxed">
-          Instagram is the #1 platform for brand giveaways, but it's also where "rigged" accusations are most common. Showing the actual wheel spin — ideally live — is the clearest proof that the draw was fair. RealWheelPicker was built for exactly this use case.
+          Instagram is the #1 platform for brand giveaways, but it's also where "rigged" accusations are most common. Showing the actual wheel spin — ideally live — is the clearest proof that the draw was fair. Real Wheel Picker was built for exactly this use case.
         </p>
       </section>
 
@@ -136,7 +125,7 @@ const jsonLd = {
 
         <div class="p-6 rounded-xl border bg-card border-border space-y-3">
           <h3 class="text-lg font-bold text-foreground">Step 4: Spin the Wheel</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">Paste your verified list into RealWheelPicker. Start a screen recording (iOS: Control Center → Screen Record; Android: Quick Settings → Screen Record). Hit Spin. The wheel randomly selects a winner. Stop recording after the result appears.</p>
+          <p class="text-sm text-muted-foreground leading-relaxed">Paste your verified list into Real Wheel Picker. Start a screen recording (iOS: Control Center → Screen Record; Android: Quick Settings → Screen Record). Hit Spin. The wheel randomly selects a winner. Stop recording after the result appears.</p>
         </div>
 
         <div class="p-6 rounded-xl border bg-card border-border space-y-3">
@@ -183,7 +172,7 @@ const jsonLd = {
       <section class="py-8 px-6 rounded-xl border bg-primary/5 border-primary/20 space-y-4">
         <h2 class="text-xl md:text-2xl font-bold text-foreground">Free Instagram Giveaway Picker — Fair, Transparent Winner Selection</h2>
         <p class="text-muted-foreground leading-relaxed">
-          RealWheelPicker is the most transparent way to pick an Instagram giveaway winner. Unlike apps that pick a winner with no visible draw, our spinning wheel shows the selection happening in real time. The animated wheel, the slowing spin, the moment it stops — your audience sees exactly how the winner was chosen. Screen-record it, post it to your Story, and end all "rigged" accusations permanently.
+          Real Wheel Picker is the most transparent way to pick an Instagram giveaway winner. Unlike apps that pick a winner with no visible draw, our spinning wheel shows the selection happening in real time. The animated wheel, the slowing spin, the moment it stops — your audience sees exactly how the winner was chosen. Screen-record it, post it to your Story, and end all "rigged" accusations permanently.
         </p>
         <p class="text-muted-foreground leading-relaxed">
           Cryptographic randomness means the result is impossible to predict or manipulate. Every participant has an exactly equal chance — weighted by however many entries you give them. No server, no data storage, no account needed.

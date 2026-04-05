@@ -3,14 +3,26 @@ import Layout from '@/layouts/Layout.astro';
 import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
 
-const title = "Terms of Service — RealWheelPicker";
+const title = "Terms of Service — Real Wheel Picker";
 const description = "Read the terms of service for Real Wheel Picker. Understand the rules of use for our free online spinning wheel and random picker tools. Free to use, no account required.";
 const canonical = "/terms-of-service";
 
 const lastUpdated = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://realwheelpicker.com/terms-of-service",
+  "name": "Terms of Service — Real Wheel Picker",
+  "url": "https://realwheelpicker.com/terms-of-service",
+  "description": "Terms of service for Real Wheel Picker. Free to use, no account required.",
+  "dateModified": "2026-03-01",
+  "isPartOf": { "@id": "https://realwheelpicker.com/#website" },
+  "publisher": { "@id": "https://realwheelpicker.com/#organization" },
+};
 ---
 
-<Layout title={title} description={description} canonical={canonical}>
+<Layout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
   <div class="min-h-screen" style="background: var(--gradient-bg)">
     <HeaderIsland client:load />
     <main class="max-w-3xl mx-auto px-4 py-12">

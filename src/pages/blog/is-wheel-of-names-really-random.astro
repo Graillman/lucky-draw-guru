@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
 import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
 import AdPlaceholder from '@/components/AdPlaceholder';
@@ -42,6 +43,7 @@ const fairnessPoints = [
 ---
 
 <Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<SchemaBreadcrumb items={[{ name: "Home", url: "https://realwheelpicker.com/" }, { name: "Blog", url: "https://realwheelpicker.com/blog" }, { name: title, url: `https://realwheelpicker.com${canonical}` }]} />
   <div style="background: var(--gradient-bg)">
     <HeaderIsland client:load />
     <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
@@ -123,7 +125,7 @@ const fairnessPoints = [
         </p>
         <div class="bg-muted/40 rounded-lg p-4 flex items-start gap-2">
           <Lightbulb className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-          <p class="text-sm text-muted-foreground"><strong class="text-foreground">The fix — rejection sampling:</strong> If the random byte falls in the biased range, throw it away and generate a new one. At RealWheelPicker, we use rejection sampling on top of <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">crypto.getRandomValues()</code> to eliminate modulo bias entirely.</p>
+          <p class="text-sm text-muted-foreground"><strong class="text-foreground">The fix — rejection sampling:</strong> If the random byte falls in the biased range, throw it away and generate a new one. At Real Wheel Picker, we use rejection sampling on top of <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">crypto.getRandomValues()</code> to eliminate modulo bias entirely.</p>
         </div>
       </section>
 
@@ -169,7 +171,7 @@ const fairnessPoints = [
             </thead>
             <tbody>
               <tr class="border-b border-border/50">
-                <td class="py-3 px-4 text-foreground font-medium">RealWheelPicker</td>
+                <td class="py-3 px-4 text-foreground font-medium">Real Wheel Picker</td>
                 <td class="py-3 px-4 text-green-600 dark:text-green-400">crypto.getRandomValues()</td>
                 <td class="py-3 px-4 text-green-600 dark:text-green-400">Yes — rejection sampling</td>
               </tr>
@@ -230,7 +232,7 @@ const fairnessPoints = [
           Not all spinner wheels are created equal. Look for two things: <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">crypto.getRandomValues()</code> (not <code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">Math.random()</code>) and rejection sampling (not modulo). If a wheel uses both, it's as fair as mathematics allows.
         </p>
         <p class="text-muted-foreground leading-relaxed">
-          Our <a href="/wheel-of-names" class="text-primary hover:underline">wheel of names</a>, <a href="/giveaway-picker" class="text-primary hover:underline">giveaway picker</a>, and every other tool on RealWheelPicker uses this exact approach. The code runs in your browser, the randomness comes from your hardware, and we never see the results.
+          Our <a href="/wheel-of-names" class="text-primary hover:underline">wheel of names</a>, <a href="/giveaway-picker" class="text-primary hover:underline">giveaway picker</a>, and every other tool on Real Wheel Picker uses this exact approach. The code runs in your browser, the randomness comes from your hardware, and we never see the results.
         </p>
         <p class="text-muted-foreground leading-relaxed">
           For scenarios where some participants should have better odds — like raffles with multiple tickets — our <a href="/weighted-random-picker" class="text-primary hover:underline">weighted random picker</a> lets you assign custom probabilities while keeping the draw transparent.
