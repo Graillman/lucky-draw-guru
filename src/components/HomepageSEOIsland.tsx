@@ -27,7 +27,7 @@ const HomepageSEOIslandInner = () => {
       <section className="space-y-8 pt-8">
         <div className="text-center space-y-2">
           <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-widest mb-2">
-            Pourquoi nous choisir
+            Why choose us
           </span>
           <h2 className="text-3xl font-bold text-foreground">{t.indexValueTitle}</h2>
         </div>
@@ -74,7 +74,7 @@ const HomepageSEOIslandInner = () => {
       <section className="space-y-8">
         <div className="text-center">
           <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-widest mb-3">
-            Mode d'emploi
+            How it works
           </span>
           <h2 className="text-3xl font-bold text-foreground">{t.indexHowToTitle}</h2>
         </div>
@@ -101,7 +101,7 @@ const HomepageSEOIslandInner = () => {
       <section className="space-y-8">
         <div className="text-center">
           <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-widest mb-3">
-            Nos engagements
+            Our commitment
           </span>
           <h2 className="text-3xl font-bold text-foreground">{t.indexWhyTitle}</h2>
         </div>

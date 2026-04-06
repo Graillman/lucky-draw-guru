@@ -50,10 +50,10 @@ const users = [
 ];
 
 const stats = [
-  { val: "50+", label: "Countries" },
-  { val: "0", label: "Data Stored" },
-  { val: "100%", label: "Client-Side" },
-  { val: "100K+", label: "Draws Monthly" },
+  { val: "0 bytes", label: "Data we store about you" },
+  { val: "100%", label: "Client-Side Processing" },
+  { val: "Free", label: "Always, no account needed" },
+  { val: "CSPRNG", label: "Cryptographic randomness" },
 ];
 ---
 
@@ -69,16 +69,17 @@ const stats = [
         <p class="text-sm text-muted-foreground">Free &bull; Privacy-First &bull; Used Globally</p>
       </section>
 
-      <!-- Mission -->
+      <!-- Origin Story -->
       <section class="bg-card border border-border rounded-xl p-6 md:p-8 space-y-4">
         <div class="flex items-center gap-3">
           <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-primary" aria-hidden="true"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
           </div>
-          <h2 class="text-xl md:text-2xl font-bold text-foreground">Our Mission</h2>
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">Why We Built This</h2>
         </div>
-        <p class="text-muted-foreground leading-relaxed">We believe everyone deserves access to fair, unbiased random selection. Whether you're a teacher picking students, a streamer running giveaways, or a team making decisions - randomness should be transparent, accessible, and free.</p>
-        <p class="text-muted-foreground leading-relaxed">Real Wheel Picker was created to be the gold standard in online random draws: no accounts, no tracking, no manipulation - just pure, cryptographically secure randomness.</p>
+        <p class="text-muted-foreground leading-relaxed">Real Wheel Picker started from a simple frustration: every existing random picker tool was either riddled with ads that broke the experience, required you to create an account just to use a spinning wheel, or — worse — used <code class="text-xs bg-muted px-1 py-0.5 rounded">Math.random()</code>, JavaScript's built-in pseudo-random function that produces predictable sequences.</p>
+        <p class="text-muted-foreground leading-relaxed">That last point matters more than it sounds. <code class="text-xs bg-muted px-1 py-0.5 rounded">Math.random()</code> uses a deterministic algorithm seeded by a timestamp. A skilled developer can reproduce any sequence it generates. For a classroom activity or a casual team standup, this probably doesn't matter. But for a YouTube giveaway with thousands of participants, or a company raffle with real prizes, the integrity of the draw is everything — and pseudo-random isn't good enough.</p>
+        <p class="text-muted-foreground leading-relaxed">So we built Real Wheel Picker on <strong class="text-foreground">the Web Crypto API</strong> (<code class="text-xs bg-muted px-1 py-0.5 rounded">crypto.getRandomValues()</code>), the same cryptographic standard used by password managers and banking applications. The randomness comes from hardware entropy — electrical noise inside your device — which is fundamentally impossible to predict or reproduce. That's the foundation every tool on this site is built on.</p>
       </section>
 
       <!-- Who We Are -->
@@ -89,9 +90,22 @@ const stats = [
           </div>
           <h2 class="text-xl md:text-2xl font-bold text-foreground">Who We Are</h2>
         </div>
-        <p class="text-muted-foreground leading-relaxed">Real Wheel Picker is developed and maintained by an independent development team based in France. We're passionate about building tools that respect user privacy while delivering genuinely useful functionality.</p>
-        <p class="text-muted-foreground leading-relaxed">The site is built on modern open-web technology — Astro, TypeScript, React, and Tailwind CSS — for fast loading times and a smooth experience on any device. Every feature is free, and we plan to keep it that way. The site is supported by non-intrusive advertising through Google AdSense, which allows us to keep all tools free for every user.</p>
-        <p class="text-muted-foreground leading-relaxed">We believe basic randomization tools should be accessible to everyone — teachers selecting students, streamers running giveaways, teams making decisions, and anyone who needs a fair, unbiased pick. That belief drives every decision we make about this product.</p>
+        <p class="text-muted-foreground leading-relaxed">We're an independent web development project based in France. Real Wheel Picker is built and maintained by a small team of developers who got tired of tools that treat users as data sources rather than people trying to get something done.</p>
+        <p class="text-muted-foreground leading-relaxed">The entire site runs on modern open-web standards: <strong class="text-foreground">Astro</strong> for static rendering (your wheel loads instantly, no waiting for JavaScript), <strong class="text-foreground">TypeScript</strong> throughout for reliability, <strong class="text-foreground">React</strong> for the interactive components, and <strong class="text-foreground">Tailwind CSS</strong> for the interface. All your data — participant names, draw history, wheel configurations — stays in your browser's local storage. It never reaches our servers, because we don't have servers that accept it.</p>
+        <p class="text-muted-foreground leading-relaxed">The site is supported by advertising through Google AdSense, which is how we keep every tool completely free. We deliberately chose non-intrusive ad placements that don't interrupt the actual draw experience. Our rule: ads should fund the product, not become the product.</p>
+      </section>
+
+      <!-- How the randomness works -->
+      <section class="bg-card border border-border rounded-xl p-6 md:p-8 space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-primary" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h2 class="text-xl md:text-2xl font-bold text-foreground">How the Randomness Works</h2>
+        </div>
+        <p class="text-muted-foreground leading-relaxed">Every pick on Real Wheel Picker calls <code class="text-xs bg-muted px-1 py-0.5 rounded">window.crypto.getRandomValues()</code>, a browser API defined in the <a href="https://www.w3.org/TR/WebCryptoAPI/" class="text-primary hover:underline" target="_blank" rel="noopener noreferrer">W3C Web Cryptography specification</a>. The browser collects entropy from multiple hardware sources — CPU timing variations, mouse movements, disk I/O interrupts — and feeds it into a cryptographically secure pseudorandom number generator (CSPRNG).</p>
+        <p class="text-muted-foreground leading-relaxed">The result: each draw is statistically independent. Winning one draw has zero influence on who wins the next. There is no "hot streak" and no way for the operator to predict the outcome before it happens — not even us.</p>
+        <p class="text-muted-foreground leading-relaxed">For weighted draws (where some entries have higher odds), we use the Fisher-Yates shuffle algorithm seeded by the crypto API, which guarantees uniform distribution — every entry's probability exactly matches its configured weight, with no rounding artifacts or clustering.</p>
       </section>
 
       <!-- Values -->
@@ -146,6 +160,43 @@ const stats = [
               <h3 class="font-semibold text-foreground">{u.title}</h3>
               <p class="text-xs text-muted-foreground">{u.desc}</p>
             </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground text-center">Common Questions</h2>
+        <div class="space-y-3">
+          {[
+            {
+              q: "Is the random pick really fair?",
+              a: "Yes. Every draw uses the Web Crypto API, which draws entropy from hardware sources inside your device. The outcome cannot be predicted, replayed, or influenced by any external factor — including us. We have no server-side involvement in the draw at all."
+            },
+            {
+              q: "Do you store my participant names?",
+              a: "No. Participant names are processed entirely in your browser using JavaScript. If you use the save feature, the data is written to your browser's localStorage — a storage area on your device that we cannot read. Closing your browser or clearing site data removes everything."
+            },
+            {
+              q: "Why is it free?",
+              a: "The site is funded by Google AdSense advertising. We believe randomization tools should be a public utility, not a subscription product. Every feature — weighted draws, multiple wheels, the giveaway picker, team generator — is permanently free."
+            },
+            {
+              q: "Can I use this for a real giveaway with legal requirements?",
+              a: "Real Wheel Picker is a tool, not a legal service. For giveaways with legal or platform-specific requirements (Instagram, YouTube, etc.), you are responsible for ensuring your draw complies with those rules. We recommend reading the platform's contest guidelines and your local regulations before running a public giveaway."
+            },
+            {
+              q: "How is this different from other wheel spinners?",
+              a: "Three things: (1) cryptographic randomness instead of Math.random(), (2) zero data collection — no login, no tracking, nothing stored on our servers, (3) all tools are free with no feature tiers. Most competitors lock weighted draws or CSV import behind a paid plan."
+            },
+          ].map((item) => (
+            <details class="bg-card border border-border rounded-xl p-5 group">
+              <summary class="font-semibold text-foreground cursor-pointer flex items-center justify-between gap-3 list-none">
+                {item.q}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <p class="mt-3 text-sm text-muted-foreground leading-relaxed">{item.a}</p>
+            </details>
           ))}
         </div>
       </section>

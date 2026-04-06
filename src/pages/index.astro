@@ -178,23 +178,105 @@ const jsonLd = {
     </section>
   </div>
 
-  <!-- Static content block for AI crawlers and search engines (not visible to users) -->
-  <div class="sr-only" aria-hidden="true">
-    <section>
-      <h2>What is Real Wheel Picker?</h2>
-      <p>Real Wheel Picker is a free online spinning wheel and random picker. Unlike most wheel tools, it uses crypto.getRandomValues() — cryptographic randomness sourced from your device's hardware — instead of Math.random(). This makes it suitable for giveaways, raffles, classroom draws, and any situation where the fairness of the selection must be demonstrable. No account is required. All data stays in the browser: participant names and results are never sent to any server.</p>
-    </section>
-    <section>
-      <h2>Why is cryptographic randomness better for giveaways?</h2>
-      <p>Math.random(), used by most online wheel tools including Wheel of Names, generates numbers using a deterministic algorithm seeded by a value like the system clock. The output looks random but is technically predictable and reproducible. crypto.getRandomValues() pulls entropy directly from hardware random number generators built into modern CPUs and operating systems. The result is not predictable, not reproducible, and meets the same standard used in cryptographic applications, password generation, and online banking. For giveaway runners who need to defend the fairness of their selection — especially in communities where accusations of rigging are common — this distinction is material.</p>
-    </section>
-    <section>
-      <h2>What tools does Real Wheel Picker offer?</h2>
-      <p>Real Wheel Picker includes a spinning name wheel, weighted random picker (for bonus-entry giveaways and raffle tickets), a no-repeat picker (ensures every name is drawn once before anyone is picked twice), and dedicated giveaway pickers for Instagram, TikTok, Discord, YouTube, Twitch, Reddit, Twitter/X, Facebook, Snapchat, and LinkedIn. Specialty tools include a classroom student picker for teachers, a random team generator, a Secret Santa picker, a yes/no decision wheel, a truth or dare wheel, and a random number picker. All tools are free and require no account.</p>
-    </section>
-    <section>
-      <h2>How does Real Wheel Picker compare to Wheel of Names?</h2>
-      <p>Both are free online spinning wheel tools. Wheel of Names uses Math.random() for its randomness. Real Wheel Picker uses crypto.getRandomValues(). Real Wheel Picker also offers platform-specific giveaway pickers (Instagram, TikTok, Discord, etc.) that Wheel of Names does not have, a native no-repeat picker mode, and weighted draws for tiered giveaways. Wheel of Names has a larger existing user base and offers shareable short URLs for saved wheels. For casual use both tools work well; for giveaways where fairness is scrutinized, the cryptographic approach provides stronger evidence of impartiality.</p>
+  <!-- Editorial content — visible to users and AdSense reviewers -->
+  <div style="background: var(--gradient-bg)">
+    <section class="max-w-4xl mx-auto px-4 py-16 space-y-12">
+
+      <!-- What is this / Why it exists -->
+      <div class="space-y-6">
+        <h2 class="text-2xl md:text-3xl font-bold text-foreground text-center">What is Real Wheel Picker and why does it exist?</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-card border border-border rounded-xl p-6 space-y-3">
+            <h3 class="font-bold text-foreground text-lg">The problem with most online wheels</h3>
+            <p class="text-muted-foreground text-sm leading-relaxed">Most online spinning wheel tools use <code class="bg-muted px-1 rounded font-mono text-xs">Math.random()</code> — a pseudorandom number generator seeded by values like the system clock. The output looks random, but it is technically deterministic and reproducible. In giveaway communities, this matters: results can be challenged, questioned, or accused of manipulation with no way to disprove it.</p>
+          </div>
+          <div class="bg-card border border-border rounded-xl p-6 space-y-3">
+            <h3 class="font-bold text-foreground text-lg">The cryptographic difference</h3>
+            <p class="text-muted-foreground text-sm leading-relaxed">Real Wheel Picker uses <code class="bg-muted px-1 rounded font-mono text-xs">crypto.getRandomValues()</code> — the Web Crypto API. It draws entropy from your device's hardware random number generator. The result is not predictable, not reproducible, and meets the same standard used in password managers, SSL certificates, and online banking. Every spin is genuinely unpredictable.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Who uses it -->
+      <div class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground text-center">Who uses Real Wheel Picker?</h2>
+        <div class="grid sm:grid-cols-3 gap-4">
+          {[
+            { title: "Teachers & Educators", text: "Select students fairly for class participation, group assignments, and in-class activities. The no-repeat mode ensures every student is called before anyone is called twice — eliminating perceived favoritism.", icon: "🎓" },
+            { title: "Content Creators", text: "Run transparent giveaways on Instagram, TikTok, YouTube, Discord, and Twitch. Screen-record the spin and post it as proof. Your audience watches the draw happen in real time — no rigging claims, no drama.", icon: "🎥" },
+            { title: "Teams & Businesses", text: "Decide who presents first, assign tasks randomly, run Secret Santa draws, split into project teams. The weighted mode lets you give higher-ticket prizes more weight — or give long-standing employees more entries.", icon: "💼" },
+          ].map(({ title, text, icon }) => (
+            <div class="bg-card border border-border rounded-xl p-5 space-y-3">
+              <div class="text-3xl">{icon}</div>
+              <h3 class="font-bold text-foreground text-sm">{title}</h3>
+              <p class="text-muted-foreground text-xs leading-relaxed">{text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- How to run a fair draw -->
+      <div class="bg-card border border-border rounded-xl p-6 md:p-8 space-y-5">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How to run a provably fair random draw</h2>
+        <p class="text-muted-foreground text-sm leading-relaxed">Whether you're running a giveaway for 50 followers or a raffle with 5,000 entries, these steps eliminate any credible dispute about fairness:</p>
+        <ol class="space-y-3">
+          {[
+            { n: "1", t: "Collect entries first, close submissions before loading the wheel", d: "Announce the deadline in advance. Never add or remove names after the wheel is loaded. Participants should see you paste the full list before spinning." },
+            { n: "2", t: "Screen-record the entire process — list loading and spin", d: "On mobile: iOS Control Centre → Screen Record. Android: Quick Settings → Screen Record. On desktop: OBS, QuickTime, or Windows Game Bar (Win+G). Record from the moment you paste names through the full spin." },
+            { n: "3", t: "Spin on a live session or post immediately", d: "Going live provides real-time proof. If not live, post the recording within minutes of spinning — delayed publication raises suspicion. Post it as a Story, Reel, or video and tag the winner." },
+            { n: "4", t: "Check eligibility after the draw, not before", d: "Verify that the winner met entry requirements (followed you, liked the post, etc.) after spinning — not before. If they're ineligible, spin again and document why. Verifying before adds selection bias risk." },
+          ].map(({ n, t, d }) => (
+            <li class="flex gap-4">
+              <span class="w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-bold flex items-center justify-center shrink-0 mt-0.5">{n}</span>
+              <div>
+                <p class="font-semibold text-foreground text-sm mb-1">{t}</p>
+                <p class="text-muted-foreground text-xs leading-relaxed">{d}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <!-- Tool directory -->
+      <div class="space-y-5">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground text-center">All free tools — no account required</h2>
+        <div class="grid sm:grid-cols-2 gap-3">
+          {[
+            { href: "/wheel-of-names", title: "Wheel of Names", desc: "Add names, spin to pick a random winner. The classic." },
+            { href: "/random-name-picker", title: "Random Name Picker", desc: "Instant random name selection from any list." },
+            { href: "/weighted-random-picker", title: "Weighted Random Picker", desc: "Assign different odds to each entry. For tiered raffles." },
+            { href: "/random-picker-no-repeat", title: "No-Repeat Picker", desc: "Every name drawn once before anyone is drawn twice." },
+            { href: "/giveaway-picker", title: "Giveaway Picker", desc: "Universal winner picker for any platform." },
+            { href: "/team-generator", title: "Team Generator", desc: "Split any group into balanced random teams." },
+            { href: "/classroom-picker", title: "Classroom Picker", desc: "Fair student selector for teachers." },
+            { href: "/yes-no-wheel", title: "Yes or No Wheel", desc: "Cryptographically random 50/50 decisions." },
+            { href: "/decision-wheel", title: "Decision Wheel", desc: "Spin to choose between any list of options." },
+            { href: "/secret-santa-picker", title: "Secret Santa Picker", desc: "Random Secret Santa assignments with no self-picks." },
+          ].map(({ href, title, desc }) => (
+            <a href={href} class="flex items-start gap-3 p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all">
+              <span class="text-primary font-bold text-sm mt-0.5 shrink-0">→</span>
+              <div>
+                <p class="font-semibold text-foreground text-sm">{title}</p>
+                <p class="text-muted-foreground text-xs leading-snug">{desc}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Privacy commitment -->
+      <div class="bg-primary/5 border border-primary/20 rounded-xl p-6 md:p-8 space-y-4">
+        <h2 class="text-xl font-bold text-foreground">Privacy by design — your data never leaves your browser</h2>
+        <p class="text-muted-foreground text-sm leading-relaxed">Every draw runs entirely in your browser. The participant names you enter, the results, the weights you assign — none of it is transmitted to any server. We have no account system, no database of past draws, and no ability to see or influence your results. The source of randomness is your own device's hardware entropy pool, not our servers. This is not a marketing claim — it is the technical consequence of using <code class="bg-muted px-1 rounded font-mono text-xs">crypto.getRandomValues()</code> client-side with no backend API calls.</p>
+        <div class="flex flex-wrap gap-3 pt-2">
+          <a href="/privacy-policy" class="text-xs text-primary hover:underline font-medium">Privacy Policy</a>
+          <span class="text-muted-foreground text-xs">·</span>
+          <a href="/about" class="text-xs text-primary hover:underline font-medium">About Real Wheel Picker</a>
+          <span class="text-muted-foreground text-xs">·</span>
+          <a href="/contact" class="text-xs text-primary hover:underline font-medium">Contact Us</a>
+        </div>
+      </div>
+
     </section>
   </div>
 
