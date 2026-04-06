@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast"; // used for validation errors
 
 const ContactFormIsland = () => {
   const [name, setName] = useState("");
@@ -12,10 +12,9 @@ const ContactFormIsland = () => {
       toast({ title: "Error", description: "Please fill in all fields.", variant: "destructive" });
       return;
     }
-    toast({ title: "Message sent!", description: "Thank you for reaching out. We'll get back to you soon." });
-    setName("");
-    setEmail("");
-    setMessage("");
+    const subject = encodeURIComponent("Message via Real Wheel Picker contact form");
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+    window.location.href = `mailto:contact@realwheelpicker.com?subject=${subject}&body=${body}`;
   };
 
   return (
