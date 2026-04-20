@@ -1,0 +1,392 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertCircle, Trophy, Clock, Shield, Lightbulb } from 'lucide-react';
+
+const title = "How to Run a Workplace Giveaway: The HR Manager's Complete Playbook 2026";
+const description = "The complete HR guide to running fair, compliant workplace giveaways — tax rules, prize ideas by budget, remote teams, and how to pick winners without bias.";
+const canonical = "/blog/workplace-giveaway-guide";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Run a Workplace Giveaway: The HR Manager's Complete Playbook 2026",
+  "description": "The complete HR guide to running fair, compliant workplace giveaways — tax rules, prize ideas by budget, remote teams, and how to pick winners without bias.",
+  "author": { "@type": "Person", "name": "Real Wheel Picker Editorial Team", "url": "https://realwheelpicker.com/about" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2026-04-06",
+  "dateModified": "2026-04-06",
+  "image": "https://realwheelpicker.com/og-default.png",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/workplace-giveaway-guide" },
+};
+
+const prizeIdeas = [
+  { budget: "$25 per person", title: "Small Recognition Prizes", ideas: "Amazon gift card, local coffee shop card, branded company swag kit, a nice notebook + pen set, one extra PTO hour (check state rules), meal delivery credit." },
+  { budget: "$50 per person", title: "Mid-Tier Rewards", ideas: "Restaurant gift card, online course subscription (Skillshare, Coursera), streaming service gift card, nice water bottle or desk accessory, grocery delivery credit, spa or massage voucher." },
+  { budget: "$100 per person", title: "Meaningful Rewards", ideas: "Experience voucher (cooking class, axe throwing, wine tasting), Airbnb credit, quality headphones, fitness tracker, spa day gift certificate, prepaid Visa card." },
+  { budget: "$250+", title: "High-Impact Recognition", ideas: "Weekend getaway package, premium tech (AirPods, smart watch), catered team lunch, annual gym membership, plane ticket credit, meaningful charity donation in the winner's name." },
+];
+
+const commonMistakes = [
+  { title: "The Same Person Keeps Winning", text: "If you run monthly raffles without tracking past winners, you'll inevitably have one employee win three times in a year while others win zero. Track winners in a spreadsheet and consider a cooldown period — winners become ineligible for 3-6 months after a win." },
+  { title: "Vague Eligibility Rules", text: "You announce a prize draw, and then someone asks: 'Does this include contractors?' 'What about the part-timers who started last month?' 'Can managers enter?' Define eligibility in writing before announcing. Every ambiguity becomes a grievance." },
+  { title: "The Boss Picks the Winner", text: "Even with the best intentions, manual winner selection by management looks rigged. The moment a senior leader's favorite employee wins, you have a morale problem. Use a verifiable random picker — ideally one you run on-screen in front of staff." },
+  { title: "Forgetting Remote Employees", text: "If your in-office team gets a pizza party raffle and your remote employees get nothing equivalent, you've created a two-tier workforce feeling. Always design prizes that work regardless of location — gift cards and digital rewards are your friend." },
+  { title: "No Written Record", text: "HR disputes around perceived unfairness can escalate. If you can't produce documentation of who was eligible, how the draw was conducted, and who won, you're exposed. A simple one-page record per draw is enough to protect you." },
+  { title: "Taxable Gifts Without Warning", text: "Employees are sometimes blindsided when a prize shows up on their W-2. Communicate tax implications in advance, especially for prizes over $25 ($75 in some interpretations) or anything over £50 in the UK. No one likes a surprise tax bill from a 'gift.'" },
+];
+---
+
+<Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<SchemaBreadcrumb items={[{ name: "Home", url: "https://realwheelpicker.com/" }, { name: "Blog", url: "https://realwheelpicker.com/blog" }, { name: title, url: `https://realwheelpicker.com${canonical}` }]} />
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      {/* Hero */}
+      <section class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary transition-colors">Blog</a>
+          <span>/</span>
+          <span>Workplace Giveaway Guide</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          How to Run a Workplace Giveaway: The HR Manager's Complete Playbook 2026
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          Workplace giveaways — holiday raffles, employee appreciation draws, performance rewards — are one of the cheapest tools HR has for boosting morale. A $50 gift card given fairly and publicly creates 10x the goodwill of a $50 raise that nobody talks about. But done poorly, they breed resentment faster than almost anything else. This guide covers every dimension: legal, logistical, psychological, and practical.
+        </p>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>15 min read</span><span>·</span><span>Updated April 2026</span>
+        </div>
+      </section>
+
+      {/* Table of Contents */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-3">
+        <h2 class="font-bold text-foreground">In this guide</h2>
+        <ol class="space-y-1 text-sm text-primary list-decimal list-inside">
+          <li><a href="#why-it-matters" class="hover:underline">Why workplace giveaways actually work (the engagement data)</a></li>
+          <li><a href="#types" class="hover:underline">Types of workplace giveaways: raffle vs prize draw vs performance reward</a></li>
+          <li><a href="#legal-tax" class="hover:underline">Legal and tax considerations (US and UK rules)</a></li>
+          <li><a href="#fairness-problem" class="hover:underline">The fairness problem: why manual picks look rigged</a></li>
+          <li><a href="#how-to-run" class="hover:underline">Step-by-step: running a transparent draw</a></li>
+          <li><a href="#prize-ideas" class="hover:underline">Prize ideas by budget ($25 to $250+)</a></li>
+          <li><a href="#remote-teams" class="hover:underline">Virtual and remote team giveaways</a></li>
+          <li><a href="#hr-documentation" class="hover:underline">HR documentation and records</a></li>
+          <li><a href="#mistakes" class="hover:underline">Common mistakes and how to avoid them</a></li>
+          <li><a href="#checklist" class="hover:underline">Full planning checklist</a></li>
+        </ol>
+      </section>
+
+      {/* Section 1 */}
+      <section id="why-it-matters" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Why Workplace Giveaways Actually Work</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Gallup's 2024 State of the Global Workplace report found that only 23% of employees worldwide are engaged at work. The top predictor of engagement isn't salary — it's whether employees feel recognized. Recognition doesn't mean a plaque on the wall. It means being seen, being acknowledged in front of peers, and occasionally getting something tangible that says "we noticed you."
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Workplace giveaways work because they create a shared moment. When you pull up a spinner wheel in your all-hands meeting and 40 employees lean in to see whose name appears, you've created a brief, genuine collective experience. The winner gets something real. Everyone else gets the feeling of participation and fairness. That's a lot of psychological return for a $50 Amazon card.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The Society for Human Resource Management (SHRM) consistently reports that companies with strong recognition programs have 31% lower voluntary turnover. That's not because of the prizes themselves — it's because of the message those prizes send: you matter here, we see your effort, this is a good place to work.
+        </p>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground flex items-center gap-2"><Lightbulb className="w-4 h-4 text-primary" /> The ROI math is striking</p>
+          <p class="text-sm text-muted-foreground">Replacing an employee costs between 50% and 200% of their annual salary (recruiting fees, lost productivity, onboarding time). A $500/month recognition program that retains even one employee who earns $60,000/year pays for itself 10x over. Workplace giveaways are the cheapest line item in your retention budget.</p>
+        </div>
+        <p class="text-muted-foreground leading-relaxed">
+          The timing matters too. Holiday-season giveaways (November-December) hit at a moment when employees are making decisions about their next year. A well-run holiday raffle signals organizational health and investment in people — exactly the signals that make someone update their LinkedIn status to "not looking."
+        </p>
+      </section>
+
+      {/* Section 2 */}
+      <section id="types" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Types of Workplace Giveaways: Raffle vs Prize Draw vs Performance Reward</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          These terms get used interchangeably in HR conversations, but they describe meaningfully different things with different legal and psychological implications.
+        </p>
+
+        <div class="bg-card border border-border rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">The Pure Raffle</p>
+          <p class="text-sm text-muted-foreground">Everyone eligible gets one entry. Names go into the draw equally. Winner is selected at random. No performance component, no ticket purchasing (in a workplace context), just luck. This is the most egalitarian format and creates the least resentment — everyone had the same shot. Best for: holiday parties, employee appreciation events, team milestone celebrations. The psychological benefit is that even low performers feel included, which matters for team cohesion.</p>
+        </div>
+
+        <div class="bg-card border border-border rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">The Weighted Entry Draw</p>
+          <p class="text-sm text-muted-foreground">Employees earn additional entries through specific behaviors — perfect attendance gets 2 entries, completing a training module gets 1 extra entry, hitting a sales target gets 3 entries. The draw is still random, but odds are skewed toward high performers. This format rewards effort without guaranteeing the top performer always wins, which keeps the excitement alive. Caution: you must define the earning criteria in writing before the period starts or you'll face questions about retroactive favoritism.</p>
+        </div>
+
+        <div class="bg-card border border-border rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">The Performance-Based Prize</p>
+          <p class="text-sm text-muted-foreground">Not random at all — the best performer wins. Employee of the month, top sales rep of the quarter, most customer compliments. These are legitimate recognition programs, but they have a flaw: they're demotivating for everyone except the person who wins. If the same sales rep always tops the board, the prize loses meaning for everyone else after two or three cycles. Use sparingly, combine with raffle-format programs for balance.</p>
+        </div>
+
+        <div class="bg-card border border-border rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">The Instant Reward</p>
+          <p class="text-sm text-muted-foreground">Spot recognition — a manager catches an employee doing something exceptional and immediately gives them a gift card, a bonus day off, or a physical prize. No draw, no process, just immediate acknowledgment. These work brilliantly for individual recognition but can cause fairness concerns if managers apply them inconsistently. You need manager training and clear criteria ("you can give an instant reward when an employee goes significantly above their role scope").</p>
+        </div>
+
+        <p class="text-muted-foreground leading-relaxed">
+          For most workplaces, the ideal program combines formats: a monthly raffle everyone enters automatically (egalitarian, low-stakes fun) plus a quarterly performance award (meaningful recognition for excellence). This way you're serving different psychological needs without either feeling hollow.
+        </p>
+      </section>
+
+      <AdPlaceholder position="mid-article-1" client:visible />
+
+      {/* Section 3 */}
+      <section id="legal-tax" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Legal and Tax Considerations: What HR Actually Needs to Know</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          This is where most workplace giveaway guides go vague, and that's a disservice to HR managers who will face real consequences if they get it wrong. Let's be specific.
+        </p>
+
+        <div class="bg-card border border-border rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground flex items-center gap-2"><Shield className="w-4 h-4 text-primary" /> United States: IRS Rules on Employee Gifts</p>
+          <p class="text-sm text-muted-foreground">The IRS draws a critical distinction between "de minimis fringe benefits" and taxable compensation. A de minimis gift is one so small that accounting for it would be unreasonable — think a holiday turkey, a coffee mug, or an occasional movie ticket. The IRS doesn't specify a dollar amount, but $25 has been the traditional informal threshold most companies use. Cash, gift cards, and near-cash gifts (prepaid Visa cards, specific retailer cards) are always taxable regardless of amount. A $10 Amazon gift card is taxable income; a $75 branded water bottle might not be. This distinction matters enormously for your W-2 reporting obligations.</p>
+        </div>
+
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5">
+          <p class="font-semibold text-foreground">The Gift Card Problem in the US</p>
+          <p class="text-sm text-muted-foreground mt-1">Gift cards are the most popular workplace prize — and the most legally complicated. The IRS explicitly states that gift cards are taxable employee income, full stop, regardless of dollar amount. If you give an employee a $50 Target gift card, that $50 must be added to their W-2 as wages. This means payroll taxes apply (both employee and employer). Most companies either absorb the tax cost (they "gross up" the prize) or simply inform employees upfront. Failure to report means potential penalties in an audit. Many small businesses skip this step — don't be one of them.</p>
+        </div>
+
+        <div class="bg-card border border-border rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground flex items-center gap-2"><Shield className="w-4 h-4 text-primary" /> United Kingdom: HMRC Rules on Employee Benefits</p>
+          <p class="text-sm text-muted-foreground">HMRC has a cleaner framework: the "trivial benefits" exemption. Gifts to employees are exempt from Income Tax and National Insurance if they cost £50 or less per employee, are not cash or cash vouchers, are not performance-related, and are not part of salary sacrifice. This means a nice bottle of wine at Christmas? Tax-free. A £50 restaurant voucher? If it's not a reward for work done, also potentially tax-free. A £60 spa day? Taxable. Anything over £50 per employee per occasion must be reported to HMRC via a P11D form. Directors of close companies face stricter rules — trivial benefits are capped at £300 per tax year total.</p>
+        </div>
+
+        <p class="text-muted-foreground leading-relaxed">
+          For most small workplace raffles (under $25/$50 in prize value), the practical answer is: keep records, be consistent, and consult your payroll provider if you're unsure. For larger prizes or frequent programs, get a 30-minute consultation with your accountant or payroll specialist — it's worth it. The rules are not designed to punish good employers; they just require awareness.
+        </p>
+
+        <div class="bg-card border border-border rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">Employment Law Considerations</p>
+          <p class="text-sm text-muted-foreground">A workplace raffle should never disadvantage protected classes. If your draw structure systematically results in certain groups never winning (for example, if part-time workers — who skew female in many industries — are excluded from eligibility without business justification), you may face discrimination concerns. Define eligibility broadly and neutrally. "All employees on payroll as of [date]" is cleaner than "full-time employees only" unless there's a specific business reason for the distinction. Similarly, if your prize is alcohol-focused (wine hamper, bar experience), ensure you offer an equivalent alternative for non-drinkers.</p>
+        </div>
+      </section>
+
+      {/* Section 4 */}
+      <section id="fairness-problem" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">The Fairness Problem: Why Manual Picks Look Rigged Even When They're Not</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Here's a scenario that plays out in workplaces constantly: The office manager writes everyone's name on a slip of paper, puts them in a bowl, and draws a winner. They pull out Sarah's name. Sarah happens to be the manager's lunch buddy. Within 48 hours, half the office has quietly concluded the draw was fixed.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The manager didn't cheat. Sarah's name genuinely came up. But human beings are pattern-recognition machines, and we're particularly good at finding patterns that confirm what we already suspect. When the outcome is visible (Sarah wins) but the process is invisible (paper slips in a bowl), people fill the gap with assumptions — usually unflattering ones.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          This is why transparency in the selection process isn't optional — it's the entire point. A random draw that no one witnessed or can verify is functionally identical to a rigged draw in terms of its workplace impact. What you need is a selection method that is:
+        </p>
+        <div class="space-y-3">
+          {[
+            { title: "Verifiably random", text: "Not \"I shuffled the cards\" but a documented random selection method that employees can look up and understand." },
+            { title: "Conducted publicly", text: "Done in the all-hands meeting, on a team call, or recorded so everyone can see the moment of selection." },
+            { title: "Impossible to manipulate retroactively", text: "The entry list is fixed and visible before the draw happens, so no one can claim names were added or removed." },
+            { title: "Repeatable", text: "If someone questions the result, you can explain exactly how it worked and why the outcome is as legitimate as it gets." },
+          ].map((item) => (
+            <div key={item.title} class="bg-card border border-border rounded-xl p-4 flex gap-3">
+              <CheckCircle className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
+              <div>
+                <p class="font-semibold text-foreground text-sm">{item.title}</p>
+                <p class="text-sm text-muted-foreground mt-1">{item.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p class="text-muted-foreground leading-relaxed">
+          A digital random picker like <a href="/" class="text-primary hover:underline">Real Wheel Picker</a> or the <a href="/giveaway-picker" class="text-primary hover:underline">giveaway picker tool</a> solves this cleanly. You paste the employee list into the tool before anyone sees it, share your screen, and spin. The algorithm is documented, the process is visible, and the outcome is recorded. It takes 90 seconds and eliminates any basis for "the draw was rigged" complaints.
+        </p>
+      </section>
+
+      {/* Section 5 */}
+      <section id="how-to-run" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Step-by-Step: Running a Transparent Workplace Draw</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Here's the exact process to run a workplace raffle that holds up to scrutiny. This works for a team of 8 or a company of 800.
+        </p>
+
+        <div class="space-y-3">
+          {[
+            { step: "Step 1: Define and document the rules (1 week before)", text: "Write a one-paragraph description: who is eligible, what the prize is, when the draw occurs, and whether any exclusions apply (e.g., people who won last quarter). Email this to all eligible employees before the draw. This is your paper trail." },
+            { step: "Step 2: Collect the entry list", text: "If everyone is automatically entered, pull the list from your HRIS (HR information system) — Bamboo HR, Workday, Gusto, etc. Export to a clean spreadsheet. If employees opt in, create a simple signup form (Google Form works fine). Cut off entries 24 hours before the draw and freeze the list." },
+            { step: "Step 3: Share the entry list before the draw", text: "Optional but powerful: send the finalized entry list to all participants the morning of the draw. This makes it impossible to claim names were added or removed retroactively. It takes 30 seconds and eliminates an entire category of grievances." },
+            { step: "Step 4: Set up the random picker before going live", text: "Go to realwheelpicker.com or your chosen random picker. Paste all names into the tool. Check that the count matches your entry list. Do this before you share your screen — you don't want to be fumbling with the tool live." },
+            { step: "Step 5: Conduct the draw publicly", text: "Share your screen on the team call or bring up the display in the meeting room. State clearly: 'Here is the tool, here are the names, I'm going to spin now.' Let it run. Don't touch the list after sharing your screen. The winner appears — announce it enthusiastically." },
+            { step: "Step 6: Screenshot and save the result", text: "Take a screenshot of the result immediately. Save it with the date and prize description in the filename. This is your documentation. Email the winner directly with confirmation and prize details within 30 minutes." },
+            { step: "Step 7: Record it in your HR log", text: "Add a one-line entry to your giveaway log: date, prize, eligible employees, winner name, method used. Keep this file. If a question ever arises, you have it." },
+          ].map((item) => (
+            <div key={item.step} class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground">{item.step}</p>
+              <p class="text-sm text-muted-foreground mt-1">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <AdPlaceholder position="mid-article-2" client:visible />
+
+      {/* Section 6 */}
+      <section id="prize-ideas" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Prize Ideas by Budget</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The best prize is one your specific employees actually want. Survey your team before setting a prize budget — a simple "which of these would you most like to win?" poll takes 2 minutes and prevents you from buying a gym membership for someone who has a disability or wine for someone who doesn't drink. That said, here are solid options at each budget level, including their tax implications.
+        </p>
+        <div class="space-y-3">
+          {prizeIdeas.map((item) => (
+            <div key={item.budget} class="bg-card border border-border rounded-xl p-5">
+              <div class="flex items-center gap-2 mb-2">
+                <Trophy className="w-4 h-4 text-primary" />
+                <p class="font-semibold text-foreground">{item.title} <span class="text-primary font-normal">({item.budget})</span></p>
+              </div>
+              <p class="text-sm text-muted-foreground">{item.ideas}</p>
+            </div>
+          ))}
+        </div>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5">
+          <p class="font-semibold text-foreground">The PTO Prize: Powerful but Complex</p>
+          <p class="text-sm text-muted-foreground mt-1">Giving extra paid time off as a prize is extremely popular with employees and costs the company relatively little if headcount is large enough. But check your state or country's rules first. Some US states (California, Colorado) treat PTO as earned wages — meaning unused PTO has monetary value that must be paid out upon termination. If you grant "bonus PTO" that isn't tracked in your official system and doesn't have the same payout rules, you may be creating a compliance headache. Many companies solve this by giving a "work-from-home flex day" instead — same practical benefit, cleaner from a payroll perspective.</p>
+        </div>
+      </section>
+
+      {/* Section 7 */}
+      <section id="remote-teams" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Virtual and Remote Team Giveaways</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Remote and hybrid work has fundamentally changed what "workplace giveaway" means. If 12 of your 20 employees work from home in three different time zones, a prize draw that happens in the office conference room at 3pm Thursday excludes them — both practically and symbolically. Here's how to make it work for distributed teams.
+        </p>
+
+        <div class="space-y-3">
+          {[
+            { title: "Run the draw on a video call, not in the office", text: "Use Zoom, Teams, or Google Meet with everyone invited — both office and remote staff. Screen share the random picker. Record the session. Remote employees need to see the draw happen in real time, not hear about it secondhand." },
+            { title: "Choose location-agnostic prizes", text: "An office pizza party is useless for a remote employee in Austin. Design prizes that work regardless of location: Amazon or Visa gift cards, DoorDash credits, streaming subscriptions, online course access, charity donations in the winner's name." },
+            { title: "Ship physical prizes thoughtfully", text: "If the prize is physical (nice headphones, a branded kit), confirm the winner's shipping address privately — don't ask for it in the team channel. Ship with tracking. International employees may face customs complications; factor this in when designing your prize options." },
+            { title: "Use async-friendly formats when needed", text: "Not every team has a regular all-hands. For async teams, you can run the draw live on a recorded video, post the recording within hours, and announce the winner simultaneously. The key is that the process is documented and visible, even if not everyone watches it live." },
+            { title: "Match the prize to the remote experience", text: "Remote employees often miss the social texture of office life — spontaneous lunch conversations, the break room, colleague interaction. Prizes that facilitate this are especially appreciated: a 'virtual lunch together' budget (everyone orders delivery, you eat on video), a group experience like an online escape room, or a 'Donut' subscription that automates random 1:1 coffee chats." },
+          ].map((item) => (
+            <div key={item.title} class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground">{item.title}</p>
+              <p class="text-sm text-muted-foreground mt-1">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Section 8 */}
+      <section id="hr-documentation" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">HR Documentation: What to Keep and Why</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          HR documentation for workplace giveaways isn't bureaucracy for its own sake — it's the paper trail that protects both the company and the employees. Here's the minimum you should keep for every draw.
+        </p>
+        <div class="bg-card border border-border rounded-xl p-6 space-y-4">
+          <h3 class="font-semibold text-foreground">Your Giveaway Record Should Include:</h3>
+          <div class="space-y-2 text-sm text-muted-foreground">
+            <div class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" /><span><strong class="text-foreground">Date and time</strong> of the draw</span></div>
+            <div class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" /><span><strong class="text-foreground">Prize description</strong> and approximate retail value</span></div>
+            <div class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" /><span><strong class="text-foreground">Eligibility criteria</strong> used</span></div>
+            <div class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" /><span><strong class="text-foreground">Number of eligible participants</strong></span></div>
+            <div class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" /><span><strong class="text-foreground">Name of winner</strong></span></div>
+            <div class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" /><span><strong class="text-foreground">Selection method</strong> used (e.g., "Real Wheel Picker random draw, screen-shared on team Zoom call")</span></div>
+            <div class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" /><span><strong class="text-foreground">Screenshot or recording</strong> of the draw result</span></div>
+            <div class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" /><span><strong class="text-foreground">Tax treatment note</strong> (whether the prize value was added to W-2 / reported to HMRC)</span></div>
+            <div class="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" /><span><strong class="text-foreground">Person who ran the draw</strong> (name and title)</span></div>
+          </div>
+        </div>
+        <p class="text-muted-foreground leading-relaxed">
+          Keep this log for a minimum of 3 years. In the US, that aligns with standard statute of limitations for employment disputes. In the UK, 6 years is the safer standard for financial records. A simple Google Sheet with one row per draw is perfectly sufficient — you don't need HR software for this.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          If you have a works council, employee representative group, or union in your workplace, consider inviting a representative to observe the draw. Their presence adds an independent witness layer that makes any future challenge extremely difficult to sustain.
+        </p>
+      </section>
+
+      {/* Section 9 */}
+      <section id="mistakes" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Common Mistakes That Undermine Workplace Giveaways</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Most workplace giveaway disasters are preventable. They usually fall into a handful of recurring patterns.
+        </p>
+        <div class="space-y-3">
+          {commonMistakes.map((item) => (
+            <div key={item.title} class="bg-card border border-border rounded-xl p-5 flex gap-3">
+              <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+              <div>
+                <p class="font-semibold text-foreground">{item.title}</p>
+                <p class="text-sm text-muted-foreground mt-1">{item.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Section 10: Checklist */}
+      <section id="checklist" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Full Planning Checklist</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Use this before every workplace draw. Print it out or save it as a template in your HR folder.
+        </p>
+        <div class="bg-card border border-border rounded-xl p-6 space-y-5">
+          <div>
+            <p class="font-semibold text-foreground mb-2">One Week Before</p>
+            <div class="space-y-1 text-sm text-muted-foreground">
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Define prize and check tax treatment with payroll</span></div>
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Write eligibility rules in plain language</span></div>
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Email the announcement to all eligible employees</span></div>
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Confirm how entries will be collected (auto-enroll vs opt-in)</span></div>
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Check winner cooldown policy — has anyone won recently?</span></div>
+            </div>
+          </div>
+          <div>
+            <p class="font-semibold text-foreground mb-2">Day Before</p>
+            <div class="space-y-1 text-sm text-muted-foreground">
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Freeze the entry list — no additions after cutoff</span></div>
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Optional: share the final entry list with all participants</span></div>
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Set up random picker tool and test it</span></div>
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Schedule the draw on team calendar / send Zoom invite</span></div>
+            </div>
+          </div>
+          <div>
+            <p class="font-semibold text-foreground mb-2">Draw Day</p>
+            <div class="space-y-1 text-sm text-muted-foreground">
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Share screen with random picker loaded and entry list visible</span></div>
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>State the rules and prize out loud before spinning</span></div>
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Spin the wheel — announce winner enthusiastically</span></div>
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Screenshot the result immediately</span></div>
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Email winner within 30 minutes with prize details</span></div>
+            </div>
+          </div>
+          <div>
+            <p class="font-semibold text-foreground mb-2">After the Draw</p>
+            <div class="space-y-1 text-sm text-muted-foreground">
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Log the draw in your HR giveaway record</span></div>
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Notify payroll if the prize is a taxable gift card or cash equivalent</span></div>
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Ship or deliver the prize within 5 business days</span></div>
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>File screenshot with draw date in your HR records folder</span></div>
+              <div class="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500 shrink-0" /><span>Schedule the next draw date if this is a recurring program</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section class="bg-primary/5 border border-primary/20 rounded-xl p-8 text-center space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Ready to Run Your Next Draw?</h2>
+        <p class="text-muted-foreground">Real Wheel Picker is free, no signup required, and takes 60 seconds to run a transparent, documented random draw your entire team can see.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="/" class="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Try the Wheel Picker Free <ArrowRight className="w-4 h-4" />
+          </a>
+          <a href="/giveaway-picker" class="inline-flex items-center justify-center gap-2 bg-card border border-border text-foreground px-6 py-3 rounded-xl font-semibold hover:bg-muted transition-colors">
+            Try the Giveaway Picker
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug={canonical} client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

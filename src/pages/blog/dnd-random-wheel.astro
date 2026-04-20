@@ -1,0 +1,384 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, Dice5, Star, Users, Shield, Sparkles, Scroll } from 'lucide-react';
+
+const title = "D&D Random Wheel: 40+ Tables for Encounters, NPCs, Weather & Wild Magic";
+const description = "Use a D&D random wheel for encounters, NPC names, wild magic surges, weather, loot tables, and more. 40+ curated tables for Dungeon Masters — all ready to paste into your wheel.";
+const canonical = "/blog/dnd-random-wheel";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": description,
+  "url": `https://realwheelpicker.com${canonical}`,
+  "author": { "@type": "Person", "name": "Real Wheel Picker Editorial Team", "url": "https://realwheelpicker.com/about" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2026-04-14",
+  "dateModified": "2026-04-14",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": `https://realwheelpicker.com${canonical}` }
+};
+
+const encounterTypes = [
+  "Goblin ambush (3-6, high ground advantage)",
+  "Wandering merchant with unusual wares",
+  "Wounded knight, claims cursed",
+  "Pack of dire wolves, hunting prey",
+  "Abandoned campsite, signs of struggle",
+  "Cultists performing a ritual",
+  "Dragon wyrmling, separated from parent",
+  "Bandit tollgate (negotiations possible)",
+  "Giant spider nest, treasure inside",
+  "Elemental anomaly — ground trembles",
+  "Zombie horde moving toward nearest village",
+  "Mysterious locked chest in the path",
+  "Friendly ranger, knows the area",
+  "Owlbear defending its territory",
+  "Ruins with animated armor inside",
+];
+
+const npcPersonalities = [
+  "Cheerfully oblivious to danger",
+  "Paranoid — checks exits immediately",
+  "Talks exclusively in metaphors",
+  "Has a strong opinion about the party's smell",
+  "Claims to be royalty (possibly true)",
+  "Desperately needs to make a sale today",
+  "Speaks only in questions",
+  "Has a vendetta against elves specifically",
+  "Extremely enthusiastic about a boring hobby",
+  "Morally grey — admits it freely",
+  "Deeply in debt to someone dangerous",
+  "Recovering from a curse, side effects linger",
+  "Lost a bet, now serves the party for a day",
+  "Actually an undercover spy",
+  "Has useful information but terrible timing",
+];
+
+const npcVoices = [
+  "Gravelly whisper, dramatically pauses mid-sentence",
+  "High-pitched, excited, talks at double speed",
+  "Slow and deliberate, expects attention",
+  "Formal, old-fashioned dialect",
+  "Speaks Common with a heavy regional accent",
+  "Monotone delivery regardless of content",
+  "Laughs awkwardly after everything",
+  "Uses the wrong words confidently",
+  "Drops voice to a whisper when lying",
+  "Asks 'Am I right?' after every sentence",
+];
+
+const wildMagicSurges = [
+  "A third eye appears on your forehead for 1 minute",
+  "You polymorphed into a potted plant until your next turn",
+  "Confetti explosions around you — disadvantage on stealth for 1 minute",
+  "Your spell goes off twice — or not at all (coin flip)",
+  "Every door within 60 feet opens simultaneously",
+  "You speak only in rhyme until your next long rest",
+  "Your skin turns bright blue for 1d4 days",
+  "The nearest body of water turns to chocolate milk",
+  "All lights in 30 feet go out for 1 minute",
+  "You and your nearest ally swap positions",
+  "Musical fanfare accompanies your next 3 actions",
+  "The last enemy you hit gets teleported 30 feet up",
+  "You grow a magnificent beard (regardless of species or gender)",
+  "Everyone can hear your thoughts for 1 minute",
+  "Small animals are drawn to you and follow you for 1 hour",
+];
+
+const weatherConditions = [
+  "Clear and sunny — visibility perfect",
+  "Light rain, ground slippery (+2 DC on Athletics)",
+  "Thick fog — visibility 10 feet",
+  "Thunderstorm — outdoor travel at disadvantage",
+  "Hailstorm — 1d4 bludgeoning per minute outdoors",
+  "Unnaturally warm — suspiciously warm for season",
+  "Blizzard — movement speed halved outdoors",
+  "Eerie calm — even birds are silent",
+  "Strong winds — ranged attacks disadvantage",
+  "Magical aurora — Arcana DC 15 to interpret",
+];
+
+const tavernMenuItems = [
+  "Boar shank with roasted turnips (2 cp)",
+  "Mystery stew — today's protein unclear (1 cp)",
+  "Elven bread with honey and goat cheese (3 cp)",
+  "Dragon pepper soup — Constitution save DC 12 (4 cp)",
+  "Flatbread with salt fish (1 cp)",
+  "Whole roasted chicken, serves 2 (5 cp)",
+  "Vegetable pottage with bread (1 cp)",
+  "Smoked sausage with mustard (2 cp)",
+  "Sweet rolls with candied fruit (1 cp)",
+  "House ale — 'stronger than it looks' (2 cp)",
+];
+
+const lootTableItems = [
+  "47 gold pieces and a chipped ruby (worth 12gp)",
+  "Potion of healing (standard)",
+  "Map to a location none of the party recognizes",
+  "Ornate dagger, no magical properties",
+  "50 feet of hempen rope and a grappling hook",
+  "Wanted poster — the face looks like a party member",
+  "Mysterious locked box, no key",
+  "Scroll with spell: Comprehend Languages",
+  "Set of thieves' tools, well-used",
+  "4 gems worth 10gp each",
+  "A letter sealed with a noble's crest",
+  "Bag of caltrops and a tinderbox",
+  "Disguise kit, one use remaining",
+  "Flask of dwarven spirits — equivalent to 3 rations",
+  "Enchanted coin — always lands on the side you bet",
+];
+
+const questHooks = [
+  "A child asks you to find her missing cat — the cat is definitely a polymorphed wizard",
+  "Someone is being blackmailed with information that isn't actually embarrassing",
+  "The local haunting is real, but the ghost is just lost and scared",
+  "A famous bard is stealing other people's songs, but they genuinely don't remember writing them",
+  "Two villages are at war over a border dispute — both maps are slightly wrong",
+  "A noble is hoarding grain during a shortage — for reasons that might actually be sympathetic",
+  "The monster terrorizing the village is trying to communicate",
+  "Someone needs you to deliver a package they haven't looked inside",
+  "The cult isn't evil — they're just extremely annoying",
+  "The dragon wants to hire the party as its lawyers",
+];
+
+const wheelUseCases = [
+  { use: "Session prep shortcut", description: "Spin for the main encounter type, the inciting NPC personality, and the weather. Three spins, 10 seconds — you have a session skeleton." },
+  { use: "Improv at the table", description: "Player goes off-script? Spin for an encounter. NPC you hadn't planned? Spin for personality and voice. The wheel has your back." },
+  { use: "Solo D&D / journaling", description: "Use the wheel as your Oracle. Spin for events, encounters, and NPC reactions when playing solo." },
+  { use: "Wild Magic table replacement", description: "The official Wild Magic Surge table has 50 entries. Your wheel can have custom entries tailored to your campaign's tone — comedic, dark, or cosmic." },
+  { use: "Session 0 character details", description: "Spin for backstory elements, personal flaws, childhood events, or the nature of your character's inciting trauma." },
+];
+---
+
+<Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com/" },
+    { name: "Blog", url: "https://realwheelpicker.com/blog" },
+    { name: title, url: `https://realwheelpicker.com${canonical}` }
+  ]} />
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <!-- Hero -->
+      <header class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-purple-400 font-medium">
+          <Dice5 size={16} className="text-purple-400" />
+          <span>Tabletop RPG</span>
+          <span class="text-gray-500">·</span>
+          <span class="text-gray-400">11 min read</span>
+        </div>
+        <h1 class="text-3xl font-bold text-white leading-tight">
+          D&D Random Wheel: 40+ Tables for Encounters, NPCs, Weather & Wild Magic
+        </h1>
+        <p class="text-lg text-gray-300">
+          Your players just took a left turn. You had 45 minutes of content for a right turn. The random wheel is every DM's best improvisation tool — it generates the unexpected instantly, makes decisions feel cosmically random, and keeps you from defaulting to "you see a goblin" for the fifth time this arc. Here are 40+ tables you can paste directly into your wheel.
+        </p>
+      </header>
+
+      <!-- ToC -->
+      <nav class="bg-white/5 border border-white/10 rounded-xl p-6">
+        <h2 class="text-white font-semibold mb-3">Tables in this guide</h2>
+        <ol class="space-y-1.5 text-sm text-gray-300">
+          <li><a href="#use-cases" class="hover:text-purple-400 transition-colors">1. How DMs use random wheels at the table</a></li>
+          <li><a href="#encounters" class="hover:text-purple-400 transition-colors">2. Random encounter table (15 entries)</a></li>
+          <li><a href="#npcs" class="hover:text-purple-400 transition-colors">3. NPC personality + voice tables</a></li>
+          <li><a href="#wild-magic" class="hover:text-purple-400 transition-colors">4. Wild magic surge table (15 entries)</a></li>
+          <li><a href="#weather" class="hover:text-purple-400 transition-colors">5. Weather conditions table</a></li>
+          <li><a href="#loot" class="hover:text-purple-400 transition-colors">6. Loot table (15 entries)</a></li>
+          <li><a href="#quests" class="hover:text-purple-400 transition-colors">7. Quest hook table (10 entries)</a></li>
+          <li><a href="#tavern" class="hover:text-purple-400 transition-colors">8. Tavern menu</a></li>
+        </ol>
+      </nav>
+
+      <AdPlaceholder position="in-content" client:visible />
+
+      <!-- Section 1: Use Cases -->
+      <section id="use-cases" class="space-y-5">
+        <h2 class="text-2xl font-bold text-white">1. How DMs Use Random Wheels at the Table</h2>
+        <p class="text-gray-300">
+          A random wheel isn't a replacement for a good campaign — it's the infrastructure for improvisation. Here's how experienced DMs use it:
+        </p>
+        <div class="space-y-3">
+          {wheelUseCases.map((item) => (
+            <div class="flex gap-4 bg-white/5 rounded-xl p-4 border border-white/10">
+              <Scroll size={18} className="text-purple-400 mt-0.5 flex-shrink-0" />
+              <div>
+                <p class="text-white font-semibold">{item.use}</p>
+                <p class="text-gray-400 text-sm mt-1">{item.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
+          <p class="text-blue-300 text-sm"><strong>Setup tip:</strong> Before your session, open 5-6 separate browser tabs — one per wheel type (encounters, NPCs, weather, loot, wild magic). Have them ready to spin. You can switch between them in seconds when players inevitably surprise you.</p>
+        </div>
+      </section>
+
+      <!-- Section 2: Encounters -->
+      <section id="encounters" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">2. Random Encounter Table (15 Entries)</h2>
+        <p class="text-gray-300">
+          These encounters are designed to be starting points, not scripts. Each one has room for expansion, negotiation, or a completely different direction based on what your players do.
+        </p>
+        <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+          <p class="text-gray-400 text-xs mb-3 font-semibold uppercase">Copy to your wheel — one per line</p>
+          <ul class="space-y-2">
+            {encounterTypes.map((enc, i) => (
+              <li class="flex items-start gap-3 text-gray-300 text-sm">
+                <span class="text-purple-400 font-mono w-6 flex-shrink-0">{i + 1}.</span>
+                {enc}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <p class="text-gray-300 text-sm">
+          <strong>Customization tip:</strong> Replace generic monsters with monsters native to your campaign's current region. "Pack of dire wolves" becomes "Pack of shadow wolves" in the cursed forest. The structure stays the same; the flavor becomes yours.
+        </p>
+      </section>
+
+      <!-- Section 3: NPCs -->
+      <section id="npcs" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">3. NPC Personality + Voice Tables</h2>
+        <p class="text-gray-300">
+          Two wheels: one for personality, one for speech pattern. Spin both for an instant NPC you can play immediately without any prep.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+            <h3 class="text-white font-semibold mb-3">Personality Wheel</h3>
+            <ul class="space-y-1.5">
+              {npcPersonalities.map((p, i) => (
+                <li class="text-gray-300 text-sm flex items-start gap-2">
+                  <span class="text-purple-400 font-mono text-xs w-5 flex-shrink-0">{i + 1}.</span>
+                  {p}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+            <h3 class="text-white font-semibold mb-3">Voice/Speech Wheel</h3>
+            <ul class="space-y-1.5">
+              {npcVoices.map((v, i) => (
+                <li class="text-gray-300 text-sm flex items-start gap-2">
+                  <span class="text-purple-400 font-mono text-xs w-5 flex-shrink-0">{i + 1}.</span>
+                  {v}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div class="bg-purple-900/30 border border-purple-500/30 rounded-lg p-4">
+          <p class="text-purple-300 text-sm"><strong>DM tip:</strong> Spin personality first, then spin voice. A paranoid NPC who speaks only in questions is a completely different roleplay challenge than a paranoid NPC who is gravelly and dramatic. Two spins, infinite combinations.</p>
+        </div>
+      </section>
+
+      <!-- Section 4: Wild Magic -->
+      <section id="wild-magic" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">4. Wild Magic Surge Table (15 Entries)</h2>
+        <p class="text-gray-300">
+          The official Wild Magic Surge table is great — but it's a d100 table in a book. A spin wheel is faster, visible to the whole table, and can be customized for your campaign's tone. These entries lean comedic but have real gameplay consequences.
+        </p>
+        <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+          <ul class="space-y-2">
+            {wildMagicSurges.map((surge, i) => (
+              <li class="flex items-start gap-3 text-gray-300 text-sm">
+                <Sparkles size={14} className="text-purple-400 mt-0.5 flex-shrink-0" />
+                {surge}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <p class="text-gray-300 text-sm">
+          Want a darker tone? Replace comedic entries with: "The caster ages 1d10 years," "Nearest creature takes 3d6 necrotic damage," or "A portal to the Shadowfell opens for 1 minute." Same wheel structure, completely different atmosphere.
+        </p>
+      </section>
+
+      <!-- Section 5: Weather -->
+      <section id="weather" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">5. Weather Conditions Table</h2>
+        <p class="text-gray-300">
+          Weather is underused in D&D. It creates atmosphere, adds mechanical complexity, and makes the world feel like it has its own agenda. Spin this at the start of each travel day.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {weatherConditions.map((w, i) => (
+            <div class="bg-white/5 border border-white/10 rounded-lg p-3 flex items-start gap-2">
+              <span class="text-purple-400 font-mono text-xs w-5 flex-shrink-0">{i + 1}.</span>
+              <p class="text-gray-300 text-sm">{w}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Section 6: Loot -->
+      <section id="loot" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">6. Loot Table (15 Entries)</h2>
+        <p class="text-gray-300">
+          Loot tables in D&D often produce either boring gold or game-breaking magic items. This table leans toward interesting low-magic finds that create stories, not just stats.
+        </p>
+        <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+          <ul class="space-y-2">
+            {lootTableItems.map((item, i) => (
+              <li class="flex items-start gap-3 text-gray-300 text-sm">
+                <span class="text-yellow-400 font-mono text-xs w-5 flex-shrink-0">{i + 1}.</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <!-- Section 7: Quest Hooks -->
+      <section id="quests" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">7. Quest Hook Table (10 Entries)</h2>
+        <p class="text-gray-300">
+          These hooks are designed to subvert expectations — the obvious interpretation isn't the right one. They reward players who investigate before assuming.
+        </p>
+        <div class="space-y-2">
+          {questHooks.map((hook, i) => (
+            <div class="flex items-start gap-3 bg-white/5 rounded-lg p-4 border border-white/10">
+              <Star size={14} className="text-purple-400 mt-0.5 flex-shrink-0" />
+              <p class="text-gray-300 text-sm">{hook}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Section 8: Tavern Menu -->
+      <section id="tavern" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">8. Tavern Menu</h2>
+        <p class="text-gray-300">
+          When players ask "what's on the menu?" this wheel gives you an immediate answer instead of "uh... stew." Use this during any tavern scene.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {tavernMenuItems.map((item, i) => (
+            <div class="bg-white/5 border border-white/10 rounded-lg p-3">
+              <p class="text-gray-300 text-sm">{item}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="bg-gradient-to-br from-purple-900/40 to-indigo-900/40 border border-purple-500/30 rounded-2xl p-8 text-center space-y-4">
+        <Dice5 size={40} className="text-purple-400 mx-auto" />
+        <h2 class="text-2xl font-bold text-white">Build Your D&D Random Wheel</h2>
+        <p class="text-gray-300 max-w-lg mx-auto">
+          Copy any table above, paste it into Real Wheel Picker, and spin. Ready for your players' next unexpected turn.
+        </p>
+        <a href="/" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+          Open the D&D Wheel <ArrowRight size={18} className="text-white" />
+        </a>
+      </section>
+
+      <RelatedPosts currentSlug={canonical} client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

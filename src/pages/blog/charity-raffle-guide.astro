@@ -1,0 +1,388 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertTriangle, FileText, DollarSign, Shield, Users, Globe } from 'lucide-react';
+
+const title = "How to Run a Charity Raffle Online: Legal Requirements + Free Tools 2026";
+const description = "Complete guide to running a legal charity raffle online. US state-by-state rules, UK Gambling Commission requirements, Canadian provincial laws, winner selection tools, and documentation checklist.";
+const canonical = "/blog/charity-raffle-guide";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": description,
+  "url": `https://realwheelpicker.com${canonical}`,
+  "author": { "@type": "Person", "name": "Real Wheel Picker Editorial Team", "url": "https://realwheelpicker.com/about" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2026-04-07",
+  "dateModified": "2026-04-07",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": `https://realwheelpicker.com${canonical}` }
+};
+
+const usStates = [
+  { state: "California", license: "Required for prizes over $25,000", notes: "Must register with AG's office, file financial report within 30 days" },
+  { state: "New York", license: "Required — games of chance license", notes: "County clerk issues license, must be nonprofit 501(c)", },
+  { state: "Texas", license: "Not required if under $50,000/year", notes: "Cannot charge admission fee, must be charitable organization" },
+  { state: "Florida", license: "Required for prizes over $500", notes: "DBPR license, must post results publicly" },
+  { state: "Washington", license: "Required — charitable gaming license", notes: "Washington State Gambling Commission, strict financial reporting" },
+  { state: "Illinois", license: "Required for prizes over $5,000", notes: "Illinois Gaming Board, must have 35-member nonprofit" },
+  { state: "Pennsylvania", license: "Required — small games of chance permit", notes: "Local municipality issues permit, 50% of proceeds to charity" },
+  { state: "Colorado", license: "Required — bingo/raffle license", notes: "Secretary of State, gross receipts reporting required" },
+];
+
+const ukRules = [
+  { rule: "Small lotteries exemption", detail: "Prizes under £500, no rollover, tickets sold only at same event" },
+  { rule: "Private society lotteries", detail: "Members only, no external ticket sales, all proceeds to good cause" },
+  { rule: "Customer lotteries", detail: "On single premises only, no rollover, no profit" },
+  { rule: "Registered lotteries", detail: "Non-commercial only, register with Gambling Commission, prizes up to £50 per ticket" },
+  { rule: "Licensed lotteries", detail: "Full operator licence required, complex compliance, for large operations" },
+];
+
+const canadaProvinces = [
+  { province: "Ontario", body: "Alcohol and Gaming Commission", notes: "Licence required for prizes over $500, application fee based on prize value" },
+  { province: "British Columbia", body: "Gaming Policy & Enforcement Branch", notes: "Must be registered charity, licence by prize tier" },
+  { province: "Quebec", body: "Régie des alcools, des courses et des jeux", notes: "Strict requirements, French-language compliance mandatory" },
+  { province: "Alberta", body: "Alberta Gaming, Liquor & Cannabis", notes: "Registered charity required, community licence for smaller events" },
+];
+
+const documentationChecklist = [
+  "Proof of nonprofit/charitable status (501(c)(3), charity registration number)",
+  "Copy of raffle licence or exemption documentation",
+  "Complete list of all ticket purchasers with contact details",
+  "Ticket prices, total tickets printed vs. sold",
+  "Description and fair market value of all prizes",
+  "Winner selection method and timestamp (screen recording recommended)",
+  "Winner contact attempts and responses",
+  "Final financial report (gross proceeds, expenses, net to charity)",
+  "Post-draw audit signature if required by jurisdiction",
+];
+
+const winnerSelectionBestPractices = [
+  { step: "Pre-commit", action: "Publish the full entry list 24h before the draw", why: "Shows no last-minute additions, builds trust" },
+  { step: "Live draw", action: "Stream on YouTube/Facebook Live with ticket count visible", why: "Real-time witness, timestamped record" },
+  { step: "Tool selection", action: "Use a CSPRNG-based wheel (not Math.random())", why: "Cryptographic randomness is auditable" },
+  { step: "Documentation", action: "Screen-record the entire selection process", why: "Evidence for disputes and regulatory filing" },
+  { step: "Announcement", action: "Contact winner within 48h, post publicly within 72h", why: "Regulatory requirement in most jurisdictions" },
+  { step: "Archive", action: "Keep all records for minimum 3 years", why: "Audit defense, IRS/HMRC requirements" },
+];
+
+const commonMistakes = [
+  { mistake: "Calling it a raffle when it's a sweepstakes", risk: "Legal misclassification — raffle requires ticket purchase, sweepstakes must be free entry" },
+  { mistake: "Selling tickets across state lines online", risk: "Triggers federal lottery laws — potentially illegal without federal exception" },
+  { mistake: "Using Math.random() or basic shuffle", risk: "Not auditably random — open to accusations of manipulation" },
+  { mistake: "Skipping financial reporting", risk: "Loss of nonprofit status, regulatory fines, personal liability for organizers" },
+  { mistake: "No winner contact documentation", risk: "Unclaimed prizes create legal liability; must show attempts were made" },
+  { mistake: "Giving prizes to organizers or their families", risk: "Automatic disqualification, potential fraud charges" },
+];
+---
+
+<Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com/" },
+    { name: "Blog", url: "https://realwheelpicker.com/blog" },
+    { name: title, url: `https://realwheelpicker.com${canonical}` }
+  ]} />
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <!-- Hero -->
+      <header class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-purple-400 font-medium">
+          <Shield size={16} className="text-purple-400" />
+          <span>Charity & Fundraising</span>
+          <span class="text-gray-500">·</span>
+          <span class="text-gray-400">12 min read</span>
+        </div>
+        <h1 class="text-3xl font-bold text-white leading-tight">
+          How to Run a Charity Raffle Online: Legal Requirements + Free Tools 2026
+        </h1>
+        <p class="text-lg text-gray-300">
+          Charity raffles raise billions every year. They also generate thousands of regulatory fines — usually because well-meaning organizers didn't know the rules. This guide covers the legal requirements in the US, UK, and Canada, plus how to pick winners in a way that's transparent, documented, and dispute-proof.
+        </p>
+        <div class="bg-yellow-900/30 border border-yellow-500/40 rounded-lg p-4">
+          <div class="flex items-start gap-3">
+            <AlertTriangle size={20} className="text-yellow-400 mt-0.5 flex-shrink-0" />
+            <p class="text-yellow-200 text-sm"><strong>Disclaimer:</strong> This guide is for informational purposes only and does not constitute legal advice. Raffle laws vary by jurisdiction and change frequently. Always consult a lawyer familiar with charitable gaming laws in your specific location before running a raffle.</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Table of Contents -->
+      <nav class="bg-white/5 border border-white/10 rounded-xl p-6">
+        <h2 class="text-white font-semibold mb-3">What's in this guide</h2>
+        <ol class="space-y-1.5 text-sm text-gray-300">
+          <li><a href="#raffle-vs-sweepstakes" class="hover:text-purple-400 transition-colors">1. Raffle vs. sweepstakes — the legal difference that matters</a></li>
+          <li><a href="#us-states" class="hover:text-purple-400 transition-colors">2. US state-by-state requirements</a></li>
+          <li><a href="#uk-rules" class="hover:text-purple-400 transition-colors">3. UK Gambling Commission rules</a></li>
+          <li><a href="#canada" class="hover:text-purple-400 transition-colors">4. Canadian provincial licensing</a></li>
+          <li><a href="#online-raffles" class="hover:text-purple-400 transition-colors">5. The problem with online ticket sales across borders</a></li>
+          <li><a href="#winner-selection" class="hover:text-purple-400 transition-colors">6. How to pick winners transparently</a></li>
+          <li><a href="#documentation" class="hover:text-purple-400 transition-colors">7. Documentation checklist</a></li>
+          <li><a href="#mistakes" class="hover:text-purple-400 transition-colors">8. Common mistakes that get charities in trouble</a></li>
+        </ol>
+      </nav>
+
+      <AdPlaceholder position="in-content" client:visible />
+
+      <!-- Section 1: Raffle vs Sweepstakes -->
+      <section id="raffle-vs-sweepstakes" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">1. Raffle vs. Sweepstakes — The Legal Difference That Changes Everything</h2>
+        <p class="text-gray-300">
+          These two words get mixed up constantly, and the confusion creates legal exposure. In most jurisdictions, the distinction is:
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-purple-900/30 border border-purple-500/30 rounded-xl p-5">
+            <h3 class="text-purple-300 font-semibold mb-3 flex items-center gap-2">
+              <FileText size={18} className="text-purple-400" /> Raffle
+            </h3>
+            <ul class="space-y-2 text-gray-300 text-sm">
+              <li>• Requires purchase of ticket to enter</li>
+              <li>• Winner chosen by random draw from paid entries</li>
+              <li>• Regulated as "lottery" in most jurisdictions</li>
+              <li>• Usually requires nonprofit status + licence</li>
+              <li>• Proceeds must go to charitable purpose</li>
+            </ul>
+          </div>
+          <div class="bg-green-900/30 border border-green-500/30 rounded-xl p-5">
+            <h3 class="text-green-300 font-semibold mb-3 flex items-center gap-2">
+              <Globe size={18} className="text-green-400" /> Sweepstakes
+            </h3>
+            <ul class="space-y-2 text-gray-300 text-sm">
+              <li>• Must have free alternative method of entry (AMOE)</li>
+              <li>• No purchase necessary to win</li>
+              <li>• Not regulated as lottery — can run commercially</li>
+              <li>• Winner chosen randomly from all entries</li>
+              <li>• Subject to different FTC/ASA rules</li>
+            </ul>
+          </div>
+        </div>
+        <p class="text-gray-300">
+          The critical element is "consideration" — if people have to pay or provide significant effort to enter, it's a lottery. If there's a free entry path, it's a sweepstakes. Most charity "raffles" are legally lotteries, which is why they require licences in most places.
+        </p>
+        <div class="bg-red-900/20 border border-red-500/30 rounded-lg p-4">
+          <p class="text-red-300 text-sm"><strong>Important:</strong> Running an unlicensed lottery (even for charity) is a criminal offence in the UK and a misdemeanor or felony in many US states. "We didn't know" is not a defence.</p>
+        </div>
+      </section>
+
+      <!-- Section 2: US States -->
+      <section id="us-states" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">2. US State-by-State Requirements</h2>
+        <p class="text-gray-300">
+          There is no unified federal charity raffle law in the US. Each state regulates independently — and some states (Utah, Hawaii) ban charitable lotteries entirely. Here's a snapshot of major states:
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-white/10">
+                <th class="text-left text-gray-400 font-medium py-2 pr-4">State</th>
+                <th class="text-left text-gray-400 font-medium py-2 pr-4">Licence</th>
+                <th class="text-left text-gray-400 font-medium py-2">Key Rules</th>
+              </tr>
+            </thead>
+            <tbody>
+              {usStates.map((item, i) => (
+                <tr class={`border-b border-white/5 ${i % 2 === 0 ? 'bg-white/2' : ''}`}>
+                  <td class="text-white font-medium py-3 pr-4">{item.state}</td>
+                  <td class="text-yellow-300 py-3 pr-4">{item.license}</td>
+                  <td class="text-gray-300 py-3">{item.notes}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div class="bg-white/5 rounded-xl p-5 space-y-3">
+          <h3 class="text-white font-semibold">Federal layer: The Charity Games Advertising Clarification Act</h3>
+          <p class="text-gray-300 text-sm">
+            Federal law generally prohibits operating lotteries, but the 1988 Charity Games Act provides an exception: states may authorize charitable lotteries without violating federal law. This means if your state authorizes it and you have a valid licence, you're covered federally. But the moment you sell tickets across state lines online, you may be triggering federal mail or wire fraud statutes. This is why most lawyers advise keeping ticket sales strictly within your licensed state.
+          </p>
+        </div>
+        <p class="text-gray-300">
+          <strong>States that prohibit charitable raffles entirely:</strong> Utah and Hawaii have historically banned most forms of charitable gambling. Alabama and Alaska have very limited exemptions. Always verify current law with a local attorney — these rules change with legislation.
+        </p>
+      </section>
+
+      <!-- Section 3: UK -->
+      <section id="uk-rules" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">3. UK Gambling Commission Rules</h2>
+        <p class="text-gray-300">
+          In the UK, lotteries are regulated under the Gambling Act 2005. The good news: there are several exempt categories that don't require a Gambling Commission licence, as long as you stay within the limits.
+        </p>
+        <div class="space-y-3">
+          {ukRules.map((item) => (
+            <div class="bg-white/5 border border-white/10 rounded-lg p-4">
+              <h3 class="text-white font-semibold text-sm">{item.rule}</h3>
+              <p class="text-gray-400 text-sm mt-1">{item.detail}</p>
+            </div>
+          ))}
+        </div>
+        <p class="text-gray-300">
+          For most charity events, the "small society lottery" category is the relevant one. If your charity has an annual turnover under £250,000, you can register with your local authority (not the Gambling Commission) and run lotteries with ticket prices up to £2 and prizes up to £25,000. Above those thresholds, you need a full Gambling Commission operating licence — a significantly more complex process.
+        </p>
+        <div class="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
+          <p class="text-blue-300 text-sm"><strong>UK requirement:</strong> At least 20% of proceeds from a registered lottery must go to the society's purposes. Maximum 80% can be used for prizes and expenses combined. Keep detailed accounts — HMRC and the Gambling Commission both have audit rights.</p>
+        </div>
+      </section>
+
+      <!-- Section 4: Canada -->
+      <section id="canada" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">4. Canadian Provincial Licensing</h2>
+        <p class="text-gray-300">
+          Canada is similar to the US — lottery regulation is provincial, not federal. Each province has its own gaming authority. The Criminal Code of Canada makes lotteries illegal except where authorized by provincial licence.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {canadaProvinces.map((p) => (
+            <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+              <h3 class="text-white font-semibold">{p.province}</h3>
+              <p class="text-purple-400 text-sm">{p.body}</p>
+              <p class="text-gray-400 text-sm mt-2">{p.notes}</p>
+            </div>
+          ))}
+        </div>
+        <p class="text-gray-300">
+          Most provinces require: proof of charitable registration, a completed licence application, prize descriptions with fair market values, and a post-event financial report. Licence fees are typically a percentage of gross prize value. Processing times range from 2 weeks (Alberta) to 8+ weeks (Quebec) — plan well ahead.
+        </p>
+      </section>
+
+      <!-- Section 5: Online Sales Problem -->
+      <section id="online-raffles" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">5. The Problem With Online Ticket Sales Across Borders</h2>
+        <p class="text-gray-300">
+          This is where most charities run into serious trouble: they get a licence in their state or province, then put the ticket sales link on social media — and suddenly they have buyers from 40 different jurisdictions, none of which they're licensed in.
+        </p>
+        <div class="bg-red-900/20 border border-red-500/30 rounded-xl p-5 space-y-3">
+          <h3 class="text-red-300 font-semibold flex items-center gap-2">
+            <AlertTriangle size={18} className="text-red-400" /> The core problem
+          </h3>
+          <p class="text-gray-300 text-sm">
+            A raffle licence authorizes you to sell tickets in a specific jurisdiction. When someone in a different state, province, or country buys a ticket online, you may be violating lottery laws in their jurisdiction — even though you followed the rules in yours. US federal courts have ruled that the Wire Act and mail fraud statutes can apply to interstate lottery ticket sales, even charitable ones.
+          </p>
+        </div>
+        <h3 class="text-white font-semibold">Practical solutions:</h3>
+        <ul class="space-y-3 text-gray-300">
+          <li class="flex items-start gap-3">
+            <CheckCircle size={18} className="text-green-400 mt-0.5 flex-shrink-0" />
+            <span><strong class="text-white">Restrict sales geographically</strong> — Use your ticket platform's geo-restriction settings to block purchases from outside your licensed jurisdiction.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <CheckCircle size={18} className="text-green-400 mt-0.5 flex-shrink-0" />
+            <span><strong class="text-white">Add a declaration checkbox</strong> — Require buyers to confirm they're residents of the authorized jurisdiction before purchase.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <CheckCircle size={18} className="text-green-400 mt-0.5 flex-shrink-0" />
+            <span><strong class="text-white">Consider a sweepstakes format instead</strong> — If you add a free alternative entry method (mail-in, online form without purchase), you convert the legal classification from lottery to sweepstakes, eliminating the licence requirement in most US states.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <CheckCircle size={18} className="text-green-400 mt-0.5 flex-shrink-0" />
+            <span><strong class="text-white">In-person events</strong> — Selling tickets only at a physical event sidesteps the cross-border issue entirely, and often qualifies for simpler exemptions.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section 6: Winner Selection -->
+      <section id="winner-selection" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">6. How to Pick Winners Transparently</h2>
+        <p class="text-gray-300">
+          The winner selection is the moment of highest legal and reputational risk. A random draw that looks rigged — or actually is rigged — can end your charity's credibility. Here's the process that protects you:
+        </p>
+        <div class="space-y-3">
+          {winnerSelectionBestPractices.map((item, i) => (
+            <div class="flex gap-4 bg-white/5 rounded-xl p-4 border border-white/10">
+              <div class="bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">{i + 1}</div>
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-purple-300 font-semibold text-sm">{item.step}</span>
+                  <span class="text-gray-500">→</span>
+                  <span class="text-white text-sm">{item.action}</span>
+                </div>
+                <p class="text-gray-400 text-sm">{item.why}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="bg-purple-900/30 border border-purple-500/30 rounded-xl p-6">
+          <h3 class="text-white font-semibold mb-3">Why tool choice matters for credibility</h3>
+          <p class="text-gray-300 text-sm mb-3">
+            Not all "random" is equal. JavaScript's Math.random() uses a pseudo-random algorithm that produces predictable sequences if you know the seed. A determined critic could theoretically claim the draw was manipulated.
+          </p>
+          <p class="text-gray-300 text-sm mb-3">
+            Real Wheel Picker uses <code class="bg-white/10 px-1 rounded">crypto.getRandomValues()</code> — the Web Cryptography API, the same standard used by password managers and banking software. The W3C specification requires implementations to use "cryptographically secure pseudo-random number generators." That's a verifiable, auditable claim.
+          </p>
+          <a href="/" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            Use our free raffle wheel <ArrowRight size={16} className="text-white" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 7: Documentation -->
+      <section id="documentation" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">7. Documentation Checklist</h2>
+        <p class="text-gray-300">
+          Every regulatory body — IRS, HMRC, provincial gaming authorities — requires post-raffle reporting. Keep these documents for at least 3 years, 7 years if you're in the US and the IRS requires it for your tax exemption status.
+        </p>
+        <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+          <div class="space-y-2">
+            {documentationChecklist.map((item) => (
+              <label class="flex items-start gap-3 cursor-pointer group">
+                <div class="w-5 h-5 border-2 border-purple-500 rounded mt-0.5 flex-shrink-0 group-hover:bg-purple-500/20 transition-colors"></div>
+                <span class="text-gray-300 text-sm">{item}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div class="bg-white/5 rounded-xl p-5">
+          <h3 class="text-white font-semibold mb-2">Financial reporting requirements (US nonprofit)</h3>
+          <p class="text-gray-300 text-sm">
+            If your organization files Form 990, gaming income is reported on Schedule G. Gross receipts from gaming over $15,000 trigger Part III of Schedule G. Paid gaming workers must receive W-2s if their winnings exceed $600 in a calendar year. If a winner's prize is over $600 and more than 300x the ticket price, your organization must withhold 24% federal tax and file Form W-2G.
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 8: Common Mistakes -->
+      <section id="mistakes" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">8. Common Mistakes That Get Charities in Trouble</h2>
+        <div class="space-y-3">
+          {commonMistakes.map((item) => (
+            <div class="bg-red-900/10 border border-red-500/20 rounded-lg p-4">
+              <div class="flex items-start gap-3">
+                <AlertTriangle size={18} className="text-red-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p class="text-white font-semibold text-sm">{item.mistake}</p>
+                  <p class="text-red-300 text-sm mt-1"><strong>Risk:</strong> {item.risk}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="bg-green-900/20 border border-green-500/30 rounded-xl p-6">
+          <h3 class="text-green-300 font-semibold mb-3 flex items-center gap-2">
+            <CheckCircle size={18} className="text-green-400" /> The short version
+          </h3>
+          <p class="text-gray-300 text-sm">
+            Get licensed before selling a single ticket. Restrict sales to your licensed jurisdiction. Use a verifiably random tool. Document everything. File your financial reports on time. Consult a lawyer if your prize value or expected gross receipts exceed $10,000 — the licence fee and legal consultation cost a fraction of what a regulatory investigation costs.
+          </p>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="bg-gradient-to-br from-purple-900/40 to-indigo-900/40 border border-purple-500/30 rounded-2xl p-8 text-center space-y-4">
+        <DollarSign size={40} className="text-purple-400 mx-auto" />
+        <h2 class="text-2xl font-bold text-white">Ready to Run Your Charity Draw?</h2>
+        <p class="text-gray-300 max-w-lg mx-auto">
+          Once you have your licence sorted, use Real Wheel Picker to run a cryptographically fair, screen-recordable draw that satisfies regulatory transparency requirements.
+        </p>
+        <a href="/" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+          Start the Free Raffle Wheel <ArrowRight size={18} className="text-white" />
+        </a>
+      </section>
+
+      <RelatedPosts currentSlug={canonical} client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

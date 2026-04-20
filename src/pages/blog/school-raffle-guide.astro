@@ -1,0 +1,393 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertTriangle, BookOpen, Users, DollarSign, Star, Clock, Shield } from 'lucide-react';
+
+const title = "School Raffle Guide: How PTAs & Teachers Run Fundraising Raffles That Actually Make Money";
+const description = "Everything PTAs, teachers, and school fundraising committees need to know about running a school raffle — ticket pricing, prize sourcing, legal compliance, digital vs. paper tickets, and picking winners fairly.";
+const canonical = "/blog/school-raffle-guide";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": description,
+  "url": `https://realwheelpicker.com${canonical}`,
+  "author": { "@type": "Person", "name": "Real Wheel Picker Editorial Team", "url": "https://realwheelpicker.com/about" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2026-04-17",
+  "dateModified": "2026-04-17",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": `https://realwheelpicker.com${canonical}` }
+};
+
+const raffleTypes = [
+  {
+    name: "Traditional Paper Raffle",
+    description: "Printed tickets with counterfoils, sold by students and parents. Winner drawn from a drum or box.",
+    best_for: "Community events, school fairs, dinner galas",
+    revenue_potential: "High — physical tickets feel tangible, parents buy multiple",
+    effort: "High — printing, distribution, collection, physical draw",
+    compliance: "Most familiar to regulators — well-established compliance path"
+  },
+  {
+    name: "Digital Online Raffle",
+    description: "Participants buy entries via an online platform (Eventbrite, Rafflecopter, Gleam). Winner selected digitally.",
+    best_for: "Schools with strong digital parent community, remote participants",
+    revenue_potential: "Medium-high — easy to share, but lower impulse purchase rate",
+    effort: "Medium — setup time, but no physical logistics",
+    compliance: "More complex — cross-jurisdiction ticket sales require extra care"
+  },
+  {
+    name: "Classroom Raffle (Behavior Incentive)",
+    description: "Teacher gives tickets for positive behaviors throughout the week. Friday draw for small prizes.",
+    best_for: "Classroom management, not fundraising",
+    revenue_potential: "None — these are not fundraising raffles",
+    effort: "Low ongoing — becomes habitual",
+    compliance: "No licensing needed — internal incentive system, not a public lottery"
+  },
+  {
+    name: "Reverse Raffle",
+    description: "Instead of the first number drawn winning, the LAST number remaining wins. All other numbers are eliminated one by one.",
+    best_for: "Gala events, seated dinners — creates a 90-minute event from one raffle",
+    revenue_potential: "Very high — creates event momentum, people buy to avoid elimination",
+    effort: "High — requires skilled MC, specific format",
+    compliance: "Same as traditional raffle — licence requirements apply"
+  },
+  {
+    name: "50/50 Raffle",
+    description: "Half the ticket revenue goes to a winner, half to the school. Winner takes half the pot.",
+    best_for: "Events where prize sourcing is difficult, sports events",
+    revenue_potential: "Moderate — pot grows throughout event, creating urgency",
+    effort: "Low — simple format, no prize to source",
+    compliance: "Regulated as lottery in most US states — licence still required"
+  },
+];
+
+const ticketPricing = [
+  { option: "Single ticket", price_range: "$2-$5", best_for: "Accessibility — anyone can enter" },
+  { option: "Bundle deal (5 for $20)", price_range: "$4 per ticket", best_for: "Revenue maximization — most popular option" },
+  { option: "Book of 10", price_range: "$25-$35", best_for: "Committed donors, grandparents buying for grandkids" },
+  { option: "Sponsorship tier", price_range: "$100-$500", best_for: "Local businesses, employer matching programs" },
+];
+
+const prizeIdeas = [
+  { tier: "Grand Prize ($500-$2000)", examples: ["iPad or laptop", "Family vacation package", "Season tickets to local sports team", "Home appliance", "Gift card bundle ($500+)"] },
+  { tier: "Mid Prizes ($100-$500)", examples: ["Restaurant dinner packages", "Spa vouchers", "Shopping mall gift cards", "Sports equipment", "Amazon / Visa gift cards"] },
+  { tier: "Small Prizes ($25-$100)", examples: ["Movie night packages", "Book bundles", "Coffee shop vouchers", "Local experience vouchers", "Kids' game/toy packages"] },
+];
+
+const prizeSourceStrategies = [
+  { strategy: "Business solicitation letters", detail: "Send formal letters to 50+ local businesses on school letterhead. Conversion rate is typically 15-25%. Restaurants, hotels, and activity providers donate frequently." },
+  { strategy: "Parent network asks", detail: "Parents who work in relevant industries often have access to experiences — sports tickets, concert tickets, hotel stays, product samples. A direct ask via the PTA newsletter is highly effective." },
+  { strategy: "Online marketplace", detail: "Amazon, Costco, and major retailers offer bulk gift cards. Buy $500 Visa cards for face value and offer them as prizes — simple, high-value, universally desirable." },
+  { strategy: "Experience over objects", detail: "Principal for a day, VIP parking spot for a semester, naming rights to a school event — these are zero-cost to the school and create unique, bid-worthy prizes." },
+  { strategy: "Donation aggregation", detail: "Instead of one business giving a $500 prize, ask 20 businesses for $25 each. A gift basket of $25 donations has the same value but creates 20 relationships." },
+];
+
+const legalChecklist = [
+  { item: "Check state/provincial charity lottery licence requirements", detail: "Most US states require nonprofits/PTAs to apply for a specific charitable gaming licence. Processing time varies 2-8 weeks." },
+  { item: "Verify your organization's 501(c) status", detail: "Many states only allow licensed charitable raffles for registered 501(c)(3) or equivalent organizations — confirm your PTA qualifies." },
+  { item: "Confirm ticket sale geographic restrictions", detail: "Don't sell tickets online without understanding jurisdiction rules. In-person school sales are typically safest." },
+  { item: "Document all prize fair market values", detail: "Required for tax reporting if any prize exceeds $600. IRS Form W-2G may be required." },
+  { item: "File post-event financial report", detail: "Many state gaming authorities require a report within 30-90 days of the raffle showing gross receipts, expenses, and net amount to charity." },
+  { item: "Keep records for 3+ years", detail: "Include: ticket stubs (or digital records), entry list, financial accounts, winner documentation." },
+];
+
+const digitalVsPaper = [
+  { factor: "Setup time", paper: "High — design, print, distribute", digital: "Medium — platform setup + sharing", winner: "Digital" },
+  { factor: "Cost", paper: "Printing costs ($50-$300 typical)", digital: "Platform fees (2-5% typically)", winner: "Tie — both have costs" },
+  { factor: "Impulse purchases", paper: "High — physical ticket in hand", digital: "Lower — requires intentional action", winner: "Paper" },
+  { factor: "Tracking entries", paper: "Stub-based, manual reconciliation", digital: "Automated, accurate", winner: "Digital" },
+  { factor: "Geographic reach", paper: "Restricted to distribution area", digital: "Unlimited (but adds legal complexity)", winner: "Digital (if legal)" },
+  { factor: "Dispute handling", paper: "Harder — physical ticket verification", digital: "Easier — timestamped digital records", winner: "Digital" },
+];
+
+const winnerSelectionBestPractices = [
+  { step: "Pre-announce the draw date, time, and location", why: "Parents who bought tickets should have the option to be present. Many states require public draws." },
+  { step: "Count all tickets/entries publicly", why: "Announce the total number of entries before drawing — this lets ticket buyers verify their odds." },
+  { step: "Use a fair, observable random method", why: "Traditional bingo drum is classic. For digital lists, use a random picker like Real Wheel Picker on a projected screen." },
+  { step: "Have an independent adult present", why: "Someone from outside the organizing committee adds credibility. A teacher, principal, or community member." },
+  { step: "Announce winner immediately and publicly", why: "Delay breeds suspicion. Announce name, have them come forward, hand over prize on the spot or document it clearly." },
+  { step: "Record the draw on video", why: "Parents unable to attend will appreciate seeing the draw was conducted fairly. Post to the school's social media." },
+];
+---
+
+<Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com/" },
+    { name: "Blog", url: "https://realwheelpicker.com/blog" },
+    { name: title, url: `https://realwheelpicker.com${canonical}` }
+  ]} />
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <!-- Hero -->
+      <header class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-purple-400 font-medium">
+          <BookOpen size={16} className="text-purple-400" />
+          <span>Education & Fundraising</span>
+          <span class="text-gray-500">·</span>
+          <span class="text-gray-400">12 min read</span>
+        </div>
+        <h1 class="text-3xl font-bold text-white leading-tight">
+          School Raffle Guide: How PTAs & Teachers Run Fundraising Raffles That Actually Make Money
+        </h1>
+        <p class="text-lg text-gray-300">
+          A well-run school raffle can raise $5,000-$50,000 for a single event. A poorly run one creates legal headaches, parent complaints, and a very awkward PTA meeting. This guide covers every stage — choosing the format, sourcing prizes, complying with state laws, pricing tickets, and conducting a draw that no one can dispute.
+        </p>
+      </header>
+
+      <!-- ToC -->
+      <nav class="bg-white/5 border border-white/10 rounded-xl p-6">
+        <h2 class="text-white font-semibold mb-3">In this guide</h2>
+        <ol class="space-y-1.5 text-sm text-gray-300">
+          <li><a href="#types" class="hover:text-purple-400 transition-colors">1. Five school raffle formats compared</a></li>
+          <li><a href="#legal" class="hover:text-purple-400 transition-colors">2. Legal compliance checklist</a></li>
+          <li><a href="#prizes" class="hover:text-purple-400 transition-colors">3. Prize sourcing — how to get $2,000+ in prizes for free</a></li>
+          <li><a href="#tickets" class="hover:text-purple-400 transition-colors">4. Ticket pricing strategy</a></li>
+          <li><a href="#digital-vs-paper" class="hover:text-purple-400 transition-colors">5. Digital vs. paper tickets</a></li>
+          <li><a href="#winner" class="hover:text-purple-400 transition-colors">6. Conducting a fair, undisputable draw</a></li>
+          <li><a href="#classroom" class="hover:text-purple-400 transition-colors">7. Classroom behavior raffles (teachers)</a></li>
+        </ol>
+      </nav>
+
+      <AdPlaceholder position="in-content" client:visible />
+
+      <!-- Section 1: Types -->
+      <section id="types" class="space-y-5">
+        <h2 class="text-2xl font-bold text-white">1. Five School Raffle Formats</h2>
+        <p class="text-gray-300">
+          Not all raffles are the same. The format determines your revenue potential, logistical burden, and legal compliance path:
+        </p>
+        <div class="space-y-4">
+          {raffleTypes.map((type, i) => (
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+              <h3 class="text-white font-bold text-lg">{i + 1}. {type.name}</h3>
+              <p class="text-gray-300 text-sm mt-2">{type.description}</p>
+              <div class="grid grid-cols-2 gap-3 mt-4">
+                <div>
+                  <p class="text-gray-500 text-xs uppercase font-semibold">Best for</p>
+                  <p class="text-gray-300 text-sm">{type.best_for}</p>
+                </div>
+                <div>
+                  <p class="text-gray-500 text-xs uppercase font-semibold">Revenue potential</p>
+                  <p class="text-gray-300 text-sm">{type.revenue_potential}</p>
+                </div>
+                <div>
+                  <p class="text-gray-500 text-xs uppercase font-semibold">Effort</p>
+                  <p class="text-gray-300 text-sm">{type.effort}</p>
+                </div>
+                <div>
+                  <p class="text-gray-500 text-xs uppercase font-semibold">Compliance</p>
+                  <p class="text-gray-300 text-sm">{type.compliance}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Section 2: Legal -->
+      <section id="legal" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">2. Legal Compliance Checklist</h2>
+        <p class="text-gray-300">
+          School fundraising raffles are subject to the same charitable gaming laws as any other lottery. "It's for the kids" doesn't exempt you from licensing requirements. Work through this checklist before selling a single ticket:
+        </p>
+        <div class="space-y-3">
+          {legalChecklist.map((item) => (
+            <div class="bg-white/5 border border-white/10 rounded-lg p-4">
+              <div class="flex items-start gap-3">
+                <Shield size={16} className="text-purple-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p class="text-white font-semibold text-sm">{item.item}</p>
+                  <p class="text-gray-400 text-sm mt-1">{item.detail}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4">
+          <p class="text-yellow-300 text-sm"><strong>Start the licence application early.</strong> Most states process charitable gaming licences in 4-8 weeks. If your raffle is tied to an event date (annual fair, gala), apply 3 months out. Late applications are one of the most common reasons school raffles get cancelled or run illegally by accident.</p>
+        </div>
+      </section>
+
+      <!-- Section 3: Prizes -->
+      <section id="prizes" class="space-y-5">
+        <h2 class="text-2xl font-bold text-white">3. Prize Sourcing — How to Get $2,000+ in Prizes for Free</h2>
+        <p class="text-gray-300">
+          The prize is the primary driver of raffle ticket sales. A compelling prize pool of $2,000-$5,000 can justify $25-$50 ticket prices. Here's how to source prizes without spending the fundraising budget:
+        </p>
+        <div class="space-y-3">
+          {prizeSourceStrategies.map((item) => (
+            <div class="flex gap-4 bg-white/5 rounded-xl p-4 border border-white/10">
+              <Star size={18} className="text-purple-400 mt-0.5 flex-shrink-0" />
+              <div>
+                <p class="text-white font-semibold">{item.strategy}</p>
+                <p class="text-gray-400 text-sm mt-1">{item.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <h3 class="text-white font-semibold mt-4">Prize tiers that drive ticket sales</h3>
+        <div class="space-y-4">
+          {prizeIdeas.map((tier) => (
+            <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+              <h4 class="text-purple-300 font-bold">{tier.tier}</h4>
+              <ul class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-1">
+                {tier.examples.map((example) => (
+                  <li class="flex items-center gap-2 text-gray-300 text-sm">
+                    <CheckCircle size={12} className="text-green-400 flex-shrink-0" /> {example}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Section 4: Tickets -->
+      <section id="tickets" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">4. Ticket Pricing Strategy</h2>
+        <p class="text-gray-300">
+          Ticket pricing is where most school raffles leave money on the table. Single $1 tickets are almost always underpriced given the prize pool. Research consistently shows that bundle pricing drives the highest revenue per buyer:
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-white/10">
+                <th class="text-left text-gray-400 font-medium py-2 pr-4">Option</th>
+                <th class="text-left text-gray-400 font-medium py-2 pr-4">Price Range</th>
+                <th class="text-left text-gray-400 font-medium py-2">Best for</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ticketPricing.map((t, i) => (
+                <tr class={`border-b border-white/5 ${i % 2 === 0 ? 'bg-white/2' : ''}`}>
+                  <td class="text-white font-medium py-3 pr-4">{t.option}</td>
+                  <td class="text-green-300 py-3 pr-4">{t.price_range}</td>
+                  <td class="text-gray-300 py-3">{t.best_for}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div class="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
+          <p class="text-blue-300 text-sm"><strong>The bundle psychology:</strong> When you offer "5 for $20" alongside "$5 each," approximately 70-80% of buyers choose the bundle even though the per-ticket price is the same. The bundle signals that you expect them to buy multiple and removes the decision about how many to get.</p>
+        </div>
+      </section>
+
+      <!-- Section 5: Digital vs Paper -->
+      <section id="digital-vs-paper" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">5. Digital vs. Paper Tickets</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-white/10">
+                <th class="text-left text-gray-400 font-medium py-2 pr-3">Factor</th>
+                <th class="text-left text-gray-400 font-medium py-2 pr-3">Paper</th>
+                <th class="text-left text-gray-400 font-medium py-2 pr-3">Digital</th>
+                <th class="text-left text-gray-400 font-medium py-2">Winner</th>
+              </tr>
+            </thead>
+            <tbody>
+              {digitalVsPaper.map((row, i) => (
+                <tr class={`border-b border-white/5 ${i % 2 === 0 ? 'bg-white/2' : ''}`}>
+                  <td class="text-white font-medium py-3 pr-3">{row.factor}</td>
+                  <td class="text-gray-300 py-3 pr-3 text-xs">{row.paper}</td>
+                  <td class="text-gray-300 py-3 pr-3 text-xs">{row.digital}</td>
+                  <td class="text-purple-300 py-3 text-xs font-semibold">{row.winner}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-gray-300">
+          <strong>Recommendation:</strong> Use paper tickets for in-person events (school fairs, galas). Use digital for extended fundraising periods (weeks or months). Hybrid approach — sell both — maximizes reach but doubles your reconciliation work.
+        </p>
+      </section>
+
+      <!-- Section 6: Winner -->
+      <section id="winner" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">6. Conducting a Fair, Undisputable Draw</h2>
+        <p class="text-gray-300">
+          The draw is the moment of highest community scrutiny. Parents who feel the draw was unfair will remember — and mention it at every PTA meeting for the next three years. Do it right:
+        </p>
+        <div class="space-y-3">
+          {winnerSelectionBestPractices.map((item, i) => (
+            <div class="flex gap-4 bg-white/5 rounded-xl p-4 border border-white/10">
+              <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">{i + 1}</div>
+              <div>
+                <p class="text-white font-semibold">{item.step}</p>
+                <p class="text-gray-400 text-sm mt-1">{item.why}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="bg-purple-900/30 border border-purple-500/30 rounded-xl p-5">
+          <h3 class="text-white font-semibold mb-2">Digital draw at an in-person event</h3>
+          <p class="text-gray-300 text-sm">
+            For digital ticket lists, project Real Wheel Picker on a screen at the event. Show all ticket numbers/names loaded into the wheel, then spin in front of the audience. The spin animation is inherently theatrical and crowd-pleasing — the wheel's visual randomness is actually more convincing to an audience than a paper draw that happens behind a table.
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 7: Classroom -->
+      <section id="classroom" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">7. Classroom Behavior Raffles (Teachers)</h2>
+        <p class="text-gray-300">
+          Different from fundraising raffles — classroom ticket systems are behavior management tools, not public lotteries. No licensing required. Here's how to run them effectively:
+        </p>
+        <div class="space-y-3">
+          <div class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <CheckCircle size={18} className="text-green-400 mt-0.5 flex-shrink-0" />
+            <div>
+              <p class="text-white font-semibold">Give tickets for specific, verifiable behaviors</p>
+              <p class="text-gray-400 text-sm mt-1">Not just "being good" — ticket for completing homework, answering a question, helping a classmate, on-time arrival. Specific criteria reduces accusations of favoritism.</p>
+            </div>
+          </div>
+          <div class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <CheckCircle size={18} className="text-green-400 mt-0.5 flex-shrink-0" />
+            <div>
+              <p class="text-white font-semibold">Draw weekly, not daily</p>
+              <p class="text-gray-400 text-sm mt-1">Weekly draws create a sustained motivation throughout the week. Daily draws lose their novelty quickly. Friday afternoon draws create a positive end-of-week ritual.</p>
+            </div>
+          </div>
+          <div class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <CheckCircle size={18} className="text-green-400 mt-0.5 flex-shrink-0" />
+            <div>
+              <p class="text-white font-semibold">Draw publicly in front of the class</p>
+              <p class="text-gray-400 text-sm mt-1">Students whose names are in the wheel but didn't win this week can see the process was fair. Use a projected wheel — kids love watching it spin.</p>
+            </div>
+          </div>
+          <div class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <CheckCircle size={18} className="text-green-400 mt-0.5 flex-shrink-0" />
+            <div>
+              <p class="text-white font-semibold">Keep prizes small and varied</p>
+              <p class="text-gray-400 text-sm mt-1">Homework pass, extra recess minute, sit anywhere for one day, choose the read-aloud book, first in the lunch line. Non-material prizes are often more motivating for kids than small toys and avoid equity concerns about prize value.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="bg-gradient-to-br from-purple-900/40 to-indigo-900/40 border border-purple-500/30 rounded-2xl p-8 text-center space-y-4">
+        <Users size={40} className="text-purple-400 mx-auto" />
+        <h2 class="text-2xl font-bold text-white">Run Your School Raffle Draw</h2>
+        <p class="text-gray-300 max-w-lg mx-auto">
+          Project the wheel at your event. Load all entries, spin in front of the crowd, announce the winner. Free, works on any screen, no setup required.
+        </p>
+        <a href="/" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+          Open the Raffle Wheel <ArrowRight size={18} className="text-white" />
+        </a>
+      </section>
+
+      <RelatedPosts currentSlug={canonical} client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

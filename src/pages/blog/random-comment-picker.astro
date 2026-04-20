@@ -1,0 +1,346 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertTriangle, MessageSquare, Users, Shield, Copy, FileText } from 'lucide-react';
+
+const title = "How to Pick a Random Comment Winner (Step-by-Step for Every Platform)";
+const description = "Learn how to pick a random winner from Instagram, YouTube, TikTok, or Facebook comments — with proof. Step-by-step instructions for each platform, plus how to handle disputes and document your draw.";
+const canonical = "/blog/random-comment-picker";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": description,
+  "url": `https://realwheelpicker.com${canonical}`,
+  "author": { "@type": "Person", "name": "Real Wheel Picker Editorial Team", "url": "https://realwheelpicker.com/about" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2026-04-11",
+  "dateModified": "2026-04-11",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": `https://realwheelpicker.com${canonical}` }
+};
+
+const platforms = [
+  {
+    name: "Instagram",
+    how_to_collect: "Go to your post, open comments, scroll through manually copying usernames — or export via Meta Business Suite if you have API access. For large giveaways (500+ comments), third-party tools like Gleam or Easypromos can export automatically.",
+    gotchas: [
+      "Instagram hides some comments from non-followers",
+      "Comments in direct messages don't count as post comments",
+      "Deleted accounts show as username but win nothing — have a backup plan",
+      "Replies to comments are separate from top-level comments — clarify in your rules"
+    ],
+    api_limit: "Instagram Basic Display API allows reading posts and media for personal accounts. Business accounts need Meta Graph API with appropriate permissions."
+  },
+  {
+    name: "YouTube",
+    how_to_collect: "In YouTube Studio, go to Comments → filter by your specific video. You can sort and see all comments. For bulk export, YouTube Data API v3 allows fetching comments programmatically (quota: 10,000 units/day). Third-party: vidIQ, TubeBuddy have comment export features.",
+    gotchas: [
+      "YouTube auto-hides spam comments — these commenters won't know they were filtered",
+      "Community Guidelines strikes can hide comments from certain users",
+      "Live stream chat and regular comments are separate systems",
+      "Pinned comments by creator don't count unless you specifically allow it"
+    ],
+    api_limit: "YouTube Data API v3: free tier with daily quota. For 1000 comments, expect to use ~2,000 quota units."
+  },
+  {
+    name: "TikTok",
+    how_to_collect: "TikTok doesn't have a native comment export tool. Options: manually copy usernames (tedious), use TikTok API if you're a developer (TikTok for Developers), or use screen recording while scrolling through comments to create a visual record.",
+    gotchas: [
+      "TikTok comment sections can be highly regional — some comments may be hidden by geo",
+      "Duets and Stitch responses are not comments — be explicit in your rules",
+      "Comments left on reposts may not appear on the original",
+      "TikTok's spam filter is aggressive and opaque"
+    ],
+    api_limit: "TikTok Content Posting API (for business accounts) has rate limits of 100 requests per day for comments."
+  },
+  {
+    name: "Facebook",
+    how_to_collect: "On desktop, click the comment count to expand all comments. Right-click → Save Page As, then parse the HTML for usernames — or use Facebook Graph API for pages/posts you manage. Meta Business Suite has basic comment management.",
+    gotchas: [
+      "Friends-only profiles may not be identifiable as real people",
+      "Reactions and emoji-only responses may or may not count — be clear in rules",
+      "Facebook groups and page posts have different APIs",
+      "Profiles with privacy restrictions may not be contactable"
+    ],
+    api_limit: "Facebook Graph API: pages can read their own post comments without user token. User-specific endpoints require user login."
+  },
+];
+
+const processSteps = [
+  {
+    step: "Write clear rules before posting",
+    detail: "Define: which platform, which post, which comment types count (top-level only? replies included?), entry period, winner announcement date, how you'll pick, what proof you'll share."
+  },
+  {
+    step: "Lock comments when the entry period ends",
+    detail: "Don't turn off comments (that hides existing ones) — just stop accepting new entries. Note the cutoff time in your rules post."
+  },
+  {
+    step: "Collect all qualifying comments",
+    detail: "Depending on volume: manual (under 100), semi-manual with copy-paste (100-500), API export (500+). Remove duplicates if your rules say one entry per person."
+  },
+  {
+    step: "Remove ineligible entries",
+    detail: "Filter out: bot accounts (no profile photo, 0 posts, created within last week), disqualified entries (didn't follow the rules), accounts that deleted their comment before the draw."
+  },
+  {
+    step: "Paste into Real Wheel Picker",
+    detail: "Add one username per line. Enable 'remove after spin' if drawing multiple winners. The tool uses crypto.getRandomValues() — not Math.random() — for verifiable randomness."
+  },
+  {
+    step: "Screen-record the entire spin",
+    detail: "Show: the wheel with all names visible, the spin animation, the result. Upload to YouTube or save locally for dispute evidence."
+  },
+  {
+    step: "Announce and contact winner within 48 hours",
+    detail: "Post publicly naming the winner. DM them on the same platform. Give them 48-72 hours to respond before drawing a backup."
+  },
+  {
+    step: "Archive everything",
+    detail: "Save: the entry list, the screen recording, winner contact attempts, their confirmation. Keep for 90 days minimum."
+  },
+];
+
+const fairnessRedFlags = [
+  { flag: "Using a tool that doesn't show all entries before spinning", risk: "Anyone can claim you added/removed names after the fact" },
+  { flag: "Not publishing the entry list", risk: "Commenters can't verify their entry was counted" },
+  { flag: "Drawing 'live' without recording", risk: "No evidence if someone disputes the result" },
+  { flag: "Announcing winner via DM only (no public announcement)", risk: "Looks like the 'winner' is a friend — classic manipulation accusation" },
+  { flag: "No backup winner policy", risk: "If winner ghosts you, you have to draw again publicly or explain why you didn't" },
+  { flag: "Not specifying entry rules before the draw", risk: "Post-hoc rule changes look like cheating even when they're innocent" },
+];
+
+const duplicateHandling = [
+  { scenario: "Same person commented 5 times", solution: "If rules say 'one entry per person', count once. If unlimited comments allowed, count all 5 separately" },
+  { scenario: "Person tagged a friend + own comment", solution: "Clarify in rules whether tag + comment = 1 entry or 2 entries" },
+  { scenario: "Duplicate names (two @john_smith accounts)", solution: "Distinguish by checking profile URLs, not just display names" },
+  { scenario: "Bot-looking account won", solution: "Investigate the profile — if clearly bot, disqualify with public explanation and draw backup" },
+];
+---
+
+<Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com/" },
+    { name: "Blog", url: "https://realwheelpicker.com/blog" },
+    { name: title, url: `https://realwheelpicker.com${canonical}` }
+  ]} />
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <!-- Hero -->
+      <header class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-purple-400 font-medium">
+          <MessageSquare size={16} className="text-purple-400" />
+          <span>Social Media</span>
+          <span class="text-gray-500">·</span>
+          <span class="text-gray-400">10 min read</span>
+        </div>
+        <h1 class="text-3xl font-bold text-white leading-tight">
+          How to Pick a Random Comment Winner (Step-by-Step for Every Platform)
+        </h1>
+        <p class="text-lg text-gray-300">
+          "I'm picking a random winner from the comments!" sounds simple. In practice, it raises questions: How do you copy all the comments? What if someone comments twice? How do you prove the draw was fair? This guide answers all of it — platform by platform, with screenshots, dispute handling, and documentation that protects you.
+        </p>
+      </header>
+
+      <!-- ToC -->
+      <nav class="bg-white/5 border border-white/10 rounded-xl p-6">
+        <h2 class="text-white font-semibold mb-3">In this guide</h2>
+        <ol class="space-y-1.5 text-sm text-gray-300">
+          <li><a href="#process" class="hover:text-purple-400 transition-colors">1. The 8-step process (works on all platforms)</a></li>
+          <li><a href="#platforms" class="hover:text-purple-400 transition-colors">2. Platform-by-platform collection guide</a></li>
+          <li><a href="#duplicates" class="hover:text-purple-400 transition-colors">3. Handling duplicate entries and edge cases</a></li>
+          <li><a href="#fairness" class="hover:text-purple-400 transition-colors">4. Red flags that make your draw look rigged</a></li>
+          <li><a href="#disputes" class="hover:text-purple-400 transition-colors">5. What to do when someone accuses you of cheating</a></li>
+          <li><a href="#tool" class="hover:text-purple-400 transition-colors">6. Why tool choice matters for credibility</a></li>
+        </ol>
+      </nav>
+
+      <AdPlaceholder position="in-content" client:visible />
+
+      <!-- Section 1: Process -->
+      <section id="process" class="space-y-5">
+        <h2 class="text-2xl font-bold text-white">1. The 8-Step Process (Works on All Platforms)</h2>
+        <p class="text-gray-300">
+          This process is platform-agnostic. Follow it whether you have 50 comments or 50,000.
+        </p>
+        <div class="space-y-3">
+          {processSteps.map((item, i) => (
+            <div class="flex gap-4 bg-white/5 rounded-xl p-5 border border-white/10">
+              <div class="bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">{i + 1}</div>
+              <div>
+                <p class="text-white font-semibold">{item.step}</p>
+                <p class="text-gray-400 text-sm mt-1">{item.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Section 2: Platforms -->
+      <section id="platforms" class="space-y-6">
+        <h2 class="text-2xl font-bold text-white">2. Platform-by-Platform Collection Guide</h2>
+        <p class="text-gray-300">
+          Each platform has different comment visibility rules, API access, and gotchas. Here's what you need to know for each:
+        </p>
+        {platforms.map((platform) => (
+          <div class="bg-white/5 border border-white/10 rounded-xl p-6 space-y-4">
+            <h3 class="text-white font-bold text-xl flex items-center gap-2">
+              <MessageSquare size={20} className="text-purple-400" /> {platform.name}
+            </h3>
+            <div>
+              <p class="text-gray-400 text-xs font-semibold uppercase mb-2">How to collect comments</p>
+              <p class="text-gray-300 text-sm">{platform.how_to_collect}</p>
+            </div>
+            <div>
+              <p class="text-gray-400 text-xs font-semibold uppercase mb-2">Watch out for</p>
+              <ul class="space-y-1">
+                {platform.gotchas.map((g) => (
+                  <li class="flex items-start gap-2 text-gray-300 text-sm">
+                    <AlertTriangle size={14} className="text-yellow-400 mt-0.5 flex-shrink-0" /> {g}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div class="bg-blue-900/20 rounded-lg p-3">
+              <p class="text-blue-300 text-xs"><strong>API info:</strong> {platform.api_limit}</p>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <!-- Section 3: Duplicates -->
+      <section id="duplicates" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">3. Handling Duplicate Entries and Edge Cases</h2>
+        <p class="text-gray-300">
+          Your giveaway rules should pre-answer all of these. If they don't, you'll be making judgment calls after the fact — and those always look suspicious.
+        </p>
+        <div class="space-y-3">
+          {duplicateHandling.map((item) => (
+            <div class="bg-white/5 border border-white/10 rounded-lg p-4">
+              <p class="text-white font-semibold text-sm">{item.scenario}</p>
+              <p class="text-gray-400 text-sm mt-1"><strong class="text-green-300">Recommended approach:</strong> {item.solution}</p>
+            </div>
+          ))}
+        </div>
+        <div class="bg-yellow-900/20 border border-yellow-500/30 rounded-xl p-5">
+          <h3 class="text-yellow-300 font-semibold mb-2">The "follow + comment" combo entry</h3>
+          <p class="text-gray-300 text-sm">
+            This is the most common giveaway format — "follow me and comment to enter." The problem: you can see the comment but can't verify the follow at draw time if someone unfollows after. Options: (1) ignore it and trust that winners are real followers, (2) manually check the winner's follower status before announcing, (3) use a tool like Gleam that verifies entries automatically.
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 4: Red flags -->
+      <section id="fairness" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">4. Red Flags That Make Your Draw Look Rigged</h2>
+        <p class="text-gray-300">
+          You can run a perfectly fair draw and still get accused of cheating if you make these mistakes:
+        </p>
+        <div class="space-y-3">
+          {fairnessRedFlags.map((item) => (
+            <div class="bg-red-900/10 border border-red-500/20 rounded-lg p-4">
+              <div class="flex items-start gap-3">
+                <AlertTriangle size={16} className="text-red-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p class="text-white font-semibold text-sm">{item.flag}</p>
+                  <p class="text-red-300 text-sm mt-1">{item.risk}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Section 5: Disputes -->
+      <section id="disputes" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">5. What to Do When Someone Accuses You of Cheating</h2>
+        <p class="text-gray-300">
+          If you ran a fair draw but someone accuses you of rigging it, the only counter is documentation. Here's the response framework:
+        </p>
+        <div class="space-y-3">
+          <div class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">1</div>
+            <div>
+              <p class="text-white font-semibold">Respond publicly, not defensively</p>
+              <p class="text-gray-400 text-sm mt-1">Reply in the comments, not via DM. "Hi [name] — here's the screen recording of the draw: [link]. Here's the full entry list: [link]. If your username isn't on the list, please let me know when you entered."</p>
+            </div>
+          </div>
+          <div class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">2</div>
+            <div>
+              <p class="text-white font-semibold">Share the entry list</p>
+              <p class="text-gray-400 text-sm mt-1">If you published it before the draw (recommended), link directly to it. If not, publish it now. The list shows their name was or wasn't included — and why.</p>
+            </div>
+          </div>
+          <div class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">3</div>
+            <div>
+              <p class="text-white font-semibold">Don't re-draw because of noise</p>
+              <p class="text-gray-400 text-sm mt-1">Accusations don't require a redraw. Offer to explain your process. If someone wasn't on the entry list for a legitimate reason (their comment was spam-filtered, they entered after the deadline), explain that specifically.</p>
+            </div>
+          </div>
+          <div class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">4</div>
+            <div>
+              <p class="text-white font-semibold">If you made a genuine mistake, own it</p>
+              <p class="text-gray-400 text-sm mt-1">If you accidentally excluded someone legitimate or used a flawed process, acknowledge it specifically and offer a new draw. Vague apologies make things worse. Specific acknowledgment + correction builds trust.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Tool -->
+      <section id="tool" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">6. Why Tool Choice Matters for Credibility</h2>
+        <p class="text-gray-300">
+          The randomness quality of your picker matters — not because someone can tell the difference from the result, but because it matters what you can say about it.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-red-900/20 border border-red-500/30 rounded-xl p-5">
+            <h3 class="text-red-300 font-semibold mb-2">Math.random() based tools</h3>
+            <ul class="space-y-1 text-gray-300 text-sm">
+              <li>• Uses a seeded pseudo-random algorithm</li>
+              <li>• Technically deterministic</li>
+              <li>• Can be argued to be predictable or manipulable</li>
+              <li>• No independently verifiable standard</li>
+            </ul>
+          </div>
+          <div class="bg-green-900/20 border border-green-500/30 rounded-xl p-5">
+            <h3 class="text-green-300 font-semibold mb-2">crypto.getRandomValues() (us)</h3>
+            <ul class="space-y-1 text-gray-300 text-sm">
+              <li>• Web Cryptography API standard (W3C)</li>
+              <li>• Same standard as password generators</li>
+              <li>• Auditable, documented specification</li>
+              <li>• You can cite the standard in disputes</li>
+            </ul>
+          </div>
+        </div>
+        <p class="text-gray-300">
+          Real Wheel Picker uses <code class="bg-white/10 px-1.5 py-0.5 rounded text-sm font-mono">crypto.getRandomValues()</code>. When someone accuses you of a rigged draw, you can say: "I used Real Wheel Picker, which uses the Web Cryptography API specification from the W3C — the same standard used by password managers and banking applications." That's a verifiable, authoritative claim.
+        </p>
+      </section>
+
+      <!-- CTA -->
+      <section class="bg-gradient-to-br from-purple-900/40 to-indigo-900/40 border border-purple-500/30 rounded-2xl p-8 text-center space-y-4">
+        <Shield size={40} className="text-purple-400 mx-auto" />
+        <h2 class="text-2xl font-bold text-white">Pick Your Comment Winner Now</h2>
+        <p class="text-gray-300 max-w-lg mx-auto">
+          Paste your comment list, spin with cryptographic randomness, screen-record the result. Free, no signup, done in 2 minutes.
+        </p>
+        <a href="/" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+          Open the Comment Picker <ArrowRight size={18} className="text-white" />
+        </a>
+      </section>
+
+      <RelatedPosts currentSlug={canonical} client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

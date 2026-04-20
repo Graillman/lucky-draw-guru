@@ -1,0 +1,326 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, Star, Lightbulb, Users, Zap } from 'lucide-react';
+
+const title = "Truth or Dare Wheel: 100+ Questions & Dares + How to Set Up the Perfect Party Spinner";
+const description = "Upgrade Truth or Dare with a spin wheel. 50+ truth questions and 50+ dare ideas for teens, adults, and couples. How to set up, customize, and run the game.";
+const canonical = "/blog/truth-or-dare-wheel";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Truth or Dare Wheel: 100+ Questions & Dares + How to Set Up the Perfect Party Spinner",
+  "description": "Upgrade Truth or Dare with a spin wheel. 50+ truths and 50+ dares for teens, adults, and couples.",
+  "author": { "@type": "Person", "name": "Real Wheel Picker Editorial Team", "url": "https://realwheelpicker.com/about" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2026-04-06",
+  "dateModified": "2026-04-06",
+  "image": "https://realwheelpicker.com/og-default.png",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/truth-or-dare-wheel" },
+};
+
+const teensТruths = [
+  "What's the most embarrassing thing that's happened to you at school?",
+  "Have you ever liked someone in this room? (Don't say who.)",
+  "What's the worst grade you've ever gotten, and what was it for?",
+  "Have you ever been caught doing something you weren't supposed to? What happened?",
+  "What's the most childish thing you still do?",
+  "Have you ever lied to get out of trouble? What was the lie?",
+  "What's something you're afraid people would think is weird about you?",
+  "Have you ever cheated on a test?",
+  "What's the most cringeworthy text you've ever sent?",
+  "If you could switch lives with anyone in this room for a day, who would it be and why?",
+];
+
+const adultsТruths = [
+  "What's the most spontaneous thing you've ever done?",
+  "What's a belief you held 10 years ago that you've completely reversed?",
+  "What's the most impressive thing you've done that nobody knows about?",
+  "What's a social situation you've been in that you still cringe thinking about?",
+  "What do you genuinely think happens after death?",
+  "Have you ever ghosted someone? Do you regret it?",
+  "What's the angriest you've ever been at someone in this room?",
+  "If your browser history was projected on a wall right now, what would be the most embarrassing thing visible?",
+  "What's something you've done that you're surprised you never got caught for?",
+  "What's a deal-breaker in a relationship that most people think is shallow?",
+];
+
+const couplesТruths = [
+  "What was your actual first impression of me?",
+  "What's something I do that you find secretly adorable but would never admit to?",
+  "What's the nicest thing you've ever thought about me but never said?",
+  "If you had to describe our relationship to a stranger in one sentence, what would it be?",
+  "What's the most annoying habit of mine you've learned to live with?",
+  "What's something you wish I'd ask you about more?",
+  "What's your favorite memory of us together?",
+  "Is there something you've wanted us to try together but haven't brought up yet?",
+];
+
+const safeDares = [
+  "Do your best impression of someone in the room",
+  "Talk in an accent for the next 3 turns",
+  "Let the group pick one contact in your phone and send them a compliment right now",
+  "Attempt to do 10 push-ups",
+  "Try to lick your elbow (nearly impossible, the attempt is the point)",
+  "Speak in rhymes for the next 2 minutes",
+  "Let someone else post something on your social media (within reason)",
+  "Do your best catwalk across the room",
+  "Call a pizza place and order something not on the menu as seriously as possible",
+  "Describe yourself using only animal sounds",
+  "Sing the chorus of the last song that was stuck in your head",
+  "Let the group pick a song — you have to dance for 30 seconds",
+  "Attempt to balance a shoe on your head while walking across the room",
+  "Speak in pig latin for the next 2 minutes",
+  "Do your best celebrity impression and have people guess who it is",
+];
+
+const adultsDares = [
+  "Text a random contact 'I need to tell you something' and wait for their response (show the group)",
+  "Call a family member and tell them you have exciting news — then tell them you passed an online quiz",
+  "Let the group compose a LinkedIn post from your account (within reason)",
+  "Do your most convincing 'I'm fine' face while clearly not being fine",
+  "Share your most recent search history (top 5 entries)",
+  "Reenact your morning routine in 60 seconds",
+  "Take a selfie making the most unattractive face possible and set it as your lock screen for 10 minutes",
+  "Call a restaurant and ask what their most hated menu item is",
+  "Text your most recent contact 'I've been thinking about something and I need your advice'",
+  "Do your best impression of what you think you look like when you're sleeping",
+];
+
+const wheelFormats = [
+  { format: "Standard T or D wheel", desc: "One wheel with 'Truth' and 'Dare' as the only two options, 50/50. Spin to decide which category, then pick a card from a deck or a list. Simple and fast." },
+  { format: "Question wheel", desc: "Put actual truth questions directly on the wheel — spin lands on a specific question. No choosing, no refusing. The wheel picked it." },
+  { format: "Double wheel", desc: "First wheel picks the player. Second wheel picks Truth or Dare. Great for larger groups where the 'who goes next' question slows things down." },
+  { format: "Consequence wheel", desc: "Add a 'Consequence' option alongside Truth and Dare — spinning consequence means you do a predetermined mild forfeit (10 jumping jacks, sit out one turn, etc.). Gives players a third option without completely opting out." },
+  { format: "Player wheel", desc: "Put all player names on the wheel. First spin picks who faces the challenge. Second spin picks their T or D. Third spin (optional) picks who asks them the question." },
+];
+---
+
+<Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<SchemaBreadcrumb items={[{ name: "Home", url: "https://realwheelpicker.com/" }, { name: "Blog", url: "https://realwheelpicker.com/blog" }, { name: title, url: `https://realwheelpicker.com${canonical}` }]} />
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <section class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary transition-colors">Blog</a>
+          <span>/</span>
+          <span>Truth or Dare Wheel</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Truth or Dare Wheel: 100+ Questions & Dares + How to Set Up the Perfect Party Spinner
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          Truth or Dare is one of those games that sounds fun in theory and then stalls immediately when nobody wants to pick. A spin wheel fixes the biggest problem with the classic game: choice paralysis and social awkwardness. When the wheel picks the question, nobody feels targeted. The wheel is impartial. Here's how to set it up and 100+ questions and dares to fill it.
+        </p>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>10 min read</span>
+          <span>·</span>
+          <span>Updated April 2026</span>
+        </div>
+      </section>
+
+      <section class="bg-card border border-border rounded-xl p-6 space-y-3">
+        <h2 class="font-bold text-foreground">In this guide</h2>
+        <ol class="space-y-1 text-sm text-primary list-decimal list-inside">
+          <li><a href="#why-wheel" class="hover:underline">Why a wheel makes Truth or Dare better</a></li>
+          <li><a href="#wheel-formats" class="hover:underline">5 different wheel formats</a></li>
+          <li><a href="#teens-truths" class="hover:underline">Truth questions for teens</a></li>
+          <li><a href="#adults-truths" class="hover:underline">Truth questions for adults</a></li>
+          <li><a href="#couples-truths" class="hover:underline">Truth questions for couples</a></li>
+          <li><a href="#safe-dares" class="hover:underline">Safe, fun dare ideas</a></li>
+          <li><a href="#adults-dares" class="hover:underline">Adult dare ideas</a></li>
+          <li><a href="#setup" class="hover:underline">How to set up the wheel</a></li>
+          <li><a href="#rules" class="hover:underline">House rules that keep the game fun</a></li>
+        </ol>
+      </section>
+
+      <section id="why-wheel" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Why a Wheel Makes Truth or Dare Better</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Classic Truth or Dare has three friction points that kill the energy: (1) players spend 30 seconds saying "um, truth" or "dare" while visibly calculating risk; (2) the person asking tries to choose an appropriate question or dare for the specific person and either plays it too safe or goes too far; (3) players can refuse anything by saying "that's too personal" and the game derails into negotiation.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          A wheel solves all three. The wheel picks Truth or Dare (no deliberation). The wheel or pre-made list picks the specific question (no targeting). And the social contract is clear: you agreed to play, the wheel picked, now you answer. The randomness removes the personal element.
+        </p>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">The key psychological insight</p>
+          <p class="text-sm text-muted-foreground">When a human picks a question for you, you wonder if they chose it to embarrass you specifically. When a wheel picks it, you know it's random. The same question lands completely differently depending on whether it feels targeted. The wheel makes everything feel fair — even the uncomfortable questions.</p>
+        </div>
+      </section>
+
+      <section id="wheel-formats" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">5 Different Wheel Formats</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          There's no single "correct" way to run a Truth or Dare wheel. Here are the main formats:
+        </p>
+        <div class="space-y-3">
+          {wheelFormats.map((item) => (
+            <div class="bg-card border border-border rounded-xl p-5">
+              <p class="font-semibold text-foreground">{item.format}</p>
+              <p class="text-sm text-muted-foreground mt-1">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+        <p class="text-muted-foreground leading-relaxed">
+          For most parties, the simplest format works best: one wheel with player names, one wheel with Truth/Dare/Consequence. Spin player, spin category, consult a list of questions/dares. Three spins, game moves fast.
+        </p>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      <section id="teens-truths" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Truth Questions for Teens</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          These work well for ages 13-17 — revealing enough to be interesting, appropriate enough not to put anyone in a genuinely uncomfortable position:
+        </p>
+        <div class="space-y-2">
+          {teensТruths.map((q, i) => (
+            <div class="bg-card border border-border rounded-xl p-4 flex gap-3">
+              <span class="text-primary font-bold text-sm shrink-0">{i + 1}.</span>
+              <p class="text-sm text-muted-foreground">{q}</p>
+            </div>
+          ))}
+        </div>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-4">
+          <p class="text-sm text-muted-foreground"><strong class="text-foreground">More teen truths to add to your wheel:</strong> What's a YouTube rabbit hole you've been down recently? What TV show do you rewatch when you're sad? Have you ever cried at something embarrassing like a commercial? What's something you've Googled that you immediately regretted? What's your go-to comfort food when you're upset?</p>
+        </div>
+      </section>
+
+      <section id="adults-truths" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Truth Questions for Adults</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Adult truth questions should go deeper than teenage ones — more introspective, more revealing about actual life experiences:
+        </p>
+        <div class="space-y-2">
+          {adultsТruths.map((q, i) => (
+            <div class="bg-card border border-border rounded-xl p-4 flex gap-3">
+              <span class="text-primary font-bold text-sm shrink-0">{i + 1}.</span>
+              <p class="text-sm text-muted-foreground">{q}</p>
+            </div>
+          ))}
+        </div>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-4">
+          <p class="text-sm text-muted-foreground"><strong class="text-foreground">Additional adult truths:</strong> What's the longest you've gone without checking your phone? Have you ever sent a message to the wrong person? What's the most money you've spent on something you regret? What career did you want as a child, and how do you feel about where you ended up? What's something about your personality you're still figuring out?</p>
+        </div>
+      </section>
+
+      <section id="couples-truths" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Truth Questions for Couples</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          These are designed for partners playing together — either one-on-one or in a group where couples are playing as teams. They're revealing without being weaponizable:
+        </p>
+        <div class="space-y-2">
+          {couplesТruths.map((q, i) => (
+            <div class="bg-card border border-border rounded-xl p-4 flex gap-3">
+              <span class="text-primary font-bold text-sm shrink-0">{i + 1}.</span>
+              <p class="text-sm text-muted-foreground">{q}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="safe-dares" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Safe, Fun Dare Ideas (All Ages)</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Good dares are embarrassing, not dangerous. The point is mild social discomfort in a safe environment — not physical risk or genuine humiliation. These work for teens and adults alike:
+        </p>
+        <div class="space-y-2">
+          {safeDares.map((d, i) => (
+            <div class="bg-card border border-border rounded-xl p-4 flex gap-3">
+              <span class="text-primary font-bold text-sm shrink-0">{i + 1}.</span>
+              <p class="text-sm text-muted-foreground">{d}</p>
+            </div>
+          ))}
+        </div>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-4">
+          <p class="text-sm text-muted-foreground"><strong class="text-foreground">More safe dares:</strong> Narrate everything you do for the next 3 minutes like a nature documentary. Let someone else style your hair for 2 minutes. Try to make everyone in the room laugh without speaking. Hold an ice cube in your hand for 60 seconds. Read the last text you received out loud in your best dramatic voice.</p>
+        </div>
+      </section>
+
+      <section id="adults-dares" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Adult Dare Ideas</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          These are funnier and slightly more daring, appropriate for adult parties:
+        </p>
+        <div class="space-y-2">
+          {adultsDares.map((d, i) => (
+            <div class="bg-card border border-border rounded-xl p-4 flex gap-3">
+              <span class="text-primary font-bold text-sm shrink-0">{i + 1}.</span>
+              <p class="text-sm text-muted-foreground">{d}</p>
+            </div>
+          ))}
+        </div>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-4">
+          <p class="text-sm text-muted-foreground"><strong class="text-foreground">More adult dares:</strong> Speak only in questions for the next 5 minutes. Let someone else read your emails for 30 seconds. Try to sell an ordinary household object to the group as a luxury item. Do a full monologue about your day as if it were a film trailer. Call your mom and pretend you have very important news — the news is that you finally figured out how to fold a fitted sheet.</p>
+        </div>
+      </section>
+
+      <section id="setup" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">How to Set Up Your Truth or Dare Wheel</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The recommended setup for most groups uses two wheels:
+        </p>
+        <ol class="space-y-3">
+          {[
+            { n: "1", t: "Player wheel", d: "Go to realwheelpicker.com. Add all player names. Spin to pick who goes next. This eliminates the 'who picks who' issue and keeps the pace up." },
+            { n: "2", t: "T or D wheel", d: "Create a second wheel (open a new tab) with just: Truth | Dare | Consequence. Consequence can be something mild like 'Lose a turn' or 'Do 10 jumping jacks' — it gives the truly reluctant player a third option that doesn't stop the game." },
+            { n: "3", t: "Questions list", d: "Copy a list of truths and dares (from this article) into a notes app or printed sheet. After the spin determines Truth or Dare, someone reads the next question from the list in order — no choosing, no targeting." },
+            { n: "4", t: "Save your wheels", d: "Click the share icon on each wheel to save the URL. Bookmark them or add to your phone's home screen so you can pull up the full game setup in seconds at your next party." },
+          ].map((step) => (
+            <div class="flex gap-4 bg-card border border-border rounded-xl p-5">
+              <span class="w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-bold flex items-center justify-center shrink-0">{step.n}</span>
+              <div>
+                <p class="font-semibold text-foreground">{step.t}</p>
+                <p class="text-sm text-muted-foreground mt-1">{step.d}</p>
+              </div>
+            </div>
+          ))}
+        </ol>
+      </section>
+
+      <section id="rules" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">House Rules That Keep the Game Fun (Not Awkward)</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The rules you set before starting determine whether the game is fun or uncomfortable. Set these expectations clearly before the first spin:
+        </p>
+        <div class="space-y-3">
+          {[
+            { title: "The veto rule", desc: "Every player gets one 'pass' per game — they can skip a question or dare without explanation, no penalty. This gives everyone a safety valve without making passing trivially easy. One pass, use it wisely." },
+            { title: "The scale rule", desc: "Questions are rated 1-5 difficulty (1 = totally harmless, 5 = genuinely revealing). Agree on the maximum level you'll play before starting. First-time groups should cap at 3. Friend groups who know each other well can play 4-5." },
+            { title: "The keep-it-here rule", desc: "What's said in Truth or Dare stays in the room. No screenshotting answers, no bringing it up on social media, no referencing embarrassing answers later to mock someone. State this explicitly at the start." },
+            { title: "The consequence escalation rule", desc: "If someone refuses to answer a truth AND refuses the dare, they do the predetermined consequence AND sit out one round. Consequences should be mild and agreed upon upfront — not improvised in the moment when emotions are running high." },
+            { title: "No physical danger, full stop", desc: "Any dare that involves physical risk (drinking unknown substances, doing something dangerous, leaving the building) is automatically overruled regardless of who spun it. Set this as an absolute rule, not a case-by-case judgment call." },
+          ].map((rule) => (
+            <div class="bg-card border border-border rounded-xl p-5 space-y-1">
+              <p class="font-semibold text-foreground">{rule.title}</p>
+              <p class="text-sm text-muted-foreground">{rule.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="bg-primary/5 border border-primary/20 rounded-xl p-8 text-center space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Set up your Truth or Dare wheel in 2 minutes</h2>
+        <p class="text-muted-foreground">Free, works on any device, no account needed. Spin for players, then spin for Truth or Dare.</p>
+        <div class="flex flex-wrap gap-3 justify-center">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Start Playing Now <ArrowRight className="w-4 h-4" />
+          </a>
+          <a href="/party-wheel" class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-6 py-3 rounded-xl font-semibold hover:border-primary transition-colors">
+            Party Wheel
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug={canonical} client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

@@ -1,0 +1,395 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertCircle, Clock, Star, Users, Lightbulb } from 'lucide-react';
+
+const title = "The Chore Wheel: How to Divide Household Tasks Fairly (30+ Ideas & Templates)";
+const description = "Stop arguing about chores. A chore wheel uses randomness to divide household tasks fairly — nobody can claim it's rigged. 30+ chore ideas, templates, and setup tips.";
+const canonical = "/blog/chore-wheel";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "The Chore Wheel: How to Divide Household Tasks Fairly (30+ Ideas & Templates)",
+  "description": "Stop arguing about chores. A chore wheel uses randomness to divide household tasks fairly — nobody can claim it's rigged. 30+ chore ideas, templates, and setup tips.",
+  "author": { "@type": "Person", "name": "Real Wheel Picker Editorial Team", "url": "https://realwheelpicker.com/about" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2026-04-06",
+  "dateModified": "2026-04-06",
+  "image": "https://realwheelpicker.com/og-default.png",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/chore-wheel" },
+};
+
+const dailyChores = [
+  { name: "Wash the dishes", effort: "15–20 min", notes: "After every meal or once at end of day" },
+  { name: "Wipe down kitchen counters", effort: "5 min", notes: "After cooking — catches splatter before it sets" },
+  { name: "Sweep or vacuum high-traffic areas", effort: "10 min", notes: "Entryway, kitchen, living room" },
+  { name: "Empty the kitchen trash", effort: "3 min", notes: "When it's full, not when it overflows" },
+  { name: "Feed pets", effort: "5 min", notes: "Morning and evening if applicable" },
+  { name: "Wipe bathroom sink & mirror", effort: "3 min", notes: "Toothpaste splatter is nobody's best friend" },
+  { name: "Tidy common areas (living room, hallway)", effort: "10 min", notes: "Pillows, shoes, jackets — put things away" },
+];
+
+const weeklyChores = [
+  { name: "Full bathroom scrub", effort: "30–45 min", notes: "Toilet, shower/tub, sink, floor — the whole deal" },
+  { name: "Vacuum all carpets and rugs", effort: "20–30 min", notes: "Under cushions counts" },
+  { name: "Mop hard floors", effort: "20–30 min", notes: "Kitchen and bathrooms especially" },
+  { name: "Change bed linens", effort: "20 min", notes: "Wash and re-make — every 7–10 days minimum" },
+  { name: "Clean stovetop and oven exterior", effort: "15 min", notes: "Grease buildup is the enemy" },
+  { name: "Scrub kitchen sink", effort: "10 min", notes: "Including the drain and tap base" },
+  { name: "Take out all trash and recycling", effort: "10 min", notes: "Set bins at curb on collection day" },
+  { name: "Wipe down appliances", effort: "15 min", notes: "Microwave inside and out, fridge exterior, dishwasher door" },
+  { name: "Dust all surfaces", effort: "20 min", notes: "Shelves, baseboards, ceiling fans, TV stands" },
+  { name: "Clean mirrors throughout house", effort: "10 min", notes: "Glass cleaner and a microfiber cloth" },
+];
+
+const monthlyChores = [
+  { name: "Deep clean the oven interior", effort: "1–2 hours", notes: "Or use self-clean cycle — either way, someone has to do it" },
+  { name: "Clean refrigerator inside", effort: "45 min", notes: "Remove everything, wipe shelves, check expiry dates" },
+  { name: "Wash windows (inside)", effort: "30 min", notes: "Squeegee technique makes this bearable" },
+  { name: "Clean baseboards and trim", effort: "30 min", notes: "Damp cloth — dusty baseboards are the first sign of a messy home to guests" },
+  { name: "Descale kettle and coffee maker", effort: "30 min", notes: "Run a vinegar cycle — extends appliance life significantly" },
+  { name: "Clean washing machine", effort: "15 min", notes: "Drum cleaner tablet + wipe seal — prevents mold smell" },
+  { name: "Wipe light switches and door handles", effort: "15 min", notes: "Germ hotspots that nobody thinks about" },
+  { name: "Organize one drawer or cabinet", effort: "20–30 min", notes: "Rotate through the house over the year" },
+];
+
+const seasonalChores = [
+  { name: "Deep clean all windows (inside + outside)", effort: "Half day", notes: "Spring is the classic time for this" },
+  { name: "Flip or rotate mattresses", effort: "20 min", notes: "Extends mattress life by 2–3 years" },
+  { name: "Clean behind large appliances", effort: "45 min", notes: "Fridge, stove, washing machine — move them out, vacuum, mop" },
+  { name: "Declutter wardrobes for season change", effort: "1–2 hours", notes: "Donate what you haven't worn in 12 months" },
+  { name: "Clear gutters", effort: "1–2 hours", notes: "Autumn especially — blocked gutters cause serious water damage" },
+  { name: "Deep clean carpets (steam or professional)", effort: "Half day", notes: "Once or twice a year keeps allergens down" },
+  { name: "Test smoke and CO alarms, replace batteries", effort: "30 min", notes: "Do this when clocks change — easy calendar anchor" },
+  { name: "Wash curtains and blinds", effort: "Half day", notes: "Machine washable curtains, wipe blinds slat by slat" },
+];
+
+const setupSteps = [
+  { step: "List everyone in the household", detail: "Roommates, partners, kids old enough to contribute (ages 7+ can handle simple chores). Write every name down." },
+  { step: "Categorize your chores by frequency", detail: "Don't mix daily and monthly chores on the same wheel — they need different rotation schedules." },
+  { step: "Decide on your spin frequency", detail: "Weekly spins work best for most households. Monthly spins suit roommates who prefer more structure." },
+  { step: "Create one wheel per chore category", detail: "A 'Weekly Chores' wheel, a 'Deep Clean' wheel, and a 'Monthly Tasks' wheel. Separate wheels keep things manageable." },
+  { step: "Spin and assign — screenshot the result", detail: "Take a screenshot after each spin so nobody disputes their assignment mid-week." },
+  { step: "Review after 4 weeks", detail: "Does anyone consistently get the worst chores? Adjust the wheel inputs or weighting if needed." },
+];
+
+const kidsChores = [
+  { age: "Ages 4–6", chores: ["Put toys away", "Feed pets with supervision", "Wipe their own placemat after meals", "Put dirty clothes in hamper", "Dust low surfaces with a cloth"] },
+  { age: "Ages 7–10", chores: ["Set and clear the table", "Empty dishwasher", "Vacuum their bedroom", "Wipe bathroom sink", "Take out small bins", "Sort laundry by color"] },
+  { age: "Ages 11–13", chores: ["Load and run dishwasher", "Mop kitchen floor", "Full bathroom clean", "Mow lawn with supervision", "Cook simple meals", "Take trash to curb"] },
+  { age: "Ages 14+", chores: ["Full independent bathroom deep clean", "Cook dinner once per week", "Do own laundry start to finish", "Grocery shopping from a list", "Any adult chore on the wheel"] },
+];
+---
+
+<Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<SchemaBreadcrumb items={[{ name: "Home", url: "https://realwheelpicker.com/" }, { name: "Blog", url: "https://realwheelpicker.com/blog" }, { name: title, url: `https://realwheelpicker.com${canonical}` }]} />
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      {/* Hero */}
+      <section class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary transition-colors">Blog</a>
+          <span>/</span>
+          <span>Chore Wheel</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          The Chore Wheel: How to Divide Household Tasks Fairly (30+ Ideas & Templates)
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          Chore arguments are one of the most common sources of friction in shared households — between roommates, partners, and even parents and kids. The chore wheel doesn't solve all of life's problems, but it does eliminate the single biggest complaint: "It's not fair." When a random spinner assigns the tasks, nobody can credibly argue the system is rigged. Here's how to build one that actually works.
+        </p>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>14 min read</span>
+          <span>·</span>
+          <span>Updated April 2026</span>
+        </div>
+      </section>
+
+      {/* Table of Contents */}
+      <section class="bg-card border border-border rounded-xl p-6 space-y-3">
+        <h2 class="font-bold text-foreground">In this guide</h2>
+        <ol class="space-y-1 text-sm text-primary list-decimal list-inside">
+          <li><a href="#why-chore-wheels-work" class="hover:underline">Why chore wheels actually work (psychology)</a></li>
+          <li><a href="#setup" class="hover:underline">How to set up your chore wheel step by step</a></li>
+          <li><a href="#daily-chores" class="hover:underline">Daily chore ideas (7 tasks)</a></li>
+          <li><a href="#weekly-chores" class="hover:underline">Weekly chore ideas (10 tasks)</a></li>
+          <li><a href="#monthly-chores" class="hover:underline">Monthly chore ideas (8 tasks)</a></li>
+          <li><a href="#seasonal-chores" class="hover:underline">Seasonal chore ideas (8 tasks)</a></li>
+          <li><a href="#kids" class="hover:underline">Chore wheels for kids (by age group)</a></li>
+          <li><a href="#roommates-vs-couples" class="hover:underline">Roommates vs. couples: different rules apply</a></li>
+          <li><a href="#weighted-chores" class="hover:underline">Handling unequal chores and weighted assignments</a></li>
+        </ol>
+      </section>
+
+      {/* Section 1 */}
+      <section id="why-chore-wheels-work" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Why Chore Wheels Actually Work (It's Psychological)</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          There's a concept in behavioral economics called "procedural fairness." It's the idea that people care deeply not just about outcomes, but about the process that produced them. Even if you get a worse chore one week, you're more likely to accept it without resentment if the assignment method was visibly fair.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          This is why static chore charts — where you just assign tasks and write them on a whiteboard — fail within 3–4 weeks in most households. Someone feels the division is unequal. Maybe it objectively is, or maybe it just feels that way. Either way, the resentment builds and the system collapses.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          A spinning wheel changes the game entirely because:
+        </p>
+        <div class="space-y-3">
+          {[
+            { title: "The result is visibly random", desc: "Everyone watches the wheel spin. Nobody can accuse anyone of manipulating the outcome. The algorithm doesn't have favorites." },
+            { title: "Complaining is pointless (in a good way)", desc: "When a random wheel assigns you toilet duty, there's genuinely nobody to be annoyed at. The anger has nowhere to go, so it dissipates. This sounds small, but it's huge for household harmony." },
+            { title: "It creates shared buy-in", desc: "When everyone agrees to a spin-based system upfront, they're consenting to whatever the wheel decides. That consent is what makes the assignment feel legitimate." },
+            { title: "Variety prevents burnout", desc: "If you cleaned the bathroom every single week for six months, you'd be miserable too. Randomness distributes the painful chores across everyone over time, which is genuinely more fair." },
+          ].map((item) => (
+            <div class="bg-card border border-border rounded-xl p-5" key={item.title}>
+              <p class="font-semibold text-foreground">{item.title}</p>
+              <p class="text-sm text-muted-foreground mt-1">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">Real-world example</p>
+          <p class="text-sm text-muted-foreground">A household of three roommates in a shared flat — two work from home, one commutes. The commuter was quietly doing fewer chores because they were simply home less. With a static chart, this caused ongoing friction. With a weekly wheel spin, the commuter got assigned tasks they could do on weekends. Nobody could complain about fairness anymore because the wheel didn't know who had more time at home. Was it perfectly optimized? No. Was the conflict gone? Yes.</p>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      {/* Section 2 */}
+      <section id="setup" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">How to Set Up Your Chore Wheel (Step by Step)</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The setup takes about 20 minutes the first time. After that, the weekly spin takes 2 minutes. Here's the exact process:
+        </p>
+        <div class="space-y-3">
+          {setupSteps.map((item, i) => (
+            <div class="flex items-start gap-4 bg-card border border-border rounded-xl p-5" key={i}>
+              <span class="w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+              <div>
+                <p class="font-semibold text-foreground">{item.step}</p>
+                <p class="text-sm text-muted-foreground mt-1">{item.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">Two-wheel vs. one-wheel approach</p>
+          <p class="text-sm text-muted-foreground">Some households do one master wheel with all chores, one spin per person. Others run two wheels: one that picks the chore, one that picks the person. The two-wheel approach (spin for chore, then spin the <a href="/random-name-picker" class="text-primary hover:underline">Random Name Picker</a> to pick who does it) adds an extra layer of visible randomness that people tend to find even more satisfying. Try both and see what your household prefers.</p>
+        </div>
+      </section>
+
+      {/* Section 3 — Daily Chores */}
+      <section id="daily-chores" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Daily Chore Ideas for Your Wheel (7 Tasks)</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Daily chores are the ones that, if skipped, make the whole house feel gross within 24 hours. These are your non-negotiables. Rather than spinning daily (that would be exhausting), assign daily chores on a rotating weekly schedule — each person owns a set of daily tasks for the whole week, then you spin to reassign next week.
+        </p>
+        <div class="space-y-3">
+          {dailyChores.map((chore) => (
+            <div class="bg-card border border-border rounded-xl p-5" key={chore.name}>
+              <div class="flex items-start justify-between gap-4">
+                <p class="font-semibold text-foreground">{chore.name}</p>
+                <span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex-shrink-0">{chore.effort}</span>
+              </div>
+              <p class="text-sm text-muted-foreground mt-1">{chore.notes}</p>
+            </div>
+          ))}
+        </div>
+        <p class="text-muted-foreground leading-relaxed">
+          With 7 daily chores and 3 people in a household, each person takes on 2–3 tasks per week. That's completely manageable. With 2 people, you each get 3–4 tasks. The wheel decides who gets which bundle at the start of each week.
+        </p>
+      </section>
+
+      {/* Section 4 — Weekly Chores */}
+      <section id="weekly-chores" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Weekly Chore Ideas (10 Tasks)</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Weekly chores are where most chore conflict lives. The bathroom scrub, the vacuuming, the mopping — these are the tasks people actively dread. This is where the wheel earns its keep. When it's random, nobody can develop a grudge about always being stuck with the worst job.
+        </p>
+        <div class="space-y-3">
+          {weeklyChores.map((chore) => (
+            <div class="bg-card border border-border rounded-xl p-5" key={chore.name}>
+              <div class="flex items-start justify-between gap-4">
+                <p class="font-semibold text-foreground">{chore.name}</p>
+                <span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex-shrink-0">{chore.effort}</span>
+              </div>
+              <p class="text-sm text-muted-foreground mt-1">{chore.notes}</p>
+            </div>
+          ))}
+        </div>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">Tip: Group chores that make sense together</p>
+          <p class="text-sm text-muted-foreground">When you put these on a wheel, consider grouping "vacuum all carpets" with "mop hard floors" as a single "Floors" wheel entry. One person owns all floor cleaning for the week — it's more efficient (you move furniture once, not twice) and it feels like one big task rather than two medium ones.</p>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      {/* Section 5 — Monthly Chores */}
+      <section id="monthly-chores" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Monthly Chore Ideas (8 Tasks)</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Monthly chores are the ones that feel optional until they really, really aren't. The refrigerator that nobody has cleaned in four months. The oven interior that's starting to smoke at 200°C. The washing machine that now smells like a wet dog. These need their own wheel, spun once at the start of each month.
+        </p>
+        <div class="space-y-3">
+          {monthlyChores.map((chore) => (
+            <div class="bg-card border border-border rounded-xl p-5" key={chore.name}>
+              <div class="flex items-start justify-between gap-4">
+                <p class="font-semibold text-foreground">{chore.name}</p>
+                <span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex-shrink-0">{chore.effort}</span>
+              </div>
+              <p class="text-sm text-muted-foreground mt-1">{chore.notes}</p>
+            </div>
+          ))}
+        </div>
+        <p class="text-muted-foreground leading-relaxed">
+          With 8 monthly tasks and a monthly spin, each person in a 2-person household gets 4 tasks per month, 3 in a 3-person household. Most of these are 15–45 minute jobs. The total monthly extra cleaning time per person is roughly 2–3 hours, which is genuinely not a lot when you lay it out like this.
+        </p>
+      </section>
+
+      {/* Section 6 — Seasonal */}
+      <section id="seasonal-chores" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Seasonal Chore Ideas (8 Tasks)</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Seasonal chores are the big-effort items that only need to happen 2–4 times per year. Put these on a separate wheel and spin it at the start of each season: January, April, July, October. Or just whenever you notice things have gotten bad enough.
+        </p>
+        <div class="space-y-3">
+          {seasonalChores.map((chore) => (
+            <div class="bg-card border border-border rounded-xl p-5" key={chore.name}>
+              <div class="flex items-start justify-between gap-4">
+                <p class="font-semibold text-foreground">{chore.name}</p>
+                <span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full flex-shrink-0">{chore.effort}</span>
+              </div>
+              <p class="text-sm text-muted-foreground mt-1">{chore.notes}</p>
+            </div>
+          ))}
+        </div>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">The "half-day chore" problem</p>
+          <p class="text-sm text-muted-foreground">Some seasonal chores (deep carpet cleaning, full window wash) are genuinely large. For these, either assign them to one person who gets credit for two or three monthly tasks, or do them together as a household and put the result on the wheel anyway — just so there's a record of who did the planning and organizing.</p>
+        </div>
+      </section>
+
+      {/* Section 7 — Kids */}
+      <section id="kids" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Chore Wheels for Kids (By Age Group)</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The chore wheel is genuinely excellent for kids, and not just because it gets them contributing to the household. The randomness teaches an important life lesson: sometimes you get the job you didn't want. Learning to do it anyway, without it being anyone's "fault," is a skill that transfers everywhere.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The key is age-appropriateness. Give a 5-year-old the same chores as a 12-year-old and you've set them up to fail. Here's a breakdown that actually works:
+        </p>
+        <div class="space-y-4">
+          {kidsChores.map((group) => (
+            <div class="bg-card border border-border rounded-xl p-5" key={group.age}>
+              <p class="font-semibold text-foreground mb-3">{group.age}</p>
+              <ul class="space-y-1">
+                {group.chores.map((chore) => (
+                  <li class="flex items-center gap-2 text-sm text-muted-foreground" key={chore}>
+                    <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
+                    {chore}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <p class="text-muted-foreground leading-relaxed">
+          A few practical notes on running a kids' chore wheel: First, make the spin itself a ritual. Do it together on Sunday evening, make it feel like an event. Second, younger kids benefit from visual confirmation — a physical wheel (drawn on card and put on the fridge) alongside the digital one you use for the actual spin. Third, link the wheel to an allowance system if you use one, but don't make chores entirely conditional on payment. Some tasks are just part of being in a family.
+        </p>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">The "swap rule" for kids</p>
+          <p class="text-sm text-muted-foreground">Allow kids to swap chores with each other after the spin, but not with parents. This gives them agency while keeping adult-level tasks appropriately assigned. If your 9-year-old and 12-year-old both want to swap "set the table" for "vacuum the bedroom," that's their negotiation to have — not yours.</p>
+        </div>
+      </section>
+
+      {/* Section 8 — Roommates vs Couples */}
+      <section id="roommates-vs-couples" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Roommates vs. Couples: Different Rules Apply</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Chore dynamics are genuinely different depending on your household arrangement. What works for roommates often doesn't work for couples, and vice versa.
+        </p>
+        <div class="space-y-4">
+          <div class="bg-card border border-border rounded-xl p-5 space-y-3">
+            <div class="flex items-center gap-2">
+              <Users className="w-5 h-5 text-primary" />
+              <p class="font-semibold text-foreground">Roommate arrangements</p>
+            </div>
+            <p class="text-sm text-muted-foreground">With roommates, the default should be strict equality — everyone's name on the same wheel, full stop. The key difference from a couple is that roommates typically have less tolerance for flexible informality. If one person slacks, there's no underlying relationship cushioning the resentment. This means the wheel needs to be taken seriously as a system, with clear consequences (usually just social pressure) for not completing assigned tasks.</p>
+            <p class="text-sm text-muted-foreground">Specific tip: roommates often do better with a monthly spin for deep cleans rather than weekly, because weekly feel like a lot of overhead for people who are largely living parallel lives. Put the deep cleaning tasks on a monthly wheel, and handle daily/weekly chores with a simple rotating schedule that everyone agrees to upfront.</p>
+            <p class="text-sm text-muted-foreground">Also worth noting: private spaces (individual bedrooms) should never be on the shared chore wheel. Your room is your own problem. The wheel covers only common areas: kitchen, bathrooms, living room, hallways, shared outdoor spaces.</p>
+          </div>
+          <div class="bg-card border border-border rounded-xl p-5 space-y-3">
+            <div class="flex items-center gap-2">
+              <Star className="w-5 h-5 text-primary" />
+              <p class="font-semibold text-foreground">Couples and partners</p>
+            </div>
+            <p class="text-sm text-muted-foreground">Couples have a harder problem because they often have genuinely unequal situations — different work schedules, different physical abilities, different standards of cleanliness. A rigid 50/50 wheel doesn't always reflect this reality.</p>
+            <p class="text-sm text-muted-foreground">The most effective approach for couples is a "contribution weighting" system. If one partner works significantly longer hours, they might only spin for 40% of the chores (meaning their name appears fewer times on the "who does this chore" spin). This needs to be agreed on explicitly and revisited when circumstances change — a new job, a pregnancy, an injury.</p>
+            <p class="text-sm text-muted-foreground">The wheel still provides the procedural fairness that makes the outcome feel legitimate. But you can tilt the probabilities to reflect real-world equity. Real Wheel Picker doesn't currently support weighted names, but you can achieve the same effect by adding a person's name multiple times (e.g., put "Alex" in three times and "Sam" in twice for a 60/40 split).</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 9 — Weighted */}
+      <section id="weighted-chores" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Handling Unequal Chores and Weighted Assignments</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Not all chores are created equal. Scrubbing a bathroom for 45 minutes is not the same as taking out the trash for 3 minutes. A truly fair system needs to account for this. Here are three approaches that actually work:
+        </p>
+        <div class="space-y-4">
+          {[
+            {
+              title: "The Effort Tier system",
+              desc: "Divide all your chores into three tiers: Light (under 10 min), Medium (10–30 min), Heavy (30+ min). Create separate wheels for each tier. Each person must spin for at least one Heavy chore per week. This ensures nobody gets to fill their quota entirely with light tasks.",
+            },
+            {
+              title: "The Points system",
+              desc: "Assign point values to each chore based on time and effort. Bathroom scrub = 5 points. Taking out trash = 1 point. Each person needs to earn 15 points per week (or whatever total makes sense for your household). They spin from a pool of all chores and keep spinning until they hit their target. This gives autonomy while maintaining fairness.",
+            },
+            {
+              title: "The Bundle system",
+              desc: "Pre-build bundles of chores that are roughly equal in total effort. Bundle A = bathroom scrub + wipe switches. Bundle B = vacuum all floors + dust surfaces. Bundle C = mop + clean kitchen sink + empty all trash. Each bundle takes roughly 45–60 minutes. The wheel picks which bundle each person gets. This is the simplest approach and the one most households stick with long-term.",
+            },
+            {
+              title: "The 'I hate this chore' exception",
+              desc: "Allow each person to permanently exclude one chore that they genuinely cannot stand — not just dislike, but find deeply unpleasant (spiders in the bathroom, severe cleaning chemical sensitivity, etc.). That chore gets removed from their personal wheel. In exchange, they take on an agreed-upon alternative with similar effort. This exception must be used sparingly — max one per person — or the wheel becomes meaningless.",
+            },
+          ].map((item) => (
+            <div class="bg-card border border-border rounded-xl p-5" key={item.title}>
+              <p class="font-semibold text-foreground">{item.title}</p>
+              <p class="text-sm text-muted-foreground mt-1">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">The honest truth about chore systems</p>
+          <p class="text-sm text-muted-foreground">No system is perfect. The chore wheel works best when everyone actually wants it to work — when there's a shared desire to resolve the conflict and live together more smoothly. If someone is determined to be resentful regardless of the outcome, a wheel won't fix that. But for households where the dispute is genuinely about fairness rather than about deeper relationship issues, the wheel resolves things remarkably well. Start simple, run it for a month, and adjust based on what actually happens rather than what you predicted would happen.</p>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section class="bg-primary/5 border border-primary/20 rounded-xl p-8 text-center space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Ready to end the chore debate?</h2>
+        <p class="text-muted-foreground">Build your household chore wheel in 2 minutes. Free, no account needed.</p>
+        <div class="flex flex-wrap gap-3 justify-center">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Build Your Chore Wheel <ArrowRight className="w-4 h-4" />
+          </a>
+          <a href="/random-name-picker" class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-6 py-3 rounded-xl font-semibold hover:border-primary transition-colors">
+            Pick Who Does What
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug={canonical} client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

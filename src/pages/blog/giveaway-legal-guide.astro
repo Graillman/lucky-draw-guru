@@ -1,0 +1,334 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertTriangle, FileText, Shield, Globe, Scale, BookOpen } from 'lucide-react';
+
+const title = "Giveaway Legal Guide 2026: What's Actually Required (US, EU, UK & Canada)";
+const description = "Are your giveaways legal? This plain-English legal guide covers contest vs. sweepstakes rules, required disclosures, FTC regulations, GDPR, age restrictions, and the exact disclaimers you need to include.";
+const canonical = "/blog/giveaway-legal-guide";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": description,
+  "url": `https://realwheelpicker.com${canonical}`,
+  "author": { "@type": "Person", "name": "Real Wheel Picker Editorial Team", "url": "https://realwheelpicker.com/about" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2026-04-16",
+  "dateModified": "2026-04-16",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": `https://realwheelpicker.com${canonical}` }
+};
+
+const legalTriangle = [
+  { element: "Prize", description: "Something of value offered to participants" },
+  { element: "Chance", description: "Winner chosen randomly (not by skill or merit)" },
+  { element: "Consideration", description: "Participants must pay or provide significant value to enter" },
+];
+
+const sweepstakesRequirements = [
+  { requirement: "No purchase necessary (AMOE)", detail: "You must offer an Alternative Method of Entry — a way to enter without buying anything. Usually a mail-in or free online form." },
+  { requirement: "Official Rules document", detail: "Must include: eligibility, entry dates, prize description and ARV (Approximate Retail Value), odds of winning, method of selection, winner notification, and void-where-prohibited language." },
+  { requirement: "Winner verification", detail: "In most US states, winners must sign an affidavit of eligibility and a publicity release (if prizes exceed $600)." },
+  { requirement: "Registration in specific states", detail: "Florida (prizes over $5,000) and New York (prizes over $5,000) require registration and bonding. Rhode Island and Arizona have different thresholds." },
+  { requirement: "Prize tax documentation", detail: "Prizes over $600 must be reported on a 1099-MISC (US). Winner is responsible for taxes, but you must issue the form." },
+  { requirement: "Odds of winning disclosure", detail: "If the odds are deterministic, state them. If variable, use 'depends on number of eligible entries received.'" },
+];
+
+const contestRequirements = [
+  { requirement: "Judging criteria must be objective", detail: "A contest (skill-based) must have clear, pre-announced judging criteria. 'Best photo' is too vague without defined parameters." },
+  { requirement: "Qualified judges", detail: "Judges should be identified and their qualifications stated. Using your own employees as judges for public contests creates conflict-of-interest perception." },
+  { requirement: "No purchase necessary still applies", detail: "Even skill-based contests require a free entry path in the US if there's a chance element in judging (e.g., judges vote subjectively)." },
+  { requirement: "Winner selection transparency", detail: "How judges scored entries must be available on request in many jurisdictions." },
+];
+
+const disclosureRequirements = [
+  {
+    country: "United States (FTC)",
+    requirements: [
+      "Material connections must be disclosed — if you're running a giveaway as part of a paid partnership, disclose it",
+      "'Void where prohibited by law' in all promotional materials",
+      "No purchase necessary — Alternative Method of Entry available",
+      "Sponsor identification (your full legal name and address)",
+      "Prize ARV (Approximate Retail Value) must be disclosed"
+    ]
+  },
+  {
+    country: "European Union (GDPR)",
+    requirements: [
+      "Explicit consent for data collection — entering a giveaway doesn't automatically give you permission to add them to your email list",
+      "Data minimization — only collect data you actually need",
+      "Right to deletion — winners and losers can request you delete their data",
+      "Privacy policy must be linked from entry form",
+      "Data retention period must be specified"
+    ]
+  },
+  {
+    country: "United Kingdom (Advertising Standards Authority)",
+    requirements: [
+      "Significant conditions must be disclosed upfront, not hidden in small print",
+      "Promoters must not mislead about prize quality, value, or availability",
+      "Draw must be conducted under independent supervision or independently verifiable",
+      "'This promotion is not endorsed by [platform]' disclosure required",
+      "Winner must be made available on request for 60 days after draw"
+    ]
+  },
+  {
+    country: "Canada (CASL + Provincial)",
+    requirements: [
+      "Anti-spam legislation (CASL) — requires express consent before sending marketing emails",
+      "Must not require electronic address collection as the only entry method",
+      "Skill-testing question required for prizes — this is the famous Canadian 'math question' requirement that makes it a contest, not a lottery",
+      "Quebec: French-language rules must be available"
+    ]
+  },
+];
+
+const officialRulesTemplate = `OFFICIAL RULES — [GIVEAWAY NAME]
+
+NO PURCHASE NECESSARY TO ENTER OR WIN. A PURCHASE WILL NOT INCREASE YOUR CHANCES OF WINNING.
+
+1. ELIGIBILITY: Open to legal residents of [country/state], 18 years of age or older at time of entry. Employees of [Company Name] and their immediate family members are not eligible.
+
+2. SPONSOR: [Your Full Legal Name / Company Name, Address].
+
+3. AGREEMENT TO RULES: By participating, you agree to be fully bound by these Official Rules.
+
+4. ENTRY PERIOD: Begins [Date/Time] and ends [Date/Time] [Timezone].
+
+5. HOW TO ENTER: [Describe entry method]. One (1) entry per person. Alternative Method of Entry: To enter without [any purchase/requirement], [mail-in method or free online form link].
+
+6. PRIZES: One (1) winner will receive [Prize Description]. Approximate Retail Value: $[ARV]. No cash alternative.
+
+7. WINNER SELECTION: Winner will be selected on [Date] by random drawing from all eligible entries. Odds of winning depend on number of eligible entries received.
+
+8. WINNER NOTIFICATION: Winner will be notified via [method] within [timeframe]. Winner must respond within 48 hours.
+
+9. TAXES: Winner is responsible for all applicable taxes.
+
+10. GENERAL CONDITIONS: Void where prohibited. Sponsor reserves the right to cancel, modify, or suspend this promotion.
+
+11. PRIVACY: Information submitted is subject to [Privacy Policy URL].
+
+This promotion is in no way sponsored, endorsed, or administered by, or associated with [Platform Name].`;
+
+const commonMistakes = [
+  { mistake: "Not having Official Rules for sweepstakes", risk: "Illegal in most US states — regulators require it for any sweepstakes with significant prize value" },
+  { mistake: "Requiring email signup as the only way to enter", risk: "Violates GDPR in EU — creates a 'pay with data' situation that requires genuine free alternative" },
+  { mistake: "Not specifying prize ARV", risk: "Required by FTC, some state laws. IRS also uses ARV for tax reporting thresholds" },
+  { mistake: "Collecting entries from minors without parental consent", risk: "COPPA (US) requires parental consent for users under 13. Many brands require 18+ just to avoid complexity" },
+  { mistake: "Failing to report prizes over $600 on 1099-MISC", risk: "IRS violation — organizer may be liable for tax penalties even if winner doesn't report the prize" },
+  { mistake: "Running the giveaway in NY or FL without registration", risk: "New York Subdivision 5 and Florida's law require bonding and registration for sweepstakes with prizes over $5,000" },
+];
+---
+
+<Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com/" },
+    { name: "Blog", url: "https://realwheelpicker.com/blog" },
+    { name: title, url: `https://realwheelpicker.com${canonical}` }
+  ]} />
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <!-- Hero -->
+      <header class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-purple-400 font-medium">
+          <Scale size={16} className="text-purple-400" />
+          <span>Legal & Compliance</span>
+          <span class="text-gray-500">·</span>
+          <span class="text-gray-400">13 min read</span>
+        </div>
+        <h1 class="text-3xl font-bold text-white leading-tight">
+          Giveaway Legal Guide 2026: What's Actually Required (US, EU, UK & Canada)
+        </h1>
+        <p class="text-lg text-gray-300">
+          "Follow and comment to win!" is one of the most legally fraught phrases in social media. Most brands running giveaways are technically in violation of at least one rule — FTC disclosure requirements, state registration rules, GDPR data processing rules, or platform terms of service. This guide explains what's actually required in plain English, with specific templates and checklists.
+        </p>
+        <div class="bg-yellow-900/30 border border-yellow-500/40 rounded-lg p-4">
+          <div class="flex items-start gap-3">
+            <AlertTriangle size={20} className="text-yellow-400 mt-0.5 flex-shrink-0" />
+            <p class="text-yellow-200 text-sm"><strong>Disclaimer:</strong> This guide is for general informational purposes and does not constitute legal advice. Laws vary by jurisdiction and change frequently. Consult a qualified attorney before running high-value promotions.</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- ToC -->
+      <nav class="bg-white/5 border border-white/10 rounded-xl p-6">
+        <h2 class="text-white font-semibold mb-3">In this guide</h2>
+        <ol class="space-y-1.5 text-sm text-gray-300">
+          <li><a href="#triangle" class="hover:text-purple-400 transition-colors">1. The illegal lottery triangle — what makes a giveaway a crime</a></li>
+          <li><a href="#sweepstakes" class="hover:text-purple-400 transition-colors">2. Sweepstakes requirements (US)</a></li>
+          <li><a href="#contests" class="hover:text-purple-400 transition-colors">3. Contest (skill-based) requirements</a></li>
+          <li><a href="#disclosures" class="hover:text-purple-400 transition-colors">4. Required disclosures by country</a></li>
+          <li><a href="#template" class="hover:text-purple-400 transition-colors">5. Official Rules template</a></li>
+          <li><a href="#mistakes" class="hover:text-purple-400 transition-colors">6. Common legal mistakes</a></li>
+        </ol>
+      </nav>
+
+      <AdPlaceholder position="in-content" client:visible />
+
+      <!-- Section 1: Triangle -->
+      <section id="triangle" class="space-y-5">
+        <h2 class="text-2xl font-bold text-white">1. The Illegal Lottery Triangle</h2>
+        <p class="text-gray-300">
+          In most jurisdictions, running a lottery (which is what most people call a raffle) is illegal unless you're a licensed charity or the government. A lottery is defined by three elements — all three must be present for it to be legally a lottery:
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {legalTriangle.map((item) => (
+            <div class="bg-white/5 border border-white/10 rounded-xl p-5 text-center">
+              <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Scale size={20} className="text-white" />
+              </div>
+              <h3 class="text-white font-bold">{item.element}</h3>
+              <p class="text-gray-400 text-sm mt-2">{item.description}</p>
+            </div>
+          ))}
+        </div>
+        <p class="text-gray-300">
+          The legal solution used by brands running social media giveaways: remove "Consideration" by adding an Alternative Method of Entry (AMOE). A free entry option converts the illegal lottery into a legal sweepstakes. This is why every legitimate US sweepstakes says "No purchase necessary." That phrase is doing real legal work.
+        </p>
+        <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+          <h3 class="text-white font-semibold mb-3">Lottery vs. Contest vs. Sweepstakes</h3>
+          <div class="space-y-2 text-sm">
+            <div class="flex gap-3">
+              <span class="text-red-300 font-semibold w-24 flex-shrink-0">Lottery</span>
+              <span class="text-gray-300">Prize + Chance + Consideration = illegal without licence</span>
+            </div>
+            <div class="flex gap-3">
+              <span class="text-green-300 font-semibold w-24 flex-shrink-0">Sweepstakes</span>
+              <span class="text-gray-300">Prize + Chance + no Consideration (free entry available) = legal</span>
+            </div>
+            <div class="flex gap-3">
+              <span class="text-blue-300 font-semibold w-24 flex-shrink-0">Contest</span>
+              <span class="text-gray-300">Prize + Skill (no pure chance) + Consideration possible = legal with rules</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Sweepstakes -->
+      <section id="sweepstakes" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">2. US Sweepstakes Requirements</h2>
+        <p class="text-gray-300">
+          US federal law (primarily FTC regulations and the Postal Service regulations) and state laws govern sweepstakes. Here are the core requirements:
+        </p>
+        <div class="space-y-3">
+          {sweepstakesRequirements.map((item) => (
+            <div class="bg-white/5 border border-white/10 rounded-lg p-4">
+              <h3 class="text-white font-semibold text-sm flex items-center gap-2">
+                <CheckCircle size={14} className="text-green-400 flex-shrink-0" /> {item.requirement}
+              </h3>
+              <p class="text-gray-400 text-sm mt-2">{item.detail}</p>
+            </div>
+          ))}
+        </div>
+        <div class="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4">
+          <p class="text-yellow-300 text-sm"><strong>New York & Florida registration:</strong> These two states have strict sweepstakes registration requirements for prizes over $5,000. If you're running a national sweepstakes with significant prizes, you need to register in both states or exclude them from eligibility. Excluding them is simpler but reduces your potential audience.</p>
+        </div>
+      </section>
+
+      <!-- Section 3: Contests -->
+      <section id="contests" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">3. Contest (Skill-Based) Requirements</h2>
+        <p class="text-gray-300">
+          If you're running a "best photo," "most creative caption," or other skill-based competition, different rules apply. The winner isn't chosen randomly — but that doesn't mean anything goes.
+        </p>
+        <div class="space-y-3">
+          {contestRequirements.map((item) => (
+            <div class="bg-white/5 border border-white/10 rounded-lg p-4">
+              <h3 class="text-white font-semibold text-sm">{item.requirement}</h3>
+              <p class="text-gray-400 text-sm mt-2">{item.detail}</p>
+            </div>
+          ))}
+        </div>
+        <div class="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
+          <p class="text-blue-300 text-sm"><strong>Canada's skill-testing requirement:</strong> Canada requires even sweepstakes to include a skill-testing question to avoid lottery classification. Typically a simple math problem (e.g., "What is 5 × 3 + 2 - 7?"). Winners must answer correctly to receive their prize. This requirement applies across all provinces, though the specific rules vary.</p>
+        </div>
+      </section>
+
+      <!-- Section 4: Disclosures -->
+      <section id="disclosures" class="space-y-5">
+        <h2 class="text-2xl font-bold text-white">4. Required Disclosures by Country</h2>
+        <p class="text-gray-300">
+          If your giveaway is open internationally (common for social media), you may face requirements from multiple jurisdictions simultaneously.
+        </p>
+        {disclosureRequirements.map((country) => (
+          <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+            <h3 class="text-white font-bold flex items-center gap-2 mb-3">
+              <Globe size={18} className="text-purple-400" /> {country.country}
+            </h3>
+            <ul class="space-y-2">
+              {country.requirements.map((req) => (
+                <li class="flex items-start gap-2 text-gray-300 text-sm">
+                  <CheckCircle size={14} className="text-green-400 mt-0.5 flex-shrink-0" /> {req}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        <div class="bg-purple-900/30 border border-purple-500/30 rounded-lg p-4">
+          <p class="text-purple-300 text-sm"><strong>Simple solution for small creators:</strong> Restrict your giveaway to one country. "Open to US residents only" eliminates GDPR, Canadian CASL, and UK ASA compliance requirements. You still need to comply with US federal and state rules, but that's one ruleset, not four.</p>
+        </div>
+      </section>
+
+      <!-- Section 5: Template -->
+      <section id="template" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">5. Official Rules Template</h2>
+        <p class="text-gray-300">
+          Use this as a starting point — customize the brackets and have a lawyer review for high-value giveaways. Every sweepstakes over $500 should have something like this.
+        </p>
+        <div class="bg-gray-900 border border-white/10 rounded-xl p-5 overflow-x-auto">
+          <pre class="text-gray-300 text-xs whitespace-pre-wrap font-mono leading-relaxed">{officialRulesTemplate}</pre>
+        </div>
+        <p class="text-gray-400 text-sm">Customize all bracketed items. For giveaways with prizes under $500 in a single state, a simplified version of the above is often sufficient. For prizes over $5,000 or multi-state/national sweepstakes, consult a promotions lawyer.</p>
+      </section>
+
+      <!-- Section 6: Mistakes -->
+      <section id="mistakes" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">6. Common Legal Mistakes (and Their Risks)</h2>
+        <div class="space-y-3">
+          {commonMistakes.map((item) => (
+            <div class="bg-red-900/10 border border-red-500/20 rounded-lg p-4">
+              <div class="flex items-start gap-3">
+                <AlertTriangle size={16} className="text-red-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p class="text-white font-semibold text-sm">{item.mistake}</p>
+                  <p class="text-red-300 text-sm mt-1">{item.risk}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="bg-green-900/20 border border-green-500/30 rounded-xl p-5">
+          <h3 class="text-green-300 font-semibold mb-2 flex items-center gap-2">
+            <CheckCircle size={16} className="text-green-400" /> The minimum viable compliant giveaway
+          </h3>
+          <p class="text-gray-300 text-sm">
+            For a social media giveaway under $500, restricted to one country, run by an individual or small business: (1) Write Official Rules even if brief. (2) Add "No purchase necessary" and an AMOE. (3) Include the platform disclaimer. (4) Specify the prize ARV. (5) Contact winner and announce publicly. That's the real minimum — everything else is risk mitigation for higher stakes.
+          </p>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="bg-gradient-to-br from-purple-900/40 to-indigo-900/40 border border-purple-500/30 rounded-2xl p-8 text-center space-y-4">
+        <Shield size={40} className="text-purple-400 mx-auto" />
+        <h2 class="text-2xl font-bold text-white">Run Your Giveaway With Verifiable Fairness</h2>
+        <p class="text-gray-300 max-w-lg mx-auto">
+          Once your rules are sorted, use Real Wheel Picker to pick your winner — cryptographically random, screen-recordable, defensible in any dispute.
+        </p>
+        <a href="/" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+          Open the Winner Picker <ArrowRight size={18} className="text-white" />
+        </a>
+      </section>
+
+      <RelatedPosts currentSlug={canonical} client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

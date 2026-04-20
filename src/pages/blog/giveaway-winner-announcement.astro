@@ -1,0 +1,353 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertTriangle, Trophy, MessageSquare, Clock, Users, Share2 } from 'lucide-react';
+
+const title = "Giveaway Winner Announcement: Templates, Timing & What to Do When They Don't Respond";
+const description = "How to announce your giveaway winner professionally — with 8 ready-to-use announcement templates for every platform, the exact timing sequence to follow, and a backup plan when your winner ghosts you.";
+const canonical = "/blog/giveaway-winner-announcement";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": description,
+  "url": `https://realwheelpicker.com${canonical}`,
+  "author": { "@type": "Person", "name": "Real Wheel Picker Editorial Team", "url": "https://realwheelpicker.com/about" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2026-04-12",
+  "dateModified": "2026-04-12",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": `https://realwheelpicker.com${canonical}` }
+};
+
+const announcementTemplates = [
+  {
+    platform: "Instagram Post",
+    tone: "Exciting / Celebration",
+    template: `🎉 AND THE WINNER IS... @[username]! 🎉
+
+Congratulations! You've won [prize description]!
+
+I've just sent you a DM with the details. Please respond within 48 hours to claim your prize.
+
+Thank you to ALL [number] of you who entered — this community is everything. Stay tuned, there's another giveaway coming [timeframe].
+
+Rules: Winner was selected randomly using @realwheelpicker from all qualifying entries. Draw was recorded and is available on request.`
+  },
+  {
+    platform: "Instagram Story",
+    tone: "Quick / Casual",
+    template: `🏆 WINNER ANNOUNCEMENT
+
+[Prize name] goes to... @[username]!
+
+✅ Check your DMs!
+✅ 48h to respond
+✅ New giveaway coming [timeframe]
+
+[Add screen recording of the spin as a story video]`
+  },
+  {
+    platform: "TikTok Video Caption",
+    tone: "High energy",
+    template: `WINNER REVEALED! 🎊 See the spin result in the video above.
+
+Congrats @[username] — you just won [prize]! DM me to claim!
+
+To everyone who entered: you're amazing. I'm running another one next [week/month] so follow so you don't miss it 🫶
+
+#giveaway #winner #[yourniche]`
+  },
+  {
+    platform: "YouTube Community Post",
+    tone: "Professional / Warm",
+    template: `Giveaway Winner Announcement
+
+After [number] entries and a live wheel spin (linked below), the winner of [prize] is: [username]!
+
+[Username], I've sent you a private message here on YouTube. Please respond within 48 hours. If I don't hear back, I'll draw a new winner on [date].
+
+Full draw recording: [link]
+Entry list: [link]
+
+Thank you to everyone who participated. Your support means everything to this channel.`
+  },
+  {
+    platform: "Facebook Post",
+    tone: "Community-focused",
+    template: `🎉 Giveaway Winner Announced!
+
+After [X] entries, I used a random wheel picker to select our winner of [prize]:
+
+🏆 [Full Name / @username]
+
+Congratulations! I'll be sending you a message shortly. Please respond within 48 hours to claim your prize.
+
+For transparency: the draw was recorded — reply to this post if you'd like the link. The full entry list is also available.
+
+To everyone else: thank you for participating! [Future giveaway teaser.]`
+  },
+  {
+    platform: "Twitter / X",
+    tone: "Brief",
+    template: `Giveaway winner: @[username] 🎉
+
+You've won [prize]! DM incoming — 48h to respond.
+
+Draw recording: [link]
+
+Thanks to all [number] who entered. 🙏`
+  },
+  {
+    platform: "Email to participants (if you collected emails)",
+    tone: "Professional",
+    template: `Subject: [Giveaway name] — Winner Announcement
+
+Hi [first name],
+
+Thank you for entering the [giveaway name]!
+
+After a random draw from [number] entries, the winner is: [winner name/username].
+
+If you're the winner, please reply to this email within 48 hours to claim your [prize].
+
+For full transparency, the draw recording is available here: [link]. The complete entry list can be requested by replying to this email.
+
+Thank you for your participation. We'll be running another giveaway [timeframe] — watch your inbox!
+
+[Your name/brand]`
+  },
+  {
+    platform: "Direct Message to Winner",
+    tone: "Personal / Warm",
+    template: `Hi [name]! 👋
+
+Congratulations — you've won the [giveaway name]! 🎉
+
+You were selected from [number] entries using a random wheel draw (I can share the recording if you'd like).
+
+To claim your [prize], I just need:
+• [Delivery address / email / other info needed]
+• Confirmation that you agree to the terms I posted: [link]
+
+Please respond within 48 hours. If I don't hear from you by [date/time], I'll need to select a new winner.
+
+So excited for you! 🎊`
+  }
+];
+
+const timingSequence = [
+  { time: "T+0 (Draw complete)", action: "Contact the winner via DM immediately", note: "Don't announce publicly until you've reached out — they should hear it from you first" },
+  { time: "T+1 hour", action: "Post public announcement", note: "Give the winner 1 hour to see their DM before going public" },
+  { time: "T+24 hours", action: "Send a follow-up DM if no response", note: "One gentle reminder — 'Just checking you saw my message!'" },
+  { time: "T+48 hours", action: "Final contact attempt", note: "Email if you have it, comment on one of their recent posts (publicly)" },
+  { time: "T+72 hours", action: "Announce backup winner selection", note: "Post publicly that the original winner didn't respond and you're selecting a new winner" },
+  { time: "T+73 hours", action: "Draw and announce backup winner", note: "Same process — DM first, public announcement after 1 hour" },
+];
+
+const noResponseScripts = [
+  {
+    scenario: "Winner hasn't responded after 24 hours",
+    what_to_say: "Hey [name]! Just wanted to make sure you saw my message — you won [prize]! Let me know if you have any questions. Looking forward to getting this to you! 🎉",
+    tone: "Friendly reminder, no pressure"
+  },
+  {
+    scenario: "Winner hasn't responded after 48 hours (final contact)",
+    what_to_say: "Hi [name] — this is my final attempt to reach you about your prize. If I don't hear from you by [specific date and time], I'll need to draw a new winner to ensure the prize goes to someone in our community. Hope to hear from you soon!",
+    tone: "Clear deadline, no hard feelings"
+  },
+  {
+    scenario: "Winner responds but refuses prize",
+    what_to_say: "No worries at all! It happens. I'll do a new draw from the remaining entries — good luck to everyone else!",
+    tone: "Gracious, redirect immediately"
+  },
+  {
+    scenario: "Winner can't be contacted at all (account deleted, DMs closed)",
+    what_to_say: "[Post publicly]: Update on our giveaway — unfortunately, I've been unable to reach our original winner @[username] after multiple contact attempts over [timeframe]. I'm now drawing a new winner from the remaining entries. New winner announced shortly!",
+    tone: "Transparent, explains the situation"
+  },
+];
+
+const announcementMistakes = [
+  "Tagging the winner publicly before contacting them privately",
+  "Setting a response window under 24 hours (winner may be asleep, traveling, etc.)",
+  "Not specifying what info you need from the winner to send the prize",
+  "Announcing via Stories only (disappear after 24h — no permanent record)",
+  "Drawing a backup winner without announcing that the original didn't respond",
+  "Collecting shipping addresses in public comments (privacy violation)",
+];
+---
+
+<Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com/" },
+    { name: "Blog", url: "https://realwheelpicker.com/blog" },
+    { name: title, url: `https://realwheelpicker.com${canonical}` }
+  ]} />
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <!-- Hero -->
+      <header class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-purple-400 font-medium">
+          <Trophy size={16} className="text-purple-400" />
+          <span>Giveaways</span>
+          <span class="text-gray-500">·</span>
+          <span class="text-gray-400">11 min read</span>
+        </div>
+        <h1 class="text-3xl font-bold text-white leading-tight">
+          Giveaway Winner Announcement: Templates, Timing & What to Do When They Don't Respond
+        </h1>
+        <p class="text-lg text-gray-300">
+          You've run the draw. You have a winner. Now comes the part most guides skip: the actual announcement, the timing, the awkward DM conversation, and the backup plan when your winner disappears into the void. Here are 8 ready-to-use templates, a timeline sequence that protects you legally, and scripts for every scenario.
+        </p>
+      </header>
+
+      <!-- ToC -->
+      <nav class="bg-white/5 border border-white/10 rounded-xl p-6">
+        <h2 class="text-white font-semibold mb-3">In this guide</h2>
+        <ol class="space-y-1.5 text-sm text-gray-300">
+          <li><a href="#timing" class="hover:text-purple-400 transition-colors">1. The timing sequence — who to tell, and when</a></li>
+          <li><a href="#templates" class="hover:text-purple-400 transition-colors">2. 8 announcement templates (one per platform)</a></li>
+          <li><a href="#no-response" class="hover:text-purple-400 transition-colors">3. When your winner doesn't respond</a></li>
+          <li><a href="#backup" class="hover:text-purple-400 transition-colors">4. How to draw a backup winner</a></li>
+          <li><a href="#mistakes" class="hover:text-purple-400 transition-colors">5. Announcement mistakes that kill trust</a></li>
+        </ol>
+      </nav>
+
+      <AdPlaceholder position="in-content" client:visible />
+
+      <!-- Section 1: Timing -->
+      <section id="timing" class="space-y-5">
+        <h2 class="text-2xl font-bold text-white">1. The Timing Sequence — Who to Tell, and When</h2>
+        <p class="text-gray-300">
+          The order matters. Most brands get this backwards: they announce the winner publicly first, then DM them — which means the winner often finds out from the comments, not from you. That's a terrible first impression for your prize delivery.
+        </p>
+        <div class="space-y-2">
+          {timingSequence.map((item) => (
+            <div class="flex gap-4 bg-white/5 rounded-xl p-4 border border-white/10">
+              <div class="w-24 flex-shrink-0">
+                <span class="text-purple-300 font-mono text-sm">{item.time}</span>
+              </div>
+              <div>
+                <p class="text-white font-semibold text-sm">{item.action}</p>
+                <p class="text-gray-400 text-sm mt-0.5">{item.note}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
+          <p class="text-blue-300 text-sm"><strong>Why 48 hours?</strong> Winners live in different time zones, have jobs, get sick, go camping. 24 hours is too short — you'll get complaints from legitimate winners who just happened to be offline. 72 hours is too long — your audience loses interest and the announcement loses momentum. 48 hours is the sweet spot.</p>
+        </div>
+      </section>
+
+      <!-- Section 2: Templates -->
+      <section id="templates" class="space-y-6">
+        <h2 class="text-2xl font-bold text-white">2. Eight Announcement Templates</h2>
+        <p class="text-gray-300">
+          Copy, customize the brackets, and post. Each template includes the transparency language that protects you from accusations.
+        </p>
+        {announcementTemplates.map((template, i) => (
+          <div class="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
+            <div class="flex items-center justify-between px-5 py-3 border-b border-white/10">
+              <h3 class="text-white font-semibold">{template.platform}</h3>
+              <span class="bg-purple-900/40 text-purple-300 text-xs px-2 py-1 rounded">{template.tone}</span>
+            </div>
+            <div class="p-5">
+              <pre class="text-gray-300 text-sm whitespace-pre-wrap font-sans leading-relaxed">{template.template}</pre>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <!-- Section 3: No response -->
+      <section id="no-response" class="space-y-5">
+        <h2 class="text-2xl font-bold text-white">3. When Your Winner Doesn't Respond</h2>
+        <p class="text-gray-300">
+          It happens more often than you'd think — roughly 15-20% of giveaway winners need multiple contact attempts. Here are the exact scripts for each scenario:
+        </p>
+        <div class="space-y-4">
+          {noResponseScripts.map((script) => (
+            <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+              <h3 class="text-white font-semibold">{script.scenario}</h3>
+              <div class="bg-white/5 rounded-lg p-4 mt-3">
+                <p class="text-gray-300 text-sm italic">"{script.what_to_say}"</p>
+              </div>
+              <p class="text-gray-500 text-xs mt-2">Tone: {script.tone}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Section 4: Backup winner -->
+      <section id="backup" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">4. How to Draw a Backup Winner</h2>
+        <p class="text-gray-300">
+          Your giveaway rules should mention backup winners upfront: "If the winner doesn't respond within 48 hours, a new winner will be selected from the remaining entries." This pre-empts accusations that you hand-picked the backup.
+        </p>
+        <ol class="space-y-3">
+          <li class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">1</div>
+            <p class="text-gray-300 text-sm"><strong class="text-white">Remove the original winner from the list</strong> before spinning again. They had their chance; the backup should come from the remaining pool.</p>
+          </li>
+          <li class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">2</div>
+            <p class="text-gray-300 text-sm"><strong class="text-white">Screen-record the backup draw</strong> — same as the original. The backup draw needs the same level of documentation.</p>
+          </li>
+          <li class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">3</div>
+            <p class="text-gray-300 text-sm"><strong class="text-white">Post publicly that you're drawing a backup</strong> before doing so. "Original winner @[user] didn't respond within our 48h window — drawing a new winner now." Don't just silently announce a different name.</p>
+          </li>
+          <li class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">4</div>
+            <p class="text-gray-300 text-sm"><strong class="text-white">Repeat the full timing sequence</strong> for the backup winner — DM first, public announcement after 1 hour, 48-hour response window.</p>
+          </li>
+        </ol>
+        <div class="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4">
+          <p class="text-yellow-300 text-sm"><strong>How many backup winners?</strong> Most brands draw one backup and, if that person also doesn't respond, draw a second. Three rounds of non-responding winners is statistically unusual and may indicate a problem with your entry collection (bots, deleted accounts). Investigate before drawing a fourth.</p>
+        </div>
+      </section>
+
+      <!-- Section 5: Mistakes -->
+      <section id="mistakes" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">5. Announcement Mistakes That Kill Trust</h2>
+        <div class="space-y-2">
+          {announcementMistakes.map((mistake, i) => (
+            <div class="flex items-start gap-3 bg-red-900/10 border border-red-500/20 rounded-lg p-3">
+              <AlertTriangle size={16} className="text-red-400 mt-0.5 flex-shrink-0" />
+              <p class="text-gray-300 text-sm">{mistake}</p>
+            </div>
+          ))}
+        </div>
+        <div class="bg-green-900/20 border border-green-500/30 rounded-xl p-5">
+          <h3 class="text-green-300 font-semibold mb-2 flex items-center gap-2">
+            <CheckCircle size={16} className="text-green-400" /> The announcement that builds the most trust
+          </h3>
+          <p class="text-gray-300 text-sm">
+            The most credible announcement includes: (1) the winner's username, (2) a link to the draw recording, (3) a link to the entry list, (4) a clear 48-hour response window, and (5) a statement that you've already DMed them. Every piece of that is verifiable, which makes every piece dispute-proof.
+          </p>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="bg-gradient-to-br from-purple-900/40 to-indigo-900/40 border border-purple-500/30 rounded-2xl p-8 text-center space-y-4">
+        <Trophy size={40} className="text-purple-400 mx-auto" />
+        <h2 class="text-2xl font-bold text-white">Ready to Pick Your Winner?</h2>
+        <p class="text-gray-300 max-w-lg mx-auto">
+          Run your draw with Real Wheel Picker — cryptographically random, screen-recordable, dispute-proof.
+        </p>
+        <a href="/" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+          Start the Winner Draw <ArrowRight size={18} className="text-white" />
+        </a>
+      </section>
+
+      <RelatedPosts currentSlug={canonical} client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

@@ -1,0 +1,384 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, Clock, Utensils, Star, Lightbulb } from 'lucide-react';
+
+const title = "Spin the Wheel for Dinner: 40 Meal Ideas to End 'What Should We Eat?' Forever";
+const description = "Decision fatigue at dinner is real. A meal decision wheel ends the nightly debate in seconds. 40 meal ideas, cuisine wheels, restaurant roulette, and how to set it up.";
+const canonical = "/blog/meal-decision-wheel";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Spin the Wheel for Dinner: 40 Meal Ideas to End 'What Should We Eat?' Forever",
+  "description": "Decision fatigue at dinner is real. A meal decision wheel ends the nightly debate in seconds.",
+  "author": { "@type": "Person", "name": "Real Wheel Picker Editorial Team", "url": "https://realwheelpicker.com/about" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2026-04-06",
+  "dateModified": "2026-04-06",
+  "image": "https://realwheelpicker.com/og-default.png",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/meal-decision-wheel" },
+};
+
+const quickMeals = [
+  { name: "Pasta aglio e olio", time: "15 min", effort: "Easy", notes: "Garlic, olive oil, parmesan — pantry staple dinner" },
+  { name: "Fried rice", time: "20 min", effort: "Easy", notes: "Best with day-old rice; add whatever protein you have" },
+  { name: "Tacos", time: "20 min", effort: "Easy", notes: "Ground beef or canned beans, tortillas, salsa" },
+  { name: "Stir-fry", time: "20 min", effort: "Easy", notes: "Any vegetables + protein + soy sauce + rice" },
+  { name: "Omelette or frittata", time: "15 min", effort: "Easy", notes: "The 'breakfast for dinner' option everyone secretly loves" },
+  { name: "Grilled cheese + tomato soup", time: "20 min", effort: "Easy", notes: "Comfort food classic, endlessly satisfying" },
+  { name: "Quesadillas", time: "15 min", effort: "Easy", notes: "Cheese + whatever leftovers are in the fridge" },
+  { name: "BLT sandwiches", time: "10 min", effort: "Very Easy", notes: "Bacon, lettuce, tomato — peak summer dinner" },
+];
+
+const cuisineOptions = [
+  { cuisine: "Italian", examples: "Pasta carbonara, risotto, pizza, chicken piccata" },
+  { cuisine: "Mexican", examples: "Tacos, enchiladas, pozole, chiles rellenos" },
+  { cuisine: "Japanese", examples: "Ramen, sushi bowls, teriyaki, katsu curry" },
+  { cuisine: "Indian", examples: "Butter chicken, dal, palak paneer, biryani" },
+  { cuisine: "Thai", examples: "Pad thai, green curry, tom kha soup, larb" },
+  { cuisine: "Chinese", examples: "Kung pao chicken, mapo tofu, dumplings, fried rice" },
+  { cuisine: "Mediterranean", examples: "Greek salad + pita, falafel, moussaka, shakshuka" },
+  { cuisine: "American", examples: "Burgers, BBQ ribs, mac & cheese, pot roast" },
+  { cuisine: "Korean", examples: "Bibimbap, bulgogi, kimchi stew, Korean fried chicken" },
+  { cuisine: "French", examples: "Quiche, coq au vin, croque monsieur, ratatouille" },
+];
+
+const restaurantCategories = [
+  { type: "Fast casual", examples: "Chipotle, Shake Shack, local burger joint" },
+  { type: "Pizza delivery", examples: "Pick the pizzeria, spin for toppings separately" },
+  { type: "Sushi / Japanese", examples: "Delivery or dine-in, omakase vs à la carte spin" },
+  { type: "Indian delivery", examples: "Biryani house, curry restaurant, chaat spot" },
+  { type: "Chinese delivery", examples: "Dim sum spot, Szechuan, Cantonese" },
+  { type: "Thai", examples: "Local Thai joint, delivery via DoorDash" },
+  { type: "Greek / Mediterranean", examples: "Gyro spot, mezze restaurant" },
+  { type: "Local favorite", examples: "That place you always say you'll go to more often" },
+];
+
+const weeklyPlan = [
+  { day: "Monday", category: "Quick & easy", why: "Start of the week — energy is low after the weekend wind-down" },
+  { day: "Tuesday", category: "International cuisine", why: "Mid-week variety keeps the routine interesting" },
+  { day: "Wednesday", category: "Leftover remix", why: "Use whatever's in the fridge creatively" },
+  { day: "Thursday", category: "Protein-focused", why: "Pre-weekend energy boost — grilled chicken, steak, fish" },
+  { day: "Friday", category: "Treat meal", why: "Order out, pizza night, or something special" },
+  { day: "Saturday", category: "Family cook-together", why: "Longer recipe, everyone participates" },
+  { day: "Sunday", category: "Batch cook / meal prep", why: "Something that makes leftovers for Monday" },
+];
+---
+
+<Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+<SchemaBreadcrumb items={[{ name: "Home", url: "https://realwheelpicker.com/" }, { name: "Blog", url: "https://realwheelpicker.com/blog" }, { name: title, url: `https://realwheelpicker.com${canonical}` }]} />
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <section class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href="/blog" class="hover:text-primary transition-colors">Blog</a>
+          <span>/</span>
+          <span>Meal Decision Wheel</span>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Spin the Wheel for Dinner: 40 Meal Ideas to End "What Should We Eat?" Forever
+        </h1>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          The average person makes about 35,000 decisions per day. By dinner time, your brain is running on fumes. That's why "what should we eat?" is the question that ends relationships — not because the question is hard, but because nobody has any decision-making capacity left to answer it. The meal wheel fixes this permanently.
+        </p>
+        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>9 min read</span>
+          <span>·</span>
+          <span>Updated April 2026</span>
+        </div>
+      </section>
+
+      <section class="bg-card border border-border rounded-xl p-6 space-y-3">
+        <h2 class="font-bold text-foreground">In this guide</h2>
+        <ol class="space-y-1 text-sm text-primary list-decimal list-inside">
+          <li><a href="#why" class="hover:underline">Why dinner decisions are so exhausting</a></li>
+          <li><a href="#how-to-build" class="hover:underline">How to build your meal wheel</a></li>
+          <li><a href="#quick-meals" class="hover:underline">40 meal ideas for your wheel</a></li>
+          <li><a href="#cuisine-wheel" class="hover:underline">The cuisine roulette approach</a></li>
+          <li><a href="#restaurant" class="hover:underline">Restaurant roulette (for ordering out)</a></li>
+          <li><a href="#weekly" class="hover:underline">Weekly meal planning with a spin wheel</a></li>
+          <li><a href="#kids" class="hover:underline">Kids and the meal wheel</a></li>
+          <li><a href="#dietary" class="hover:underline">Adapting for dietary restrictions</a></li>
+          <li><a href="#setup" class="hover:underline">Setting it up on Real Wheel Picker</a></li>
+        </ol>
+      </section>
+
+      <section id="why" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Why Dinner Decisions Are Uniquely Exhausting</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Decision fatigue is a real psychological phenomenon — the quality of decisions deteriorates after a long period of decision-making. It's why judges give harsher sentences before lunch, why people impulse-buy at checkout after a long shopping trip, and why "I don't care, you pick" is a universal response to dinner questions at 7pm.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The dinner problem has a specific compounding factor: the stakes feel asymmetric. If you choose badly — picked something nobody wanted, ordered something that took 90 minutes — you feel responsible for a bad evening. So instead of deciding, everyone defers. And the deferral loop ("I don't mind, whatever you want") can last 40 minutes.
+        </p>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">The actual problem isn't hunger — it's meta-decision anxiety</p>
+          <p class="text-sm text-muted-foreground">You're not really deciding what to eat. You're trying to simultaneously satisfy your own preferences, predict everyone else's preferences, assess your budget, estimate prep time, check what's in the fridge, and avoid repeating last night's meal. No wonder it's paralyzing. A spin wheel removes all of that — one spin, done.</p>
+        </div>
+        <p class="text-muted-foreground leading-relaxed">
+          The spin wheel works because it provides external authority. Nobody picked it. Nobody is imposing their preference. The wheel decided. This is psychologically clean in a way that "I guess we could do pasta again" never is.
+        </p>
+      </section>
+
+      <section id="how-to-build" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">How to Build Your Meal Wheel</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          There are three approaches, each suited for different households:
+        </p>
+        <div class="space-y-4">
+          <div class="bg-card border border-border rounded-xl p-5 space-y-2">
+            <p class="font-semibold text-foreground">Approach 1: Specific meals</p>
+            <p class="text-sm text-muted-foreground">Put actual dishes on the wheel: "Pasta carbonara," "Chicken stir-fry," "Tacos," "Fried rice." The wheel picks tonight's dinner directly. Best for households with established favorites and a decent pantry. Downside: you need ingredients for whatever it picks — some advance planning required.</p>
+          </div>
+          <div class="bg-card border border-border rounded-xl p-5 space-y-2">
+            <p class="font-semibold text-foreground">Approach 2: Cuisine categories</p>
+            <p class="text-sm text-muted-foreground">Put cuisines on the wheel: "Italian," "Japanese," "Mexican," "Thai." The spin gives you a direction, then you pick the specific dish. More flexible — you decide within the category based on what you have or feel like. Works well when you want variety but not a rigid meal plan.</p>
+          </div>
+          <div class="bg-card border border-border rounded-xl p-5 space-y-2">
+            <p class="font-semibold text-foreground">Approach 3: Method categories</p>
+            <p class="text-sm text-muted-foreground">Put cooking methods or meal types: "Order delivery," "Quick pasta," "Grilled protein + salad," "Batch cook something," "Breakfast for dinner," "Use the freezer." This is the most flexible — it doesn't commit you to a specific dish, just a general direction and effort level.</p>
+          </div>
+        </div>
+        <p class="text-muted-foreground leading-relaxed">
+          Most households find that a combination of approach 1 and 3 works best: specific favorites on the wheel alongside wildcard categories like "whatever's in the fridge" and "order delivery." The wildcard keeps the wheel practical on days when you haven't planned ahead.
+        </p>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">Pro tip: weight the wheel</p>
+          <p class="text-sm text-muted-foreground">Real Wheel Picker supports weighted entries. If you want "quick pasta" to come up more often than "elaborate Sunday roast," give quick pasta a weight of 3 and the roast a weight of 1. The wheel will pick proportionally. Use this to match your actual cooking frequency — not your aspirational cooking frequency.</p>
+        </div>
+      </section>
+
+      <AdPlaceholder position="after-use-cases" client:visible />
+
+      <section id="quick-meals" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">40 Meal Ideas to Put on Your Wheel</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Here are 40 meals organized by effort level. Copy the ones that match your household's cooking reality — not your aspirational cooking life where you make beef bourguignon on a Tuesday.
+        </p>
+
+        <h3 class="text-lg font-semibold text-foreground">Quick meals (under 25 minutes)</h3>
+        <div class="space-y-2">
+          {quickMeals.map((meal) => (
+            <div class="bg-card border border-border rounded-xl p-4 flex items-start gap-4">
+              <div class="shrink-0 text-right w-16">
+                <span class="text-xs font-mono bg-primary/10 text-primary px-2 py-0.5 rounded">{meal.time}</span>
+              </div>
+              <div>
+                <p class="font-semibold text-foreground text-sm">{meal.name}</p>
+                <p class="text-xs text-muted-foreground">{meal.notes}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <h3 class="text-lg font-semibold text-foreground mt-4">Medium effort (25–45 minutes)</h3>
+        <div class="space-y-2">
+          {[
+            { name: "Salmon with roasted vegetables", notes: "Sheet pan dinner — everything goes in the oven together" },
+            { name: "Chicken tikka masala", notes: "Store-bought sauce is fine, serve with naan or rice" },
+            { name: "Shakshuka", notes: "Eggs poached in spiced tomato sauce — vegetarian, impressive" },
+            { name: "Beef and broccoli", notes: "Better than takeout, ready in 30 minutes" },
+            { name: "Homemade burgers", notes: "Season the patties well, don't press them while cooking" },
+            { name: "Thai green curry", notes: "Curry paste from a jar is perfectly acceptable" },
+            { name: "Pork chops + mashed potato", notes: "Classic, filling, crowd-pleasing" },
+            { name: "Lentil soup", notes: "Underrated — deeply satisfying and incredibly cheap" },
+            { name: "Chicken fajitas", notes: "High effort-to-enjoyment ratio, great leftovers" },
+            { name: "Mushroom risotto", notes: "Requires stirring attention but only 35 minutes" },
+          ].map((meal) => (
+            <div class="bg-card border border-border rounded-xl p-4">
+              <p class="font-semibold text-foreground text-sm">{meal.name}</p>
+              <p class="text-xs text-muted-foreground">{meal.notes}</p>
+            </div>
+          ))}
+        </div>
+
+        <h3 class="text-lg font-semibold text-foreground mt-4">Special occasion / weekend meals</h3>
+        <div class="space-y-2">
+          {[
+            { name: "Slow-cooked beef stew", notes: "Sunday staple — starts in the morning, ready for dinner" },
+            { name: "Roast chicken", notes: "The definitive family dinner — serve with whatever vegetables" },
+            { name: "Homemade pizza", notes: "Make the dough Friday evening for Saturday dinner" },
+            { name: "Sushi bowls", notes: "All the sushi flavors, none of the rolling skill required" },
+            { name: "BBQ ribs", notes: "Weekend only — needs 3-4 hours in the oven low and slow" },
+            { name: "Paella", notes: "One-pan Spanish rice dish — the leftovers are arguably better" },
+            { name: "Lamb shoulder", notes: "Slow roasted until it falls apart — 4 hours, worth every minute" },
+            { name: "Ramen from scratch", notes: "Project cooking at its finest — bone broth, 6-hour simmer" },
+          ].map((meal) => (
+            <div class="bg-card border border-border rounded-xl p-4">
+              <p class="font-semibold text-foreground text-sm">{meal.name}</p>
+              <p class="text-xs text-muted-foreground">{meal.notes}</p>
+            </div>
+          ))}
+        </div>
+
+        <h3 class="text-lg font-semibold text-foreground mt-4">Wildcard entries (always good to include)</h3>
+        <div class="grid sm:grid-cols-2 gap-2">
+          {[
+            "Order delivery 🛵",
+            "Breakfast for dinner 🍳",
+            "Clean out the fridge 🧹",
+            "Use the freezer 🧊",
+            "Fancy leftovers remix 🍱",
+            "Whoever picks makes it 🎲",
+          ].map((item) => (
+            <div class="bg-card border border-border rounded-xl p-3 text-sm font-medium text-foreground">{item}</div>
+          ))}
+        </div>
+      </section>
+
+      <section id="cuisine-wheel" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">The Cuisine Roulette Approach</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Instead of specific dishes, some households prefer spinning for a cuisine and then choosing within it. This is more flexible — great for when you want to cook something specific but can't decide on a direction.
+        </p>
+        <div class="space-y-3">
+          {cuisineOptions.map((item) => (
+            <div class="bg-card border border-border rounded-xl p-4">
+              <p class="font-semibold text-foreground text-sm">{item.cuisine}</p>
+              <p class="text-xs text-muted-foreground mt-1">{item.examples}</p>
+            </div>
+          ))}
+        </div>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">The two-spin approach</p>
+          <p class="text-sm text-muted-foreground">Spin once for cuisine, then spin again within that cuisine for a specific dish. This creates a fun game out of dinner decision-making and gets everyone involved. Kids especially love being in charge of the second spin.</p>
+        </div>
+      </section>
+
+      <section id="restaurant" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Restaurant Roulette: For When You're Not Cooking</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The "where should we order from?" conversation is just as bad as the "what should we cook?" conversation. Restaurant roulette works exactly the same way — put your go-to delivery or dine-out options on the wheel and let it decide.
+        </p>
+        <div class="space-y-3">
+          {restaurantCategories.map((item) => (
+            <div class="bg-card border border-border rounded-xl p-4 flex gap-4">
+              <p class="font-semibold text-foreground text-sm w-36 shrink-0">{item.type}</p>
+              <p class="text-xs text-muted-foreground">{item.examples}</p>
+            </div>
+          ))}
+        </div>
+        <p class="text-muted-foreground leading-relaxed">
+          The key to a good restaurant wheel: include only places you'd genuinely be happy with. Don't add "that sushi place that was disappointing" just to have more options. Fewer, better choices beat more mediocre choices. Six restaurants you love beats twenty restaurants you're lukewarm on.
+        </p>
+      </section>
+
+      <AdPlaceholder position="after-winners" client:visible />
+
+      <section id="weekly" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Weekly Meal Planning with a Spin Wheel</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The meal wheel works best when combined with a loose weekly structure. Spin once at the beginning of the week to get a general direction, then shop accordingly. This avoids the "we spun for Thai but we have no coconut milk" problem.
+        </p>
+        <div class="space-y-3">
+          {weeklyPlan.map((day) => (
+            <div class="bg-card border border-border rounded-xl p-4 flex gap-4">
+              <p class="font-semibold text-foreground text-sm w-28 shrink-0">{day.day}</p>
+              <div>
+                <p class="text-sm font-medium text-foreground">{day.category}</p>
+                <p class="text-xs text-muted-foreground">{day.why}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p class="text-muted-foreground leading-relaxed">
+          You don't need to use the wheel every day — the structure handles some nights, and the wheel handles the "I have no idea what I feel like" nights. The combination of light structure + random flexibility is what makes the system sustainable.
+        </p>
+      </section>
+
+      <section id="kids" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Kids and the Meal Wheel</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Children are uniquely good candidates for the meal wheel because they accept random outcomes with less resistance than adults — once they've bought into the system, they can't argue it's unfair. The wheel is impartial. Nobody chose it. It's the wheel's fault.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          A few tactics that work well with kids:
+        </p>
+        <div class="space-y-3">
+          {[
+            { title: "Let them add to the wheel", desc: "Give each child 2-3 meal slots they can nominate. They now have buy-in because their meal might come up. When it does, they feel heard. When their meal doesn't come up, they can't complain — the wheel was fair." },
+            { title: "The veto rule (sparingly)", desc: "Allow each person one veto per month. This prevents genuine misery (the child who genuinely can't eat a specific food) without creating a veto-everything culture. One veto total, monthly." },
+            { title: "Kids get one guaranteed night", desc: "Friday night or Saturday — a kid's choice night is not spun. This takes the pressure off the wheel needing to satisfy everyone every night. Six nights wheel-decided, one night theirs." },
+            { title: "Spin in front of them", desc: "The ritual matters. Open the laptop together, paste the list, spin. The shared experience of watching the wheel spin is half the fun. It becomes a family activity, not just a tool." },
+          ].map((item) => (
+            <div class="bg-card border border-border rounded-xl p-5 space-y-1">
+              <p class="font-semibold text-foreground text-sm">{item.title}</p>
+              <p class="text-sm text-muted-foreground">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="dietary" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">Adapting for Dietary Restrictions</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          The meal wheel needs to work for your household's reality. If someone is vegetarian, gluten-free, or allergic to shellfish, those constraints should be built into the wheel — not handled as exceptions after the spin.
+        </p>
+        <div class="space-y-3">
+          {[
+            { title: "Build separate wheels", desc: "If preferences genuinely diverge (one person is vegan, one is an enthusiastic meat-eater), consider two separate wheel segments: 'Shared meals' and 'Build your own.' Tuesday might be shared pasta, Thursday might be 'everyone makes their own thing.'" },
+            { title: "The allergy override rule", desc: "Allergies are never negotiable — if the wheel picks shellfish and someone is anaphylactic, you spin again. Set this rule before you start, so it's built into the system, not a case-by-case decision that creates resentment." },
+            { title: "Preference vs restriction", desc: "Be honest about the difference. 'I don't really feel like Indian food tonight' is a preference — the wheel still wins. 'Gluten gives me serious gastrointestinal distress' is a restriction — spin again. The wheel respects restrictions; it ignores preferences." },
+            { title: "Flexible entries", desc: "Add versatile meals that adapt easily: 'Grain bowls' (can be vegetarian, vegan, or with chicken), 'Tacos' (beef or black bean), 'Stir-fry' (any protein). These flex entries work for almost any dietary situation." },
+          ].map((item) => (
+            <div class="bg-card border border-border rounded-xl p-5 space-y-1">
+              <p class="font-semibold text-foreground text-sm">{item.title}</p>
+              <p class="text-sm text-muted-foreground">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="setup" class="space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">How to Set Up Your Meal Wheel on Real Wheel Picker</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Setting up your meal wheel takes about three minutes:
+        </p>
+        <ol class="space-y-3">
+          {[
+            { n: "1", t: "Open Real Wheel Picker on your phone or computer", d: "No account needed. Go to realwheelpicker.com." },
+            { n: "2", t: "Clear the default names and paste your meal list", d: "Type or paste one meal per line. Start with 8-12 options — you can always add more later." },
+            { n: "3", t: "Add weights if needed", d: "Switch to Weighted mode and give easy weeknight meals a higher weight than weekend projects. Quick pasta might be weight 3, slow-roasted lamb weight 1." },
+            { n: "4", t: "Save the wheel configuration", d: "Click the share icon to copy the URL. Save it as a bookmark or phone shortcut. Now the wheel is always ready with your meals pre-loaded." },
+            { n: "5", t: "Spin at dinner time", d: "Open the bookmark, spin, done. The wheel chooses. Discussion over." },
+          ].map((step) => (
+            <div class="flex gap-4 bg-card border border-border rounded-xl p-5">
+              <span class="w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-bold flex items-center justify-center shrink-0">{step.n}</span>
+              <div>
+                <p class="font-semibold text-foreground">{step.t}</p>
+                <p class="text-sm text-muted-foreground mt-1">{step.d}</p>
+              </div>
+            </div>
+          ))}
+        </ol>
+        <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
+          <p class="font-semibold text-foreground">The family shortcut trick</p>
+          <p class="text-sm text-muted-foreground">Save the wheel URL as a home screen shortcut on your phone. On iOS: open in Safari → Share → Add to Home Screen. On Android: open in Chrome → menu → Add to Home Screen. Now your meal wheel is one tap away — faster than opening any app.</p>
+        </div>
+      </section>
+
+      <section class="bg-primary/5 border border-primary/20 rounded-xl p-8 text-center space-y-4">
+        <h2 class="text-2xl font-bold text-foreground">End the dinner debate tonight</h2>
+        <p class="text-muted-foreground">Set up your meal wheel in 3 minutes. Free, no signup, works on any device.</p>
+        <div class="flex flex-wrap gap-3 justify-center">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Build My Meal Wheel <ArrowRight className="w-4 h-4" />
+          </a>
+          <a href="/decision-wheel" class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-6 py-3 rounded-xl font-semibold hover:border-primary transition-colors">
+            Try the Decision Wheel
+          </a>
+        </div>
+      </section>
+
+      <RelatedPosts currentSlug={canonical} client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

@@ -1,0 +1,395 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertTriangle, Heart, Pin, TrendingUp, Users, Search, Star } from 'lucide-react';
+
+const title = "Pinterest Giveaway Guide 2026: Rules, Pin Formats & How to Pick Winners";
+const description = "Complete guide to running a Pinterest giveaway in 2026. Covers Pinterest's official promotion rules, what actually works (vs. common myths), pin formats, entry mechanics, and picking a winner fairly.";
+const canonical = "/blog/pinterest-giveaway-guide";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": description,
+  "url": `https://realwheelpicker.com${canonical}`,
+  "author": { "@type": "Person", "name": "Real Wheel Picker Editorial Team", "url": "https://realwheelpicker.com/about" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2026-04-15",
+  "dateModified": "2026-04-15",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": `https://realwheelpicker.com${canonical}` }
+};
+
+const pinterestVsOthers = [
+  {
+    aspect: "Entry collection",
+    pinterest: "Comments on Pins, follows, saves to boards",
+    instagram: "Comments, DMs, story interactions",
+    verdict: "Pinterest is harder — no API for comment export"
+  },
+  {
+    aspect: "Audience size typically needed",
+    pinterest: "Pinterest works from 0 — search discovery is strong",
+    instagram: "Requires existing follower base for visibility",
+    verdict: "Pinterest advantage for new accounts"
+  },
+  {
+    aspect: "Content longevity",
+    pinterest: "Pins circulate for months or years",
+    instagram: "Feed posts: weeks. Stories: 24 hours",
+    verdict: "Massive Pinterest advantage"
+  },
+  {
+    aspect: "Giveaway comment management",
+    pinterest: "Manual — no bulk export tool exists",
+    instagram: "Semi-manual or third-party tools",
+    verdict: "Instagram easier for large giveaways"
+  },
+  {
+    aspect: "Platform giveaway culture",
+    pinterest: "Less common — stands out more",
+    instagram: "Saturated — users are desensitized",
+    verdict: "Pinterest giveaways get relatively more attention"
+  },
+];
+
+const officialRules = [
+  {
+    rule: "Include 'not associated with Pinterest' disclaimer",
+    detail: "Pinterest requires all promotions to state they are not sponsored, endorsed, or affiliated with Pinterest Inc. Use this exact language or equivalent."
+  },
+  {
+    rule: "No inaccurate or misleading content",
+    detail: "Don't use prize images you don't own or describe prizes inaccurately. 'Win a Dyson vacuum' when you're giving a generic knockoff violates this rule."
+  },
+  {
+    rule: "Comply with all applicable laws",
+    detail: "Sweepstakes and contest laws vary by country, state, and province. Pinterest's rules don't override legal requirements — they're in addition to them."
+  },
+  {
+    rule: "Don't ask people to save specific Pins as contest entry",
+    detail: "This is Pinterest-specific and widely violated: 'Save this Pin to win' is against Pinterest's rules. Pinterest doesn't want saves to be transactional. Comment-based entries are fine."
+  },
+  {
+    rule: "Don't create spam or low-quality content",
+    detail: "Pinterest actively demotes spam-like behavior. Excessive hashtags, low-quality images, and repetitive pin descriptions can get your account flagged."
+  },
+];
+
+const pinFormats = [
+  {
+    format: "Standard Image Pin",
+    dimensions: "1000×1500px (2:3 ratio)",
+    best_for: "Most giveaways — high feed visibility",
+    design_tips: "Prize photo occupying 60%+ of frame. 'GIVEAWAY' text large and clear at top. Entry instructions in readable font. Brand/account handle at bottom.",
+    cta: "Drop a comment below to enter!"
+  },
+  {
+    format: "Video Pin",
+    dimensions: "1:1, 9:16, or 4:5 ratio, up to 15 minutes",
+    best_for: "Products that benefit from demonstration, higher engagement",
+    design_tips: "First 3 seconds must hook immediately. Showcase the prize in motion. Include text overlay for silent viewers (majority watch muted).",
+    cta: "Watch, save, and comment to enter"
+  },
+  {
+    format: "Carousel Pin",
+    dimensions: "Multiple 1000×1500px images",
+    best_for: "Bundles or prize packages with multiple items",
+    design_tips: "Slide 1: headline + hero image. Slide 2: prize breakdown. Slide 3: rules + how to enter. Slide 4: your brand story.",
+    cta: "Swipe through and comment to enter"
+  },
+  {
+    format: "Idea Pin (formerly Story Pin)",
+    dimensions: "9:16 fullscreen, up to 20 pages",
+    best_for: "Community building, tutorials tied to prize theme",
+    design_tips: "Tell a story across multiple slides. Prize reveal at the end builds anticipation. Can't add links — use comment entry only.",
+    cta: "Follow + comment on this Idea Pin to enter"
+  },
+];
+
+const entryMethods = [
+  {
+    method: "Comment on the Pin",
+    how_to_track: "Manually read comments and copy usernames into a list. No export tool exists — budget 30-60 minutes for 500+ comments.",
+    pros: "Creates visible social proof (others see the comments), boosts Pin engagement",
+    cons: "Time-intensive for large giveaways, no automated export"
+  },
+  {
+    method: "Follow + Comment",
+    how_to_track: "Comment is verifiable (on Pin). Follow is verifiable at draw time manually — check winner's follower status before announcing.",
+    pros: "Grows followers alongside engagement",
+    cons: "Some entrants may unfollow after entry period ends"
+  },
+  {
+    method: "Comment on Linked Website",
+    how_to_track: "Drive traffic from Pin to your website/blog where a comment form or Gleam/Rafflecopter widget lives. Export entries there.",
+    pros: "Much easier to export and verify, collects email addresses if desired",
+    cons: "Friction reduces participation rate"
+  },
+  {
+    method: "Email Subscribe + Comment (Hybrid)",
+    how_to_track: "Pin drives to landing page. Entrants subscribe via email AND leave a comment. Verify both at draw time.",
+    pros: "Builds email list (far more valuable than followers long-term)",
+    cons: "Highest friction — lowest participation, highest quality entries"
+  },
+];
+
+const winnerPickingProcess = [
+  "At close of entry period, compile all comment usernames from the Pin (manually or with a browser extension that can export page text)",
+  "Remove duplicate entries if your rules say one entry per person",
+  "Remove entries that didn't follow the rules (e.g., didn't answer the question you asked)",
+  "Check any follow requirements by searching for the winner's name in your followers list",
+  "Paste the final entry list into Real Wheel Picker (one username per line)",
+  "Screen-record the spin — show the entry list is loaded, then spin",
+  "DM the winner on Pinterest immediately",
+  "Comment on your giveaway Pin tagging the winner publicly",
+  "Upload the spin recording to YouTube or save it — link to it in your announcement if anyone asks for proof",
+];
+
+const pinterestGrowthStrategy = [
+  {
+    strategy: "SEO your giveaway Pin title",
+    detail: "Pinterest is a search engine. 'GIVEAWAY: Win a $200 KitchenAid Stand Mixer — Home Bakers' will get organic search traffic. Generic 'Giveaway!' will not."
+  },
+  {
+    strategy: "Post at peak Pinterest times",
+    detail: "Pinterest's best engagement hours: evenings (8-11pm local), weekends, especially Saturday mornings. US-focused: EST evenings outperform all other times."
+  },
+  {
+    strategy: "Create a giveaway board",
+    detail: "A dedicated 'Giveaways & Contests' board where you save all your giveaway Pins signals to Pinterest that you run them regularly and makes them findable."
+  },
+  {
+    strategy: "Cross-promote to your other platforms",
+    detail: "Pinterest alone won't generate thousands of entries from 0 followers. Share the Pin link to Instagram Stories, email list, and TikTok to seed initial engagement."
+  },
+  {
+    strategy: "Prize relevance over prize value",
+    detail: "A $50 prize perfectly relevant to your niche will get more quality entrants than a $500 Amazon gift card. Relevant prizes filter for your actual target audience."
+  },
+];
+---
+
+<Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com/" },
+    { name: "Blog", url: "https://realwheelpicker.com/blog" },
+    { name: title, url: `https://realwheelpicker.com${canonical}` }
+  ]} />
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <!-- Hero -->
+      <header class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-purple-400 font-medium">
+          <Pin size={16} className="text-purple-400" />
+          <span>Social Media</span>
+          <span class="text-gray-500">·</span>
+          <span class="text-gray-400">11 min read</span>
+        </div>
+        <h1 class="text-3xl font-bold text-white leading-tight">
+          Pinterest Giveaway Guide 2026: Rules, Pin Formats & How to Pick Winners
+        </h1>
+        <p class="text-lg text-gray-300">
+          Pinterest giveaways are the most underutilized giveaway format in social media. While Instagram giveaways compete in a saturated market and disappear in days, Pinterest Pins circulate for months — sometimes years — giving your giveaway compounding reach long after you've moved on. Here's everything you need to run one effectively and legally.
+        </p>
+      </header>
+
+      <!-- ToC -->
+      <nav class="bg-white/5 border border-white/10 rounded-xl p-6">
+        <h2 class="text-white font-semibold mb-3">In this guide</h2>
+        <ol class="space-y-1.5 text-sm text-gray-300">
+          <li><a href="#vs-instagram" class="hover:text-purple-400 transition-colors">1. Pinterest vs. Instagram giveaways — how they differ</a></li>
+          <li><a href="#rules" class="hover:text-purple-400 transition-colors">2. Pinterest's official giveaway rules</a></li>
+          <li><a href="#pin-formats" class="hover:text-purple-400 transition-colors">3. Pin formats for giveaways</a></li>
+          <li><a href="#entry-methods" class="hover:text-purple-400 transition-colors">4. Entry mechanics — pros and cons</a></li>
+          <li><a href="#winner" class="hover:text-purple-400 transition-colors">5. Picking a winner from Pinterest comments</a></li>
+          <li><a href="#growth" class="hover:text-purple-400 transition-colors">6. Pinterest giveaway growth strategy</a></li>
+        </ol>
+      </nav>
+
+      <AdPlaceholder position="in-content" client:visible />
+
+      <!-- Section 1: vs Instagram -->
+      <section id="vs-instagram" class="space-y-5">
+        <h2 class="text-2xl font-bold text-white">1. Pinterest vs. Instagram Giveaways — How They Differ</h2>
+        <p class="text-gray-300">
+          Before deciding if Pinterest is the right platform for your giveaway, understand what you're working with:
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-white/10">
+                <th class="text-left text-gray-400 font-medium py-2 pr-4">Aspect</th>
+                <th class="text-left text-gray-400 font-medium py-2 pr-4">Pinterest</th>
+                <th class="text-left text-gray-400 font-medium py-2 pr-4">Instagram</th>
+                <th class="text-left text-gray-400 font-medium py-2">Verdict</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pinterestVsOthers.map((row, i) => (
+                <tr class={`border-b border-white/5 ${i % 2 === 0 ? 'bg-white/2' : ''}`}>
+                  <td class="text-white font-medium py-3 pr-4">{row.aspect}</td>
+                  <td class="text-gray-300 py-3 pr-4 text-xs">{row.pinterest}</td>
+                  <td class="text-gray-300 py-3 pr-4 text-xs">{row.instagram}</td>
+                  <td class="text-purple-300 py-3 text-xs">{row.verdict}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div class="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
+          <p class="text-blue-300 text-sm"><strong>Who Pinterest giveaways work best for:</strong> Lifestyle brands, food bloggers, home decor, fashion, crafting, wedding planning, fitness, parenting — niches that are already well-represented on Pinterest. Tech, B2B, gaming, and music don't perform as well.</p>
+        </div>
+      </section>
+
+      <!-- Section 2: Rules -->
+      <section id="rules" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">2. Pinterest's Official Giveaway Rules</h2>
+        <p class="text-gray-300">
+          Pinterest's Community Guidelines and Merchant Guidelines both apply to promotions. Here are the key requirements:
+        </p>
+        <div class="space-y-3">
+          {officialRules.map((rule) => (
+            <div class="bg-white/5 border border-white/10 rounded-lg p-4">
+              <h3 class="text-white font-semibold text-sm flex items-center gap-2">
+                <CheckCircle size={14} className="text-green-400 flex-shrink-0" /> {rule.rule}
+              </h3>
+              <p class="text-gray-400 text-sm mt-2">{rule.detail}</p>
+            </div>
+          ))}
+        </div>
+        <div class="bg-red-900/20 border border-red-500/30 rounded-xl p-5">
+          <h3 class="text-red-300 font-semibold mb-2 flex items-center gap-2">
+            <AlertTriangle size={16} className="text-red-400" /> The "Save to Enter" rule is widely violated
+          </h3>
+          <p class="text-gray-300 text-sm">
+            "Repin this to enter" or "Save this Pin to your board to enter" is explicitly against Pinterest's guidelines. Many brands do it anyway, and many aren't immediately penalized — but Pinterest has suspended accounts for repeated violations. Comment-based entry is the safe alternative that also boosts Pin engagement (which Pinterest rewards).
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 3: Pin Formats -->
+      <section id="pin-formats" class="space-y-5">
+        <h2 class="text-2xl font-bold text-white">3. Pin Formats for Giveaways</h2>
+        <p class="text-gray-300">
+          Pinterest supports several Pin formats — each with different engagement characteristics. Here's how to choose:
+        </p>
+        <div class="space-y-4">
+          {pinFormats.map((format) => (
+            <div class="bg-white/5 border border-white/10 rounded-xl p-5 space-y-3">
+              <h3 class="text-white font-bold">{format.format}</h3>
+              <div class="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <p class="text-gray-500 text-xs font-semibold uppercase">Dimensions</p>
+                  <p class="text-purple-300">{format.dimensions}</p>
+                </div>
+                <div>
+                  <p class="text-gray-500 text-xs font-semibold uppercase">Best for</p>
+                  <p class="text-gray-300">{format.best_for}</p>
+                </div>
+              </div>
+              <div>
+                <p class="text-gray-500 text-xs font-semibold uppercase mb-1">Design tips</p>
+                <p class="text-gray-300 text-sm">{format.design_tips}</p>
+              </div>
+              <div class="bg-purple-900/30 rounded-lg px-3 py-2">
+                <p class="text-purple-300 text-sm"><strong>CTA:</strong> {format.cta}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Section 4: Entry Methods -->
+      <section id="entry-methods" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">4. Entry Mechanics — Pros and Cons</h2>
+        <p class="text-gray-300">
+          Your entry method determines how many people enter, how easy it is to collect entries, and what you get out of the giveaway beyond the draw.
+        </p>
+        <div class="space-y-4">
+          {entryMethods.map((method) => (
+            <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+              <h3 class="text-white font-bold">{method.method}</h3>
+              <p class="text-gray-400 text-sm mt-2">{method.how_to_track}</p>
+              <div class="grid grid-cols-2 gap-3 mt-3">
+                <div>
+                  <p class="text-green-300 text-xs font-semibold uppercase mb-1">Pros</p>
+                  <p class="text-gray-300 text-sm">{method.pros}</p>
+                </div>
+                <div>
+                  <p class="text-red-300 text-xs font-semibold uppercase mb-1">Cons</p>
+                  <p class="text-gray-300 text-sm">{method.cons}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Section 5: Winner Picking -->
+      <section id="winner" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">5. Picking a Winner From Pinterest Comments</h2>
+        <p class="text-gray-300">
+          Pinterest has no comment export API for regular users. Entry collection is entirely manual — but the selection process, once you have your list, is identical to any platform:
+        </p>
+        <ol class="space-y-2">
+          {winnerPickingProcess.map((step, i) => (
+            <li class="flex gap-4 bg-white/5 rounded-xl p-4">
+              <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">{i + 1}</div>
+              <p class="text-gray-300 text-sm">{step}</p>
+            </li>
+          ))}
+        </ol>
+        <div class="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4">
+          <p class="text-yellow-300 text-sm"><strong>Comment export workaround:</strong> Use your browser's "Find in Page" (Ctrl+F) to locate comments. Or use browser extensions like Comment Exporter (available for Chrome) that can scrape visible page content. Always manually verify any automated export before using it as your entry list.</p>
+        </div>
+      </section>
+
+      <!-- Section 6: Growth Strategy -->
+      <section id="growth" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">6. Pinterest Giveaway Growth Strategy</h2>
+        <p class="text-gray-300">
+          Pinterest giveaways that work as growth tools follow specific patterns. Here's what actually moves the needle:
+        </p>
+        <div class="space-y-3">
+          {pinterestGrowthStrategy.map((item) => (
+            <div class="flex gap-4 bg-white/5 rounded-xl p-4">
+              <TrendingUp size={18} className="text-purple-400 mt-0.5 flex-shrink-0" />
+              <div>
+                <p class="text-white font-semibold">{item.strategy}</p>
+                <p class="text-gray-400 text-sm mt-1">{item.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="bg-purple-900/30 border border-purple-500/30 rounded-xl p-5">
+          <h3 class="text-white font-semibold mb-2">The Pinterest advantage: longevity</h3>
+          <p class="text-gray-300 text-sm">
+            A well-optimized Pinterest giveaway Pin doesn't die after 48 hours like an Instagram post. Pins circulate through search results and home feeds for months. It's common to see entries arrive weeks after the giveaway closed from Pinners who discovered the Pin organically. Close your entry period clearly in the Pin description with a specific date — and check comments after close to confirm no latecomers were included.
+          </p>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="bg-gradient-to-br from-purple-900/40 to-indigo-900/40 border border-purple-500/30 rounded-2xl p-8 text-center space-y-4">
+        <Heart size={40} className="text-purple-400 mx-auto" />
+        <h2 class="text-2xl font-bold text-white">Pick Your Pinterest Giveaway Winner</h2>
+        <p class="text-gray-300 max-w-lg mx-auto">
+          Once you have your comment list, paste it in and spin. Free, no signup, cryptographically random.
+        </p>
+        <a href="/" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+          Open the Giveaway Picker <ArrowRight size={18} className="text-white" />
+        </a>
+      </section>
+
+      <RelatedPosts currentSlug={canonical} client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

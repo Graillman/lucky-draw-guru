@@ -1,0 +1,334 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, AlertTriangle, Instagram, Clock, Users, TrendingUp, Star } from 'lucide-react';
+
+const title = "Instagram Stories Giveaway: The Complete 2026 Guide (Rules, Tools & Results)";
+const description = "Run an Instagram Stories giveaway that actually grows your account. Covers entry mechanics, Story sequence structure, DM reply giveaways, the 'Add Yours' sticker, legal rules, and picking winners fairly.";
+const canonical = "/blog/instagram-stories-giveaway";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": description,
+  "url": `https://realwheelpicker.com${canonical}`,
+  "author": { "@type": "Person", "name": "Real Wheel Picker Editorial Team", "url": "https://realwheelpicker.com/about" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2026-04-13",
+  "dateModified": "2026-04-13",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": `https://realwheelpicker.com${canonical}` }
+};
+
+const storyGiveawayTypes = [
+  {
+    type: "DM Reply Giveaway",
+    description: "Post a Story saying 'DM me the word [KEYWORD] to enter.' You pick a random winner from DMs received.",
+    pros: ["High engagement signal (DM = strong interaction)", "Shows Instagram your content drives direct conversation", "Easy to collect — all DMs in one place"],
+    cons: ["Manual to collect entries", "Disappears after 24h unless saved to Highlights", "Can't verify entries after Stories expire"],
+    best_for: "Accounts under 10K followers — DMs are manageable, algorithm rewards the interaction"
+  },
+  {
+    type: "Poll/Quiz Sticker Giveaway",
+    description: "Post a Story with a poll or quiz sticker. Everyone who answers (correctly, or just answers) is entered. You screenshot the responses and pick randomly.",
+    pros: ["Easy to enter — one tap", "Instagram shows you who voted", "High participation rates"],
+    cons: ["Instagram only shows vote counts, not all usernames for large accounts", "Votes can't be exported", "Both options must be available to enter — rules must be very clear"],
+    best_for: "Mid-size accounts (5K-50K) running quick, low-friction giveaways"
+  },
+  {
+    type: "'Add Yours' Sticker Giveaway",
+    description: "Create an 'Add Yours' prompt (e.g., 'Show me your morning coffee setup'). Everyone who adds their Story to the chain is entered.",
+    pros: ["Viral potential — each participant shows their followers the prompt", "User-generated content you can reshare", "Shows real people using/enjoying the related theme"],
+    cons: ["Harder to track — entries are spread across Instagram", "No centralized entry list", "Requires manual scrolling through all participant Stories"],
+    best_for: "Lifestyle and product brands wanting UGC and exposure beyond existing audience"
+  },
+  {
+    type: "Story Re-Share Giveaway",
+    description: "Ask followers to share your giveaway post to their Story and tag you. You pick a winner from everyone who reshared.",
+    pros: ["Maximum reach — your giveaway gets shown to every entrant's followers", "Easy to verify (Instagram notifies you of reshares)", "Strong social proof signal"],
+    cons: ["Algorithm changes may reduce reach of reshared Stories", "Some followers feel uncomfortable broadcasting that they entered giveaways", "Reshares expire after 24h — you must check notifications daily"],
+    best_for: "Accounts launching a new product or running a follower growth campaign"
+  },
+  {
+    type: "Quiz Correct Answer Giveaway",
+    description: "Post a quiz sticker with one correct answer. Only people who answered correctly are entered. This filters for engaged, knowledgeable audience members.",
+    pros: ["Filters for genuinely engaged followers", "Creates fun, educational content", "Easy to verify — Instagram shows who answered correctly"],
+    cons: ["Smaller entry pool (some will guess wrong)", "Must be a genuinely fair question", "Some audience members will feel frustrated if they guess wrong"],
+    best_for: "Educational, niche, or technical accounts that want to reward true fans"
+  },
+];
+
+const storySequence = [
+  { slide: 1, name: "The Hook", content: "BIG ANNOUNCEMENT text with prize visual. Make it unmissable — text large, contrast high, emoji strategic. Goal: stop the tap." },
+  { slide: 2, name: "Prize Details", content: "Clear photo/video of the actual prize. Value stated explicitly. Why this matters to your specific audience." },
+  { slide: 3, name: "How to Enter", content: "Single clear instruction. One action only — studies show each additional entry requirement reduces participation by 35%." },
+  { slide: 4, name: "Rules & Deadline", content: "Who can enter, deadline date/time (with timezone), when winner is announced. Keep it brief but complete." },
+  { slide: 5, name: "Social Proof", content: "Previous winners, your past giveaway feedback, or why you're running this giveaway. Builds trust with skeptical viewers." },
+  { slide: 6, name: "CTA", content: "'Share this to your Story to help a friend win too!' — not a requirement, but a suggestion. Increases organic reach." },
+];
+
+const instagramRules = [
+  { rule: "Acknowledge it's not associated with Instagram", detail: "Every giveaway must include: 'This promotion is in no way sponsored, endorsed or administered by, or associated with, Instagram.' Include this in your post caption or a Story slide." },
+  { rule: "No inaccurate, false, or misleading giveaways", detail: "The prize must be exactly what you describe. 'Win a trip to Bali!' where the prize is a hotel voucher that doesn't include flights is misleading." },
+  { rule: "Comply with applicable laws", detail: "If you're in the EU, GDPR applies to any data you collect. In the US, sweepstakes rules vary by state. Instagram's rules don't override local law." },
+  { rule: "No vote incentivization", detail: "You can't use Instagram's voting stickers as an official contest entry mechanism by asking people to vote a specific way — but you can use it as a soft signal." },
+  { rule: "Don't tag or inaccurate representations", detail: "You cannot ask people to tag themselves in content they don't appear in as an entry method." },
+];
+
+const dmGiveawayProcess = [
+  "Post your Story at peak hours for your timezone (typically Tue-Thu, 6-9pm local time)",
+  "In your Story, state clearly: 'DM me [WORD] by [DATE/TIME] to enter'",
+  "As DMs come in, keep your Instagram DM request folder open — new followers' DMs go to requests",
+  "Screenshot all DM timestamps to prove who sent before the deadline",
+  "Create your entry list: copy each username into a text document, one per line",
+  "Remove duplicates (same person DM'd twice with same keyword)",
+  "Paste the list into Real Wheel Picker and spin",
+  "Screen-record the spin, then DM the winner and post the result to your Story",
+];
+
+const winnerPickingChallenge = "The core challenge of Stories giveaways is that entries disappear. DMs persist, but Story interaction data (who replied to a poll, who did 'Add Yours') may not be exportable after 24 hours. This is why the DM entry format is most reliable — it creates a permanent, timestamped record.";
+
+const growthTips = [
+  { tip: "Time your giveaway around a milestone", detail: "10K followers, product launch, anniversary, seasonal moment — gives the giveaway a story beyond 'free stuff.'" },
+  { tip: "Make the prize audience-specific", detail: "A generic Amazon gift card attracts everyone. A niche prize (photography gear, specific software, curated book list) attracts your exact target follower." },
+  { tip: "Run a series, not a one-off", detail: "Monthly giveaways train your audience to check in. The first giveaway grows followers. The fifth one converts them to loyal audience members." },
+  { tip: "Reshare the winner's reaction", detail: "If your winner posts about receiving their prize and tags you, reshare it immediately. Social proof of real winners dramatically increases trust in future giveaways." },
+  { tip: "Cross-post to Feed + Stories", detail: "A Feed post lasts forever; a Story lasts 24 hours. Run both simultaneously — the Feed post captures search traffic and non-daily Story viewers." },
+];
+---
+
+<Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com/" },
+    { name: "Blog", url: "https://realwheelpicker.com/blog" },
+    { name: title, url: `https://realwheelpicker.com${canonical}` }
+  ]} />
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <!-- Hero -->
+      <header class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-purple-400 font-medium">
+          <Star size={16} className="text-purple-400" />
+          <span>Social Media</span>
+          <span class="text-gray-500">·</span>
+          <span class="text-gray-400">12 min read</span>
+        </div>
+        <h1 class="text-3xl font-bold text-white leading-tight">
+          Instagram Stories Giveaway: The Complete 2026 Guide
+        </h1>
+        <p class="text-lg text-gray-300">
+          Instagram Stories giveaways are fast, high-engagement, and — when done right — one of the most effective follower growth tools on the platform. When done wrong, they look like scams and get you shadowbanned. This guide covers every Stories giveaway format, the exact Story sequence to post, Instagram's official rules, and how to pick winners from a format that disappears after 24 hours.
+        </p>
+      </header>
+
+      <!-- ToC -->
+      <nav class="bg-white/5 border border-white/10 rounded-xl p-6">
+        <h2 class="text-white font-semibold mb-3">In this guide</h2>
+        <ol class="space-y-1.5 text-sm text-gray-300">
+          <li><a href="#types" class="hover:text-purple-400 transition-colors">1. Five Stories giveaway formats compared</a></li>
+          <li><a href="#sequence" class="hover:text-purple-400 transition-colors">2. The 6-slide Story sequence</a></li>
+          <li><a href="#dm-process" class="hover:text-purple-400 transition-colors">3. DM giveaway: step-by-step process</a></li>
+          <li><a href="#instagram-rules" class="hover:text-purple-400 transition-colors">4. Instagram's official giveaway rules</a></li>
+          <li><a href="#picking-winner" class="hover:text-purple-400 transition-colors">5. Picking winners from Stories entries</a></li>
+          <li><a href="#growth" class="hover:text-purple-400 transition-colors">6. Using giveaways for actual account growth</a></li>
+        </ol>
+      </nav>
+
+      <AdPlaceholder position="in-content" client:visible />
+
+      <!-- Section 1: Types -->
+      <section id="types" class="space-y-5">
+        <h2 class="text-2xl font-bold text-white">1. Five Stories Giveaway Formats Compared</h2>
+        <p class="text-gray-300">
+          Not all Stories giveaway formats are equally practical. The right choice depends on your account size, how much time you have, and what you want to achieve beyond the giveaway itself.
+        </p>
+        <div class="space-y-5">
+          {storyGiveawayTypes.map((type, i) => (
+            <div class="bg-white/5 border border-white/10 rounded-xl p-6 space-y-4">
+              <div class="flex items-start justify-between gap-4">
+                <h3 class="text-white font-bold text-lg">{i + 1}. {type.type}</h3>
+              </div>
+              <p class="text-gray-300 text-sm">{type.description}</p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p class="text-green-300 text-xs font-semibold uppercase mb-2">Pros</p>
+                  <ul class="space-y-1">
+                    {type.pros.map((pro) => (
+                      <li class="text-gray-300 text-sm flex items-start gap-2">
+                        <CheckCircle size={12} className="text-green-400 mt-0.5 flex-shrink-0" /> {pro}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p class="text-red-300 text-xs font-semibold uppercase mb-2">Cons</p>
+                  <ul class="space-y-1">
+                    {type.cons.map((con) => (
+                      <li class="text-gray-300 text-sm flex items-start gap-2">
+                        <AlertTriangle size={12} className="text-yellow-400 mt-0.5 flex-shrink-0" /> {con}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div class="bg-purple-900/30 rounded-lg px-4 py-2">
+                <p class="text-purple-300 text-sm"><strong>Best for:</strong> {type.best_for}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Section 2: Sequence -->
+      <section id="sequence" class="space-y-5">
+        <h2 class="text-2xl font-bold text-white">2. The 6-Slide Story Sequence</h2>
+        <p class="text-gray-300">
+          Most giveaway Stories fail because they're one slide with too much information. Nobody reads it, nobody enters. Structure your giveaway as a 6-slide sequence where each slide has one job:
+        </p>
+        <div class="space-y-3">
+          {storySequence.map((slide) => (
+            <div class="flex gap-4 bg-white/5 rounded-xl p-4 border border-white/10">
+              <div class="bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">{slide.slide}</div>
+              <div>
+                <p class="text-purple-300 font-semibold text-sm">{slide.name}</p>
+                <p class="text-gray-300 text-sm mt-1">{slide.content}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
+          <p class="text-blue-300 text-sm"><strong>Posting tip:</strong> Post all 6 slides in rapid succession (within 5 minutes). Instagram bundles Stories posted close together, keeping your giveaway sequence intact rather than splitting it across your Story ring.</p>
+        </div>
+      </section>
+
+      <!-- Section 3: DM Process -->
+      <section id="dm-process" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">3. DM Giveaway: Step-by-Step Process</h2>
+        <p class="text-gray-300">
+          The DM entry format is the most reliable for Stories giveaways because DMs create a permanent record that doesn't expire. Here's the exact process:
+        </p>
+        <ol class="space-y-2">
+          {dmGiveawayProcess.map((step, i) => (
+            <li class="flex gap-4 bg-white/5 rounded-xl p-4">
+              <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">{i + 1}</div>
+              <p class="text-gray-300 text-sm">{step}</p>
+            </li>
+          ))}
+        </ol>
+        <div class="bg-yellow-900/20 border border-yellow-500/30 rounded-xl p-5">
+          <h3 class="text-yellow-300 font-semibold mb-2 flex items-center gap-2">
+            <AlertTriangle size={16} className="text-yellow-400" /> The disappearing data problem
+          </h3>
+          <p class="text-gray-300 text-sm">{winnerPickingChallenge}</p>
+        </div>
+      </section>
+
+      <!-- Section 4: Instagram Rules -->
+      <section id="instagram-rules" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">4. Instagram's Official Giveaway Rules</h2>
+        <p class="text-gray-300">
+          Instagram's Promotion Guidelines are straightforward but widely ignored. Violating them is grounds for account restriction — which would be a painful irony after running a giveaway to grow your account.
+        </p>
+        <div class="space-y-3">
+          {instagramRules.map((rule) => (
+            <div class="bg-white/5 border border-white/10 rounded-lg p-4">
+              <h3 class="text-white font-semibold text-sm">{rule.rule}</h3>
+              <p class="text-gray-400 text-sm mt-1">{rule.detail}</p>
+            </div>
+          ))}
+        </div>
+        <div class="bg-white/5 rounded-xl p-5">
+          <h3 class="text-white font-semibold mb-2">The disclaimer you need to include</h3>
+          <div class="bg-white/5 rounded-lg p-4">
+            <p class="text-gray-300 text-sm italic">"This promotion is in no way sponsored, endorsed or administered by, or associated with, Instagram. By participating, you release Instagram from any liability."</p>
+          </div>
+          <p class="text-gray-400 text-sm mt-3">Put this in your Feed post caption if you have one, or on a dedicated Story slide. Too long for a Story? Shorten to: "Not affiliated with or endorsed by Instagram."</p>
+        </div>
+      </section>
+
+      <!-- Section 5: Picking Winner -->
+      <section id="picking-winner" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">5. Picking Winners From Stories Entries</h2>
+        <p class="text-gray-300">
+          Once you have your entry list, the winner selection itself is simple — but the tool you use and the documentation you create determines how trustworthy the result looks.
+        </p>
+        <div class="space-y-3">
+          <div class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">1</div>
+            <div>
+              <p class="text-white font-semibold">Post the entry list to your Stories first</p>
+              <p class="text-gray-400 text-sm mt-1">Screenshot your text document with all usernames and post it to Stories before spinning. "Here are all [X] entries — spinning now!" This pre-commitment is critical for fairness.</p>
+            </div>
+          </div>
+          <div class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">2</div>
+            <div>
+              <p class="text-white font-semibold">Paste all usernames into Real Wheel Picker</p>
+              <p class="text-gray-400 text-sm mt-1">One username per line. The wheel uses cryptographic randomness — the same standard as banking software. Verifiable claim you can cite in disputes.</p>
+            </div>
+          </div>
+          <div class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">3</div>
+            <div>
+              <p class="text-white font-semibold">Screen-record from list entry to result</p>
+              <p class="text-gray-400 text-sm mt-1">On iPhone: Control Center → Screen Recording. On Android: notification shade swipe. On desktop: QuickTime, OBS, or Windows Game Bar (Win+G).</p>
+            </div>
+          </div>
+          <div class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">4</div>
+            <div>
+              <p class="text-white font-semibold">Post the spin recording to Stories</p>
+              <p class="text-gray-400 text-sm mt-1">Trim to the relevant 15-30 seconds. Show: wheel with names, spin, result. Add "The winner is @[username]!" text overlay. Save to Highlights as "Giveaway" so it persists.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Growth -->
+      <section id="growth" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">6. Using Giveaways for Actual Account Growth</h2>
+        <p class="text-gray-300">
+          A giveaway that attracts 500 followers and then sees 400 unfollow after the prize is announced is a waste of resources. Here's how to run giveaways that convert entrants into real audience members:
+        </p>
+        <div class="space-y-3">
+          {growthTips.map((item) => (
+            <div class="flex gap-4 bg-white/5 rounded-xl p-4">
+              <CheckCircle size={18} className="text-green-400 mt-0.5 flex-shrink-0" />
+              <div>
+                <p class="text-white font-semibold">{item.tip}</p>
+                <p class="text-gray-400 text-sm mt-1">{item.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="bg-purple-900/30 border border-purple-500/30 rounded-xl p-5">
+          <h3 class="text-white font-semibold mb-2">The honest truth about giveaway growth</h3>
+          <p class="text-gray-300 text-sm">
+            Most giveaway followers are prize-seekers, not content lovers. The follow/unfollow rate after a giveaway is typically 30-60% within two weeks. This isn't a failure — it's expected. The goal is the 40-70% who stay because they genuinely liked what they saw. To maximize retention: post your absolute best content for the 48 hours immediately after a giveaway when eyes are on you. That's your real window.
+          </p>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="bg-gradient-to-br from-purple-900/40 to-indigo-900/40 border border-purple-500/30 rounded-2xl p-8 text-center space-y-4">
+        <TrendingUp size={40} className="text-purple-400 mx-auto" />
+        <h2 class="text-2xl font-bold text-white">Pick Your Instagram Giveaway Winner</h2>
+        <p class="text-gray-300 max-w-lg mx-auto">
+          Paste your DM entry list, spin with cryptographic randomness, screen-record the result. Free, instant, dispute-proof.
+        </p>
+        <a href="/" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+          Open the Giveaway Picker <ArrowRight size={18} className="text-white" />
+        </a>
+      </section>
+
+      <RelatedPosts currentSlug={canonical} client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

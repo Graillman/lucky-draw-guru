@@ -1,0 +1,348 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import RelatedPosts from '@/components/RelatedPosts';
+import { ArrowRight, CheckCircle, Star, Clock, Users, Gamepad2, Dice5, Trophy } from 'lucide-react';
+
+const title = "Game Night Wheel: 60+ Games Sorted by Player Count, Time & Vibe";
+const description = "Stop spending 20 minutes arguing about what to play. Use a game night wheel to pick your next board game, card game, or party game instantly. 60+ game ideas sorted by group size, time, and mood.";
+const canonical = "/blog/game-night-wheel";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": description,
+  "url": `https://realwheelpicker.com${canonical}`,
+  "author": { "@type": "Person", "name": "Real Wheel Picker Editorial Team", "url": "https://realwheelpicker.com/about" },
+  "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
+  "datePublished": "2026-04-09",
+  "dateModified": "2026-04-09",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": `https://realwheelpicker.com${canonical}` }
+};
+
+const quickGames = [
+  { name: "Codenames", players: "4-8", time: "15-30 min", type: "Word/Teams", verdict: "Highly replayable" },
+  { name: "Sushi Go Party!", players: "2-8", time: "20 min", type: "Card Drafting", verdict: "Fast, hits different every game" },
+  { name: "Wavelength", players: "2-12", time: "30 min", type: "Social Deduction", verdict: "Best for larger groups" },
+  { name: "Just One", players: "3-7", time: "20 min", type: "Cooperative Word", verdict: "Genuinely funny" },
+  { name: "Coup", players: "2-6", time: "15 min", type: "Bluffing", verdict: "Brutal, addictive" },
+  { name: "Love Letter", players: "2-6", time: "20 min", type: "Card/Deduction", verdict: "Perfect filler game" },
+  { name: "Skull", players: "3-6", time: "15 min", type: "Bluffing", verdict: "Simple rules, deep reads" },
+  { name: "The Mind", players: "2-4", time: "15 min", type: "Cooperative", verdict: "Terrifyingly tense" },
+];
+
+const mediumGames = [
+  { name: "Ticket to Ride", players: "2-5", time: "45-75 min", type: "Strategy/Routes", verdict: "Gateway classic" },
+  { name: "Catan", players: "3-4", time: "60-120 min", type: "Resource Trading", verdict: "The one everyone knows" },
+  { name: "7 Wonders", players: "2-7", time: "30-45 min", type: "Card Drafting", verdict: "Scales incredibly well" },
+  { name: "Pandemic", players: "2-4", time: "45-60 min", type: "Cooperative", verdict: "Genuinely stressful" },
+  { name: "Azul", players: "2-4", time: "30-45 min", type: "Pattern/Abstract", verdict: "Beautiful, meditative" },
+  { name: "Carcassonne", players: "2-5", time: "30-45 min", type: "Tile Laying", verdict: "Perfect teach game" },
+  { name: "Splendor", players: "2-4", time: "30 min", type: "Engine Building", verdict: "Smooth, satisfying" },
+  { name: "Betrayal at House on the Hill", players: "3-6", time: "60 min", type: "Horror/Traitor", verdict: "Different every time" },
+];
+
+const heavyGames = [
+  { name: "Gloomhaven: Jaws of the Lion", players: "1-4", time: "60-120 min", type: "Dungeon Crawler", verdict: "Campaign game, commitment required" },
+  { name: "Wingspan", players: "1-5", time: "45-70 min", type: "Engine Building", verdict: "Gorgeous, calm competition" },
+  { name: "Viticulture Essential Edition", players: "2-6", time: "45-90 min", type: "Worker Placement", verdict: "Thematic, forgiving for new players" },
+  { name: "Everdell", players: "1-4", time: "40-80 min", type: "Worker Placement", verdict: "Stunning production" },
+  { name: "Root", players: "2-4", time: "60-90 min", type: "Asymmetric Strategy", verdict: "Very different each faction" },
+];
+
+const partyGames = [
+  { name: "Jackbox Party Pack (digital)", players: "3-10", time: "60-90 min", type: "Trivia/Drawing", verdict: "Remote-friendly, always fresh" },
+  { name: "Fibbage", players: "2-8", time: "30 min", type: "Bluffing/Trivia", verdict: "Hilarious every time" },
+  { name: "Drawful 2", players: "3-8", time: "30 min", type: "Drawing/Guessing", verdict: "Drawing skills irrelevant" },
+  { name: "Werewolf (social deduction)", players: "6-20", time: "30 min", type: "Social Deduction", verdict: "Large group winner" },
+  { name: "Two Truths and a Lie", players: "3+", time: "20 min", type: "Social", verdict: "No components needed" },
+  { name: "Quiplash", players: "3-8", time: "30 min", type: "Party/Humor", verdict: "Clean + adult modes" },
+];
+
+const wheelStrategies = [
+  {
+    name: "The Pre-Filtered Wheel",
+    how: "Before anyone arrives, you narrow the wheel to only games that fit: time available, player count, who's there. Then spin freely from the shortlist.",
+    advantage: "Everyone agrees to the method upfront — no post-spin complaining"
+  },
+  {
+    name: "The Vibe Wheel",
+    how: "Your wheel has moods, not games: Competitive / Cooperative / Party / Chill / Strategic / Quick. Spin for a vibe, then choose a game that fits.",
+    advantage: "Sets energy expectations before game selection begins"
+  },
+  {
+    name: "The Collection Wheel",
+    how: "List every game you own. Spin blindly. Whatever comes up, you play — no exceptions.",
+    advantage: "Forces you to play games that have been shelved for years"
+  },
+  {
+    name: "The New Game Wheel",
+    how: "A separate wheel of games you own but haven't played yet, or games on your wishlist to try.",
+    advantage: "Ensures the group actually learns new games instead of defaulting to the familiar"
+  },
+  {
+    name: "The Tournament Bracket",
+    how: "Spin 8 games into a bracket. Majority votes eliminate each game head-to-head until one wins.",
+    advantage: "Democratic but with structure — the wheel provides the bracket, people vote from there"
+  },
+];
+
+const hostingTips = [
+  { tip: "Confirm attendance 48h before", detail: "Player count determines what's possible. A 6-player party can't play most 4-player games." },
+  { tip: "Set a game-start time, not a party start time", detail: "\"We're spinning the wheel at 7:30\" creates urgency and prevents 45-minute arrivals-and-settling lag." },
+  { tip: "Have a teach-ready person for each game", detail: "When the wheel lands, someone should be ready to teach in under 5 minutes. Rotate this responsibility." },
+  { tip: "Prepare a snack break between games", detail: "15 minutes of food + chat resets the energy. The second game often goes better than the first." },
+  { tip: "End on a win, not on exhaustion", detail: "The best game nights stop while people still want more. Not everyone needs to pass out at 2am for it to be a success." },
+];
+---
+
+<Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com/" },
+    { name: "Blog", url: "https://realwheelpicker.com/blog" },
+    { name: title, url: `https://realwheelpicker.com${canonical}` }
+  ]} />
+  <div style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+    <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
+
+      <!-- Hero -->
+      <header class="space-y-4">
+        <div class="flex items-center gap-2 text-sm text-purple-400 font-medium">
+          <Gamepad2 size={16} className="text-purple-400" />
+          <span>Entertainment</span>
+          <span class="text-gray-500">·</span>
+          <span class="text-gray-400">10 min read</span>
+        </div>
+        <h1 class="text-3xl font-bold text-white leading-tight">
+          Game Night Wheel: 60+ Games Sorted by Player Count, Time & Vibe
+        </h1>
+        <p class="text-lg text-gray-300">
+          You've gathered 6 people, set out the snacks, and now everyone is staring at the game shelf for 25 minutes having the same argument: "What do you want to play?" "I don't know, what do you want to play?" The game night wheel ends this. Spin once, play immediately.
+        </p>
+      </header>
+
+      <!-- ToC -->
+      <nav class="bg-white/5 border border-white/10 rounded-xl p-6">
+        <h2 class="text-white font-semibold mb-3">In this guide</h2>
+        <ol class="space-y-1.5 text-sm text-gray-300">
+          <li><a href="#strategies" class="hover:text-purple-400 transition-colors">1. Five ways to use a game night wheel</a></li>
+          <li><a href="#quick" class="hover:text-purple-400 transition-colors">2. Quick games (under 30 min) — 8 options</a></li>
+          <li><a href="#medium" class="hover:text-purple-400 transition-colors">3. Medium games (30-90 min) — 8 options</a></li>
+          <li><a href="#heavy" class="hover:text-purple-400 transition-colors">4. Heavy games (90+ min) — for the committed</a></li>
+          <li><a href="#party" class="hover:text-purple-400 transition-colors">5. Party games for large groups</a></li>
+          <li><a href="#hosting" class="hover:text-purple-400 transition-colors">6. Game night hosting tips</a></li>
+          <li><a href="#setup" class="hover:text-purple-400 transition-colors">7. Building your wheel by game collection</a></li>
+        </ol>
+      </nav>
+
+      <AdPlaceholder position="in-content" client:visible />
+
+      <!-- Section 1: Strategies -->
+      <section id="strategies" class="space-y-5">
+        <h2 class="text-2xl font-bold text-white">1. Five Ways to Use a Game Night Wheel</h2>
+        <p class="text-gray-300">
+          Not all game night wheels are equal. The strategy you use changes the dynamics of the evening. Here are five formats, from most random to most structured:
+        </p>
+        <div class="space-y-4">
+          {wheelStrategies.map((s, i) => (
+            <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+              <div class="flex items-start gap-3">
+                <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">{i + 1}</div>
+                <div>
+                  <h3 class="text-white font-bold">{s.name}</h3>
+                  <p class="text-gray-300 text-sm mt-1">{s.how}</p>
+                  <p class="text-green-300 text-sm mt-2"><strong>Advantage:</strong> {s.advantage}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
+          <p class="text-blue-300 text-sm"><strong>Our recommendation:</strong> The Pre-Filtered Wheel for first-time group nights. The Collection Wheel for regular groups who know their library. The Vibe Wheel when group dynamics are unpredictable.</p>
+        </div>
+      </section>
+
+      <!-- Section 2: Quick Games -->
+      <section id="quick" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">2. Quick Games (Under 30 Minutes)</h2>
+        <p class="text-gray-300">
+          Perfect for the first game of the night while people are still arriving, or the last game when energy is fading. These games teach quickly and run fast enough that you can play 2-3 rounds in an evening.
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-white/10">
+                <th class="text-left text-gray-400 font-medium py-2 pr-3">Game</th>
+                <th class="text-left text-gray-400 font-medium py-2 pr-3">Players</th>
+                <th class="text-left text-gray-400 font-medium py-2 pr-3">Time</th>
+                <th class="text-left text-gray-400 font-medium py-2 pr-3">Type</th>
+                <th class="text-left text-gray-400 font-medium py-2">Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              {quickGames.map((g, i) => (
+                <tr class={`border-b border-white/5 ${i % 2 === 0 ? 'bg-white/2' : ''}`}>
+                  <td class="text-white font-medium py-3 pr-3">{g.name}</td>
+                  <td class="text-purple-300 py-3 pr-3 text-xs">{g.players}</td>
+                  <td class="text-yellow-300 py-3 pr-3 text-xs">{g.time}</td>
+                  <td class="text-gray-400 py-3 pr-3 text-xs">{g.type}</td>
+                  <td class="text-green-300 py-3 text-xs">{g.verdict}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 3: Medium Games -->
+      <section id="medium" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">3. Medium Games (30–90 Minutes)</h2>
+        <p class="text-gray-300">
+          The sweet spot for most game nights. Enough depth to feel satisfying, short enough to play twice or follow with a quick game. These are the backbone of any game library.
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-white/10">
+                <th class="text-left text-gray-400 font-medium py-2 pr-3">Game</th>
+                <th class="text-left text-gray-400 font-medium py-2 pr-3">Players</th>
+                <th class="text-left text-gray-400 font-medium py-2 pr-3">Time</th>
+                <th class="text-left text-gray-400 font-medium py-2 pr-3">Type</th>
+                <th class="text-left text-gray-400 font-medium py-2">Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              {mediumGames.map((g, i) => (
+                <tr class={`border-b border-white/5 ${i % 2 === 0 ? 'bg-white/2' : ''}`}>
+                  <td class="text-white font-medium py-3 pr-3">{g.name}</td>
+                  <td class="text-purple-300 py-3 pr-3 text-xs">{g.players}</td>
+                  <td class="text-yellow-300 py-3 pr-3 text-xs">{g.time}</td>
+                  <td class="text-gray-400 py-3 pr-3 text-xs">{g.type}</td>
+                  <td class="text-green-300 py-3 text-xs">{g.verdict}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 4: Heavy Games -->
+      <section id="heavy" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">4. Heavy Games (90+ Minutes)</h2>
+        <p class="text-gray-300">
+          These need planning — a dedicated game night with the right group, no early departures, and everyone bought in before sitting down. Don't spin a random wheel for these. Put them in their own "committed group" wheel for special occasions.
+        </p>
+        <div class="grid grid-cols-1 gap-3">
+          {heavyGames.map((g) => (
+            <div class="bg-white/5 border border-white/10 rounded-lg p-4">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <h3 class="text-white font-semibold">{g.name}</h3>
+                <div class="flex items-center gap-3 text-xs">
+                  <span class="text-purple-300">{g.players} players</span>
+                  <span class="text-yellow-300">{g.time}</span>
+                </div>
+              </div>
+              <p class="text-gray-400 text-sm mt-1">{g.type} · <span class="text-green-300">{g.verdict}</span></p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Section 5: Party Games -->
+      <section id="party" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">5. Party Games for Large Groups (6–20 People)</h2>
+        <p class="text-gray-300">
+          Most board games cap at 5-6 players. When you have 8, 10, or 12 people, you need dedicated party games or digital options that everyone can join from their phone.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {partyGames.map((g) => (
+            <div class="bg-white/5 border border-white/10 rounded-lg p-4">
+              <h3 class="text-white font-semibold text-sm">{g.name}</h3>
+              <div class="flex items-center gap-2 mt-1">
+                <Users size={12} className="text-purple-400" />
+                <span class="text-purple-300 text-xs">{g.players}</span>
+                <Clock size={12} className="text-yellow-400 ml-2" />
+                <span class="text-yellow-300 text-xs">{g.time}</span>
+              </div>
+              <p class="text-gray-400 text-xs mt-1">{g.verdict}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Section 6: Hosting Tips -->
+      <section id="hosting" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">6. Game Night Hosting Tips</h2>
+        <div class="space-y-3">
+          {hostingTips.map((item) => (
+            <div class="flex gap-4 bg-white/5 rounded-xl p-4">
+              <CheckCircle size={18} className="text-green-400 mt-0.5 flex-shrink-0" />
+              <div>
+                <p class="text-white font-semibold text-sm">{item.tip}</p>
+                <p class="text-gray-400 text-sm mt-1">{item.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Section 7: Setup -->
+      <section id="setup" class="space-y-4">
+        <h2 class="text-2xl font-bold text-white">7. Building Your Wheel by Game Collection</h2>
+        <p class="text-gray-300">
+          The most practical game night wheel is built from games you actually own. Here's how to structure it:
+        </p>
+        <ol class="space-y-3">
+          <li class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">1</div>
+            <div>
+              <p class="text-white font-semibold">List all your games</p>
+              <p class="text-gray-400 text-sm">Go shelf by shelf. Include digital/app games. Most people own 20-40 games but only regularly play 5.</p>
+            </div>
+          </li>
+          <li class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">2</div>
+            <div>
+              <p class="text-white font-semibold">Tag each with: time, min players, max players, complexity</p>
+              <p class="text-gray-400 text-sm">Use BoardGameGeek for accurate player counts and play times.</p>
+            </div>
+          </li>
+          <li class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">3</div>
+            <div>
+              <p class="text-white font-semibold">Create 3 separate wheels: Quick / Evening / Heavy</p>
+              <p class="text-gray-400 text-sm">Bookmark each one. Spin the appropriate wheel based on the night's constraints.</p>
+            </div>
+          </li>
+          <li class="flex gap-4 bg-white/5 rounded-xl p-4">
+            <div class="bg-purple-600 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">4</div>
+            <div>
+              <p class="text-white font-semibold">Add or remove games as your collection changes</p>
+              <p class="text-gray-400 text-sm">Update the wheel when you get new games or trade away ones you've outgrown.</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- CTA -->
+      <section class="bg-gradient-to-br from-purple-900/40 to-indigo-900/40 border border-purple-500/30 rounded-2xl p-8 text-center space-y-4">
+        <Trophy size={40} className="text-purple-400 mx-auto" />
+        <h2 class="text-2xl font-bold text-white">Ready to Spin for Tonight's Game?</h2>
+        <p class="text-gray-300 max-w-lg mx-auto">
+          Add your games, set your filters, and let the wheel decide. No more 20-minute debates — just play.
+        </p>
+        <a href="/" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+          Open the Game Night Wheel <ArrowRight size={18} className="text-white" />
+        </a>
+      </section>
+
+      <RelatedPosts currentSlug={canonical} client:idle />
+      <AdPlaceholder position="bottom" client:visible />
+    </main>
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>
