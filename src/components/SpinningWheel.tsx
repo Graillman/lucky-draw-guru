@@ -187,8 +187,13 @@ export function SpinningWheel({
   const canvasDisplaySize = size;
   const canvasPixelSize = canvasDisplaySize * dpr;
 
+  // ─── Draw function — extracted from the useEffect so we can call it directly
+  // during the spin animation (bypassing React state and avoiding 60fps re-renders).
+  const drawRef = useRef<((rotation: number) => void) | null>(null);
+
   // ─── Draw effect ──────────────────────────────────────────────────────────
   useEffect(() => {
+    drawRef.current = (rotation: number) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -599,8 +604,19 @@ export function SpinningWheel({
 
       ctx.restore();
     }
+    };
 
-  }, [rotation, segments, participants.length, mode, themeColor, themeColorDark, themeColorGlow, themeColorHalf, themeColorLight, themeStroke, borderStyle, bgImgVersion, isAnimating, clickToSpinLabel, clickToSpinSub, wheelShape, hubTheme, canvasDisplaySize]);
+    // Initial draw — use the ref to avoid stale `rotation` state in the closure
+    // (after a spin, rotation state catches up; we draw with whatever ref says now).
+    drawRef.current(rotationRef.current);
+  }, [segments, participants.length, mode, themeColor, themeColorDark, themeColorGlow, themeColorHalf, themeColorLight, themeStroke, borderStyle, bgImgVersion, isAnimating, clickToSpinLabel, clickToSpinSub, wheelShape, hubTheme, canvasDisplaySize, dpr]);
+
+  // Redraw when the controlled `rotation` state changes (after-spin sync,
+  // initial render, deliberate setRotation calls). The spin animation itself
+  // writes directly to drawRef.current without going through React state.
+  useEffect(() => {
+    drawRef.current?.(rotation);
+  }, [rotation]);
   // ─────────────────────────────────────────────────────────────────────────
 
   // Idle rotation — 1 revolution per ~20s, stops on first spin.
@@ -704,7 +720,11 @@ export function SpinningWheel({
 
       const newRotation = startRotation + totalRotation * easeOut;
       rotationRef.current = newRotation;
-      setRotation(newRotation);
+      // Bypass React state during the spin — draw directly to canvas via the ref.
+      // This avoids 60fps full component re-renders + 60fps full canvas redraws
+      // (the draw effect would re-fire on every rotation state change). We sync
+      // the React state once at the end of the spin below.
+      drawRef.current?.(newRotation);
 
       if (onTickRef.current) {
         const pointerAngle = ((Math.PI / 2 - newRotation) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
@@ -723,6 +743,9 @@ export function SpinningWheel({
       if (progress < 1) {
         animationRef.current = requestAnimationFrame(animate);
       } else {
+        // Sync React state with the final rotation (we bypassed setState during
+        // the animation to avoid re-renders; this catches the state up).
+        setRotation(newRotation);
         setIsAnimating(false);
         onCompleteRef.current(selectedWinnersRef.current);
       }
