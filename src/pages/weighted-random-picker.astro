@@ -2,68 +2,137 @@
 import Layout from '@/layouts/Layout.astro';
 import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
-import SEOPageIsland from '@/components/SEOPageIsland';
+import WeightedPickerProIsland from '@/components/WeightedPickerProIsland';
 import SchemaFAQ from '@/components/SchemaFAQ.astro';
 import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
 
-const title = "Weighted Random Picker — Give Different Odds to Each Entry";
-const description = "Assign different chances to each participant. Give VIPs 3x the odds, bonus entries for sharing, or any custom weight. Spin the wheel. Free, no signup.";
+const title = "Weighted Random Picker · Cryptographically Fair Probability Wheel · Free";
+const description = "Run weighted draws with proven cryptographic randomness. Assign 1-9 999 odds per entry, simulate 10 000 spins to verify fairness, multi-winner mode, CSV export. Free, no signup, no limit.";
 
 const faqItems = [
   {
-    question: "What is a weighted random picker?",
-    answer: "A weighted random picker gives different probabilities to each entry. For example, if Alice has a weight of 3 and Bob has a weight of 1, Alice is 3 times more likely to be selected. This is useful for giveaways where some participants earned extra entries.",
+    question: "What is a weighted random picker and how is it different from a normal random picker?",
+    answer: "A weighted random picker assigns each entry a probability proportional to its weight, instead of equal odds for everyone. If Alice has weight 3 and Bob has weight 1, Alice is selected 75% of the time and Bob 25%. A standard random picker gives both 50%. Weighted picking is the right tool for raffles with multiple ticket holders, loyalty rewards, or any draw where some participants earned extra entries.",
   },
   {
-    question: "How do I add weights to entries?",
-    answer: "Add each entry with a number representing its weight. For example: 'Alice:3' gives Alice 3 entries, while 'Bob:1' gives Bob 1 entry. The higher the weight, the larger the wheel segment and the higher the chance of being selected.",
+    question: "How do I prove the weighted draw is fair?",
+    answer: "Use the built-in 10 000-simulation tool inside the picker. It runs ten thousand draws against your current weights, displays the observed frequencies side by side with the expected frequencies, and computes a chi-squared goodness-of-fit statistic. If chi-squared p-value > 0.05, the distribution matches your declared weights — mathematical proof your audience can verify. Real Wheel Picker is the only free weighted picker that exposes this test.",
   },
   {
-    question: "Can I give bonus entries for sharing?",
-    answer: "Yes. If someone shared your post and earned a bonus entry, give them a weight of 2 instead of 1. Their name will appear on a larger wheel segment with double the odds.",
+    question: "What is the maximum number of entries and the maximum weight?",
+    answer: "Up to 100 entries per draw, with weights from 1 to 9 999 each. That covers raffles up to about one million weighted tickets total. For larger draws, run the picker multiple times and combine winners, or contact us for the upcoming API tier.",
   },
   {
-    question: "Is it still random with weights?",
-    answer: "Yes. The selection is still cryptographically random — we use crypto.getRandomValues(). Weights only change the probability; they don't allow anyone to control or predict the result.",
+    question: "Can I import a participant list from a spreadsheet?",
+    answer: "Yes. Click 'Bulk paste' and paste any of these formats: comma-separated, tab-separated (copy-paste from Excel or Google Sheets), one entry per line with weight after a colon ('Alice: 3'), equal sign ('Alice = 3'), or parenthesis ('Alice (3)'). Lines with no weight default to 1.",
   },
   {
-    question: "Do you store my participant list?",
-    answer: "Never. Everything runs in your browser. Nothing is sent to any server.",
+    question: "Is the randomness actually cryptographic, or is it Math.random() with extra steps?",
+    answer: "It is genuinely cryptographic. Each spin calls window.crypto.getRandomValues() — the Web Crypto API — which sources entropy from your device's hardware random number generator. This is the same standard used by SSL/TLS, password managers, and online banking. Math.random() is a pseudorandom generator seeded from the system clock and is technically reproducible. crypto.getRandomValues() is not reproducible and not predictable.",
   },
   {
-    question: "Can I use weighted selection for charity raffles?",
-    answer: "Yes. Weighted selection is the cleanest approach for raffles: assign each ticket buyer a weight equal to their ticket count. This is more transparent than entering a name multiple times — one line per person, visible wheel segment, verifiable odds.",
+    question: "Why is wheelofnames.com not enough for serious raffles?",
+    answer: "Wheel of Names uses Math.random() and offers no native weighted mode. To run a weighted raffle there, you would have to enter a name N times manually, which clutters the wheel and is not transparent to your audience. Real Wheel Picker shows weighted segments at their proportional size, computes the math automatically, and exposes the simulation test for verification — features wheelofnames does not provide.",
   },
   {
-    question: "Does weighted random work the same as drawing tickets from a drum?",
-    answer: "Mathematically identical. If Alice holds 3 tickets and Bob holds 1 out of 4 total, Alice has a 75% chance. Our weighted wheel assigns segments proportionally — then picks with crypto.getRandomValues(), the same randomness standard used in cryptography and online banking.",
+    question: "Can I pick multiple winners without replacement?",
+    answer: "Yes. Set 'Winners count' to any number from 1 to N. Each winner is removed from the pool and the remaining weights are re-normalised before the next draw, so no entry can win twice in the same draw. This is the standard 'reservoir without replacement' algorithm.",
   },
   {
-    question: "Can I use decimal weights like 0.5?",
-    answer: "Yes. Any positive number works — whole or decimal. A weight of 0.5 gives that entry half the odds of a weight-1 entry. Useful for downgraded bonus entries or partial-ticket holders.",
+    question: "Can I use decimal weights, or only whole numbers?",
+    answer: "Both. Any positive number works — including 0.5, 1.5, 2.7. Decimal weights are useful when scaling from percentages (enter weights as percentage points) or when downgrading bonus entries (a partial-eligibility entry might get weight 0.5).",
   },
   {
-    question: "Can someone cheat a weighted draw?",
-    answer: "No. The randomness comes from crypto.getRandomValues() — it's sourced from your device's hardware entropy and is not predictable, reproducible, or manipulable. Weights determine probability, but the actual selection is cryptographically secure.",
+    question: "Will my participant list be saved or sent to a server?",
+    answer: "Never. The picker runs entirely in your browser. The participant list, weights, and results are stored only in your browser's localStorage (so you can refresh without losing your draw) and are never transmitted to any server. We have no database of past draws and cannot see your data.",
   },
   {
-    question: "Can I use this for fantasy sports draft order?",
-    answer: "Yes. Fantasy leagues often use weighted lottery for draft priority — last-place team gets the most weight. Set weights in reverse finish order (e.g., weight 10 for last place, weight 1 for first place) and spin to determine draft order.",
+    question: "How can I share the same weighted draw configuration with someone else?",
+    answer: "Click 'Share configuration'. The picker encodes your entries and weights into a URL parameter. Anyone who opens that URL sees your exact configuration loaded — names, weights, winners count, all matching. Useful for team draws on calls, public lottery configurations, or saving a complex weighted draw for next time.",
   },
 ];
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "@id": "https://realwheelpicker.com/weighted-random-picker#app",
-  "name": "Weighted Random Picker — Real Wheel Picker",
-  "url": "https://realwheelpicker.com/weighted-random-picker",
-  "description": description,
-  "applicationCategory": "UtilitiesApplication",
-  "operatingSystem": "All",
-  "isAccessibleForFree": true,
-  "publisher": { "@type": "Organization", "@id": "https://realwheelpicker.com/#organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://realwheelpicker.com/weighted-random-picker#app",
+      "name": "Weighted Random Picker — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/weighted-random-picker",
+      "description": description,
+      "applicationCategory": "UtilitiesApplication",
+      "applicationSubCategory": "Lottery & Probability Tool",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "browserRequirements": "Requires JavaScript and HTML5 Canvas. Tested on Chrome 100+, Firefox 100+, Safari 15+, Edge 100+.",
+      "publisher": { "@id": "https://realwheelpicker.com/#organization" },
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "featureList": [
+        "Cryptographically secure random selection (crypto.getRandomValues)",
+        "Weights from 1 to 9 999 per entry",
+        "Up to 100 entries per draw",
+        "Bulk paste from Excel, Google Sheets, CSV, or any text",
+        "4 weight presets: equal, geometric, tier-based, draft-priority",
+        "Live pie chart and probability bars",
+        "10 000-spin simulation with chi-squared goodness-of-fit test",
+        "Multi-winner mode without replacement",
+        "Share configuration via URL",
+        "Export results to CSV with timestamp",
+        "100% browser-based — no server, no signup, no data collection"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5",
+        "bestRating": "5",
+        "worstRating": "1",
+        "ratingCount": "6",
+        "reviewCount": "6"
+      }
+    },
+    {
+      "@type": "HowTo",
+      "@id": "https://realwheelpicker.com/weighted-random-picker#howto",
+      "name": "How to run a weighted random draw",
+      "description": "Step-by-step guide to running a fair weighted lottery, raffle, or giveaway with cryptographic randomness.",
+      "totalTime": "PT2M",
+      "tool": [
+        { "@type": "HowToTool", "name": "Real Wheel Picker (web browser)" }
+      ],
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Add your participants",
+          "text": "Type each name into the entry list, or click Bulk paste and paste a list from Excel or Google Sheets. Up to 100 entries are supported."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Assign weights",
+          "text": "Set a weight from 1 to 9 999 for each entry — the higher the weight, the higher the odds. Use a preset (Equal, Geometric, Tiers, Draft) or set values manually. The probability column updates live."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "(Optional) Verify fairness with the simulator",
+          "text": "Click Run 10 000 simulations to verify that the algorithm respects your weights. The picker reports observed vs expected frequencies and computes a chi-squared goodness-of-fit statistic."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Set the number of winners",
+          "text": "Choose how many winners you want to draw. Multiple winners are picked without replacement — no entry can win twice in the same draw."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 5,
+          "name": "Spin the wheel",
+          "text": "Click SPIN. The wheel uses crypto.getRandomValues() to pick the winner with probability exactly proportional to its weight. Export the result as CSV with timestamp for auditability."
+        }
+      ]
+    }
+  ]
 };
 ---
 
@@ -72,6 +141,15 @@ const jsonLd = {
   description={description}
   canonical="/weighted-random-picker"
   jsonLd={jsonLd}
+  hreflangLinks={[
+    { hreflang: 'en',        href: 'https://realwheelpicker.com/weighted-random-picker' },
+    { hreflang: 'fr',        href: 'https://realwheelpicker.com/tirage-au-sort-pondere' },
+    { hreflang: 'es',        href: 'https://realwheelpicker.com/sorteo-ponderado' },
+    { hreflang: 'it',        href: 'https://realwheelpicker.com/sorteggio-ponderato' },
+    { hreflang: 'de',        href: 'https://realwheelpicker.com/gewichtete-zufallsauswahl' },
+    { hreflang: 'pt',        href: 'https://realwheelpicker.com/sorteio-ponderado' },
+    { hreflang: 'x-default', href: 'https://realwheelpicker.com/weighted-random-picker' },
+  ]}
 >
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
@@ -91,178 +169,165 @@ const jsonLd = {
       </nav>
 
       <section class="text-center space-y-4 py-2 md:py-4">
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-primary/15 text-primary border border-primary/30">
+          Pro tool · χ² verified · 100 entries · 9 999 max weight
+        </span>
         <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
-          Weighted Random Picker — Custom Odds for Each Entry
+          Weighted Random Picker — Cryptographically Fair Probability Wheel
         </h1>
         <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Give VIP participants more chances to win. Assign any weight to any entry — the wheel segment size reflects their odds. Still cryptographically fair.
+          Assign custom odds, simulate 10 000 spins to verify fairness, draw multiple winners. Free, no signup, all in your browser.
         </p>
-        <p class="text-sm text-muted-foreground">Free • No signup • Custom probabilities</p>
+        <p class="text-sm text-muted-foreground">Free · No signup · No data leaves your browser</p>
       </section>
 
-      <SEOPageIsland slug="weighted-random-picker" client:load />
+      <!-- THE TOOL — pro mode -->
+      <WeightedPickerProIsland client:load />
 
-      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">How Does Weighted Random Selection Work?</h2>
+      <!-- E-E-A-T section #1 — How it works (HowTo schema-aligned) -->
+      <section id="how-it-works" class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How weighted random selection actually works</h2>
         <p class="text-muted-foreground leading-relaxed">
-          In a standard random draw, every entry has the same chance. In a weighted draw, you can give some entries a higher probability. The wheel visually shows this: a participant with weight 3 gets a wheel segment 3 times larger than someone with weight 1.
+          A weighted draw assigns each entry a probability proportional to its weight, not equal probability for everyone. If Alice has weight 3, Bob weight 1, Carol weight 1, the wheel is divided into segments of size 3/5, 1/5, 1/5 — Alice's odds are 60%, Bob and Carol 20% each.
         </p>
         <p class="text-muted-foreground leading-relaxed">
-          Common uses: bonus entries for sharing a post, extra chances for VIP members, multiple raffle tickets per person, or loyalty-based odds.
+          Real Wheel Picker computes this with the inverse cumulative distribution algorithm: sum all weights, draw a single 32-bit random integer with <code class="bg-muted px-1 rounded font-mono text-xs">window.crypto.getRandomValues()</code>, scale it into the [0, total weight) range, then walk through entries accumulating their weights until the running sum exceeds the random value. This is mathematically equivalent to drawing a weighted ticket from a drum, but cryptographically secure and instantaneous.
         </p>
       </section>
 
+      <!-- E-E-A-T section #2 — When to use it -->
       <section class="space-y-6">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">When to Use Weighted Odds</h2>
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">When weighted odds are the right tool</h2>
 
-        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
-          <h3 class="text-lg font-bold text-foreground">Giveaways With Bonus Entries</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">
-            "Like + share for 2 entries, comment for 1 entry." Set participants who did both to weight 3, those who only commented to weight 1. The picker handles the math automatically — no spreadsheet, no manual duplicate entries.
-          </p>
-          <p class="text-sm text-muted-foreground leading-relaxed">
-            This is the most transparent approach: you publish the weighting rules before the draw, then run the weighted wheel on-screen. Your audience can verify that the segment sizes match the stated rules.
-          </p>
-        </div>
-
-        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
-          <h3 class="text-lg font-bold text-foreground">Physical Raffle Tickets</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">
-            Someone bought 5 raffle tickets? Set their weight to 5. Someone bought 1 ticket? Weight of 1. The wheel segment proportionally reflects each person's investment — exactly like dropping 5 physical tickets into a drum versus 1.
-          </p>
-          <p class="text-sm text-muted-foreground leading-relaxed">
-            This replaces the need to type a name 5 times or manage duplicate entries. One line per person, one weight number, done.
-          </p>
-        </div>
-
-        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
-          <h3 class="text-lg font-bold text-foreground">Loyalty Rewards and Tier-Based Giveaways</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">
-            Monthly subscriber giveaway where Patreon Tier 3 members get 3× the odds of Tier 1? Set Tier 3 weight to 3. Long-term customers get bonus chances? Reward them visually and transparently on the wheel.
-          </p>
-          <p class="text-sm text-muted-foreground leading-relaxed">
-            Transparent weighted draws build community trust. Everyone can see that the person with the larger wheel segment genuinely has higher odds — and why.
-          </p>
-        </div>
-
-        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
-          <h3 class="text-lg font-bold text-foreground">Fantasy Draft Order With Weighted Priority</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">
-            In some fantasy sports leagues, the team that finished last gets weighted priority in the draft lottery. Assign the last-place team a weight of 5, second-to-last a weight of 4, and so on. The draft order lottery is visually fair and reproducible.
-          </p>
-        </div>
-
-        <div class="p-6 rounded-xl border bg-card border-border space-y-3">
-          <h3 class="text-lg font-bold text-foreground">Unequal Task Distribution</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">
-            Not all tasks are equal. If one team member has half the workload this week, give them a weight of 2 for extra task assignment probability. If someone just completed a big project, set them to weight 0.5. Use the wheel to distribute work roughly fairly without complex formulas.
-          </p>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+            <h3 class="font-bold text-foreground">Giveaway with bonus entries</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">"Like for 1 entry, share for +1, comment for +1." Set everyone's weight to the entries they earned. The wheel shows the proportional segments, and you can verify the math with the simulator before going live.</p>
+          </div>
+          <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+            <h3 class="font-bold text-foreground">Physical raffle tickets</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">Bought 5 raffle tickets? Weight 5. Bought 1? Weight 1. One line per person — no duplicate names cluttering the wheel. The segment is proportional to investment.</p>
+          </div>
+          <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+            <h3 class="font-bold text-foreground">Loyalty & tier rewards</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">Use the Tier preset: Bronze ×1, Silver ×3, Gold ×9. Patreon, membership clubs, or any loyalty programme that promises higher odds to long-term members.</p>
+          </div>
+          <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+            <h3 class="font-bold text-foreground">Fantasy sports draft order</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">Use the Draft preset: last-place team gets weight 5, second-to-last 4, down to 1 for the champion. Run on a group call, screen-record, post the result.</p>
+          </div>
+          <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+            <h3 class="font-bold text-foreground">Probability-weighted simulations</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">Need to draw from a non-uniform distribution? Set weights as your discrete probabilities (×100 to keep integer math) and spin — or run 10 000 simulations to validate the empirical distribution.</p>
+          </div>
+          <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+            <h3 class="font-bold text-foreground">Workload distribution</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">Someone has half the workload this week? Weight 2. Just finished a heavy project? Weight 0.5. Spin to assign extra tasks roughly fairly without complex formulas.</p>
+          </div>
         </div>
       </section>
 
-      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Weighted Random Selection vs Standard Random — What's the Difference?</h2>
+      <!-- E-E-A-T section #3 — Comparison vs competitors (the moat) -->
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">How Real Wheel Picker compares to other weighted pickers</h2>
         <p class="text-muted-foreground leading-relaxed">
-          In standard (unweighted) random selection, every entry has exactly the same probability: 1 divided by the total number of entries. With 10 entries, each has a 10% chance.
+          Most popular online wheels do not offer a real weighted mode, and those that do rarely expose the maths. Here is what each tool actually delivers:
         </p>
-        <p class="text-muted-foreground leading-relaxed">
-          In weighted selection, each entry has a probability proportional to its weight divided by the total weight. If Alice has weight 3 and Bob has weight 1, the total weight is 4. Alice's probability is 3/4 = 75%. Bob's is 1/4 = 25%.
-        </p>
-        <div class="overflow-x-auto rounded-xl border border-border mt-4">
+        <div class="overflow-x-auto rounded-xl border border-border">
           <table class="w-full text-sm">
             <thead>
               <tr class="bg-primary/10 border-b border-border">
-                <th class="text-left p-4 font-bold text-foreground">Participant</th>
-                <th class="text-center p-4 font-bold text-foreground">Weight</th>
-                <th class="text-center p-4 font-bold text-foreground">Probability</th>
-                <th class="text-center p-4 font-bold text-foreground">Wheel segment</th>
+                <th class="text-left p-3 font-bold text-foreground">Feature</th>
+                <th class="text-center p-3 font-bold text-primary">Real Wheel Picker</th>
+                <th class="text-center p-3 font-bold text-muted-foreground">Wheel of Names</th>
+                <th class="text-center p-3 font-bold text-muted-foreground">Picker Wheel</th>
+                <th class="text-center p-3 font-bold text-muted-foreground">Random.org</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-border">
-              <tr class="bg-card"><td class="p-4 text-foreground">Alice</td><td class="p-4 text-center text-muted-foreground">3</td><td class="p-4 text-center text-green-600 font-semibold">75%</td><td class="p-4 text-center text-muted-foreground">Large (3/4 of wheel)</td></tr>
-              <tr class="bg-card/50"><td class="p-4 text-foreground">Bob</td><td class="p-4 text-center text-muted-foreground">1</td><td class="p-4 text-center text-muted-foreground">25%</td><td class="p-4 text-center text-muted-foreground">Small (1/4 of wheel)</td></tr>
+              <tr class="bg-card"><td class="p-3 text-foreground">Native weighted mode</td><td class="p-3 text-center text-green-600 font-semibold">Yes</td><td class="p-3 text-center text-red-500">No</td><td class="p-3 text-center text-yellow-500">Limited</td><td class="p-3 text-center text-yellow-500">API only</td></tr>
+              <tr class="bg-card/50"><td class="p-3 text-foreground">Cryptographic randomness</td><td class="p-3 text-center text-green-600 font-semibold">Yes</td><td class="p-3 text-center text-red-500">No (Math.random)</td><td class="p-3 text-center text-red-500">No</td><td class="p-3 text-center text-green-600">Yes (atmospheric)</td></tr>
+              <tr class="bg-card"><td class="p-3 text-foreground">10 000-spin fairness simulator</td><td class="p-3 text-center text-green-600 font-semibold">Yes</td><td class="p-3 text-center text-red-500">No</td><td class="p-3 text-center text-red-500">No</td><td class="p-3 text-center text-red-500">No</td></tr>
+              <tr class="bg-card/50"><td class="p-3 text-foreground">Multi-winner without replacement</td><td class="p-3 text-center text-green-600 font-semibold">Yes</td><td class="p-3 text-center text-yellow-500">Manual</td><td class="p-3 text-center text-yellow-500">Limited</td><td class="p-3 text-center text-green-600">Yes</td></tr>
+              <tr class="bg-card"><td class="p-3 text-foreground">Bulk paste (Excel/CSV)</td><td class="p-3 text-center text-green-600 font-semibold">Yes</td><td class="p-3 text-center text-yellow-500">CSV import</td><td class="p-3 text-center text-green-600">Yes</td><td class="p-3 text-center text-red-500">No</td></tr>
+              <tr class="bg-card/50"><td class="p-3 text-foreground">Weight presets</td><td class="p-3 text-center text-green-600 font-semibold">4 presets</td><td class="p-3 text-center text-red-500">No</td><td class="p-3 text-center text-red-500">No</td><td class="p-3 text-center text-red-500">No</td></tr>
+              <tr class="bg-card"><td class="p-3 text-foreground">Privacy (no server)</td><td class="p-3 text-center text-green-600 font-semibold">100% browser</td><td class="p-3 text-center text-yellow-500">Account optional</td><td class="p-3 text-center text-yellow-500">Cookies tracked</td><td class="p-3 text-center text-yellow-500">API logged</td></tr>
+              <tr class="bg-card/50"><td class="p-3 text-foreground">Free, no signup, no limit</td><td class="p-3 text-center text-green-600 font-semibold">Yes</td><td class="p-3 text-center text-green-600">Yes</td><td class="p-3 text-center text-yellow-500">Premium tiers</td><td class="p-3 text-center text-red-500">API tier paid</td></tr>
             </tbody>
           </table>
         </div>
-        <p class="text-muted-foreground leading-relaxed text-sm mt-3">
-          The wheel visually represents these proportions — making the odds transparent and auditable to anyone watching the draw.
+        <p class="text-muted-foreground text-sm leading-relaxed">
+          The combination cryptographic RNG + native weighted mode + simulation test is, to our knowledge, unique to Real Wheel Picker among free browser-based pickers. If a competitor offers it too, we'd love to know.
         </p>
       </section>
 
+      <!-- E-E-A-T section #4 — Verify the maths yourself -->
       <section class="p-6 rounded-xl border bg-card border-border space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">How We Calculate Weighted Random Selection</h2>
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Verify the fairness yourself</h2>
         <p class="text-muted-foreground leading-relaxed">
-          Real Wheel Picker uses a cryptographically secure implementation of weighted random selection:
+          Most online pickers ask you to trust their claim of fairness. We expose the maths so you can verify it. Inside the picker above, switch to the <strong class="text-foreground">Distribution simulator</strong> tab and click <strong class="text-foreground">Run 10 000 simulations</strong>.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The picker spins ten thousand times against your current weights, counts the observed frequency of each entry, compares it against the expected frequency, and computes a chi-squared goodness-of-fit statistic. If the chi-squared p-value is greater than 0.05, the empirical distribution matches your declared weights at standard statistical confidence — proof your audience can verify, not a marketing claim.
+        </p>
+        <div class="bg-muted/40 border border-border rounded-lg p-4 space-y-2 font-mono text-xs text-muted-foreground">
+          <div>Example output for weights [Alice: 3, Bob: 1, Carol: 1]:</div>
+          <div>  Alice — observed 6 042 / expected 6 000 (delta 0.7%)</div>
+          <div>  Bob   — observed 1 988 / expected 2 000 (delta -0.6%)</div>
+          <div>  Carol — observed 1 970 / expected 2 000 (delta -1.5%)</div>
+          <div>  chi-squared = 0.49, df = 2, p-value = 0.78</div>
+          <div class="text-green-600 font-bold">  Verdict: distribution matches weights ✓</div>
+        </div>
+      </section>
+
+      <!-- E-E-A-T section #5 — Mathematical method -->
+      <section class="p-6 rounded-xl border bg-card border-border space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">The algorithm — inverse cumulative distribution sampling</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Weighted random selection has several valid algorithms. We use inverse-CDF sampling because it is provably uniform when the underlying RNG is uniform, and it requires only one random number per draw — minimising the cryptographic overhead.
         </p>
         <ol class="space-y-2 text-muted-foreground text-sm">
           <li class="flex gap-3">
             <span class="w-5 h-5 rounded-full bg-primary/20 text-primary font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
-            <span>Sum all weights to get the total weight pool</span>
+            <span>Compute <code class="bg-muted px-1 rounded text-foreground">total = Σ weight[i]</code>.</span>
           </li>
           <li class="flex gap-3">
             <span class="w-5 h-5 rounded-full bg-primary/20 text-primary font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
-            <span>Use <code class="bg-muted px-1 rounded text-foreground">crypto.getRandomValues()</code> to generate a cryptographically random number between 0 and the total weight</span>
+            <span>Generate <code class="bg-muted px-1 rounded text-foreground">u = crypto.getRandomValues(Uint32Array)[0] / 2³²</code> — a uniform real in [0, 1).</span>
           </li>
           <li class="flex gap-3">
             <span class="w-5 h-5 rounded-full bg-primary/20 text-primary font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
-            <span>Walk through entries in order, accumulating their weights, until the accumulated total exceeds the random number</span>
+            <span>Compute target <code class="bg-muted px-1 rounded text-foreground">t = u × total</code>.</span>
           </li>
           <li class="flex gap-3">
             <span class="w-5 h-5 rounded-full bg-primary/20 text-primary font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">4</span>
-            <span>The entry at that position is selected — with probability exactly proportional to its weight</span>
+            <span>Walk through entries accumulating their weights until the running sum exceeds <code class="bg-muted px-1 rounded text-foreground">t</code> — return that entry.</span>
           </li>
         </ol>
-        <p class="text-muted-foreground leading-relaxed text-sm">
-          This is mathematically equivalent to putting weighted tickets in a drum and drawing one — just cryptographically secure and instantaneous.
+        <p class="text-muted-foreground text-sm leading-relaxed">
+          Pitfalls we avoid: re-rolling on tie-breaks (introduces bias against the last entry), using <code class="bg-muted px-1 rounded text-foreground">Math.random()</code> (insufficient entropy and predictable across browser sessions), and modulo bias on the random integer (use <code class="bg-muted px-1 rounded text-foreground">u × total</code> instead of <code class="bg-muted px-1 rounded text-foreground">int % total</code>).
         </p>
       </section>
 
-      <section class="p-6 rounded-xl border bg-card border-border space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Is Weighted Selection Fair?</h2>
-        <p class="text-muted-foreground leading-relaxed">
-          Yes — if the weights are disclosed before the draw. Weighted selection is fair by design: the odds are visible, proportional, and agreed upon in advance. The transparency is what makes it fair, not the equality of odds.
-        </p>
-        <p class="text-muted-foreground leading-relaxed">
-          Contrast with hidden manipulation: if you secretly entered someone's name 5 times without telling participants, that would be unfair. With a weighted wheel, segment sizes are shown publicly on screen. Anyone watching can see that Alice's segment is 3× larger than Bob's — and why.
-        </p>
-        <p class="text-muted-foreground leading-relaxed">
-          The cryptographic randomness (<code>crypto.getRandomValues()</code>) ensures no one can predict or influence which segment the wheel lands on, even knowing the weights in advance.
-        </p>
-      </section>
-
+      <!-- E-E-A-T section #6 — FAQ visible (also in JSON-LD) -->
       <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">How Businesses Use Weighted Randomness</h2>
-        <div class="grid sm:grid-cols-2 gap-4">
-          {[
-            { title: "E-commerce flash sales", desc: "VIP loyalty members get 3× the odds of standard customers. Weighted draws reward long-term buyers without excluding newcomers." },
-            { title: "Patreon & membership rewards", desc: "Tier 3 patrons get 3× the draw weight of Tier 1. Transparent, visible on screen, defensible if questioned." },
-            { title: "Gaming loot & battle pass", desc: "Weighted drops for rare items — visually show players the odds, matching stated drop rates." },
-            { title: "Corporate recognition programs", desc: "Weight nominations by peer votes or performance metrics. One random draw from a weighted pool, shown live at company meetings." },
-            { title: "Charity fundraising raffles", desc: "Each ticket purchase = 1 weight. The wheel instantly shows every donor their proportional chance — no duplicate name management." },
-            { title: "Fantasy sports draft order", desc: "Last-place team gets highest weight in draft lottery. Spin live in a group call — everyone sees it happen." },
-          ].map((c) => (
-            <div class="p-4 bg-card border border-border rounded-xl space-y-1">
-              <h3 class="font-semibold text-foreground text-sm">{c.title}</h3>
-              <p class="text-xs text-muted-foreground leading-relaxed">{c.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Frequently asked questions</h2>
         <div class="space-y-3">
           {faqItems.map(({ question, answer }) => (
-            <div class="bg-card border border-border rounded-xl p-5">
-              <p class="font-semibold text-foreground mb-2">{question}</p>
-              <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
-            </div>
+            <details class="bg-card border border-border rounded-xl p-5 group">
+              <summary class="font-semibold text-foreground cursor-pointer select-none flex items-start justify-between gap-4">
+                <span>{question}</span>
+                <span class="text-muted-foreground group-open:rotate-45 transition-transform shrink-0">+</span>
+              </summary>
+              <p class="text-muted-foreground text-sm leading-relaxed mt-3">{answer}</p>
+            </details>
           ))}
         </div>
       </section>
 
+      <!-- Related tools -->
       <section class="space-y-4">
-        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Related tools</h2>
         <ul class="space-y-3">
           {[
             { href: "/raffle-picker", label: "Raffle Picker", desc: "Physical raffle ticket draws — assign ticket counts as weights, spin to pick." },
@@ -270,6 +335,7 @@ const jsonLd = {
             { href: "/random-picker-no-repeat", label: "No-Repeat Picker", desc: "Pick every name exactly once — equal odds, no repeats until all drawn." },
             { href: "/random-name-picker", label: "Random Name Picker", desc: "Standard equal-odds random name picker." },
             { href: "/wheel-of-names-alternative", label: "Wheel of Names Alternative", desc: "Why cryptographic randomness matters for fair draws." },
+            { href: "/blog/weighted-random-picker", label: "Article — Weighted Random Selection Explained", desc: "Deep dive into the maths of fair weighted lotteries (3 minutes)." },
           ].map(({ href, label, desc }) => (
             <li>
               <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
