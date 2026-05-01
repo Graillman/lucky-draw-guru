@@ -37,6 +37,11 @@ const BASE_URL = 'https://realwheelpicker.com';
 const canonicalUrl = `${BASE_URL}${canonical}`;
 const langCode = locale.split('_')[0];
 
+// AdSense and Google Fonts are heavyweight and only useful in production.
+// Loading them in dev mode triples page weight and can hang the browser
+// when localhost can't reach the AdSense network reliably.
+const isProd = import.meta.env.PROD;
+
 const resolvedHreflang: HreflangLink[] = hreflangLinks ?? [
   { hreflang: langCode, href: canonicalUrl },
   { hreflang: 'x-default', href: langCode === 'en' ? canonicalUrl : `${BASE_URL}/` },
@@ -51,11 +56,15 @@ const resolvedHreflang: HreflangLink[] = hreflangLinks ?? [
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" /></noscript>
-    <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+    {isProd && (
+      <>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+        <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" /></noscript>
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+      </>
+    )}
 
     <!-- Primary Meta -->
     <title>{title}</title>
@@ -104,32 +113,34 @@ const resolvedHreflang: HreflangLink[] = hreflangLinks ?? [
     <slot />
     <CookieConsentBanner client:idle />
 
-    <!-- AdSense — deferred until after first paint to protect LCP / INP -->
-    <script is:inline>
-      (function () {
-        var ADSENSE_SRC = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8978154316839498';
-        function loadAdsense() {
-          if (document.querySelector('script[data-adsense]')) return;
-          var s = document.createElement('script');
-          s.src = ADSENSE_SRC;
-          s.async = true;
-          s.crossOrigin = 'anonymous';
-          s.setAttribute('data-adsense', '1');
-          document.head.appendChild(s);
-        }
-        function schedule() {
-          if ('requestIdleCallback' in window) {
-            requestIdleCallback(loadAdsense, { timeout: 4000 });
-          } else {
-            setTimeout(loadAdsense, 2500);
+    {isProd && (
+      <!-- AdSense — deferred until after first paint to protect LCP / INP. Production only. -->
+      <script is:inline>
+        (function () {
+          var ADSENSE_SRC = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8978154316839498';
+          function loadAdsense() {
+            if (document.querySelector('script[data-adsense]')) return;
+            var s = document.createElement('script');
+            s.src = ADSENSE_SRC;
+            s.async = true;
+            s.crossOrigin = 'anonymous';
+            s.setAttribute('data-adsense', '1');
+            document.head.appendChild(s);
           }
-        }
-        if (document.readyState === 'complete') {
-          schedule();
-        } else {
-          window.addEventListener('load', schedule, { once: true });
-        }
-      })();
-    </script>
+          function schedule() {
+            if ('requestIdleCallback' in window) {
+              requestIdleCallback(loadAdsense, { timeout: 4000 });
+            } else {
+              setTimeout(loadAdsense, 2500);
+            }
+          }
+          if (document.readyState === 'complete') {
+            schedule();
+          } else {
+            window.addEventListener('load', schedule, { once: true });
+          }
+        })();
+      </script>
+    )}
   </body>
 </html>
