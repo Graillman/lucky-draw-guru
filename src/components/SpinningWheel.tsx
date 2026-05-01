@@ -24,6 +24,7 @@ interface SpinningWheelProps {
   compact?: boolean; // true = reduced padding for multi-wheel mode
   wheelShape?: string; // 'circle' | 'star6' | 'star8' | 'heart' | 'hexagon'
   hubTheme?: string;   // 'default' | 'gold' | 'fire' | 'ice' | 'cosmic' | 'rose' | 'orange' | 'forest' | 'neon' | 'purple' | 'crimson' | 'teal' | 'amber'
+  idleAnimation?: boolean; // continuous slow rotation when not spinning. Off by default — was causing serious lag in production (60fps React re-render + full canvas redraw). Re-enable per-page if needed.
 }
 
 const DEFAULT_COLORS = [
@@ -122,7 +123,7 @@ export function SpinningWheel({
   participants, isSpinning, onComplete, mode, winnersCount,
   onSpin, onTick, colors, borderStyle = 'default', backgroundImage,
   size = 480, spinDuration = 8, clickToSpinLabel, clickToSpinSub, compact = false,
-  wheelShape = 'circle', hubTheme = 'default'
+  wheelShape = 'circle', hubTheme = 'default', idleAnimation = false
 }: SpinningWheelProps) {
   const COLORS = colors && colors.length > 0 ? colors : DEFAULT_COLORS;
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -602,9 +603,12 @@ export function SpinningWheel({
   }, [rotation, segments, participants.length, mode, themeColor, themeColorDark, themeColorGlow, themeColorHalf, themeColorLight, themeStroke, borderStyle, bgImgVersion, isAnimating, clickToSpinLabel, clickToSpinSub, wheelShape, hubTheme, canvasDisplaySize]);
   // ─────────────────────────────────────────────────────────────────────────
 
-  // Idle rotation — 1 revolution per ~20s, stops on first spin
+  // Idle rotation — 1 revolution per ~20s, stops on first spin.
+  // Disabled when `idleAnimation={false}` (default true for backward compat).
+  // This effect re-renders React + redraws the entire canvas at 60fps;
+  // expensive on pages with many segments or stacked alongside other islands.
   useEffect(() => {
-    if (hasSpunRef.current) return;
+    if (!idleAnimation || hasSpunRef.current) return;
     const IDLE_SPEED = (2 * Math.PI) / 20000;
     idleLastTimeRef.current = performance.now();
     const tick = (now: number) => {
@@ -619,7 +623,7 @@ export function SpinningWheel({
     };
     idleAnimRef.current = requestAnimationFrame(tick);
     return () => { if (idleAnimRef.current) cancelAnimationFrame(idleAnimRef.current); };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [idleAnimation]);
 
   useEffect(() => {
     if (!isSpinning) return;

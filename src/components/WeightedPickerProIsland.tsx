@@ -575,6 +575,7 @@ const WeightedPickerProInner = () => {
                   winnersCount={winnersCount}
                   onSpin={handleDraw}
                   size={420}
+                  idleAnimation={false}
                 />
                 {!isSpinning && winners.length === 0 && (
                   <DrawButton onDraw={handleDraw} isSpinning={isSpinning} disabled={items.length < 2} participantCount={items.length} mode="advanced" />
