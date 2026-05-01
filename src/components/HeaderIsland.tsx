@@ -215,8 +215,10 @@ const HeaderIsland = () => {
             onClick={toggleFullscreen}
             className="hidden md:flex items-center gap-1 px-2.5 py-1.5 rounded-md transition-colors text-muted-foreground hover:text-foreground"
             title={t.navFullscreen}
+            aria-label={isFs ? "Exit fullscreen mode" : "Enter fullscreen mode"}
+            aria-pressed={isFs}
           >
-            {isFs ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            {isFs ? <Minimize2 className="w-4 h-4" aria-hidden="true" /> : <Maximize2 className="w-4 h-4" aria-hidden="true" />}
           </button>
         </nav>
 
@@ -226,15 +228,18 @@ const HeaderIsland = () => {
             onClick={toggleTheme}
             className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
             title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            aria-pressed={isDark}
           >
-            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            {isDark ? <Sun className="w-4 h-4" aria-hidden="true" /> : <Moon className="w-4 h-4" aria-hidden="true" />}
           </button>
           <button
             onClick={handleShare}
             className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-            title="Share"
+            title="Share this page"
+            aria-label="Share this page"
           >
-            <Share2 className="w-4 h-4" />
+            <Share2 className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
       </div>

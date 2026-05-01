@@ -1,0 +1,61 @@
+# Cloudflare Pages — canonical URLs (no trailing slash)
+# GSC indexed both /path and /path/ historically; force canonical to fix cannibalization
+
+# Localized landing pages (highest impact — actively crawled per GSC 90d)
+/tirage-au-sort/                 /tirage-au-sort                 301
+/sorteo-online/                  /sorteo-online                  301
+/sorteio-online/                 /sorteio-online                 301
+/sorteggio-online/               /sorteggio-online               301
+/zufallsgenerator/               /zufallsgenerator               301
+/losowanie-online/               /losowanie-online               301
+/zhuanpan/                       /zhuanpan                       301
+/sans-carki/                     /sans-carki                     301
+/rad-van-fortuin/                /rad-van-fortuin                301
+/ruota-dei-nomi/                 /ruota-dei-nomi                 301
+/roleta-de-nomes/                /roleta-de-nomes                301
+/rueda-de-la-suerte/             /rueda-de-la-suerte             301
+/roue-des-noms/                  /roue-des-noms                  301
+/namenrad/                       /namenrad                       301
+/generador-de-nombres/           /generador-de-nombres           301
+
+# Giveaway verticals (key SEO targets)
+/giveaway-picker/                /giveaway-picker                301
+/instagram-giveaway-picker/      /instagram-giveaway-picker      301
+/tiktok-giveaway-picker/         /tiktok-giveaway-picker         301
+/discord-giveaway-picker/        /discord-giveaway-picker        301
+/facebook-giveaway-picker/       /facebook-giveaway-picker       301
+/linkedin-giveaway-picker/       /linkedin-giveaway-picker       301
+/reddit-giveaway-picker/         /reddit-giveaway-picker         301
+/snapchat-giveaway-picker/       /snapchat-giveaway-picker       301
+
+# Picker tools
+/random-wheel/                   /random-wheel                   301
+/random-name-picker/             /random-name-picker             301
+/weighted-random-picker/         /weighted-random-picker         301
+/random-picker-no-repeat/        /random-picker-no-repeat        301
+/random-number-picker/           /random-number-picker           301
+/random-state-picker/            /random-state-picker            301
+/random-country-picker/          /random-country-picker          301
+/random-word-generator/          /random-word-generator          301
+/probability-picker/             /probability-picker             301
+/raffle-picker/                  /raffle-picker                  301
+/secret-santa-picker/            /secret-santa-picker            301
+/classroom-picker/               /classroom-picker               301
+/decision-wheel/                 /decision-wheel                 301
+/party-wheel/                    /party-wheel                    301
+/wheel-of-names/                 /wheel-of-names                 301
+/best-free-wheel-spinner/        /best-free-wheel-spinner        301
+/how-to-pick-a-random-winner/    /how-to-pick-a-random-winner    301
+
+# Editorial / static
+/about/                          /about                          301
+/contact/                        /contact                        301
+/faq/                            /faq                            301
+/privacy-policy/                 /privacy-policy                 301
+/blog/                           /blog                           301
+/gallery/                        /gallery                        301
+
+# Legacy short slugs (already in astro.config.mjs but reinforced at edge)
+/random-team-selector            /team-generator                 301
+/yes-or-no-wheel                 /yes-no-wheel                   301
+/random-number-generator         /random-number-picker           301
