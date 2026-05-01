@@ -137,6 +137,7 @@ export function SpinningWheel({
   const idleAnimRef = useRef<number>();
   const hasSpunRef = useRef(false);
   const idleLastTimeRef = useRef(0);
+  const lastDrawTimeRef = useRef(0);
 
   // Stable refs for callbacks — prevents animation restarts when parent re-renders
   const onCompleteRef = useRef(onComplete);
@@ -183,7 +184,12 @@ export function SpinningWheel({
     img.src = backgroundImage;
   }, [backgroundImage]);
 
-  const dpr = typeof window !== 'undefined' ? Math.min(window.devicePixelRatio || 1, 2) : 1;
+  // dpr capped at 1 (was 2). On retina screens this means slightly less crisp
+  // text on segment labels, but the draw is 4x cheaper per frame — the wheel
+  // is large enough that the difference is barely visible, and the perf gain
+  // during the 60fps spin animation is dramatic (~480k pixels/frame instead
+  // of ~960k, then drawArcText, gradients, shadows on top).
+  const dpr = 1;
   const canvasDisplaySize = size;
   const canvasPixelSize = canvasDisplaySize * dpr;
 
@@ -724,7 +730,14 @@ export function SpinningWheel({
       // This avoids 60fps full component re-renders + 60fps full canvas redraws
       // (the draw effect would re-fire on every rotation state change). We sync
       // the React state once at the end of the spin below.
-      drawRef.current?.(newRotation);
+      // Throttle to ~30fps: rotation math runs every frame (smooth physics),
+      // but the heavy canvas redraw only fires every other frame. Visually
+      // imperceptible, halves the pixel work.
+      const now = performance.now();
+      if (now - lastDrawTimeRef.current >= 32) {
+        lastDrawTimeRef.current = now;
+        drawRef.current?.(newRotation);
+      }
 
       if (onTickRef.current) {
         const pointerAngle = ((Math.PI / 2 - newRotation) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
@@ -745,6 +758,9 @@ export function SpinningWheel({
       } else {
         // Sync React state with the final rotation (we bypassed setState during
         // the animation to avoid re-renders; this catches the state up).
+        // Force a final paint so the wheel rests at exactly the winner position
+        // even if the throttle skipped the last frame.
+        drawRef.current?.(newRotation);
         setRotation(newRotation);
         setIsAnimating(false);
         onCompleteRef.current(selectedWinnersRef.current);
