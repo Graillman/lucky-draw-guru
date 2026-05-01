@@ -1,0 +1,146 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Mentions légales · Real Wheel Picker";
+const description = "Mentions légales de Real Wheel Picker (realwheelpicker.com) : éditeur, hébergeur, contact, propriété intellectuelle, traitement des données. Conforme RGPD.";
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/mentions-legales"
+  locale="fr_FR"
+  robots="index, follow"
+  hreflangLinks={[
+    { hreflang: 'fr',        href: 'https://realwheelpicker.com/mentions-legales' },
+    { hreflang: 'en',        href: 'https://realwheelpicker.com/legal-notice' },
+    { hreflang: 'x-default', href: 'https://realwheelpicker.com/mentions-legales' },
+  ]}
+>
+  <SchemaBreadcrumb items={[
+    { name: "Accueil", url: "https://realwheelpicker.com" },
+    { name: "Mentions légales", url: "https://realwheelpicker.com/mentions-legales" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-3xl mx-auto px-4 py-8 md:py-12 space-y-8">
+
+      <nav aria-label="fil d'Ariane" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Accueil</a>
+        <span>/</span>
+        <span class="text-foreground">Mentions légales</span>
+      </nav>
+
+      <header class="space-y-2">
+        <h1 class="text-3xl md:text-4xl font-bold text-foreground">Mentions légales</h1>
+        <p class="text-sm text-muted-foreground">Dernière mise à jour : 1<sup>er</sup> mai 2026</p>
+      </header>
+
+      <section class="space-y-3 prose prose-invert max-w-none">
+        <h2 class="text-xl font-bold text-foreground">1. Éditeur du site</h2>
+        <div class="rounded-xl border border-border bg-card p-5 text-sm space-y-2 text-muted-foreground">
+          <p><strong class="text-foreground">Nom du site :</strong> Real Wheel Picker</p>
+          <p><strong class="text-foreground">URL :</strong> <a href="https://realwheelpicker.com" class="text-primary hover:underline">https://realwheelpicker.com</a></p>
+          <p><strong class="text-foreground">Éditeur / Responsable de publication :</strong> Noé Fougères (entrepreneur individuel — auto-entrepreneur)</p>
+          <p><strong class="text-foreground">Contact :</strong> <a href="mailto:contact@realwheelpicker.com" class="text-primary hover:underline">contact@realwheelpicker.com</a></p>
+          <p><strong class="text-foreground">SIRET :</strong> à compléter par l'éditeur (numéro à 14 chiffres délivré par l'INSEE).</p>
+          <p><strong class="text-foreground">N° TVA intracommunautaire :</strong> non applicable (auto-entrepreneur en franchise en base de TVA).</p>
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-foreground">2. Hébergement</h2>
+        <div class="rounded-xl border border-border bg-card p-5 text-sm space-y-2 text-muted-foreground">
+          <p><strong class="text-foreground">Hébergeur :</strong> Cloudflare, Inc.</p>
+          <p><strong class="text-foreground">Adresse :</strong> 101 Townsend St, San Francisco, CA 94107, États-Unis</p>
+          <p><strong class="text-foreground">Site :</strong> <a href="https://www.cloudflare.com" rel="noopener" class="text-primary hover:underline">https://www.cloudflare.com</a></p>
+          <p>Le site est servi via Cloudflare Pages avec serveurs edge répartis mondialement. Le contenu est servi depuis le datacenter le plus proche de l'utilisateur.</p>
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-foreground">3. Propriété intellectuelle</h2>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          L'ensemble des éléments composant le site Real Wheel Picker (textes, images, logo, code source, design, illustrations, marques) est la propriété exclusive de l'éditeur ou de ses partenaires, et est protégé par les lois françaises et internationales relatives à la propriété intellectuelle (Code de la propriété intellectuelle, articles L.111-1 et suivants).
+        </p>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          Toute reproduction, représentation, modification, publication, transmission, dénaturation, totale ou partielle du site ou de son contenu, par quelque procédé que ce soit, et sur quelque support que ce soit, est interdite sans l'autorisation écrite préalable de l'éditeur. Toute exploitation non autorisée du site ou de l'un quelconque des éléments qu'il contient est considérée comme constitutive d'une contrefaçon et passible de poursuites.
+        </p>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          La réutilisation à titre privé pour visualiser un tirage est libre. L'intégration du widget embed sur un site tiers est autorisée tant que la mention « Powered by Real Wheel Picker » et le lien d'origine sont conservés.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-foreground">4. Données personnelles &amp; RGPD</h2>
+        <div class="rounded-xl border border-green-500/30 bg-green-500/5 p-5 space-y-2">
+          <p class="font-bold text-foreground">Principe : aucune donnée personnelle n'est transmise à un serveur Real Wheel Picker.</p>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            Le site Real Wheel Picker fonctionne intégralement côté navigateur. Les noms, listes de participants, poids, et résultats de tirage que tu saisis ne sont <strong class="text-foreground">jamais</strong> envoyés à nos serveurs. Ils sont stockés uniquement dans le <code class="bg-muted px-1 rounded">localStorage</code> de ton navigateur (côté client) afin de te permettre de recharger la page sans perdre ton tirage en cours.
+          </p>
+        </div>
+
+        <h3 class="text-base font-bold text-foreground pt-2">Données collectées par l'éditeur</h3>
+        <ul class="space-y-1.5 text-sm text-muted-foreground">
+          <li class="flex gap-2"><span class="text-primary">•</span><span><strong class="text-foreground">Compteur global de tirages</strong> (Supabase) : un compteur anonyme incrémenté à chaque spin, sans aucune donnée d'identification (aucun nom, aucun pseudonyme, aucune IP attachée). Finalité : afficher publiquement le nombre total de tirages effectués sur le site.</span></li>
+          <li class="flex gap-2"><span class="text-primary">•</span><span><strong class="text-foreground">Logs serveur Cloudflare</strong> : adresse IP anonymisée, user-agent, URL demandée, code de statut HTTP. Finalité : sécurité (anti-DDoS), performance, dépannage. Durée de conservation : 7 jours, puis suppression automatique.</span></li>
+          <li class="flex gap-2"><span class="text-primary">•</span><span><strong class="text-foreground">Cookies tiers (Google AdSense)</strong> : cookies publicitaires gérés par Google, soumis à ton consentement préalable via la bannière de consentement. En cas de refus, aucun cookie publicitaire n'est déposé.</span></li>
+          <li class="flex gap-2"><span class="text-primary">•</span><span><strong class="text-foreground">Cookie de préférence (theme)</strong> : un cookie technique stockant le mode clair/sombre choisi. Pas de finalité publicitaire, exempté de consentement.</span></li>
+        </ul>
+
+        <h3 class="text-base font-bold text-foreground pt-2">Tes droits RGPD</h3>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          Conformément au Règlement (UE) 2016/679 (RGPD) et à la loi Informatique et Libertés modifiée, tu disposes des droits suivants sur tes données : accès, rectification, effacement, limitation, opposition, portabilité, et droit de définir des directives post-mortem. Pour exercer ces droits, écris à <a href="mailto:contact@realwheelpicker.com" class="text-primary hover:underline">contact@realwheelpicker.com</a>. La réponse t'est apportée sous un mois.
+        </p>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          En cas de litige non résolu, tu peux saisir la <a href="https://www.cnil.fr/fr/plaintes" rel="noopener" class="text-primary hover:underline">Commission Nationale de l'Informatique et des Libertés (CNIL)</a>, 3 place de Fontenoy, 75007 Paris.
+        </p>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          Real Wheel Picker, en tant qu'auto-entrepreneur de moins de 250 salariés et sans traitement à grande échelle de données sensibles au sens de l'article 9 RGPD, n'est pas tenu de désigner un Délégué à la Protection des Données (DPO). L'éditeur (Noé Fougères) traite directement les demandes RGPD.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-foreground">5. Cookies</h2>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          Le site utilise des cookies techniques (préférences d'affichage, état d'acceptation des cookies) exemptés de consentement, et des cookies publicitaires Google AdSense soumis à ton consentement explicite via la bannière affichée à ta première visite.
+        </p>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          Tu peux à tout moment modifier tes préférences en vidant les données du site dans les paramètres de ton navigateur, ou en utilisant la bannière de consentement.
+        </p>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          Pour plus de détails, consulte notre <a href="/privacy-policy" class="text-primary hover:underline">politique de confidentialité</a>.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-foreground">6. Limitation de responsabilité</h2>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          Real Wheel Picker est fourni « en l'état », sans garantie d'aucune sorte. L'éditeur s'efforce d'assurer la disponibilité et la fiabilité du service, mais ne peut être tenu responsable des interruptions, bugs, ou résultats inattendus.
+        </p>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          Real Wheel Picker fournit l'outil technique de tirage au sort équitable cryptographiquement, mais ne se substitue pas à un constat d'huissier ou au dépôt de règlement chez un officier ministériel pour les concours et loteries soumis à la législation française (article L121-36 du Code de la consommation). L'utilisateur reste seul responsable de la conformité légale de ses tirages.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-foreground">7. Droit applicable et juridiction</h2>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+          Les présentes mentions légales sont régies par le droit français. Tout litige relatif à l'utilisation du site Real Wheel Picker sera, à défaut d'accord amiable, soumis aux tribunaux compétents français.
+        </p>
+      </section>
+
+      <section class="rounded-xl border border-border bg-muted/20 p-5 text-xs text-muted-foreground">
+        <p>Pour toute question sur ces mentions, le traitement de tes données ou un signalement, contacte <a href="mailto:contact@realwheelpicker.com" class="text-primary hover:underline">contact@realwheelpicker.com</a>.</p>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>

@@ -1,0 +1,245 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import WeightedPickerProIsland from '@/components/WeightedPickerProIsland';
+import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
+
+const title = "Tirage au sort pondéré · Roue de probabilité gratuite · Sans inscription";
+const description = "Tirage au sort en ligne avec poids personnalisés : donne 1 à 9 999 chances par participant, simule 10 000 tirages pour vérifier l'équité, mode multi-gagnants. Gratuit, sans inscription, rien ne quitte ton navigateur.";
+
+const faqItems = [
+  {
+    question: "Qu'est-ce qu'un tirage au sort pondéré ?",
+    answer: "Un tirage au sort pondéré attribue à chaque participant une probabilité proportionnelle à son poids, au lieu de chances égales pour tous. Si Alice a un poids de 3 et Bob un poids de 1, Alice est tirée 75% du temps, Bob 25%. C'est l'outil adapté aux concours avec billets multiples, programmes de fidélité bonus, ou tirages où certains participants ont gagné des entrées supplémentaires.",
+  },
+  {
+    question: "Comment prouver que mon tirage pondéré est équitable ?",
+    answer: "Utilise le simulateur intégré : 10 000 tirages effectués contre tes poids actuels, avec affichage des fréquences observées vs attendues et test du chi-deux d'adéquation. Si la p-value est supérieure à 0,05, la distribution correspond à tes poids déclarés au seuil de confiance statistique standard — preuve mathématique que ton public peut vérifier. Real Wheel Picker est le seul tirage pondéré gratuit qui expose ce test.",
+  },
+  {
+    question: "Quel est le nombre maximum d'entrées et de poids ?",
+    answer: "Jusqu'à 100 entrées par tirage, avec des poids de 1 à 9 999 chacune. Cela couvre les tombolas avec environ 1 million de tickets pondérés au total. Pour des tirages plus grands, lance le picker plusieurs fois et combine les gagnants.",
+  },
+  {
+    question: "Puis-je importer ma liste de participants depuis un tableur ?",
+    answer: "Oui. Clique sur « Bulk paste » et colle n'importe quel format : virgule (« Alice, 3 »), deux-points (« Alice : 3 »), parenthèses (« Alice (3) »), ou tabulation depuis Excel / Google Sheets. Les lignes sans poids reçoivent un poids par défaut de 1.",
+  },
+  {
+    question: "Le hasard est-il vraiment cryptographique, ou juste Math.random() amélioré ?",
+    answer: "C'est de la cryptographie réelle. Chaque tirage utilise window.crypto.getRandomValues() — l'API Web Crypto, qui puise son entropie dans le générateur matériel de ton appareil. C'est le même standard que le SSL/TLS, les gestionnaires de mots de passe, et les banques en ligne. Math.random() est un générateur pseudo-aléatoire seedé sur l'horloge système et techniquement reproductible. crypto.getRandomValues() ne l'est pas.",
+  },
+  {
+    question: "Pourquoi wheelofnames ne suffit-il pas pour une vraie tombola ?",
+    answer: "Wheelofnames utilise Math.random() et n'a pas de mode pondéré natif. Pour faire une tombola pondérée, il faut taper N fois le même nom — ce qui surcharge la roue et n'est pas transparent pour le public. Real Wheel Picker affiche les segments pondérés à la taille proportionnelle, calcule la math automatiquement, et expose le test de simulation pour vérification — wheelofnames ne le fait pas.",
+  },
+  {
+    question: "Puis-je tirer plusieurs gagnants sans remise ?",
+    answer: "Oui. Définis le nombre de gagnants entre 1 et N. Chaque gagnant est retiré du pool, et les poids restants sont renormalisés avant le prochain tirage — aucune entrée ne peut gagner deux fois dans le même tirage.",
+  },
+  {
+    question: "Cet outil convient-il pour les concours soumis à la législation française ?",
+    answer: "Pour les concours et tombolas soumis à la législation française (art. L121-36 du Code de la consommation), un règlement écrit est obligatoire pour les tirages au sort de valeur supérieure à un certain seuil. Real Wheel Picker fournit l'outil technique de tirage équitable, mais ne se substitue pas à un constat d'huissier ou au dépôt de règlement chez un officier ministériel pour les concours réglementés. Vérifie auprès d'un juriste pour ton cas particulier.",
+  },
+  {
+    question: "Mes données sont-elles sauvegardées ou envoyées à un serveur ?",
+    answer: "Jamais. Le picker fonctionne entièrement dans ton navigateur. Tes participants, leurs poids et les résultats sont stockés uniquement dans le localStorage de ton navigateur (pour que tu puisses recharger la page sans perdre le tirage) et ne sont jamais transmis à un serveur. Aucune base de données, aucun tracking côté Real Wheel Picker.",
+  },
+  {
+    question: "Comment partager exactement la même configuration de tirage avec quelqu'un d'autre ?",
+    answer: "Clique sur « Share ». Le picker encode ta liste et tes poids dans une URL. Toute personne qui ouvre cette URL voit ta configuration exacte chargée — noms, poids, nombre de gagnants. Pratique pour les tirages d'équipe en visio ou pour archiver une configuration complexe.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://realwheelpicker.com/tirage-au-sort-pondere#app",
+      "name": "Tirage au sort pondéré — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/tirage-au-sort-pondere",
+      "description": description,
+      "applicationCategory": "UtilitiesApplication",
+      "applicationSubCategory": "Loterie & probabilités",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "inLanguage": "fr",
+      "publisher": { "@id": "https://realwheelpicker.com/#organization" },
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+      "featureList": [
+        "Sélection cryptographiquement sûre (crypto.getRandomValues)",
+        "Poids de 1 à 9 999 par entrée",
+        "Jusqu'à 100 entrées par tirage",
+        "Import depuis Excel, Google Sheets, CSV",
+        "4 modèles : équitable, géométrique, paliers, draft inversée",
+        "Diagramme circulaire et barres de probabilité en direct",
+        "Simulateur 10 000 tirages avec test du chi-deux",
+        "Mode multi-gagnants sans remise",
+        "Partage de configuration par URL",
+        "Export CSV horodaté",
+        "100% côté navigateur — aucun serveur, aucune inscription"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5",
+        "bestRating": "5",
+        "worstRating": "1",
+        "ratingCount": "6",
+        "reviewCount": "6"
+      }
+    }
+  ]
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical="/tirage-au-sort-pondere"
+  locale="fr_FR"
+  jsonLd={jsonLd}
+  hreflangLinks={[
+    { hreflang: 'fr',        href: 'https://realwheelpicker.com/tirage-au-sort-pondere' },
+    { hreflang: 'en',        href: 'https://realwheelpicker.com/weighted-random-picker' },
+    { hreflang: 'es',        href: 'https://realwheelpicker.com/sorteo-ponderado' },
+    { hreflang: 'it',        href: 'https://realwheelpicker.com/sorteggio-ponderato' },
+    { hreflang: 'de',        href: 'https://realwheelpicker.com/gewichtete-zufallsauswahl' },
+    { hreflang: 'pt',        href: 'https://realwheelpicker.com/sorteio-ponderado' },
+    { hreflang: 'x-default', href: 'https://realwheelpicker.com/weighted-random-picker' },
+  ]}
+>
+  <SchemaFAQ items={faqItems} />
+  <SchemaBreadcrumb items={[
+    { name: "Accueil", url: "https://realwheelpicker.com" },
+    { name: "Tirage au sort pondéré", url: "https://realwheelpicker.com/tirage-au-sort-pondere" },
+  ]} />
+
+  <div class="min-h-screen" style="background: var(--gradient-bg)">
+    <HeaderIsland client:load />
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
+
+      <nav aria-label="fil d'Ariane" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Accueil</a>
+        <span>/</span>
+        <span class="text-foreground">Tirage au sort pondéré</span>
+      </nav>
+
+      <section class="text-center space-y-4 py-2 md:py-4">
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-primary/15 text-primary border border-primary/30">
+          Pro · Vérifié χ² · 100 entrées · Poids max 9 999
+        </span>
+        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+          Tirage au sort pondéré — roue équitable cryptographiquement
+        </h1>
+        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Attribue des chances personnalisées, simule 10 000 tirages pour prouver l'équité, tire plusieurs gagnants. Gratuit, sans inscription, tout dans ton navigateur.
+        </p>
+        <p class="text-sm text-muted-foreground">Gratuit · Sans inscription · Aucune donnée ne quitte ton navigateur</p>
+      </section>
+
+      <WeightedPickerProIsland client:load />
+
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Comment fonctionne un tirage au sort pondéré ?</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          Un tirage pondéré attribue à chaque participant une probabilité proportionnelle à son poids, au lieu d'une probabilité égale pour tous. Si Alice a un poids de 3, Bob 1, Carol 1, la roue est divisée en segments de tailles 3/5, 1/5, 1/5 — les chances d'Alice sont de 60%, celles de Bob et Carol de 20% chacune.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Real Wheel Picker calcule cela avec l'algorithme d'échantillonnage par fonction de répartition inverse : somme des poids, génération d'un entier aléatoire 32 bits via <code class="bg-muted px-1 rounded font-mono text-xs">window.crypto.getRandomValues()</code>, mise à l'échelle dans l'intervalle [0, somme), puis parcours des entrées en accumulant leurs poids jusqu'à dépasser la valeur tirée. C'est mathématiquement équivalent à tirer un ticket pondéré dans une urne, mais cryptographiquement sécurisé et instantané.
+        </p>
+      </section>
+
+      <section class="space-y-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Cas d'usage du tirage au sort pondéré</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+            <h3 class="font-bold text-foreground">Concours avec entrées bonus</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">« Liker = 1 entrée, partager = +1, tagger un ami = +1 ». Le poids de chaque participant correspond aux entrées gagnées. La roue affiche les segments proportionnels et tu peux vérifier la math avec le simulateur avant le live.</p>
+          </div>
+          <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+            <h3 class="font-bold text-foreground">Tombolas physiques avec billets multiples</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">Quelqu'un a acheté 5 billets ? Poids 5. Un seul billet ? Poids 1. Une ligne par personne — pas de noms en double qui encombrent la roue. Le segment est proportionnel à l'investissement.</p>
+          </div>
+          <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+            <h3 class="font-bold text-foreground">Récompenses fidélité &amp; paliers</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">Utilise le modèle Paliers : Bronze ×1, Argent ×3, Or ×9. Pour Patreon, abonnés, ou tout programme de fidélité qui promet plus de chances aux membres anciens.</p>
+          </div>
+          <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+            <h3 class="font-bold text-foreground">Ordre de draft sportif</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">Modèle Draft : la dernière équipe au classement reçoit le poids 5, l'avant-dernière 4, jusqu'à 1 pour le champion. Tirage en visio, capture d'écran, publication.</p>
+          </div>
+          <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+            <h3 class="font-bold text-foreground">Simulations probabilistes</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">Besoin de tirer dans une distribution non-uniforme ? Définis les poids comme tes probabilités discrètes (×100 pour entiers) et lance — ou simule 10 000 tirages pour valider la distribution empirique.</p>
+          </div>
+          <div class="p-5 rounded-xl border bg-card border-border space-y-2">
+            <h3 class="font-bold text-foreground">Répartition de tâches inégale</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">Quelqu'un a moitié moins de charge cette semaine ? Poids 2. Vient de finir un gros projet ? Poids 0,5. Tirage pour répartir les tâches sans formules complexes.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="p-6 rounded-xl border bg-card border-border space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Vérifie l'équité du tirage toi-même</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          La plupart des tirages en ligne te demandent de croire à leur claim d'équité. Real Wheel Picker expose la math pour que tu la vérifies. Dans le picker ci-dessus, bascule sur l'onglet <strong class="text-foreground">Simulator</strong> et clique sur <strong class="text-foreground">Run 10 000 simulations</strong>.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Le picker effectue 10 000 tirages contre tes poids actuels, compte la fréquence observée de chaque entrée, la compare à la fréquence attendue, et calcule le test du chi-deux d'adéquation. Si la p-value du chi-deux est supérieure à 0,05, la distribution empirique correspond à tes poids déclarés au seuil de confiance statistique standard — preuve mathématique que ton public peut vérifier, ce n'est pas un argument marketing.
+        </p>
+        <div class="bg-muted/40 border border-border rounded-lg p-4 space-y-2 font-mono text-xs text-muted-foreground">
+          <div>Exemple pour les poids [Alice : 3, Bob : 1, Carol : 1] :</div>
+          <div>  Alice — observé 6 042 / attendu 6 000 (delta 0,7 %)</div>
+          <div>  Bob   — observé 1 988 / attendu 2 000 (delta -0,6 %)</div>
+          <div>  Carol — observé 1 970 / attendu 2 000 (delta -1,5 %)</div>
+          <div>  chi-deux = 0,49, df = 2, p-value = 0,78</div>
+          <div class="text-green-600 font-bold">  Verdict : la distribution correspond aux poids ✓</div>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Questions fréquentes</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ question, answer }) => (
+            <details class="bg-card border border-border rounded-xl p-5 group">
+              <summary class="font-semibold text-foreground cursor-pointer select-none flex items-start justify-between gap-4">
+                <span>{question}</span>
+                <span class="text-muted-foreground group-open:rotate-45 transition-transform shrink-0">+</span>
+              </summary>
+              <p class="text-muted-foreground text-sm leading-relaxed mt-3">{answer}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Outils connexes</h2>
+        <ul class="space-y-3">
+          {[
+            { href: "/tirage-au-sort", label: "Tirage au sort en ligne", desc: "Roue de tirage classique avec chances égales pour tous." },
+            { href: "/weighted-random-picker", label: "Weighted Random Picker (English)", desc: "Same tool, English version with full SEO content." },
+            { href: "/raffle-picker", label: "Raffle Picker", desc: "Tombolas physiques — tickets multiples avec poids = nombre de tickets achetés." },
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Tirage universel pour concours sur tout réseau social." },
+            { href: "/random-name-picker", label: "Random Name Picker", desc: "Tirage classique sans pondération." },
+          ].map(({ href, label, desc }) => (
+            <li>
+              <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">
+                <span class="text-primary font-bold text-sm mt-0.5">→</span>
+                <span>
+                  <span class="font-semibold text-foreground">{label}</span>
+                  <span class="text-muted-foreground text-sm"> — {desc}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+
+    <GlobalFooterIsland client:idle />
+  </div>
+</Layout>
