@@ -97,18 +97,21 @@ const jsonLd = {
         <span class="text-foreground">Wheel of Names</span>
       </nav>
 
-      <!-- Hero -->
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+      <!-- Hero — compact so the tool sits above the fold -->
+      <section class="text-center space-y-3 py-2 md:py-4">
+        <h1 class="text-3xl md:text-4xl font-bold text-foreground leading-tight tracking-tight">
           Wheel of Names — Pick a Random Name Instantly
         </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Enter names, spin the wheel, and let fate decide. Cryptographically fair. No signup. Works on any device.
+        <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+          Enter names, spin the wheel, and let fate decide. Cryptographically fair, no signup, works on any device.
         </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
+        <p class="text-xs text-muted-foreground">Free · No account · Instant result</p>
       </section>
 
-      <!-- How it works — rich version -->
+      <!-- Interactive tool — first thing the user lands on -->
+      <SEOPageIsland slug="wheel-of-names" client:load />
+
+      <!-- How it works — rich version, now BELOW the tool so it doesn't push it off the fold -->
       <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
         <h2 class="text-xl md:text-2xl font-bold text-foreground">How Does This Wheel of Names Work?</h2>
         <p class="text-muted-foreground leading-relaxed">
@@ -144,9 +147,6 @@ const jsonLd = {
           </ol>
         </div>
       </section>
-
-      <!-- Interactive tool -->
-      <SEOPageIsland slug="wheel-of-names" client:load />
 
       <!-- Step-by-step guide -->
       <section class="space-y-6">
