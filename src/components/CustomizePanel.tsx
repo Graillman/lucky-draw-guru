@@ -31,7 +31,10 @@ export const DEFAULT_CONFIG: CustomizeConfig = {
   resultSoundVolume: 70,
   launchConfetti: true,
   showRemoveButton: true,
-  theme: "classic",
+  // Design System v2 — "signature" is the new harmonized 12-color palette
+  // anchored on brand Gold + Violet. "classic" (the old rainbow) is still
+  // selectable from the theme picker if a user wants the legacy look.
+  theme: "signature",
   borderStyle: "default",
   wheelShape: "circle",
   hubTheme: "default",

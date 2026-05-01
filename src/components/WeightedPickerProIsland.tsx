@@ -40,11 +40,22 @@ const MAX_WEIGHT = 9999;
 const SIM_RUNS = 10000;
 const STORAGE_KEY = 'rwp:weighted-pro:v1';
 
+// Design System v2 — harmonized palette aligned with SpinningWheel DEFAULT_COLORS.
+// Hex equivalents of the HSL values used in SpinningWheel so the small swatches
+// in the entries list visually match the wheel segments.
 const COLORS = [
-  '#e53e3e', '#f5c518', '#38a169', '#3182ce',
-  '#805ad5', '#dd6b20', '#319795', '#d53f8c',
-  '#2b6cb0', '#276749', '#744210', '#553c9a',
-  '#9b2c2c', '#b7791f', '#22543d', '#2a4365',
+  '#d63b58', // crimson
+  '#eb7849', // coral
+  '#e89916', // amber
+  '#e8be0d', // saffron (brand primary)
+  '#85c032', // pistachio
+  '#26a69a', // teal
+  '#3a8fd1', // sky
+  '#4a5fc2', // indigo
+  '#7c4ddc', // violet (brand accent)
+  '#c44ec1', // magenta
+  '#dc6a8e', // rose
+  '#9d4dad', // plum
 ];
 
 const DEFAULTS: Item[] = [

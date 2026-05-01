@@ -27,19 +27,26 @@ interface SpinningWheelProps {
   idleAnimation?: boolean; // continuous slow rotation when not spinning. Off by default — was causing serious lag in production (60fps React re-render + full canvas redraw). Re-enable per-page if needed.
 }
 
+// Design System v2 — harmonized wheel palette.
+// Replaces the previous high-saturation rainbow (R/Y/G/B/V/O/T) which read
+// as "early-2010s" and clashed with the "Pro tool" brand positioning.
+// New palette: 12 colors evenly distributed around the chromatic wheel,
+// saturation kept in the 60-90% band, lightness in the 45-60% band — so the
+// segments read as a *family* rather than as competing primary colors.
+// Anchored on brand: Saffron (≈ Primary Gold) + Violet (≈ brand Accent).
 const DEFAULT_COLORS = [
-  'hsl(348, 83%, 47%)',  // Red
-  'hsl(45, 100%, 51%)',  // Gold
-  'hsl(210, 80%, 45%)',  // Blue
-  'hsl(145, 63%, 42%)',  // Green
-  'hsl(25, 95%, 53%)',   // Orange
-  'hsl(280, 68%, 50%)',  // Purple
-  'hsl(190, 90%, 45%)',  // Teal
-  'hsl(340, 75%, 55%)',  // Pink
-  'hsl(160, 60%, 40%)',  // Forest
-  'hsl(35, 100%, 50%)',  // Amber
-  'hsl(220, 70%, 55%)',  // Steel Blue
-  'hsl(0, 75%, 55%)',    // Crimson
+  'hsl(348, 75%, 55%)', // crimson
+  'hsl(15, 80%, 60%)',  // coral
+  'hsl(35, 90%, 55%)',  // amber
+  'hsl(45, 93%, 50%)',  // saffron (brand primary anchor)
+  'hsl(85, 60%, 50%)',  // pistachio
+  'hsl(175, 65%, 45%)', // teal
+  'hsl(205, 75%, 55%)', // sky
+  'hsl(235, 70%, 55%)', // indigo
+  'hsl(262, 75%, 58%)', // violet (brand accent anchor)
+  'hsl(305, 70%, 55%)', // magenta
+  'hsl(335, 70%, 60%)', // rose
+  'hsl(295, 50%, 50%)', // plum
 ];
 
 // ── Hub theme presets ───────────────────────────────────────────────────────

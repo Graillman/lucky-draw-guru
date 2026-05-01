@@ -1,4 +1,26 @@
 export const WHEEL_THEMES: Record<string, { label: string; preview: string; colors: string[] }> = {
+  // Design System v2 — brand-aligned harmonized palette.
+  // 12 colors evenly distributed around the chromatic wheel, saturation 60-90%,
+  // lightness 45-60% — anchored on the brand Gold (saffron) and Violet.
+  // Reads as a "family" instead of competing primaries; ships as the default.
+  signature: {
+    label: "Signature",
+    preview: "hsl(45,93%,50%)",
+    colors: [
+      "hsl(348,75%,55%)", // crimson
+      "hsl(15,80%,60%)",  // coral
+      "hsl(35,90%,55%)",  // amber
+      "hsl(45,93%,50%)",  // saffron (brand primary)
+      "hsl(85,60%,50%)",  // pistachio
+      "hsl(175,65%,45%)", // teal
+      "hsl(205,75%,55%)", // sky
+      "hsl(235,70%,55%)", // indigo
+      "hsl(262,75%,58%)", // violet (brand accent)
+      "hsl(305,70%,55%)", // magenta
+      "hsl(335,70%,60%)", // rose
+      "hsl(295,50%,50%)", // plum
+    ],
+  },
   classic: {
     label: "Classic",
     preview: "#e53e3e",
