@@ -54,6 +54,13 @@ interface SEOPageIslandProps {
   faqs?: Array<{ question: string; answer: string }>;
   relatedBlogPost?: { slug: string; title: string };
   defaultParticipants?: ParticipantEntry[];
+  /** Pass `true` when the hosting Astro page already renders its own
+   *  hero (h1 + subtitle). Prevents the duplicate h1 bug that surfaces
+   *  for slugs that have a translated `pageT.h1` (e.g. random-name-picker
+   *  in FR rendered both the English hero h1 from the Astro page AND the
+   *  French h1 from this island, stacked one on top of the other).
+   */
+  hideHero?: boolean;
 }
 
 // Pages where the "Tirage Personnalisé" (advanced/weighted) mode is relevant
@@ -71,7 +78,7 @@ const ADVANCED_ALLOWED_SLUGS = new Set([
   'discord-giveaway-picker',
 ]);
 
-const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, howItWorksText, whenToUseTitle, useCases, seoTitle, seoText, faqs, relatedBlogPost, defaultParticipants: propDefaults }: SEOPageIslandProps) => {
+const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, howItWorksText, whenToUseTitle, useCases, seoTitle, seoText, faqs, relatedBlogPost, defaultParticipants: propDefaults, hideHero }: SEOPageIslandProps) => {
   const { participants, setParticipants, isLoaded } = useLocalStorageParticipants();
   const { t } = useLanguage();
   const allowAdvanced = ADVANCED_ALLOWED_SLUGS.has(slug);
@@ -180,8 +187,8 @@ const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, ho
 
   return (
     <div className="space-y-8">
-      {/* Translated hero section */}
-      {(displayH1 || displaySubtitle) && (
+      {/* Translated hero section — suppressed when the hosting page provides its own hero */}
+      {!hideHero && (displayH1 || displaySubtitle) && (
         <section className="text-center space-y-4 py-4 md:py-6">
           {displayH1 && (
             <h1 className="text-3xl md:text-5xl font-bold text-foreground leading-tight">
