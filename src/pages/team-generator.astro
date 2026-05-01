@@ -70,15 +70,18 @@ const jsonLd = {
         <span class="text-foreground">Team Generator</span>
       </nav>
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+      <section class="text-center space-y-3 py-2 md:py-4">
+        <h1 class="text-3xl md:text-4xl font-bold text-foreground leading-tight tracking-tight">
           Team Generator — Split Into Random Teams Instantly
         </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+        <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
           Add names, choose how many teams you need, and let the wheel decide. Fair, fast, and impossible to rig.
         </p>
-        <p class="text-sm text-muted-foreground">Free • No signup • Cryptographically fair</p>
+        <p class="text-xs text-muted-foreground">Free · No signup · Cryptographically fair</p>
       </section>
+
+      <!-- Tool above the fold so users land directly on the team-splitting wheel -->
+      <SEOPageIsland slug="team-generator" client:load />
 
       <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
         <h2 class="text-xl md:text-2xl font-bold text-foreground">How Does the Team Generator Work?</h2>
@@ -89,8 +92,6 @@ const jsonLd = {
           Everything happens in your browser. No server, no data collection, no account needed.
         </p>
       </section>
-
-      <SEOPageIsland slug="team-generator" client:load />
 
       <section class="space-y-6">
         <h2 class="text-xl md:text-2xl font-bold text-foreground">Use Cases for Random Team Generation</h2>

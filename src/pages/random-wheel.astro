@@ -70,15 +70,18 @@ const jsonLd = {
         <span class="text-foreground">Random Wheel</span>
       </nav>
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+      <section class="text-center space-y-3 py-2 md:py-4">
+        <h1 class="text-3xl md:text-4xl font-bold text-foreground leading-tight tracking-tight">
           Random Wheel — Spin to Decide Anything
         </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Add any options — names, choices, tasks, numbers — and spin the wheel for an instant random result. Visual, fair, and screen-recordable for full transparency.
+        <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+          Add any options — names, choices, tasks, numbers — and spin the wheel for an instant random result. Visual, fair, and screen-recordable.
         </p>
-        <p class="text-sm text-muted-foreground">Free • No signup • Cryptographically fair</p>
+        <p class="text-xs text-muted-foreground">Free · No signup · Cryptographically fair</p>
       </section>
+
+      <!-- Tool above the fold so users land directly on the interactive wheel -->
+      <SEOPageIsland slug="random-wheel" client:load />
 
       <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
         <h2 class="text-xl md:text-2xl font-bold text-foreground">How the Random Wheel Works</h2>
@@ -89,8 +92,6 @@ const jsonLd = {
           The randomness comes from <strong class="text-foreground">crypto.getRandomValues()</strong> — the Web Crypto API built into every modern browser. This is the same standard used in SSL encryption and password generation, not the predictable Math.random() used by most wheel tools.
         </p>
       </section>
-
-      <SEOPageIsland slug="random-wheel" client:load />
 
       <section class="space-y-6">
         <h2 class="text-xl md:text-2xl font-bold text-foreground">What Can You Use a Random Wheel For?</h2>

@@ -70,15 +70,18 @@ const jsonLd = {
         <span class="text-foreground">Classroom Picker</span>
       </nav>
 
-      <section class="text-center space-y-4 py-2 md:py-6">
-        <h1 class="text-3xl md:text-5xl font-bold text-foreground leading-tight">
+      <section class="text-center space-y-3 py-2 md:py-4">
+        <h1 class="text-3xl md:text-4xl font-bold text-foreground leading-tight tracking-tight">
           Classroom Random Picker — Call on Students Fairly
         </h1>
-        <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+        <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
           Add your class roster, spin the wheel, and pick a student at random. More engagement, zero favoritism. Works on any device or smartboard.
         </p>
-        <p class="text-sm text-muted-foreground">Free • No account • Works on projectors</p>
+        <p class="text-xs text-muted-foreground">Free · No account · Works on projectors</p>
       </section>
+
+      <!-- Tool above the fold so teachers can start picking immediately -->
+      <SEOPageIsland slug="classroom-picker" client:load />
 
       <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
         <h2 class="text-xl md:text-2xl font-bold text-foreground">Why Use a Random Student Picker?</h2>
@@ -89,8 +92,6 @@ const jsonLd = {
           Add your roster once, spin as many times as you need. Remove each selected student to avoid repeats. Reset at the start of each session.
         </p>
       </section>
-
-      <SEOPageIsland slug="classroom-picker" client:load />
 
       <section class="space-y-6">
         <h2 class="text-xl md:text-2xl font-bold text-foreground">How to Use the Classroom Picker</h2>

@@ -1,20 +1,37 @@
 import { useState, useEffect } from 'react';
 
+/**
+ * Cookie consent banner — compact, non-intrusive, design-system-aligned.
+ *
+ * Previous version was a full-width fixed bar at the bottom that ate ~80px of
+ * the fold and visually covered the wheel's spin CTA on shorter pages. New
+ * version is a small floating card in the bottom-right with backdrop blur and
+ * an auto-collapse to a 🍪 chip after 20s so the page stays usable while still
+ * being visible/legal.
+ */
 export default function CookieConsentBanner() {
   const [visible, setVisible] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
+  // Show after a small delay so it doesn't flash on load
   useEffect(() => {
     try {
       const consent = localStorage.getItem('cookie_consent');
       if (!consent) {
-        // Small delay so it doesn't flash immediately on load
-        const timer = setTimeout(() => setVisible(true), 1200);
+        const timer = setTimeout(() => setVisible(true), 1500);
         return () => clearTimeout(timer);
       }
     } catch {
-      // localStorage unavailable (private mode, etc.)
+      /* localStorage unavailable */
     }
   }, []);
+
+  // Auto-collapse the full card after 20s; user can still re-open via the chip
+  useEffect(() => {
+    if (!visible || collapsed) return;
+    const t = setTimeout(() => setCollapsed(true), 20000);
+    return () => clearTimeout(t);
+  }, [visible, collapsed]);
 
   function accept() {
     try {
@@ -32,63 +49,60 @@ export default function CookieConsentBanner() {
 
   if (!visible) return null;
 
+  // Collapsed: small chip in the corner that re-opens the dialog
+  if (collapsed) {
+    return (
+      <button
+        onClick={() => setCollapsed(false)}
+        aria-label="Open cookie preferences"
+        className="fixed bottom-4 right-4 z-[9999] flex items-center gap-1.5 px-3 py-2 rounded-full bg-card/90 backdrop-blur border border-border shadow-md text-xs font-medium text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
+      >
+        <span aria-hidden="true">🍪</span>
+        <span>Cookies</span>
+      </button>
+    );
+  }
+
   return (
     <div
       role="dialog"
       aria-label="Cookie consent"
       aria-live="polite"
-      style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 9999,
-        padding: '16px',
-        background: 'var(--background, #0a0f1a)',
-        borderTop: '1px solid var(--border, #1e2a3a)',
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '12px',
-        boxShadow: '0 -4px 24px rgba(0,0,0,0.4)',
-      }}
+      className="fixed bottom-4 right-4 z-[9999] w-[min(380px,calc(100vw-2rem))] p-4 rounded-2xl bg-card/95 backdrop-blur-md border border-border shadow-2xl space-y-3 animate-fade-in"
     >
-      <p style={{ margin: 0, fontSize: '13px', color: 'var(--muted-foreground, #8899aa)', maxWidth: '700px', lineHeight: '1.5' }}>
-        We use cookies for analytics and to show relevant ads via Google AdSense.
-        By continuing to use this site you accept our{' '}
-        <a href="/privacy-policy" style={{ color: 'var(--primary, #6366f1)', textDecoration: 'underline' }}>
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <span className="text-lg" aria-hidden="true">🍪</span>
+          <h3 className="text-sm font-semibold text-foreground">Cookies</h3>
+        </div>
+        <button
+          onClick={() => setCollapsed(true)}
+          aria-label="Minimize cookie banner"
+          className="text-muted-foreground hover:text-foreground transition-colors p-1 -m-1 leading-none"
+        >
+          ✕
+        </button>
+      </div>
+
+      <p className="text-xs text-muted-foreground leading-relaxed">
+        We use cookies for analytics and personalised ads via Google AdSense.
+        Read our{' '}
+        <a href="/privacy-policy" className="text-primary hover:underline font-medium">
           Privacy Policy
         </a>
         .
       </p>
-      <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+
+      <div className="flex gap-2">
         <button
           onClick={decline}
-          style={{
-            padding: '8px 16px',
-            fontSize: '13px',
-            borderRadius: '8px',
-            border: '1px solid var(--border, #1e2a3a)',
-            background: 'transparent',
-            color: 'var(--muted-foreground, #8899aa)',
-            cursor: 'pointer',
-          }}
+          className="flex-1 px-3 py-2 text-xs font-medium rounded-lg border border-border bg-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-colors"
         >
           Decline
         </button>
         <button
           onClick={accept}
-          style={{
-            padding: '8px 20px',
-            fontSize: '13px',
-            fontWeight: 600,
-            borderRadius: '8px',
-            border: 'none',
-            background: 'var(--primary, #6366f1)',
-            color: '#fff',
-            cursor: 'pointer',
-          }}
+          className="flex-1 px-3 py-2 text-xs font-bold rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
         >
           Accept
         </button>
