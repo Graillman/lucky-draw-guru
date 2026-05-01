@@ -31,13 +31,19 @@ const detectBrowserLanguage = (): Language => {
 };
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
-  const [language, setLanguageState] = useState<Language>(() => {
-    if (typeof window !== 'undefined') {
-      // Always use browser language — never remember previous choice
-      return detectBrowserLanguage();
-    }
-    return 'en';
-  });
+  // CRITICAL: initial state MUST match the SSR output (always 'en'). Detecting
+  // the browser language during the initial client render produces a hydration
+  // mismatch (SSR rendered "Free Spin the Wheel Tool", client wants "Outil
+  // Gratuit de Roue") -> React abandons the SSR HTML and rebuilds the entire
+  // tree client-side, locking the main thread for hundreds of ms on heavy
+  // pages. Detect the language post-mount instead.
+  const [language, setLanguageState] = useState<Language>('en');
+
+  // Detect browser language AFTER hydration to avoid SSR/client mismatch.
+  useEffect(() => {
+    const detected = detectBrowserLanguage();
+    if (detected !== 'en') setLanguageState(detected);
+  }, []);
 
   // Listen for cross-island language changes (other Astro islands changing language)
   useEffect(() => {

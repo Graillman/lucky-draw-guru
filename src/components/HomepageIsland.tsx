@@ -242,7 +242,10 @@ const HomepageIslandInner = () => {
     return extra && extra.participants.length >= 2 ? extra.participants : DEFAULT_NAMES;
   }, [displayParticipants, extraWheels]);
 
-  const singleWheelSize = 7495;
+  // BUG FIX: was 7495 — almost certainly a typo. With devicePixelRatio=2 it
+  // produced a 14990x14990 canvas (~900MB GPU memory) and froze the browser.
+  // 480 matches SpinningWheel's default and the rest of the codebase.
+  const singleWheelSize = 480;
   const wheelOffsetY = 25;
 
   const wheelSize = totalWheels === 1 ? singleWheelSize : totalWheels === 2 ? 300 : totalWheels === 3 ? 220 : totalWheels === 4 ? 180 : 155;
