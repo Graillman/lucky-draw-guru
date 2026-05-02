@@ -134,6 +134,10 @@ const jsonLd = {
 
     <HeaderIsland client:load />
 
+    {/* SEO: invisible h1 anchors the page for search engines without
+        polluting the "no text above the wheel" themed design. */}
+    <h1 class="sr-only">Yes or No Wheel — Free Random Yes/No Decision Spinner</h1>
+
     <div class="relative z-10 max-w-4xl mx-auto px-4 pt-2 pb-10">
       <!-- THE WHEEL — front and center, no text above -->
       <SimpleWheelIsland

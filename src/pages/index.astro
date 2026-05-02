@@ -137,6 +137,14 @@ const jsonLd = {
   ]}
 >
   <HeaderIsland client:load />
+
+  {/* SEO: an invisible H1 anchors the homepage for search engines.
+      The visible hero (logo + tagline + tab "Roue 1") is not semantic h1
+      material, and Google requires exactly one h1 per page for proper
+      keyword targeting. The "sr-only" class hides it from sighted users
+      (no visual change to the homepage) but it's perfectly indexable. */}
+  <h1 class="sr-only">Spin the Wheel — Free Online Random Picker &amp; Name Wheel</h1>
+
   <HomepageIsland client:load />
 
   <div style="background: var(--gradient-bg)">
