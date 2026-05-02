@@ -258,6 +258,20 @@ export interface Translations {
   drawTitleDefault: string;
   navGiveawaySubtitle: string;
   navFullscreen: string;
+  // Tool menu — labels for the Explore-More-Tools dropdown
+  navSpinWheel: string;
+  navYesNo: string;
+  navCoinFlip: string;
+  navDecisionWheel: string;
+  navNumberPicker: string;
+  navRaffle: string;
+  navSecretSanta: string;
+  navClassroom: string;
+  navTruthDare: string;
+  navPartyWheel: string;
+  navSpinBottle: string;
+  navWheelOfNamesSubtitle: string;
+  navWeightedSubtitle: string;
 
   // Instagram Giveaway Page
   igTitle: string;
@@ -704,6 +718,19 @@ export const translations: Record<Language, Translations> = {
     drawTitleDefault: 'Wheel of Choices',
     navGiveawaySubtitle: 'For influencers & content creators',
     navFullscreen: 'Fullscreen',
+    navSpinWheel: 'Spin the Wheel',
+    navYesNo: 'Yes or No Wheel',
+    navCoinFlip: 'Coin Flip',
+    navDecisionWheel: 'Decision Wheel',
+    navNumberPicker: 'Number Picker',
+    navRaffle: 'Raffle Picker',
+    navSecretSanta: 'Secret Santa',
+    navClassroom: 'Classroom Picker',
+    navTruthDare: 'Truth or Dare',
+    navPartyWheel: 'Party Wheel',
+    navSpinBottle: 'Spin the Bottle',
+    navWheelOfNamesSubtitle: 'the classic name picker',
+    navWeightedSubtitle: 'Custom odds + 10k spin simulator',
 
     // Instagram Giveaway Page
     igTitle: 'Instagram Giveaway Picker',
@@ -1143,6 +1170,19 @@ export const translations: Record<Language, Translations> = {
     drawTitleDefault: 'Rueda de Opciones',
     navGiveawaySubtitle: 'Para influencers y creadores de contenido',
     navFullscreen: 'Pantalla completa',
+    navSpinWheel: 'Girar la Rueda',
+    navYesNo: 'Rueda Sí o No',
+    navCoinFlip: 'Cara o Cruz',
+    navDecisionWheel: 'Rueda de Decisiones',
+    navNumberPicker: 'Selector de Números',
+    navRaffle: 'Selector de Rifas',
+    navSecretSanta: 'Amigo Invisible',
+    navClassroom: 'Selector de Aula',
+    navTruthDare: 'Verdad o Reto',
+    navPartyWheel: 'Rueda de Fiesta',
+    navSpinBottle: 'Girar la Botella',
+    navWheelOfNamesSubtitle: 'el selector de nombres clásico',
+    navWeightedSubtitle: 'Probabilidades personalizadas + simulador 10k',
 
     // Instagram Giveaway Page
     igTitle: 'Selector de Sorteos de Instagram',
@@ -1581,6 +1621,19 @@ export const translations: Record<Language, Translations> = {
     drawTitleDefault: 'Roue des Choix',
     navGiveawaySubtitle: 'Pour les influenceurs et créateurs de contenu',
     navFullscreen: 'Plein écran',
+    navSpinWheel: 'Tourner la Roue',
+    navYesNo: 'Roue Oui ou Non',
+    navCoinFlip: 'Pile ou Face',
+    navDecisionWheel: 'Roue de Décision',
+    navNumberPicker: 'Sélecteur de Nombres',
+    navRaffle: 'Tirage au Sort',
+    navSecretSanta: 'Père Noël Secret',
+    navClassroom: 'Sélecteur de Classe',
+    navTruthDare: 'Action ou Vérité',
+    navPartyWheel: 'Roue de Fête',
+    navSpinBottle: 'Tourner la Bouteille',
+    navWheelOfNamesSubtitle: 'le sélecteur de noms classique',
+    navWeightedSubtitle: 'Probabilités personnalisées + simulateur 10k',
 
     // Instagram Giveaway Page
     igTitle: 'Sélecteur de Giveaway Instagram',
@@ -2019,6 +2072,19 @@ export const translations: Record<Language, Translations> = {
     navImportTxt: 'TXT importieren',
     drawTitleDefault: 'Glücksrad',
     navGiveawaySubtitle: 'für Influencer & Creator',
+    navSpinWheel: 'Rad drehen',
+    navYesNo: 'Ja oder Nein Rad',
+    navCoinFlip: 'Münzwurf',
+    navDecisionWheel: 'Entscheidungsrad',
+    navNumberPicker: 'Zahlenpicker',
+    navRaffle: 'Tombola-Picker',
+    navSecretSanta: 'Wichteln',
+    navClassroom: 'Klassenraum-Picker',
+    navTruthDare: 'Wahrheit oder Pflicht',
+    navPartyWheel: 'Partyrad',
+    navSpinBottle: 'Flaschendrehen',
+    navWheelOfNamesSubtitle: 'der klassische Namens-Picker',
+    navWeightedSubtitle: 'Eigene Quoten + 10k-Simulator',
 
     // Instagram Giveaway Page
     igTitle: 'Instagram Gewinnspiel-Picker',
@@ -2457,6 +2523,19 @@ export const translations: Record<Language, Translations> = {
     navImportTxt: 'Importar TXT',
     drawTitleDefault: 'Roda da Sorte',
     navGiveawaySubtitle: 'para influenciadores e criadores',
+    navSpinWheel: 'Girar a Roleta',
+    navYesNo: 'Roleta Sim ou Não',
+    navCoinFlip: 'Cara ou Coroa',
+    navDecisionWheel: 'Roleta de Decisões',
+    navNumberPicker: 'Seletor de Números',
+    navRaffle: 'Seletor de Rifa',
+    navSecretSanta: 'Amigo Secreto',
+    navClassroom: 'Seletor de Sala',
+    navTruthDare: 'Verdade ou Desafio',
+    navPartyWheel: 'Roleta de Festa',
+    navSpinBottle: 'Girar a Garrafa',
+    navWheelOfNamesSubtitle: 'o seletor de nomes clássico',
+    navWeightedSubtitle: 'Probabilidades personalizadas + simulador 10k',
 
     // Instagram Giveaway Page
     igTitle: 'Seletor de Sorteios do Instagram',
@@ -2895,6 +2974,19 @@ export const translations: Record<Language, Translations> = {
     navImportTxt: 'Importa TXT',
     drawTitleDefault: 'Ruota della Fortuna',
     navGiveawaySubtitle: 'per influencer e creator',
+    navSpinWheel: 'Gira la Ruota',
+    navYesNo: 'Ruota Sì o No',
+    navCoinFlip: 'Testa o Croce',
+    navDecisionWheel: 'Ruota delle Decisioni',
+    navNumberPicker: 'Selettore di Numeri',
+    navRaffle: 'Selettore di Lotteria',
+    navSecretSanta: 'Babbo Natale Segreto',
+    navClassroom: 'Selettore di Classe',
+    navTruthDare: 'Obbligo o Verità',
+    navPartyWheel: 'Ruota della Festa',
+    navSpinBottle: 'Gira la Bottiglia',
+    navWheelOfNamesSubtitle: 'il classico selettore di nomi',
+    navWeightedSubtitle: 'Probabilità personalizzate + simulatore 10k',
 
     // Instagram Giveaway Page
     igTitle: 'Selettore di Giveaway Instagram',

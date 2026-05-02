@@ -20,29 +20,29 @@ const WheelLogo = () => (
   </svg>
 );
 
-// Nav menu — ordered by GSC traffic priority (highest-volume keywords first).
-// Audit gap fixed: /weighted-random-picker (position 7.25 on GSC, top GSC keyword)
-// was missing entirely from this list — the user clicked through the site and
-// never landed on the pillar tool. /wheel-of-names (1M+ searches/month) and
-// /random-name-picker (high-volume EN) were also absent.
-const toolLinks = [
-  { path: "/", label: "🎡 Spin the Wheel" },
-  { path: "/wheel-of-names", label: "🎯 Wheel of Names", subtitle: "the classic name picker" },
-  { path: "/random-name-picker", label: "📛 Random Name Picker" },
-  { path: "/weighted-random-picker", label: "⚖️ Weighted Picker", subtitle: "Custom odds + 10k spin simulator" },
-  { path: "/random-wheel", label: "🎰 Random Wheel" },
-  { path: "/yes-no-wheel", label: "✅ Yes or No Wheel" },
-  { path: "/coin-flip", label: "🪙 Coin Flip" },
-  { path: "/decision-wheel", label: "🤔 Decision Wheel" },
-  { path: "/random-number-picker", label: "🔢 Number Picker" },
-  { path: "/giveaway-picker", label: "🎁 Giveaway Picker", subtitle: "Instagram, TikTok, YouTube…" },
-  { path: "/raffle-picker", label: "🎟️ Raffle Picker" },
-  { path: "/secret-santa-picker", label: "🎄 Secret Santa" },
-  { path: "/team-generator", label: "👥 Team Generator" },
-  { path: "/classroom-picker", label: "🎓 Classroom Picker" },
-  { path: "/truth-or-dare-wheel", label: "🎭 Truth or Dare" },
-  { path: "/party-wheel", label: "🎉 Party Wheel" },
-  { path: "/spin-the-bottle", label: "🍾 Spin the Bottle" },
+// Tool menu — ordered by GSC traffic priority (highest-volume keywords first).
+// Labels resolved at render-time from the active language so French visitors on
+// /tirage-au-sort don't see English entries in the dropdown. Emojis are kept
+// outside the i18n bundle since they're language-independent visual anchors.
+import type { Translations } from '@/lib/i18n';
+const buildToolLinks = (t: Translations) => [
+  { path: "/", emoji: "🎡", label: t.navSpinWheel },
+  { path: "/wheel-of-names", emoji: "🎯", label: t.navWheelOfNames, subtitle: t.navWheelOfNamesSubtitle },
+  { path: "/random-name-picker", emoji: "📛", label: t.navNamePicker },
+  { path: "/weighted-random-picker", emoji: "⚖️", label: t.navWeighted, subtitle: t.navWeightedSubtitle },
+  { path: "/random-wheel", emoji: "🎰", label: t.navRandomWheel },
+  { path: "/yes-no-wheel", emoji: "✅", label: t.navYesNo },
+  { path: "/coin-flip", emoji: "🪙", label: t.navCoinFlip },
+  { path: "/decision-wheel", emoji: "🤔", label: t.navDecisionWheel },
+  { path: "/random-number-picker", emoji: "🔢", label: t.navNumberPicker },
+  { path: "/giveaway-picker", emoji: "🎁", label: t.navGiveaway, subtitle: t.navGiveawaySubtitle },
+  { path: "/raffle-picker", emoji: "🎟️", label: t.navRaffle },
+  { path: "/secret-santa-picker", emoji: "🎄", label: t.navSecretSanta },
+  { path: "/team-generator", emoji: "👥", label: t.navTeams },
+  { path: "/classroom-picker", emoji: "🎓", label: t.navClassroom },
+  { path: "/truth-or-dare-wheel", emoji: "🎭", label: t.navTruthDare },
+  { path: "/party-wheel", emoji: "🎉", label: t.navPartyWheel },
+  { path: "/spin-the-bottle", emoji: "🍾", label: t.navSpinBottle },
 ];
 
 function parseParticipantsFromText(text: string): { pseudo: string; weight: number }[] {
@@ -56,6 +56,7 @@ function parseParticipantsFromText(text: string): { pseudo: string; weight: numb
 
 const HeaderIsland = () => {
   const { t } = useLanguage();
+  const toolLinks = buildToolLinks(t);
   const [toolsOpen, setToolsOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [pathname, setPathname] = useState("");
@@ -158,7 +159,7 @@ const HeaderIsland = () => {
               <ChevronDown className={`w-3.5 h-3.5 transition-transform ${toolsOpen ? "rotate-180" : ""}`} />
             </button>
             {toolsOpen && (
-              <div className="absolute top-full left-0 mt-1 w-64 bg-card border border-border rounded-xl shadow-xl py-2 z-50">
+              <div className="absolute top-full left-0 mt-1 w-64 max-h-[min(70vh,540px)] overflow-y-auto bg-card border border-border rounded-xl shadow-xl py-2 z-50">
                 {toolLinks.map((tool) => (
                   <a
                     key={tool.path}
@@ -170,7 +171,7 @@ const HeaderIsland = () => {
                         : "text-foreground hover:bg-muted"
                     }`}
                   >
-                    <span>{tool.label}</span>
+                    <span>{tool.emoji} {tool.label}</span>
                     {'subtitle' in tool && tool.subtitle && (
                       <span className="block text-xs text-muted-foreground mt-0.5">{tool.subtitle}</span>
                     )}

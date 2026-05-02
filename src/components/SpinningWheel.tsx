@@ -567,13 +567,27 @@ export function SpinningWheel({
     ctx.fill();
 
     // ── "Click to spin" — arc text following the wheel curve (wheelofnames style) ──
-    if (clickToSpinLabel && !isAnimating) {
+    // Skipped on dense wheels (6+ segments) where the labels already crowd the
+    // center area: arc text would visually collide with names like "Hannah" /
+    // "Alice" that extend inward from the segment midline. The pointer cursor
+    // + hub click affordance are enough on dense wheels.
+    if (clickToSpinLabel && !isAnimating && segments.length <= 5) {
       ctx.save();
       ctx.translate(center, center);
 
-      const fs    = Math.max(12, Math.round(sz * 0.044));
-      const subFs = Math.max(7,  Math.round(sz * 0.022));
-      const arcR  = radius * 0.42;
+      const fs    = Math.max(11, Math.round(sz * 0.038));
+      const subFs = Math.max(7,  Math.round(sz * 0.020));
+      // Push the arc closer to the hub (0.34 → was 0.42) so it sits in the
+      // ring between hub border and label inner edge.
+      const arcR  = radius * 0.34;
+
+      // Subtle dark backdrop ring so the white text stays legible above the
+      // segment colors. Drawn before text so it sits behind it.
+      ctx.beginPath();
+      ctx.arc(0, 0, arcR + fs * 0.7, 0, Math.PI * 2);
+      ctx.arc(0, 0, arcR - fs * 0.7, 0, Math.PI * 2, true);
+      ctx.fillStyle = 'rgba(10, 15, 26, 0.28)';
+      ctx.fill();
 
       const drawArcText = (text: string, fontSize: number, fontWeight: string, arcRadius: number, color: string) => {
         ctx.font = `${fontWeight} ${fontSize}px 'Space Grotesk', 'Inter', 'Arial', sans-serif`;
