@@ -119,25 +119,25 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
           onClick={() => setShowEdit(!showEdit)}
           className="w-full flex items-center justify-between px-4 py-2 rounded-lg border border-border bg-card/50 hover:bg-card transition-colors text-sm text-muted-foreground hover:text-foreground"
         >
-          <span>✏️ Customize entries ({activeParticipants.length})</span>
-          <span className="text-xs">{showEdit ? '▲ Hide' : '▼ Edit'}</span>
+          <span>✏️ {t.customizeEntries} ({activeParticipants.length})</span>
+          <span className="text-xs">{showEdit ? `▲ ${t.hideEditor}` : `▼ ${t.showEditor}`}</span>
         </button>
         {showEdit && (
           <div className="mt-2 p-4 rounded-lg border border-border bg-card space-y-3">
-            <p className="text-xs text-muted-foreground">One entry per line. Changes apply instantly to the wheel.</p>
+            <p className="text-xs text-muted-foreground">{t.onePerLineHint}</p>
             <textarea
               className="w-full min-h-[120px] font-mono text-sm bg-background border border-border rounded-lg p-2 resize-none focus:outline-none focus:border-primary transition-colors"
-              placeholder="One entry per line..."
+              placeholder={t.onePerLinePlaceholder}
               value={textValue}
               onChange={handleTextChange}
             />
             <div className="flex items-center justify-between">
-              <span className="text-xs text-muted-foreground">{activeParticipants.length} entries</span>
+              <span className="text-xs text-muted-foreground">{activeParticipants.length} {t.entriesCount}</span>
               <button
                 onClick={handleReset}
                 className="text-xs text-muted-foreground hover:text-primary transition-colors underline"
               >
-                ↺ Reset to defaults
+                ↺ {t.resetToDefaults}
               </button>
             </div>
           </div>

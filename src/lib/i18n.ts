@@ -272,6 +272,21 @@ export interface Translations {
   navSpinBottle: string;
   navWheelOfNamesSubtitle: string;
   navWeightedSubtitle: string;
+  // SimpleWheelIsland editor (collapsible "Customize entries" panel)
+  customizeEntries: string;
+  hideEditor: string;
+  showEditor: string;
+  onePerLineHint: string;
+  onePerLinePlaceholder: string;
+  entriesCount: string;
+  resetToDefaults: string;
+  // Cookie banner
+  cookieTitle: string;
+  cookieMessageBefore: string;
+  cookieMessageAfter: string;
+  cookiePrivacyLink: string;
+  cookieDecline: string;
+  cookieAccept: string;
 
   // Instagram Giveaway Page
   igTitle: string;
@@ -731,6 +746,19 @@ export const translations: Record<Language, Translations> = {
     navSpinBottle: 'Spin the Bottle',
     navWheelOfNamesSubtitle: 'the classic name picker',
     navWeightedSubtitle: 'Custom odds + 10k spin simulator',
+    customizeEntries: 'Customize entries',
+    hideEditor: 'Hide',
+    showEditor: 'Edit',
+    onePerLineHint: 'One entry per line. Changes apply instantly to the wheel.',
+    onePerLinePlaceholder: 'One entry per line...',
+    entriesCount: 'entries',
+    resetToDefaults: 'Reset to defaults',
+    cookieTitle: 'Cookies',
+    cookieMessageBefore: 'We use cookies for analytics and personalised ads via Google AdSense. Read our',
+    cookieMessageAfter: '.',
+    cookiePrivacyLink: 'Privacy Policy',
+    cookieDecline: 'Decline',
+    cookieAccept: 'Accept',
 
     // Instagram Giveaway Page
     igTitle: 'Instagram Giveaway Picker',
@@ -1183,6 +1211,19 @@ export const translations: Record<Language, Translations> = {
     navSpinBottle: 'Girar la Botella',
     navWheelOfNamesSubtitle: 'el selector de nombres clásico',
     navWeightedSubtitle: 'Probabilidades personalizadas + simulador 10k',
+    customizeEntries: 'Personalizar entradas',
+    hideEditor: 'Ocultar',
+    showEditor: 'Editar',
+    onePerLineHint: 'Una entrada por línea. Los cambios se aplican al instante en la ruleta.',
+    onePerLinePlaceholder: 'Una entrada por línea...',
+    entriesCount: 'entradas',
+    resetToDefaults: 'Restaurar por defecto',
+    cookieTitle: 'Cookies',
+    cookieMessageBefore: 'Usamos cookies para análisis y anuncios personalizados con Google AdSense. Lee nuestra',
+    cookieMessageAfter: '.',
+    cookiePrivacyLink: 'Política de Privacidad',
+    cookieDecline: 'Rechazar',
+    cookieAccept: 'Aceptar',
 
     // Instagram Giveaway Page
     igTitle: 'Selector de Sorteos de Instagram',
@@ -1634,6 +1675,19 @@ export const translations: Record<Language, Translations> = {
     navSpinBottle: 'Tourner la Bouteille',
     navWheelOfNamesSubtitle: 'le sélecteur de noms classique',
     navWeightedSubtitle: 'Probabilités personnalisées + simulateur 10k',
+    customizeEntries: 'Personnaliser les entrées',
+    hideEditor: 'Masquer',
+    showEditor: 'Modifier',
+    onePerLineHint: 'Une entrée par ligne. Les modifications s\'appliquent instantanément à la roue.',
+    onePerLinePlaceholder: 'Une entrée par ligne...',
+    entriesCount: 'entrées',
+    resetToDefaults: 'Réinitialiser',
+    cookieTitle: 'Cookies',
+    cookieMessageBefore: 'Nous utilisons des cookies pour l\'analyse et les annonces personnalisées via Google AdSense. Consultez notre',
+    cookieMessageAfter: '.',
+    cookiePrivacyLink: 'Politique de Confidentialité',
+    cookieDecline: 'Refuser',
+    cookieAccept: 'Accepter',
 
     // Instagram Giveaway Page
     igTitle: 'Sélecteur de Giveaway Instagram',
@@ -2085,6 +2139,19 @@ export const translations: Record<Language, Translations> = {
     navSpinBottle: 'Flaschendrehen',
     navWheelOfNamesSubtitle: 'der klassische Namens-Picker',
     navWeightedSubtitle: 'Eigene Quoten + 10k-Simulator',
+    customizeEntries: 'Einträge anpassen',
+    hideEditor: 'Ausblenden',
+    showEditor: 'Bearbeiten',
+    onePerLineHint: 'Ein Eintrag pro Zeile. Änderungen werden sofort auf das Rad angewendet.',
+    onePerLinePlaceholder: 'Ein Eintrag pro Zeile...',
+    entriesCount: 'Einträge',
+    resetToDefaults: 'Zurücksetzen',
+    cookieTitle: 'Cookies',
+    cookieMessageBefore: 'Wir verwenden Cookies für Analysen und personalisierte Anzeigen über Google AdSense. Lies unsere',
+    cookieMessageAfter: '.',
+    cookiePrivacyLink: 'Datenschutzerklärung',
+    cookieDecline: 'Ablehnen',
+    cookieAccept: 'Akzeptieren',
 
     // Instagram Giveaway Page
     igTitle: 'Instagram Gewinnspiel-Picker',
@@ -2536,6 +2603,19 @@ export const translations: Record<Language, Translations> = {
     navSpinBottle: 'Girar a Garrafa',
     navWheelOfNamesSubtitle: 'o seletor de nomes clássico',
     navWeightedSubtitle: 'Probabilidades personalizadas + simulador 10k',
+    customizeEntries: 'Personalizar entradas',
+    hideEditor: 'Ocultar',
+    showEditor: 'Editar',
+    onePerLineHint: 'Uma entrada por linha. As alterações são aplicadas instantaneamente à roda.',
+    onePerLinePlaceholder: 'Uma entrada por linha...',
+    entriesCount: 'entradas',
+    resetToDefaults: 'Restaurar padrão',
+    cookieTitle: 'Cookies',
+    cookieMessageBefore: 'Usamos cookies para análises e anúncios personalizados via Google AdSense. Leia nossa',
+    cookieMessageAfter: '.',
+    cookiePrivacyLink: 'Política de Privacidade',
+    cookieDecline: 'Recusar',
+    cookieAccept: 'Aceitar',
 
     // Instagram Giveaway Page
     igTitle: 'Seletor de Sorteios do Instagram',
@@ -2987,6 +3067,19 @@ export const translations: Record<Language, Translations> = {
     navSpinBottle: 'Gira la Bottiglia',
     navWheelOfNamesSubtitle: 'il classico selettore di nomi',
     navWeightedSubtitle: 'Probabilità personalizzate + simulatore 10k',
+    customizeEntries: 'Personalizza voci',
+    hideEditor: 'Nascondi',
+    showEditor: 'Modifica',
+    onePerLineHint: 'Una voce per riga. Le modifiche si applicano subito alla ruota.',
+    onePerLinePlaceholder: 'Una voce per riga...',
+    entriesCount: 'voci',
+    resetToDefaults: 'Ripristina predefiniti',
+    cookieTitle: 'Cookie',
+    cookieMessageBefore: 'Usiamo cookie per analisi e annunci personalizzati tramite Google AdSense. Leggi la nostra',
+    cookieMessageAfter: '.',
+    cookiePrivacyLink: 'Privacy Policy',
+    cookieDecline: 'Rifiuta',
+    cookieAccept: 'Accetta',
 
     // Instagram Giveaway Page
     igTitle: 'Selettore di Giveaway Instagram',

@@ -68,10 +68,15 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
     return () => window.removeEventListener(LANG_EVENT, handler);
   }, []);
 
-  // Update document lang attribute on language change
-  useEffect(() => {
-    document.documentElement.lang = language;
-  }, [language]);
+  // ⚠️ DO NOT add an effect that writes `document.documentElement.lang` on every
+  // language state change. We had one and it created a race condition: when
+  // multiple islands hydrate in sequence, each one starts with state='en', and
+  // the write effect runs BEFORE the page-locale-sync effect on later islands —
+  // overwriting the SSR-correct `lang="es"` (or fr/de/etc.) back to "en", which
+  // then made other islands' detection effect read "en" and stay in EN. The
+  // SSR `<html lang="...">` attribute is already correct; only `setLanguage()`
+  // (called from the LanguageSelector when the user manually switches) needs
+  // to update the attribute, and it does so directly inline.
 
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);

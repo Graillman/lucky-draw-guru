@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
 
 /**
  * Cookie consent banner — compact, non-intrusive, design-system-aligned.
@@ -8,8 +9,12 @@ import { useState, useEffect } from 'react';
  * version is a small floating card in the bottom-right with backdrop blur and
  * an auto-collapse to a 🍪 chip after 20s so the page stays usable while still
  * being visible/legal.
+ *
+ * Wrapped in `LanguageProvider` so the banner copy follows the page locale
+ * (es/fr/de/pt/it) — previously the banner stayed in English on every page.
  */
-export default function CookieConsentBanner() {
+function CookieConsentBannerInner() {
+  const { t } = useLanguage();
   const [visible, setVisible] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
 
@@ -29,21 +34,21 @@ export default function CookieConsentBanner() {
   // Auto-collapse the full card after 20s; user can still re-open via the chip
   useEffect(() => {
     if (!visible || collapsed) return;
-    const t = setTimeout(() => setCollapsed(true), 20000);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setCollapsed(true), 20000);
+    return () => clearTimeout(timer);
   }, [visible, collapsed]);
 
   function accept() {
     try {
       localStorage.setItem('cookie_consent', 'accepted');
-    } catch {}
+    } catch { /* */ }
     setVisible(false);
   }
 
   function decline() {
     try {
       localStorage.setItem('cookie_consent', 'declined');
-    } catch {}
+    } catch { /* */ }
     setVisible(false);
   }
 
@@ -54,11 +59,11 @@ export default function CookieConsentBanner() {
     return (
       <button
         onClick={() => setCollapsed(false)}
-        aria-label="Open cookie preferences"
+        aria-label={t.cookieTitle}
         className="fixed bottom-4 right-4 z-[9999] flex items-center gap-1.5 px-3 py-2 rounded-full bg-card/90 backdrop-blur border border-border shadow-md text-xs font-medium text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
       >
         <span aria-hidden="true">🍪</span>
-        <span>Cookies</span>
+        <span>{t.cookieTitle}</span>
       </button>
     );
   }
@@ -66,18 +71,18 @@ export default function CookieConsentBanner() {
   return (
     <div
       role="dialog"
-      aria-label="Cookie consent"
+      aria-label={t.cookieTitle}
       aria-live="polite"
       className="fixed bottom-4 right-4 z-[9999] w-[min(380px,calc(100vw-2rem))] p-4 rounded-2xl bg-card/95 backdrop-blur-md border border-border shadow-2xl space-y-3 animate-fade-in"
     >
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="text-lg" aria-hidden="true">🍪</span>
-          <h3 className="text-sm font-semibold text-foreground">Cookies</h3>
+          <h3 className="text-sm font-semibold text-foreground">{t.cookieTitle}</h3>
         </div>
         <button
           onClick={() => setCollapsed(true)}
-          aria-label="Minimize cookie banner"
+          aria-label={t.hideEditor}
           className="text-muted-foreground hover:text-foreground transition-colors p-1 -m-1 leading-none"
         >
           ✕
@@ -85,12 +90,11 @@ export default function CookieConsentBanner() {
       </div>
 
       <p className="text-xs text-muted-foreground leading-relaxed">
-        We use cookies for analytics and personalised ads via Google AdSense.
-        Read our{' '}
+        {t.cookieMessageBefore}{' '}
         <a href="/privacy-policy" className="text-primary hover:underline font-medium">
-          Privacy Policy
+          {t.cookiePrivacyLink}
         </a>
-        .
+        {t.cookieMessageAfter}
       </p>
 
       <div className="flex gap-2">
@@ -98,15 +102,23 @@ export default function CookieConsentBanner() {
           onClick={decline}
           className="flex-1 px-3 py-2 text-xs font-medium rounded-lg border border-border bg-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-colors"
         >
-          Decline
+          {t.cookieDecline}
         </button>
         <button
           onClick={accept}
           className="flex-1 px-3 py-2 text-xs font-bold rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
         >
-          Accept
+          {t.cookieAccept}
         </button>
       </div>
     </div>
+  );
+}
+
+export default function CookieConsentBanner() {
+  return (
+    <LanguageProvider>
+      <CookieConsentBannerInner />
+    </LanguageProvider>
   );
 }
