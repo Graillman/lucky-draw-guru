@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from "react";
-import { LanguageProvider } from "@/contexts/LanguageContext";
+import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
 import { SpinningWheel } from "@/components/SpinningWheel";
 import DrawButton from "@/components/DrawButton";
 import WinnerResult from "@/components/WinnerResult";
@@ -19,6 +19,7 @@ interface SimpleWheelIslandProps {
 }
 
 const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTheme, locked }: SimpleWheelIslandProps) => {
+  const { t } = useLanguage();
   const [participants, setParticipants] = useState<Participant[]>([...defaultParticipants]);
   const [winners, setWinners] = useState<string[]>([]);
   const [isSpinning, setIsSpinning] = useState(false);
@@ -86,7 +87,8 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
           onSpin={handleDraw}
           mode="simple"
           winnersCount={1}
-          clickToSpinLabel="Click to spin"
+          clickToSpinLabel={t.clickToSpin}
+          clickToSpinSub={t.clickToSpinSub}
           colors={colors}
           wheelShape={wheelShape}
           hubTheme={hubTheme}
