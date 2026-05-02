@@ -287,6 +287,16 @@ export interface Translations {
   cookiePrivacyLink: string;
   cookieDecline: string;
   cookieAccept: string;
+  // Wheel toolbar (sound, share, history)
+  shareWheel: string;
+  shareWheelCopied: string;
+  shareWheelHint: string;
+  soundOn: string;
+  soundOff: string;
+  recentWinners: string;
+  noRecentWinners: string;
+  clearHistory: string;
+  loadedFromLink: string;
 
   // Instagram Giveaway Page
   igTitle: string;
@@ -759,6 +769,15 @@ export const translations: Record<Language, Translations> = {
     cookiePrivacyLink: 'Privacy Policy',
     cookieDecline: 'Decline',
     cookieAccept: 'Accept',
+    shareWheel: 'Share wheel',
+    shareWheelCopied: 'Link copied!',
+    shareWheelHint: 'Anyone with the link gets the same wheel — no account needed.',
+    soundOn: 'Sound on',
+    soundOff: 'Sound off',
+    recentWinners: 'Recent winners',
+    noRecentWinners: 'No winners yet — spin the wheel!',
+    clearHistory: 'Clear history',
+    loadedFromLink: 'Wheel loaded from shared link',
 
     // Instagram Giveaway Page
     igTitle: 'Instagram Giveaway Picker',
@@ -1224,6 +1243,15 @@ export const translations: Record<Language, Translations> = {
     cookiePrivacyLink: 'Política de Privacidad',
     cookieDecline: 'Rechazar',
     cookieAccept: 'Aceptar',
+    shareWheel: 'Compartir ruleta',
+    shareWheelCopied: '¡Enlace copiado!',
+    shareWheelHint: 'Cualquiera con el enlace verá la misma ruleta — sin registro.',
+    soundOn: 'Sonido activado',
+    soundOff: 'Sonido desactivado',
+    recentWinners: 'Ganadores recientes',
+    noRecentWinners: 'Aún no hay ganadores — ¡gira la ruleta!',
+    clearHistory: 'Borrar historial',
+    loadedFromLink: 'Ruleta cargada desde un enlace compartido',
 
     // Instagram Giveaway Page
     igTitle: 'Selector de Sorteos de Instagram',
@@ -1688,6 +1716,15 @@ export const translations: Record<Language, Translations> = {
     cookiePrivacyLink: 'Politique de Confidentialité',
     cookieDecline: 'Refuser',
     cookieAccept: 'Accepter',
+    shareWheel: 'Partager la roue',
+    shareWheelCopied: 'Lien copié !',
+    shareWheelHint: 'Toute personne avec le lien verra la même roue — sans inscription.',
+    soundOn: 'Son activé',
+    soundOff: 'Son coupé',
+    recentWinners: 'Gagnants récents',
+    noRecentWinners: 'Pas encore de gagnants — lance la roue !',
+    clearHistory: 'Effacer l\'historique',
+    loadedFromLink: 'Roue chargée depuis un lien partagé',
 
     // Instagram Giveaway Page
     igTitle: 'Sélecteur de Giveaway Instagram',
@@ -2152,6 +2189,15 @@ export const translations: Record<Language, Translations> = {
     cookiePrivacyLink: 'Datenschutzerklärung',
     cookieDecline: 'Ablehnen',
     cookieAccept: 'Akzeptieren',
+    shareWheel: 'Rad teilen',
+    shareWheelCopied: 'Link kopiert!',
+    shareWheelHint: 'Jeder mit dem Link sieht dasselbe Rad — ohne Anmeldung.',
+    soundOn: 'Ton an',
+    soundOff: 'Ton aus',
+    recentWinners: 'Letzte Gewinner',
+    noRecentWinners: 'Noch keine Gewinner — drehe das Rad!',
+    clearHistory: 'Verlauf löschen',
+    loadedFromLink: 'Rad aus geteiltem Link geladen',
 
     // Instagram Giveaway Page
     igTitle: 'Instagram Gewinnspiel-Picker',
@@ -2616,6 +2662,15 @@ export const translations: Record<Language, Translations> = {
     cookiePrivacyLink: 'Política de Privacidade',
     cookieDecline: 'Recusar',
     cookieAccept: 'Aceitar',
+    shareWheel: 'Compartilhar roda',
+    shareWheelCopied: 'Link copiado!',
+    shareWheelHint: 'Qualquer pessoa com o link vê a mesma roda — sem cadastro.',
+    soundOn: 'Som ligado',
+    soundOff: 'Som desligado',
+    recentWinners: 'Vencedores recentes',
+    noRecentWinners: 'Nenhum vencedor ainda — gire a roda!',
+    clearHistory: 'Limpar histórico',
+    loadedFromLink: 'Roda carregada de um link compartilhado',
 
     // Instagram Giveaway Page
     igTitle: 'Seletor de Sorteios do Instagram',
@@ -3080,6 +3135,15 @@ export const translations: Record<Language, Translations> = {
     cookiePrivacyLink: 'Privacy Policy',
     cookieDecline: 'Rifiuta',
     cookieAccept: 'Accetta',
+    shareWheel: 'Condividi ruota',
+    shareWheelCopied: 'Link copiato!',
+    shareWheelHint: 'Chiunque abbia il link vede la stessa ruota — nessuna registrazione.',
+    soundOn: 'Audio attivo',
+    soundOff: 'Audio disattivo',
+    recentWinners: 'Vincitori recenti',
+    noRecentWinners: 'Nessun vincitore ancora — gira la ruota!',
+    clearHistory: 'Cancella cronologia',
+    loadedFromLink: 'Ruota caricata da un link condiviso',
 
     // Instagram Giveaway Page
     igTitle: 'Selettore di Giveaway Instagram',

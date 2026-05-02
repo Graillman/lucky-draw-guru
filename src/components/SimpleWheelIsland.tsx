@@ -1,9 +1,24 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
+import { Share2, Check, Volume2, VolumeX, Trash2, History } from "lucide-react";
 import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
 import { SpinningWheel } from "@/components/SpinningWheel";
 import DrawButton from "@/components/DrawButton";
 import WinnerResult from "@/components/WinnerResult";
 import { ConfettiEffect } from "@/components/ConfettiEffect";
+import { useWheelSound } from "@/hooks/useWheelSound";
+import {
+  buildShareUrl,
+  copyToClipboard,
+  readWheelFromHash,
+  type ShareableParticipant,
+} from "@/lib/wheelShare";
+import {
+  getWinnerHistory,
+  pushWinnerEntry,
+  clearWinnerHistory,
+  formatRelativeTime,
+  type WinnerEntry,
+} from "@/lib/winnerHistory";
 
 interface Participant {
   pseudo: string;
@@ -18,15 +33,45 @@ interface SimpleWheelIslandProps {
   locked?: boolean; // hide the customize entries panel
 }
 
+const SOUND_PREF_KEY = "rwp:sound-on";
+
 const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTheme, locked }: SimpleWheelIslandProps) => {
-  const { t } = useLanguage();
-  const [participants, setParticipants] = useState<Participant[]>([...defaultParticipants]);
+  const { t, language } = useLanguage();
+  const { playTick, playFanfare } = useWheelSound();
+
+  // Initial participants: prefer the URL-shared wheel if present, else defaults.
+  // Done lazily so SSR (where window is undefined) gets the defaults and the
+  // hash takes over only after hydration — no mismatch flash.
+  const [participants, setParticipants] = useState<Participant[]>(() =>
+    [...defaultParticipants]
+  );
   const [winners, setWinners] = useState<string[]>([]);
   const [isSpinning, setIsSpinning] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
   const [textValue, setTextValue] = useState(defaultParticipants.map(p => p.pseudo).join('\n'));
+  const [history, setHistory] = useState<WinnerEntry[]>([]);
+  const [soundOn, setSoundOn] = useState(true);
+  const [shareNotice, setShareNotice] = useState<string | null>(null);
+  const [hashLoaded, setHashLoaded] = useState(false);
   const wheelRef = useRef<HTMLDivElement>(null);
+
+  // Hydrate from URL hash (#w=...) and localStorage on mount
+  useEffect(() => {
+    const fromHash: ShareableParticipant[] = readWheelFromHash();
+    if (fromHash.length >= 2) {
+      const mapped = fromHash.map(p => ({ pseudo: p.pseudo, weight: p.weight ?? 1 }));
+      setParticipants(mapped);
+      setTextValue(mapped.map(p => p.pseudo).join('\n'));
+      setHashLoaded(true);
+    }
+    setHistory(getWinnerHistory());
+    try {
+      const stored = localStorage.getItem(SOUND_PREF_KEY);
+      if (stored !== null) setSoundOn(stored === "1");
+    } catch { /* ignore */ }
+  }, []);
 
   const scrollToWheel = useCallback(() => {
     wheelRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -42,7 +87,10 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
     setWinners(w);
     setIsSpinning(false);
     setShowConfetti(true);
-  }, []);
+    if (soundOn) playFanfare();
+    pushWinnerEntry(w);
+    setHistory(getWinnerHistory());
+  }, [soundOn, playFanfare]);
 
   const handleRelaunch = useCallback(() => {
     setWinners([]);
@@ -71,7 +119,48 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
     setParticipants([...defaultParticipants]);
     setTextValue(defaultParticipants.map(p => p.pseudo).join('\n'));
     setWinners([]);
+    setHashLoaded(false);
+    // Strip the share hash so refresh doesn't re-load the shared wheel
+    if (typeof window !== "undefined" && window.location.hash) {
+      try { window.history.replaceState(null, "", window.location.pathname + window.location.search); } catch { /* */ }
+    }
   }, [defaultParticipants]);
+
+  const handleToggleSound = useCallback(() => {
+    setSoundOn(prev => {
+      const next = !prev;
+      try { localStorage.setItem(SOUND_PREF_KEY, next ? "1" : "0"); } catch { /* */ }
+      return next;
+    });
+  }, []);
+
+  const handleShare = useCallback(async () => {
+    const url = buildShareUrl(participants);
+    if (!url) return;
+    // Update the address bar so a refresh keeps the wheel
+    if (typeof window !== "undefined") {
+      try { window.history.replaceState(null, "", url); } catch { /* */ }
+    }
+    // Prefer Web Share on mobile, clipboard everywhere else
+    const shared = await (async () => {
+      if (typeof navigator !== "undefined" && navigator.share) {
+        try {
+          await navigator.share({ title: document.title, url });
+          return true;
+        } catch { /* user cancelled or blocked — fall through */ }
+      }
+      return copyToClipboard(url);
+    })();
+    if (shared) {
+      setShareNotice(t.shareWheelCopied);
+      setTimeout(() => setShareNotice(null), 2400);
+    }
+  }, [participants, t.shareWheelCopied]);
+
+  const handleClearHistory = useCallback(() => {
+    clearWinnerHistory();
+    setHistory([]);
+  }, []);
 
   const activeParticipants = participants.length >= 2 ? participants : defaultParticipants;
 
@@ -79,12 +168,19 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
     <div className="w-full space-y-4">
       <ConfettiEffect active={showConfetti} onComplete={() => setShowConfetti(false)} />
 
+      {hashLoaded && winners.length === 0 && !isSpinning && (
+        <div className="max-w-md mx-auto text-xs text-center px-3 py-2 rounded-lg bg-primary/10 text-primary border border-primary/20">
+          {t.loadedFromLink}
+        </div>
+      )}
+
       <div ref={wheelRef} className="flex flex-col items-center space-y-4">
         <SpinningWheel
           participants={activeParticipants}
           isSpinning={isSpinning}
           onComplete={handleComplete}
           onSpin={handleDraw}
+          onTick={soundOn ? () => playTick("click") : undefined}
           mode="simple"
           winnersCount={1}
           clickToSpinLabel={t.clickToSpin}
@@ -111,7 +207,71 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
             mode="simple"
           />
         )}
+
+        {/* Toolbar: Share | Sound | History */}
+        <div className="flex items-center justify-center gap-2 flex-wrap">
+          <button
+            onClick={handleShare}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card/60 hover:border-primary/40 hover:shadow-sm transition-all text-xs font-medium text-muted-foreground hover:text-foreground"
+            title={t.shareWheelHint}
+            aria-label={t.shareWheel}
+          >
+            {shareNotice ? <Check className="w-3.5 h-3.5 text-primary" aria-hidden /> : <Share2 className="w-3.5 h-3.5" aria-hidden />}
+            <span>{shareNotice ?? t.shareWheel}</span>
+          </button>
+          <button
+            onClick={handleToggleSound}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card/60 hover:border-primary/40 hover:shadow-sm transition-all text-xs font-medium text-muted-foreground hover:text-foreground"
+            title={soundOn ? t.soundOn : t.soundOff}
+            aria-label={soundOn ? t.soundOn : t.soundOff}
+            aria-pressed={soundOn}
+          >
+            {soundOn ? <Volume2 className="w-3.5 h-3.5" aria-hidden /> : <VolumeX className="w-3.5 h-3.5" aria-hidden />}
+            <span>{soundOn ? t.soundOn : t.soundOff}</span>
+          </button>
+          <button
+            onClick={() => setShowHistory(v => !v)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card/60 hover:border-primary/40 hover:shadow-sm transition-all text-xs font-medium text-muted-foreground hover:text-foreground"
+            aria-expanded={showHistory}
+          >
+            <History className="w-3.5 h-3.5" aria-hidden />
+            <span>{t.recentWinners} {history.length > 0 && <span className="text-primary">({history.length})</span>}</span>
+          </button>
+        </div>
       </div>
+
+      {/* Recent winners panel */}
+      {showHistory && (
+        <div className="w-full max-w-md mx-auto p-4 rounded-lg border border-border bg-card space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-semibold text-foreground">{t.recentWinners}</span>
+            {history.length > 0 && (
+              <button
+                onClick={handleClearHistory}
+                className="flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive transition-colors"
+              >
+                <Trash2 className="w-3 h-3" aria-hidden />
+                {t.clearHistory}
+              </button>
+            )}
+          </div>
+          {history.length === 0 ? (
+            <p className="text-xs text-muted-foreground py-2 text-center">{t.noRecentWinners}</p>
+          ) : (
+            <ol className="space-y-1.5">
+              {history.map((entry) => (
+                <li
+                  key={entry.at}
+                  className="flex items-center justify-between text-sm border-l-2 border-primary/40 pl-2 py-0.5"
+                >
+                  <span className="text-foreground truncate">{entry.pseudos.join(', ')}</span>
+                  <span className="text-xs text-muted-foreground shrink-0 ml-2">{formatRelativeTime(entry.at, language)}</span>
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
+      )}
 
       {/* Editable entries toggle */}
       {!locked && <div className="w-full max-w-md mx-auto">
