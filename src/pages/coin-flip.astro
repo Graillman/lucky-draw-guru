@@ -1,0 +1,181 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import { ArrowRight } from 'lucide-react';
+
+const title = "Coin Flip Online — Free Virtual Coin Toss for Heads or Tails";
+const description = "Flip a virtual coin instantly. 50/50 cryptographically random Heads or Tails. Free, no signup, no app — works on any device. Perfect for quick decisions.";
+const canonical = "/coin-flip";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Coin Flip Online — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/coin-flip",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Online coin flip — instant random Heads or Tails using window.crypto.getRandomValues().",
+      "inLanguage": "en"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is this online coin flip truly random?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Real Wheel Picker uses window.crypto.getRandomValues() — the cryptographic standard built into modern browsers. The probability is exactly 50/50 every flip, with no possible bias. This is the same level of randomness used in SSL encryption and password generation." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I replace Heads and Tails with my own options?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Click on the labels to edit them. You can put any two options you want and the wheel picks one with exactly 50% probability each." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is a virtual coin flip more fair than a real coin?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Surprisingly, yes. Real coins are not perfectly balanced — Heads and Tails sides have slightly different masses, creating a tiny but measurable bias. Throwing technique also affects the outcome. A digital wheel using crypto.getRandomValues() guarantees exactly 50/50 every time, with no exception." }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Coin Flip" }
+      ]
+    }
+  ]
+};
+
+const defaultParticipants = [
+  { pseudo: "Heads", weight: 1 },
+  { pseudo: "Tails", weight: 1 }
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  hreflangLinks={[
+    { hreflang: 'en',        href: 'https://realwheelpicker.com/coin-flip' },
+    { hreflang: 'fr',        href: 'https://realwheelpicker.com/pile-ou-face' },
+    { hreflang: 'x-default', href: 'https://realwheelpicker.com/coin-flip' },
+  ]}
+>
+  <div class="relative min-h-screen overflow-hidden" style="background: var(--gradient-bg)">
+    <div aria-hidden class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div class="aurora-orb aurora-orb-gold"></div>
+      <div class="aurora-orb aurora-orb-purple"></div>
+      <div class="aurora-orb aurora-orb-blue"></div>
+    </div>
+    <div class="relative z-10">
+      <HeaderIsland client:load />
+      <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+
+        <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+          <a href="/" class="hover:text-primary transition-colors">Home</a>
+          <span>/</span>
+          <span class="text-foreground">Coin Flip</span>
+        </nav>
+
+        <section class="text-center space-y-3 py-2">
+          <h1 class="text-2xl md:text-4xl font-bold text-foreground leading-tight tracking-tight">
+            Coin Flip Online — Heads or Tails Instantly
+          </h1>
+          <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            No coin in your pocket? Spin the virtual wheel for an instant cryptographically random Heads or Tails. Exactly 50/50 every time.
+          </p>
+          <p class="text-xs text-muted-foreground">Free · No signup · 50/50 guaranteed</p>
+        </section>
+
+        <!-- Tool above the fold -->
+        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+
+        <section class="bg-card border border-border rounded-xl p-5 text-sm text-muted-foreground leading-relaxed">
+          <p>
+            <strong class="text-foreground">Online coin flip:</strong> Click Spin and the result is determined by <code class="bg-muted px-1 rounded font-mono text-xs">window.crypto.getRandomValues()</code> — exactly 50% probability for Heads, 50% for Tails. Zero bias, zero possible manipulation.
+          </p>
+        </section>
+
+        <section class="bg-card border border-border rounded-xl p-6 space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Why a virtual wheel beats a real coin</h2>
+          <p class="text-muted-foreground leading-relaxed">
+            A physical coin is not perfectly balanced — the Heads and Tails sides have slightly different masses (the embossing on each side adds tiny weight differences), which creates a measurable bias of about 51/49 in some studies. Throwing technique also influences the result: in 2007, mathematicians at Stanford showed that coin flips are slightly more likely to land on the same side they started on. A digital wheel powered by <code class="bg-muted px-1 rounded font-mono text-xs">window.crypto.getRandomValues()</code> guarantees exactly 50/50 every spin — no exceptions.
+          </p>
+        </section>
+
+        <section class="space-y-6">
+          <h2 class="text-xl font-bold text-foreground">When to use a coin flip</h2>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { icon: "⚽", title: "Sports referee decisions", desc: "Who kicks off, who serves, which side to defend — the universal way to start a game." },
+              { icon: "🍕", title: "Quick everyday decisions", desc: "Pizza or burger? Movie A or B? Stop overthinking and let the coin decide." },
+              { icon: "🎲", title: "Tabletop & board games", desc: "First player, contested rules, who goes next — a coin flip is the cleanest tiebreaker." },
+              { icon: "🎓", title: "Classroom activities", desc: "Random grouping, team A vs team B, who answers next — fair and transparent." },
+              { icon: "💼", title: "Workplace tiebreakers", desc: "Who gets the last cookie? Who picks the meeting time? Use a coin flip when nothing else matters." },
+              { icon: "🏠", title: "Family disputes", desc: "Settle small arguments without bargaining. The coin is the impartial referee." },
+            ].map((item) => (
+              <div class="p-4 bg-card border border-border rounded-xl space-y-2">
+                <div class="text-2xl">{item.icon}</div>
+                <p class="font-semibold text-foreground text-sm">{item.title}</p>
+                <p class="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Frequently asked questions</h2>
+          <div class="space-y-3">
+            {[
+              ["Is this online coin flip truly random?", "Yes. We use window.crypto.getRandomValues() — the cryptographic standard built into modern browsers. Probability is exactly 50/50 every flip, with no possible bias."],
+              ["Can I replace Heads and Tails with my own options?", "Yes. Click the labels to edit. You can use any two options you want — Yes/No, This/That, Pizza/Burger — and the wheel picks one with 50% probability each."],
+              ["Is a virtual coin more fair than a real one?", "Surprisingly, yes. Real coins have tiny mass differences between Heads and Tails sides, plus throwing technique creates measurable bias. A digital wheel guarantees exactly 50/50 every time."],
+              ["Do you store any data?", "Never. Everything runs in your browser. Nothing is sent to any server."],
+              ["Is it free?", "100% free. No signup, no download, no usage limit. Just open the page and flip."],
+            ].map(([q, a]) => (
+              <div class="bg-card border border-border rounded-xl p-5">
+                <p class="font-semibold text-foreground mb-2">{q}</p>
+                <p class="text-muted-foreground text-sm leading-relaxed">{a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Other quick decision tools</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              { label: "Yes or No Wheel", href: "/yes-no-wheel" },
+              { label: "Decision Wheel", href: "/decision-wheel" },
+              { label: "Pile ou Face (Français)", href: "/pile-ou-face" },
+            ].map((link) => (
+              <a href={link.href}
+                class="p-4 bg-card border border-border rounded-xl text-center hover:border-primary/50 hover:shadow-md transition-all text-sm font-semibold text-foreground">
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section class="text-center py-6">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Full Wheel Tool <ArrowRight className="w-4 h-4" />
+          </a>
+        </section>
+
+        <AdPlaceholder position="bottom" client:visible />
+      </main>
+      <GlobalFooterIsland client:idle />
+    </div>
+  </div>
+</Layout>

@@ -18,7 +18,8 @@ export default defineConfig({
     '/random-team-selector': '/team-generator',
     '/yes-or-no-wheel': '/yes-no-wheel',
     '/random-number-generator': '/random-number-picker',
-    '/coin-flip': '/pile-ou-face',           // EN slug missing, FR page exists; TODO: build dedicated EN page
+    // /coin-flip is now its own dedicated EN page (src/pages/coin-flip.astro)
+    // hreflang-paired with /pile-ou-face (FR), so no redirect needed.
     '/random-decision-maker': '/decision-wheel',
     '/random-winner-picker': '/giveaway-picker',
   },
