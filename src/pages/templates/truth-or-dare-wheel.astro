@@ -8,7 +8,10 @@ import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
 
 const title = "Truth or Dare Wheel — Free Spinner for Parties";
 const description = "Spin the truth or dare wheel to pick your next challenge. Pre-loaded with 20 prompts. Perfect for parties, sleepovers, and game nights. Free, instant.";
-const canonical = "/templates/truth-or-dare-wheel";
+// Canonical points to the root /truth-or-dare-wheel page — the audit found
+// this template duplicates content with the dedicated keyword-targeting page
+// at the root (richer FAQs, SEOPageIsland with mode handling).
+const canonical = "/truth-or-dare-wheel";
 
 const faqItems = [
   {
@@ -274,7 +277,7 @@ const jsonLd = {
         </nav>
 
         <section class="text-center space-y-4 py-2 md:py-6 mb-8">
-          <h1 class="text-3xl md:text-5xl font-bold leading-tight">
+          <h1 class="text-3xl md:text-4xl font-bold leading-tight">
             <span class="tod-title-red">Truth</span>
             <span class="tod-title-sep"> or </span>
             <span class="tod-title-blue">Dare</span>

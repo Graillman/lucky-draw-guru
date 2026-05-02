@@ -8,7 +8,10 @@ import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
 
 const title = "Coin Flip Wheel — Online Coin Toss Spinner | Heads or Tails";
 const description = "Flip a virtual coin online. Spin the wheel to get Heads or Tails — exactly 50/50 odds, cryptographically random, instant result. Free, no signup.";
-const canonical = "/templates/coin-flip-wheel";
+// Canonical points to /coin-flip — the audit found this template duplicates
+// content with the dedicated EN root page. The root version is canonical
+// (richer JSON-LD, Stanford study citation, hreflang-paired with /pile-ou-face).
+const canonical = "/coin-flip";
 
 const faqItems = [
   {
@@ -308,7 +311,7 @@ const themeColors = ['#ffd700','#b8860b','#daa520','#cd853f','#c0a060','#ffa500'
         </nav>
         <div class="text-center mb-8">
           <div class="text-5xl mb-3">🪙</div>
-          <h1 class="text-3xl md:text-5xl font-black leading-tight cf-title mb-3">Coin Flip Wheel</h1>
+          <h1 class="text-3xl md:text-4xl font-black leading-tight cf-title mb-3">Coin Flip Wheel</h1>
           <p class="text-lg text-white/55 max-w-xl mx-auto mb-5">Spin to flip a virtual coin. Exactly 50/50 odds — cryptographically random, no physical bias, instant result.</p>
           <div class="flex flex-wrap items-center justify-center gap-2">
             <span class="cf-tag">Heads or Tails</span>
