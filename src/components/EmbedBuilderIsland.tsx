@@ -12,10 +12,10 @@ const EMBED_SIZES = [
 const EMBED_PAGES = [
   { label: "Spin the Wheel", path: "/" },
   { label: "Giveaway Picker", path: "/giveaway-picker" },
-  { label: "Yes or No Wheel", path: "/yes-or-no-wheel" },
+  { label: "Yes or No Wheel", path: "/yes-no-wheel" },
   { label: "Classroom Picker", path: "/classroom-picker" },
   { label: "Team Generator", path: "/team-generator" },
-  { label: "Random Number Generator", path: "/random-number-generator" },
+  { label: "Random Number Generator", path: "/random-number-picker" },
 ];
 
 const EmbedBuilderIsland = () => {

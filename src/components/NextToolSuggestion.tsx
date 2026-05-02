@@ -9,9 +9,9 @@ const NextToolSuggestion = ({ currentPath, mode }: NextToolSuggestionProps) => {
   const { t } = useLanguage();
 
   const TOOLS = [
-    { path: "/yes-or-no-wheel", label: t.nextToolYesNo },
+    { path: "/yes-no-wheel", label: t.nextToolYesNo },
     { path: "/team-generator", label: t.nextToolTeam },
-    { path: "/random-number-generator", label: t.nextToolNumber },
+    { path: "/random-number-picker", label: t.nextToolNumber },
     { path: "/giveaway-picker", label: t.nextToolGiveaway },
     { path: "/classroom-picker", label: t.nextToolClassroom },
   ];

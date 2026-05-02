@@ -67,9 +67,9 @@ const GlobalFooterInner = () => {
             <h4 className="font-semibold text-sm text-foreground">{t.footerTools}</h4>
             <nav className="flex flex-col gap-1.5 text-xs text-muted-foreground">
               <a href="/" className="hover:text-primary transition-colors">Spin the Wheel</a>
-              <a href="/yes-or-no-wheel" className="hover:text-primary transition-colors">Yes or No Wheel</a>
+              <a href="/yes-no-wheel" className="hover:text-primary transition-colors">Yes or No Wheel</a>
               <a href="/team-generator" className="hover:text-primary transition-colors">Team Generator</a>
-              <a href="/random-number-generator" className="hover:text-primary transition-colors">Number Picker</a>
+              <a href="/random-number-picker" className="hover:text-primary transition-colors">Number Picker</a>
               <a href="/giveaway-picker" className="hover:text-primary transition-colors">Giveaway Picker</a>
               <a href="/party-wheel" className="hover:text-primary transition-colors">Party Wheel</a>
               <a href="/classroom-picker" className="hover:text-primary transition-colors">Classroom Picker</a>
