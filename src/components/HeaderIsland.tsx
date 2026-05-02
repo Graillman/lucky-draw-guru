@@ -20,16 +20,29 @@ const WheelLogo = () => (
   </svg>
 );
 
+// Nav menu — ordered by GSC traffic priority (highest-volume keywords first).
+// Audit gap fixed: /weighted-random-picker (position 7.25 on GSC, top GSC keyword)
+// was missing entirely from this list — the user clicked through the site and
+// never landed on the pillar tool. /wheel-of-names (1M+ searches/month) and
+// /random-name-picker (high-volume EN) were also absent.
 const toolLinks = [
   { path: "/", label: "🎡 Spin the Wheel" },
+  { path: "/wheel-of-names", label: "🎯 Wheel of Names", subtitle: "the classic name picker" },
+  { path: "/random-name-picker", label: "📛 Random Name Picker" },
+  { path: "/weighted-random-picker", label: "⚖️ Weighted Picker", subtitle: "Custom odds + 10k spin simulator" },
   { path: "/random-wheel", label: "🎰 Random Wheel" },
   { path: "/yes-no-wheel", label: "✅ Yes or No Wheel" },
+  { path: "/coin-flip", label: "🪙 Coin Flip" },
+  { path: "/decision-wheel", label: "🤔 Decision Wheel" },
   { path: "/random-number-picker", label: "🔢 Number Picker" },
-  { path: "/giveaway-picker", label: "🎁 Giveaway Picker", subtitle: "pour les influenceurs & créateurs" },
+  { path: "/giveaway-picker", label: "🎁 Giveaway Picker", subtitle: "Instagram, TikTok, YouTube…" },
+  { path: "/raffle-picker", label: "🎟️ Raffle Picker" },
+  { path: "/secret-santa-picker", label: "🎄 Secret Santa" },
   { path: "/team-generator", label: "👥 Team Generator" },
+  { path: "/classroom-picker", label: "🎓 Classroom Picker" },
+  { path: "/truth-or-dare-wheel", label: "🎭 Truth or Dare" },
   { path: "/party-wheel", label: "🎉 Party Wheel" },
   { path: "/spin-the-bottle", label: "🍾 Spin the Bottle" },
-  { path: "/classroom-picker", label: "🎓 Classroom Picker" },
 ];
 
 function parseParticipantsFromText(text: string): { pseudo: string; weight: number }[] {

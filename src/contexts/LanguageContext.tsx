@@ -33,16 +33,29 @@ const detectBrowserLanguage = (): Language => {
 export function LanguageProvider({ children }: LanguageProviderProps) {
   // CRITICAL: initial state MUST match the SSR output (always 'en'). Detecting
   // the browser language during the initial client render produces a hydration
-  // mismatch (SSR rendered "Free Spin the Wheel Tool", client wants "Outil
-  // Gratuit de Roue") -> React abandons the SSR HTML and rebuilds the entire
-  // tree client-side, locking the main thread for hundreds of ms on heavy
-  // pages. Detect the language post-mount instead.
+  // mismatch -> React abandons the SSR HTML and rebuilds client-side.
   const [language, setLanguageState] = useState<Language>('en');
 
-  // Detect browser language AFTER hydration to avoid SSR/client mismatch.
+  // After hydration, sync language with the page's actual locale. We read
+  // `document.documentElement.lang` which Astro's Layout sets from the page's
+  // `locale` prop ("en_US" -> lang="en", "fr_FR" -> lang="fr", etc.).
+  //
+  // Why this approach (vs auto-detecting browser language):
+  // The site has dedicated localized pages — / (EN), /tirage-au-sort (FR),
+  // /sorteo-online (ES), etc. — each declared in hreflang. If we auto-detect
+  // the browser language on /, a French visitor sees French wheel labels
+  // mixed with English static content (testimonials, "Trusted by", FAQ headers)
+  // because the static .astro markup can't auto-translate.
+  //
+  // By syncing with the page locale, every page renders consistently in ONE
+  // language — matching the language Google indexed under that URL. French
+  // users get auto-redirected to /tirage-au-sort by Google when they search
+  // in French, so they land on the FR page directly.
   useEffect(() => {
-    const detected = detectBrowserLanguage();
-    if (detected !== 'en') setLanguageState(detected);
+    const pageLang = document.documentElement.lang as Language;
+    if (pageLang && translations[pageLang] && pageLang !== language) {
+      setLanguageState(pageLang);
+    }
   }, []);
 
   // Listen for cross-island language changes (other Astro islands changing language)
