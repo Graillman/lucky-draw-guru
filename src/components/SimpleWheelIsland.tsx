@@ -6,6 +6,7 @@ import DrawButton from "@/components/DrawButton";
 import WinnerResult from "@/components/WinnerResult";
 import { ConfettiEffect } from "@/components/ConfettiEffect";
 import { useWheelSound } from "@/hooks/useWheelSound";
+import { WHEEL_THEMES } from "@/components/WheelThemePicker";
 import {
   buildShareUrl,
   copyToClipboard,
@@ -19,6 +20,7 @@ import {
   formatRelativeTime,
   type WinnerEntry,
 } from "@/lib/winnerHistory";
+import { recordSpin } from "@/lib/spinCounter";
 
 interface Participant {
   pseudo: string;
@@ -34,6 +36,7 @@ interface SimpleWheelIslandProps {
 }
 
 const SOUND_PREF_KEY = "rwp:sound-on";
+const THEME_PREF_KEY = "rwp:wheel-theme";
 
 const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTheme, locked }: SimpleWheelIslandProps) => {
   const { t, language } = useLanguage();
@@ -55,6 +58,9 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
   const [soundOn, setSoundOn] = useState(true);
   const [shareNotice, setShareNotice] = useState<string | null>(null);
   const [hashLoaded, setHashLoaded] = useState(false);
+  // null = inherit colors from props (page-level default); otherwise the theme
+  // key chosen by the user, persisted in localStorage so it survives reloads.
+  const [themeOverride, setThemeOverride] = useState<string | null>(null);
   const wheelRef = useRef<HTMLDivElement>(null);
 
   // Hydrate from URL hash (#w=...) and localStorage on mount
@@ -70,6 +76,8 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
     try {
       const stored = localStorage.getItem(SOUND_PREF_KEY);
       if (stored !== null) setSoundOn(stored === "1");
+      const themeKey = localStorage.getItem(THEME_PREF_KEY);
+      if (themeKey && WHEEL_THEMES[themeKey]) setThemeOverride(themeKey);
     } catch { /* ignore */ }
   }, []);
 
@@ -90,6 +98,10 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
     if (soundOn) playFanfare();
     pushWinnerEntry(w);
     setHistory(getWinnerHistory());
+    // Bump the global spin counter (Supabase). Buffered+throttled inside, so
+    // no per-spin network call. Used to power the "X spins this week" social
+    // proof on the homepage.
+    recordSpin();
   }, [soundOn, playFanfare]);
 
   const handleRelaunch = useCallback(() => {
@@ -162,7 +174,14 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
     setHistory([]);
   }, []);
 
+  const handlePickTheme = useCallback((key: string) => {
+    setThemeOverride(key);
+    try { localStorage.setItem(THEME_PREF_KEY, key); } catch { /* */ }
+  }, []);
+
   const activeParticipants = participants.length >= 2 ? participants : defaultParticipants;
+  // User pick > page-level prop > built-in default in SpinningWheel
+  const activeColors = themeOverride ? WHEEL_THEMES[themeOverride].colors : colors;
 
   return (
     <div className="w-full space-y-4">
@@ -185,7 +204,7 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
           winnersCount={1}
           clickToSpinLabel={t.clickToSpin}
           clickToSpinSub={t.clickToSpinSub}
-          colors={colors}
+          colors={activeColors}
           wheelShape={wheelShape}
           hubTheme={hubTheme}
         />
@@ -299,6 +318,33 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
               >
                 ↺ {t.resetToDefaults}
               </button>
+            </div>
+
+            {/* Theme strip — single-line palette swatches. Localized label
+                isn't critical here (visual is self-explanatory); palette names
+                stay in English to match WheelThemePicker.tsx. */}
+            <div className="pt-2 border-t border-border/60">
+              <span className="text-xs text-muted-foreground font-medium block mb-1.5">🎨 Theme</span>
+              <div className="flex gap-1.5 overflow-x-auto pb-1">
+                {Object.entries(WHEEL_THEMES).map(([key, theme]) => {
+                  const isActive = themeOverride === key;
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => handlePickTheme(key)}
+                      title={theme.label}
+                      aria-label={theme.label}
+                      aria-pressed={isActive}
+                      className={`shrink-0 w-7 h-7 rounded-full border-2 transition-all ${
+                        isActive
+                          ? "border-primary scale-110 shadow-sm"
+                          : "border-border hover:border-primary/50 hover:scale-105"
+                      }`}
+                      style={{ backgroundColor: theme.preview }}
+                    />
+                  );
+                })}
+              </div>
             </div>
           </div>
         )}
