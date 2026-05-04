@@ -1,0 +1,674 @@
+/* ============================================================================
+ * Real Wheel Picker — Editorial design system (overlay sur shadcn HSL).
+ *
+ * Ce fichier est chargé APRES index.css. Il :
+ *   1. Définit un nouveau set de CSS variables OKLCH (--bg, --ink, --amber...)
+ *      qui ne conflictent pas avec les variables HSL de shadcn (--background,
+ *      --foreground, --primary...). Les composants shadcn continuent donc
+ *      de fonctionner inchangés.
+ *   2. Override font-family du body (Geist au lieu de Space Grotesk).
+ *   3. Ajoute des classes utility (.btn, .card, .chip, .tab, .hero-*,
+ *      .wheel-*, .btn-spin-center...) que les nouveaux composants peuvent
+ *      utiliser directement, en complément des utilitaires Tailwind.
+ *
+ * IMPORTANT : `.container` est volontairement absent de ce fichier — Tailwind
+ * en génère déjà une et l'override casserait `container mx-auto` partout.
+ * `.nav` et `.footer` sont implémentés dans les composants React/Astro, pas ici.
+ * ========================================================================= */
+
+:root {
+  /* Tone — vibrant + saturated backgrounds */
+  --bg: oklch(0.985 0.014 85);
+  --bg-2: oklch(0.95 0.03 80);
+  --bg-3: oklch(0.92 0.04 70);
+  --ink: oklch(0.16 0.02 60);
+  --ink-2: oklch(0.34 0.022 60);
+  --ink-3: oklch(0.55 0.022 65);
+  --line: oklch(0.86 0.025 70);
+  --line-2: oklch(0.92 0.022 75);
+
+  /* Accents — MAX saturation, dopamine palette */
+  --amber: #ffb800;
+  --amber-2: #ff8c00;
+  --bronze: #c2410c;
+  --emerald: #00c896;
+  --rose: #ff2e7e;
+  --violet: #8b3dff;
+  --sky: #00b8ff;
+  --hot-pink: #ff006e;
+  --neon-lime: #c4ff00;
+  --electric-blue: #4361ff;
+  --cream: oklch(0.92 0.14 85);
+  --mint: oklch(0.88 0.16 165);
+  --peach: oklch(0.85 0.18 35);
+  --lavender: oklch(0.85 0.14 295);
+  --sunshine: #ffe156;
+
+  /* Type families — exposed as vars so editorial classes can reference them */
+  --serif: "Instrument Serif", "Fraunces", ui-serif, Georgia, serif;
+  --sans: "Geist", "Space Grotesk", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", "Geist Mono", ui-monospace, "SF Mono", monospace;
+
+  --radius-ed: 14px;
+  --radius-ed-sm: 8px;
+  --shadow-ed-sm: 0 1px 0 0 oklch(0.85 0.012 75 / 0.6);
+  --shadow-ed: 0 1px 2px oklch(0.2 0.01 70 / 0.04), 0 8px 24px -8px oklch(0.2 0.01 70 / 0.1);
+  --shadow-ed-lg: 0 2px 4px oklch(0.2 0.01 70 / 0.05), 0 20px 60px -15px oklch(0.2 0.01 70 / 0.18);
+}
+
+[data-theme="dark"], .dark {
+  --bg: oklch(0.16 0.01 70);
+  --bg-2: oklch(0.20 0.012 70);
+  --bg-3: oklch(0.24 0.014 70);
+  --ink: oklch(0.96 0.008 80);
+  --ink-2: oklch(0.82 0.012 80);
+  --ink-3: oklch(0.62 0.012 80);
+  --line: oklch(0.30 0.014 70);
+  --line-2: oklch(0.24 0.012 70);
+}
+
+/* Body — adopte la nouvelle police + le grain editorial.
+   On garde `bg-background` de Tailwind/shadcn (HSL) pour les couleurs ; le
+   grain layer ajoute juste une texture par-dessus. */
+body {
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv11";
+}
+
+/* Grain layer — texture éditoriale subtile */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+}
+[data-theme="dark"] body::before, .dark body::before { mix-blend-mode: screen; opacity: 0.3; }
+
+/* ============================================================================
+ * Typography helpers
+ * ========================================================================= */
+.display {
+  font-family: var(--serif);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+  font-feature-settings: "ss01";
+}
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.tabular { font-variant-numeric: tabular-nums; }
+
+.h-display { font-size: clamp(48px, 7vw, 96px); }
+.h-1 { font-size: clamp(36px, 5vw, 64px); }
+.h-2 { font-size: clamp(28px, 3.4vw, 44px); }
+
+/* ============================================================================
+ * Buttons (.btn-ed family — préfixe `-ed` evite conflits Tailwind / shadcn)
+ * ========================================================================= */
+.btn-ed {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink);
+  transition: all 0.18s cubic-bezier(0.2, 0, 0, 1);
+  white-space: nowrap;
+}
+.btn-ed:hover { transform: translateY(-2px) scale(1.03); }
+.btn-ed:active { transform: scale(0.97); }
+.btn-ed-primary {
+  background: var(--ink);
+  color: var(--bg);
+  padding: 12px 22px;
+  box-shadow: 0 1px 0 0 oklch(1 0 0 / 0.15) inset, var(--shadow-ed);
+}
+.btn-ed-primary:hover { background: oklch(0.28 0.012 70); }
+.btn-ed-amber {
+  background: var(--ink);
+  color: var(--bg);
+  padding: 14px 26px;
+  font-size: 15px;
+  position: relative;
+  box-shadow: 0 1px 0 0 oklch(1 0 0 / 0.15) inset, 0 0 0 0 var(--amber), var(--shadow-ed);
+}
+.btn-ed-amber::before {
+  content: "";
+  position: absolute; inset: -3px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--amber), var(--amber-2));
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.btn-ed-amber:hover::before { opacity: 0.4; }
+.btn-ed-ghost {
+  border-color: var(--line);
+  background: var(--bg);
+}
+.btn-ed-ghost:hover { background: var(--bg-2); border-color: var(--ink-3); }
+
+/* ============================================================================
+ * Cards / panels / chips / tabs (suffixés `-ed` pour éviter conflits shadcn)
+ * ========================================================================= */
+.card-ed {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-ed);
+  box-shadow: var(--shadow-ed-sm);
+}
+
+.panel-ed {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-ed);
+  padding: 24px;
+}
+
+.hairline { border: none; border-top: 1px solid var(--line); margin: 0; }
+
+.chip-ed {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  font-size: 12px;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.chip-ed:hover {
+  transform: translateY(-2px) scale(1.05);
+  border-color: var(--ink);
+  box-shadow: 0 6px 16px -4px oklch(from var(--ink) l c h / 0.25);
+}
+.chip-ed:active { transform: scale(0.95); }
+.chip-ed.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+.tabs-ed {
+  display: inline-flex;
+  padding: 4px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+.tab-ed {
+  padding: 7px 14px;
+  font-size: 13px;
+  border-radius: 999px;
+  cursor: pointer;
+  color: var(--ink-2);
+  transition: all 0.15s;
+  background: transparent;
+  border: none;
+}
+.tab-ed.active { background: var(--bg); color: var(--ink); box-shadow: var(--shadow-ed-sm); }
+
+/* ============================================================================
+ * Inputs (suffix `-ed`)
+ * ========================================================================= */
+.input-ed, .textarea-ed {
+  width: 100%;
+  padding: 11px 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.input-ed:focus, .textarea-ed:focus {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px oklch(from var(--ink) l c h / 0.08);
+}
+.textarea-ed { resize: vertical; min-height: 120px; font-family: var(--mono); font-size: 13px; line-height: 1.7; }
+
+/* ============================================================================
+ * Selection
+ * ========================================================================= */
+::selection { background: var(--amber); color: var(--ink); }
+
+/* ============================================================================
+ * Scrollbar utilitaire (à appliquer manuellement avec `.thin-scroll`)
+ * ========================================================================= */
+.thin-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.thin-scroll::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+.thin-scroll::-webkit-scrollbar-thumb:hover { background: var(--ink-3); }
+
+/* ============================================================================
+ * Live dot (used in trust bars / hero tags)
+ * ========================================================================= */
+.live-dot {
+  display: inline-block;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: oklch(0.7 0.27 25);
+  position: relative;
+  box-shadow: 0 0 12px oklch(0.7 0.27 25 / 0.8);
+}
+.live-dot::after {
+  content: "";
+  position: absolute; inset: -4px;
+  border-radius: 50%;
+  background: oklch(0.7 0.27 25 / 0.4);
+  animation: ed-pulse 1.6s infinite;
+}
+@keyframes ed-pulse {
+  0% { transform: scale(0.6); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+/* ============================================================================
+ * KBD (clavier)
+ * ========================================================================= */
+.kbd-ed {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--bg);
+  color: var(--ink-2);
+}
+
+/* ============================================================================
+ * Section helpers (color blocks)
+ * ========================================================================= */
+.section-cream { background: var(--cream); }
+.section-mint { background: var(--mint); }
+.section-peach { background: var(--peach); }
+.section-ink { background: var(--ink); color: var(--bg); }
+.section-ink .eyebrow { color: oklch(from var(--bg) l c h / 0.6); }
+.section-ink .hairline { border-color: oklch(from var(--bg) l c h / 0.15); }
+
+/* ============================================================================
+ * Hero (used by HomepageIsland)
+ * ========================================================================= */
+.hero-ed {
+  position: relative;
+  min-height: 540px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+.hero-bg-ed {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 55% at 15% 20%, oklch(0.92 0.12 28 / 0.65), transparent 55%),
+    radial-gradient(ellipse 55% 60% at 85% 80%, oklch(0.9 0.1 295 / 0.55), transparent 55%);
+  z-index: 0;
+  pointer-events: none;
+  animation: hero-bg-drift 22s ease-in-out infinite;
+  opacity: 0.9;
+}
+@keyframes hero-bg-drift {
+  0%, 100% { filter: hue-rotate(0deg); transform: scale(1); }
+  50% { filter: hue-rotate(8deg); transform: scale(1.03); }
+}
+.hero-bg-ed::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 65%, oklch(from var(--bg) l c h / 0.5) 100%);
+  pointer-events: none;
+}
+
+.hero-orb-ed {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: multiply;
+  opacity: 0.14;
+}
+[data-theme="dark"] .hero-orb-ed, .dark .hero-orb-ed { mix-blend-mode: screen; opacity: 1; filter: blur(80px); }
+.hero-orb-1 {
+  width: 320px; height: 320px;
+  background: #ff2e7e;
+  top: -40px; left: 18%;
+  animation: orb-float-1 14s ease-in-out infinite;
+}
+.hero-orb-2 {
+  width: 280px; height: 280px;
+  background: #8b3dff;
+  bottom: -60px; right: 28%;
+  animation: orb-float-2 16s ease-in-out infinite;
+}
+.hero-orb-3 {
+  width: 220px; height: 220px;
+  background: #ffd60a;
+  top: 30%; right: 12%;
+  animation: orb-float-3 18s ease-in-out infinite;
+}
+
+@keyframes orb-float-1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(40px, 30px); }
+}
+@keyframes orb-float-2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-30px, -20px); }
+}
+@keyframes orb-float-3 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-20px, 40px); }
+}
+
+.hero-tag-ed {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 13px;
+  background: oklch(from var(--bg) l c h / 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 12px;
+  font-family: var(--mono);
+  color: var(--ink-2);
+  animation: tag-glow 3s ease-in-out infinite;
+}
+@keyframes tag-glow {
+  0%, 100% { box-shadow: 0 0 0 0 oklch(0.7 0.27 25 / 0); }
+  50% { box-shadow: 0 0 24px -6px oklch(0.7 0.27 25 / 0.4); }
+}
+
+.hero-title-ed {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 56px);
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+  margin: 0;
+  text-align: center;
+  font-weight: 400;
+}
+.hero-title-ed em {
+  font-style: italic;
+  background: linear-gradient(135deg, #ff3d7f 0%, #ff8c42 30%, #ffd23f 60%, #c77dff 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 4s ease-in-out infinite;
+}
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ============================================================================
+ * Wheel halo + central SPIN button
+ * Le SpinningWheel reste en canvas ; on superpose ce halo + ce bouton.
+ * ========================================================================= */
+.wheel-halo {
+  position: absolute;
+  inset: -10%;
+  background: radial-gradient(circle at center,
+    oklch(0.85 0.25 28 / 0.4),
+    oklch(0.75 0.25 295 / 0.3) 35%,
+    transparent 65%);
+  filter: blur(48px);
+  z-index: -1;
+  pointer-events: none;
+  animation: halo-pulse 4s ease-in-out infinite;
+}
+@keyframes halo-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+.btn-spin-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 22%;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0;
+  font-family: var(--sans);
+  background: var(--ink);
+  color: white;
+  border: 4px solid var(--bg);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 4;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+  box-shadow:
+    0 1px 0 oklch(1 0 0 / 0.2) inset,
+    0 0 0 4px oklch(from var(--bg) l c h / 0.6),
+    0 18px 50px -12px #ff2e7e,
+    0 28px 70px -20px #8b3dff;
+  animation: spin-btn-bounce 3s ease-in-out infinite;
+}
+.btn-spin-center::before {
+  content: "";
+  position: absolute; inset: -3px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg,
+    #ff2e7e, #ff8c42, #ffd23f, #06d6a0, #4d96ff, #c77dff, #ff2e7e);
+  z-index: -2;
+  animation: spin-btn-rotate 3s linear infinite;
+}
+.btn-spin-center::after {
+  content: "";
+  position: absolute; inset: -16px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg,
+    #ff2e7e, #ff8c42, #ffd23f, #06d6a0, #4d96ff, #c77dff, #ff2e7e);
+  z-index: -3;
+  filter: blur(20px);
+  opacity: 0.7;
+  animation: spin-btn-rotate 3s linear infinite;
+}
+@keyframes spin-btn-bounce {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.04); }
+}
+@keyframes spin-btn-rotate {
+  to { transform: rotate(360deg); }
+}
+.btn-spin-center .spin-label {
+  font-family: var(--serif);
+  font-size: clamp(16px, 1.6vw, 22px);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.btn-spin-center .spin-sub {
+  font-size: clamp(8px, 0.7vw, 9px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+.btn-spin-center:hover:not(:disabled) {
+  animation: none;
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow:
+    0 1px 0 oklch(1 0 0 / 0.2) inset,
+    0 0 0 4px oklch(from var(--bg) l c h / 0.6),
+    0 28px 80px -10px #ff2e7e,
+    0 40px 100px -20px #8b3dff;
+}
+.btn-spin-center:hover:not(:disabled)::after {
+  inset: -22px;
+  filter: blur(28px);
+  opacity: 1;
+}
+.btn-spin-center:active:not(:disabled) {
+  transform: translate(-50%, -50%) scale(0.94);
+}
+.btn-spin-center:disabled { cursor: not-allowed; animation: none; }
+
+.spin-loading {
+  display: flex; gap: 4px;
+}
+.spin-loading > span {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: white;
+  animation: spin-loading-bounce 0.9s infinite ease-in-out;
+}
+.spin-loading > span:nth-child(2) { animation-delay: 0.15s; }
+.spin-loading > span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes spin-loading-bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+  40% { transform: scale(1.2); opacity: 1; }
+}
+
+/* ============================================================================
+ * Winner pop badge (used below the wheel after a spin)
+ * ========================================================================= */
+.winner-pop-ed {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 11px 22px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a1a3a 100%);
+  color: var(--bg);
+  border-radius: 999px;
+  font-size: 15px;
+  white-space: nowrap;
+  box-shadow: var(--shadow-ed-lg);
+  position: relative;
+  z-index: 10;
+  animation: winner-pop 0.5s cubic-bezier(0.2,0.7,0.3,1.3);
+}
+.winner-pop-ed strong {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+.winner-pop-ed::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 999px;
+  background: conic-gradient(from 0deg, #ff3d7f, #ffd23f, #06d6a0, #4d96ff, #c77dff, #ff3d7f);
+  z-index: -1;
+  animation: spin-btn-rotate 3s linear infinite;
+}
+@keyframes winner-pop {
+  0% { transform: translateY(8px) scale(0.7); opacity: 0; }
+  60% { transform: translateY(0) scale(1.06); opacity: 1; }
+  100% { transform: translateY(0) scale(1); }
+}
+
+/* ============================================================================
+ * Reveal-on-scroll utility
+ * ========================================================================= */
+.reveal-ed {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.9s cubic-bezier(0.34, 1.2, 0.64, 1), transform 0.9s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+.reveal-ed.in { opacity: 1; transform: none; }
+
+/* ============================================================================
+ * Lift hover (cards qui flottent au survol)
+ * ========================================================================= */
+.lift-ed {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
+}
+.lift-ed:hover { transform: translateY(-6px) scale(1.01); box-shadow: var(--shadow-ed-lg); }
+
+/* ============================================================================
+ * Sparkle (animation italique éphémère)
+ * ========================================================================= */
+.sparkle-ed {
+  position: absolute;
+  pointer-events: none;
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--amber-2);
+  font-size: 22px;
+  animation: sparkle-fade 0.9s ease forwards;
+}
+@keyframes sparkle-fade {
+  0% { opacity: 0; transform: scale(0.5); }
+  40% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 0; transform: scale(1) translateY(-30px); }
+}
+
+/* ============================================================================
+ * Ticker (marquee)
+ * ========================================================================= */
+.ticker-ed {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-2);
+  overflow: hidden;
+  padding: 14px 0;
+}
+.ticker-track-ed {
+  display: flex; gap: 64px;
+  animation: ticker 60s linear infinite;
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.ticker-track-ed > span { display: inline-flex; align-items: center; gap: 12px; }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ============================================================================
+ * Logo mark (conic gradient brand badge)
+ * ========================================================================= */
+.logo-mark-ed {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background:
+    conic-gradient(from -90deg,
+      var(--amber) 0deg 60deg,
+      var(--rose) 60deg 120deg,
+      var(--violet) 120deg 180deg,
+      var(--sky) 180deg 240deg,
+      var(--emerald) 240deg 300deg,
+      var(--amber-2) 300deg 360deg);
+  position: relative;
+  box-shadow: 0 0 0 1px var(--ink) inset;
+  flex-shrink: 0;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.logo-mark-ed::after {
+  content: "";
+  position: absolute; inset: 38%;
+  background: var(--ink);
+  border-radius: 50%;
+}
+.logo-ed:hover .logo-mark-ed { transform: rotate(360deg); }
+.logo-ed {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--serif);
+  white-space: nowrap;
+  font-size: 21px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+}

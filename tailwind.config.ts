@@ -14,7 +14,12 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Space Grotesk', 'sans-serif'],
+        // Editorial design system : Geist en sans par défaut (Space Grotesk en
+        // fallback pour les composants pas encore migrés), Instrument Serif pour
+        // les titres `.display`, JetBrains Mono pour les eyebrows/code.
+        sans: ['Geist', 'Space Grotesk', 'sans-serif'],
+        serif: ['Instrument Serif', 'Fraunces', 'Georgia', 'serif'],
+        display: ['Instrument Serif', 'Fraunces', 'Georgia', 'serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       colors: {
