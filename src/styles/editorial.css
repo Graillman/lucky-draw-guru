@@ -67,11 +67,11 @@
   --line-2: oklch(0.24 0.012 70);
 }
 
-/* Body — adopte la nouvelle police + le grain editorial + le fond éditorial
-   multi-radial (crème + ellipses subtiles rose/violet/jaune comme dans le zip).
-   Override la `--gradient-bg` HSL d'index.css : ici on mixe le crème de base
-   avec 3 radial-gradients colorés très diffus pour donner l'impression de
-   "lumière" en arrière-plan, comme le hero du zip mais sur tout le site. */
+/* Body — adopte la nouvelle police + le grain editorial.
+   Le fond multi-radial coloré (ellipses rose/violet/jaune sur cream) est
+   défini directement dans `--gradient-bg` (index.css) pour que toutes les
+   pages qui utilisent `style="background: var(--gradient-bg)"` héritent du
+   bon fond — sinon leurs wrappers couvrent le bg du body. */
 body {
   font-family: var(--sans);
   font-size: 15px;
@@ -79,21 +79,6 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-feature-settings: "ss01", "cv11";
-  background:
-    radial-gradient(ellipse 60% 50% at 12% 15%, oklch(0.92 0.10 28 / 0.55), transparent 55%),
-    radial-gradient(ellipse 55% 55% at 88% 82%, oklch(0.90 0.09 295 / 0.50), transparent 55%),
-    radial-gradient(ellipse 45% 40% at 75% 25%, oklch(0.93 0.10 85 / 0.40), transparent 60%),
-    var(--bg);
-  background-attachment: fixed;
-  min-height: 100vh;
-}
-[data-theme="dark"] body, .dark body {
-  background:
-    radial-gradient(ellipse 60% 50% at 12% 15%, oklch(0.30 0.12 28 / 0.35), transparent 55%),
-    radial-gradient(ellipse 55% 55% at 88% 82%, oklch(0.28 0.12 295 / 0.35), transparent 55%),
-    radial-gradient(ellipse 45% 40% at 75% 25%, oklch(0.28 0.10 85 / 0.25), transparent 60%),
-    var(--bg);
-  background-attachment: fixed;
 }
 
 /* Grain layer — texture éditoriale subtile */
@@ -456,6 +441,9 @@ body::before {
   50% { transform: scale(1.08); opacity: 1; }
 }
 
+/* SPIN button — premium minimalist version (was a flashy rotating rainbow
+   conic-gradient halo in v1, judged "hyper mal fait" by Noé 2026-05-04 and
+   simplified to a clean black puck with a soft amber glow + ring). */
 .btn-spin-center {
   position: absolute;
   top: 50%; left: 50%;
@@ -470,7 +458,7 @@ body::before {
   padding: 0;
   font-family: var(--sans);
   background: var(--ink);
-  color: white;
+  color: var(--bg); /* swaps with --ink in dark mode so the label stays readable */
   border: 4px solid var(--bg);
   border-radius: 50%;
   cursor: pointer;
@@ -478,37 +466,9 @@ body::before {
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
   box-shadow:
     0 1px 0 oklch(1 0 0 / 0.2) inset,
-    0 0 0 4px oklch(from var(--bg) l c h / 0.6),
-    0 18px 50px -12px #ff2e7e,
-    0 28px 70px -20px #8b3dff;
-  animation: spin-btn-bounce 3s ease-in-out infinite;
-}
-.btn-spin-center::before {
-  content: "";
-  position: absolute; inset: -3px;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg,
-    #ff2e7e, #ff8c42, #ffd23f, #06d6a0, #4d96ff, #c77dff, #ff2e7e);
-  z-index: -2;
-  animation: spin-btn-rotate 3s linear infinite;
-}
-.btn-spin-center::after {
-  content: "";
-  position: absolute; inset: -16px;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg,
-    #ff2e7e, #ff8c42, #ffd23f, #06d6a0, #4d96ff, #c77dff, #ff2e7e);
-  z-index: -3;
-  filter: blur(20px);
-  opacity: 0.7;
-  animation: spin-btn-rotate 3s linear infinite;
-}
-@keyframes spin-btn-bounce {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(1.04); }
-}
-@keyframes spin-btn-rotate {
-  to { transform: rotate(360deg); }
+    0 0 0 4px oklch(from var(--bg) l c h / 0.7),
+    0 0 0 5px oklch(from var(--amber) l c h / 0.35),
+    0 14px 36px -10px oklch(0 0 0 / 0.45);
 }
 .btn-spin-center .spin-label {
   font-family: var(--serif);
@@ -521,26 +481,23 @@ body::before {
   font-size: clamp(8px, 0.7vw, 9px);
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  opacity: 0.6;
+  opacity: 0.55;
 }
 .btn-spin-center:hover:not(:disabled) {
-  animation: none;
-  transform: translate(-50%, -50%) scale(1.1);
+  transform: translate(-50%, -50%) scale(1.06);
   box-shadow:
     0 1px 0 oklch(1 0 0 / 0.2) inset,
-    0 0 0 4px oklch(from var(--bg) l c h / 0.6),
-    0 28px 80px -10px #ff2e7e,
-    0 40px 100px -20px #8b3dff;
-}
-.btn-spin-center:hover:not(:disabled)::after {
-  inset: -22px;
-  filter: blur(28px);
-  opacity: 1;
+    0 0 0 4px oklch(from var(--bg) l c h / 0.7),
+    0 0 0 7px oklch(from var(--amber) l c h / 0.55),
+    0 20px 48px -10px oklch(0 0 0 / 0.55);
 }
 .btn-spin-center:active:not(:disabled) {
-  transform: translate(-50%, -50%) scale(0.94);
+  transform: translate(-50%, -50%) scale(0.96);
 }
-.btn-spin-center:disabled { cursor: not-allowed; animation: none; }
+.btn-spin-center:disabled { cursor: not-allowed; opacity: 0.7; }
+@keyframes spin-btn-rotate {
+  to { transform: rotate(360deg); }
+}
 
 .spin-loading {
   display: flex; gap: 4px;
