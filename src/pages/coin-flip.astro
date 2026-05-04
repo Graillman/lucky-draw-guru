@@ -2,7 +2,7 @@
 import Layout from '@/layouts/Layout.astro';
 import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
-import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import CoinFlipperIsland from '@/components/CoinFlipperIsland';
 import AdPlaceholder from '@/components/AdPlaceholder';
 import { ArrowRight } from 'lucide-react';
 
@@ -54,10 +54,6 @@ const jsonLd = {
   ]
 };
 
-const defaultParticipants = [
-  { pseudo: "Heads", weight: 1 },
-  { pseudo: "Tails", weight: 1 }
-];
 ---
 
 <Layout
@@ -97,8 +93,8 @@ const defaultParticipants = [
           <p class="text-xs text-muted-foreground">Free · No signup · 50/50 guaranteed</p>
         </section>
 
-        <!-- Tool above the fold -->
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+        <!-- 3D HD coin replaces the wheel — a coin makes more sense than a wheel for a binary heads/tails toss. -->
+        <CoinFlipperIsland client:load />
 
         <section class="bg-card border border-border rounded-xl p-5 text-sm text-muted-foreground leading-relaxed">
           <p>

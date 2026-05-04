@@ -2,7 +2,7 @@
 import Layout from '@/layouts/Layout.astro';
 import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
-import SimpleWheelIsland from '@/components/SimpleWheelIsland';
+import CoinFlipperIsland from '@/components/CoinFlipperIsland';
 import AdPlaceholder from '@/components/AdPlaceholder';
 import { ArrowRight } from 'lucide-react';
 
@@ -49,10 +49,6 @@ const jsonLd = {
   ],
 };
 
-const defaultParticipants = [
-  { pseudo: "Pile", weight: 1 },
-  { pseudo: "Face", weight: 1 },
-];
 ---
 
 <Layout
@@ -98,7 +94,14 @@ const defaultParticipants = [
           </p>
         </section>
 
-        <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
+        <CoinFlipperIsland
+          client:load
+          labelHeads="PILE"
+          labelTails="FACE"
+          prompt="Pile ou Face ?"
+          flipCta="Lancer la pièce"
+          resultTemplate="C'est {result} !"
+        />
 
         <section class="bg-card border border-border rounded-xl p-6 space-y-3">
           <h2 class="text-xl font-bold text-foreground">Pourquoi une roue virtuelle plutôt qu'une vraie pièce ?</h2>
