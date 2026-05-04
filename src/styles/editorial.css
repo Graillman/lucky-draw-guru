@@ -67,9 +67,11 @@
   --line-2: oklch(0.24 0.012 70);
 }
 
-/* Body — adopte la nouvelle police + le grain editorial.
-   On garde `bg-background` de Tailwind/shadcn (HSL) pour les couleurs ; le
-   grain layer ajoute juste une texture par-dessus. */
+/* Body — adopte la nouvelle police + le grain editorial + le fond éditorial
+   multi-radial (crème + ellipses subtiles rose/violet/jaune comme dans le zip).
+   Override la `--gradient-bg` HSL d'index.css : ici on mixe le crème de base
+   avec 3 radial-gradients colorés très diffus pour donner l'impression de
+   "lumière" en arrière-plan, comme le hero du zip mais sur tout le site. */
 body {
   font-family: var(--sans);
   font-size: 15px;
@@ -77,6 +79,21 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-feature-settings: "ss01", "cv11";
+  background:
+    radial-gradient(ellipse 60% 50% at 12% 15%, oklch(0.92 0.10 28 / 0.55), transparent 55%),
+    radial-gradient(ellipse 55% 55% at 88% 82%, oklch(0.90 0.09 295 / 0.50), transparent 55%),
+    radial-gradient(ellipse 45% 40% at 75% 25%, oklch(0.93 0.10 85 / 0.40), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+[data-theme="dark"] body, .dark body {
+  background:
+    radial-gradient(ellipse 60% 50% at 12% 15%, oklch(0.30 0.12 28 / 0.35), transparent 55%),
+    radial-gradient(ellipse 55% 55% at 88% 82%, oklch(0.28 0.12 295 / 0.35), transparent 55%),
+    radial-gradient(ellipse 45% 40% at 75% 25%, oklch(0.28 0.10 85 / 0.25), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
 }
 
 /* Grain layer — texture éditoriale subtile */

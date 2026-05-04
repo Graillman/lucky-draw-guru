@@ -126,10 +126,48 @@ function drawRoundRect(
   ctx.closePath();
 }
 
+// ── Cubic-bezier easing — matches CSS `cubic-bezier(x1, y1, x2, y2)` ──
+// Replaces the legacy 2-phase (gentle push + exp friction) easing with the
+// editorial spin curve from the zip prototype: cubic-bezier(0.17, 0.67, 0.16,
+// 0.99). Visually: fast initial kick, then a long very-smooth deceleration —
+// the deceleration tail matches CSS transitions, which is what makes the spin
+// feel premium / "Apple-like" rather than mechanical.
+function bezierEasing(x1: number, y1: number, x2: number, y2: number) {
+  const A = (a1: number, a2: number) => 1 - 3 * a2 + 3 * a1;
+  const B = (a1: number, a2: number) => 3 * a2 - 6 * a1;
+  const C = (a1: number) => 3 * a1;
+  const calc = (t: number, a1: number, a2: number) =>
+    ((A(a1, a2) * t + B(a1, a2)) * t + C(a1)) * t;
+  const slope = (t: number, a1: number, a2: number) =>
+    3 * A(a1, a2) * t * t + 2 * B(a1, a2) * t + C(a1);
+
+  // Newton-Raphson, max 8 iterations — plenty given our 60fps timestep.
+  const getTForX = (x: number) => {
+    let t = x;
+    for (let i = 0; i < 8; i++) {
+      const cs = slope(t, x1, x2);
+      if (cs === 0) return t;
+      const cx = calc(t, x1, x2) - x;
+      t -= cx / cs;
+    }
+    return t;
+  };
+
+  return (x: number) => {
+    if (x <= 0) return 0;
+    if (x >= 1) return 1;
+    return calc(getTForX(x), y1, y2);
+  };
+}
+
+// Pre-built easing curve for the editorial spin — instantiated once at module
+// load so the animate() loop doesn't allocate closures per frame.
+const ED_SPIN_EASING = bezierEasing(0.17, 0.67, 0.16, 0.99);
+
 export function SpinningWheel({
   participants, isSpinning, onComplete, mode, winnersCount,
   onSpin, onTick, colors, borderStyle = 'default', backgroundImage,
-  size = 480, spinDuration = 8, clickToSpinLabel, clickToSpinSub, compact = false,
+  size = 480, spinDuration = 5.4, clickToSpinLabel, clickToSpinSub, compact = false,
   wheelShape = 'circle', hubTheme = 'default', idleAnimation = false,
   centerSpinButton = true,
 }: SpinningWheelProps) {
@@ -745,20 +783,11 @@ export function SpinningWheel({
       const elapsed = Date.now() - startTimeRef.current;
       const progress = Math.min(elapsed / duration, 1);
 
-      // 2-phase: gentle push (10%) + long exponential friction (90%)
-      // — smoother, more realistic feel than pure ease-out
-      const push = 0.10;
-      const k    = 1.2;
-      const area1 = push / 2;
-      const area2 = (1 - push) / k * (1 - Math.exp(-k));
-      const totalArea = area1 + area2;
-      let easeOut: number;
-      if (progress <= push) {
-        easeOut = (progress * progress / (2 * push)) / totalArea;
-      } else {
-        const p2 = (progress - push) / (1 - push);
-        easeOut = (area1 + (1 - push) / k * (1 - Math.exp(-k * p2))) / totalArea;
-      }
+      // Editorial spin curve — `cubic-bezier(0.17, 0.67, 0.16, 0.99)`.
+      // Snappy initial kick (segments fly past), then a very long smooth
+      // deceleration as the wheel coasts toward the winning slice. Matches
+      // the `transition` declared on the SVG <g> in the zip prototype.
+      const easeOut = ED_SPIN_EASING(progress);
 
       const newRotation = startRotation + totalRotation * easeOut;
       rotationRef.current = newRotation;

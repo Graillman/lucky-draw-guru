@@ -108,8 +108,22 @@ const SocialGiveawayInner = () => {
     storyShareList: '',
     winnersCount: 1,
   });
-  const [wheelParticipants, setWheelParticipants] = useState<{ pseudo: string; weight: number }[]>([]);
-  const [loaded, setLoaded] = useState(false);
+  // Wheel is shown by default with 8 sample participants so the visitor sees
+  // the spin tool immediately on landing (was hidden until "Load into wheel"
+  // was clicked, which left the page looking like a form-only utility). When
+  // the visitor pastes their own list and clicks "Load into wheel & spin", the
+  // sample is replaced with their entries.
+  const [wheelParticipants, setWheelParticipants] = useState<{ pseudo: string; weight: number }[]>([
+    { pseudo: '@alice', weight: 1 },
+    { pseudo: '@bruno', weight: 1 },
+    { pseudo: '@clara', weight: 1 },
+    { pseudo: '@david', weight: 1 },
+    { pseudo: '@emma', weight: 1 },
+    { pseudo: '@fatima', weight: 1 },
+    { pseudo: '@gabriel', weight: 1 },
+    { pseudo: '@hannah', weight: 1 },
+  ]);
+  const [loaded, setLoaded] = useState(true);
   const [winners, setWinners] = useState<string[]>([]);
   const [isSpinning, setIsSpinning] = useState(false);
   const wheelRef = useRef<HTMLDivElement>(null);
