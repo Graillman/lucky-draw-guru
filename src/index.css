@@ -66,15 +66,16 @@
     --gradient-gold: linear-gradient(135deg, hsl(45, 93%, 47%), hsl(35, 100%, 45%));
     --gradient-purple: linear-gradient(135deg, hsl(262, 83%, 55%), hsl(280, 90%, 50%));
     --gradient-card: linear-gradient(180deg, hsl(38, 30%, 99%), hsl(38, 22%, 96%));
-    /* Editorial multi-radial background (matches the zip prototype's hero-bg
-       applied site-wide). 3 diffuse coloured ellipses on a cream base — rose
-       top-left, violet bottom-right, warm yellow upper-right. Every page
-       wrapper that uses `style="background: var(--gradient-bg)"` inherits it. */
+    /* Editorial background — matches the zip prototype's hero (hero-toned,
+       saturated variant) applied SITE-WIDE on every page, light AND dark mode.
+       2 ellipses only (per the zip): hot pink top-left, warm yellow-orange
+       bottom-right, cream base. NO violet. The same value is set on .dark
+       below so the bg never goes black even if the user toggles dark mode —
+       per Noé 2026-05-04: "le même fond partout, pas du noir". */
     --gradient-bg:
-      radial-gradient(ellipse 60% 50% at 12% 15%, hsla(28, 80%, 80%, 0.55), transparent 55%),
-      radial-gradient(ellipse 55% 55% at 88% 82%, hsla(295, 65%, 80%, 0.50), transparent 55%),
-      radial-gradient(ellipse 45% 40% at 75% 25%, hsla(45, 90%, 78%, 0.45), transparent 60%),
-      hsl(38, 22%, 96%);
+      radial-gradient(ellipse 70% 60% at 8% 10%, hsla(335, 92%, 72%, 0.62), transparent 60%),
+      radial-gradient(ellipse 65% 65% at 92% 90%, hsla(40, 95%, 68%, 0.62), transparent 60%),
+      hsl(38, 26%, 96%);
     --gradient-bg-purple: radial-gradient(ellipse at 50% 0%, hsl(280, 35%, 95%) 0%, hsl(262, 25%, 95%) 40%, hsl(262, 18%, 92%) 100%);
 
     --shadow-gold: 0 0 40px -10px hsl(45, 93%, 47% / 0.4);
@@ -125,11 +126,12 @@
       --gradient-gold: linear-gradient(135deg, hsl(45, 93%, 58%), hsl(35, 100%, 50%));
       --gradient-purple: linear-gradient(135deg, hsl(262, 83%, 58%), hsl(280, 90%, 50%));
       --gradient-card: linear-gradient(180deg, hsl(222, 47%, 10%), hsl(222, 47%, 6%));
+      /* Same as :root — bg stays cream + zip ellipses even in dark mode (Noé
+         2026-05-04: "pas du noir"). Only the foreground tokens go dark. */
       --gradient-bg:
-        radial-gradient(ellipse 60% 50% at 12% 15%, hsla(28, 60%, 30%, 0.30), transparent 55%),
-        radial-gradient(ellipse 55% 55% at 88% 82%, hsla(295, 55%, 30%, 0.30), transparent 55%),
-        radial-gradient(ellipse 45% 40% at 75% 25%, hsla(45, 50%, 25%, 0.20), transparent 60%),
-        radial-gradient(ellipse at top, hsl(222, 47%, 12%), hsl(222, 47%, 4%));
+        radial-gradient(ellipse 70% 60% at 8% 10%, hsla(335, 92%, 72%, 0.62), transparent 60%),
+        radial-gradient(ellipse 65% 65% at 92% 90%, hsla(40, 95%, 68%, 0.62), transparent 60%),
+        hsl(38, 26%, 96%);
       --gradient-bg-purple: radial-gradient(ellipse at top, hsl(262, 47%, 12%), hsl(262, 47%, 4%));
       
       --shadow-gold: 0 0 40px -10px hsl(45, 93%, 58% / 0.5);
