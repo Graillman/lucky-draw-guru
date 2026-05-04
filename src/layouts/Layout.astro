@@ -122,12 +122,16 @@ const resolvedHreflang: HreflangLink[] = hreflangLinks ?? [
         (function () {
           var ADSENSE_SRC = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8978154316839498';
           function loadAdsense() {
-            if (document.querySelector('script[data-adsense]')) return;
+            // Use a custom attribute (data-rwp-adsense) — `data-adsense` is
+            // intercepted by the Google AdSense script itself and triggers a
+            // "AdSense head tag doesn't support data-adsense attribute" warning
+            // x3 in the console. Using our own namespaced attribute is silent.
+            if (document.querySelector('script[data-rwp-adsense]')) return;
             var s = document.createElement('script');
             s.src = ADSENSE_SRC;
             s.async = true;
             s.crossOrigin = 'anonymous';
-            s.setAttribute('data-adsense', '1');
+            s.setAttribute('data-rwp-adsense', '1');
             document.head.appendChild(s);
           }
           function schedule() {

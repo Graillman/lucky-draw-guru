@@ -672,3 +672,35 @@ body::before {
   color: var(--ink);
   text-decoration: none;
 }
+
+/* ============================================================================
+ * Accessibility — prefers-reduced-motion
+ * Cancels every "ambient" infinite animation (orbs floating, halo pulsing,
+ * conic-gradient rotating, gradient text shifting, ticker scrolling, ed-pulse).
+ * The functional spin-wheel rotation (driven by JS in SpinningWheel) is left
+ * intact since it's the core behavior the user explicitly asks for by clicking
+ * SPIN. Also drops the grain layer for users who find texture noisy.
+ * ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  body::before { display: none; }
+  .hero-bg-ed,
+  .hero-orb-1,
+  .hero-orb-2,
+  .hero-orb-3,
+  .hero-tag-ed,
+  .hero-title-ed em,
+  .wheel-halo,
+  .btn-spin-center,
+  .btn-spin-center::before,
+  .btn-spin-center::after,
+  .winner-pop-ed::before,
+  .live-dot::after,
+  .ticker-track-ed,
+  .logo-mark-ed { animation: none !important; }
+  .btn-ed,
+  .chip-ed,
+  .lift-ed,
+  .reveal-ed,
+  .theme-swatch { transition-duration: 0.01ms !important; }
+  .reveal-ed { opacity: 1 !important; transform: none !important; }
+}
