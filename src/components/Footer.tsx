@@ -16,20 +16,20 @@ const Footer = ({ mode = "simple" }: FooterProps) => {
       </div>
 
       <div className="max-w-4xl mx-auto text-center space-y-4 pb-16 md:pb-0">
-        <div className={`text-2xl font-bold transition-all duration-300 ${
-          isAdvanced 
+        <div className={`font-serif text-3xl tracking-tight transition-all duration-300 ${
+          isAdvanced
             ? "bg-gradient-to-r from-accent to-purple-400 bg-clip-text text-transparent"
             : "text-gradient-gold"
         }`}>
-          randompicker.com
+          Real Wheel Picker
         </div>
-        
+
         <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
           {t.footerDisclaimer}
         </p>
 
-        <div className="flex flex-wrap justify-center gap-4 text-xs text-muted-foreground">
-          <span>© {new Date().getFullYear()} randompicker.com</span>
+        <div className="flex flex-wrap justify-center gap-4 text-xs font-mono uppercase tracking-wider text-muted-foreground">
+          <span>© {new Date().getFullYear()} realwheelpicker.com</span>
           <span>•</span>
           <a href="#" className={`transition-colors ${
             isAdvanced ? "hover:text-accent" : "hover:text-primary"

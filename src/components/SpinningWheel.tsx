@@ -25,28 +25,28 @@ interface SpinningWheelProps {
   wheelShape?: string; // 'circle' | 'star6' | 'star8' | 'heart' | 'hexagon'
   hubTheme?: string;   // 'default' | 'gold' | 'fire' | 'ice' | 'cosmic' | 'rose' | 'orange' | 'forest' | 'neon' | 'purple' | 'crimson' | 'teal' | 'amber'
   idleAnimation?: boolean; // continuous slow rotation when not spinning. Off by default — was causing serious lag in production (60fps React re-render + full canvas redraw). Re-enable per-page if needed.
+  centerSpinButton?: boolean; // editorial design: replaces the canvas hub + arc text with a React overlay button (.btn-spin-center). Default true when onSpin is provided.
 }
 
-// Design System v2 — harmonized wheel palette.
-// Replaces the previous high-saturation rainbow (R/Y/G/B/V/O/T) which read
-// as "early-2010s" and clashed with the "Pro tool" brand positioning.
-// New palette: 12 colors evenly distributed around the chromatic wheel,
-// saturation kept in the 60-90% band, lightness in the 45-60% band — so the
-// segments read as a *family* rather than as competing primary colors.
-// Anchored on brand: Saffron (≈ Primary Gold) + Violet (≈ brand Accent).
+// Editorial palette — 12 dopamine-saturated colors aligned with the brand
+// spin button halo (--rose / --amber / --violet / --emerald / --sky). Replaces
+// the previous harmonized HSL family (which read as "Pro tool muted") with the
+// vibrant accents from the editorial design system. Anchored on hot-pink (--rose),
+// amber and violet — same colors as the rotating conic-gradient halo of the
+// `.btn-spin-center` overlay so the wheel and the SPIN button feel like one piece.
 const DEFAULT_COLORS = [
-  'hsl(348, 75%, 55%)', // crimson
-  'hsl(15, 80%, 60%)',  // coral
-  'hsl(35, 90%, 55%)',  // amber
-  'hsl(45, 93%, 50%)',  // saffron (brand primary anchor)
-  'hsl(85, 60%, 50%)',  // pistachio
-  'hsl(175, 65%, 45%)', // teal
-  'hsl(205, 75%, 55%)', // sky
-  'hsl(235, 70%, 55%)', // indigo
-  'hsl(262, 75%, 58%)', // violet (brand accent anchor)
-  'hsl(305, 70%, 55%)', // magenta
-  'hsl(335, 70%, 60%)', // rose
-  'hsl(295, 50%, 50%)', // plum
+  '#ff2e7e', // hot pink   (--rose)
+  '#ffb800', // amber      (--amber)
+  '#8b3dff', // violet     (--violet)
+  '#00e5b4', // mint
+  '#ff6b35', // orange
+  '#4361ff', // electric blue
+  '#ffd60a', // sun yellow
+  '#ff006e', // magenta    (--hot-pink)
+  '#00c896', // emerald    (--emerald)
+  '#c77dff', // lavender
+  '#ff8c42', // peach      (--amber-2 echo)
+  '#06d6a0', // teal
 ];
 
 // ── Hub theme presets ───────────────────────────────────────────────────────
@@ -130,8 +130,14 @@ export function SpinningWheel({
   participants, isSpinning, onComplete, mode, winnersCount,
   onSpin, onTick, colors, borderStyle = 'default', backgroundImage,
   size = 480, spinDuration = 8, clickToSpinLabel, clickToSpinSub, compact = false,
-  wheelShape = 'circle', hubTheme = 'default', idleAnimation = false
+  wheelShape = 'circle', hubTheme = 'default', idleAnimation = false,
+  centerSpinButton = true,
 }: SpinningWheelProps) {
+  // Editorial overlay: when a spin handler is provided, swap the canvas-drawn
+  // hub + "Click to spin" arc text for a React `.btn-spin-center` button (with
+  // animated conic-gradient halo, defined in editorial.css). Pass
+  // `centerSpinButton={false}` to opt back into the legacy canvas hub.
+  const showCenterSpin = centerSpinButton && !!onSpin;
   const COLORS = colors && colors.length > 0 ? colors : DEFAULT_COLORS;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [rotation, setRotation] = useState(0);
@@ -367,46 +373,50 @@ export function SpinningWheel({
     ctx.lineWidth = Math.max(1, Math.round(scale));
     ctx.stroke();
 
-    // Center circle (hub) — themed
-    const hub = HUB_PRESETS[hubTheme];
-    const hubBg0   = hub?.bg[0]  ?? 'hsl(222, 47%, 15%)';
-    const hubBg1   = hub?.bg[1]  ?? 'hsl(222, 47%, 8%)';
-    const hubBg2   = hub?.bg[2]  ?? 'hsl(222, 47%, 4%)';
-    const hubBorder = hub?.border ?? themeColor;
-    const hubInner  = hub?.inner  ?? themeColorHalf;
-    const hubDot    = hub?.dot    ?? themeColor;
+    // Center circle (hub) — themed. Skipped when `showCenterSpin` is on so the
+    // React `.btn-spin-center` overlay sits on a clean wheel center (no
+    // double-stack of canvas hub + button).
+    if (!showCenterSpin) {
+      const hub = HUB_PRESETS[hubTheme];
+      const hubBg0   = hub?.bg[0]  ?? 'hsl(222, 47%, 15%)';
+      const hubBg1   = hub?.bg[1]  ?? 'hsl(222, 47%, 8%)';
+      const hubBg2   = hub?.bg[2]  ?? 'hsl(222, 47%, 4%)';
+      const hubBorder = hub?.border ?? themeColor;
+      const hubInner  = hub?.inner  ?? themeColorHalf;
+      const hubDot    = hub?.dot    ?? themeColor;
 
-    const hubR = Math.round(30 * scale);
-    const hubInnerR = Math.round(18 * scale);
-    const hubDotR = Math.round(6 * scale);
-    const centerGrad = ctx.createRadialGradient(center - Math.round(5 * scale), center - Math.round(5 * scale), 0, center, center, Math.round(35 * scale));
-    centerGrad.addColorStop(0,   hubBg0);
-    centerGrad.addColorStop(0.5, hubBg1);
-    centerGrad.addColorStop(1,   hubBg2);
-    ctx.beginPath();
-    ctx.arc(center, center, hubR, 0, Math.PI * 2);
-    ctx.fillStyle = centerGrad;
-    ctx.fill();
+      const hubR = Math.round(30 * scale);
+      const hubInnerR = Math.round(18 * scale);
+      const hubDotR = Math.round(6 * scale);
+      const centerGrad = ctx.createRadialGradient(center - Math.round(5 * scale), center - Math.round(5 * scale), 0, center, center, Math.round(35 * scale));
+      centerGrad.addColorStop(0,   hubBg0);
+      centerGrad.addColorStop(0.5, hubBg1);
+      centerGrad.addColorStop(1,   hubBg2);
+      ctx.beginPath();
+      ctx.arc(center, center, hubR, 0, Math.PI * 2);
+      ctx.fillStyle = centerGrad;
+      ctx.fill();
 
-    ctx.beginPath();
-    ctx.arc(center, center, hubR, 0, Math.PI * 2);
-    ctx.strokeStyle = hubBorder;
-    ctx.lineWidth = Math.round(4 * scale);
-    ctx.shadowColor = hubBorder;
-    ctx.shadowBlur = Math.round(15 * scale);
-    ctx.stroke();
-    ctx.shadowBlur = 0;
+      ctx.beginPath();
+      ctx.arc(center, center, hubR, 0, Math.PI * 2);
+      ctx.strokeStyle = hubBorder;
+      ctx.lineWidth = Math.round(4 * scale);
+      ctx.shadowColor = hubBorder;
+      ctx.shadowBlur = Math.round(15 * scale);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
 
-    ctx.beginPath();
-    ctx.arc(center, center, hubInnerR, 0, Math.PI * 2);
-    ctx.strokeStyle = hubInner;
-    ctx.lineWidth = Math.round(2 * scale);
-    ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(center, center, hubInnerR, 0, Math.PI * 2);
+      ctx.strokeStyle = hubInner;
+      ctx.lineWidth = Math.round(2 * scale);
+      ctx.stroke();
 
-    ctx.beginPath();
-    ctx.arc(center, center, hubDotR, 0, Math.PI * 2);
-    ctx.fillStyle = hubDot;
-    ctx.fill();
+      ctx.beginPath();
+      ctx.arc(center, center, hubDotR, 0, Math.PI * 2);
+      ctx.fillStyle = hubDot;
+      ctx.fill();
+    }
 
     ctx.restore(); // end of rotated context
 
@@ -477,23 +487,26 @@ export function SpinningWheel({
       });
       ctx.restore(); // end second rotation pass
 
-      // 3. Redraw hub on top so it's always visible over the image
-      ctx.save();
-      const hub2 = HUB_PRESETS[hubTheme];
-      const hb0 = hub2?.bg[0] ?? 'hsl(222,47%,15%)';
-      const hb1 = hub2?.bg[1] ?? 'hsl(222,47%,8%)';
-      const hb2 = hub2?.bg[2] ?? 'hsl(222,47%,4%)';
-      const hBorder = hub2?.border ?? themeColor;
-      const hInner  = hub2?.inner  ?? themeColorHalf;
-      const hDot    = hub2?.dot    ?? themeColor;
-      const cg2 = ctx.createRadialGradient(center - Math.round(5*scale), center - Math.round(5*scale), 0, center, center, Math.round(35*scale));
-      cg2.addColorStop(0, hb0); cg2.addColorStop(0.5, hb1); cg2.addColorStop(1, hb2);
-      ctx.beginPath(); ctx.arc(center, center, Math.round(30*scale), 0, Math.PI * 2); ctx.fillStyle = cg2; ctx.fill();
-      ctx.beginPath(); ctx.arc(center, center, Math.round(30*scale), 0, Math.PI * 2);
-      ctx.strokeStyle = hBorder; ctx.lineWidth = Math.round(4*scale); ctx.shadowColor = hBorder; ctx.shadowBlur = Math.round(15*scale); ctx.stroke(); ctx.shadowBlur = 0;
-      ctx.beginPath(); ctx.arc(center, center, Math.round(18*scale), 0, Math.PI * 2); ctx.strokeStyle = hInner; ctx.lineWidth = Math.round(2*scale); ctx.stroke();
-      ctx.beginPath(); ctx.arc(center, center, Math.round(6*scale), 0, Math.PI * 2); ctx.fillStyle = hDot; ctx.fill();
-      ctx.restore();
+      // 3. Redraw hub on top so it's always visible over the image. Skipped
+      // when the React `.btn-spin-center` overlay handles the center.
+      if (!showCenterSpin) {
+        ctx.save();
+        const hub2 = HUB_PRESETS[hubTheme];
+        const hb0 = hub2?.bg[0] ?? 'hsl(222,47%,15%)';
+        const hb1 = hub2?.bg[1] ?? 'hsl(222,47%,8%)';
+        const hb2 = hub2?.bg[2] ?? 'hsl(222,47%,4%)';
+        const hBorder = hub2?.border ?? themeColor;
+        const hInner  = hub2?.inner  ?? themeColorHalf;
+        const hDot    = hub2?.dot    ?? themeColor;
+        const cg2 = ctx.createRadialGradient(center - Math.round(5*scale), center - Math.round(5*scale), 0, center, center, Math.round(35*scale));
+        cg2.addColorStop(0, hb0); cg2.addColorStop(0.5, hb1); cg2.addColorStop(1, hb2);
+        ctx.beginPath(); ctx.arc(center, center, Math.round(30*scale), 0, Math.PI * 2); ctx.fillStyle = cg2; ctx.fill();
+        ctx.beginPath(); ctx.arc(center, center, Math.round(30*scale), 0, Math.PI * 2);
+        ctx.strokeStyle = hBorder; ctx.lineWidth = Math.round(4*scale); ctx.shadowColor = hBorder; ctx.shadowBlur = Math.round(15*scale); ctx.stroke(); ctx.shadowBlur = 0;
+        ctx.beginPath(); ctx.arc(center, center, Math.round(18*scale), 0, Math.PI * 2); ctx.strokeStyle = hInner; ctx.lineWidth = Math.round(2*scale); ctx.stroke();
+        ctx.beginPath(); ctx.arc(center, center, Math.round(6*scale), 0, Math.PI * 2); ctx.fillStyle = hDot; ctx.fill();
+        ctx.restore();
+      }
     }
 
     // Release shape clip, then draw shape outline on top
@@ -571,7 +584,9 @@ export function SpinningWheel({
     // center area: arc text would visually collide with names like "Hannah" /
     // "Alice" that extend inward from the segment midline. The pointer cursor
     // + hub click affordance are enough on dense wheels.
-    if (clickToSpinLabel && !isAnimating && segments.length <= 5) {
+    // Also skipped when `showCenterSpin` is on — the React `.btn-spin-center`
+    // overlay already says "SPIN / tap to play", so arc text would be redundant.
+    if (clickToSpinLabel && !isAnimating && segments.length <= 5 && !showCenterSpin) {
       ctx.save();
       ctx.translate(center, center);
 
@@ -636,7 +651,7 @@ export function SpinningWheel({
     // Initial draw — use the ref to avoid stale `rotation` state in the closure
     // (after a spin, rotation state catches up; we draw with whatever ref says now).
     drawRef.current(rotationRef.current);
-  }, [segments, participants.length, mode, themeColor, themeColorDark, themeColorGlow, themeColorHalf, themeColorLight, themeStroke, borderStyle, bgImgVersion, isAnimating, clickToSpinLabel, clickToSpinSub, wheelShape, hubTheme, canvasDisplaySize, dpr]);
+  }, [segments, participants.length, mode, themeColor, themeColorDark, themeColorGlow, themeColorHalf, themeColorLight, themeStroke, borderStyle, bgImgVersion, isAnimating, clickToSpinLabel, clickToSpinSub, wheelShape, hubTheme, canvasDisplaySize, dpr, showCenterSpin]);
 
   // Redraw when the controlled `rotation` state changes (after-spin sync,
   // initial render, deliberate setRotation calls). The spin animation itself
@@ -874,6 +889,28 @@ export function SpinningWheel({
             <div className={`absolute bottom-12 left-8 w-1 h-1 bg-${colorClass} rounded-full animate-ping`} style={{ animationDelay: '0.6s' }} />
             <div className={`absolute bottom-4 right-4 w-2 h-2 bg-${colorClass} rounded-full animate-ping`} style={{ animationDelay: '0.9s' }} />
           </>
+        )}
+
+        {/* Editorial center SPIN button — sits inside the wheel hub. Replaces
+            the canvas-drawn hub + arc text. Uses .btn-spin-center from
+            editorial.css (animated conic-gradient halo). */}
+        {showCenterSpin && (
+          <button
+            type="button"
+            onClick={onSpin}
+            disabled={isSpinning}
+            className="btn-spin-center"
+            aria-label="Spin the wheel"
+          >
+            {isSpinning ? (
+              <span className="spin-loading"><span /><span /><span /></span>
+            ) : (
+              <>
+                <span className="spin-label">SPIN</span>
+                <span className="spin-sub">tap to play</span>
+              </>
+            )}
+          </button>
         )}
       </div>
 

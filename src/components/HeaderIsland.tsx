@@ -3,22 +3,10 @@ import { ChevronDown, Sun, Moon, Maximize2, Minimize2, Share2, Upload, FileText,
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
 
-const WheelLogo = () => (
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M14 14 L14 2 A12 12 0 0 1 22.39 6 Z" fill="#e53e3e"/>
-    <path d="M14 14 L22.39 6 A12 12 0 0 1 26 14 Z" fill="#f5c518"/>
-    <path d="M14 14 L26 14 A12 12 0 0 1 22.39 22 Z" fill="#38a169"/>
-    <path d="M14 14 L22.39 22 A12 12 0 0 1 14 26 Z" fill="#3182ce"/>
-    <path d="M14 14 L14 26 A12 12 0 0 1 5.61 22 Z" fill="#805ad5"/>
-    <path d="M14 14 L5.61 22 A12 12 0 0 1 2 14 Z" fill="#dd6b20"/>
-    <path d="M14 14 L2 14 A12 12 0 0 1 5.61 6 Z" fill="#319795"/>
-    <path d="M14 14 L5.61 6 A12 12 0 0 1 14 2 Z" fill="#e53e3e" opacity="0.7"/>
-    <circle cx="14" cy="14" r="12" fill="none" stroke="#f5c518" strokeWidth="1.5"/>
-    <circle cx="14" cy="14" r="3" fill="#0a0f1a"/>
-    <circle cx="14" cy="14" r="1.5" fill="#f5c518"/>
-    <polygon points="14,0.5 16,4 12,4" fill="#f5c518"/>
-  </svg>
-);
+// Editorial logo: a CSS conic-gradient disc with an ink dot in the center.
+// Matches `.logo-mark-ed` from editorial.css. The serif wordmark sits next to
+// it via the `.logo-ed` parent class (which also applies a 360° rotate hover).
+const WheelLogo = () => <span className="logo-mark-ed" aria-hidden="true" />;
 
 // Tool menu — ordered by GSC traffic priority (highest-volume keywords first).
 // Labels resolved at render-time from the active language so French visitors on
@@ -132,9 +120,9 @@ const HeaderIsland = () => {
   return (
     <header className="sticky top-0 z-50 w-full bg-card/90 backdrop-blur-md border-b border-border shadow-[0_2px_20px_-4px_rgba(0,0,0,0.15)]">
       <div className="max-w-6xl mx-auto px-4 h-12 flex items-center justify-between gap-2">
-        <a href="/" className="flex items-center gap-2 shrink-0">
+        <a href="/" className="logo-ed shrink-0" aria-label="Real Wheel Picker — home">
           <WheelLogo />
-          <span className="font-bold text-base text-foreground hidden sm:inline">Real Wheel Picker</span>
+          <span className="hidden sm:inline">Real Wheel Picker</span>
         </a>
 
         <nav className="flex items-center gap-0.5 md:gap-2 text-sm font-medium">
