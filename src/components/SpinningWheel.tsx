@@ -877,12 +877,12 @@ export function SpinningWheel({
 
       {/* Outer wrapper for sparkles (not clipped) */}
       <div
-        className="relative"
-        style={{
-          width: compact ? `${canvasDisplaySize}px` : 'min(90vw, calc(90vh - 80px))',
-          height: compact ? `${canvasDisplaySize}px` : 'min(90vw, calc(90vh - 80px))',
+        className={compact ? "relative mx-auto" : "relative mx-auto w-full max-w-[480px] aspect-square"}
+        style={compact ? {
+          width: `${canvasDisplaySize}px`,
+          height: `${canvasDisplaySize}px`,
           aspectRatio: '1 / 1',
-        }}
+        } : undefined}
       >
         {/* Circular clip + shadow — guarantees a perfect circle, no square leak */}
         <div
