@@ -53,10 +53,15 @@ const jsonLd = {
 ---
 
 <style>
+  /* Hero used to be a hardcoded #030b14 dark scene with green/red glows. Per
+     Noé 2026-05-04 ("le même fond partout, pas du noir") it now inherits the
+     site-wide cream + zip ellipses via var(--gradient-bg). The thematic
+     yes/no green & red glows are kept but at lower opacity so they read as
+     a subtle accent on cream instead of dominating the canvas. */
   .yesno-hero {
     position: relative;
     overflow: hidden;
-    background: #030b14;
+    background: var(--gradient-bg);
   }
   .yesno-glow-yes {
     position: absolute;
@@ -65,7 +70,7 @@ const jsonLd = {
     width: 600px;
     height: 600px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(34,197,94,0.22) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(34,197,94,0.10) 0%, transparent 70%);
     pointer-events: none;
     animation: pulseGreen 4s ease-in-out infinite alternate;
   }
@@ -76,7 +81,7 @@ const jsonLd = {
     width: 600px;
     height: 600px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(239,68,68,0.22) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(239,68,68,0.10) 0%, transparent 70%);
     pointer-events: none;
     animation: pulseRed 4s ease-in-out infinite alternate;
   }
@@ -88,7 +93,7 @@ const jsonLd = {
     width: 400px;
     height: 300px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,215,0,0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255,215,0,0.06) 0%, transparent 70%);
     pointer-events: none;
   }
   @keyframes pulseGreen {
