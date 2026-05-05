@@ -889,14 +889,20 @@ export function SpinningWheel({
           aspectRatio: '1 / 1',
         }}
       >
-        {/* Circular clip + shadow — guarantees a perfect circle, no square leak */}
+        {/* Circular clip + soft shadow.
+            Old shadow was `0 16px 48px rgba(0,0,0,0.55), 0 4px 12px rgba(0,0,0,0.35)`
+            — too heavy, formed a visible dark "square" halo around the wheel
+            on the cream + ellipse background (Noé 2026-05-05: "ya une sorte
+            de carré autour de la roue d'accueil, c'est moche"). New shadow
+            matches the prototype: a single soft drop with low alpha so the
+            wheel just floats subtly above the bg, no rectangle leak. */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
             borderRadius: '50%',
             overflow: 'hidden',
-            boxShadow: compact ? undefined : '0 16px 48px rgba(0,0,0,0.55), 0 4px 12px rgba(0,0,0,0.35)',
+            boxShadow: compact ? undefined : '0 12px 28px -8px rgba(0,0,0,0.18)',
           }}
         >
           <canvas
