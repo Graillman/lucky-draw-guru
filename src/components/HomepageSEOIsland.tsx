@@ -20,8 +20,90 @@ const HomepageSEOIslandInner = () => {
     { emoji: "🔒", title: t.indexWhyPrivate,  text: t.indexWhyPrivateText, gradient: "from-orange-500/10 to-orange-600/5",border: "border-orange-500/20" },
   ];
 
+  // 3 flagship cards (Classic peach / Influencer mint / Weighted lavender) —
+  // ported from the editorial Claude Design redesign. Each card uses one of
+  // the editorial palette tones (--peach / --mint / --lavender), shows a
+  // mini-wheel built from a conic-gradient (no SVG needed), and links to
+  // the corresponding tool page.
+  const flagships = [
+    {
+      tone: "peach", num: "01", tag: "MOST POPULAR",
+      title: "Classic Wheel",
+      desc: "Names, lists, decisions. The everyday picker that just works.",
+      href: "/wheel-of-names",
+      conic: "conic-gradient(from -90deg, #ff2e7e 0deg 60deg, #ffb800 60deg 120deg, #8b3dff 120deg 180deg, #00e5b4 180deg 240deg, #ff6b35 240deg 300deg, #4361ff 300deg 360deg)",
+    },
+    {
+      tone: "mint", num: "02", tag: "FOR CREATORS",
+      title: "Influencer Wheel",
+      desc: "Pull comments from IG/TikTok. Filter, dedupe, draw multiple winners.",
+      href: "/giveaway-picker",
+      conic: "conic-gradient(from -90deg, #00c896 0deg 60deg, #c77dff 60deg 120deg, #ffb800 120deg 180deg, #ff2e7e 180deg 240deg, #4361ff 240deg 300deg, #ffd60a 300deg 360deg)",
+    },
+    {
+      tone: "lavender", num: "03", tag: "PRO MODE",
+      title: "Weighted Wheel",
+      desc: "Custom probabilities. Tier draws, raffles — with a 10k spin simulator.",
+      href: "/weighted-random-picker",
+      conic: "conic-gradient(from -90deg, #ffd60a 0deg 90deg, #c0c0c0 90deg 180deg, #cd7f32 180deg 270deg, #71717a 270deg 360deg)",
+    },
+  ];
+
   return (
     <div className="max-w-6xl mx-auto px-4 pb-16 space-y-20">
+
+      {/* ── Pick your flavor — 3 flagship cards (peach/mint/lavender) ── */}
+      <section className="space-y-8 pt-12">
+        <div className="text-center max-w-xl mx-auto space-y-3">
+          <span className="eyebrow">Three wheels · one platform</span>
+          <h2 className="font-serif text-4xl md:text-5xl tracking-tight text-foreground" style={{ letterSpacing: "-0.025em" }}>
+            Pick your flavor.
+          </h2>
+          <p className="text-muted-foreground">
+            Three purpose-built tools — share one fair, beautiful engine.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {flagships.map((card) => (
+            <a
+              key={card.title}
+              href={card.href}
+              className="lift-ed group flex flex-col gap-5 p-7 rounded-2xl border border-border no-underline"
+              style={{
+                background: card.tone === "peach" ? "var(--peach)"
+                  : card.tone === "mint" ? "var(--mint)"
+                  : card.tone === "lavender" ? "var(--lavender)"
+                  : "var(--bg-2)",
+                color: "var(--ink)",
+              }}
+            >
+              <div className="flex justify-between items-center">
+                <span className="eyebrow">{card.num} · {card.tag}</span>
+                <span className="w-7 h-7 rounded-full bg-foreground text-background flex items-center justify-center transition-transform group-hover:rotate-45">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 9l6-6M5 3h4v4"/></svg>
+                </span>
+              </div>
+              <div
+                className="aspect-[1.5] rounded-xl flex items-center justify-center"
+                style={{ background: "oklch(from var(--bg) l c h / 0.5)" }}
+              >
+                <div
+                  className="w-32 h-32 rounded-full shadow-lg"
+                  style={{
+                    background: card.conic,
+                    boxShadow: "0 10px 24px -8px oklch(0 0 0 / 0.25), inset 0 0 0 4px var(--bg)",
+                  }}
+                  aria-hidden="true"
+                />
+              </div>
+              <div>
+                <h3 className="font-serif text-2xl mb-1.5" style={{ letterSpacing: "-0.02em" }}>{card.title}</h3>
+                <p className="text-sm text-muted-foreground">{card.desc}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
 
       {/* ── Value proposition ── */}
       <section className="space-y-8 pt-8">
@@ -70,13 +152,16 @@ const HomepageSEOIslandInner = () => {
         </div>
       </section>
 
-      {/* ── How to use — numbered steps ── */}
-      <section className="space-y-8">
+      {/* ── How to use — numbered steps on the cream/yellow section
+            (matches "Three steps to a fair pick" panel from the editorial
+            redesign — `--cream` is the saturated warm yellow tone). ── */}
+      <section
+        className="space-y-8 px-6 py-12 md:px-12 md:py-16 rounded-3xl border border-border"
+        style={{ background: "var(--cream)" }}
+      >
         <div className="text-center">
-          <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-widest mb-3">
-            How it works
-          </span>
-          <h2 className="text-3xl font-bold text-foreground">{t.indexHowToTitle}</h2>
+          <span className="eyebrow">How it works</span>
+          <h2 className="font-serif text-3xl md:text-4xl text-foreground mt-2" style={{ letterSpacing: "-0.025em" }}>{t.indexHowToTitle}</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
