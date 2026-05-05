@@ -89,14 +89,51 @@ const HomepageSEOIslandInner = () => {
                 className="aspect-[1.5] rounded-xl flex items-center justify-center"
                 style={{ background: "oklch(from var(--bg) l c h / 0.5)" }}
               >
+                {/* Mini wheel = conic-gradient disc + classic hub (white inner
+                    circle with a black dot, matching the prototype's flagship
+                    cards). Pointer-arrow notch on the right side completes the
+                    "wheel of fortune" silhouette. */}
                 <div
-                  className="w-32 h-32 rounded-full shadow-lg"
+                  className="w-32 h-32 rounded-full relative"
                   style={{
                     background: card.conic,
                     boxShadow: "0 10px 24px -8px oklch(0 0 0 / 0.25), inset 0 0 0 4px var(--bg)",
                   }}
                   aria-hidden="true"
-                />
+                >
+                  {/* Hub: white inner circle */}
+                  <div
+                    className="absolute rounded-full flex items-center justify-center"
+                    style={{
+                      inset: "38%",
+                      background: "var(--bg)",
+                      boxShadow: "0 1px 2px oklch(0 0 0 / 0.15), inset 0 0 0 1px var(--line)",
+                    }}
+                  >
+                    {/* Center dot */}
+                    <div
+                      className="rounded-full"
+                      style={{
+                        width: "30%",
+                        height: "30%",
+                        background: "var(--ink)",
+                      }}
+                    />
+                  </div>
+                  {/* Pointer notch on the right edge */}
+                  <div
+                    className="absolute"
+                    style={{
+                      right: "-6px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      width: "12px",
+                      height: "12px",
+                      background: "var(--ink)",
+                      clipPath: "polygon(100% 50%, 0 0, 0 100%)",
+                    }}
+                  />
+                </div>
               </div>
               <div>
                 <h3 className="font-serif text-2xl mb-1.5" style={{ letterSpacing: "-0.02em" }}>{card.title}</h3>
