@@ -164,16 +164,6 @@ const HeaderIsland = () => {
             )}
           </div>
 
-          {/* Templates — direct link */}
-          <a
-            href="/templates"
-            className={`hidden md:block px-2.5 py-1.5 rounded-md transition-colors ${
-              isActive("/templates") ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            {t.navTemplates}
-          </a>
-
           {/* Import dropdown */}
           <div ref={importRef} className="relative hidden md:block">
             <button
