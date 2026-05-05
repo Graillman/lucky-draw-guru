@@ -3,14 +3,16 @@ import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
 const HomepageSEOIslandInner = () => {
   const { t } = useLanguage();
 
+  // 6 use cases in a 3x2 editorial grid (matches the redesign's "Used wherever
+  // people need to decide fairly" section). Each cell has a big emoji, a serif
+  // title, and a one-line description (no more single-line label).
   const useCases = [
-    { emoji: "🎁", label: t.indexUseCaseGiveaway },
-    { emoji: "🎓", label: t.indexUseCaseClassroom },
-    { emoji: "☕", label: t.indexUseCaseStandup },
-    { emoji: "🎉", label: t.indexUseCaseParty },
-    { emoji: "🍽️", label: t.indexUseCaseDinner },
-    { emoji: "✅", label: t.indexUseCaseTodo },
-    { emoji: "📊", label: t.indexUseCasePresentation },
+    { emoji: "🎁", title: "Giveaways",   desc: "Draw from IG/TikTok comments." },
+    { emoji: "🎓", title: "Classrooms",  desc: "Pick students, no tears." },
+    { emoji: "☕", title: "Stand-ups",   desc: "Who demos first today?" },
+    { emoji: "🍕", title: "Decisions",   desc: "Outsource the indecision." },
+    { emoji: "🏆", title: "Tournaments", desc: "Brackets, byes, seeded draws." },
+    { emoji: "🎲", title: "Party games", desc: "Truth, dare, charades." },
   ];
 
   const whyCards = [
@@ -131,22 +133,27 @@ const HomepageSEOIslandInner = () => {
         </div>
       </section>
 
-      {/* ── Use Cases — icon grid ── */}
+      {/* ── Use Cases — editorial 3x2 grid (Claude Design redesign) ── */}
       <section className="space-y-8">
-        <div className="text-center space-y-2">
-          <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-widest mb-2">
-            {t.indexWhatIsTitle}
-          </span>
-          <p className="text-muted-foreground max-w-xl mx-auto text-sm">{t.indexWhatIsText}</p>
+        <div className="space-y-3 max-w-2xl">
+          <span className="eyebrow">Use cases</span>
+          <h2 className="font-serif text-3xl md:text-4xl text-foreground" style={{ letterSpacing: "-0.02em" }}>
+            Used wherever people<br/>need to <em className="not-italic" style={{ fontStyle: "italic", color: "var(--bronze)" }}>decide fairly</em>.
+          </h2>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {useCases.map((uc) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-0 border border-border rounded-2xl overflow-hidden bg-card">
+          {useCases.map((uc, i) => (
             <div
-              key={uc.emoji}
-              className="flex flex-col items-center gap-2 p-4 rounded-2xl border border-border bg-card/60 hover:bg-primary/5 hover:border-primary/30 transition-all cursor-default text-center"
+              key={uc.title}
+              className="p-7 transition-colors hover:bg-secondary/30"
+              style={{
+                borderRight: (i + 1) % 3 !== 0 ? "1px solid hsl(var(--border))" : undefined,
+                borderBottom: i < 3 ? "1px solid hsl(var(--border))" : undefined,
+              }}
             >
-              <span className="text-3xl">{uc.emoji}</span>
-              <p className="text-xs text-muted-foreground leading-snug line-clamp-3">{uc.label}</p>
+              <div className="text-3xl mb-3">{uc.emoji}</div>
+              <div className="font-serif text-xl mb-1 text-foreground" style={{ letterSpacing: "-0.01em" }}>{uc.title}</div>
+              <div className="text-sm text-muted-foreground">{uc.desc}</div>
             </div>
           ))}
         </div>
