@@ -441,9 +441,10 @@ body::before {
   50% { transform: scale(1.08); opacity: 1; }
 }
 
-/* SPIN button — premium minimalist version (was a flashy rotating rainbow
-   conic-gradient halo in v1, judged "hyper mal fait" by Noé 2026-05-04 and
-   simplified to a clean black puck with a soft amber glow + ring). */
+/* SPIN button — black puck with a static rainbow conic-gradient ring (no
+   animation — the spinning rainbow halo from v1 was judged "hyper mal fait"
+   by Noé, but the all-black v2 was judged "trop noir, je veux l'arc en ciel".
+   Compromise: keep the multicolor ring, drop the rotation. */
 .btn-spin-center {
   position: absolute;
   top: 50%; left: 50%;
@@ -467,8 +468,20 @@ body::before {
   box-shadow:
     0 1px 0 oklch(1 0 0 / 0.2) inset,
     0 0 0 4px oklch(from var(--bg) l c h / 0.7),
-    0 0 0 5px oklch(from var(--amber) l c h / 0.35),
     0 14px 36px -10px oklch(0 0 0 / 0.45);
+}
+/* Multicolor static ring sitting just outside the white border. */
+.btn-spin-center::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg,
+    #ff2e7e, #ff8c42, #ffd23f, #06d6a0, #4d96ff, #c77dff, #ff2e7e);
+  z-index: -1;
+  /* mask carves out the inner area so we keep just a thin ring */
+  -webkit-mask: radial-gradient(circle, transparent 56%, #000 60%);
+  mask: radial-gradient(circle, transparent 56%, #000 60%);
 }
 .btn-spin-center .spin-label {
   font-family: var(--serif);
