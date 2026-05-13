@@ -282,22 +282,26 @@ For non-binary choices, add segments by typing more lines into the entries box; 
   "party-wheel": {
     slug: "party-wheel",
     h1: "Party Wheel – Fun Random Challenges & Dares",
-    subtitle: "Spin the party wheel for random challenges, tasks, and dares. Perfect for game nights.",
-    microText: "Free • No signup • Instant fun",
+    subtitle: "Loaded with thirty truth-or-dare prompts by default. Replace any of them with your own, or rebuild from scratch.",
+    microText: "Free • Editable • Works on a phone passed around",
     howItWorksTitle: "How does the party wheel work?",
-    howItWorksText: "Load the wheel with party challenges, dares, or tasks, then spin to randomly assign them. You can use the pre-loaded party options or customize with your own challenges. Each spin is random and fair — perfect for keeping game nights unpredictable and exciting.",
+    howItWorksText: "The wheel comes pre-loaded with party prompts (dares, would-you-rather, truth questions, never-have-I-ever). Replace any line with your own by editing the list on the right — changes persist on the device. Spin once per turn. Whoever just won the previous turn does the dare, then passes the phone. The wheel doesn't track turns or scores; that's the host's job.",
     whenToUseTitle: "When should you use a party wheel?",
     useCases: [
-      { icon: "sparkles", title: "Game Nights", description: "Add random challenges to board games" },
-      { icon: "users", title: "Group Activities", description: "Assign random tasks to party guests" },
-      { icon: "gift", title: "Party Forfeits", description: "Spin for dares and forfeits" },
-      { icon: "trophy", title: "Competitions", description: "Random prizes or challenge assignments" },
-      { icon: "graduation", title: "Icebreakers", description: "Fun random prompts to start conversations" },
+      { icon: "sparkles", title: "Pre-Drinking Games", description: "Light prompts that warm a group up without the awkward 'who starts?'" },
+      { icon: "users", title: "Birthday Parties", description: "Pass the phone around the table instead of buying a $40 box game" },
+      { icon: "gift", title: "Stag/Hen Dos", description: "Load the wheel with custom prompts about the bride/groom" },
+      { icon: "trophy", title: "Office Holiday Parties", description: "Keep the prompts SFW; the random element does the work" },
+      { icon: "graduation", title: "Icebreakers", description: "First-day-of-class, summer camp, retreat openers" },
     ],
     seoTitle: "Free Party Wheel for Game Nights",
-    seoText: "Make any party or game night more exciting with our free party wheel. Spin to randomly assign challenges, dares, tasks, or prizes. Customize it with your own party ideas or use our pre-loaded options. Whether you're hosting a house party, office event, or birthday celebration, the party wheel adds an unpredictable element that keeps everyone engaged. Free, instant, no account required.",
-    metaTitle: "Party Wheel - Free Random Challenge Spinner | Real Wheel Picker",
-    metaDescription: "Spin the party wheel for random challenges and dares. Free, customizable, perfect for game nights. No signup required!",
+    seoText: `A party wheel is a low-effort substitute for buying a card game. The default prompts are pulled from public-domain truth-or-dare collections and screened for SFW (no nudity dares, no humiliation-style forfeits). Replace any line you don't like — the list edits in place, no separate config screen.
+
+The wheel pairs well with a phone passed around the table. One spin per turn, the wheel takes the "who picks next" decision out of the group, the prompts keep things moving when nobody wants to commit to a card game with rules. Hosts of stag/hen weekends often load the wheel with custom prompts referencing the guest of honour; thirty entries cover an evening comfortably.
+
+For prompt-specific themes, see the <a href="/templates/dare-wheel" class="text-primary underline hover:no-underline">dare wheel</a>, <a href="/templates/never-have-i-ever-wheel" class="text-primary underline hover:no-underline">never-have-I-ever wheel</a>, <a href="/templates/would-you-rather-wheel" class="text-primary underline hover:no-underline">would-you-rather wheel</a>, or the <a href="/templates/drinking-game-wheel" class="text-primary underline hover:no-underline">drinking game wheel</a> for separate pre-built lists.`,
+    metaTitle: "Party Wheel — Free Random Challenge Spinner | Real Wheel Picker",
+    metaDescription: "Thirty SFW party prompts loaded by default, fully editable. Spin to decide whose turn it is. No app to install, no account.",
   },
   "classroom-picker": {
     slug: "classroom-picker",
@@ -399,22 +403,30 @@ Once you've got the cleaned list, paste it here or stay on the social giveaway p
   "tiktok-giveaway-picker": {
     slug: "tiktok-giveaway-picker",
     h1: "TikTok Giveaway Picker – Select Winners Instantly",
-    subtitle: "Randomly pick TikTok giveaway winners. Fair, live, and shareable.",
-    microText: "Free • No signup • Instant result",
+    subtitle: "TikTok comments don't paste cleanly. The picker strips the timestamps, replies, and emoji-only entries so you can spin the actual list.",
+    microText: "Free • No app • Screen-record ready",
     howItWorksTitle: "How does this TikTok giveaway picker work?",
-    howItWorksText: "Collect your TikTok giveaway participants (commenters, followers, or duet entries), paste them into the picker, and spin the wheel live. The random selection is cryptographically secure and the animation is perfect for recording and sharing on your TikTok.",
+    howItWorksText: "Open your video, scroll the full comment thread (TikTok lazy-loads, so scroll all the way down), select-all and copy the comments panel. Paste into the entries box. The picker cleans up TikTok's interleaved replies and the @ tags. Set how many winners you need, spin the wheel while screen-recording, post the clip to your account or as a duet.",
     whenToUseTitle: "When should you use a TikTok giveaway picker?",
     useCases: [
-      { icon: "video", title: "Comment Draws", description: "Pick winners from TikTok comments" },
-      { icon: "gift", title: "Duet/Stitch Contests", description: "Select winners from challenge entries" },
-      { icon: "users", title: "Follower Milestones", description: "Celebrate follower counts with a giveaway" },
-      { icon: "trophy", title: "Live Giveaways", description: "Run draws during TikTok Lives" },
-      { icon: "sparkles", title: "Brand Deals", description: "Professional creator giveaways" },
+      { icon: "video", title: "Comment Draws", description: "Standard 'comment to enter' format" },
+      { icon: "gift", title: "Duet/Stitch Entries", description: "Manual list, but the picker handles the draw the same way" },
+      { icon: "users", title: "Follower Milestone Draws", description: "100K, 500K, 1M follower celebrations" },
+      { icon: "trophy", title: "Live Draws", description: "Spin on stream with the wheel visible to viewers" },
+      { icon: "sparkles", title: "Sponsored Giveaways", description: "Brand-paid draws where transparency is contractual" },
     ],
     seoTitle: "Free TikTok Giveaway Picker",
-    seoText: "Make your TikTok giveaway fair and transparent with our free TikTok giveaway picker. Paste your list of participants, spin the wheel, and get a random winner instantly. Record the spin as proof and post it to your TikTok — your audience will appreciate the transparency. Works for comment giveaways, challenge winners, and follower milestone celebrations. No account required.",
-    metaTitle: "TikTok Giveaway Picker - Free Winner Selector | Real Wheel Picker",
-    metaDescription: "Pick TikTok giveaway winners fairly. Spin the wheel live and record for proof. Free, no signup required!",
+    seoText: `TikTok's comment system is interleaved — every original comment can have a long reply thread directly below it, and "copy all comments" pastes everything in a single block including the @-mention replies. The picker handles this: paste the wall of text, the cleaner extracts unique commenter handles, drops the reply markers, removes emoji-only entries and duplicates.
+
+<strong class="text-foreground">Why screen-record the spin and not just post a screenshot</strong>
+Screenshot-based "I picked @user randomly" announcements get accused of being faked roughly as often as they're posted. The same wheel spin recorded and posted as a clip ends the question. TikTok's algorithm tends to surface giveaway-result videos to people who entered the giveaway, so the clip itself often drives engagement on the next post.
+
+<strong class="text-foreground">A note on platform rules</strong>
+TikTok Community Guidelines don't restrict prize draws as long as the contest itself is legal in the host's region and the prize delivery isn't a scam. Random-selection method isn't regulated. The clip-as-proof approach is what we see top creators using by default.
+
+For multi-platform draws (TikTok + Instagram + Twitter at the same time), combine the lists into the <a href="/giveaway-picker" class="text-primary underline hover:no-underline">main giveaway picker</a>. For comment filtering by required keywords (e.g. "enter 🎁" must appear), the <a href="/social-giveaway" class="text-primary underline hover:no-underline">social giveaway picker</a> has a keyword filter.`,
+    metaTitle: "TikTok Giveaway Picker — Free Winner Selector | Real Wheel Picker",
+    metaDescription: "Paste raw TikTok comments, the picker cleans the reply markers and dupes, spin while recording, post the clip. No API key, no signup.",
     relatedBlogPost: { slug: "/blog/tiktok-giveaway-guide", title: "How to Run a TikTok Giveaway That Gets Results" },
   },
   "youtube-giveaway-picker": {
