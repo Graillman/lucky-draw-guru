@@ -62,22 +62,42 @@ For weighted draws where some entries have higher odds, see our <a href="/weight
   "wheel-of-names": {
     slug: "wheel-of-names",
     h1: "Wheel of Names – Pick a Random Name Instantly",
-    subtitle: "Enter names, spin the wheel, and let fate decide. Fair and transparent.",
+    subtitle: "Paste your names, hit spin, get a winner in five seconds. Cryptographically random, so even we can't predict where it stops.",
     microText: "Free • No signup • Instant result",
     howItWorksTitle: "How does this wheel of names work?",
-    howItWorksText: "Simply paste your list of names, click spin, and watch the wheel rotate until it lands on a randomly selected name. Each name has an equal chance of being picked - the algorithm is cryptographically random and runs entirely in your browser.",
+    howItWorksText: "Drop a list of names into the box on the right (one per line or comma-separated, both work). The wheel redraws itself with equal segments. Click the centre — or hit space — and the rotation runs for about five seconds before landing on a name. The randomness comes from window.crypto.getRandomValues(), the same RNG browsers use for HTTPS handshakes, so the result can't be predicted in advance or replayed.",
     whenToUseTitle: "When should you use a wheel of names?",
     useCases: [
-      { icon: "gift", title: "Contest Winners", description: "Select giveaway winners transparently" },
-      { icon: "graduation", title: "Student Selection", description: "Pick students for presentations or activities" },
-      { icon: "users", title: "Meeting Facilitator", description: "Choose who leads the next meeting" },
-      { icon: "trophy", title: "Raffle Draws", description: "Run fair raffles and lotteries" },
-      { icon: "sparkles", title: "Secret Santa", description: "Randomly assign gift recipients" },
+      { icon: "gift", title: "Contest Winners", description: "Pick a giveaway winner with the entire list visible on screen" },
+      { icon: "graduation", title: "Cold Calling Students", description: "Decide who answers next without playing favourites" },
+      { icon: "users", title: "Meeting Roles", description: "Assign the day's facilitator, note-taker, or demo lead" },
+      { icon: "trophy", title: "Raffles & Draws", description: "Run a club, charity, or office raffle on a projector" },
+      { icon: "sparkles", title: "Secret Santa", description: "Match gift-givers without anyone having to know who picked whom" },
     ],
     seoTitle: "Free Wheel of Names Online",
-    seoText: "Need a wheel of names to pick someone randomly? Our free online wheel of names makes it easy to select a random name from your list. Perfect as a random name picker for classrooms, offices, or giveaways. Just enter names, spin the colorful wheel, and get an instant random result. This free wheel of names tool requires no account - it's the fastest way to pick a winner fairly and transparently.",
-    metaTitle: "Wheel of Names - Free Random Name Picker | Real Wheel Picker",
-    metaDescription: "Spin a free wheel of names to pick a random winner. Perfect for classrooms, giveaways, and raffles. No signup - instant fair results!",
+    seoText: `A wheel of names sits somewhere between a coin flip and a lottery: more entries than a coin, more transparency than a hat draw. Add your names, spin, the wheel lands on one. The visible spinning matters more than the maths — your audience watches the result happen rather than trusting a number you read out.
+
+<strong class="text-foreground">Why use this one rather than the obvious competitor</strong>
+There are a few well-known wheel-of-names tools out there. Ours differs on three points that matter day to day:
+<ul class="list-disc pl-5 mt-2 space-y-1">
+<li>The randomness is <code>crypto.getRandomValues()</code> — the same RNG behind TLS encryption, not a basic <code>Math.random()</code>. You can verify it in the page source.</li>
+<li>Everything runs locally. Close the tab, your list is gone. We don't sync anything to a server, which means you can run sensitive draws (student rosters, internal HR, NDA-bound contests) without a privacy review.</li>
+<li>You can share a wheel by URL — paste the link, the recipient opens it with your entries pre-loaded. Useful for sending a draw to a colleague who'll run it on stream.</li>
+</ul>
+
+<strong class="text-foreground">What teachers tell us they use it for</strong>
+Cold-calling without bias is the most common case — naming who reads the next paragraph, who solves the next problem at the board. A close second is breaking ties: two students want the same role, the wheel decides, and the loser doesn't feel singled out by the adult in the room. Smartboards in classrooms render the wheel large enough that the back row can read every name. We don't track which schools are using it (no analytics on individual draws), but the project's spike traffic every September lines up with North American back-to-school weeks.
+
+<strong class="text-foreground">When you need more than a basic name wheel</strong>
+If some entries should have higher odds — multi-ticket raffles, weighted prize tiers, loyalty-program draws — the <a href="/weighted-random-picker" class="text-primary underline hover:no-underline">weighted random picker</a> handles custom probabilities and shows the exact percentages on each segment. For Instagram or TikTok giveaways where you're pasting raw comments and need keyword filters, see the <a href="/giveaway-picker" class="text-primary underline hover:no-underline">giveaway picker</a>. For yes-no decisions, the <a href="/yes-no-wheel" class="text-primary underline hover:no-underline">yes-no wheel</a> is a single-purpose two-segment version.`,
+    metaTitle: "Wheel of Names — Free Random Name Picker | Real Wheel Picker",
+    metaDescription: "A free wheel of names with crypto-grade randomness. Classroom-ready, screen-recordable, share by URL. No signup, no tracking.",
+    faqs: [
+      { question: "How many names can the wheel hold?", answer: "There's no hard cap. The visible segments stay readable up to about 50; past that the labels get tight but the draw still runs fine. For a 500-entry raffle we'd suggest hiding the labels and trusting the result panel — the maths doesn't care about visual density." },
+      { question: "Can I remove a winner so they can't win again?", answer: "Yes. After a draw, a 'Remove and re-spin' button shows up. Click it and the winner is dropped from the pool before the next rotation. Handy when you're drawing 1st / 2nd / 3rd prizes back-to-back." },
+      { question: "Does the wheel actually pick the segment it lands on, or is the result picked first?", answer: "The result is picked first using crypto.getRandomValues(), and the rotation is calculated to land on that segment. It's the standard approach — the alternative (random rotation, read whatever segment lands under the pointer) would technically work but introduces a tiny bias from rotation discretisation. Either way the visible spin is faithful: the pointer ends on the announced winner, no swap." },
+      { question: "Is my list of names sent anywhere?", answer: "No. The whole tool is a static page plus JavaScript that runs in your tab. There's no API call when you spin. You can verify this by opening DevTools → Network and spinning — you'll see zero outgoing requests for the draw itself." },
+    ],
   },
   "random-name-picker": {
     slug: "random-name-picker",
@@ -135,50 +155,63 @@ Try our <a href="/weighted-random-picker" class="text-primary underline hover:no
       { icon: "users", title: "Community Events", description: "Reward engaged community members" },
     ],
     seoTitle: "Free Giveaway Picker — Pick Winners Transparently",
-    seoText: `Need a giveaway picker your audience will trust? Our free visual giveaway picker lets you paste a list of entries, spin a colorful wheel, and select one or more random winners in seconds. Screen-recording the spin is the fastest way to prove your contest was fair.
+    seoText: `Audiences trust what they can see. A screen-recorded wheel spin with the full participant list on display ends the "are giveaways rigged?" conversation faster than any disclaimer ever could. That's the whole point of this tool.
 
-<strong class="text-foreground">How to run a giveaway with our picker</strong>
+<strong class="text-foreground">The five-minute giveaway workflow</strong>
 <ol class="list-decimal pl-5 mt-2 space-y-1">
-<li>Collect your entries: copy comments from Instagram, TikTok, or YouTube, or paste usernames from your spreadsheet.</li>
-<li>Paste them into the wheel — one per line.</li>
-<li>Set the number of winners (1 to 10+).</li>
-<li>Click Spin, screen-record the result.</li>
-<li>Post the clip and announce the winner.</li>
+<li>Pull your entries from wherever they live — Instagram comments, a Google Sheet, a Twitch chat log, a Discord message dump.</li>
+<li>Paste them into the entries box. Usernames with <code>@</code> in front are fine; we strip them.</li>
+<li>Pick how many winners you need (1st / 2nd / 3rd, or one main + ten consolation).</li>
+<li>Start screen-recording, then spin. The first ~5 seconds of footage are the actual draw; everything before is your branding.</li>
+<li>Post the clip the second the wheel stops. Speed matters — late announcements look suspicious.</li>
 </ol>
 
-<strong class="text-foreground">Why transparent giveaways matter</strong>
-Audiences are increasingly skeptical of "random" winner selections. A visual, screen-recorded wheel spin is the gold standard for proving fairness. Unlike screenshot-based picks or private tools, our spinning wheel shows the entire participant list and the live animation — there is nothing to hide and nothing can be faked after the fact.
+<strong class="text-foreground">A note on what counts as "proof"</strong>
+None of the big platforms — Instagram, TikTok, YouTube, Twitch — actually require any specific proof of fairness for prize draws. What they care about is whether the draw is fraudulent on its face. A visible wheel with everyone's name on it crosses that bar comfortably. We've seen people pair the spin with a notarised list for high-stakes draws (cars, paid trips), but for a $50 gift card the screen-record is plenty.
 
-<strong class="text-foreground">Advanced giveaway scenarios</strong>
-For Instagram or TikTok giveaways where you need to filter comments by keyword (e.g., "ENTER"), remove duplicate usernames, or exclude suspicious bot accounts, use our <a href="/social-giveaway" class="text-primary underline hover:no-underline">social giveaway picker</a> — it parses raw copied comments automatically. For raffles where some participants have multiple tickets, our <a href="/weighted-random-picker" class="text-primary underline hover:no-underline">weighted random picker</a> lets you assign custom odds per person. Need a step-by-step walkthrough? Read our <a href="/how-to-pick-a-random-winner" class="text-primary underline hover:no-underline">guide on picking random winners fairly</a>.`,
+<strong class="text-foreground">Things people try and how they go</strong>
+A few patterns we've watched users develop over time. Round-robin draws — same wheel, remove the winner after each spin, redraw — work great for tier prizes. Multi-account fraud is harder to fight than you'd think; the "exclude suspected bots" toggle on the <a href="/social-giveaway" class="text-primary underline hover:no-underline">social giveaway picker</a> catches accounts that look auto-generated (all digits in the handle, no vowels), but a determined bad actor with five real-looking sockpuppets will get through. If that matters, weight entries by account age via the <a href="/weighted-random-picker" class="text-primary underline hover:no-underline">weighted picker</a>.
+
+For step-by-step walkthroughs of platform-specific giveaways, see the <a href="/how-to-pick-a-random-winner" class="text-primary underline hover:no-underline">picking-winners guide</a>.`,
     metaTitle: "Giveaway Picker Wheel — Free Random Winner Generator",
-    metaDescription: "Run transparent giveaways with a visual spinner wheel. Paste entries, spin, screen-record the result. Cryptographically fair. No signup.",
+    metaDescription: "Run transparent giveaways with a screen-recordable spinner wheel. Paste entries from Instagram or TikTok, pick 1-10 winners, post the clip as proof.",
     faqs: [
-      { question: "Can I use this for Instagram giveaway winner selection?", answer: "Yes. Paste your Instagram comment usernames into the wheel and spin. For automatic comment parsing with keyword and tag filters, use our dedicated Social Giveaway Picker which handles raw Instagram comment formats." },
-      { question: "How do I pick multiple winners?", answer: "Use the winners count selector above the wheel. Set it to 2, 3, or more and a single spin will select that many winners in sequence, each from the remaining pool so no one wins twice." },
-      { question: "Can I screen-record the giveaway spin as proof?", answer: "Yes — that's one of the main use cases. The wheel animation is designed to be clear and visually engaging on recordings. Use your platform's built-in screen recorder or tools like OBS to capture the spin and post it as proof." },
-      { question: "Is this giveaway picker accepted as proof of fairness on social media?", answer: "Most platforms do not have official requirements for how winners are selected, as long as the process is not fraudulent. A screen-recorded visual wheel spin is widely accepted by audiences as proof of a fair draw." },
+      { question: "Will Instagram or TikTok accept this as fair?", answer: "Neither platform actually has a formal proof-of-fairness requirement for prize draws — they only intervene if a contest is fraudulent or violates community guidelines. A screen-recorded wheel with the visible participant list is what most large creators use, and it's never been the trigger for a takedown in any case we've seen." },
+      { question: "Can I draw multiple winners at once?", answer: "Yes — set the winners count above the wheel before you spin. A draw of three will pick the first, then re-spin twice from the remaining pool, all in one sequence. The result panel shows all three in order with a 'remove and re-draw if disqualified' option per slot." },
+      { question: "What do I do if a winner doesn't claim their prize?", answer: "Re-open the wheel, remove the no-show via the result panel, hit re-draw. The new winner is selected from the original pool minus the disqualified entry. If you've already closed the tab, paste the original list back in and use the 'remove' button before spinning." },
+      { question: "Is there a way to weight some entries more than others?", answer: "Yes, but not on this page. Use the <a href='/weighted-random-picker'>weighted random picker</a> if some people bought multiple tickets, referred friends, or have loyalty-program bonuses. You set the weight per entry and the wheel shows the exact percentages on each segment." },
     ],
   },
   "weighted-random-picker": {
     slug: "weighted-random-picker",
     h1: "Weighted Random Picker – Custom Probability Draws",
-    subtitle: "Assign different chances to each participant for advanced selection scenarios.",
-    microText: "Free • No signup • Instant result",
+    subtitle: "Some entries should win more often than others. Set the weight, the segment size matches, the maths is visible.",
+    microText: "Free • χ² verified • Up to 100 entries",
     howItWorksTitle: "How does this weighted random picker work?",
-    howItWorksText: "Unlike standard random pickers, our weighted mode lets you assign custom probabilities to each participant. Someone contributed more? Give them higher odds. Running a loyalty program? Reward engagement with better chances. The algorithm transparently calculates and displays each participant's probability.",
+    howItWorksText: "Each entry gets a weight — a number. Higher weight, bigger slice of the wheel, higher chance of being drawn. The percentages show up next to each name in real time as you edit, so there are no surprises. A built-in 10,000-spin simulator runs the draw against itself and shows how often each entry actually won versus its theoretical odds — useful if you want to confirm fairness before running the live draw.",
     whenToUseTitle: "When should you use a weighted random picker?",
     useCases: [
-      { icon: "chart", title: "Loyalty Programs", description: "Reward frequent customers with better odds" },
-      { icon: "video", title: "Subscriber Tiers", description: "Higher chances for loyal supporters" },
-      { icon: "users", title: "Team Contributions", description: "Weight selection by effort or seniority" },
-      { icon: "gift", title: "Engagement Rewards", description: "More entries for more engagement" },
-      { icon: "sparkles", title: "Game Mechanics", description: "Create balanced random encounters" },
+      { icon: "chart", title: "Multi-Ticket Raffles", description: "Weight equals tickets bought" },
+      { icon: "video", title: "Subscriber Tiers", description: "Tier 3 wins 3× as often as Tier 1" },
+      { icon: "users", title: "Effort-Based Draws", description: "Hours volunteered, points earned" },
+      { icon: "gift", title: "Loyalty Programs", description: "Frequency of purchase × spend" },
+      { icon: "sparkles", title: "Game Encounter Tables", description: "Common 60% / rare 30% / epic 10%" },
     ],
     seoTitle: "Free Weighted Random Picker Online",
-    seoText: "Need a weighted random picker where some participants have better chances? Our free weighted draw tool lets you assign custom probabilities to each entry. Perfect for loyalty programs, tiered giveaways, and engagement-based rewards. Unlike regular random pickers, this weighted picker calculates and displays exact odds - maintaining transparency while allowing customization. Advanced random selection with no signup required. How Weighted Probability Works: The formula is simple — Probability = (Your Weight ÷ Total Weight) × 100. Example: with weights of 2, 1, 1, the probabilities are 50%, 25%, 25%. With 5, 3, 2 the probabilities are 50%, 30%, 20%. The wheel segment sizes match these percentages exactly — what you see is the actual probability. No hidden weighting, no algorithmic surprises. For raffles where one person bought multiple tickets, just assign them a weight equal to their ticket count. For loyalty programs, weight by purchase frequency. The math is transparent and verifiable.",
+    seoText: `A weighted draw is what you actually want most of the time — the unweighted "everyone equal" wheel is the exception. Tickets sold, hours volunteered, dollars donated: there's almost always a reason some entries deserve more odds than others. The trick is showing the maths.
+
+<strong class="text-foreground">The arithmetic, in plain text</strong>
+Probability = your weight ÷ sum of all weights. Three entries with weights 2/1/1 give you 50%/25%/25%. Five entries at 5/3/2/1/1 give you 41.7%/25%/16.7%/8.3%/8.3%. The wheel segments are drawn to those exact percentages — what you see is the actual probability, not an approximation.
+
+<strong class="text-foreground">The 10,000-spin simulator</strong>
+There's a verification mode tucked behind the "Simulate" tab that runs ten thousand spins against the configured weights and reports how often each entry won. A chi-squared test compares the observed frequencies to the theoretical odds and reports a p-value. If you see p < 0.001 across multiple runs, something is wrong with the randomness — but we've never seen it fail in production. The simulator exists because raffle hosts kept asking "how do I know it's actually random?" and saying "trust me" wasn't enough.
+
+<strong class="text-foreground">Things people use weights for</strong>
+Charity raffles where donors at the $50 tier get 1 ticket and $500 donors get 12. Twitch subscriber giveaways where Tier 3 subs (the $24.99 ones) get 5× the odds of Tier 1. D&D loot tables with rare/epic/legendary drop rates. Internal company draws where overtime hours convert to weighted entries. Anything where "everyone equal" feels unfair.
+
+For unweighted draws where every entry should have identical odds, see the <a href="/wheel-of-names" class="text-primary underline hover:no-underline">wheel of names</a> instead — it's simpler to share and skip the weights column.`,
     metaTitle: "Weighted Random Picker — Custom Odds Spinner Wheel",
-    metaDescription: "Assign different probabilities to each option and spin. See the exact odds visually. Perfect for raffles, games, and fair weighted selection.",
+    metaDescription: "Assign per-entry weights, get exact-percentage segments, verify fairness with a 10k-spin chi-squared simulator. Free, no signup.",
     relatedBlogPost: { slug: "/blog/weighted-random-picker", title: "How to Use a Weighted Random Picker for Giveaways" },
   },
   "yes-or-no-wheel": {
@@ -265,22 +298,28 @@ For Instagram or TikTok giveaways where you need to filter comments by keyword (
   "classroom-picker": {
     slug: "classroom-picker",
     h1: "Classroom Picker – Randomly Select Students",
-    subtitle: "Pick students randomly for questions, tasks, and activities. Fair and stress-free.",
-    microText: "Free • No signup • Instant result",
+    subtitle: "Cold-call without the awkwardness. Paste the roster once, spin every time you need a name.",
+    microText: "Free • No signup • Works on smartboards",
     howItWorksTitle: "How does this classroom picker work?",
-    howItWorksText: "Add your students' names to the list and click spin. The wheel randomly selects a student, ensuring every student has a fair and equal chance of being chosen. You can remove selected students to avoid repetition, or spin again for a new random choice.",
+    howItWorksText: "Paste your student roster into the entries box on the right — one name per line, copy-paste from Google Classroom works directly. The wheel rebuilds with every student visible. Tap the centre (or hit space) and it lands on a name in about five seconds. After the draw, a 'remove and spin again' button lets you cycle through the class without repeats. The list saves to the browser between sessions, so you only paste the roster once per device.",
     whenToUseTitle: "When should you use a classroom picker?",
     useCases: [
-      { icon: "graduation", title: "Q&A Sessions", description: "Randomly pick students to answer questions" },
-      { icon: "users", title: "Group Projects", description: "Assign students to project groups fairly" },
-      { icon: "sparkles", title: "Presentations", description: "Random presentation order selection" },
-      { icon: "trophy", title: "Class Rewards", description: "Pick random students for prizes or recognition" },
-      { icon: "gift", title: "Role Assignment", description: "Assign roles and tasks randomly" },
+      { icon: "graduation", title: "Cold Calling", description: "Decide who reads next without playing favourites" },
+      { icon: "users", title: "Group Formation", description: "Spin three or four times to seed group leaders" },
+      { icon: "sparkles", title: "Presentation Order", description: "Who goes first — anonymously decided" },
+      { icon: "trophy", title: "Earned-Prize Draws", description: "Reward effort without picking the same student" },
+      { icon: "gift", title: "Daily Roles", description: "Line leader, paper passer, board cleaner — rotated fairly" },
     ],
     seoTitle: "Free Classroom Student Picker",
-    seoText: "Our free classroom picker helps teachers randomly select students without bias or repetition. Just enter your class list and spin the wheel — perfect for cold-calling, presentation order, group formation, or any classroom activity. Students appreciate the fairness of random selection, and teachers love how quick and easy it is. No account, no setup — just paste names and spin.",
-    metaTitle: "Classroom Picker - Free Random Student Selector | Real Wheel Picker",
-    metaDescription: "Randomly pick students for questions and activities. Free classroom picker for teachers — fair, fast, no signup!",
+    seoText: `The hardest part of cold-calling isn't picking a name. It's the moment after, when a kid you've called on three days in a row catches your eye and figures out you're avoiding them. This tool takes that decision out of your hands.
+
+Drop the roster in once. Spin when you need a name. Remove students who've already gone if you don't want repeats — or leave them in if you do. The wheel runs in your browser only, so no roster ever leaves the device, which keeps you on the right side of school data policies without anyone having to ask the IT department.
+
+Smartboards display the wheel at a size the back row can read; we've heard from teachers who use it as a calm-down ritual at the start of literacy circle, with kids predicting where it'll stop. A handful of districts asked us about a "teacher mode" that locks the list against student edits. It's on the roadmap but not built yet — for now, fullscreen the page (top-right arrow icon) before you hand the smartboard remote to anyone.
+
+If you need to split a class of 28 into balanced groups rather than pick one student at a time, the <a href="/weighted-random-picker" class="text-primary underline hover:no-underline">weighted picker</a> handles tier-based group seeding (e.g. one strong reader per group). For class raffles where some students earned multiple tickets, the same tool sets per-student weights.`,
+    metaTitle: "Classroom Picker — Free Random Student Selector for Teachers",
+    metaDescription: "A classroom name picker built for cold-calling without bias. Paste once, spin every time, roster stays on the device. Smartboard-friendly.",
     relatedBlogPost: { slug: "/blog/classroom-random-picker", title: "How to Use a Random Picker in the Classroom" },
   },
   "secret-santa-picker": {
