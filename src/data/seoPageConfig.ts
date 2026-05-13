@@ -217,22 +217,26 @@ For unweighted draws where every entry should have identical odds, see the <a hr
   "yes-or-no-wheel": {
     slug: "yes-or-no-wheel",
     h1: "Yes or No Wheel – Let the Wheel Decide",
-    subtitle: "Spin the Yes or No wheel for instant decisions. Fun, fast, and surprisingly useful.",
-    microText: "Free • No signup • Instant result",
+    subtitle: "Two segments, one spin, decision made. Useful for the moments when you're not actually torn — you just want an excuse to commit.",
+    microText: "Free • 50/50 guaranteed • Single click",
     howItWorksTitle: "How does the Yes or No wheel work?",
-    howItWorksText: "The wheel is pre-loaded with 'Yes' and 'No'. Click spin and let it decide for you. You can also add custom options like 'Maybe' or 'Ask later'. Each spin is cryptographically random - no predictable patterns, ever.",
+    howItWorksText: "The wheel ships with two segments: Yes and No. Click the centre, the rotation lasts about five seconds, the pointer lands on one. If you want to bias the outcome (the wheel is for nudging, not actually for high-stakes choices), add a third segment — 'Maybe', 'Ask tomorrow', 'Try the smaller portion' — and the odds rebalance to 33/33/33. Every spin uses crypto.getRandomValues(); past spins don't influence future ones.",
     whenToUseTitle: "When should you use a Yes or No wheel?",
     useCases: [
-      { icon: "sparkles", title: "Daily Decisions", description: "Break the indecision loop instantly" },
-      { icon: "users", title: "Group Debates", description: "Let the wheel settle arguments" },
-      { icon: "gift", title: "Party Games", description: "Add a random element to game nights" },
-      { icon: "graduation", title: "Classroom Fun", description: "Make random yes/no choices engaging" },
-      { icon: "trophy", title: "Challenges", description: "Accept or skip challenges randomly" },
+      { icon: "sparkles", title: "Decision Fatigue", description: "You've been at it for ten minutes. The wheel breaks the tie." },
+      { icon: "users", title: "Group Tiebreakers", description: "Two votes each, nobody budges, the wheel settles it." },
+      { icon: "gift", title: "Party Truth/Dare", description: "Yes you take the dare, no you don't — no pressure either way." },
+      { icon: "graduation", title: "Classroom Polls", description: "Should we extend the break? Vote, but let the wheel decide ties." },
+      { icon: "trophy", title: "Workout Stretches", description: "Extra set or move on. Wheel decides." },
     ],
     seoTitle: "Free Yes or No Wheel Online",
-    seoText: "Can't make up your mind? Spin our free Yes or No wheel and let fate decide. This simple random decision maker is perfect for breaking indecision loops, settling debates, or adding fun to game nights. Unlike a coin flip, you can customize the wheel with more options like 'Maybe' or 'Later'. Free, instant, no signup required — just spin and go.",
+    seoText: `A binary choice is the cheapest decision to outsource to a wheel. There's no list to paste, no weights to balance — open the page, spin, move on with your life. It's the digital equivalent of flipping a coin, except a coin is biased (roughly 51/49 toward whichever side started up, per the 2007 Stanford study) and the digital wheel is genuinely 50/50.
+
+The most interesting case isn't actually random decision-making. It's the moment when you already know what you want but won't admit it: you spin, the wheel says No, you feel disappointed, and that's the answer. Pre-commitment bias has a name in the behavioural economics literature; the wheel is a $0 way to surface it. We hear from users who use it for "should I open this app right now" gates — the wheel says no often enough to break the doomscroll without willpower being involved.
+
+For non-binary choices, add segments by typing more lines into the entries box; the wheel rebalances live. For yes-no decisions with one side weighted more (you want the wheel to say "go for it" 70% of the time, say) the <a href="/weighted-random-picker" class="text-primary underline hover:no-underline">weighted picker</a> handles it. For a physical-feeling coin flip rather than a wheel, the <a href="/coin-flip" class="text-primary underline hover:no-underline">coin flipper</a> has the same 50/50 but flips a 3D piece instead.`,
     metaTitle: "Yes or No Wheel - Free Random Decision Maker | Real Wheel Picker",
-    metaDescription: "Spin the Yes or No wheel for instant decisions. Free random picker — add Maybe, Later, or any custom option. No signup!",
+    metaDescription: "A 50/50 Yes-or-No wheel for tiebreakers, decision fatigue, and pre-commitment checks. Add custom options if 2 isn't enough.",
   },
   "team-generator": {
     slug: "team-generator",
@@ -369,19 +373,27 @@ If you need to split a class of 28 into balanced groups rather than pick one stu
     subtitle: "Randomly select Instagram giveaway winners. Fair, transparent, and verifiable.",
     microText: "Free • No signup • Instant result",
     howItWorksTitle: "How does this Instagram giveaway picker work?",
-    howItWorksText: "Copy your Instagram comment participants, paste them into the list, and spin the wheel. Each participant has an equal chance of winning. The live animation makes the draw transparent — perfect to record and share as proof of fairness with your audience.",
+    howItWorksText: "Pull the commenter usernames off your post (select all on the comment thread, copy, paste — handles count and replies fine). Drop them in. The wheel renders with every entry visible. Hit space, watch the spin, screen-record the last five seconds. Post the clip the moment it stops. Total time: about a minute from copy to announcement.",
     whenToUseTitle: "When should you use an Instagram giveaway picker?",
     useCases: [
-      { icon: "gift", title: "Comment Giveaways", description: "Pick winners from post comments" },
-      { icon: "users", title: "Follower Contests", description: "Select from eligible followers" },
-      { icon: "video", title: "Story Giveaways", description: "Draw winners from story entries" },
-      { icon: "trophy", title: "Multiple Winners", description: "Pick 1, 3, or 5+ winners at once" },
-      { icon: "sparkles", title: "Brand Campaigns", description: "Professional giveaway execution" },
+      { icon: "gift", title: "Comment Draws", description: "Paste raw comments, the picker strips @s and dupes" },
+      { icon: "users", title: "Story Reshare Draws", description: "Manual list, but the spin part is the same" },
+      { icon: "video", title: "Reel Engagement", description: "Tag-2-friends rules become weighted entries" },
+      { icon: "trophy", title: "Multi-Prize Draws", description: "Pick 1st, 2nd, 3rd in one sequence" },
+      { icon: "sparkles", title: "Collab Giveaways", description: "Combine commenter lists from two accounts" },
     ],
     seoTitle: "Free Instagram Giveaway Picker",
-    seoText: "Run your Instagram giveaway the right way with our free Instagram giveaway picker. Paste your list of commenters or participants, spin the wheel, and get a verifiable random winner. The live spinning animation can be recorded and shared as proof of fairness — your followers will trust the result. Pick multiple winners at once for bigger campaigns. No Instagram API access required, no account needed.",
-    metaTitle: "Instagram Giveaway Picker - Free Winner Selector | Real Wheel Picker",
-    metaDescription: "Pick Instagram giveaway winners fairly. Paste commenters, spin the wheel, get a verifiable result. Free, no signup!",
+    seoText: `Meta's terms allow giveaways on Instagram but don't endorse specific winner-selection tools. What that means in practice: you're free to use any method, as long as the disclosure to participants is honest. A screen-recorded wheel spin clears that bar and ends the trust conversation faster than any disclaimer would.
+
+<strong class="text-foreground">The Instagram-specific bit</strong>
+The mildly annoying part of an IG giveaway is collecting comments. Instagram caps the visible comment count and replies expand inline; copy-paste from the app works but pastes a wall of usernames + reply markers. The picker strips Instagram's comment-thread metadata (timestamps, "@user replied", emoji-only entries) and gives you a clean list. Duplicates are removed by default; toggle that off if your rule is "more comments = more entries."
+
+<strong class="text-foreground">Tag-2-friends rules</strong>
+The <a href="/social-giveaway" class="text-primary underline hover:no-underline">social giveaway picker</a> has a "minimum @ tags in comment" filter. Set it to 2 and only entries whose comment contains at least 2 @-mentions stay in. This is the cleanest way to enforce "tag 2 friends to enter" without manually scanning replies.
+
+Once you've got the cleaned list, paste it here or stay on the social giveaway picker and spin from there. Either works.`,
+    metaTitle: "Instagram Giveaway Picker — Free Winner Selector | Real Wheel Picker",
+    metaDescription: "Paste raw IG comments, the wheel strips dupes and @ symbols, screen-record the spin for proof. Meta-policy friendly, no API, no signup.",
     relatedBlogPost: { slug: "/blog/how-to-run-instagram-giveaway", title: "How to Run a Successful Instagram Giveaway" },
   },
   "tiktok-giveaway-picker": {
