@@ -432,148 +432,202 @@ For multi-platform draws (TikTok + Instagram + Twitter at the same time), combin
   "youtube-giveaway-picker": {
     slug: "youtube-giveaway-picker",
     h1: "YouTube Giveaway Picker – Pick Subscriber Winners",
-    subtitle: "Randomly select YouTube giveaway winners from subscribers or commenters. Fair and live.",
-    microText: "Free • No signup • Instant result",
+    subtitle: "Channel members or comment-thread entries — paste either, spin once, show the recording in your next video as proof.",
+    microText: "Free • Works without the YouTube API • Stream-ready",
     howItWorksTitle: "How does this YouTube giveaway picker work?",
-    howItWorksText: "Collect your YouTube giveaway entries (comment usernames, subscriber names, or members), paste them into the picker, and spin the wheel. The live spinning animation is perfect to show on stream or record as a video to prove the draw was fair.",
+    howItWorksText: "Open the comment section, sort by 'Newest first' (otherwise YouTube reorders by relevance and you miss late entries). Expand 'Show more replies' a few times to load the full thread, then select-all-and-copy. Paste here. The picker strips reply markers and bumps duplicates. For sub-only draws, paste the membership list from YouTube Studio → Memberships → Active members instead. Spin while screen-recording — the next video's pinned comment is where the clip goes.",
     whenToUseTitle: "When should you use a YouTube giveaway picker?",
     useCases: [
-      { icon: "video", title: "Subscriber Milestones", description: "Celebrate subscriber counts with a giveaway" },
-      { icon: "gift", title: "Comment Giveaways", description: "Pick winners from video comments" },
-      { icon: "users", title: "Member Rewards", description: "Randomly reward channel members" },
-      { icon: "trophy", title: "Live Stream Draws", description: "Spin the wheel during your stream" },
-      { icon: "sparkles", title: "Channel Growth", description: "Boost engagement with exciting giveaways" },
+      { icon: "video", title: "Subscriber Milestone", description: "100K / 500K / 1M plaque celebrations" },
+      { icon: "gift", title: "Comment-to-Enter", description: "The dominant YouTube giveaway format" },
+      { icon: "users", title: "Members-Only Draws", description: "Channel-membership exclusive prizes" },
+      { icon: "trophy", title: "Live Stream Draws", description: "Premiere / Live wait-screens" },
+      { icon: "sparkles", title: "Brand Deal Activations", description: "Sponsor-mandated transparent draws" },
     ],
     seoTitle: "Free YouTube Giveaway Picker",
-    seoText: "Our free YouTube giveaway picker makes selecting winners from your subscribers or commenters quick and verifiable. Paste your list, spin the wheel live on stream or record it, and prove to your audience the draw is completely random. Perfect for subscriber milestones, comment giveaways, and member-only draws. No YouTube API access needed — works with any list you paste in.",
-    metaTitle: "YouTube Giveaway Picker - Free Subscriber Winner Selector | Real Wheel Picker",
-    metaDescription: "Pick YouTube giveaway winners fairly from subscribers or comments. Live spin for proof. Free, no signup required!",
+    seoText: `YouTube's giveaway policy lives inside the broader Community Guidelines and the YouTube Partner Program rules. The short version: prize draws are allowed, the entry mechanism can't promise views or engagement in exchange for the prize (no "subscribe + comment + 3 friends" Pyramid style), and the prize fulfilment is on the creator. The platform itself doesn't certify draws.
+
+<strong class="text-foreground">The actual workflow that works</strong>
+Sort comments by Newest first. YouTube's default "Top comments" sort reorders by engagement, which means late entries silently disappear from the visible list — copy from that view and you've shadow-excluded half your participants. Newest-first also makes it easier to scroll back to a cutoff timestamp if your giveaway has an entry deadline.
+
+<strong class="text-foreground">Sub-only versus all-comment draws</strong>
+Members-only draws are easier to verify (YouTube Studio gives you a clean active-members CSV), and they convert better as channel-growth tools because the entry barrier creates the conversion. Open-comment draws cast a wider net but get more bots and the verification work falls on you.
+
+For comment-keyword filtering ("must include #giveaway" or similar) the <a href="/social-giveaway" class="text-primary underline hover:no-underline">social giveaway picker</a> handles it. For weighted draws where channel members count for 3× a non-member's chance, the <a href="/weighted-random-picker" class="text-primary underline hover:no-underline">weighted picker</a> sets that ratio.`,
+    metaTitle: "YouTube Giveaway Picker — Free Subscriber Winner Selector",
+    metaDescription: "Paste comments or the YouTube Studio members CSV, spin once, screen-record the result. YPP-friendly, no API key, no signup.",
     relatedBlogPost: { slug: "/blog/youtube-giveaway-guide", title: "How to Run a YouTube Giveaway That Grows Your Channel" },
   },
   "discord-giveaway-picker": {
     slug: "discord-giveaway-picker",
     h1: "Discord Giveaway Picker – Select Server Winners",
-    subtitle: "Randomly pick Discord giveaway winners from your server members. Fair and instant.",
-    microText: "Free • No signup • Instant result",
+    subtitle: "Reaction collectors and Giveaway-Bot do the same thing this page does, except this works without adding a bot to your server.",
+    microText: "Free • No bot needed • Mod-permission-friendly",
     howItWorksTitle: "How does this Discord giveaway picker work?",
-    howItWorksText: "Copy your Discord giveaway participants (reaction users, members who entered, or anyone in a channel), paste their usernames into the picker, and spin the wheel. The random selection ensures every eligible member has an equal chance of winning.",
+    howItWorksText: "Pull the participant list from wherever your entries live: people who reacted with 🎉, members of a specific role, anyone who replied to the giveaway message. Discord's UI doesn't make this easy without a bot — you typically right-click the reaction count, view all reactors, and copy from the modal. Once you have the usernames, paste them here and spin. The picker handles Discord's discriminator format (Name#1234 or the new @handle) cleanly.",
     whenToUseTitle: "When should you use a Discord giveaway picker?",
     useCases: [
-      { icon: "gift", title: "Server Giveaways", description: "Reward engaged server members" },
-      { icon: "users", title: "Reaction Draws", description: "Pick from emoji-reaction participants" },
-      { icon: "trophy", title: "Community Events", description: "Prizes for event participants" },
-      { icon: "video", title: "Gaming Contests", description: "Select winners for gaming tournaments" },
-      { icon: "sparkles", title: "Role Rewards", description: "Randomly assign special roles" },
+      { icon: "gift", title: "Reaction Giveaways", description: "🎉 reactors, no bot install needed" },
+      { icon: "users", title: "Role-Gated Draws", description: "Booster-only, Nitro-only, donator-only" },
+      { icon: "trophy", title: "Tournament Slot Draws", description: "Pick 8 / 16 / 32 slots from a sign-up list" },
+      { icon: "video", title: "Voice Channel Attendance", description: "Manual list of people who showed up to the event" },
+      { icon: "sparkles", title: "Karma/XP Rewards", description: "Mee6/Tatsu top-N user lists" },
     ],
     seoTitle: "Free Discord Giveaway Picker",
-    seoText: "Running a Discord giveaway? Our free Discord giveaway picker makes it easy to randomly select winners from your server members. Just paste the list of eligible participants (from reactions, message entries, or manual lists), spin the wheel, and announce the winner. Perfect for community events, gaming contests, and server engagement rewards. No Discord bot required — just paste and spin.",
-    metaTitle: "Discord Giveaway Picker - Free Server Winner Selector | Real Wheel Picker",
-    metaDescription: "Pick Discord giveaway winners fairly from server members. Paste usernames, spin the wheel. Free, no bot required!",
+    seoText: `Adding a giveaway bot to a Discord server is a permissions decision a lot of admins don't want to make for a one-off draw — bots like Giveaway-Bot or MEE6 need Manage Messages, sometimes Manage Roles, and you've now got a third party reading your server. This page is the no-bot alternative: paste a list, spin, post the screenshot in the announcement channel.
+
+<strong class="text-foreground">Getting the reactor list out of Discord</strong>
+Right-click the reaction count below the giveaway message → "View Reactors" → there's no native "copy all" but the user list is selectable. For servers with more than 100 reactors, paginate through the modal. If you've got a bot already, most of them expose a /listreactors-style command that pastes the list into a channel; copy from there instead.
+
+<strong class="text-foreground">Role-restricted draws</strong>
+For Booster-only or Nitro-only draws, the cleanest method is asking eligible members to react with a specific emoji to the giveaway message, then filtering the reactor list against your role list. The picker doesn't do the filtering itself — it just runs the spin once you've cleaned the list.
+
+For server-wide draws where you want the giveaway message itself to handle entries automatically, a bot is still easier. For one-off draws where the bot-install friction outweighs the convenience, this page wins.`,
+    metaTitle: "Discord Giveaway Picker — Free Server Winner Selector",
+    metaDescription: "Run a Discord giveaway without installing a bot. Paste reactors, role-members, or tournament sign-ups, spin once, post the proof.",
     relatedBlogPost: { slug: "/blog/discord-giveaway-guide", title: "How to Run a Discord Giveaway (Complete Guide)" },
   },
   "twitter-giveaway-picker": {
     slug: "twitter-giveaway-picker",
     h1: "Twitter / X Giveaway Picker – Select Winners Fast",
-    subtitle: "Randomly pick Twitter/X giveaway winners from retweets or replies. Fair and verifiable.",
-    microText: "Free • No signup • Instant result",
+    subtitle: "Since the X API turned paid, third-party 'pick a winner from retweets' tools died. This page is the manual-paste replacement.",
+    microText: "Free • Works post-API • Verified-tier weighting optional",
     howItWorksTitle: "How does this Twitter/X giveaway picker work?",
-    howItWorksText: "Collect your Twitter/X giveaway participants (retweeters, repliers, or likers), paste their usernames into the picker, and spin. The cryptographically random selection ensures every participant has a fair chance, and you can share the spin as proof.",
+    howItWorksText: "X removed free public-API access in 2023, so the old crop of retweet-roulette tools either shut down or now charge $100/month. The manual workflow is: open the retweets/quotes panel on the giveaway tweet, scroll the full list (X lazy-loads, so scroll all the way), select-all the usernames pane, copy. Paste here. The picker strips @ symbols and dedupes. Spin, screen-record, post the clip as a reply to the original tweet.",
     whenToUseTitle: "When should you use a Twitter/X giveaway picker?",
     useCases: [
-      { icon: "gift", title: "Retweet Giveaways", description: "Pick winners from retweet participants" },
-      { icon: "users", title: "Reply Contests", description: "Select from reply or quote-tweet entries" },
-      { icon: "video", title: "Like Draws", description: "Choose from users who liked your tweet" },
-      { icon: "trophy", title: "Follower Rewards", description: "Celebrate follower milestones" },
-      { icon: "sparkles", title: "Brand Campaigns", description: "Professional Twitter/X promotions" },
+      { icon: "gift", title: "Retweet/Repost Draws", description: "Classic 'RT to enter' giveaway format" },
+      { icon: "users", title: "Quote-Tweet Contests", description: "More engagement signal than a plain RT" },
+      { icon: "video", title: "Reply Draws", description: "Lower entry barrier, more bot risk" },
+      { icon: "trophy", title: "Follower Milestones", description: "1K / 10K / 100K celebration giveaways" },
+      { icon: "sparkles", title: "Verified/Blue Bias", description: "Weight verified accounts 2× via weighted picker" },
     ],
     seoTitle: "Free Twitter / X Giveaway Picker",
-    seoText: "Our free Twitter/X giveaway picker helps you select winners from retweets, replies, or likes fairly and transparently. Copy participant usernames, paste them in, spin the wheel, and share the result. Perfect for viral marketing campaigns, follower milestone giveaways, and engagement-boosting contests. No Twitter/X API access required — just paste names and spin.",
-    metaTitle: "Twitter Giveaway Picker - Free X Contest Winner Selector | Real Wheel Picker",
-    metaDescription: "Pick Twitter/X giveaway winners from retweets and replies. Fair, verifiable, free. No signup required!",
+    seoText: `The X giveaway landscape changed sharply in 2023. The free public API closure killed the previous generation of "paste a tweet URL and we'll pick a winner" tools — RandomPicker, TwitterPickerBot, and others either shut down or moved behind a paid X Developer tier that costs $100/month minimum. The remaining options are manual collection (this page) or expensive API access.
+
+<strong class="text-foreground">The manual workflow, end to end</strong>
+Open the retweets panel of your giveaway tweet (click the retweet count). X paginates aggressively, so scroll until "End of retweets" appears or until you've covered the entry deadline. Select the username column with click-drag, copy, paste here. The picker drops @-symbols, removes duplicates by default, and gives you a clean list to spin.
+
+<strong class="text-foreground">Bot defence on X</strong>
+X giveaways attract a higher proportion of bot entries than other platforms because the entry barrier (RT or reply) is the lowest of any major social network. The <a href="/social-giveaway" class="text-primary underline hover:no-underline">social giveaway picker</a> has an "exclude suspected bots" toggle that catches handles with the all-digit or no-vowel patterns generated en masse. Verified accounts (legacy or paid Blue) typically pass through that filter; if you want to weight them higher to bias toward real engagement, the <a href="/weighted-random-picker" class="text-primary underline hover:no-underline">weighted picker</a> sets per-entry odds.`,
+    metaTitle: "Twitter Giveaway Picker — Free X Contest Winner Selector",
+    metaDescription: "The post-API-shutdown way to pick X giveaway winners. Paste retweeters or repliers, spin, post the clip. No $100/mo API tier needed.",
     relatedBlogPost: { slug: "/blog/twitter-giveaway-guide", title: "How to Run a Twitter/X Giveaway That Goes Viral" },
   },
   "facebook-giveaway-picker": {
     slug: "facebook-giveaway-picker",
     h1: "Facebook Giveaway Picker – Draw Winners Fairly",
-    subtitle: "Randomly pick Facebook giveaway winners from comments or likes. Transparent and fast.",
-    microText: "Free • No signup • Instant result",
+    subtitle: "Meta's Promotions Guidelines have a hard rule: you can't require sharing to enter. Beyond that, anything goes. This page handles the draw itself.",
+    microText: "Free • Meta-policy-compliant flow • Group + Page",
     howItWorksTitle: "How does this Facebook giveaway picker work?",
-    howItWorksText: "Collect Facebook giveaway participants from your post comments, page followers, or group members. Paste the list of names into the picker and spin the wheel. The live animation is perfect to record and post as proof of a fair draw.",
+    howItWorksText: "Open your giveaway post. Comments paginate the same as the rest of Facebook — click 'View more comments' until you've loaded the full thread. Select-all and copy the comment column (Facebook's UI mixes timestamps and reactions in the copy buffer; the picker filters that out). Paste here, spin once, screen-record. Post the recording as a follow-up comment or a new post pinned to the page.",
     whenToUseTitle: "When should you use a Facebook giveaway picker?",
     useCases: [
-      { icon: "gift", title: "Post Comment Draws", description: "Pick winners from Facebook post comments" },
-      { icon: "users", title: "Page Giveaways", description: "Reward page followers and fans" },
-      { icon: "video", title: "Group Contests", description: "Run giveaways in Facebook Groups" },
-      { icon: "trophy", title: "Business Promotions", description: "Professional business page giveaways" },
-      { icon: "sparkles", title: "Event Draws", description: "Select winners at Facebook Events" },
+      { icon: "gift", title: "Page Post Giveaways", description: "Comment-to-enter, the standard Page format" },
+      { icon: "users", title: "Group Giveaways", description: "Closed/private groups, members-only draws" },
+      { icon: "video", title: "Live Stream Draws", description: "Spin during Facebook Live, audience sees it" },
+      { icon: "trophy", title: "Local Business Promo", description: "Boost Page reach with a transparent draw" },
+      { icon: "sparkles", title: "Event RSVP Draws", description: "Pick winners from event attendees" },
     ],
     seoTitle: "Free Facebook Giveaway Picker",
-    seoText: "Run compliant and fair Facebook giveaways with our free Facebook giveaway picker. Paste your list of participants from comments or followers, spin the wheel live, and select a verifiable winner. Record the spinning animation to share as proof of transparency. Perfect for business page promotions, group giveaways, and follower engagement campaigns. No Facebook API needed.",
-    metaTitle: "Facebook Giveaway Picker - Free Contest Winner Selector | Real Wheel Picker",
-    metaDescription: "Pick Facebook giveaway winners from comments and followers. Live spin for transparency. Free, no signup required!",
+    seoText: `Meta's Promotions Guidelines (the rulebook for prize draws on Facebook and Instagram) are short and specific: you cannot require participants to share a post, tag friends in the post content, or move the giveaway to a personal timeline. Comment-to-enter and like-to-enter are both allowed. Most violations of these rules don't trigger automated takedowns — they trigger reports from competitors, so the rules matter most when your draw is big enough to attract attention.
+
+<strong class="text-foreground">Page giveaway versus Group giveaway</strong>
+On a public Page, the comment thread is your participant list. On a private Group, you're operating inside a closed audience and most Promotions Guidelines don't apply the same way — Group admins set the rules. Group giveaways convert better (audience is pre-segmented and engaged) but reach less new people.
+
+<strong class="text-foreground">The "must share to enter" trap</strong>
+Lots of Pages still post "comment + share to enter" giveaways. Sharing is technically prohibited as an entry requirement. Meta enforces this inconsistently — small Pages get away with it, large brands get flagged. Stick to "comment to enter" and you don't have to worry about the policy review email.
+
+For weighted draws where Page fans get higher odds than first-time commenters, the <a href="/weighted-random-picker" class="text-primary underline hover:no-underline">weighted picker</a> handles per-entry weighting. For keyword-filtered draws (e.g., "must mention #brand"), use the <a href="/social-giveaway" class="text-primary underline hover:no-underline">social giveaway picker</a>.`,
+    metaTitle: "Facebook Giveaway Picker — Free Contest Winner Selector",
+    metaDescription: "Paste FB post comments, spin, screen-record. Meta-Promotions-Guidelines-compliant workflow. Works for Pages, Groups, and Live streams.",
     relatedBlogPost: { slug: "/blog/facebook-giveaway-guide", title: "How to Run a Facebook Giveaway the Right Way" },
   },
   "twitch-giveaway-picker": {
     slug: "twitch-giveaway-picker",
     h1: "Twitch Giveaway Picker – Select Stream Winners Live",
-    subtitle: "Randomly pick Twitch giveaway winners from your chat or subscribers. Live and fair.",
-    microText: "Free • No signup • Instant result",
+    subtitle: "OBS browser source it, alt-tab to it on stream, hit space. The wheel becomes a five-second segment your viewers actually want to watch.",
+    microText: "Free • OBS-friendly • Sub-tier weighting via the weighted picker",
     howItWorksTitle: "How does this Twitch giveaway picker work?",
-    howItWorksText: "Collect your Twitch giveaway entries from chat messages, subscriptions, or manual lists. Paste usernames into the picker, spin the wheel live on stream, and let your chat watch the draw happen in real time. Cryptographically random — no way to predict or rig the result.",
+    howItWorksText: "On stream: add the page as an OBS Browser Source so you can switch to it as a scene. Pull the participant list from chat (FrankerFaceZ's chat-log export or the standard Twitch chat scroll-and-copy), or from Streamlabs/Streamelements if you've been running a !enter command. Paste, spin, the wheel takes about 5 seconds — long enough for hype-build, short enough that you don't lose chat momentum.",
     whenToUseTitle: "When should you use a Twitch giveaway picker?",
     useCases: [
-      { icon: "video", title: "Live Stream Draws", description: "Spin on screen for chat to watch" },
-      { icon: "users", title: "Sub Giveaways", description: "Reward subscribers with random prizes" },
-      { icon: "gift", title: "Chat Contests", description: "Pick from chat command participants" },
-      { icon: "trophy", title: "Subscriber Milestones", description: "Celebrate sub counts with prizes" },
-      { icon: "sparkles", title: "Viewer Rewards", description: "Random rewards for active viewers" },
+      { icon: "video", title: "Live Stream Reveal", description: "Add as OBS scene, spin between segments" },
+      { icon: "users", title: "Sub-Only Draws", description: "Tier 3 weights 3× via the weighted picker" },
+      { icon: "gift", title: "Channel Point Redemption", description: "Top redeemers entered automatically" },
+      { icon: "trophy", title: "Sub Milestone", description: "100 / 500 / 1K sub celebration" },
+      { icon: "sparkles", title: "Charity Streams", description: "Donation-tier weighted draws for raids" },
     ],
     seoTitle: "Free Twitch Giveaway Picker",
-    seoText: "Engage your Twitch community with our free Twitch giveaway picker. Paste your list of giveaway participants — subscribers, chatters, or anyone who entered — and spin the wheel live on stream. Your audience sees the real-time spin, making the draw exciting and transparent. No Twitch API or bot needed. Perfect for subscriber giveaways, channel point rewards, and milestone celebrations.",
-    metaTitle: "Twitch Giveaway Picker - Free Stream Winner Selector | Real Wheel Picker",
-    metaDescription: "Pick Twitch giveaway winners live on stream. Paste subs or chatters, spin the wheel. Free, no signup, no bot needed!",
+    seoText: `On Twitch, the wheel is a piece of show-don't-tell. The five-second spin window fits cleanly into a stream's pacing — long enough to read a sponsor blurb over it, short enough that you don't lose chat. The audience watches the wheel rather than waiting for you to type out a number.
+
+<strong class="text-foreground">OBS integration without a plugin</strong>
+Add the giveaway page URL as a Browser Source in OBS at 800×800. Set it as a separate scene; switch to it when it's draw time, switch back to your camera scene when the wheel stops. No StreamElements or Streamlabs plugin install needed — the page is just a webpage. Chat sees the wheel via your stream output the same way they see your gameplay.
+
+<strong class="text-foreground">Sub-tier weighting</strong>
+On Twitch, tier 1 / 2 / 3 subs pay $5 / $10 / $25 monthly. Weighting tier 3 subs 5× the odds of tier 1 (matching the dollar ratio) is the most defensible "VIP gets better odds" formula. The <a href="/weighted-random-picker" class="text-primary underline hover:no-underline">weighted picker</a> handles those ratios; you'd paste tier-1 names with weight 1, tier-2 names with weight 2, tier-3 names with weight 5.
+
+For chat-command-based entries (!enter), Streamlabs and Nightbot can export the entry list to a CSV; paste that CSV's username column here. For pure chat-scrolling collection, FrankerFaceZ Chat Logger is the least painful tool.`,
+    metaTitle: "Twitch Giveaway Picker — Free Stream Winner Selector",
+    metaDescription: "Add as an OBS Browser Source, switch scene to spin during stream. Sub-tier weighting via the weighted picker. No plugin, no bot.",
     relatedBlogPost: { slug: "/blog/twitch-giveaway-guide", title: "How to Run a Twitch Giveaway Your Community Will Love" },
   },
   "reddit-giveaway-picker": {
     slug: "reddit-giveaway-picker",
     h1: "Reddit Giveaway Picker – Draw Comment Winners",
-    subtitle: "Randomly select Reddit giveaway winners from post comments. Fair and instant.",
-    microText: "Free • No signup • Instant result",
+    subtitle: "Most subs require mod-approved draws with a randomizer link in the result thread. This page is one of the links mods accept.",
+    microText: "Free • Result-thread linkable • Mod-policy compatible",
     howItWorksTitle: "How does this Reddit giveaway picker work?",
-    howItWorksText: "Copy usernames from your Reddit giveaway post comments, paste them into the picker, and spin the wheel. Each commenter has an equal chance. You can share the result in your thread as proof of a fair random draw.",
+    howItWorksText: "Reddit doesn't have a 'copy all comments' export, so the workflow is: scroll the comment section, manually copy the commenter usernames (or use a browser extension like Reddit Enhancement Suite which has a 'show user list' feature). Filter top-level comments only if your rule says 'top-level to enter'. Paste here, spin, post the result thread linking back to this page so mods can verify your participant list reproduces the same outcome.",
     whenToUseTitle: "When should you use a Reddit giveaway picker?",
     useCases: [
-      { icon: "gift", title: "Post Comment Draws", description: "Pick winners from subreddit comments" },
-      { icon: "users", title: "AMA Giveaways", description: "Reward participants in AMAs" },
-      { icon: "trophy", title: "Community Contests", description: "Subreddit contests and challenges" },
-      { icon: "video", title: "Free Stuff Posts", description: "Select from r/giveaways entries" },
-      { icon: "sparkles", title: "Karma Events", description: "Reward engaged community members" },
+      { icon: "gift", title: "Sub-Specific Giveaways", description: "r/anime / r/mechanicalkeyboards / r/Watches typical format" },
+      { icon: "users", title: "AMA Prize Draws", description: "End-of-AMA random commenter prize" },
+      { icon: "trophy", title: "Charity Drives", description: "Karma-threshold-gated draws with mod oversight" },
+      { icon: "video", title: "r/giveaways Posts", description: "Free-stuff sub with verification chains" },
+      { icon: "sparkles", title: "Cake Day Draws", description: "Account anniversary mini-giveaways" },
     ],
     seoTitle: "Free Reddit Giveaway Picker",
-    seoText: "Running a Reddit giveaway? Our free Reddit giveaway picker makes it easy to randomly select winners from your post comments. Copy commenter usernames, paste them into the wheel, spin, and post the proof in your thread. The cryptographically random result ensures complete fairness — no accusations of bias. Works for any subreddit giveaway, AMA prize draw, or community contest. No account required.",
-    metaTitle: "Reddit Giveaway Picker - Free Comment Winner Selector | Real Wheel Picker",
-    metaDescription: "Pick Reddit giveaway winners from post comments. Fair random draw, shareable proof. Free, no signup required!",
+    seoText: `Reddit is the platform where giveaway transparency is enforced socially rather than algorithmically. Mod teams on big subs (r/anime, r/mechanicalkeyboards, r/Watches, r/giveaways) require giveaway posts to be flaired, account-age and karma-gated, and concluded with a winner-announcement thread linking to a public randomizer. The community will dig through your post history if a draw seems suspicious; a screenshot isn't enough.
+
+<strong class="text-foreground">What makes a mod-acceptable result thread</strong>
+The pattern most subs accept: original giveaway post → snapshot of the participant list at the deadline (RES export, or a Pastebin of the comment usernames) → public randomizer link with the participant list pre-loaded → winner announcement linking to all three. The pre-loaded URL is the key step — anyone can re-run the draw and confirm they get the same winner, which is what mods are actually checking.
+
+<strong class="text-foreground">Karma and account-age gating</strong>
+Most giveaway subs require entrants to have 30-day-old accounts and minimum karma (varies, often 100+ comment karma). Reddit doesn't enforce this — you do, manually, by filtering the comment list before pasting. RES makes the filtering tolerable; without it, the work is genuinely tedious for a 500-entry draw.
+
+For weighted draws (e.g., higher-karma entrants get more odds, common in r/charity_giveaways), the <a href="/weighted-random-picker" class="text-primary underline hover:no-underline">weighted picker</a> handles per-entry weights.`,
+    metaTitle: "Reddit Giveaway Picker — Free Comment Winner Selector",
+    metaDescription: "The randomizer link mod teams on giveaway subs accept. Paste filtered commenters, link the result, audit the draw via the share URL.",
     relatedBlogPost: { slug: "/blog/reddit-giveaway-guide", title: "How to Run a Reddit Giveaway the Right Way" },
   },
   "linkedin-giveaway-picker": {
     slug: "linkedin-giveaway-picker",
     h1: "LinkedIn Giveaway Picker – Professional Winner Selection",
-    subtitle: "Randomly select LinkedIn giveaway winners from post comments. Professional and fair.",
-    microText: "Free • No signup • Instant result",
+    subtitle: "LinkedIn giveaways have a different audience than IG/TikTok ones. Lower volume, higher quality leads, mandatory professional tone in the result post.",
+    microText: "Free • B2B-appropriate output • Engagement-boost workflow",
     howItWorksTitle: "How does this LinkedIn giveaway picker work?",
-    howItWorksText: "Copy the names of LinkedIn users who commented, liked, or engaged with your giveaway post. Paste them into the picker, spin the wheel, and get a random winner. The professional animation and verifiable result are perfect for sharing back on LinkedIn.",
+    howItWorksText: "LinkedIn's UI doesn't paginate the comment thread cleanly — 'See more comments' loads in batches and you have to click it 10+ times for a viral post. Once the full thread is visible, select-all the commenter names column (LinkedIn appends the user's title and company; the picker strips that to just the name). Spin once, take a screenshot of the result, post it as a follow-up update tagging the winner — that follow-up post typically gets 30-50% of the original post's engagement, which is why LinkedIn giveaways are good content even before the prize matters.",
     whenToUseTitle: "When should you use a LinkedIn giveaway picker?",
     useCases: [
-      { icon: "users", title: "B2B Giveaways", description: "Professional business giveaways and contests" },
-      { icon: "gift", title: "Post Engagement", description: "Reward commenters on viral posts" },
-      { icon: "trophy", title: "Thought Leader Promos", description: "Build authority with giveaway content" },
-      { icon: "sparkles", title: "Conference Draws", description: "Virtual event prize draws" },
-      { icon: "chart", title: "Product Launches", description: "Generate buzz with professional contests" },
+      { icon: "users", title: "Book/Course Giveaways", description: "The standard 'follow + comment to win' B2B format" },
+      { icon: "gift", title: "Conference Tickets", description: "Pre-event audience-build draws" },
+      { icon: "trophy", title: "Product Launch Promos", description: "First-100 sign-ups draw a premium tier" },
+      { icon: "sparkles", title: "Webinar Attendance", description: "Live-attendees-only draw to drive showup rates" },
+      { icon: "chart", title: "Newsletter Sign-Up", description: "Subscribe-this-week to enter draws" },
     ],
     seoTitle: "Free LinkedIn Giveaway Picker",
-    seoText: "Run professional LinkedIn giveaways with our free winner picker. Paste the names of commenters or participants from your LinkedIn post, spin the wheel, and select a verifiable random winner. Share the result as a follow-up post to boost engagement further. Perfect for B2B giveaways, thought leader campaigns, product launches, and conference prize draws. No LinkedIn API required.",
-    metaTitle: "LinkedIn Giveaway Picker - Free Professional Winner Selector | Real Wheel Picker",
-    metaDescription: "Pick LinkedIn giveaway winners professionally. Paste commenters, spin the wheel, share the proof. Free, no signup!",
+    seoText: `LinkedIn giveaways play by different rules than the consumer-platform ones. The audience is smaller, the entry barrier is higher (commenters are putting their professional reputation on a giveaway post), and the prize that converts is usually content-adjacent: books, course seats, conference tickets, software trials. A $50 Amazon card draw on LinkedIn underperforms a free book.
+
+<strong class="text-foreground">The follow-up post is the actual asset</strong>
+On LinkedIn, the winner-announcement post often outperforms the original giveaway post in impressions. Tag the winner, congratulate them by name, mention the contest briefly, and add a "I'm running another one in [month] — follow me to catch it" call-to-action. That sequence regularly compounds reach across 2-3 giveaway cycles before audience fatigue sets in.
+
+<strong class="text-foreground">Connection-degree weighting (optional)</strong>
+B2B giveaways sometimes weight 1st-degree connections higher than 2nd or 3rd — the rationale being that close-network connections are more likely to become customers. The <a href="/weighted-random-picker" class="text-primary underline hover:no-underline">weighted picker</a> handles this if you manually tag entries by connection degree before pasting (you'd label 1st-degree connections with weight 3, 2nd with 2, 3rd with 1).
+
+For multi-platform B2B campaigns (LinkedIn + Twitter/X simultaneously), combine the lists into the <a href="/giveaway-picker" class="text-primary underline hover:no-underline">main giveaway picker</a> after collecting from each.`,
+    metaTitle: "LinkedIn Giveaway Picker — Free Professional Winner Selector",
+    metaDescription: "B2B-tuned giveaway picker. Paste LinkedIn commenters (titles auto-stripped), spin, post the follow-up that drives 30-50% of original reach.",
     relatedBlogPost: { slug: "/blog/linkedin-giveaway-guide", title: "How to Run a LinkedIn Giveaway That Builds Your Brand" },
   },
 };
