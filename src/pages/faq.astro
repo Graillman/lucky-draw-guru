@@ -12,36 +12,36 @@ const canonical = "/faq";
 
 const faqItems = [
   {
-    question: "Is this random picker truly fair and unbiased?",
-    answer: "Yes, absolutely. Our random picker uses the Web Crypto API (crypto.getRandomValues), which provides cryptographically secure random numbers. This is the same technology used by banks and security applications. Every participant has exactly equal chances in fair mode - no manipulation is possible.",
+    question: "Is this random picker actually fair, or is that just marketing?",
+    answer: "It's verifiable. Every draw calls window.crypto.getRandomValues(), the browser API that backs TLS handshakes and password generators. You can open DevTools → Sources → find the spin function and read the line yourself. There's no server roundtrip, so we couldn't manipulate the result if we tried — the page wouldn't know which entry you'd want to win.",
   },
   {
-    question: "How does the randomness algorithm work?",
-    answer: "We use your browser's built-in cryptographic random number generator (CSPRNG). Unlike simple Math.random(), this provides true randomness based on hardware entropy sources. The algorithm is deterministic once seeded, ensuring consistent and verifiable results. All calculations happen locally - nothing is sent to servers.",
+    question: "How is crypto.getRandomValues() different from Math.random()?",
+    answer: "Math.random() uses a deterministic pseudo-random algorithm seeded by a timestamp. Given the seed and the call sequence, the output is reproducible — which is fine for visual effects but bad for prize draws where someone with the timestamp could in principle reproduce your sequence. crypto.getRandomValues() pulls from a kernel-level CSPRNG that mixes hardware entropy (CPU jitter, mouse-movement timing, etc.) and is not reproducible. Same RNG that TLS uses.",
   },
   {
-    question: "Is my data safe? What do you store?",
-    answer: "We store absolutely nothing on our servers. Your participant list is saved only in your browser's local storage for convenience - you can clear it anytime. No cookies track you, no analytics collect personal data, and no information leaves your device. The draw runs 100% client-side.",
+    question: "What do you store about me on your servers?",
+    answer: "Nothing about your draws. The site has Google AdSense, which sets advertising cookies — that's the only third-party tracking. Your participant list lives in your browser's localStorage (you can wipe it via the trash icon or DevTools → Application → Local Storage). We don't have an API endpoint that accepts your list, which means we don't have an inbox of leaked rosters either.",
   },
   {
     question: "Can I use this for Instagram or YouTube giveaways?",
-    answer: "Yes! Our giveaway picker is perfect for social media contests. You can paste comments, usernames, or any list of participants. The visual wheel spin adds transparency - show your audience the live draw. Many influencers and streamers use our tool for fair, public winner selection.",
+    answer: "Yes, and the platform-specific pages handle the awkward bits: Instagram's reply-thread paste, YouTube's Newest-first sort trap, TikTok's interleaved comments. The dedicated /instagram-giveaway-picker / /youtube-giveaway-picker / /tiktok-giveaway-picker pages all run the same crypto-RNG underneath but with platform-aware comment cleaning.",
   },
   {
-    question: "What's the difference between Fair and Custom draw modes?",
-    answer: "Fair mode gives everyone equal chances - perfect for giveaways where fairness is essential. Custom mode lets you assign different weights/probabilities to participants - useful for loyalty programs, engagement rewards, or scenarios where some entries should have better odds. Both modes show transparent probability calculations.",
+    question: "What's the difference between equal-odds and weighted draws?",
+    answer: "Equal-odds means every entry gets the same segment size (1/N each). Weighted means you assign per-entry weights (numbers) and the segment sizes scale to match — entry with weight 5 takes 5× the space of weight 1. Use the /weighted-random-picker for tickets-purchased, sub-tier, or donation-amount draws. The wheel shows the exact percentages live as you edit.",
   },
   {
-    question: "Can I pick multiple winners at once?",
-    answer: "Yes! Set the number of winners before spinning. For multiple winners, we use our casino roulette visualization with numbered balls - each landing in a unique slot. Winners are selected without replacement, ensuring the same person can't win twice in a single draw.",
+    question: "Can I pick multiple winners in one draw?",
+    answer: "Yes. Set the winners count above the wheel before spinning. The picker draws without replacement — first winner gets removed from the pool, second winner comes from the remaining N-1, and so on. The result panel shows them in draw order. Useful for 1st/2nd/3rd place sequences.",
   },
   {
-    question: "Does it work on mobile devices?",
-    answer: "Absolutely. Our tool is fully responsive and optimized for all devices - phones, tablets, and desktops. The wheel animations are smooth, touch-friendly, and work identically across all platforms. No app download required - just open the website.",
+    question: "Does it work on phones and tablets?",
+    answer: "Yes. The canvas renders the same on mobile as on desktop, and the spin works via tap or swipe instead of click. The one caveat: the wheel sizes to viewport height, so on a tall narrow screen it'll be smaller than on a 16:9 monitor. If you need a larger wheel on mobile, the fullscreen icon (top-right) gives you the entire viewport.",
   },
   {
-    question: "Is this free? Are there hidden costs?",
-    answer: "100% free with no hidden costs, no premium tiers, no signup required. We're supported by non-intrusive ads that never interrupt your draws. Use it unlimited times with unlimited participants.",
+    question: "What's the catch? Why is it free?",
+    answer: "The site runs Google AdSense — not paywalled tools, not feature locks. Ads sit in fixed slots that don't overlay the wheel. The tool is genuinely free with no usage caps. If you find that annoying, an uBlock-style blocker disables them and we don't paywall in response. The math doesn't change either way.",
   },
 ];
 
@@ -68,10 +68,10 @@ const jsonLd = {
       <section class="bg-card border border-border rounded-xl p-6 md:p-8 space-y-4">
         <h2 class="text-xl font-bold text-foreground">Still have questions?</h2>
         <p class="text-muted-foreground leading-relaxed">
-          Real Wheel Picker is a free online random selection tool built for streamers, teachers, event organizers, and anyone who needs a fair, transparent way to pick winners. It runs entirely in your browser — no data ever leaves your device, no account is needed, and every draw is powered by cryptographically secure randomness.
+          The questions we get most often that aren't in the list above: how to embed the wheel in a website (see <a href="/embed" class="text-primary hover:underline">/embed</a>), how to verify a winner after the fact (screen-record the spin, the recording is the proof), what happens if a winner doesn't respond within X days (remove them in the result panel and re-spin from the remaining pool).
         </p>
         <p class="text-muted-foreground leading-relaxed">
-          Whether you're running a giveaway for 10 followers or selecting teams for 200 employees, the tool handles it instantly. Use it for Instagram giveaways, TikTok live draws, Discord raffles, classroom activities, Secret Santa assignments, or any situation that calls for a random, unbiased choice.
+          For anything not covered, the <a href="/contact" class="text-primary hover:underline">contact page</a> has the email. We answer questions about the maths in detail because we'd rather you understood how the tool works than took our word for it.
         </p>
       </section>
 
