@@ -1,9 +1,8 @@
-import React, { useState, useMemo, useCallback, useRef } from 'react';
+import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { SpinningWheel } from '@/components/SpinningWheel';
 import DrawButton from '@/components/DrawButton';
-import WinnerResult from '@/components/WinnerResult';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight, Copy, Check, X, RotateCcw, ShieldCheck } from 'lucide-react';
 
 interface FilterConfig {
   removeDuplicates: boolean;
@@ -126,6 +125,16 @@ const SocialGiveawayInner = () => {
   const [loaded, setLoaded] = useState(true);
   const [winners, setWinners] = useState<string[]>([]);
   const [isSpinning, setIsSpinning] = useState(false);
+  // Influencer-flow extras: timestamp + per-filter audit counts captured at
+  // the moment of the draw, so the result panel can show a verifiable
+  // "drawn at HH:MM from N → N entries" stamp the creator can screenshot.
+  const [lastDrawAt, setLastDrawAt] = useState<Date | null>(null);
+  const [drawAuditCounts, setDrawAuditCounts] = useState<{ raw: number; filtered: number } | null>(null);
+  // Track disqualified usernames between spins so the creator can DM a winner,
+  // get no reply, hit "Disqualify" and re-spin from the remaining pool.
+  const [disqualified, setDisqualified] = useState<string[]>([]);
+  // "Copied!" toast state for the announcement-text button.
+  const [copied, setCopied] = useState(false);
   const wheelRef = useRef<HTMLDivElement>(null);
 
   const detectedPlatform = useMemo(() => detectPlatform(linkInput.trim()), [linkInput]);
@@ -224,6 +233,9 @@ const SocialGiveawayInner = () => {
     setWheelParticipants(names);
     setLoaded(true);
     setWinners([]);
+    setDisqualified([]);
+    setLastDrawAt(null);
+    setDrawAuditCounts(null);
     setTimeout(() => {
       wheelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 100);
@@ -233,17 +245,68 @@ const SocialGiveawayInner = () => {
     if (isSpinning || wheelParticipants.length < 2) return;
     setIsSpinning(true);
     setWinners([]);
-  }, [isSpinning, wheelParticipants.length]);
+    // Snapshot the audit counts at draw time so the result panel can show
+    // "drew from N filtered entries (N raw)" even after the user edits the list.
+    setDrawAuditCounts({ raw: parsedEntries.length || wheelParticipants.length, filtered: wheelParticipants.length });
+  }, [isSpinning, wheelParticipants.length, parsedEntries.length]);
 
   const handleComplete = useCallback((w: string[]) => {
     setWinners(w);
+    setLastDrawAt(new Date());
     setIsSpinning(false);
   }, []);
 
   const handleRelaunch = useCallback(() => {
     setWinners([]);
+    setDisqualified([]);
     setTimeout(() => setIsSpinning(true), 100);
   }, []);
+
+  // Disqualify a winner (typically: DM'd, no reply within X hours). Removes
+  // them from the wheel pool and immediately re-spins for a replacement.
+  const handleDisqualify = useCallback((username: string) => {
+    const cleaned = username.replace(/^@/, '').toLowerCase();
+    setDisqualified(prev => [...prev, username]);
+    setWheelParticipants(prev => prev.filter(p => p.pseudo.replace(/^@/, '').toLowerCase() !== cleaned));
+    setWinners([]);
+    setTimeout(() => setIsSpinning(true), 100);
+  }, []);
+
+  // Pair each winner username back to its original parsed comment so the
+  // result panel can show what they wrote (lets the host quote it in the
+  // announcement post, "@user said 'comment' — and just won!").
+  const winnersWithComment = useMemo(() => {
+    return winners.map(w => {
+      const cleaned = w.replace(/^@/, '').toLowerCase();
+      const entry = filteredEntries.find(e => e.username.toLowerCase() === cleaned);
+      return { username: w, comment: entry?.comment || '' };
+    });
+  }, [winners, filteredEntries]);
+
+  // Generate a ready-to-paste announcement message. Variable per winners.
+  const announcementText = useMemo(() => {
+    if (winners.length === 0) return '';
+    if (winners.length === 1) {
+      const w = winners[0].startsWith('@') ? winners[0] : `@${winners[0]}`;
+      return `🎉 We have a winner! Congrats ${w} — DM me to claim your prize.\n\nThanks to everyone who entered 💖`;
+    }
+    const lines = winners.map((w, i) => `${i + 1}. ${w.startsWith('@') ? w : `@${w}`}`);
+    return `🎉 ${winners.length} winners drawn — congrats to:\n\n${lines.join('\n')}\n\nDM me to claim your prize. Thanks to everyone who entered 💖`;
+  }, [winners]);
+
+  const copyAnnouncement = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(announcementText);
+      setCopied(true);
+    } catch { /* clipboard blocked, no-op */ }
+  }, [announcementText]);
+
+  // Auto-dismiss the "Copied!" badge.
+  useEffect(() => {
+    if (!copied) return;
+    const t = window.setTimeout(() => setCopied(false), 2000);
+    return () => window.clearTimeout(t);
+  }, [copied]);
 
   const platformGuide = detectedPlatform ? PLATFORM_EXPORT_GUIDE[detectedPlatform] : null;
 
@@ -490,7 +553,92 @@ const SocialGiveawayInner = () => {
               <DrawButton onDraw={handleDraw} isSpinning={isSpinning} disabled={wheelParticipants.length < 2} participantCount={wheelParticipants.length} mode="simple" />
             )}
             {winners.length > 0 && !isSpinning && (
-              <WinnerResult winners={winners} onRelaunch={handleRelaunch} mode="simple" />
+              <div className="w-full max-w-2xl space-y-4">
+                {/* Winner cards — username + their comment + per-winner disqualify */}
+                <div className="space-y-3">
+                  {winnersWithComment.map((w, i) => (
+                    <div key={w.username + i} className="rounded-2xl border border-border bg-card p-5 space-y-3 shadow-lg">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-xs font-mono uppercase tracking-wider text-muted-foreground">
+                              {winners.length > 1 ? `Winner #${i + 1}` : 'Winner'}
+                            </span>
+                            <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                              <ShieldCheck className="w-3 h-3" /> verified random
+                            </span>
+                          </div>
+                          <p className="font-serif text-2xl md:text-3xl text-foreground leading-tight tracking-tight break-all">
+                            {w.username.startsWith('@') ? w.username : `@${w.username}`}
+                          </p>
+                          {w.comment && (
+                            <p className="mt-2 text-sm text-muted-foreground italic">
+                              "{w.comment.length > 220 ? w.comment.slice(0, 217) + '…' : w.comment}"
+                            </p>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => handleDisqualify(w.username)}
+                          title="Disqualify this winner and re-spin from the remaining pool"
+                          className="shrink-0 inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border bg-card text-xs text-muted-foreground hover:text-destructive hover:border-destructive/40 transition-colors"
+                        >
+                          <X className="w-3.5 h-3.5" /> Disqualify
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Action row — copy announcement + re-spin from scratch */}
+                <div className="flex flex-col sm:flex-row gap-2.5">
+                  <button
+                    onClick={copyAnnouncement}
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-foreground text-background font-semibold text-sm hover:opacity-90 transition-opacity"
+                  >
+                    {copied ? <><Check className="w-4 h-4" /> Copied to clipboard</> : <><Copy className="w-4 h-4" /> Copy announcement post</>}
+                  </button>
+                  <button
+                    onClick={handleRelaunch}
+                    className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-border bg-card text-sm font-medium text-foreground hover:bg-muted/50 transition-colors"
+                  >
+                    <RotateCcw className="w-4 h-4" /> Spin again from full list
+                  </button>
+                </div>
+
+                {/* Pre-baked announcement preview — collapsible */}
+                <details className="rounded-xl border border-border bg-card overflow-hidden group">
+                  <summary className="cursor-pointer list-none px-4 py-3 flex items-center justify-between text-sm font-medium text-foreground hover:bg-muted/30 transition-colors">
+                    <span>Preview the announcement text</span>
+                    <ChevronDown className="w-4 h-4 text-muted-foreground group-open:rotate-180 transition-transform" />
+                  </summary>
+                  <pre className="px-4 pb-4 pt-1 text-xs text-muted-foreground whitespace-pre-wrap font-mono leading-relaxed border-t border-border bg-secondary/20">{announcementText}</pre>
+                </details>
+
+                {/* Audit footer — timestamp + pre/post-filter counts + RNG verification hint */}
+                {lastDrawAt && drawAuditCounts && (
+                  <div className="rounded-xl border border-dashed border-border bg-secondary/10 px-4 py-3 text-xs text-muted-foreground space-y-1 font-mono">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                      <span><span className="text-foreground">Drawn at</span> {lastDrawAt.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}</span>
+                      <span className="opacity-50">·</span>
+                      <span>
+                        <span className="text-foreground">{drawAuditCounts.filtered}</span> entries on the wheel
+                        {drawAuditCounts.raw !== drawAuditCounts.filtered && (
+                          <> ({drawAuditCounts.raw} raw, {drawAuditCounts.raw - drawAuditCounts.filtered} filtered out)</>
+                        )}
+                      </span>
+                      {disqualified.length > 0 && (
+                        <>
+                          <span className="opacity-50">·</span>
+                          <span><span className="text-foreground">{disqualified.length}</span> disqualified before this draw</span>
+                        </>
+                      )}
+                    </div>
+                    <div className="opacity-75">
+                      RNG: <code>window.crypto.getRandomValues()</code> — open DevTools → Network during the next spin, you'll see zero outgoing requests for the draw itself.
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </section>
