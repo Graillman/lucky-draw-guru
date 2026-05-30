@@ -133,6 +133,8 @@ const jsonLd = {
         <p class="text-sm text-muted-foreground">Gratuit · Sans inscription · Aucune donnée ne quitte ton navigateur</p>
       </section>
 
+      <p class="max-w-3xl mx-auto text-base md:text-lg font-medium text-foreground border-l-4 border-primary pl-4 py-1">Un tirage au sort pondéré attribue à chaque participant une probabilité proportionnelle à son poids : saisis les noms et leurs poids, lance la roue, et vérifie l'équité avec le simulateur de 10 000 tirages.</p>
+
       <WeightedPickerProIsland client:load />
 
       <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
@@ -213,10 +215,11 @@ const jsonLd = {
         <ul class="space-y-3">
           {[
             { href: "/tirage-au-sort", label: "Tirage au sort en ligne", desc: "Roue de tirage classique avec chances égales pour tous." },
+            { href: "/roue-des-noms", label: "Roue des noms", desc: "Roue de prénoms aléatoire pour la classe et les animations." },
+            { href: "/tirage-aleatoire", label: "Tirage aléatoire", desc: "Sélection aléatoire impartiale parmi n'importe quelle liste d'options." },
             { href: "/weighted-random-picker", label: "Weighted Random Picker (English)", desc: "Same tool, English version with full SEO content." },
             { href: "/raffle-picker", label: "Raffle Picker", desc: "Tombolas physiques — tickets multiples avec poids = nombre de tickets achetés." },
             { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Tirage universel pour concours sur tout réseau social." },
-            { href: "/random-name-picker", label: "Random Name Picker", desc: "Tirage classique sans pondération." },
           ].map(({ href, label, desc }) => (
             <li>
               <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">

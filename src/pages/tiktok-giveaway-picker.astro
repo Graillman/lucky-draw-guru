@@ -12,19 +12,31 @@ const description = "Pick TikTok giveaway winners randomly and fairly. Paste use
 const faqItems = [
   {
     question: "How do I export TikTok comments?",
-    answer: "TikTok doesn't have a built-in export. Use third-party tools like TokBoard or Phantombuster to scrape comments as a list. For small giveaways, manually copying usernames works fine.",
+    answer: "TikTok doesn't have a built-in export. Use third-party tools like TokBoard, ExportComments, or Phantombuster to scrape the comment section into a list, one username per line. For small giveaways (under 200 comments), manually copying usernames works fine.",
+  },
+  {
+    question: "How do I draw only from filtered comments (keyword entries)?",
+    answer: "Ask entrants to comment a specific keyword or emoji to enter, then filter the export to keep only comments containing it before pasting. In TikTok's comment view you can also use the search/filter to surface relevant comments. This removes off-topic replies and people who didn't actually follow the entry instruction, so the wheel only contains valid entries.",
   },
   {
     question: "Can I verify that entrants actually follow me?",
-    answer: "TikTok doesn't expose your follower list programmatically. You'll need to manually check the winner's profile to confirm they follow you. Check before announcing to avoid public awkwardness.",
+    answer: "TikTok doesn't expose your follower list programmatically. You'll need to manually check the winner's profile to confirm they follow you. Check before announcing to avoid public awkwardness — verify only the picked winner, not every entrant, which is impractical at scale.",
   },
   {
-    question: "How do I handle duplicate comments?",
-    answer: "Decide in advance: one entry per person or multiple entries allowed. If one per person, deduplicate your username list before loading. If multiple entries are allowed, keep duplicates in the list — each comment counts as a separate entry.",
+    question: "How do I handle duplicate comments and spam accounts?",
+    answer: "Decide in advance: one entry per person or multiple entries allowed. If one per person, deduplicate your username list before loading. If multiple entries are allowed, keep duplicates — each comment is a separate entry. Strip obvious spam/bot accounts (generic names with random number strings, no profile photo, zero videos) before spinning.",
+  },
+  {
+    question: "Do TikTok's official rules allow giveaways?",
+    answer: "Yes, but TikTok's Community Guidelines and Promotions policy require that your giveaway is not framed as gambling, does not require purchase where prohibited, and clearly states it is not sponsored by or affiliated with TikTok. State the rules, eligibility, prize, and deadline in the video and caption. For branded giveaways, follow TikTok's Branded Content rules and disclose any partnership with the #Ad / paid-partnership label.",
+  },
+  {
+    question: "Is the random selection actually fair, or could you rig it?",
+    answer: "It is cryptographically fair. Real Wheel Picker uses window.crypto.getRandomValues() — the Web Crypto API, the same standard as SSL certificates and password managers — seeded from your device's hardware entropy. Unlike Math.random() used by most free pickers, the result is not reproducible, predictable, or manipulable, even by us. The picker runs entirely in your browser, and you screen-record the spin as proof for your audience.",
   },
   {
     question: "Should I announce the winner on TikTok or DM them?",
-    answer: "Both. Post the wheel spin recording as a new video (it performs well algorithmically), AND DM the winner separately with claim instructions. Not everyone checks their tags.",
+    answer: "Both. Post the wheel spin recording as a new video (it performs well algorithmically), AND DM the winner separately with claim instructions. Not everyone checks their tags. Give the winner 48 hours to respond before redrawing — and record the redraw too.",
   },
   {
     question: "What prizes work best for TikTok giveaways?",
@@ -80,6 +92,8 @@ const jsonLd = {
         <p class="text-sm text-muted-foreground">Free • No account • Instant result</p>
       </section>
 
+      <p class="max-w-3xl mx-auto text-base md:text-lg font-medium text-foreground border-l-4 border-primary pl-4 py-1">To pick a random TikTok giveaway winner, export your comment section, filter it to valid keyword entries, paste the usernames into the wheel and spin — then post the recorded draw as your next video.</p>
+
       <!-- Tool above the fold -->
       <SEOPageIsland slug="tiktok-giveaway-picker" hideHero client:load />
 
@@ -117,6 +131,20 @@ const jsonLd = {
           <h3 class="text-lg font-bold text-foreground">Step 4: Announce — Turn It Into Content</h3>
           <p class="text-sm text-muted-foreground leading-relaxed">Post the screen recording as a new TikTok. Add text overlay: 'Picking the winner of the [prize] giveaway!' Use a suspenseful sound as the wheel slows down. Tag the winner in the caption. This video often gets MORE views than the original giveaway post.</p>
         </div>
+      </section>
+
+      <!-- Crypto-fairness -->
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Is the TikTok draw actually fair? The cryptographic proof</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          TikTok comment sections are huge and chaotic, so "rigged giveaway" accusations spread fast — viewers can't see how a winner was chosen inside a black-box app. Real Wheel Picker draws every result from <code class="bg-muted px-1 rounded font-mono text-xs">window.crypto.getRandomValues()</code>, the browser's Web Crypto API, sourced from your device's hardware entropy. It is the same randomness standard used by SSL/TLS certificates, password managers, and banking sessions.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Most free comment pickers use <code class="bg-muted px-1 rounded font-mono text-xs">Math.random()</code>, a pseudo-random generator seeded from the system clock and technically reproducible. <code class="bg-muted px-1 rounded font-mono text-xs">crypto.getRandomValues()</code> is not reproducible, not predictable, and cannot be biased toward any entry — not even by us. The picker runs entirely client-side in your browser, so no server influences the outcome.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          On TikTok the proof is the content itself. Screen-record the spin, add a suspense sound as the wheel slows, and post it as a follow-up video tagging the winner. A visible wheel landing on a name ends the "it was rigged" comments — and the draw video often out-performs the original giveaway post.
+        </p>
       </section>
 
       <!-- Use Cases -->
@@ -160,7 +188,7 @@ const jsonLd = {
           Our TikTok giveaway picker selects random winners from your comment section with cryptographic fairness. Record the wheel spin, post it as a follow-up TikTok, and turn your giveaway announcement into viral content. No app needed, no account required. Paste usernames, spin, pick a winner.
         </p>
         <p class="text-muted-foreground leading-relaxed">
-          For giveaways on other platforms, see our <a href="/instagram-giveaway-picker" class="text-primary hover:underline">Instagram (/instagram-giveaway-picker)</a>, <a href="/youtube-giveaway-picker" class="text-primary hover:underline">YouTube (/youtube-giveaway-picker)</a>, and <a href="/twitch-giveaway-picker" class="text-primary hover:underline">Twitch (/twitch-giveaway-picker)</a> pickers.
+          For giveaways on other platforms, see our <a href="/instagram-giveaway-picker" class="text-primary hover:underline">Instagram</a> and <a href="/discord-giveaway-picker" class="text-primary hover:underline">Discord</a> pickers, or the universal <a href="/giveaway-picker" class="text-primary hover:underline">Giveaway Picker</a>.
         </p>
       </section>
 
@@ -170,8 +198,8 @@ const jsonLd = {
         <ul class="space-y-3">
           {[
             { href: "/instagram-giveaway-picker", label: "Instagram Giveaway Picker", desc: "Pick random winners from Instagram comments and post the draw to your Story." },
-            { href: "/youtube-giveaway-picker", label: "YouTube Giveaway Picker", desc: "Export YouTube comments and spin the wheel on camera for your next upload." },
-            { href: "/twitch-giveaway-picker", label: "Twitch Giveaway Picker", desc: "Draw winners live from Twitch chat with cryptographic fairness." },
+            { href: "/discord-giveaway-picker", label: "Discord Giveaway Picker", desc: "Run Discord giveaways without a bot — collect reactors, spin to pick a winner." },
+            { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Universal giveaway picker for any platform or contest." },
           ].map(({ href, label, desc }) => (
             <li>
               <a

@@ -90,6 +90,11 @@ const jsonLd = {
           <p class="text-xs text-muted-foreground">Free · No signup · 50/50 guaranteed</p>
         </section>
 
+        <!-- Answer capsule — direct answer to the primary query -->
+        <p class="max-w-3xl mx-auto text-base md:text-lg font-medium text-foreground border-l-4 border-primary pl-4 py-1">
+          An online coin flip instantly returns Heads or Tails with exactly 50/50 odds, powered by window.crypto.getRandomValues(). It is fairer than a real coin, free, needs no app, and works on any device.
+        </p>
+
         <!-- 3D HD coin replaces the wheel — a coin makes more sense than a wheel for a binary heads/tails toss. -->
         <CoinFlipperIsland client:load />
 
@@ -130,16 +135,19 @@ const jsonLd = {
           <h2 class="text-xl font-bold text-foreground">Frequently asked questions</h2>
           <div class="space-y-3">
             {[
-              ["Is this online coin flip truly random?", "Yes. We use window.crypto.getRandomValues() — the cryptographic standard built into modern browsers. Probability is exactly 50/50 every flip, with no possible bias."],
-              ["Can I replace Heads and Tails with my own options?", "Yes. Click the labels to edit. You can use any two options you want — Yes/No, This/That, Pizza/Burger — and the wheel picks one with 50% probability each."],
-              ["Is a virtual coin more fair than a real one?", "Surprisingly, yes. Real coins have tiny mass differences between Heads and Tails sides, plus throwing technique creates measurable bias. A digital wheel guarantees exactly 50/50 every time."],
+              ["Is this online coin flip truly random?", "Yes. Real Wheel Picker uses window.crypto.getRandomValues() — the cryptographic standard built into modern browsers. The probability is exactly 50/50 every flip, with no possible bias. This is the same level of randomness used in SSL encryption and password generation."],
+              ["Can I replace Heads and Tails with my own options?", "Yes. Click on the labels to edit them. You can put any two options you want and the wheel picks one with exactly 50% probability each."],
+              ["Is a virtual coin flip more fair than a real coin?", "Surprisingly, yes. Real coins are not perfectly balanced — Heads and Tails sides have slightly different masses, creating a tiny but measurable bias. Throwing technique also affects the outcome. A digital wheel using crypto.getRandomValues() guarantees exactly 50/50 every time, with no exception."],
               ["Do you store any data?", "Never. Everything runs in your browser. Nothing is sent to any server."],
               ["Is it free?", "100% free. No signup, no download, no usage limit. Just open the page and flip."],
             ].map(([q, a]) => (
-              <div class="bg-card border border-border rounded-xl p-5">
-                <p class="font-semibold text-foreground mb-2">{q}</p>
-                <p class="text-muted-foreground text-sm leading-relaxed">{a}</p>
-              </div>
+              <details class="bg-card border border-border rounded-xl p-5 group">
+                <summary class="font-semibold text-foreground cursor-pointer list-none flex items-center justify-between gap-2">
+                  {q}
+                  <span class="text-muted-foreground shrink-0 group-open:rotate-180 transition-transform">▾</span>
+                </summary>
+                <p class="text-muted-foreground text-sm leading-relaxed mt-3">{a}</p>
+              </details>
             ))}
           </div>
         </section>

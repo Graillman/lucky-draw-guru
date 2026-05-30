@@ -18,7 +18,7 @@ const jsonLd = {
   "author": { "@type": "Person", "name": "Real Wheel Picker Editorial Team", "url": "https://realwheelpicker.com/about" },
   "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
   "datePublished": "2025-02-10",
-  "dateModified": "2026-03-01",
+  "dateModified": "2026-05-30",
   "image": "https://realwheelpicker.com/og-default.png",
   "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/weighted-random-picker" },
 };
@@ -305,6 +305,28 @@ const jsonLd = {
         <a href="/weighted-random-picker" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
           Open Weighted Picker <ArrowRight className="w-4 h-4" />
         </a>
+      </section>
+
+      {/* Related articles */}
+      <section class="space-y-4">
+        <h2 class="text-xl font-bold text-foreground">Related articles</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <a href="/blog/verify-giveaway-fairness" class="bg-card border border-border rounded-xl p-5 hover:border-primary transition-colors space-y-2">
+            <p class="font-semibold text-foreground text-sm">How to Prove Your Giveaway Was Fair</p>
+            <p class="text-xs text-muted-foreground">Prove your draw was random and transparent</p>
+            <span class="text-xs text-primary flex items-center gap-1">Read guide →</span>
+          </a>
+          <a href="/blog/best-random-picker-tools" class="bg-card border border-border rounded-xl p-5 hover:border-primary transition-colors space-y-2">
+            <p class="font-semibold text-foreground text-sm">Best Free Random Picker Tools 2026</p>
+            <p class="text-xs text-muted-foreground">Compare the top free random picker tools</p>
+            <span class="text-xs text-primary flex items-center gap-1">Read guide →</span>
+          </a>
+          <a href="/blog/is-wheel-of-names-really-random" class="bg-card border border-border rounded-xl p-5 hover:border-primary transition-colors space-y-2">
+            <p class="font-semibold text-foreground text-sm">Is Wheel of Names Really Random?</p>
+            <p class="text-xs text-muted-foreground">The math behind spinner wheels</p>
+            <span class="text-xs text-primary flex items-center gap-1">Read guide →</span>
+          </a>
+        </div>
       </section>
 
       <RelatedPosts currentSlug="/blog/weighted-random-picker" client:idle />

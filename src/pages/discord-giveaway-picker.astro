@@ -12,19 +12,39 @@ const description = "Run Discord giveaways without installing any bot. Copy name
 const faqItems = [
   {
     question: "Do I need to install anything on my Discord server?",
-    answer: "No. Real Wheel Picker runs in your browser, completely separate from Discord. You just copy-paste usernames from Discord into the picker. No bots, no permissions, no risk.",
+    answer: "No. Real Wheel Picker runs in your browser, completely separate from Discord. You just copy-paste usernames from Discord into the picker. No bots, no permissions, no OAuth scopes, no risk to your server.",
   },
   {
     question: "How do I copy all users who reacted to a message?",
-    answer: "Click on the reaction count below the message. Discord shows a list of everyone who reacted. Copy the usernames from that list. For large reactions (100+), you may need to scroll and copy in batches.",
+    answer: "Click on the reaction count below the message. Discord shows a list of everyone who reacted. Copy the usernames from that list. For large reactions (100+), you may need to scroll and copy in batches. On desktop you can also hover each reaction to expand the full reactor list.",
   },
   {
-    question: "Can I use this for Discord Nitro giveaways?",
-    answer: "Yes. Nitro giveaways are one of the most common use cases. Just collect entrant names by any method and spin the wheel.",
+    question: "How do I export a whole channel with DiscordChatExporter?",
+    answer: "DiscordChatExporter is a free open-source tool that saves a channel's messages to CSV, JSON, or HTML. Run it on the giveaway channel, open the export, and pull the Author column — that gives you one username per entry. Deduplicate the list (sort A-Z, remove repeats unless multiple entries are allowed), then paste it into the wheel. It is the cleanest way to collect message-based entries for large servers.",
   },
   {
-    question: "Is this better than GiveawayBot?",
-    answer: "Different. GiveawayBot automates the entire flow but the draw is invisible. Real Wheel Picker requires manual name collection but gives you a visual, recordable draw that proves fairness. Use whichever matters more for your community.",
+    question: "How do I exclude bots and alt accounts from the draw?",
+    answer: "Before pasting, strip out your server bots (MEE6, Dyno, Carl-bot, GiveawayBot itself) — they should never win. In a DiscordChatExporter export, bot accounts are flagged, so filter them in the spreadsheet. For suspected alts: accounts with no roles, no avatar, a join date minutes before the giveaway, and a default discriminator are red flags. Spot-check the list and require a minimum account or member age in your rules.",
+  },
+  {
+    question: "Can I use this for Discord Nitro or Steam key giveaways?",
+    answer: "Yes. Nitro gifts and Steam / game key giveaways are the two most common Discord use cases. Collect entrant names by reaction, role, or message, spin the wheel, then DM the winner the Nitro gift link or the Steam key privately. Never post a key in a public channel — paste it only in the winner's DM after you have verified they met the entry requirements.",
+  },
+  {
+    question: "Is the random selection actually fair, or could a mod rig it?",
+    answer: "It is cryptographically fair. Real Wheel Picker uses window.crypto.getRandomValues() — the Web Crypto API, the same standard as SSL certificates and password managers — seeded from your device's hardware entropy. Unlike Math.random() (used by most free pickers), the result is not reproducible, predictable, or manipulable, even by us. The picker runs entirely in your browser, so no server-side mod or bot owner can bias the outcome. Screen-record the spin and post it in your server as proof.",
+  },
+  {
+    question: "Is this better than GiveawayBot or a giveaway bot?",
+    answer: "Different. GiveawayBot, Apollo, and similar bots automate entry tracking with a 🎉 reaction, but the draw itself is invisible — members just see 'Winner: @user' with no proof. Real Wheel Picker requires manual name collection but gives you a visual, recordable, cryptographically fair draw your community can watch. Many servers use a bot to collect entrants, then export those reactors and run the final spin here for transparency.",
+  },
+  {
+    question: "Do Discord's rules allow giveaways on my server?",
+    answer: "Yes, but you must follow Discord's Community Guidelines and Terms of Service. Giveaways cannot require payment to enter (that can qualify as gambling, which is restricted), cannot involve regulated goods, and self-bots or scraping that violate the API Terms are prohibited — which is exactly why a manual copy-paste tool like this one is safe. For paid prizes over local reporting thresholds, check your country's promotion-disclosure laws.",
+  },
+  {
+    question: "Can I draw multiple winners without one person winning twice?",
+    answer: "Yes. Set the number of winners in the picker and each draw is without replacement — once a name is picked it is removed from the pool before the next spin. Perfect for tiered Nitro giveaways (1 Nitro + 3 Nitro Basic) or multiple Steam keys from a single entrant list.",
   },
 ];
 
@@ -82,6 +102,8 @@ const jsonLd = {
         </p>
         <p class="text-sm text-muted-foreground">Free • No bot install • No server permissions</p>
       </section>
+
+      <p class="max-w-3xl mx-auto text-base md:text-lg font-medium text-foreground border-l-4 border-primary pl-4 py-1">To run a Discord giveaway without a bot, copy the usernames who reacted, hold a role, or posted in your channel, paste them into the wheel and spin — a cryptographically fair, recordable draw your members can watch.</p>
 
       <!-- Tool above the fold -->
       <SEOPageIsland slug="discord-giveaway-picker" hideHero client:load />
@@ -142,6 +164,20 @@ const jsonLd = {
         </div>
       </section>
 
+      <!-- Crypto-fairness -->
+      <section class="p-6 rounded-xl border bg-primary/5 border-primary/30 space-y-4">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Is the Discord draw actually fair? The cryptographic proof</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          On a Discord server the giveaway host is usually a mod with admin powers, so the first thing members ask is: "could a mod just pick their friend?" With Real Wheel Picker the answer is no. Every spin draws its result from <code class="bg-muted px-1 rounded font-mono text-xs">window.crypto.getRandomValues()</code> — the browser's Web Crypto API, sourced from your device's hardware entropy pool. It is the same randomness standard that backs SSL/TLS certificates, password managers, and banking sessions.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Most "free" giveaway pickers and bots rely on <code class="bg-muted px-1 rounded font-mono text-xs">Math.random()</code>, a pseudo-random generator seeded from the system clock — technically reproducible if you know the seed. <code class="bg-muted px-1 rounded font-mono text-xs">crypto.getRandomValues()</code> is not reproducible, not predictable, and cannot be biased toward any entry — not even by us. Because the picker runs entirely client-side in your browser, no server, bot owner, or mod sits between the entrant list and the result.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          The practical proof for your community is the visible spin. Start a screen recording (or stream it in a voice channel via Go Live), paste the deduplicated entrant list, hit Spin, and let the wheel slow to a stop on the winner. Post the clip in the giveaway channel. A black-box bot result — "Winner: @user" — never builds the same trust as a wheel everyone watched land.
+        </p>
+      </section>
+
       <!-- Use Cases -->
       <section class="space-y-6">
         <h2 class="text-xl md:text-2xl font-bold text-foreground text-center">Discord Giveaway Use Cases</h2>
@@ -183,7 +219,7 @@ const jsonLd = {
           Run transparent Discord giveaways without installing any bot on your server. Collect participant names from reactions, roles, or messages, paste them into the wheel, and spin to draw a winner your community trusts.
         </p>
         <p class="text-muted-foreground leading-relaxed">
-          No permissions needed, no data collected, no server risk. For giveaways on other platforms, see our <a href="/twitch-giveaway-picker" class="text-primary hover:underline">Twitch</a> and <a href="/reddit-giveaway-picker" class="text-primary hover:underline">Reddit</a> pickers.
+          No permissions needed, no data collected, no server risk. For giveaways on other platforms, see our <a href="/instagram-giveaway-picker" class="text-primary hover:underline">Instagram</a> and <a href="/tiktok-giveaway-picker" class="text-primary hover:underline">TikTok</a> pickers, or the universal <a href="/giveaway-picker" class="text-primary hover:underline">Giveaway Picker</a>.
         </p>
       </section>
 
@@ -192,8 +228,8 @@ const jsonLd = {
         <h2 class="text-xl md:text-2xl font-bold text-foreground">Related Tools</h2>
         <ul class="space-y-3">
           {[
-            { href: "/twitch-giveaway-picker", label: "Twitch Giveaway Picker", desc: "Pick winners from Twitch chat participants and subscribers." },
-            { href: "/reddit-giveaway-picker", label: "Reddit Giveaway Picker", desc: "Select random winners from Reddit post comments and upvoters." },
+            { href: "/instagram-giveaway-picker", label: "Instagram Giveaway Picker", desc: "Pick random winners from Instagram comments and post the draw to your Story." },
+            { href: "/tiktok-giveaway-picker", label: "TikTok Giveaway Picker", desc: "Draw winners from TikTok comments and post the spin as a new video." },
             { href: "/giveaway-picker", label: "Giveaway Picker", desc: "Universal giveaway picker for any platform or contest." },
           ].map(({ href, label, desc }) => (
             <li>

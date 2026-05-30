@@ -74,6 +74,8 @@ const jsonLd = {
         <p class="text-sm text-muted-foreground">Gratuit • Sans compte • Mobile • Résultat crypto-sécurisé</p>
       </section>
 
+      <p class="max-w-3xl mx-auto text-base md:text-lg font-medium text-foreground border-l-4 border-primary pl-4 py-1">Pour jouer au jeu de la bouteille en ligne, ajoutez les prénoms de vos joueurs, tapez la bouteille et regardez-la tourner : elle s'arrête sur un joueur au hasard, avec un résultat cryptographiquement aléatoire.</p>
+
       <section class="flex flex-col items-center">
         <SpinTheBottleIsland lang="fr" client:load />
       </section>
@@ -131,6 +133,7 @@ const jsonLd = {
           {[
             { href: "/tirage-au-sort", label: "Tirage au Sort", desc: "Roue de tirage au sort en ligne, gratuite." },
             { href: "/roue-des-noms", label: "Roue des Noms", desc: "Roulette de noms aléatoire." },
+            { href: "/tirage-aleatoire", label: "Tirage aléatoire", desc: "Sélection aléatoire impartiale parmi n'importe quelle liste." },
             { href: "/spin-the-bottle", label: "Spin the Bottle (EN)", desc: "Version anglaise de ce jeu." },
             { href: "/templates", label: "Tous les templates", desc: "50 roues prêtes à utiliser." },
           ].map(({ href, label, desc }) => (
