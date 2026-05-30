@@ -131,6 +131,18 @@ const HomepageIslandInner = () => {
     return () => window.removeEventListener('rwp:importParticipants', handleImport as EventListener);
   }, [setParticipants]);
 
+  // Close any open overlay with Escape (a11y: WCAG 2.1.2 / dialog dismissal).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      setMultiResults(null);
+      setShowWinnerModal(false);
+      setShowMultiplierDropdown(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
   // Multi-wheel state
   const [extraWheels, setExtraWheels] = useState<ExtraWheel[]>([]);
   const [wheelIsSpinning, setWheelIsSpinning] = useState<boolean[]>([false]);
@@ -390,12 +402,12 @@ const HomepageIslandInner = () => {
       {/* Multi-spin results modal */}
       {multiResults && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={() => setMultiResults(null)}>
-          <div className="bg-card rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" aria-label="Multi-spin results" className="bg-card rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
             <div className="bg-primary px-6 py-3 flex items-center justify-between shrink-0">
               <p className="text-primary-foreground font-bold text-base">
                 Résultats — {multiplier.toLocaleString()} tirages
               </p>
-              <button onClick={() => setMultiResults(null)} className="text-primary-foreground/70 hover:text-primary-foreground text-xl font-bold">✕</button>
+              <button type="button" aria-label="Close" onClick={() => setMultiResults(null)} className="text-primary-foreground/70 hover:text-primary-foreground text-xl font-bold">✕</button>
             </div>
             <div className="overflow-y-auto p-4 space-y-1.5">
               {multiResults.map((r, i) => (
@@ -414,7 +426,7 @@ const HomepageIslandInner = () => {
       {/* Winner modal */}
       {showWinnerModal && winners.length > 0 && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={handleCloseModal}>
-          <div className="bg-card rounded-2xl shadow-2xl w-full max-w-xl mx-4 overflow-hidden" onClick={e => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" aria-label={t.winnerModalTitle} className="bg-card rounded-2xl shadow-2xl w-full max-w-xl mx-4 overflow-hidden" onClick={e => e.stopPropagation()}>
             <div className="bg-primary px-6 py-3">
               <p className="text-primary-foreground font-bold text-base text-center">{t.winnerModalTitle}</p>
             </div>
