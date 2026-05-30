@@ -55,7 +55,7 @@ const hybridMethod = [
 <Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
 <SchemaBreadcrumb items={[{ name: "Home", url: "https://realwheelpicker.com/" }, { name: "Blog", url: "https://realwheelpicker.com/blog" }, { name: title, url: `https://realwheelpicker.com${canonical}` }]} />
   <div style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+    <HeaderIsland client:idle />
     <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
 
       <section class="space-y-4">
@@ -249,10 +249,10 @@ const hybridMethod = [
         <h2 class="text-2xl font-bold text-foreground">Generate your teams in 30 seconds</h2>
         <p class="text-muted-foreground">Free, no account needed. Works for any sport, any number of players.</p>
         <div class="flex flex-wrap gap-3 justify-center">
-          <a href="/team-generator" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+          <a href="/classroom-picker" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
             Team Generator <ArrowRight className="w-4 h-4" />
           </a>
-          <a href="/random-name-picker" class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-6 py-3 rounded-xl font-semibold hover:border-primary transition-colors">
+          <a href="/wheel-of-names" class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-6 py-3 rounded-xl font-semibold hover:border-primary transition-colors">
             Random Name Picker
           </a>
         </div>

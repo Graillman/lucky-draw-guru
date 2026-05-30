@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import { getHreflang } from '@/data/hreflangClusters';
 import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
 import SEOPageIsland from '@/components/SEOPageIsland';
@@ -69,15 +70,7 @@ const jsonLd = {
   description={description}
   canonical="/wheel-of-names"
   jsonLd={jsonLd}
-  hreflangLinks={[
-    { hreflang: 'en',       href: 'https://realwheelpicker.com/wheel-of-names' },
-    { hreflang: 'fr',       href: 'https://realwheelpicker.com/roue-des-noms' },
-    { hreflang: 'es',       href: 'https://realwheelpicker.com/rueda-de-la-suerte' },
-    { hreflang: 'pt',       href: 'https://realwheelpicker.com/roleta-de-nomes' },
-    { hreflang: 'it',       href: 'https://realwheelpicker.com/ruota-dei-nomi' },
-    { hreflang: 'de',       href: 'https://realwheelpicker.com/namenrad' },
-    { hreflang: 'x-default', href: 'https://realwheelpicker.com/wheel-of-names' },
-  ]}
+  hreflangLinks={getHreflang('nameWheel')}
 >
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
@@ -86,7 +79,7 @@ const jsonLd = {
   ]} />
 
   <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+    <HeaderIsland client:idle />
 
     <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
 

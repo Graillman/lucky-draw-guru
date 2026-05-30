@@ -27,7 +27,7 @@ const jsonLd = {
 <Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
 <SchemaBreadcrumb items={[{ name: "Home", url: "https://realwheelpicker.com/" }, { name: "Blog", url: "https://realwheelpicker.com/blog" }, { name: title, url: `https://realwheelpicker.com${canonical}` }]} />
   <div style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+    <HeaderIsland client:idle />
     <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
 
       {/* Hero */}
@@ -228,7 +228,7 @@ const jsonLd = {
           <a href="/classroom-picker" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
             Open Classroom Picker <ArrowRight className="w-4 h-4" />
           </a>
-          <a href="/team-generator" class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-6 py-3 rounded-xl font-semibold hover:border-primary transition-colors">
+          <a href="/classroom-picker" class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-6 py-3 rounded-xl font-semibold hover:border-primary transition-colors">
             Random Team Generator
           </a>
         </div>

@@ -26,6 +26,7 @@ interface SpinningWheelProps {
   hubTheme?: string;   // 'default' | 'gold' | 'fire' | 'ice' | 'cosmic' | 'rose' | 'orange' | 'forest' | 'neon' | 'purple' | 'crimson' | 'teal' | 'amber'
   idleAnimation?: boolean; // continuous slow rotation when not spinning. Off by default — was causing serious lag in production (60fps React re-render + full canvas redraw). Re-enable per-page if needed.
   centerSpinButton?: boolean; // editorial design: replaces the canvas hub + arc text with a React overlay button (.btn-spin-center). Default true when onSpin is provided.
+  spinLabel?: string; // accessible label / visible text for the spin button. Defaults to "Spin the wheel" (EN). Pass a translated string for i18n.
 }
 
 // Editorial palette — 12 dopamine-saturated colors aligned with the brand
@@ -164,13 +165,28 @@ function bezierEasing(x1: number, y1: number, x2: number, y2: number) {
 // load so the animate() loop doesn't allocate closures per frame.
 const ED_SPIN_EASING = bezierEasing(0.17, 0.67, 0.16, 0.99);
 
+// Yield control back to the main thread so the browser can paint / handle
+// input before continuing. Uses the modern Scheduler API when available,
+// falling back to a macrotask. Helps INP by letting the spin animation's
+// first frame render before any heavier synchronous work runs.
+function yieldToMain(): Promise<void> {
+  const sched = (globalThis as unknown as { scheduler?: { yield?: () => Promise<void> } }).scheduler;
+  if (sched && typeof sched.yield === "function") {
+    return sched.yield();
+  }
+  return new Promise((resolve) => setTimeout(resolve, 0));
+}
+
 export function SpinningWheel({
   participants, isSpinning, onComplete, mode, winnersCount,
   onSpin, onTick, colors, borderStyle = 'default', backgroundImage,
   size = 480, spinDuration = 5.4, clickToSpinLabel, clickToSpinSub, compact = false,
   wheelShape = 'circle', hubTheme = 'default', idleAnimation = false,
-  centerSpinButton = true,
+  centerSpinButton = true, spinLabel,
 }: SpinningWheelProps) {
+  // Accessible label for the spin button. Falls back to the visible
+  // `clickToSpinLabel` (already translated by the parent) then to English.
+  const accessibleSpinLabel = spinLabel ?? clickToSpinLabel ?? 'Spin the wheel';
   // Editorial overlay: when a spin handler is provided, swap the canvas-drawn
   // hub + "Click to spin" arc text for a React `.btn-spin-center` button (with
   // animated conic-gradient halo, defined in editorial.css). Pass
@@ -756,24 +772,31 @@ export function SpinningWheel({
 
     selectedWinnersRef.current = [segments[winnerIndex].pseudo];
 
+    // INP: the primary winner (above) is cheap and pins the wheel's resting
+    // position, so it stays synchronous. The additional-winners selection is
+    // O(winnersCount × segments) and is only consumed when the spin finishes
+    // (seconds later) — defer it past the first animation frame via
+    // `yieldToMain()` so the click handler returns and the spin paints first.
     if (winnersCount > 1) {
-      const additionalWinners: string[] = [];
-      const availableIndices = segments.map((_, i) => i).filter(i => i !== winnerIndex);
-      for (let i = 1; i < winnersCount && availableIndices.length > 0; i++) {
-        const availableSegments = availableIndices.map(idx => segments[idx]);
-        const availableTotalWeight = availableSegments.reduce((sum, s) => sum + s.weight, 0);
-        const rand = cryptoRandom() * availableTotalWeight;
-        let cum = 0;
-        for (let j = 0; j < availableSegments.length; j++) {
-          cum += availableSegments[j].weight;
-          if (rand <= cum) {
-            additionalWinners.push(availableSegments[j].pseudo);
-            availableIndices.splice(j, 1);
-            break;
+      void yieldToMain().then(() => {
+        const additionalWinners: string[] = [];
+        const availableIndices = segments.map((_, i) => i).filter(i => i !== winnerIndex);
+        for (let i = 1; i < winnersCount && availableIndices.length > 0; i++) {
+          const availableSegments = availableIndices.map(idx => segments[idx]);
+          const availableTotalWeight = availableSegments.reduce((sum, s) => sum + s.weight, 0);
+          const rand = cryptoRandom() * availableTotalWeight;
+          let cum = 0;
+          for (let j = 0; j < availableSegments.length; j++) {
+            cum += availableSegments[j].weight;
+            if (rand <= cum) {
+              additionalWinners.push(availableSegments[j].pseudo);
+              availableIndices.splice(j, 1);
+              break;
+            }
           }
         }
-      }
-      selectedWinnersRef.current = [segments[winnerIndex].pseudo, ...additionalWinners];
+        selectedWinnersRef.current = [segments[winnerIndex].pseudo, ...additionalWinners];
+      });
     }
 
     const duration = spinDuration * 1000;
@@ -907,6 +930,7 @@ export function SpinningWheel({
         >
           <canvas
             ref={canvasRef}
+            aria-hidden="true"
             width={canvasPixelSize}
             height={canvasPixelSize}
             style={{
@@ -920,6 +944,14 @@ export function SpinningWheel({
             onTouchEnd={handleTouchEnd}
           />
         </div>
+
+        {/* Screen-reader-only participant list. The canvas is decorative
+            (aria-hidden), so this gives assistive tech the actual entries. */}
+        <ul className="sr-only" aria-label="Participants">
+          {participants.map((p, i) => (
+            <li key={`${p.pseudo}-${i}`}>{p.pseudo}</li>
+          ))}
+        </ul>
 
         {/* Sparkles (outside clip so they appear beyond the circle) */}
         {isSpinning && (
@@ -940,7 +972,7 @@ export function SpinningWheel({
             onClick={onSpin}
             disabled={isSpinning}
             className="btn-spin-center"
-            aria-label="Spin the wheel"
+            aria-label={accessibleSpinLabel}
           >
             {isSpinning ? (
               <span className="spin-loading"><span /><span /><span /></span>
@@ -953,6 +985,21 @@ export function SpinningWheel({
           </button>
         )}
       </div>
+
+      {/* Accessible spin trigger — when there is no center SPIN button, the
+          only pointer affordance is the canvas onClick (not keyboard-focusable
+          and hidden from assistive tech). This real <button> guarantees a
+          focusable, Space/Enter-activatable control in every configuration. */}
+      {onSpin && !showCenterSpin && (
+        <button
+          type="button"
+          onClick={onSpin}
+          disabled={isSpinning || isAnimating}
+          className="sr-only"
+        >
+          {accessibleSpinLabel}
+        </button>
+      )}
 
       {isSpinning && (
         <div className="flex gap-2 mt-2">

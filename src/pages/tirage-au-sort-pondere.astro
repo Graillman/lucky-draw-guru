@@ -1,13 +1,14 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import { getHreflang } from '@/data/hreflangClusters';
 import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
 import WeightedPickerProIsland from '@/components/WeightedPickerProIsland';
 import SchemaFAQ from '@/components/SchemaFAQ.astro';
 import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
 
-const title = "Tirage au sort pondéré · Roue de probabilité gratuite · Sans inscription";
-const description = "Tirage au sort en ligne avec poids personnalisés : donne 1 à 9 999 chances par participant, simule 10 000 tirages pour vérifier l'équité, mode multi-gagnants. Gratuit, sans inscription, rien ne quitte ton navigateur.";
+const title = "Tirage au Sort Pondéré — Roue de Probabilité Gratuite";
+const description = "Tirage au sort en ligne avec poids personnalisés par participant. Mode multi-gagnants, équité vérifiable. Gratuit, sans inscription. Lancez-le !";
 
 const faqItems = [
   {
@@ -100,15 +101,7 @@ const jsonLd = {
   canonical="/tirage-au-sort-pondere"
   locale="fr_FR"
   jsonLd={jsonLd}
-  hreflangLinks={[
-    { hreflang: 'fr',        href: 'https://realwheelpicker.com/tirage-au-sort-pondere' },
-    { hreflang: 'en',        href: 'https://realwheelpicker.com/weighted-random-picker' },
-    { hreflang: 'es',        href: 'https://realwheelpicker.com/sorteo-ponderado' },
-    { hreflang: 'it',        href: 'https://realwheelpicker.com/sorteggio-ponderato' },
-    { hreflang: 'de',        href: 'https://realwheelpicker.com/gewichtete-zufallsauswahl' },
-    { hreflang: 'pt',        href: 'https://realwheelpicker.com/sorteio-ponderado' },
-    { hreflang: 'x-default', href: 'https://realwheelpicker.com/weighted-random-picker' },
-  ]}
+  hreflangLinks={getHreflang('weighted')}
 >
   <SchemaFAQ items={faqItems} />
   <SchemaBreadcrumb items={[
@@ -117,7 +110,7 @@ const jsonLd = {
   ]} />
 
   <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+    <HeaderIsland client:idle />
 
     <main class="max-w-5xl mx-auto px-4 py-6 space-y-10 md:space-y-14">
 

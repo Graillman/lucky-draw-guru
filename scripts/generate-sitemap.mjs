@@ -6,7 +6,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.join(__dirname, '..', 'dist');
 const siteUrl = 'https://realwheelpicker.com';
 
-// Recursively find all index.html files in dist/
+// Recursively find all HTML pages in dist/.
+// Handles both build formats:
+//   - format: 'file'      → dist/about.html        → "about"
+//   - format: 'directory' → dist/about/index.html  → "about"
 function findPages(dir, base = '') {
   const pages = [];
   if (!fs.existsSync(dir)) {
@@ -18,9 +21,13 @@ function findPages(dir, base = '') {
     const fullPath = path.join(dir, entry.name);
     const relativePath = base ? `${base}/${entry.name}` : entry.name;
     if (entry.isDirectory()) {
+      if (entry.name === '_astro') continue; // skip hashed assets
       pages.push(...findPages(fullPath, relativePath));
     } else if (entry.name === 'index.html') {
       pages.push(base || '/');
+    } else if (entry.name.endsWith('.html')) {
+      const slug = relativePath.slice(0, -'.html'.length); // strip ".html"
+      pages.push(slug === 'index' ? '/' : slug);
     }
   }
   return pages;

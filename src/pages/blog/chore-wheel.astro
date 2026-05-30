@@ -88,7 +88,7 @@ const kidsChores = [
 <Layout ogType="article" title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
 <SchemaBreadcrumb items={[{ name: "Home", url: "https://realwheelpicker.com/" }, { name: "Blog", url: "https://realwheelpicker.com/blog" }, { name: title, url: `https://realwheelpicker.com${canonical}` }]} />
   <div style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+    <HeaderIsland client:idle />
     <main class="max-w-3xl mx-auto px-4 py-10 space-y-10">
 
       {/* Hero */}
@@ -179,7 +179,7 @@ const kidsChores = [
         </div>
         <div class="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-2">
           <p class="font-semibold text-foreground">Two-wheel vs. one-wheel approach</p>
-          <p class="text-sm text-muted-foreground">Some households do one master wheel with all chores, one spin per person. Others run two wheels: one that picks the chore, one that picks the person. The two-wheel approach (spin for chore, then spin the <a href="/random-name-picker" class="text-primary hover:underline">Random Name Picker</a> to pick who does it) adds an extra layer of visible randomness that people tend to find even more satisfying. Try both and see what your household prefers.</p>
+          <p class="text-sm text-muted-foreground">Some households do one master wheel with all chores, one spin per person. Others run two wheels: one that picks the chore, one that picks the person. The two-wheel approach (spin for chore, then spin the <a href="/wheel-of-names" class="text-primary hover:underline">Random Name Picker</a> to pick who does it) adds an extra layer of visible randomness that people tend to find even more satisfying. Try both and see what your household prefers.</p>
         </div>
       </section>
 
@@ -381,7 +381,7 @@ const kidsChores = [
           <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
             Build Your Chore Wheel <ArrowRight className="w-4 h-4" />
           </a>
-          <a href="/random-name-picker" class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-6 py-3 rounded-xl font-semibold hover:border-primary transition-colors">
+          <a href="/wheel-of-names" class="inline-flex items-center gap-2 bg-card border border-border text-foreground px-6 py-3 rounded-xl font-semibold hover:border-primary transition-colors">
             Pick Who Does What
           </a>
         </div>

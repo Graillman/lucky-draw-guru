@@ -39,6 +39,17 @@ function Confetti() {
 export function WinnerDisplay({ winner }: WinnerDisplayProps) {
   const [showConfetti, setShowConfetti] = useState(true);
 
+  // Polite live region, pre-rendered empty then filled — see WinnerResult for
+  // the rationale. Toggling a trailing zero-width space guarantees that the
+  // same winner twice in a row is still re-announced.
+  const [announcement, setAnnouncement] = useState("");
+  useEffect(() => {
+    setAnnouncement((prev) => {
+      const base = `Gagnant: ${winner.pseudo}`;
+      return prev === base ? base + "​" : base;
+    });
+  }, [winner]);
+
   useEffect(() => {
     const timer = setTimeout(() => setShowConfetti(false), 3000);
     return () => clearTimeout(timer);
@@ -46,8 +57,12 @@ export function WinnerDisplay({ winner }: WinnerDisplayProps) {
 
   return (
     <>
+      <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+        {announcement}
+      </div>
+
       {showConfetti && <Confetti />}
-      
+
       <div className="relative animate-scale-in">
         {/* Glow effect */}
         <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full" />
