@@ -2,33 +2,39 @@
  * fairnessCertificate.ts
  * ─────────────────────────────────────────────────────────────────────────────
  * Verifiable draw certificate — the product differentiator: PROVING that a draw
- * was not rigged.
+ * result was not altered after the fact.
  *
- * CONCEPT (commit / reveal style integrity proof)
- *   1. BEFORE the spin we generate a cryptographic random `seed` (hex).
- *   2. The winner is a DETERMINISTIC function of `seed` + the ordered list of
- *      participants. Same seed + same participants => same winner, always.
- *   3. We build a `certificate` object (participants, seed, winner, timestamp,
- *      algorithm version) and compute its SHA-256 `hash`.
- *   4. Anyone can later recompute the winner from the seed and recompute the
- *      hash. If both match the published values, the result was NOT altered
- *      after the fact.
+ * MODEL: TAMPER-EVIDENT RECORD (fc-v2)
+ *   The certificate is an immutable, hashed record of a real draw. We do NOT
+ *   re-derive the winner from a seed (that would force the wheel geometry to
+ *   match a synthetic selection). Instead we record the ACTUAL winner the wheel
+ *   produced, alongside the exact participant list, a timestamp, and a random
+ *   nonce, then commit to all of it with a single SHA-256 hash.
+ *
+ *   1. When the winner is known, we capture {participants, winner, timestamp}.
+ *   2. A cryptographic `nonce` is generated (CSPRNG) so two otherwise-identical
+ *      draws still produce distinct, unique hashes.
+ *   3. We compute a SHA-256 `hash` over a canonical, deterministic serialization
+ *      of {version, participants (ordered pseudo+weight), winner, timestamp,
+ *      nonce}. The hash field itself is excluded from the payload.
+ *   4. Anyone can later recompute the canonical hash from the published fields.
+ *      If it matches, NOT A SINGLE FIELD was edited — the participants, the
+ *      winner, the timestamp are exactly what was recorded at draw time.
  *
  * This module is PURE and dependency-free. It uses only the Web Crypto API
  * (`crypto.getRandomValues`, `crypto.subtle.digest`), available in every modern
  * browser and in Node 18+. It does not import anything from the app, so the
  * orchestrator can call it from any spin handler.
  *
- * NOTE ON THREAT MODEL: this proves *integrity / non-repudiation after the
- * commit*, not third-party timestamping. The timestamp is supplied by the
- * client. To make it tamper-evident against the operator themselves, publish
- * the hash somewhere immutable (post it publicly, anchor it, screenshot it)
- * BEFORE revealing the winner. The hash is a commitment to the seed; revealing
- * the seed afterwards lets anyone reproduce the winner.
+ * THREAT MODEL: this proves INTEGRITY / non-repudiation of the recorded result.
+ * It detects any post-hoc edit of the winner, participants, weights or
+ * timestamp (the hash would no longer match). To also be tamper-evident against
+ * the operator themselves, publish/share the hash somewhere immutable BEFORE the
+ * result is contested.
  */
 
-/** Bumped whenever the deterministic selection or serialization changes. */
-export const CERTIFICATE_ALGO_VERSION = 'fc-v1';
+/** Bumped whenever the serialization or model changes. */
+export const CERTIFICATE_ALGO_VERSION = 'fc-v2';
 
 /** A participant in the draw. Mirrors the app's Participant shape. */
 export interface CertificateParticipant {
@@ -39,13 +45,17 @@ export interface CertificateParticipant {
 
 /** The signed, shareable certificate object. */
 export interface FairnessCertificate {
-  /** Algorithm/serialization version, e.g. "fc-v1". */
+  /** Algorithm/serialization version, e.g. "fc-v2". */
   v: string;
-  /** Ordered participant list. Order is part of the proof — do not reorder. */
+  /** Ordered participant list. Order is part of the record — do not reorder. */
   participants: CertificateParticipant[];
-  /** Cryptographic seed (hex string) generated before the draw. */
-  seed: string;
-  /** The winner pseudo determined by (seed, participants). */
+  /**
+   * Cryptographic nonce (hex string). Pure uniqueness salt: it guarantees two
+   * identical draws still hash to different values. NOT used to derive the
+   * winner.
+   */
+  nonce: string;
+  /** The REAL winner the draw produced. */
   winner: string;
   /** Unix epoch milliseconds when the certificate was created. */
   timestamp: number;
@@ -56,116 +66,42 @@ export interface FairnessCertificate {
 /** Input accepted by {@link createCertificate}. */
 export interface CreateCertificateInput {
   participants: CertificateParticipant[];
-  seed: string;
-  /**
-   * Optional explicit winner. If provided it MUST equal the deterministic
-   * winner for (seed, participants) — otherwise the certificate would not
-   * verify. If omitted, the winner is computed for you.
-   */
-  winner?: string;
+  /** The real winner the wheel produced. Recorded verbatim. */
+  winner: string;
   /** Defaults to Date.now(). */
   timestamp?: number;
+  /** Optional explicit nonce (hex). Generated with a CSPRNG if omitted. */
+  nonce?: string;
 }
 
 /** Result returned by {@link verifyCertificate}. */
 export interface VerifyResult {
-  /** True only if recomputed winner AND recomputed hash both match. */
+  /** True iff the recomputed hash matches the stored hash. Equals hashMatches. */
   valid: boolean;
-  /** Winner recomputed from (seed, participants). */
-  expectedWinner: string;
-  /** Hash recomputed over the canonical payload. */
-  recomputedHash: string;
-  /** True if certificate.winner === expectedWinner. */
-  winnerMatches: boolean;
   /** True if certificate.hash === recomputedHash. */
   hashMatches: boolean;
+  /** Hash recomputed over the canonical payload. */
+  recomputedHash: string;
 }
 
-// ── seed generation ──────────────────────────────────────────────────────────
+// ── nonce generation ──────────────────────────────────────────────────────────
 
 /**
- * Generate a cryptographic seed as a lowercase hex string.
- * Uses 32 bytes (256 bits) of CSPRNG entropy from `crypto.getRandomValues`.
+ * Generate a cryptographic nonce as a lowercase hex string.
+ * Uses 16 bytes (128 bits) of CSPRNG entropy from `crypto.getRandomValues`.
  */
-export function generateSeed(bytes = 32): string {
+export function generateNonce(bytes = 16): string {
   const buf = new Uint8Array(bytes);
   crypto.getRandomValues(buf);
   return bytesToHex(buf);
-}
-
-// ── deterministic winner selection ────────────────────────────────────────────
-
-/**
- * DETERMINISTIC winner selection from a seed.
- *
- * ALGORITHM (must stay stable for a given CERTIFICATE_ALGO_VERSION):
- *   1. Compute the total weight  W = Σ weight_i  (weight defaults to 1, min 1).
- *   2. Derive a uniform 53-bit fraction r ∈ [0, 1) from the seed:
- *        - Hash the seed string with FNV-1a (64-bit) to a stable integer.
- *          FNV-1a is used (instead of SHA via the async subtle API) so that
- *          this function can stay SYNCHRONOUS and trivially reproducible in any
- *          language. It is NOT used as the integrity hash — that remains
- *          SHA-256 in `createCertificate`. Here it only maps a seed to a point.
- *        - Take the low 53 bits and divide by 2^53 to get r ∈ [0, 1).
- *   3. Walk the participants accumulating weights; the winner is the first
- *      participant whose cumulative weight strictly exceeds r * W. This is the
- *      classic weighted "roulette wheel" pick, identical in spirit to the live
- *      SpinningWheel selection, but driven by the seed instead of live RNG.
- *
- * Properties:
- *   - Same (seed, participants in same order, same weights) => same winner.
- *   - Weight-proportional probability across uniformly random seeds.
- *   - Empty list throws.
- */
-export function pickWinnerFromSeed(
-  participants: CertificateParticipant[],
-  seed: string,
-): string {
-  if (!participants || participants.length === 0) {
-    throw new Error('pickWinnerFromSeed: participants list is empty');
-  }
-
-  const weights = participants.map((p) => Math.max(1, Math.floor(p.weight || 1)));
-  const totalWeight = weights.reduce((a, b) => a + b, 0);
-
-  const r = seedToUnitFraction(seed); // [0, 1)
-  const target = r * totalWeight;
-
-  let cumulative = 0;
-  for (let i = 0; i < participants.length; i++) {
-    cumulative += weights[i];
-    if (target < cumulative) {
-      return participants[i].pseudo;
-    }
-  }
-  // Floating-point safety net: return the last participant.
-  return participants[participants.length - 1].pseudo;
-}
-
-/**
- * Map a seed string to a uniform fraction in [0, 1) using FNV-1a (64-bit)
- * implemented with BigInt for portability, then taking 53 bits of mantissa.
- */
-function seedToUnitFraction(seed: string): number {
-  const FNV_OFFSET = 0xcbf29ce484222325n;
-  const FNV_PRIME = 0x100000001b3n;
-  const MASK64 = 0xffffffffffffffffn;
-
-  let hash = FNV_OFFSET;
-  for (let i = 0; i < seed.length; i++) {
-    hash ^= BigInt(seed.charCodeAt(i) & 0xff);
-    hash = (hash * FNV_PRIME) & MASK64;
-  }
-  // Use the top 53 bits to build a double in [0, 1).
-  const top53 = hash >> 11n; // 64 - 53 = 11
-  return Number(top53) / 2 ** 53;
 }
 
 // ── certificate creation & verification ───────────────────────────────────────
 
 /**
  * Build the canonical payload string that gets hashed. The hash field itself is
- * excluded. JSON key order is fixed here so the digest is stable.
+ * excluded. JSON key order is fixed here so the digest is stable and
+ * reproducible across implementations.
  */
 function canonicalPayload(c: Omit<FairnessCertificate, 'hash'>): string {
   return JSON.stringify({
@@ -174,9 +110,9 @@ function canonicalPayload(c: Omit<FairnessCertificate, 'hash'>): string {
       pseudo: p.pseudo,
       weight: Math.max(1, Math.floor(p.weight || 1)),
     })),
-    seed: c.seed,
     winner: c.winner,
     timestamp: c.timestamp,
+    nonce: c.nonce,
   });
 }
 
@@ -188,36 +124,35 @@ async function sha256Hex(input: string): Promise<string> {
 }
 
 /**
- * Create a fairness certificate.
+ * Create a fairness certificate from the REAL draw result.
  *
- * If `winner` is omitted it is derived deterministically from the seed. If it
- * is provided it must match the deterministic winner, otherwise an error is
- * thrown (a certificate that does not verify is useless).
+ * The `winner` is recorded verbatim — it is whatever the wheel actually
+ * produced. A random `nonce` is generated when not supplied so the hash is
+ * unique even for repeated identical draws.
  *
  * Async because it uses `crypto.subtle.digest` for the SHA-256 hash.
  */
 export async function createCertificate(
   input: CreateCertificateInput,
 ): Promise<FairnessCertificate> {
+  if (!input.participants || input.participants.length === 0) {
+    throw new Error('createCertificate: participants list is empty');
+  }
+  if (typeof input.winner !== 'string' || input.winner.length === 0) {
+    throw new Error('createCertificate: a winner is required');
+  }
+
   const participants = input.participants.map((p) => ({
     pseudo: p.pseudo,
     weight: Math.max(1, Math.floor(p.weight || 1)),
   }));
 
-  const expectedWinner = pickWinnerFromSeed(participants, input.seed);
-  if (input.winner !== undefined && input.winner !== expectedWinner) {
-    throw new Error(
-      `createCertificate: provided winner "${input.winner}" does not match ` +
-        `the deterministic winner "${expectedWinner}" for this seed`,
-    );
-  }
-
   const base: Omit<FairnessCertificate, 'hash'> = {
     v: CERTIFICATE_ALGO_VERSION,
     participants,
-    seed: input.seed,
-    winner: expectedWinner,
+    winner: input.winner,
     timestamp: input.timestamp ?? Date.now(),
+    nonce: input.nonce ?? generateNonce(),
   };
 
   const hash = await sha256Hex(canonicalPayload(base));
@@ -225,40 +160,32 @@ export async function createCertificate(
 }
 
 /**
- * Verify a certificate: recompute the winner from the seed and recompute the
- * SHA-256 hash, then compare both against the stored values.
+ * Verify a certificate: recompute the SHA-256 hash over the canonical payload
+ * and compare it against the stored value.
  *
- * `valid` is true only when BOTH the winner and the hash match — i.e. neither
- * the result nor any field of the payload was tampered with.
+ * `valid` is true iff the hash matches — i.e. not a single recorded field
+ * (participants, weights, winner, timestamp, nonce) was tampered with after the
+ * certificate was created.
  */
 export async function verifyCertificate(
   certificate: FairnessCertificate,
 ): Promise<VerifyResult> {
-  const expectedWinner = pickWinnerFromSeed(
-    certificate.participants,
-    certificate.seed,
-  );
   const recomputedHash = await sha256Hex(
     canonicalPayload({
       v: certificate.v,
       participants: certificate.participants,
-      seed: certificate.seed,
-      // Hash is computed over the STORED winner so a swapped winner is caught by
-      // the hash check; the winner-vs-seed check catches the same independently.
       winner: certificate.winner,
       timestamp: certificate.timestamp,
+      nonce: certificate.nonce,
     }),
   );
 
-  const winnerMatches = certificate.winner === expectedWinner;
   const hashMatches = certificate.hash === recomputedHash;
 
   return {
-    valid: winnerMatches && hashMatches,
-    expectedWinner,
-    recomputedHash,
-    winnerMatches,
+    valid: hashMatches,
     hashMatches,
+    recomputedHash,
   };
 }
 
@@ -284,7 +211,7 @@ export function decodeCertificate(encoded: string): FairnessCertificate {
   if (
     typeof parsed !== 'object' ||
     parsed === null ||
-    typeof parsed.seed !== 'string' ||
+    typeof parsed.nonce !== 'string' ||
     typeof parsed.winner !== 'string' ||
     typeof parsed.hash !== 'string' ||
     typeof parsed.timestamp !== 'number' ||

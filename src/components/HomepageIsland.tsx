@@ -16,6 +16,8 @@ import { Share2, Settings2, BookMarked, ImagePlus, Plus, X, ChevronDown, Pencil 
 import FullscreenButton from "@/components/FullscreenButton";
 import { buildShareURL, readShareURLConfig } from "@/hooks/useShareableURL";
 import { saveWheel, getWheelById } from "@/lib/wheelGallery";
+import { createCertificate, buildVerifyUrl } from "@/lib/fairnessCertificate";
+import { ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "sonner";
 
@@ -85,6 +87,7 @@ const HomepageIslandInner = () => {
   const [showCustomize, setShowCustomize] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [winners, setWinners] = useState<string[]>([]);
+  const [verifyUrl, setVerifyUrl] = useState<string | undefined>(undefined);
   const [drawTitle, setDrawTitle] = useState("");
   const [editingTitle, setEditingTitle] = useState(false);
   const [winnerHistory, setWinnerHistory] = useState<string[][]>([]);
@@ -259,12 +262,24 @@ const HomepageIslandInner = () => {
     pendingWinnersRef.current.clear();
 
     setWinners(allWinners);
+    setVerifyUrl(undefined);
     setWinnersForRemoval(removal);
     setSpinCount(increment());
     setWinnerHistory(prev => [allWinners, ...prev].slice(0, 20));
     setShowWinnerModal(true);
     if (customizeConfig.launchConfetti) setShowConfetti(true);
     if (customizeConfig.resultSoundEnabled) playFanfare();
+
+    // Tamper-evident certificate for the primary wheel's result. Records the
+    // real winner + the exact participant snapshot, hashes it (SHA-256), and
+    // exposes a /verify link. Best-effort: a crypto failure never breaks the UI.
+    const primaryWinner = (entries.find(([idx]) => idx === 0)?.[1]) ?? allWinners[0];
+    if (primaryWinner) {
+      const snapshot = displayParticipants.map((p) => ({ pseudo: p.pseudo, weight: p.weight ?? 1 }));
+      createCertificate({ participants: snapshot, winner: primaryWinner })
+        .then((cert) => setVerifyUrl(buildVerifyUrl(cert)))
+        .catch(() => { /* ignore — certificate is a bonus, not required */ });
+    }
   }, [wheelIsSpinning]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Primary wheel draw (button below wheel)
@@ -436,6 +451,23 @@ const HomepageIslandInner = () => {
                 )}
               </div>
             </div>
+            {/* Tamper-evident verification link — recompute the SHA-256 hash on
+                /verify to confirm this result was not modified. Discreet, opens
+                in a new tab. Only shown once the certificate is ready. */}
+            {verifyUrl && (
+              <div className="px-6 pb-4 -mt-2 flex justify-center">
+                <a
+                  href={verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Verify this draw — open the tamper-proof certificate"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5" aria-hidden />
+                  🛡️ Verify this draw
+                </a>
+              </div>
+            )}
           </div>
         </div>
       )}

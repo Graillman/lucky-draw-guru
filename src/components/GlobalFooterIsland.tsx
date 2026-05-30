@@ -136,6 +136,7 @@ const GlobalFooterInner = () => {
             <h4 className="font-semibold text-sm text-foreground">{t.footerResources}</h4>
             <nav className="flex flex-col gap-1.5 text-xs text-muted-foreground">
               <a href="/blog" className="hover:text-primary transition-colors">{t.navBlog}</a>
+              <a href="/verify" className="hover:text-primary transition-colors">Verify a draw</a>
               <a href="/embed" className="hover:text-primary transition-colors">Embed Widget</a>
               <a href="/about" className="hover:text-primary transition-colors">{t.navAbout}</a>
               <a href="/contact" className="hover:text-primary transition-colors">{t.contact}</a>
