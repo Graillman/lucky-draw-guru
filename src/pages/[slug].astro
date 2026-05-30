@@ -5,6 +5,7 @@ import GlobalFooterIsland from '@/components/GlobalFooterIsland';
 import SEOPageIsland from '@/components/SEOPageIsland';
 import AdPlaceholder from '@/components/AdPlaceholder';
 import SchemaFAQ from '@/components/SchemaFAQ.astro';
+import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
 import { seoPages, type SEOPageConfig } from '@/data/seoPageConfig';
 
 export function getStaticPaths() {
@@ -88,10 +89,21 @@ const hreflangLinks = alternates
   hreflangLinks={hreflangLinks}
 >
   {config.faqs && <SchemaFAQ items={config.faqs} />}
+  <SchemaBreadcrumb items={[
+    { name: "Home", url: "https://realwheelpicker.com" },
+    { name: config.h1, url: `https://realwheelpicker.com/${config.slug}` },
+  ]} />
   <div class="min-h-screen" style="background: var(--gradient-bg)">
     <HeaderIsland client:idle />
 
     <main id="main" class="max-w-5xl mx-auto px-4 py-6 space-y-8 md:space-y-12">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-foreground">{config.h1}</span>
+      </nav>
 
       <!-- Interactive tool with all sections (translated via React) -->
       <SEOPageIsland
@@ -99,6 +111,7 @@ const hreflangLinks = alternates
         h1={config.h1}
         subtitle={config.subtitle}
         microText={config.microText}
+        answerCapsule={config.answerCapsule}
         howItWorksTitle={config.howItWorksTitle}
         howItWorksText={config.howItWorksText}
         whenToUseTitle={config.whenToUseTitle}

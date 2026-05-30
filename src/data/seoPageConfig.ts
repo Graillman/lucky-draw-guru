@@ -3,6 +3,9 @@ export interface SEOPageConfig {
   h1: string;
   subtitle: string;
   microText: string;
+  /** One self-contained 20-30 word answer to the page's core query, rendered
+   *  right under the hero. Optimized to be quoted by AI Overviews / Perplexity. */
+  answerCapsule?: string;
   howItWorksTitle: string;
   howItWorksText: string;
   whenToUseTitle: string;
@@ -25,6 +28,7 @@ export const seoPages: Record<string, SEOPageConfig> = {
     h1: "Random Wheel Picker – Spin the Wheel Online",
     subtitle: "Spin a random wheel to pick a winner instantly. Free, fast and fair.",
     microText: "Free • No signup • Instant result",
+    answerCapsule: "A random wheel is a free online spinner you fill with any options — names, tasks, prizes — then spin for an instant, cryptographically fair result. No signup, unlimited spins.",
     howItWorksTitle: "How does this random wheel work?",
     howItWorksText: "Enter any names or options — type them in, paste a list, or load a template. Hit the Spin button and watch the wheel rotate with a smooth, satisfying animation before landing on a cryptographically random result. Each segment of the wheel represents one entry, and all entries have equal-sized segments by default, making the fairness immediately visible. The entire process runs inside your browser using the Web Crypto API — no server, no storage, no tracking. Spin as many times as you want, screen-record the result for your audience, or share a pre-loaded wheel link with your entries already set.",
     whenToUseTitle: "When should you use a random wheel?",
@@ -104,6 +108,7 @@ If some entries should have higher odds — multi-ticket raffles, weighted prize
     h1: "Random Name Picker – Select Names Fairly",
     subtitle: "Paste your list and pick a random name in seconds. Zero bias guaranteed.",
     microText: "Free • No signup • Instant result",
+    answerCapsule: "A random name picker lets you paste any list of names and instantly draw one — or several — at random. Cryptographically fair, free, and private; nothing is stored or sent.",
     howItWorksTitle: "How does this random name picker work?",
     howItWorksText: "Add names to your list by typing them one by one, pasting a comma-separated list, or entering one name per line. Hit the Spin button and watch the colorful wheel rotate until it lands on a randomly chosen name. The selection uses the Web Crypto API — the same cryptographically secure randomness used in online banking — running entirely inside your browser. No data is sent to any server, nothing is stored, and the result is mathematically impossible to predict or manipulate in advance. You can pick multiple winners in a single session, remove names after they win, and re-spin for a second draw. The wheel visually shows every participant with equal-sized segments, making fairness obvious to anyone watching. Perfect for screen-recording or livestreaming your selection to prove the draw was transparent.",
     whenToUseTitle: "When should you use a random name picker?",
