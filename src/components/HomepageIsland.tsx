@@ -353,7 +353,7 @@ const HomepageIslandInner = () => {
       <div className="relative min-h-screen overflow-hidden" style={{ background: "var(--gradient-bg)" }}>
         <Toaster position="top-center" richColors />
         <div className="relative z-10">
-          <main className="max-w-7xl mx-auto px-4 pb-2">
+          <main id="main" className="max-w-7xl mx-auto px-4 pb-2">
             <div className="animate-pulse space-y-4 pt-4">
               <div className="h-8 bg-muted rounded-lg w-64 mx-auto" />
               <div className="h-4 bg-muted rounded w-48 mx-auto" />
@@ -513,7 +513,7 @@ const HomepageIslandInner = () => {
       </div>
 
       <div className="relative z-10">
-        <main className="max-w-7xl mx-auto px-4 pb-2">
+        <main id="main" className="max-w-7xl mx-auto px-4 pb-2">
 
           {/* MAIN AREA: 2-column on desktop — wheel right-aligned to minimize gap with panel */}
           <div className="flex flex-col lg:flex-row gap-[8px] items-start">
