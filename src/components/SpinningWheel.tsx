@@ -232,10 +232,20 @@ export function SpinningWheel({
   const themeStroke = isAdvanced ? 'hsl(280, 90%, 40%)' : 'hsl(35, 90%, 40%)';
 
   const segments = useMemo(() => {
-    const totalWeight = participants.reduce((sum, p) => sum + (mode === "simple" ? 1 : p.weight), 0);
+    // Sanitize weights: ignore non-finite / negative values. If every weight is
+    // 0/invalid, fall back to equal weights so the geometry never breaks — a
+    // total of 0 produced NaN angles and made the wheel always pick the last
+    // segment.
+    const safeWeight = (p: Participant) => {
+      if (mode === "simple") return 1;
+      return Number.isFinite(p.weight) && p.weight > 0 ? p.weight : 0;
+    };
+    const totalWeightRaw = participants.reduce((sum, p) => sum + safeWeight(p), 0);
+    const useEqual = !(totalWeightRaw > 0);
+    const totalWeight = useEqual ? Math.max(1, participants.length) : totalWeightRaw;
     let currentAngle = 0;
     return participants.map((p, i) => {
-      const weight = mode === "simple" ? 1 : p.weight;
+      const weight = useEqual ? 1 : safeWeight(p);
       const segmentAngle = (weight / totalWeight) * Math.PI * 2;
       const segment = {
         pseudo: p.pseudo,
@@ -759,6 +769,9 @@ export function SpinningWheel({
 
     setIsAnimating(true);
     startTimeRef.current = Date.now();
+    // Reset so the very first segment crossed in this spin always ticks, even
+    // if it equals the last segment of the previous spin.
+    lastTickSegmentRef.current = -1;
 
     const currentRotation = rotationRef.current;
     const spins = 10 + cryptoRandom() * 5;
@@ -795,7 +808,7 @@ export function SpinningWheel({
           let cum = 0;
           for (let j = 0; j < availableSegments.length; j++) {
             cum += availableSegments[j].weight;
-            if (rand <= cum) {
+            if (rand < cum) {
               additionalWinners.push(availableSegments[j].pseudo);
               availableIndices.splice(j, 1);
               break;

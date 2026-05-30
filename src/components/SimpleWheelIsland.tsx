@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { Share2, Check, Volume2, VolumeX, Trash2, History } from "lucide-react";
 import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { useSpinHotkey } from "@/hooks/useSpinHotkey";
 import { SpinningWheel } from "@/components/SpinningWheel";
 import DrawButton from "@/components/DrawButton";
 import WinnerResult from "@/components/WinnerResult";
@@ -94,6 +95,9 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
     scrollToWheel();
     setTimeout(() => { setIsSpinning(true); setWinners([]); setVerifyUrl(undefined); }, 300);
   }, [isSpinning, scrollToWheel]);
+
+  // Press Space/Enter to spin (ignored while typing or spinning).
+  useSpinHotkey(handleDraw, !isSpinning);
 
   const handleComplete = useCallback((w: string[]) => {
     setWinners(w);
@@ -237,13 +241,18 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
           hubTheme={hubTheme}
         />
         {!isSpinning && winners.length === 0 && (
-          <DrawButton
-            onDraw={handleDraw}
-            isSpinning={isSpinning}
-            disabled={false}
-            participantCount={activeParticipants.length}
-            mode="simple"
-          />
+          <>
+            <DrawButton
+              onDraw={handleDraw}
+              isSpinning={isSpinning}
+              disabled={false}
+              participantCount={activeParticipants.length}
+              mode="simple"
+            />
+            <p className="text-center text-xs text-muted-foreground mt-2" aria-hidden="true">
+              Press <kbd className="px-1.5 py-0.5 rounded border border-border bg-muted font-mono text-[0.7rem]">Space</kbd> to spin
+            </p>
+          </>
         )}
         {winners.length > 0 && !isSpinning && (
           <WinnerResult

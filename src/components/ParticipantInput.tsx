@@ -227,14 +227,14 @@ const ParticipantInput = ({ mode, participants, onParticipantsChange }: Particip
         {/* Action row */}
         <div className="flex items-center justify-between gap-1 flex-wrap">
           <div className="flex items-center gap-1">
-            <Button variant="outline" size="sm" className="h-6 text-xs px-2 border-border hover:bg-primary/10" onClick={handleShuffle} disabled={participants.length < 2} title={t.shuffle}><Shuffle className="w-3 h-3" /></Button>
-            <Button variant="outline" size="sm" className="h-6 text-xs px-2 border-border hover:bg-primary/10" onClick={handleSortAZ} disabled={participants.length < 2} title={t.sortAZ}><ArrowUpAZ className="w-3 h-3" /></Button>
-            <Button variant="outline" size="sm" className="h-6 text-xs px-2 border-border hover:bg-primary/10" onClick={handleSortZA} disabled={participants.length < 2} title={t.sortZA}><ArrowDownAZ className="w-3 h-3" /></Button>
+            <Button variant="outline" size="sm" className="h-6 text-xs px-2 border-border hover:bg-primary/10" onClick={handleShuffle} disabled={participants.length < 2} title={t.shuffle} aria-label={t.shuffle}><Shuffle className="w-3 h-3" aria-hidden="true" /></Button>
+            <Button variant="outline" size="sm" className="h-6 text-xs px-2 border-border hover:bg-primary/10" onClick={handleSortAZ} disabled={participants.length < 2} title={t.sortAZ} aria-label={t.sortAZ}><ArrowUpAZ className="w-3 h-3" aria-hidden="true" /></Button>
+            <Button variant="outline" size="sm" className="h-6 text-xs px-2 border-border hover:bg-primary/10" onClick={handleSortZA} disabled={participants.length < 2} title={t.sortZA} aria-label={t.sortZA}><ArrowDownAZ className="w-3 h-3" aria-hidden="true" /></Button>
             <input ref={fileInputRef} type="file" accept=".csv,.txt,.tsv" className="hidden" onChange={handleFileImport} />
-            <Button variant="outline" size="sm" className="h-6 text-xs px-2 border-border hover:bg-primary/10" onClick={() => fileInputRef.current?.click()} title="Import CSV/TXT"><Upload className="w-3 h-3" /></Button>
+            <Button variant="outline" size="sm" className="h-6 text-xs px-2 border-border hover:bg-primary/10" onClick={() => fileInputRef.current?.click()} title="Import CSV/TXT" aria-label="Import CSV or text file"><Upload className="w-3 h-3" aria-hidden="true" /></Button>
           </div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span>{participants.length} {participants.length !== 1 ? t.participants : t.participant}</span>
+            <span aria-live="polite">{participants.length} {participants.length !== 1 ? t.participants : t.participant}</span>
             {participants.length > 0 && (
               <Button variant="ghost" size="sm" onClick={handleClearAll} className="h-5 text-xs text-destructive hover:text-destructive px-1">
                 <Trash2 className="w-3 h-3 mr-1" />{t.clearAll}

@@ -71,8 +71,15 @@ const resolvedHreflang: HreflangLink[] = hreflangLinks ?? [
           var p = new URLSearchParams(window.location.search);
           if (p.get('embed') === '1') {
             document.documentElement.classList.add('rwp-embed');
+            // The <meta name="robots"> tag is declared later in <head>, so it
+            // does not exist yet when this script runs — create it if missing.
             var m = document.querySelector('meta[name="robots"]');
-            if (m) m.setAttribute('content', 'noindex, nofollow');
+            if (!m) {
+              m = document.createElement('meta');
+              m.setAttribute('name', 'robots');
+              document.head.appendChild(m);
+            }
+            m.setAttribute('content', 'noindex, nofollow');
           }
         } catch (e) { /* no-op */ }
       })();

@@ -53,7 +53,7 @@ const defaultParticipants = [
     </div>
     <div class="relative z-10">
       <HeaderIsland client:idle />
-      <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+      <main id="main" class="max-w-5xl mx-auto px-4 py-8 space-y-10">
 
         <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
           <a href="/" class="hover:text-primary transition-colors">Inicio</a>
@@ -102,7 +102,7 @@ const defaultParticipants = [
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {[
               { label: "Sorteo Online", href: "/sorteo-online" },
-              { label: "Rueda de la Suerte", href: "/rueda-de-la-suerte" },
+              { label: "Wheel of Names", href: "/wheel-of-names" },
               { label: "Classroom Picker", href: "/classroom-picker" },
             ].map((link) => (
               <a href={link.href}

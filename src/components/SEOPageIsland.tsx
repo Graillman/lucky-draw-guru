@@ -13,6 +13,7 @@ import MicroTrustIndicators from "@/components/MicroTrustIndicators";
 import AdvancedModeExplainer from "@/components/AdvancedModeExplainer";
 import LocalStorageNotice from "@/components/LocalStorageNotice";
 import { useLocalStorageParticipants } from "@/hooks/useLocalStorageParticipants";
+import { getRelated } from "@/data/internalLinks";
 import { ParticipantEntry } from "@/components/ParticipantInput";
 
 const DEFAULT_NAMES: ParticipantEntry[] = [
@@ -45,6 +46,7 @@ interface SEOPageIslandProps {
   h1?: string;
   subtitle?: string;
   microText?: string;
+  answerCapsule?: string;
   howItWorksTitle?: string;
   howItWorksText?: string;
   whenToUseTitle?: string;
@@ -78,7 +80,7 @@ const ADVANCED_ALLOWED_SLUGS = new Set([
   'discord-giveaway-picker',
 ]);
 
-const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, howItWorksText, whenToUseTitle, useCases, seoTitle, seoText, faqs, relatedBlogPost, defaultParticipants: propDefaults, hideHero }: SEOPageIslandProps) => {
+const SEOPageIslandInner = ({ slug, h1, subtitle, microText, answerCapsule, howItWorksTitle, howItWorksText, whenToUseTitle, useCases, seoTitle, seoText, faqs, relatedBlogPost, defaultParticipants: propDefaults, hideHero }: SEOPageIslandProps) => {
   const { participants, setParticipants, isLoaded } = useLocalStorageParticipants();
   const { t } = useLanguage();
   const allowAdvanced = ADVANCED_ALLOWED_SLUGS.has(slug);
@@ -108,6 +110,8 @@ const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, ho
   const displayH1 = pageT?.h1 ?? h1;
   const displaySubtitle = pageT?.subtitle ?? subtitle;
   const displayMicroText = pageT?.microText ?? microText;
+  const displayAnswerCapsule = (pageT as { answerCapsule?: string })?.answerCapsule ?? answerCapsule;
+  const relatedTools = getRelated(slug);
   const displayHowItWorksTitle = pageT?.howItWorksTitle ?? howItWorksTitle;
   const displayHowItWorksText = pageT?.howItWorksText ?? howItWorksText;
   const displayWhenToUseTitle = pageT?.whenToUseTitle ?? whenToUseTitle;
@@ -174,16 +178,14 @@ const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, ho
     }
   }, [winners, participants, setParticipants]);
 
-  if (!isLoaded) return (
-    <div className="flex items-center justify-center w-full aspect-square max-w-md mx-auto">
-      <div className="relative w-full aspect-square rounded-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 animate-pulse">
-        <div className="absolute inset-4 rounded-full bg-white/50 dark:bg-gray-900/50"></div>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-gray-400 dark:text-gray-500 text-sm font-medium">{t.preparingWheel}</span>
-        </div>
-      </div>
-    </div>
-  );
+  // NOTE: we intentionally do NOT early-return a skeleton while `!isLoaded`.
+  // Doing so made the whole island render empty during SSG (isLoaded is false
+  // on the server), so the page's H1, how-it-works, FAQ, internal links and
+  // answer capsule were absent from the static HTML — invisible to non-JS
+  // crawlers and weak for SEO. The wheel renders with `pageDefaults` on the
+  // server (participants fall back to defaults until localStorage loads in a
+  // client effect), which matches the first client render, so there is no
+  // hydration mismatch — same approach as SimpleWheelIsland.
 
   return (
     <div className="space-y-8">
@@ -204,6 +206,14 @@ const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, ho
             <p className="text-sm text-muted-foreground">{displayMicroText}</p>
           )}
         </section>
+      )}
+
+      {/* Answer capsule — a self-contained direct answer, optimized to be
+          quoted by AI Overviews / Perplexity and to win featured snippets. */}
+      {displayAnswerCapsule && (
+        <p className="max-w-3xl mx-auto text-base md:text-lg font-medium text-foreground border-l-4 border-primary pl-4 py-1">
+          {displayAnswerCapsule}
+        </p>
       )}
 
       {/* Translated how it works */}
@@ -397,6 +407,26 @@ const SEOPageIslandInner = ({ slug, h1, subtitle, microText, howItWorksTitle, ho
           <a href={relatedBlogPost.slug} className="font-semibold text-primary hover:underline">
             {relatedBlogPost.title} →
           </a>
+        </section>
+      )}
+
+      {/* Related tools — data-driven internal links (hub-and-spoke). Builds
+          topical authority and spreads internal PageRank. Rendered as real
+          <a> tags so they are crawlable. */}
+      {relatedTools.length > 0 && (
+        <section className="space-y-4 py-4">
+          <h2 className="text-xl md:text-2xl font-bold text-foreground">{(t as { relatedToolsTitle?: string }).relatedToolsTitle ?? "Related free tools"}</h2>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {relatedTools.map((link) => (
+              <a key={link.href} href={link.href} className="flex items-start gap-3 p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all">
+                <span className="text-primary font-bold text-sm mt-0.5 shrink-0">→</span>
+                <span>
+                  <span className="block font-semibold text-foreground text-sm">{link.label}</span>
+                  <span className="block text-muted-foreground text-xs leading-snug">{link.desc}</span>
+                </span>
+              </a>
+            ))}
+          </div>
         </section>
       )}
 

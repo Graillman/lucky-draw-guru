@@ -134,6 +134,8 @@ const HeaderIsland = () => {
           <div ref={dropdownRef} className="relative">
             <button
               onClick={() => setToolsOpen(!toolsOpen)}
+              aria-expanded={toolsOpen}
+              aria-haspopup="true"
               className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md transition-colors ${
                 toolsOpen ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground"
               }`}
@@ -168,6 +170,8 @@ const HeaderIsland = () => {
           <div ref={importRef} className="relative hidden md:block">
             <button
               onClick={() => setImportOpen(!importOpen)}
+              aria-expanded={importOpen}
+              aria-haspopup="true"
               className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md transition-colors ${
                 importOpen ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground"
               }`}

@@ -698,4 +698,9 @@ body::before {
   .reveal-ed,
   .theme-swatch { transition-duration: 0.01ms !important; }
   .reveal-ed { opacity: 1 !important; transform: none !important; }
+  /* Neutralize Tailwind looping utilities for users who asked for less motion
+     (WCAG 2.2.2 / 2.3.3). animate-spin is kept where it signals progress. */
+  .animate-ping,
+  .animate-bounce,
+  .animate-pulse { animation: none !important; }
 }
