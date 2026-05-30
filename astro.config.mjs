@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
+import AstroPWA from '@vite-pwa/astro';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -40,6 +41,51 @@ export default defineConfig({
     // expose divergent URLs to Google. The single authoritative sitemap is
     // dist/sitemap.xml, produced by scripts/generate-sitemap.mjs (postbuild)
     // with curated priorities, and declared in public/robots.txt.
+    AstroPWA({
+      // Auto-update: the SW silently fetches a new build and swaps it on the
+      // next navigation — no update prompt UI needed for a stateless tool.
+      registerType: 'autoUpdate',
+      // We register the SW ourselves in Layout.astro via virtual:pwa-register
+      // (immediate), so disable the integration's auto-injected <script>.
+      injectRegister: false,
+      manifest: {
+        name: 'Real Wheel Picker',
+        short_name: 'Wheel Picker',
+        description: 'Free random name picker wheel — spin to pick winners, teams or decisions.',
+        // standalone = launches chrome-less like a native app (key for the
+        // "installable" retention goal and the stream/presenter use case).
+        display: 'standalone',
+        start_url: '/',
+        scope: '/',
+        // Match the existing <meta name="theme-color"> in Layout.astro and the
+        // dark gradient background of the app shell.
+        theme_color: '#0a0f1a',
+        background_color: '#0a0f1a',
+        orientation: 'any',
+        icons: [
+          { src: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+          // Reuse the 512 as maskable so Android adaptive icons don't crop the
+          // logo (the asset has enough padding to act as a safe-zone maskable).
+          { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        ],
+      },
+      workbox: {
+        // build.format:'file' emits flat *.html files. The default globPatterns
+        // only precaches css/js/html — widen it so the full app shell (icons,
+        // fonts, svg) is available offline.
+        globPatterns: ['**/*.{css,js,html,svg,png,ico,txt,woff2}'],
+        // Static export can ship many small HTML pages; lift the per-file cap so
+        // large precache entries (e.g. og images) are not silently skipped.
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
+        navigateFallback: '/index.html',
+        cleanupOutdatedCaches: true,
+      },
+      // Keep the SW active in `astro dev` so PWA wiring can be verified locally.
+      devOptions: {
+        enabled: false,
+      },
+    }),
   ],
   vite: {
     resolve: {

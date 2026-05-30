@@ -5,6 +5,7 @@ import { SpinningWheel } from "@/components/SpinningWheel";
 import DrawButton from "@/components/DrawButton";
 import WinnerResult from "@/components/WinnerResult";
 import { ConfettiEffect } from "@/components/ConfettiEffect";
+import FullscreenButton from "@/components/FullscreenButton";
 import { useWheelSound } from "@/hooks/useWheelSound";
 import { WHEEL_THEMES } from "@/components/WheelThemePicker";
 import {
@@ -193,7 +194,19 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
         </div>
       )}
 
-      <div ref={wheelRef} className="flex flex-col items-center space-y-4">
+      <style>{`
+        .rwp-wheel-zone:fullscreen {
+          background: var(--gradient-bg);
+          justify-content: center;
+          padding: 2vmin;
+          overflow: auto;
+        }
+        .rwp-wheel-zone:fullscreen canvas {
+          width: min(80vmin, 100%) !important;
+          height: auto !important;
+        }
+      `}</style>
+      <div ref={wheelRef} className="rwp-wheel-zone flex flex-col items-center space-y-4">
         <SpinningWheel
           participants={activeParticipants}
           isSpinning={isSpinning}
@@ -256,6 +269,7 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
             <History className="w-3.5 h-3.5" aria-hidden />
             <span>{t.recentWinners} {history.length > 0 && <span className="text-primary">({history.length})</span>}</span>
           </button>
+          <FullscreenButton targetRef={wheelRef} />
         </div>
       </div>
 

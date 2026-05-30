@@ -13,7 +13,14 @@ interface SpinningWheelProps {
   mode: "simple" | "advanced";
   winnersCount: number;
   onSpin?: () => void;
-  onTick?: () => void;
+  /**
+   * Fired each time the pointer crosses into a new segment during a spin.
+   * Receives an optional `progress` in [0,1] (0 = spin start, 1 = settled) so
+   * callers can vary the tick — e.g. ramp the pitch or switch sound profile as
+   * the wheel slows. The argument is additive: existing zero-arg handlers keep
+   * working unchanged.
+   */
+  onTick?: (progress?: number) => void;
   colors?: string[];
   borderStyle?: string; // 'default' | 'white' | 'gold' | 'rainbow' | 'none'
   backgroundImage?: string;
@@ -837,7 +844,9 @@ export function SpinningWheel({
         }
         if (currentSeg !== lastTickSegmentRef.current) {
           lastTickSegmentRef.current = currentSeg;
-          onTickRef.current();
+          // Pass spin progress so callers can vary the tick (pitch/profile) as
+          // the wheel decelerates. Zero-arg handlers simply ignore it.
+          onTickRef.current(progress);
         }
       }
 

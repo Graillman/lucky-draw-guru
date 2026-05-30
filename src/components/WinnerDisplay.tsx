@@ -1,9 +1,24 @@
 import { Participant, formatProbability } from "@/lib/weightedRandom";
-import { Trophy, Sparkles } from "lucide-react";
+import { Trophy, Sparkles, Volume2, VolumeX } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useVoiceAnnouncer } from "@/hooks/useVoiceAnnouncer";
 
 interface WinnerDisplayProps {
   winner: Participant;
+  /**
+   * Enable the spoken winner announcement (SpeechSynthesis) + its toggle.
+   * Off by default — existing call sites are unchanged. The voice is still
+   * gated behind the per-user `rwp:voice-on` preference.
+   */
+  enableVoice?: boolean;
+  /** BCP-47 language prefix for voice selection (default "fr" — this card's UI is French). */
+  voiceLang?: string;
+}
+
+// Respect prefers-reduced-motion synchronously (used by the inline confetti).
+function prefersReducedMotion(): boolean {
+  return typeof window !== "undefined"
+    && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 }
 
 function Confetti() {
@@ -36,8 +51,10 @@ function Confetti() {
   );
 }
 
-export function WinnerDisplay({ winner }: WinnerDisplayProps) {
-  const [showConfetti, setShowConfetti] = useState(true);
+export function WinnerDisplay({ winner, enableVoice = false, voiceLang = "fr" }: WinnerDisplayProps) {
+  // Skip the celebratory confetti for users who asked for reduced motion.
+  const [showConfetti, setShowConfetti] = useState(() => !prefersReducedMotion());
+  const voice = useVoiceAnnouncer(voiceLang);
 
   // Polite live region, pre-rendered empty then filled — see WinnerResult for
   // the rationale. Toggling a trailing zero-width space guarantees that the
@@ -51,9 +68,18 @@ export function WinnerDisplay({ winner }: WinnerDisplayProps) {
   }, [winner]);
 
   useEffect(() => {
+    if (prefersReducedMotion()) { setShowConfetti(false); return; }
+    setShowConfetti(true);
     const timer = setTimeout(() => setShowConfetti(false), 3000);
     return () => clearTimeout(timer);
   }, [winner]);
+
+  // Spoken announcement (opt-in, independent of the aria-live region above).
+  useEffect(() => {
+    if (!enableVoice) return;
+    voice.speak(`Le gagnant est ${winner.pseudo} !`, { lang: voiceLang });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [winner, enableVoice, voiceLang]);
 
   return (
     <>
@@ -107,6 +133,28 @@ export function WinnerDisplay({ winner }: WinnerDisplayProps) {
                 </p>
               </div>
             </div>
+
+            {/* Discrete spoken-announcer toggle — only when opted in and the
+                browser supports SpeechSynthesis. Enabling fires a forced
+                preview so the winner is read aloud immediately. */}
+            {enableVoice && voice.supported && (
+              <button
+                type="button"
+                onClick={() => {
+                  const next = !voice.enabled;
+                  voice.setEnabled(next);
+                  if (next) voice.speak(`Le gagnant est ${winner.pseudo} !`, { lang: voiceLang }, true);
+                }}
+                aria-pressed={voice.enabled}
+                aria-label={voice.enabled ? "Annonce vocale activée" : "Annonce vocale désactivée"}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card/60 hover:border-primary/40 transition-all text-xs font-medium text-muted-foreground hover:text-foreground"
+              >
+                {voice.enabled
+                  ? <Volume2 className="w-3.5 h-3.5" aria-hidden />
+                  : <VolumeX className="w-3.5 h-3.5" aria-hidden />}
+                <span aria-hidden>🗣️</span>
+              </button>
+            )}
           </div>
         </div>
       </div>
