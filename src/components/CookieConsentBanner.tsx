@@ -58,6 +58,7 @@ function CookieConsentBannerInner() {
   if (collapsed) {
     return (
       <button
+        data-rwp-cookie
         onClick={() => setCollapsed(false)}
         aria-label={t.cookieTitle}
         className="fixed bottom-4 right-4 z-[9999] flex items-center gap-1.5 px-3 py-2 rounded-full bg-card/90 backdrop-blur border border-border shadow-md text-xs font-medium text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
@@ -70,6 +71,7 @@ function CookieConsentBannerInner() {
 
   return (
     <div
+      data-rwp-cookie
       role="dialog"
       aria-label={t.cookieTitle}
       aria-live="polite"

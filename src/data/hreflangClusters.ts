@@ -63,28 +63,25 @@ interface Cluster {
  */
 const CLUSTERS: Record<string, Cluster> = {
   homeRandom: {
+    // SEO consolidation (2026-05-30): the pt/it/nl/pl/tr/zh machine-translated
+    // variants were set to noindex,follow and REMOVED from this cluster — a
+    // hreflang alternate must never point at a noindexed page. Only the
+    // indexed variants (EN/FR/ES + DE zufallsgenerator) remain, keeping the
+    // cluster fully reciprocal across the pages Google is allowed to index.
     pages: {
       en: '/',
       fr: '/tirage-au-sort',
       es: '/sorteo-online',
-      pt: '/sorteio-online',
-      it: '/sorteggio-online',
       de: '/zufallsgenerator',
-      nl: '/rad-van-fortuin',
-      pl: '/losowanie-online',
-      tr: '/sans-carki',
-      zh: '/zhuanpan',
     },
     xDefault: 'en',
   },
   nameWheel: {
+    // SEO consolidation (2026-05-30): es/pt/it/de name-wheel variants were set
+    // to noindex,follow and removed here. Only EN + FR (both indexed) remain.
     pages: {
       en: '/wheel-of-names',
       fr: '/roue-des-noms',
-      es: '/rueda-de-la-suerte',
-      pt: '/roleta-de-nomes',
-      it: '/ruota-dei-nomi',
-      de: '/namenrad',
     },
     xDefault: 'en',
   },

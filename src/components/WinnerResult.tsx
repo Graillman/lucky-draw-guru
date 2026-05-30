@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Copy, RotateCcw, Share2, Check, Trophy, UserMinus, Twitter, Download, FileText, Volume2, VolumeX } from "lucide-react";
+import { Copy, RotateCcw, Share2, Check, Trophy, UserMinus, Twitter, Download, FileText, Volume2, VolumeX, ShieldCheck } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useVoiceAnnouncer } from "@/hooks/useVoiceAnnouncer";
@@ -41,6 +41,12 @@ interface WinnerResultProps {
   /** Optional aria-labels for the voice toggle (i18n). Defaults to English. */
   voiceOnLabel?: string;
   voiceOffLabel?: string;
+  /**
+   * Optional tamper-evident verification link for this draw. When provided, a
+   * discreet "Verify this draw" button opens it in a new tab so anyone can
+   * confirm the recorded result was not altered.
+   */
+  verifyUrl?: string;
 }
 
 const WinnerResult = ({
@@ -56,6 +62,7 @@ const WinnerResult = ({
   enableVoice = false,
   voiceOnLabel,
   voiceOffLabel,
+  verifyUrl,
 }: WinnerResultProps) => {
   const { t, language } = useLanguage();
   const [copied, setCopied] = useState(false);
@@ -346,6 +353,31 @@ const WinnerResult = ({
             <FileText className="w-4 h-4" />
             {exportCsvLabel ?? "CSV"}
           </Button>
+
+          {/* Tamper-evident verification — only when the caller passed a link.
+              Opens the /verify page (in a new tab) where anyone can recompute
+              the SHA-256 hash and confirm the result was not modified. */}
+          {verifyUrl && (
+            <Button
+              variant="outline"
+              size="default"
+              asChild
+              className={isAdvanced
+                ? "border-accent/50 hover:bg-accent/10 text-accent"
+                : "border-primary/50 hover:bg-primary/10 text-primary"
+              }
+            >
+              <a
+                href={verifyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Verify this draw — open the tamper-proof certificate"
+              >
+                <ShieldCheck className="w-4 h-4" />
+                🛡️ Verify this draw
+              </a>
+            </Button>
+          )}
 
           {/* Spoken-announcer toggle — only when opted in via `enableVoice`
               and the browser actually supports SpeechSynthesis. On enable we

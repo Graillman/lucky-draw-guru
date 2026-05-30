@@ -6,7 +6,7 @@ import {
   Trophy,
   Clock,
   Users,
-  KeyRound,
+  Fingerprint,
   Hash,
   ClipboardPaste,
 } from 'lucide-react';
@@ -192,28 +192,23 @@ const ResultPanel: React.FC<{ status: Status }> = ({ status }) => {
             }`}
           >
             {valid
-              ? 'Authentic draw — result not altered'
-              : 'Warning — this certificate does not match'}
+              ? '✅ Authentic — this result has not been modified'
+              : '❌ Invalid or altered certificate'}
           </p>
           <p className="text-sm text-muted-foreground leading-relaxed">
             {valid
-              ? 'The winner was recomputed from the original seed and the hash matches the published value. The result is exactly what the seed produced — it was not changed after the draw.'
-              : 'The recomputed winner or hash does not match the certificate. The result may have been edited after the draw, or the code was corrupted in transit.'}
+              ? 'The SHA-256 hash recomputed from this certificate matches the published value. The winner, the participant list, the timestamp — every recorded field is exactly what was sealed at draw time. Nothing was changed afterwards.'
+              : 'The hash recomputed from this certificate does not match the published value. The result may have been edited after the draw, or the code was corrupted in transit.'}
           </p>
         </div>
       </div>
 
       {/* Checks breakdown */}
-      <div className="grid sm:grid-cols-2 gap-3">
-        <CheckRow
-          ok={result.winnerMatches}
-          label="Winner matches the seed"
-          detail={`Expected: ${result.expectedWinner}`}
-        />
+      <div className="grid gap-3">
         <CheckRow
           ok={result.hashMatches}
           label="Integrity hash matches"
-          detail="SHA-256 recomputed from the payload"
+          detail="SHA-256 recomputed from the recorded fields"
         />
       </div>
 
@@ -230,9 +225,9 @@ const ResultPanel: React.FC<{ status: Status }> = ({ status }) => {
           value={new Date(certificate.timestamp).toLocaleString()}
         />
         <DetailRow
-          icon={<KeyRound className="w-4 h-4 text-primary" />}
-          label="Seed"
-          value={certificate.seed}
+          icon={<Fingerprint className="w-4 h-4 text-primary" />}
+          label="Nonce"
+          value={certificate.nonce}
           mono
         />
         <DetailRow

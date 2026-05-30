@@ -29,6 +29,10 @@ export default defineConfig({
     // hreflang-paired with /pile-ou-face (FR), so no redirect needed.
     '/random-decision-maker': '/decision-wheel',
     '/random-winner-picker': '/giveaway-picker',
+    // Removed 2026-05-30 (trademark risk: Warner/Harry Potter IP). 301 to the
+    // themed-wheel gallery so the old URLs don't 404.
+    '/harry-potter-wheel': '/templates',
+    '/magical-creature-wheel': '/templates',
   },
   integrations: [
     react(),

@@ -58,6 +58,62 @@ const resolvedHreflang: HreflangLink[] = hreflangLinks ?? [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- EMBED MODE (?embed=1) — handled CLIENT-SIDE because this site is built
+         with output:'static', so Astro.url.searchParams is not available per
+         request at build time. This inline script runs in <head> BEFORE the
+         first paint: if the URL carries embed=1 it tags <html> with the
+         `rwp-embed` class (so the CSS below hides chrome with no flash) and
+         flips the page to noindex so embedded copies don't get indexed. -->
+    <script is:inline>
+      (function () {
+        try {
+          var p = new URLSearchParams(window.location.search);
+          if (p.get('embed') === '1') {
+            document.documentElement.classList.add('rwp-embed');
+            var m = document.querySelector('meta[name="robots"]');
+            if (m) m.setAttribute('content', 'noindex, nofollow');
+          }
+        } catch (e) { /* no-op */ }
+      })();
+    </script>
+    <style is:inline>
+      /* In embed mode, hide all site chrome: header, footer, ads, cookie
+         banner. Selectors:
+           - header / footer  → the sticky <header> (HeaderIsland) and the
+             <footer> (GlobalFooterIsland) site furniture.
+           - ins.adsbygoogle / [data-ad-client]  → live AdSense units (AdUnit).
+           - [data-rwp-cookie]  → the cookie consent card AND its collapsed chip.
+         The attribution bar (.rwp-embed-attribution) is shown only here. */
+      .rwp-embed header,
+      .rwp-embed footer,
+      .rwp-embed ins.adsbygoogle,
+      .rwp-embed [data-ad-client],
+      .rwp-embed [data-rwp-cookie] {
+        display: none !important;
+      }
+      /* Theme tokens are raw HSL components (e.g. "45 93% 47%"), so they must be
+         wrapped in hsl(...). Hex fallbacks cover the case where vars are absent. */
+      .rwp-embed-attribution { display: none; }
+      .rwp-embed .rwp-embed-attribution {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.7rem;
+        line-height: 1;
+        color: hsl(var(--muted-foreground, 222 18% 38%));
+        background: hsl(var(--card, 38 30% 99%));
+        border-top: 1px solid hsl(var(--border, 38 18% 78%));
+      }
+      .rwp-embed-attribution a {
+        color: hsl(var(--primary, 45 93% 47%));
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .rwp-embed-attribution a:hover { text-decoration: underline; }
+    </style>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
     <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
@@ -128,6 +184,15 @@ const resolvedHreflang: HreflangLink[] = hreflangLinks ?? [
       Skip to main content
     </a>
     <slot />
+
+    <!-- Embed attribution bar — hidden by default, revealed by the CSS above
+         only when <html> has the `rwp-embed` class. Keeps a backlink when the
+         tool is embedded in an iframe. -->
+    <div class="rwp-embed-attribution">
+      <span aria-hidden="true">🎡</span>
+      <span>Powered by <a href="https://realwheelpicker.com" target="_blank" rel="noopener">Real Wheel Picker</a></span>
+    </div>
+
     <CookieConsentBanner client:idle />
 
     <!-- PWA service worker registration. virtual:pwa-register is resolved by

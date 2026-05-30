@@ -22,6 +22,7 @@ import {
   type WinnerEntry,
 } from "@/lib/winnerHistory";
 import { recordSpin } from "@/lib/spinCounter";
+import { createCertificate, buildVerifyUrl } from "@/lib/fairnessCertificate";
 
 interface Participant {
   pseudo: string;
@@ -50,6 +51,7 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
     [...defaultParticipants]
   );
   const [winners, setWinners] = useState<string[]>([]);
+  const [verifyUrl, setVerifyUrl] = useState<string | undefined>(undefined);
   const [isSpinning, setIsSpinning] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
@@ -89,11 +91,12 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
   const handleDraw = useCallback(() => {
     if (isSpinning) return;
     scrollToWheel();
-    setTimeout(() => { setIsSpinning(true); setWinners([]); }, 300);
+    setTimeout(() => { setIsSpinning(true); setWinners([]); setVerifyUrl(undefined); }, 300);
   }, [isSpinning, scrollToWheel]);
 
   const handleComplete = useCallback((w: string[]) => {
     setWinners(w);
+    setVerifyUrl(undefined);
     setIsSpinning(false);
     setShowConfetti(true);
     if (soundOn) playFanfare();
@@ -103,7 +106,18 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
     // no per-spin network call. Used to power the "X spins this week" social
     // proof on the homepage.
     recordSpin();
-  }, [soundOn, playFanfare]);
+
+    // Tamper-evident certificate of THIS draw. Records the real winner + the
+    // exact participant snapshot, hashes it (SHA-256), and exposes a /verify
+    // link. Async + best-effort: a crypto failure must never break the result.
+    if (w.length > 0) {
+      const snapshot = (participants.length >= 2 ? participants : defaultParticipants)
+        .map((p) => ({ pseudo: p.pseudo, weight: p.weight ?? 1 }));
+      createCertificate({ participants: snapshot, winner: w[0] })
+        .then((cert) => setVerifyUrl(buildVerifyUrl(cert)))
+        .catch(() => { /* ignore — certificate is a bonus, not required */ });
+    }
+  }, [soundOn, playFanfare, participants, defaultParticipants]);
 
   const handleRelaunch = useCallback(() => {
     setWinners([]);
@@ -237,6 +251,7 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
             onRemoveWinnersAndRespin={handleRemoveAndRespin}
             canRemoveWinners={participants.length > 2}
             mode="simple"
+            verifyUrl={verifyUrl}
           />
         )}
 
