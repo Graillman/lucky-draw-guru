@@ -6,8 +6,8 @@ import GlobalFooterIsland from '@/components/GlobalFooterIsland';
 import HomepageIsland from '@/components/HomepageIsland';
 import HomepageSEOIsland from '@/components/HomepageSEOIsland';
 
-const title = "Spin the Wheel — Free Online Random Picker";
-const description = "Spin the wheel & pick a random winner in seconds. 8 free tools: giveaways, classrooms, teams & more. Cryptographically fair, no signup required.";
+const title = "Spin the Wheel — Free Random Name Picker & Wheel Maker";
+const description = "Make your own wheel: add names, customize colors & weights, then spin to pick a random winner. Save, share & embed. Cryptographically fair, no signup.";
 const canonical = "/";
 
 const jsonLd = {
@@ -58,52 +58,6 @@ const jsonLd = {
         "No signup required",
         "Mobile and desktop"
       ],
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "5",
-        "bestRating": "5",
-        "worstRating": "1",
-        "ratingCount": "6",
-        "reviewCount": "6"
-      },
-      "review": [
-        {
-          "@type": "Review",
-          "author": { "@type": "Person", "name": "Sarah M." },
-          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-          "reviewBody": "I use this every day in my classroom to pick students. The spinning animation keeps everyone engaged — way better than just calling names."
-        },
-        {
-          "@type": "Review",
-          "author": { "@type": "Person", "name": "Jake K." },
-          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-          "reviewBody": "Finally a giveaway picker I trust. The crypto randomness matters — my Twitch community can't accuse me of rigging."
-        },
-        {
-          "@type": "Review",
-          "author": { "@type": "Person", "name": "Amelia L." },
-          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-          "reviewBody": "We use this every team meeting for random team splits. Simple, fast, no account needed. The weighted picker is perfect for our bonus draw."
-        },
-        {
-          "@type": "Review",
-          "author": { "@type": "Person", "name": "Marie R." },
-          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-          "reviewBody": "The Instagram giveaway picker saved me so much time. I paste the comment list and spin in 30 seconds."
-        },
-        {
-          "@type": "Review",
-          "author": { "@type": "Person", "name": "David P." },
-          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-          "reviewBody": "Perfect for our weekly family game night — Truth or Dare and picking who does the dishes. The kids are obsessed."
-        },
-        {
-          "@type": "Review",
-          "author": { "@type": "Person", "name": "Thomas C." },
-          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-          "reviewBody": "I ran a school raffle with 200 students. Parents watched the live spin on the projector. Nobody questioned the result."
-        }
-      ]
     },
     {
       "@type": "FAQPage",
@@ -111,7 +65,11 @@ const jsonLd = {
         { "@type": "Question", "name": "Is the random picker truly fair?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Real Wheel Picker uses the Web Crypto API (window.crypto.getRandomValues) for cryptographically secure randomness — the same standard used in online banking and encryption." } },
         { "@type": "Question", "name": "Do you store my data?", "acceptedAnswer": { "@type": "Answer", "text": "No data is sent to any server. Everything runs entirely in your browser." } },
         { "@type": "Question", "name": "Can I pick multiple winners?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Set the number of winners before spinning. Each winner is selected without replacement." } },
-        { "@type": "Question", "name": "Is it free to use?", "acceptedAnswer": { "@type": "Answer", "text": "100% free with no limits on spins, entries, or winners. No account required." } }
+        { "@type": "Question", "name": "Is it free to use?", "acceptedAnswer": { "@type": "Answer", "text": "100% free with no limits on spins, entries, or winners. No account required." } },
+        { "@type": "Question", "name": "How do I make my own wheel?", "acceptedAnswer": { "@type": "Answer", "text": "Type or paste your entries — one per line — into the editor. Names, prizes, options, anything. The wheel updates instantly, then press Spin. No account or setup needed." } },
+        { "@type": "Question", "name": "Can I customize the wheel?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Change colors and themes, give some entries higher odds with custom weights, enable no-repeat mode, pick multiple winners, turn on sounds, and switch to fullscreen presenter mode for streams." } },
+        { "@type": "Question", "name": "Can I save, share or embed my wheel?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Save a wheel to reuse it, share a link that reloads your exact entries, or embed the wheel on any website. You can also export the result as an image or CSV." } },
+        { "@type": "Question", "name": "Can I edit entries after a spin?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Edit the entry list anytime before spinning. After a draw you can remove the winner and re-spin, or reset and start over." } }
       ]
     }
   ]
@@ -132,7 +90,7 @@ const jsonLd = {
       material, and Google requires exactly one h1 per page for proper
       keyword targeting. The "sr-only" class hides it from sighted users
       (no visual change to the homepage) but it's perfectly indexable. */}
-  <h1 class="sr-only">Spin the Wheel — Free Online Random Picker &amp; Name Wheel</h1>
+  <h1 class="sr-only">Spin the Wheel — Free Random Name Picker &amp; Wheel Maker</h1>
 
   <HomepageIsland client:load />
 
@@ -227,6 +185,60 @@ const jsonLd = {
   <div style="background: var(--gradient-bg)">
     <section class="max-w-4xl mx-auto px-4 py-16 space-y-12">
 
+      <!-- Make your own wheel (the editor hub) -->
+      <div class="space-y-6">
+        <div class="text-center space-y-3">
+          <h2 class="text-2xl md:text-3xl font-bold text-foreground">How to make your own wheel</h2>
+          <p class="text-muted-foreground text-sm max-w-2xl mx-auto leading-relaxed">Building a custom wheel takes about ten seconds and never needs an account. Type or paste your entries into the editor above, the wheel redraws instantly, then press <strong class="text-foreground">Spin</strong> to pick a random winner. Here is the full flow:</p>
+        </div>
+        <ol class="grid sm:grid-cols-2 gap-4">
+          {[
+            { n: "1", t: "Add your entries", d: "Type names one per line, or paste a whole list (comma- or line-separated) — students, followers, prizes, options, restaurants, anything. There is no limit on the number of entries." },
+            { n: "2", t: "Customize the wheel", d: "Pick a color theme, set custom weights so some entries are more likely, enable no-repeat mode, choose how many winners to draw, and turn on sounds or the voice announcer." },
+            { n: "3", t: "Spin to pick a winner", d: "Press Spin (or tap the wheel). Each result uses crypto.getRandomValues() — genuinely unpredictable and impossible to rig. Go fullscreen for a clean presenter view on a stream or projector." },
+            { n: "4", t: "Save, share or prove it", d: "Save the wheel to reuse it, share a link that reloads your exact entries, embed it on your site, export the result as an image or CSV, or open a verifiable certificate to prove the draw was fair." },
+          ].map(({ n, t, d }) => (
+            <li class="bg-card border border-border rounded-xl p-5 flex gap-4">
+              <span class="w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-bold flex items-center justify-center shrink-0">{n}</span>
+              <div class="space-y-1">
+                <p class="font-semibold text-foreground text-sm">{t}</p>
+                <p class="text-muted-foreground text-xs leading-relaxed">{d}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <!-- Customize everything (feature grid) -->
+      <div class="space-y-6">
+        <div class="text-center space-y-2">
+          <h2 class="text-2xl md:text-3xl font-bold text-foreground">Customize every spin</h2>
+          <p class="text-muted-foreground text-sm max-w-2xl mx-auto leading-relaxed">One editor, every option. The wheel is fully configurable and works on mobile, desktop, and offline once installed.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {[
+            { icon: "✍️", t: "Unlimited entries", d: "Type or paste any list — no cap on names." },
+            { icon: "⚖️", t: "Custom weights", d: "Give some entries higher odds for tiered raffles." },
+            { icon: "🏆", t: "Multiple winners", d: "Draw several winners at once, without replacement." },
+            { icon: "🔁", t: "No-repeat mode", d: "Everyone is picked once before anyone repeats." },
+            { icon: "🎨", t: "Themes & colors", d: "Restyle the wheel to match your brand or event." },
+            { icon: "🔊", t: "Sounds & voice", d: "Tick sounds, confetti and a spoken winner announcement." },
+            { icon: "🖥️", t: "Fullscreen mode", d: "Clean presenter view for streams, classrooms, projectors." },
+            { icon: "🔗", t: "Save & share", d: "Reuse a wheel or share a link that reloads your entries." },
+            { icon: "🧩", t: "Embed anywhere", d: "Drop the wheel into any website for free." },
+            { icon: "📥", t: "Export results", d: "Download the winner as a PNG image or CSV file." },
+            { icon: "🛡️", t: "Verifiable draws", d: "Generate a tamper-proof certificate of the result." },
+            { icon: "🔒", t: "Private & offline", d: "Runs in your browser, installable as an app." },
+          ].map(({ icon, t, d }) => (
+            <div class="bg-card border border-border rounded-xl p-4 space-y-1.5">
+              <div class="text-2xl">{icon}</div>
+              <p class="font-semibold text-foreground text-sm">{t}</p>
+              <p class="text-muted-foreground text-xs leading-snug">{d}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <!-- What is this / Why it exists -->
       <div class="space-y-6">
         <h2 class="text-2xl md:text-3xl font-bold text-foreground text-center">What is Real Wheel Picker and why does it exist?</h2>
@@ -304,6 +316,31 @@ const jsonLd = {
                 <p class="text-muted-foreground text-xs leading-snug">{desc}</p>
               </div>
             </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- FAQ (visible — matches FAQPage structured data) -->
+      <div class="space-y-5">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground text-center">Frequently asked questions</h2>
+        <div class="space-y-3">
+          {[
+            { q: "How do I make my own wheel?", a: "Type or paste your entries — one per line — into the editor. Names, prizes, options, anything. The wheel updates instantly, then press Spin. No account or setup needed." },
+            { q: "Can I customize the wheel?", a: "Yes. Change colors and themes, give some entries higher odds with custom weights, enable no-repeat mode, pick multiple winners, turn on sounds, and switch to fullscreen presenter mode for streams." },
+            { q: "Can I save, share or embed my wheel?", a: "Yes. Save a wheel to reuse it, share a link that reloads your exact entries, or embed the wheel on any website. You can also export the result as an image or CSV." },
+            { q: "Can I edit entries after a spin?", a: "Yes. Edit the entry list anytime before spinning. After a draw you can remove the winner and re-spin, or reset and start over." },
+            { q: "Is the random picker truly fair?", a: "Yes. Real Wheel Picker uses the Web Crypto API (crypto.getRandomValues) for cryptographically secure randomness — the same standard used in online banking and encryption." },
+            { q: "Can I pick multiple winners?", a: "Yes. Set the number of winners before spinning. Each winner is selected without replacement." },
+            { q: "Do you store my data?", a: "No data is sent to any server. Everything runs entirely in your browser." },
+            { q: "Is it free to use?", a: "100% free with no limits on spins, entries, or winners. No account required." },
+          ].map(({ q, a }) => (
+            <details class="group bg-card border border-border rounded-xl p-5">
+              <summary class="font-semibold text-foreground text-sm cursor-pointer list-none flex justify-between items-center gap-3">
+                {q}
+                <span class="text-primary text-lg leading-none group-open:rotate-45 transition-transform shrink-0">+</span>
+              </summary>
+              <p class="text-muted-foreground text-sm leading-relaxed mt-3">{a}</p>
+            </details>
           ))}
         </div>
       </div>
