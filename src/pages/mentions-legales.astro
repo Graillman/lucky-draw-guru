@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import { getHreflang } from '@/data/hreflangClusters';
 import HeaderIsland from '@/components/HeaderIsland';
 import GlobalFooterIsland from '@/components/GlobalFooterIsland';
 import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
@@ -14,11 +15,7 @@ const description = "Mentions légales de Real Wheel Picker (realwheelpicker.com
   canonical="/mentions-legales"
   locale="fr_FR"
   robots="index, follow"
-  hreflangLinks={[
-    { hreflang: 'fr',        href: 'https://realwheelpicker.com/mentions-legales' },
-    { hreflang: 'en',        href: 'https://realwheelpicker.com/legal-notice' },
-    { hreflang: 'x-default', href: 'https://realwheelpicker.com/mentions-legales' },
-  ]}
+  hreflangLinks={getHreflang('legalFR')}
 >
   <SchemaBreadcrumb items={[
     { name: "Accueil", url: "https://realwheelpicker.com" },
@@ -26,7 +23,7 @@ const description = "Mentions légales de Real Wheel Picker (realwheelpicker.com
   ]} />
 
   <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+    <HeaderIsland client:idle />
 
     <main class="max-w-3xl mx-auto px-4 py-8 md:py-12 space-y-8">
 

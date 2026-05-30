@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Copy, RotateCcw, Share2, Check, Trophy, UserMinus, Twitter } from "lucide-react";
+import { Copy, RotateCcw, Share2, Check, Trophy, UserMinus, Twitter, Download, FileText } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import AdUnit from "@/components/AdUnit";
+import { exportWinnerAsPNG, exportResultsAsCSV, type ExportParticipant } from "@/lib/exportResult";
 
 interface WinnerResultProps {
   winners: string[];
@@ -12,20 +13,50 @@ interface WinnerResultProps {
   canRemoveWinners?: boolean;
   drawTitle?: string;
   mode?: "simple" | "advanced";
+  /** Optional full participant list — passed to the PNG/CSV export. */
+  participants?: ExportParticipant[];
+  /** Optional labels for the export buttons (i18n). Defaults to English. */
+  downloadImageLabel?: string;
+  exportCsvLabel?: string;
 }
 
-const WinnerResult = ({ 
-  winners, 
-  onRelaunch, 
+const WinnerResult = ({
+  winners,
+  onRelaunch,
   onRemoveWinnersAndRespin,
   canRemoveWinners = false,
-  drawTitle, 
-  mode = "simple" 
+  drawTitle,
+  mode = "simple",
+  participants,
+  downloadImageLabel,
+  exportCsvLabel,
 }: WinnerResultProps) => {
   const { t } = useLanguage();
   const [copied, setCopied] = useState(false);
 
   const isMultipleWinners = winners.length > 1;
+
+  // ── Accessible winner announcement ──────────────────────────────────────
+  // A polite live region that is PRE-RENDERED EMPTY, then filled by an effect.
+  // Screen readers only announce content that changes *after* the region is
+  // in the accessibility tree — populating it on mount via state achieves that.
+  // We append a zero-width space toggle so re-spinning the SAME winner still
+  // counts as a textContent change (otherwise SRs stay silent).
+  const [announcement, setAnnouncement] = useState("");
+  useEffect(() => {
+    if (winners.length === 0) {
+      setAnnouncement("");
+      return;
+    }
+    const label = isMultipleWinners ? t.drawWinners : t.drawWinner;
+    const names = winners.join(", ");
+    // Toggle a trailing zero-width space so identical consecutive results
+    // are still detected as a change and re-announced.
+    setAnnouncement((prev) => {
+      const base = `${label}: ${names}`;
+      return prev === base ? base + "​" : base;
+    });
+  }, [winners, isMultipleWinners, t.drawWinner, t.drawWinners]);
 
   const handleCopy = async () => {
     try {
@@ -85,8 +116,27 @@ const WinnerResult = ({
 
   const isAdvanced = mode === "advanced";
 
+  const handleDownloadImage = () => {
+    exportWinnerAsPNG(winners, participants ?? [], {
+      title: isMultipleWinners ? "Winners" : "Winner",
+      drawTitle,
+      includeParticipants: !!participants && participants.length > 0 && participants.length <= 40,
+    });
+  };
+
+  const handleExportCsv = () => {
+    exportResultsAsCSV(winners, participants ?? [], {
+      fileName: drawTitle ? drawTitle : "draw-results",
+    });
+  };
+
   return (
     <div className="space-y-6">
+      {/* Polite, atomic live region — pre-rendered empty, filled by effect. */}
+      <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+        {announcement}
+      </div>
+
       {/* AdSense — After Result (replace slot ID with real one from AdSense dashboard) */}
       <AdUnit slot="1234567890" format="horizontal" className="min-h-[90px] rounded-lg" />
 
@@ -228,6 +278,34 @@ const WinnerResult = ({
           >
             <Twitter className="w-4 h-4" />
             Tweet
+          </Button>
+
+          <Button
+            variant="outline"
+            size="default"
+            onClick={handleDownloadImage}
+            aria-label={downloadImageLabel ?? "Download result as image"}
+            className={isAdvanced
+              ? "border-accent/50 hover:bg-accent/10"
+              : "border-primary/50 hover:bg-primary/10"
+            }
+          >
+            <Download className="w-4 h-4" />
+            {downloadImageLabel ?? "Image"}
+          </Button>
+
+          <Button
+            variant="outline"
+            size="default"
+            onClick={handleExportCsv}
+            aria-label={exportCsvLabel ?? "Export result as CSV"}
+            className={isAdvanced
+              ? "border-accent/50 hover:bg-accent/10"
+              : "border-primary/50 hover:bg-primary/10"
+            }
+          >
+            <FileText className="w-4 h-4" />
+            {exportCsvLabel ?? "CSV"}
           </Button>
         </div>
       </div>

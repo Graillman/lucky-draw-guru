@@ -727,12 +727,20 @@ export function CasinoRoulette({ participants, isSpinning, onComplete, mode, win
         
         <canvas
           ref={canvasRef}
+          aria-hidden="true"
           width={canvasPixelSize}
           height={canvasPixelSize}
           className="relative z-10 drop-shadow-2xl max-w-full"
           style={{ width: 'min(520px, 90vw)', height: 'min(520px, 90vw)' }}
         />
       </div>
+
+      {/* Screen-reader-only participant list — the canvas is decorative. */}
+      <ul className="sr-only" aria-label="Participants">
+        {participants.map((p, i) => (
+          <li key={`${p.pseudo}-${i}`}>{p.pseudo}</li>
+        ))}
+      </ul>
 
       {/* Winner preview */}
       {isAnimating && landedCount > 0 && winnersCount <= 15 && (

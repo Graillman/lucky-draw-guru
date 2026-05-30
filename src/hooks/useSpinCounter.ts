@@ -31,7 +31,7 @@ export const useSpinCounter = () => {
     });
     pollingRef.current = setInterval(() => {
       getSpinCount().then(c => setGlobalCount(c));
-    }, 30_000);
+    }, 60_000);
     return () => {
       if (pollingRef.current) clearInterval(pollingRef.current);
     };

@@ -8,7 +8,7 @@ import SchemaBreadcrumb from '@/components/SchemaBreadcrumb.astro';
 import AdPlaceholder from '@/components/AdPlaceholder';
 
 const title = "Giveaway Picker Wheel — Free Random Winner Generator";
-const description = "Pick giveaway winners fairly. Paste comments from Instagram, TikTok, YouTube or any platform. Filter by keywords, tags, duplicates. Spin the wheel live. Free, no signup.";
+const description = "Pick giveaway winners fairly from any platform. Paste comments, filter keywords & duplicates, then spin the wheel live. Free, no signup. Start now!";
 const canonical = "/giveaway-picker";
 
 const faqItems = [
@@ -62,7 +62,7 @@ const jsonLd = {
   ]} />
 
   <div class="min-h-screen" style="background: var(--gradient-bg)">
-    <HeaderIsland client:load />
+    <HeaderIsland client:idle />
 
     <main class="max-w-5xl mx-auto px-4 py-6 space-y-10">
 

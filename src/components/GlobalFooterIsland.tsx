@@ -91,17 +91,22 @@ const GlobalFooterInner = () => {
           <div className="space-y-3">
             <h4 className="font-semibold text-sm text-foreground">{t.footerTools}</h4>
             <nav className="flex flex-col gap-1.5 text-xs text-muted-foreground">
+              {/* All hrefs point to canonical pages (no 301-redirected slugs).
+                  /random-name-picker, /team-generator, /secret-santa-picker and
+                  /raffle-picker are 301'd, so they were replaced with their
+                  canonical targets / distinct live tools to avoid passing every
+                  page's footer link through a redirect. */}
               <a href="/" className="hover:text-primary transition-colors">Spin the Wheel</a>
               <a href="/wheel-of-names" className="hover:text-primary transition-colors">Wheel of Names</a>
-              <a href="/random-name-picker" className="hover:text-primary transition-colors">Random Name Picker</a>
               <a href="/weighted-random-picker" className="hover:text-primary transition-colors">Weighted Picker</a>
+              <a href="/random-picker-no-repeat" className="hover:text-primary transition-colors">No-Repeat Picker</a>
               <a href="/yes-no-wheel" className="hover:text-primary transition-colors">Yes or No Wheel</a>
               <a href="/coin-flip" className="hover:text-primary transition-colors">Coin Flip</a>
-              <a href="/team-generator" className="hover:text-primary transition-colors">Team Generator</a>
+              <a href="/decision-wheel" className="hover:text-primary transition-colors">Decision Wheel</a>
               <a href="/random-number-picker" className="hover:text-primary transition-colors">Number Picker</a>
               <a href="/classroom-picker" className="hover:text-primary transition-colors">Classroom Picker</a>
-              <a href="/secret-santa-picker" className="hover:text-primary transition-colors">Secret Santa</a>
-              <a href="/raffle-picker" className="hover:text-primary transition-colors">Raffle Picker</a>
+              <a href="/random-word-generator" className="hover:text-primary transition-colors">Word Generator</a>
+              <a href="/random-country-picker" className="hover:text-primary transition-colors">Country Picker</a>
               <a href="/party-wheel" className="hover:text-primary transition-colors">Party Wheel</a>
             </nav>
           </div>

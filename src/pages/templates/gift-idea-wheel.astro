@@ -313,7 +313,7 @@ const ribbons = Array.from({length: 10}, (_, i) => ({
     ))}
 
     <div class="gi-content">
-      <HeaderIsland client:load />
+      <HeaderIsland client:idle />
       <div class="max-w-4xl mx-auto px-4 pt-4 pb-12">
         <nav aria-label="breadcrumb" class="text-xs text-white/30 flex gap-1 mb-6">
           <a href="/" class="hover:text-white/60 transition-colors">Home</a>
@@ -350,7 +350,7 @@ const ribbons = Array.from({length: 10}, (_, i) => ({
 
         <div class="gi-card space-y-4">
           <h2 class="text-xl md:text-2xl font-bold">Secret Santa and Group Gift Ideas</h2>
-          <p>For Secret Santa events, customize the wheel with your budget limit per category. Everyone in the group spins their own wheel, and you get a diverse range of gift types across the event. Alternatively, use the <a href="/secret-santa-picker" style="color:#fbbf24; text-decoration:underline;">Secret Santa Picker</a> to assign who gives to whom, then use this wheel for inspiration on what to give.</p>
+          <p>For Secret Santa events, customize the wheel with your budget limit per category. Everyone in the group spins their own wheel, and you get a diverse range of gift types across the event. Alternatively, use the <a href="/giveaway-picker" style="color:#fbbf24; text-decoration:underline;">Secret Santa Picker</a> to assign who gives to whom, then use this wheel for inspiration on what to give.</p>
           <ul class="space-y-3 mt-2">
             <li class="flex gap-3"><span style="color:#ffd700" class="font-bold">→</span><span><strong style="color:#fef9ee">Birthday:</strong> Spin for category, pick something personal within it</span></li>
             <li class="flex gap-3"><span style="color:#ef4444" class="font-bold">→</span><span><strong style="color:#fef9ee">Holiday:</strong> Set budget ranges, spin to decide tier first</span></li>
