@@ -117,6 +117,7 @@ function getPriority(urlPath) {
   if (/^(yes-no-wheel|decision-wheel|truth-or-dare-wheel|random-number-picker|wheel-of-names-alternative|team-generator|random-number-generator|party-wheel|classroom-picker|weighted-random-picker|secret-santa-picker|raffle-picker|random-picker-no-repeat|snapchat-giveaway-picker|random-wheel|sweepstakes-picker)$/.test(urlPath)) return '0.8';
   if (/^(roue-des-noms|tirage-au-sort|tirage-aleatoire|pile-ou-face)$/.test(urlPath)) return '0.8';
   if (/^(generador-de-nombres|roleta-de-nomes|rueda-de-la-suerte|ruota-dei-nomi|sorteo-online|sorteio-online|sorteggio-online|losowanie-online|namenrad|rad-van-fortuin|sans-carki|zhuanpan|zufallsgenerator)$/.test(urlPath)) return '0.7';
+  if (urlPath === 'elimination-wheel') return '0.8'; // tool page
   if (urlPath === 'how-to-pick-a-random-winner') return '0.8';
   if (urlPath.startsWith('templates/')) return '0.7';
   if (urlPath.startsWith('blog/')) return '0.7';
