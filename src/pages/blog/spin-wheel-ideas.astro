@@ -132,7 +132,7 @@ const categories = [
         </div>
       </section>
 
-      <AdPlaceholder position="after-use-cases" client:visible />
+      <AdPlaceholder position="after-use-cases" />
 
       {categories.map((cat, ci) => (
         <section key={ci} class="space-y-5">
@@ -155,7 +155,7 @@ const categories = [
               </div>
             ))}
           </div>
-          {ci === 1 && <AdPlaceholder position="after-winners" client:visible />}
+          {ci === 1 && <AdPlaceholder position="after-winners" />}
         </section>
       ))}
 
@@ -197,7 +197,7 @@ const categories = [
       </section>
 
       <RelatedPosts currentSlug="/blog/spin-wheel-ideas" client:idle />
-      <AdPlaceholder position="bottom" client:visible />
+      <AdPlaceholder position="bottom" />
     </main>
     <GlobalFooterIsland client:idle />
   </div>
