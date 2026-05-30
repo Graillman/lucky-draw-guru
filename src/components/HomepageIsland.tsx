@@ -12,7 +12,8 @@ import { useLocalStorageParticipants } from "@/hooks/useLocalStorageParticipants
 import { ConfettiEffect } from "@/components/ConfettiEffect";
 import { WHEEL_THEMES } from "@/components/WheelThemePicker";
 import { CustomizePanel, useCustomizeConfig } from "@/components/CustomizePanel";
-import { Share2, Settings2, Maximize2, Minimize2, BookMarked, ImagePlus, Plus, X, ChevronDown, Pencil } from "lucide-react";
+import { Share2, Settings2, BookMarked, ImagePlus, Plus, X, ChevronDown, Pencil } from "lucide-react";
+import FullscreenButton from "@/components/FullscreenButton";
 import { buildShareURL, readShareURLConfig } from "@/hooks/useShareableURL";
 import { saveWheel, getWheelById } from "@/lib/wheelGallery";
 import { toast } from "sonner";
@@ -28,32 +29,6 @@ const DEFAULT_NAMES: ParticipantEntry[] = [
   { pseudo: "Gabriel", weight: 1 },
   { pseudo: "Hannah", weight: 1 },
 ];
-
-// Fullscreen toggle button
-function FullscreenButton() {
-  const [isFs, setIsFs] = useState(false);
-  useEffect(() => {
-    const h = () => setIsFs(!!document.fullscreenElement);
-    document.addEventListener('fullscreenchange', h);
-    return () => document.removeEventListener('fullscreenchange', h);
-  }, []);
-  const toggle = () => {
-    if (document.fullscreenElement) document.exitFullscreen();
-    else document.documentElement.requestFullscreen().catch(() => {});
-  };
-  return (
-    <button
-      onClick={toggle}
-      title={isFs ? "Exit fullscreen" : "Fullscreen"}
-      className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-    >
-      {isFs
-        ? <Minimize2 className="w-4 h-4" />
-        : <Maximize2 className="w-4 h-4" />
-      }
-    </button>
-  );
-}
 
 // Odometer digit roller — digital clock style
 function OdometerDigit({ value, size = '2rem' }: { value: number; size?: string }) {
@@ -127,6 +102,9 @@ const HomepageIslandInner = () => {
   const [showWinnerModal, setShowWinnerModal] = useState(false);
   const [wheelBgImage, setWheelBgImage] = useState<string | null>(null);
   const imgInputRef = useRef<HTMLInputElement>(null);
+  // Fullscreen target: the wheel zone (presenter/stream view). Going fullscreen
+  // on just this element keeps the wheel centered and large for streamers.
+  const wheelZoneRef = useRef<HTMLDivElement>(null);
 
   // Responsive wheel size — fills available height below nav
   const [viewportH, setViewportH] = useState(800);
@@ -374,6 +352,22 @@ const HomepageIslandInner = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden" style={{ background: "var(--gradient-bg)" }}>
+      {/* Fullscreen/stream styling for the wheel zone: native :fullscreen has no
+          background and is top-left aligned, so paint the app gradient and
+          center the wheel + enlarge it for presenter/streamer use. */}
+      <style>{`
+        .rwp-wheel-zone:fullscreen {
+          background: var(--gradient-bg);
+          justify-content: center;
+          align-items: center !important;
+          padding: 2vmin;
+          overflow: auto;
+        }
+        .rwp-wheel-zone:fullscreen canvas {
+          width: min(80vmin, 100%) !important;
+          height: auto !important;
+        }
+      `}</style>
       <Toaster position="top-center" richColors />
       <ConfettiEffect active={showConfetti} onComplete={() => setShowConfetti(false)} />
 
@@ -492,7 +486,10 @@ const HomepageIslandInner = () => {
           <div className="flex flex-col lg:flex-row gap-[8px] items-start">
 
             {/* LEFT: Wheel zone */}
-            <div className="flex-1 min-w-0 flex flex-col items-center lg:items-end space-y-2">
+            <div
+              ref={wheelZoneRef}
+              className="rwp-wheel-zone flex-1 min-w-0 flex flex-col items-center lg:items-end space-y-2"
+            >
 
               {/* Title + wheel wrapped together so title centers over the wheel */}
               <div className="flex flex-col items-center gap-2" style={wheelOffsetY !== 0 ? { marginTop: wheelOffsetY } : undefined}>
@@ -584,7 +581,7 @@ const HomepageIslandInner = () => {
                     title="Remove image"
                   >✕</button>
                 )}
-                <FullscreenButton />
+                <FullscreenButton targetRef={wheelZoneRef} />
               </div>
 
 

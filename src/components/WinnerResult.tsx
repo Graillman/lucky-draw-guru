@@ -1,10 +1,23 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Copy, RotateCcw, Share2, Check, Trophy, UserMinus, Twitter, Download, FileText } from "lucide-react";
+import { Copy, RotateCcw, Share2, Check, Trophy, UserMinus, Twitter, Download, FileText, Volume2, VolumeX } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useVoiceAnnouncer } from "@/hooks/useVoiceAnnouncer";
 import AdUnit from "@/components/AdUnit";
 import { exportWinnerAsPNG, exportResultsAsCSV, type ExportParticipant } from "@/lib/exportResult";
+
+// Localised spoken announcement template. Kept here (rather than in the i18n
+// bundle) so this feature is self-contained and doesn't require touching shared
+// translation files. Falls back to English.
+const VOICE_TEMPLATES: Record<string, (names: string, multiple: boolean) => string> = {
+  en: (n, m) => (m ? `The winners are ${n}!` : `The winner is ${n}!`),
+  fr: (n, m) => (m ? `Les gagnants sont ${n} !` : `Le gagnant est ${n} !`),
+  es: (n, m) => (m ? `¡Los ganadores son ${n}!` : `¡El ganador es ${n}!`),
+  de: (n, m) => (m ? `Die Gewinner sind ${n}!` : `Der Gewinner ist ${n}!`),
+  pt: (n, m) => (m ? `Os vencedores são ${n}!` : `O vencedor é ${n}!`),
+  it: (n, m) => (m ? `I vincitori sono ${n}!` : `Il vincitore è ${n}!`),
+};
 
 interface WinnerResultProps {
   winners: string[];
@@ -18,6 +31,16 @@ interface WinnerResultProps {
   /** Optional labels for the export buttons (i18n). Defaults to English. */
   downloadImageLabel?: string;
   exportCsvLabel?: string;
+  /**
+   * Enable the spoken winner announcement (SpeechSynthesis) + its toggle.
+   * Off by default so existing call sites are unchanged and no surprise audio
+   * plays. The voice itself is still gated behind the per-user `rwp:voice-on`
+   * preference (also off by default) — this prop just opts the UI in.
+   */
+  enableVoice?: boolean;
+  /** Optional aria-labels for the voice toggle (i18n). Defaults to English. */
+  voiceOnLabel?: string;
+  voiceOffLabel?: string;
 }
 
 const WinnerResult = ({
@@ -30,9 +53,13 @@ const WinnerResult = ({
   participants,
   downloadImageLabel,
   exportCsvLabel,
+  enableVoice = false,
+  voiceOnLabel,
+  voiceOffLabel,
 }: WinnerResultProps) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [copied, setCopied] = useState(false);
+  const voice = useVoiceAnnouncer(language);
 
   const isMultipleWinners = winners.length > 1;
 
@@ -57,6 +84,18 @@ const WinnerResult = ({
       return prev === base ? base + "​" : base;
     });
   }, [winners, isMultipleWinners, t.drawWinner, t.drawWinners]);
+
+  // ── Spoken announcement (opt-in, second channel) ────────────────────────
+  // Independent of the aria-live region above. `speak()` itself is a no-op
+  // unless the user has turned voice on (rwp:voice-on), and it cancels any
+  // in-flight utterance so re-spins never stack overlapping voices.
+  useEffect(() => {
+    if (!enableVoice || winners.length === 0) return;
+    const tmpl = VOICE_TEMPLATES[language] ?? VOICE_TEMPLATES.en;
+    // Join with a comma + space so the engine pauses naturally between names.
+    voice.speak(tmpl(winners.join(", "), isMultipleWinners));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [winners, enableVoice, language, isMultipleWinners]);
 
   const handleCopy = async () => {
     try {
@@ -307,6 +346,37 @@ const WinnerResult = ({
             <FileText className="w-4 h-4" />
             {exportCsvLabel ?? "CSV"}
           </Button>
+
+          {/* Spoken-announcer toggle — only when opted in via `enableVoice`
+              and the browser actually supports SpeechSynthesis. On enable we
+              fire a forced preview so the user immediately hears the winner. */}
+          {enableVoice && voice.supported && (
+            <Button
+              variant="outline"
+              size="default"
+              onClick={() => {
+                const next = !voice.enabled;
+                voice.setEnabled(next);
+                if (next && winners.length > 0) {
+                  const tmpl = VOICE_TEMPLATES[language] ?? VOICE_TEMPLATES.en;
+                  voice.speak(tmpl(winners.join(", "), isMultipleWinners), {}, true);
+                }
+              }}
+              aria-pressed={voice.enabled}
+              aria-label={voice.enabled
+                ? (voiceOnLabel ?? "Voice announcement on")
+                : (voiceOffLabel ?? "Voice announcement off")}
+              className={isAdvanced
+                ? "border-accent/50 hover:bg-accent/10"
+                : "border-primary/50 hover:bg-primary/10"
+              }
+            >
+              {voice.enabled
+                ? <Volume2 className="w-4 h-4" aria-hidden />
+                : <VolumeX className="w-4 h-4" aria-hidden />}
+              <span aria-hidden>🗣️</span>
+            </Button>
+          )}
         </div>
       </div>
     </div>

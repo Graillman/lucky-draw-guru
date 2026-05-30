@@ -1,0 +1,133 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import HeaderIsland from '@/components/HeaderIsland';
+import GlobalFooterIsland from '@/components/GlobalFooterIsland';
+import VerifyIsland from '@/components/VerifyIsland';
+import AdPlaceholder from '@/components/AdPlaceholder';
+import { ArrowRight, ShieldCheck } from 'lucide-react';
+
+const title = "Verify a Draw — Tamper-Proof Fairness Certificate Checker";
+const description = "Check that a wheel draw or giveaway was not rigged. Paste a fairness certificate or open a verification link and we recompute the winner from the original seed and SHA-256 hash. 100% in your browser.";
+const canonical = "/verify";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Verifiable Draw Certificate — Real Wheel Picker",
+      "url": "https://realwheelpicker.com/verify",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Verify that a draw result was not altered. Recomputes the winner from a cryptographic seed and checks the SHA-256 integrity hash, fully client-side.",
+      "inLanguage": "en"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does the fairness certificate prove a draw was not rigged?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Before the draw, a cryptographic seed is generated. The winner is a deterministic function of that seed and the exact participant list. The tool publishes a SHA-256 hash that commits to those values. Anyone can recompute the winner from the seed and recompute the hash — if both match, the result was not changed after the draw." }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you store the certificate on a server?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The certificate lives entirely in the verification link or in the code you paste. Verification runs 100% in your browser using the Web Crypto API. Nothing is sent to any server." }
+        },
+        {
+          "@type": "Question",
+          "name": "What does a failed verification mean?",
+          "acceptedAnswer": { "@type": "Answer", "text": "It means the recomputed winner or hash does not match the certificate — the result may have been edited after the draw, or the code was corrupted while being shared." }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://realwheelpicker.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Verify a Draw" }
+      ]
+    }
+  ]
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <div class="relative min-h-screen overflow-hidden" style="background: var(--gradient-bg)">
+    <div aria-hidden class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div class="aurora-orb aurora-orb-gold"></div>
+      <div class="aurora-orb aurora-orb-purple"></div>
+      <div class="aurora-orb aurora-orb-blue"></div>
+    </div>
+    <div class="relative z-10">
+      <HeaderIsland client:idle />
+      <main class="max-w-3xl mx-auto px-4 py-8 space-y-10">
+
+        <nav aria-label="breadcrumb" class="text-xs text-muted-foreground flex gap-1">
+          <a href="/" class="hover:text-primary transition-colors">Home</a>
+          <span>/</span>
+          <span class="text-foreground">Verify a Draw</span>
+        </nav>
+
+        <section class="text-center space-y-3 py-2">
+          <div class="inline-flex items-center justify-center gap-2 text-primary">
+            <ShieldCheck className="w-7 h-7" />
+          </div>
+          <h1 class="text-2xl md:text-4xl font-bold text-foreground leading-tight tracking-tight">
+            Verify a Draw — Prove It Was Not Rigged
+          </h1>
+          <p class="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            Paste a fairness certificate or open a verification link. We recompute the winner from the original cryptographic seed and check the SHA-256 hash — entirely in your browser.
+          </p>
+          <p class="text-xs text-muted-foreground">Free · No signup · 100% client-side</p>
+        </section>
+
+        <VerifyIsland client:load />
+
+        <section class="bg-card border border-border rounded-xl p-6 space-y-3">
+          <h2 class="text-xl font-bold text-foreground">How verification works</h2>
+          <ol class="list-decimal list-inside space-y-2 text-muted-foreground leading-relaxed text-sm">
+            <li><strong class="text-foreground">A seed is generated before the draw</strong> using <code class="bg-muted px-1 rounded font-mono text-xs">crypto.getRandomValues()</code> — the same cryptographic standard used in SSL.</li>
+            <li><strong class="text-foreground">The winner is deterministic.</strong> The seed plus the exact, ordered participant list always produce the same winner. No live randomness is needed to reproduce it.</li>
+            <li><strong class="text-foreground">A SHA-256 hash commits to everything.</strong> Changing any participant, weight, the seed, the timestamp, or the winner changes the hash — so tampering is detectable.</li>
+            <li><strong class="text-foreground">You re-verify here.</strong> This page recomputes both the winner and the hash and tells you whether they match the certificate.</li>
+          </ol>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Frequently asked questions</h2>
+          <div class="space-y-3">
+            {[
+              ["How does the certificate prove a draw was not rigged?", "Before the draw a cryptographic seed is generated; the winner is a deterministic function of that seed and the exact participant list. A SHA-256 hash commits to those values. Anyone can recompute the winner from the seed and recompute the hash — if both match, nothing was changed after the draw."],
+              ["Do you store the certificate on a server?", "No. The certificate lives in the verification link or the code you paste. Everything runs in your browser with the Web Crypto API. Nothing is sent anywhere."],
+              ["What does a failed verification mean?", "The recomputed winner or hash does not match the certificate. The result may have been edited after the draw, or the code was corrupted when shared."],
+              ["Can the organizer fake a certificate?", "To be tamper-evident against the organizer too, the hash should be published or shared before the winner is revealed. Once committed, revealing the seed lets anyone reproduce the exact winner — a faked result would not match the committed hash."],
+            ].map(([q, a]) => (
+              <div class="bg-card border border-border rounded-xl p-5">
+                <p class="font-semibold text-foreground mb-2">{q}</p>
+                <p class="text-muted-foreground text-sm leading-relaxed">{a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="text-center py-6">
+          <a href="/" class="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            Run a Verifiable Draw <ArrowRight className="w-4 h-4" />
+          </a>
+        </section>
+
+        <AdPlaceholder position="bottom" client:visible />
+      </main>
+      <GlobalFooterIsland client:idle />
+    </div>
+  </div>
+</Layout>

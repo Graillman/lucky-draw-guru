@@ -54,6 +54,33 @@ const COLORS = [
 interface ConfettiEffectProps {
   active: boolean;
   onComplete?: () => void;
+  /**
+   * Optional intensity multiplier for the particle count. Defaults to 1 (the
+   * original 60 burst + 120 rain). A bigger draw deserves a bigger celebration,
+   * so callers can pass `intensity` directly, or pass `participantCount` and let
+   * the component derive a sensible multiplier. Clamped to [0.6, 2] so it never
+   * starves the effect nor floods low-end devices. Still fully skipped under
+   * `prefers-reduced-motion`.
+   */
+  intensity?: number;
+  /**
+   * Optional participant count — when provided (and `intensity` is not), the
+   * burst scales up smoothly for larger draws (more people = bigger payoff).
+   */
+  participantCount?: number;
+}
+
+// Map a participant count to a particle-density multiplier. Small draws keep
+// the original density; large draws get up to 2x. Pure function, clamped.
+function intensityFromCount(count: number): number {
+  if (!Number.isFinite(count) || count <= 8) return 1;
+  // ~+1 multiplier per 50 extra participants beyond 8, capped at 2.
+  return Math.min(2, 1 + (count - 8) / 50);
+}
+
+function clampIntensity(v: number): number {
+  if (!Number.isFinite(v)) return 1;
+  return Math.max(0.6, Math.min(2, v));
 }
 
 const SHAPES: Particle['shape'][] = ['rect', 'circle', 'strip'];
@@ -81,9 +108,15 @@ function drawParticle(ctx: CanvasRenderingContext2D, p: Particle) {
   ctx.restore();
 }
 
-export function ConfettiEffect({ active, onComplete }: ConfettiEffectProps) {
+export function ConfettiEffect({ active, onComplete, intensity, participantCount }: ConfettiEffectProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>();
+
+  // Resolve the density multiplier once per activation. Explicit `intensity`
+  // wins; otherwise derive from `participantCount`; otherwise 1 (original look).
+  const densityMult = clampIntensity(
+    intensity ?? (participantCount != null ? intensityFromCount(participantCount) : 1)
+  );
 
   useEffect(() => {
     if (!active) return;
@@ -107,9 +140,12 @@ export function ConfettiEffect({ active, onComplete }: ConfettiEffectProps) {
 
     const particles: Particle[] = [];
 
+    const burstCount = Math.round(60 * densityMult);
+    const rainCount = Math.round(120 * densityMult);
+
     // 1) Center radial burst (instant pop)
-    for (let i = 0; i < 60; i++) {
-      const angle = (i / 60) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
+    for (let i = 0; i < burstCount; i++) {
+      const angle = (i / burstCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
       const speed = 6 + Math.random() * 9;
       particles.push({
         x: cx + (Math.random() - 0.5) * 10,
@@ -127,7 +163,7 @@ export function ConfettiEffect({ active, onComplete }: ConfettiEffectProps) {
     }
 
     // 2) Top rain (sustained drift)
-    for (let i = 0; i < 120; i++) {
+    for (let i = 0; i < rainCount; i++) {
       particles.push({
         x: Math.random() * W,
         y: -30 - Math.random() * 250,
@@ -176,7 +212,7 @@ export function ConfettiEffect({ active, onComplete }: ConfettiEffectProps) {
     return () => {
       if (animRef.current) cancelAnimationFrame(animRef.current);
     };
-  }, [active, onComplete]);
+  }, [active, onComplete, densityMult]);
 
   if (!active) return null;
 
