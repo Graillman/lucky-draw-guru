@@ -33,7 +33,77 @@ function findPages(dir, base = '') {
   return pages;
 }
 
+// SEO consolidation (2026-05-30): pages set to robots="noindex, follow" must
+// NOT appear in the sitemap. A sitemap is a "please index these" signal, so it
+// would contradict the noindex tag. This set is the single source of truth for
+// the consolidation exclusions — keep it in sync with the robots="noindex,
+// follow" tags in src/pages. Reversible: remove a slug here AND drop its
+// noindex tag to bring a page back into the index.
+const NOINDEX_SLUGS = new Set([
+  // A) machine-translated multilingual variants without audience
+  'namenrad',
+  'sorteio-online',
+  'roleta-de-nomes',
+  'sorteggio-online',
+  'ruota-dei-nomi',
+  'rad-van-fortuin',
+  'losowanie-online',
+  'sans-carki',
+  'zhuanpan',
+  'rueda-de-la-suerte',
+  // B) giveaway pickers without demand + sweepstakes
+  'youtube-giveaway-picker',
+  'twitter-giveaway-picker',
+  'facebook-giveaway-picker',
+  'twitch-giveaway-picker',
+  'reddit-giveaway-picker',
+  'linkedin-giveaway-picker',
+  'snapchat-giveaway-picker',
+  'sweepstakes-picker',
+  // C) legal pages
+  'privacy-policy',
+  'terms-of-service',
+  'mentions-legales',
+  // D) secondary templates (all under templates/ EXCEPT the ~17 keepers)
+  'templates/alphabet-wheel',
+  'templates/back-to-school-wheel',
+  'templates/board-game-picker',
+  'templates/coffee-order-wheel',
+  'templates/coin-flip-wheel',
+  'templates/date-night-wheel',
+  'templates/dessert-picker',
+  'templates/drinking-game-wheel',
+  'templates/fortnite-drop-wheel',
+  'templates/gift-idea-wheel',
+  'templates/hobby-wheel',
+  'templates/icebreaker-wheel',
+  'templates/math-problem-wheel',
+  'templates/meeting-icebreaker-wheel',
+  'templates/minecraft-challenge-wheel',
+  'templates/never-have-i-ever-wheel',
+  'templates/new-years-resolution-wheel',
+  'templates/number-wheel-1-10',
+  'templates/outfit-picker-wheel',
+  'templates/random-country-wheel',
+  'templates/random-task-wheel',
+  'templates/reading-genre-wheel',
+  'templates/roblox-wheel',
+  'templates/science-topic-wheel',
+  'templates/self-care-wheel',
+  'templates/sprint-retrospective-wheel',
+  'templates/standup-order-wheel',
+  'templates/team-building-wheel',
+  'templates/travel-destination-wheel',
+  'templates/video-game-picker',
+  'templates/vocabulary-wheel',
+  'templates/weekend-activity-wheel',
+  'templates/who-goes-first-wheel',
+  'templates/workout-wheel',
+  'templates/writing-prompt-wheel',
+]);
+
 function getPriority(urlPath) {
+  if (NOINDEX_SLUGS.has(urlPath)) return null; // SEO consolidation: noindexed
   if (urlPath === '/' || urlPath === '') return '1.0';
   if (urlPath === '404') return null; // exclude 404
   if (urlPath === 'embed') return null; // no SEO value
