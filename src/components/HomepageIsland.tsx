@@ -3,6 +3,7 @@ import { useSpinCounter } from "@/hooks/useSpinCounter";
 import { useWheelSound } from "@/hooks/useWheelSound";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import ParticipantInput, { ParticipantEntry } from "@/components/ParticipantInput";
 import DrawButton from "@/components/DrawButton";
 import { SpinningWheel } from "@/components/SpinningWheel";
@@ -815,9 +816,11 @@ const HomepageIslandInner = () => {
 };
 
 const HomepageIsland = () => (
-  <LanguageProvider>
-    <HomepageIslandInner />
-  </LanguageProvider>
+  <ErrorBoundary>
+    <LanguageProvider>
+      <HomepageIslandInner />
+    </LanguageProvider>
+  </ErrorBoundary>
 );
 
 export default HomepageIsland;

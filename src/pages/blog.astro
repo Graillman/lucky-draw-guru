@@ -72,8 +72,8 @@ const rest = posts.slice(1);
 
       <BlogHeaderIsland featured={featured} rest={rest} client:load />
 
-      <AdPlaceholder position="after-winners" client:visible />
-      <AdPlaceholder position="bottom" client:visible />
+      <AdPlaceholder position="after-winners" />
+      <AdPlaceholder position="bottom" />
     </main>
     <GlobalFooterIsland client:idle />
   </div>

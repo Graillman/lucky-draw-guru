@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Share2, Check, Volume2, VolumeX, Trash2, History } from "lucide-react";
 import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import { SpinningWheel } from "@/components/SpinningWheel";
 import DrawButton from "@/components/DrawButton";
 import WinnerResult from "@/components/WinnerResult";
@@ -383,9 +384,11 @@ const SimpleWheelIslandInner = ({ defaultParticipants, colors, wheelShape, hubTh
 };
 
 const SimpleWheelIsland = ({ defaultParticipants, colors, wheelShape, hubTheme, locked }: SimpleWheelIslandProps) => (
-  <LanguageProvider>
-    <SimpleWheelIslandInner defaultParticipants={defaultParticipants} colors={colors} wheelShape={wheelShape} hubTheme={hubTheme} locked={locked} />
-  </LanguageProvider>
+  <ErrorBoundary>
+    <LanguageProvider>
+      <SimpleWheelIslandInner defaultParticipants={defaultParticipants} colors={colors} wheelShape={wheelShape} hubTheme={hubTheme} locked={locked} />
+    </LanguageProvider>
+  </ErrorBoundary>
 );
 
 export default SimpleWheelIsland;
