@@ -102,6 +102,8 @@ const USES = [
           </p>
         </section>
 
+        <p class="max-w-3xl mx-auto text-base md:text-lg font-medium text-foreground border-l-4 border-primary pl-4 py-1">Pour faire un tirage aléatoire en ligne, entrez vos options dans la liste, lancez la roue et obtenez une sélection impartiale en un instant — aléatoire cryptographique, gratuit, sans aucune donnée collectée.</p>
+
         <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
 
         {/* Cas d'usage */}
@@ -133,11 +135,12 @@ const USES = [
         {/* Liens internes */}
         <section class="space-y-3">
           <h2 class="text-xl font-bold text-foreground">Autres outils de tirage en français</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {[
               { label: "Tirage au sort", href: "/tirage-au-sort" },
               { label: "Roue des noms", href: "/roue-des-noms" },
-              { label: "Oui ou Non", href: "/yes-no-wheel" },
+              { label: "Tirage au sort pondéré", href: "/tirage-au-sort-pondere" },
+              { label: "Pile ou Face", href: "/pile-ou-face" },
             ].map((link) => (
               <a
                 href={link.href}

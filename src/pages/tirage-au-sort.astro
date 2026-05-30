@@ -120,6 +120,8 @@ const USES = [
           </p>
         </section>
 
+        <p class="max-w-3xl mx-auto text-base md:text-lg font-medium text-foreground border-l-4 border-primary pl-4 py-1">Pour faire un tirage au sort en ligne gratuit, entrez les noms des participants, lancez la roue et obtenez un gagnant en quelques secondes — aléatoire cryptographique, sans inscription, directement dans votre navigateur.</p>
+
         <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
 
         {/* Comment ça marche */}
@@ -169,6 +171,26 @@ const USES = [
           <p class="text-muted-foreground leading-relaxed">
             La roue de tirage au sort est particulièrement appréciée pour sa <strong>transparence visuelle</strong> : l'audience voit la roue tourner et ralentir en temps réel, ce qui renforce la confiance dans le résultat. Idéal pour les concours Instagram et TikTok, les activités en classe, ou les décisions de groupe.
           </p>
+        </section>
+
+        {/* Liens internes français */}
+        <section class="space-y-3">
+          <h2 class="text-xl font-bold text-foreground">Autres outils en français</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {[
+              { label: "Roue des noms", href: "/roue-des-noms" },
+              { label: "Tirage aléatoire", href: "/tirage-aleatoire" },
+              { label: "Tirage au sort pondéré", href: "/tirage-au-sort-pondere" },
+              { label: "Pile ou Face", href: "/pile-ou-face" },
+            ].map((link) => (
+              <a
+                href={link.href}
+                class="p-4 bg-card border border-border rounded-xl text-center hover:border-primary/50 hover:shadow-md transition-all text-sm font-semibold text-foreground"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
         </section>
 
         {/* FAQ */}

@@ -171,7 +171,38 @@ const resolvedHreflang: HreflangLink[] = hreflangLinks ?? [
       />
     ))}
 
-    <!-- JSON-LD -->
+    <!-- Global entity graph (Organization + WebSite) — defined on EVERY page so
+         the `@id` references used by per-page schema (publisher: {@id #organization})
+         always resolve. Avoids the "orphan node" problem where tool pages cited
+         #organization without it being defined anywhere but the homepage. -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://realwheelpicker.com/#organization",
+          "name": "Real Wheel Picker",
+          "url": "https://realwheelpicker.com",
+          "email": "contact@realwheelpicker.com",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://realwheelpicker.com/icon-512.png",
+            "width": 512,
+            "height": 512
+          },
+          "sameAs": ["https://twitter.com/realwheelpicker"]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://realwheelpicker.com/#website",
+          "url": "https://realwheelpicker.com",
+          "name": "Real Wheel Picker",
+          "publisher": { "@id": "https://realwheelpicker.com/#organization" }
+        }
+      ]
+    })} />
+
+    <!-- JSON-LD (page-specific) -->
     {jsonLd && (
       <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     )}

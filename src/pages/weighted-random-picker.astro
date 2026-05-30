@@ -135,6 +135,11 @@ const jsonLd = {
         <p class="text-sm text-muted-foreground">Free · No signup · No data leaves your browser</p>
       </section>
 
+      <!-- Answer capsule — direct answer to the primary query -->
+      <p class="max-w-3xl mx-auto text-base md:text-lg font-medium text-foreground border-l-4 border-primary pl-4 py-1">
+        A weighted random picker gives each entry odds proportional to its weight instead of equal odds. Assign weights, draw multiple winners, and verify fairness with a 10,000-spin chi-squared test — cryptographically random, free, no signup.
+      </p>
+
       <!-- THE TOOL — pro mode -->
       <WeightedPickerProIsland client:load />
 
@@ -290,6 +295,7 @@ const jsonLd = {
             { href: "/random-name-picker", label: "Random Name Picker", desc: "Standard equal-odds random name picker." },
             { href: "/wheel-of-names-alternative", label: "Wheel of Names Alternative", desc: "Why cryptographic randomness matters for fair draws." },
             { href: "/blog/weighted-random-picker", label: "Article — Weighted Random Selection Explained", desc: "Deep dive into the maths of fair weighted lotteries (3 minutes)." },
+            { href: "/blog/is-wheel-of-names-really-random", label: "Article — Is a Wheel of Names Really Random?", desc: "Why crypto.getRandomValues() beats Math.random() for fair draws." },
           ].map(({ href, label, desc }) => (
             <li>
               <a href={href} class="flex items-start gap-3 p-4 bg-card border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all">

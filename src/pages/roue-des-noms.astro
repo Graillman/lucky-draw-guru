@@ -114,6 +114,8 @@ const USES = [
           </p>
         </section>
 
+        <p class="max-w-3xl mx-auto text-base md:text-lg font-medium text-foreground border-l-4 border-primary pl-4 py-1">La roue des noms tire un prénom au hasard parmi votre liste : entrez les noms, lancez la roue et laissez le hasard désigner un élève ou un gagnant — gratuite, sans inscription, en plein écran pour la classe.</p>
+
         <SimpleWheelIsland defaultParticipants={defaultParticipants} client:load />
 
         {/* Cas d'usage */}
@@ -145,11 +147,12 @@ const USES = [
         {/* Liens internes français */}
         <section class="space-y-3">
           <h2 class="text-xl font-bold text-foreground">Outils similaires en français</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {[
               { label: "Tirage au sort en ligne", href: "/tirage-au-sort" },
               { label: "Tirage aléatoire", href: "/tirage-aleatoire" },
               { label: "Tirage au sort pondéré", href: "/tirage-au-sort-pondere" },
+              { label: "Pile ou Face", href: "/pile-ou-face" },
             ].map((link) => (
               <a
                 href={link.href}

@@ -105,6 +105,8 @@ const USOS = [
           </p>
         </section>
 
+        <p class="max-w-3xl mx-auto text-base md:text-lg font-medium text-foreground border-l-4 border-primary pl-4 py-1">Para hacer un sorteo online gratis, añade los nombres de los participantes, gira la ruleta y elige al ganador al azar en segundos — con aleatoriedad criptográfica, sin registro y directamente en tu navegador.</p>
+
         <section class="bg-card border border-border rounded-xl p-5 text-sm text-muted-foreground leading-relaxed">
           <p>
             <strong class="text-foreground">Sorteo online:</strong> Añade los nombres de los participantes, haz clic en Girar la Ruleta y el sistema elige un ganador al azar usando <code>window.crypto.getRandomValues()</code> — el estándar criptográfico de los navegadores modernos. Cada participante tiene exactamente la misma probabilidad de ganar. Transparente, verificable, gratuito.
@@ -139,8 +141,9 @@ const USOS = [
 
         <section class="space-y-3">
           <h2 class="text-xl font-bold text-foreground">Más herramientas</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {[
+              { label: "Generador de Nombres", href: "/generador-de-nombres" },
               { label: "Giveaway Picker", href: "/giveaway-picker" },
               { label: "Random Name Picker", href: "/random-name-picker" },
               { label: "Raffle Picker", href: "/raffle-picker" },

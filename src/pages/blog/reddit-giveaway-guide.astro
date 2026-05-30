@@ -18,7 +18,7 @@ const jsonLd = {
   "author": { "@type": "Person", "name": "Real Wheel Picker Editorial Team", "url": "https://realwheelpicker.com/about" },
   "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
   "datePublished": "2025-12-15",
-  "dateModified": "2026-03-24",
+  "dateModified": "2026-05-30",
   "image": "https://realwheelpicker.com/og-default.png",
   "mainEntityOfPage": { "@type": "WebPage", "@id": "https://realwheelpicker.com/blog/reddit-giveaway-guide" },
 };
@@ -182,6 +182,29 @@ const subreddits = [
       </section>
 
       <AdPlaceholder position="bottom" />
+
+      {/* Related articles */}
+      <section class="space-y-4">
+        <h2 class="text-xl font-bold text-foreground">Related articles</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <a href="/blog/online-giveaway-guide" class="bg-card border border-border rounded-xl p-5 hover:border-primary transition-colors space-y-2">
+            <p class="font-semibold text-foreground text-sm">How to Run a Fair Online Giveaway</p>
+            <p class="text-xs text-muted-foreground">Best practices for running a fair giveaway on any platform</p>
+            <span class="text-xs text-primary flex items-center gap-1">Read guide →</span>
+          </a>
+          <a href="/blog/verify-giveaway-fairness" class="bg-card border border-border rounded-xl p-5 hover:border-primary transition-colors space-y-2">
+            <p class="font-semibold text-foreground text-sm">How to Prove Your Giveaway Was Fair</p>
+            <p class="text-xs text-muted-foreground">Prove your draw was random and transparent</p>
+            <span class="text-xs text-primary flex items-center gap-1">Read guide →</span>
+          </a>
+          <a href="/blog/giveaway-legal-guide" class="bg-card border border-border rounded-xl p-5 hover:border-primary transition-colors space-y-2">
+            <p class="font-semibold text-foreground text-sm">Giveaway Legal Guide 2026</p>
+            <p class="text-xs text-muted-foreground">Rules, disclaimers and eligibility across the US, EU & UK</p>
+            <span class="text-xs text-primary flex items-center gap-1">Read guide →</span>
+          </a>
+        </div>
+        <p class="text-sm text-muted-foreground">Ready to pick a winner? Try the <a href="/giveaway-picker" class="text-primary font-medium hover:underline">Giveaway Picker</a>.</p>
+      </section>
 
       <RelatedPosts currentSlug="/blog/reddit-giveaway-guide" client:idle />
     </main>

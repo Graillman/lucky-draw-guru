@@ -19,7 +19,7 @@ const jsonLd = {
   "author": { "@type": "Person", "name": "Real Wheel Picker Editorial Team", "url": "https://realwheelpicker.com/about" },
   "publisher": { "@type": "Organization", "name": "Real Wheel Picker", "url": "https://realwheelpicker.com" },
   "datePublished": "2026-04-10",
-  "dateModified": "2026-04-10",
+  "dateModified": "2026-05-30",
   "mainEntityOfPage": { "@type": "WebPage", "@id": `https://realwheelpicker.com${canonical}` }
 };
 
@@ -286,6 +286,29 @@ const destinationFacts = [
         <a href="/" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
           Open the Travel Wheel <ArrowRight size={18} className="text-white" />
         </a>
+      </section>
+
+      {/* Related articles */}
+      <section class="space-y-4">
+        <h2 class="text-xl font-bold text-foreground">Related articles</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <a href="/blog/spin-wheel-ideas" class="bg-card border border-border rounded-xl p-5 hover:border-primary transition-colors space-y-2">
+            <p class="font-semibold text-foreground text-sm">50 Creative Spin the Wheel Ideas</p>
+            <p class="text-xs text-muted-foreground">Creative ways to use a random wheel</p>
+            <span class="text-xs text-primary flex items-center gap-1">Read guide →</span>
+          </a>
+          <a href="/blog/random-book-picker" class="bg-card border border-border rounded-xl p-5 hover:border-primary transition-colors space-y-2">
+            <p class="font-semibold text-foreground text-sm">Random Book Picker Guide</p>
+            <p class="text-xs text-muted-foreground">Decide what to read next</p>
+            <span class="text-xs text-primary flex items-center gap-1">Read guide →</span>
+          </a>
+          <a href="/blog/random-workout-wheel" class="bg-card border border-border rounded-xl p-5 hover:border-primary transition-colors space-y-2">
+            <p class="font-semibold text-foreground text-sm">The Random Workout Wheel</p>
+            <p class="text-xs text-muted-foreground">Beat gym boredom with random workouts</p>
+            <span class="text-xs text-primary flex items-center gap-1">Read guide →</span>
+          </a>
+        </div>
+        <p class="text-sm text-muted-foreground">Ready to pick a winner? Try the <a href="/random-country-picker" class="text-primary font-medium hover:underline">Random Country Picker</a>.</p>
       </section>
 
       <RelatedPosts currentSlug={canonical} client:idle />
